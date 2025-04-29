@@ -18,7 +18,6 @@ import { SettingsIntegrationActions } from '../actions/settings/settings.integra
 import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS, SETTING_INTEGRATION_TABS_V1 } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { LocaleService } from '../services/locale.service';
 import { GeneralService } from '../services/general.service';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
@@ -44,7 +43,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public selectedChildTab: number = SETTING_INTEGRATION_TABS.COMMUNICATION.VALUE;
     public activeTab: string = 'taxes';
     public integrationtab: string;
-    public isMobileScreen: boolean = true;
     public permissionTabDataFetched: boolean = false;
     public get shortcutEnabled() {
         return document.activeElement === document.body;
@@ -80,7 +78,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private settingsIntegrationActions: SettingsIntegrationActions,
         private warehouseActions: WarehouseActions,
         private http: HttpClient,
-        private breakPointObservar: BreakpointObserver,
         private localeService: LocaleService,
         private generalService: GeneralService,
         private pageLeaveUtilityService: PageLeaveUtilityService
@@ -100,12 +97,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.breakPointObservar.observe([
-            '(max-width:767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
-
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 if (params['type'] === 'integration' && params['referrer']) {
@@ -149,12 +140,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
                     }
                 }, 0);
             }
-
-            if (this.activeTab === "taxes" || this.activeTab === "addresses") {
+            if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
-                this.toggleGstPane();
             } else {
                 this.asideGstSidebarMenuState = "out";
                 document.querySelector('body').classList.add('setting-sidebar-open');
@@ -177,7 +166,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -249,7 +238,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
-        } else {
+        } else if (tab !== 'reports') {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
@@ -325,7 +314,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       * @memberof SettingsComponent
       */
     public toggleGstPane(): void {
-        if (this.isMobileScreen && this.asideGstSidebarMenuState === 'in') {
+        if (this.asideGstSidebarMenuState === 'in') {
             this.asideGstSidebarMenuState = "out";
         }
     }

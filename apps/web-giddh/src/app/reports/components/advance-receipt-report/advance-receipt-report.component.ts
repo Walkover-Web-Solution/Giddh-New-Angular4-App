@@ -7,7 +7,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
@@ -58,6 +58,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public receiptType: Array<any>;
     /** Modal reference */
     public modalRef: BsModalRef;
+    /** Modal bulk export reference */
+    public bulkExportModalRef: BsModalRef;
     /** Stores the list of all receipts */
     public allReceipts: Array<any>;
     /** Stores summary data of all receipts based on filters applied */
@@ -99,10 +101,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
@@ -177,6 +179,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         to: '',
         dataToSend: {}
     };
+    /** Holds last filters applyed */
+    public lastListingFilters: any;
 
     /** @ignore */
     constructor(
@@ -234,13 +238,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
                     value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
@@ -257,7 +262,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -265,7 +270,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -600,6 +605,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
             requestObject = { ...requestObject, ...optionalParams };
         }
+        this.lastListingFilters = requestObject;
         return (this.voucherApiVersion === 2) ? this.receiptService.GetAllReceipt(requestObject, 'receipt') : this.receiptService.getAllAdvanceReceipts(requestObject);
     }
 
@@ -916,5 +922,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 }
             }
         });
+    }
+
+    /**
+    * This will open the bulk export modal
+    *
+    * @param {TemplateRef<any>} template
+    * @memberof AdvanceReceiptReportComponent
+    */
+    public openBulkExport(template: TemplateRef<any>): void {
+        this.bulkExportModalRef = this.modalService.show(template);
     }
 }

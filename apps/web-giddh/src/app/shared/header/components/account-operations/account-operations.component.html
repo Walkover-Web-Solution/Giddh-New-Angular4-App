@@ -1,7 +1,7 @@
 <div class="bd-rr row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <ol class="breadcrumb row">
                 <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
                     <a href="javascript:void(0)"> {{ value }}</a>
@@ -9,7 +9,7 @@
             </ol>
         </div>
         <!--share group/account-->
-        <div class="col-lg-6 pr-0 pl-0" *ngIf="showEditGroup$ | async">
+        <div class="col-lg-8 pr-0 pl-0" *ngIf="showEditGroup$ | async">
             <!--group-->
             <div class="pull-right text-right">
                 <button aria-label="export" class="btn btn-share mr-r1" (click)="exportGroupLedger()">
@@ -27,7 +27,7 @@
             </div>
         </div>
         <!--account-->
-        <div class="pull-right col-lg-6 pr-0 pl-0" *ngIf="showEditAccount$ | async">
+        <div class="pull-right col-lg-8 pr-0 pl-0" *ngIf="showEditAccount$ | async">
             <button aria-label="share" class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 {{ commonLocaleData?.app_share }}
             </button>
@@ -42,7 +42,7 @@
     </div>
 
     <!--add/edit group form-->
-    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
+    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100 dropdown-wrapper">
         <group-add
             class="form-box"
             *ngIf="showAddNewGroup$ | async"
@@ -111,7 +111,7 @@
 
 <!--share Group modal  -->
 <div bsModal #shareGroupModal="bs-modal" class="modal translatY8 fade" role="dialog">
-    <div class="modal-dialog modal-md modal-share-group">
+    <div class="modal-dialog modal-share-group">
         <div class="modal-content">
             <share-group-modal
                 #shareGroupModalComp
@@ -181,7 +181,7 @@
 </div>
 
 <!--delete Account modal  -->
-<div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #deleteAccountModal="bs-modal" class="modal fade align-content-center" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal
@@ -196,16 +196,23 @@
 </div>
 
 <!-- export ladger popup -->
-<div bsModal #groupExportLedgerModal="bs-modal" class="modal translatY8 fade" role="dialog">
-    <div class="modal-dialog modal-md">
+<div bsModal #groupExportLedgerModal="bs-modal" class="modal translatY8 fade master-export" role="dialog">
+    <div class="modal-dialog modal-md modal-lg">
         <div class="modal-content">
             <export-group-ledger
                 [localeData]="localeData"
+                [activeGroupUniqueName]="activeGroupUniqueName"
                 [commonLocaleData]="commonLocaleData"
                 (closeExportGroupLedgerModal)="hideGroupExportModal($event)"
+                (closeExportGroupAccountModal)="hideAccountGroupExportModal($event)"
             ></export-group-ledger>
         </div>
     </div>
 </div>
 <!-- ./ export ladger popup -->
 <!-- modals -->
+<div class="text-center master-export-btn overflow-hidden d-flex justify-content-center align-items-center" *ngIf="!((showEditGroup$ | async) || (activeGroupInProgress$ | async) || (showNewForm$ | async) || (activeAccount$ | async) || (showEditAccount$ | async) || (showAddNewAccount$ | async) || (showAddNewGroup$ | async))">
+    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">{{ commonLocaleData?.app_export }}</button>
+</div>
+
+

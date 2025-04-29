@@ -21,7 +21,8 @@ export const LOGIN_API = {
     RESET_PASSWORD: 'reset-password',
     RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
     GET_USER_DETAILS_FROM_SESSION_ID: 'v2/user',
-    LOGIN_WITH_OTP: 'v2/login'
+    LOGIN_WITH_OTP: 'v2/login',
+    LOGIN_WITH_APPLE: 'v2/signup-with-apple'
 };
 
 export const GMAIL_API = {

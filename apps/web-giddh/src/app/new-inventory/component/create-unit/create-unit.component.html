@@ -98,7 +98,7 @@
                             [label]="localeData?.quantity"
                             [placeholder]="localeData?.enter_quantity"
                             formControlName="quantity"
-                            [allowDigitsOnly]="true"
+                            [allowDecimalDigitsOnly]="true"
                             [showError]="!isValidFormMappings && !mapping?.get('quantity')?.value"
                         >
                         </input-field>

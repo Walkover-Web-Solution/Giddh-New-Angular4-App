@@ -4,6 +4,7 @@ export const LEDGER_API = {
     // ledger methods get,create,delete,update
     GET: UNIVERSAL_URI_LEDGER + 'transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
     CREATE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2',
+    CREATE_BULK: 'company/:companyUniqueName/accounts/:accountUniqueName/bulk-ledgers-v2',
     RECONCILIATION: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile',
     UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
     // A New API Endpoint Added to Differenciate for Get Transactions
@@ -31,7 +32,7 @@ export const LEDGER_API = {
     CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
     DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId',
     NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to&accountCurrency=:accountCurrency',
-    GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?from=:from&to=:to&accountCurrency=:accountCurrency',
+    GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?q=:q&from=:from&to=:to&accountCurrency=:accountCurrency',
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
     GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus',
@@ -53,5 +54,8 @@ export const LEDGER_API = {
     RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid',
 
     // Load stock variant
-    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants'
+    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants',
+
+    GET_DOWNLOAD_ATTACHMENT: "company/:companyUniqueName/imports/signed-url?fileName=:fileName",
+    IMPORT_VOUCHER: "company/:companyUniqueName/imports/v2/upload?subType=:subType&accountUniqueName=:accountUniqueName&type=:type&isHeaderProvided=:isHeaderProvided"
 };

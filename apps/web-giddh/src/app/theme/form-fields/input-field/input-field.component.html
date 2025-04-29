@@ -1,10 +1,18 @@
-<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly }">
+<div class="text-field-container" [ngClass]="{ 'readonly-field': readonly || disabled }">
     <mat-form-field
-        [ngClass]="{ 'mat-form-field-invalid': showError }"
+        [ngClass]="{ 'mat-form-field-invalid': showError, 'prefix-icon-field': matPrefixIcon }"
         [appearance]="appearance"
         [floatLabel]="floatLabel"
     >
-        <mat-label>{{ label ? label : placeholder }}</mat-label>
+        <mat-label>
+            {{ label || placeholder }}
+            <i
+                *ngIf="showLabelIcon"
+                [class]="labelIconClass"
+                [matTooltip]="labelIconTooltip"
+                matTooltipPosition="above"
+            ></i>
+        </mat-label>
         <input
             matInput
             [name]="name"
@@ -13,6 +21,8 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -48,6 +58,8 @@
             [attr.min]="min"
             [attr.max]="max"
             *ngIf="allowDecimalDigitsOnly && !useMask"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
@@ -64,6 +76,8 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -101,6 +115,9 @@
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [allowUnsupportedPrefix]="allowUnsupportedPrefix"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [validation]="false"
             *ngIf="!allowDigitsOnly && useMask"
             #textField
@@ -117,6 +134,8 @@
             [class]="cssClass"
             [placeholder]="placeholder"
             [ngModelOptions]="{ standalone: true }"
+            (paste)="handlePaste($event)"
+            (focus)="handleFocus($event)"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -127,6 +146,7 @@
             [prefix]="prefix"
             [suffix]="suffix"
             [mask]="mask"
+            [allowUnsupportedPrefix]="allowUnsupportedPrefix"
             [validation]="false"
             *ngIf="allowDigitsOnly && useMask"
             [customDecimalPlaces]="customDecimalPlaces"
@@ -138,6 +158,19 @@
             [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
-        <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>
+        <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute"></i>
+        
+        <span matSuffix *ngIf="matSuffix" (click)="handleSuffixClick()">{{ matSuffix }}</span>
+        <i
+            matSuffix
+            *ngIf="matSuffixIcon"
+            [ngClass]="matSuffixIcon"
+            (click)="handleSuffixClick()"
+            [matTooltip]="suffixTooltipText ?? ''"
+            matTooltipPosition="above"
+            role="button"
+            [attr.aria-label]="label || placeholder"
+        >
+        </i>
     </mat-form-field>
 </div>

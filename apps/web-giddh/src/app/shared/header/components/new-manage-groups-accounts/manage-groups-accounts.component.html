@@ -91,6 +91,7 @@
                                 [commonLocaleData]="commonLocaleData"
                                 (resetSearchString)="resetGroupSearchString(false)"
                                 (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                                (activeGroupUniqueName)="activeGroupUniqueName = $event"
                                 (scrollToRight)="scrollToRight()"
                             >
                             </master>
@@ -100,18 +101,19 @@
             </div>
             <!-- middle body -->
             <div class="form-box form-bg height-in-vh">
-                <account-operations
-                    [topSharedGroups]="topSharedGroups"
-                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                    [breadcrumbPath]="breadcrumbPath"
-                    [breadcrumbUniquePath]="breadcrumbUniquePath"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    [isMasterOpen]="true"
-                    #form
-                    *ngIf="localeData?.page_heading"
-                >
-                </account-operations>
+                    <account-operations
+                        [topSharedGroups]="topSharedGroups"
+                        [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                        [breadcrumbPath]="breadcrumbPath"
+                        [breadcrumbUniquePath]="breadcrumbUniquePath"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        [isMasterOpen]="true"
+                        [activeGroupUniqueName]="activeGroupUniqueName"
+                        #form
+                        *ngIf="localeData?.page_heading"
+                    >
+                    </account-operations>
             </div>
         </div>
     </div>

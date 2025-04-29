@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject, fromEvent } from 'rxjs';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { saveAs } from 'file-saver';
@@ -34,6 +34,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public purchaseOrderUniqueName: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -73,7 +75,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /* This will hold selected company details */
     public selectedCompany: any;
     /* This will hold list of vat supported countries */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
     /* This will hold form fields */
     public formFields: any[] = [];
     /* True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
@@ -436,9 +438,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
                 this.getOnboardingForm('IN')
-            } else if (this.vatSupportedCountries.includes(code)) {
-                this.showGSTINNo = false;
+            } else if (this.trnSupportedCountries.includes(code)) {
                 this.showTRNNo = true;
+                this.showGSTINNo = false;
                 this.getOnboardingForm(code);
             }
         } else {

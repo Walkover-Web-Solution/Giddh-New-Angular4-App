@@ -12,7 +12,7 @@
                     <h1 class="border-btm">{{ localeData?.try_things }}</h1>
                     <mat-list role="list" class="manage-invoice pt-0">
                         <mat-list-item role="listitem" class="mr-b1 px-0">
-                            <a [routerLink]="['/pages', 'proforma-invoice', 'invoice', 'sales']">
+                            <a [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']">
                                 <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-r1" />{{
                                     localeData?.create_send_invoice
                                 }}</a
@@ -38,7 +38,7 @@
                                 {{ localeData?.create_bank_account }}
                             </a>
                         </mat-list-item>
-                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="(companyCountry !== 'India') && isPlaidSupportedCountry">
+                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="(companyCountry !== 'India') && (isPlaidSupportedCountry || isGoCardlessSupportedCountry)">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
                                     localeData?.configure_bank_account
@@ -54,7 +54,7 @@
                             color="primary"
                             class="mt-2"
                             target="_blank"
-                            href="https://giddh.com/help/sync-with-tally-1591360375828781"
+                            [href]="syncWithTallyHelpDocUrl"
                         >
                             {{ localeData?.sync_with_tally }}
                         </a>

@@ -294,6 +294,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 newState.settings.proformaSettings = form.proformaSettings;
                 const broadcast = new BroadcastChannel("tabs");
                 broadcast.postMessage({ autoGenerateVoucherFromEntry: form.invoiceSettings.autoGenerateVoucherFromEntry });
+                const broadcastSettings = new BroadcastChannel("settings");
+                broadcastSettings.postMessage({ form: form });
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -478,6 +480,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
         }
+        case INVOICE_ACTIONS.RESET_PENDING_DATA:
+            return {
+                ...state,
+                ledgers: null
+            };
         case INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE:
             return {
                 ...state,

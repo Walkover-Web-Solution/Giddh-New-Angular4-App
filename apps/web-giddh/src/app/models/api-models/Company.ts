@@ -1,6 +1,7 @@
-import { ITax, ITaxDetail } from '../interfaces/tax.interface';
+import { ITax, ITaxAuthority, ITaxDetail } from '../interfaces/tax.interface';
 import { INameUniqueName } from './Inventory';
 import { OrganizationType } from '../user-login-state';
+import { API_COUNT_LIMIT } from '../../app.constant';
 
 export class CompanyRequest {
     public name: string;
@@ -28,6 +29,7 @@ export class SocketNewCompanyRequest {
     public utm_campaign: string;
     public utm_term: string;
     public utm_content: string;
+    public BusinessNature: string;
 }
 
 export class StateDetailsRequest {
@@ -87,6 +89,19 @@ export interface ParentBranch {
     uniqueName: string;
 }
 
+export class SearchCompanyRequest {
+    public q: any;
+    public count: number;
+    public page: number;
+    public totalItems?: number;
+    public totalPages?: number;
+    public loadMore?: boolean;
+    public subscriptionId: string;
+    constructor() {
+        this.count = API_COUNT_LIMIT;
+        this.page = 1;
+    }
+}
 export class CompanyResponse {
     public canUserSwitch: boolean;
     public companyIdentity: any[];
@@ -216,6 +231,8 @@ export class TaxResponse implements ITax {
     public taxValue?: any;
     public isChecked?: boolean;
     public isDisabled?: boolean;
+    public taxAuthorityRequest?: ITaxAuthority;
+    public taxAuthority?: ITaxAuthority;
 }
 
 export class StatesRequest {
@@ -294,6 +311,7 @@ export class CompanyCreateRequest {
     addresses?: Addresses[];
     businessNature?: string;
     businessType?: string;
+    otherBusinessNature?: string;
     address?: string;
     industry?: string;
     baseCurrency: string;
@@ -388,6 +406,8 @@ export class BranchFilterRequest {
     to: string;
     query?: string;
     companyUniqueName?: string;
+    branchUniqueName?: string;
+    hierarchyType?: string;
 }
 
 export interface OrganizationDetails {

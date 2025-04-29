@@ -8,8 +8,9 @@ enableProdMode();
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: 'https://app.giddh.com',
+    AppUrl: 'https://books.giddh.com',
     ApiUrl: 'https://api.giddh.com/',
+    UkApiUrl: 'https://gbapi.giddh.com/',
     isElectron: false,
     APP_FOLDER: '/',
     /** Angular debug tools in the dev console

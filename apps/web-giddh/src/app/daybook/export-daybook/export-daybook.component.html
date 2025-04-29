@@ -21,47 +21,52 @@
                     <mat-radio-button id="entryDate" [value]="emailTypeDetail"
                         >{{ commonLocaleData?.app_detailed }}
                     </mat-radio-button>
-                </mat-radio-group>
-            </div>
-            <div class="pd-b2 clearfix">
-                <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
-                <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
-                    <mat-radio-button id="pdf" [value]="'pdf'">{{ commonLocaleData?.app_pdf }}</mat-radio-button>
-                    <mat-radio-button id="excel" [value]="'xlsx'">{{ commonLocaleData?.app_excel }}</mat-radio-button>
-                    <mat-radio-button id="csv" [value]="'csv'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
-                </mat-radio-group>
-            </div>
-            <div class="pd-b2 clearfix" [hidden]="fileType !== 'csv'">
-                <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
-                <label class="radio-inline p-0">
-                    <mat-slide-toggle color="primary" name="showVoucherNumber" [(ngModel)]="showVoucherNumber">
-                        <span class="pull-left">{{
-                            showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                        }}</span>
-                    </mat-slide-toggle>
-                </label>
-            </div>
-            <div class="pd-b2 clearfix" [hidden]="fileType !== 'csv'">
-                <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
-                <label class="radio-inline p-0">
-                    <mat-slide-toggle color="primary" name="showEntryVoucher" [(ngModel)]="showEntryVoucher">
-                        <span class="pull-left">{{
-                            showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                        }}</span>
-                    </mat-slide-toggle>
-                </label>
-            </div>
-            <div class="pd-b2 clearfix">
-                <label class="w100 d-sm-inline-flex d-flex">{{ localeData?.order }} </label>
-                <mat-radio-group color="primary" name="order" [(ngModel)]="order">
-                    <mat-radio-button id="ascending" [value]="'asc'"
-                        >{{ commonLocaleData?.app_ascending }}
-                    </mat-radio-button>
-                    <mat-radio-button id="descending" [value]="'desc'"
-                        >{{ commonLocaleData?.app_descending }}
+                    <mat-radio-button id="entryExpanded" [value]="emailTypeExpanded"
+                    >{{ commonLocaleData?.app_expanded }}
                     </mat-radio-button>
                 </mat-radio-group>
             </div>
+            <ng-container *ngIf="(emailTypeSelected === 'admin-detailed' || emailTypeSelected === 'view-detailed') || (emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'view-condensed')">
+                <div class="pd-b2 clearfix">
+                    <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
+                    <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
+                        <mat-radio-button id="pdf" [value]="'pdf'">{{ commonLocaleData?.app_pdf }}</mat-radio-button>
+                        <mat-radio-button id="excel" [value]="'xlsx'">{{ commonLocaleData?.app_excel }}</mat-radio-button>
+                        <mat-radio-button id="csv" [value]="'csv'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="pd-b2 clearfix" [hidden]="fileType !== 'csv'">
+                    <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" name="showVoucherNumber" [(ngModel)]="showVoucherNumber">
+                            <span class="pull-left">{{
+                                showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix" [hidden]="fileType !== 'csv'">
+                    <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" name="showEntryVoucher" [(ngModel)]="showEntryVoucher">
+                            <span class="pull-left">{{
+                                showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="w100 d-sm-inline-flex d-flex">{{ localeData?.order }} </label>
+                    <mat-radio-group color="primary" name="order" [(ngModel)]="order">
+                        <mat-radio-button id="ascending" [value]="'asc'"
+                            >{{ commonLocaleData?.app_ascending }}
+                        </mat-radio-button>
+                        <mat-radio-button id="descending" [value]="'desc'"
+                            >{{ commonLocaleData?.app_descending }}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </ng-container>
             <button mat-stroked-button color="primary" (click)="exportLedger()">
                 {{ commonLocaleData?.app_download }}
             </button>

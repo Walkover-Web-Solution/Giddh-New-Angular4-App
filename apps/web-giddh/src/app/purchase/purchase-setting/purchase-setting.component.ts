@@ -13,6 +13,8 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../store';
+import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'purchase-setting',
@@ -22,7 +24,7 @@ import { AppState } from '../../store';
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /* This will hold the invoice settings */
-    public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, generateAutoPurchaseNumber: false } };
+    public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, poAutoWhatsApp: false, autoWhatsApp: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, generateAutoPurchaseNumber: false } };
     /* This will hold the PB lock date */
     public lockDate: Date = new Date();
     /* This will hold if email updated */
@@ -52,7 +54,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
 
-    constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
+    constructor(private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -261,5 +263,35 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      */
     public getRedirectUrl(): string {
         return AppUrl + 'pages/purchase-management/purchase/settings';
+    }
+
+    /**
+     * Opens custom email dialog
+     *
+     * @param {string} voucherType
+     * @memberof PurchaseSettingComponent
+     */
+    public openCustomEmailDialog(voucherType: string): void {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: voucherType,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+    }
+
+    /**
+     * Send voucher type whatsapp option.
+     *
+     * @param {string} voucherType
+     * @returns {boolean}
+     * @memberof PurchaseSettingComponent
+     */
+    public getWhatsappSettingLabel(voucherType: string): string {
+        return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
     }
 }

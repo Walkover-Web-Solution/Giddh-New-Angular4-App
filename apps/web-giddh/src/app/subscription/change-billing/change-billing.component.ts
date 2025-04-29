@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { Observable, takeUntil, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, takeUntil, of as observableOf, ReplaySubject, delay } from 'rxjs';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { Store } from '@ngrx/store';
@@ -14,6 +14,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'change-billing',
@@ -88,12 +89,15 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         billingName: "",
         uniqueName: ""
     };
+    /** Hold current time stamp  */
+    public currentTimeStamp: string;
 
     constructor(
         private formBuilder: FormBuilder,
         private componentStore: ChangeBillingComponentStore,
         private commonActions: CommonActions,
         private toasterService: ToasterService,
+        private generalService: GeneralService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>,
         private changeDetection: ChangeDetectorRef,
@@ -102,7 +106,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private generalActions: GeneralActions,
         private elementRef: ElementRef
-    ) { }
+    ) {
+    }
 
     /**
      * Hook for component initialization
@@ -110,14 +115,13 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public ngOnInit(): void {
+        this.currentTimeStamp = this.generalService.getTimeStamp();
         this.initForm();
-        this.getCountry();
-        this.getStates();
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
 
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+        this.route.params.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.billingDetails.billingAccountUnqiueName = params?.billingAccountUnqiueName;
                 this.getBillingDetails(this.billingDetails.billingAccountUnqiueName);
@@ -126,15 +130,17 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
 
         this.updateBillingDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
-                this.router.navigate(['/pages/subscription']);
+                this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
+                this.getCountry();
+                this.getStates(data.country?.code);
                 this.setFormValues(data);
                 this.selectedCountry = data.country?.name;
-                this.selectedState = data.state?.name;
+                this.selectedState = data.state?.name ? data.state?.name : data.county?.name;
                 this.billingDetails.billingName = data?.billingName;
                 this.billingDetails.uniqueName = data?.uniqueName;
             }
@@ -266,11 +272,11 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for get states list
+     *  This will use for get states list
      *
      * @memberof ChangeBillingComponent
      */
-    public getStates(): void {
+    public getStates(countryCode?: string): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.states = [];
@@ -297,6 +303,10 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                         return { label: county.name, value: county.code };
                     });
                 }
+            } else {
+                const statesRequest = new StatesRequest();
+                statesRequest.country = countryCode;
+                this.store.dispatch(this.generalActions.getAllState(statesRequest));
             }
         });
     }
@@ -378,8 +388,10 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
-            this.changeBillingForm.controls['country'].setValue(event);
-
+            this.changeBillingForm.controls['country'].patchValue({
+                name: event.label,
+                code: event.value
+            });
             this.changeBillingForm.get('taxNumber')?.setValue('');
             this.changeBillingForm.get('state')?.setValue('');
             this.selectedState = "";
@@ -395,6 +407,21 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
             this.changeDetection.detectChanges();
+        }
+    }
+
+    /**
+      * This will use for select state
+      *
+      * @param {*} event
+      * @memberof ChangeBillingComponent
+      */
+    public selectState(event: any): void {
+        if (event?.value) {
+            this.changeBillingForm.controls['state'].patchValue({
+                name: event.label,
+                code: event.value
+            });
         }
     }
 
@@ -508,7 +535,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             },
             address: this.changeBillingForm.value.address
         }
-        if (this.changeBillingForm.value.country.code === 'UK') {
+        if (this.changeBillingForm.value.country.code === 'GB') {
             request['county'] = {
                 name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
                 code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value

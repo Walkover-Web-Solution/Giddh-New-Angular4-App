@@ -91,7 +91,8 @@
     </ng-container>
 </div>
 <div mat-dialog-actions class="modal-footer justify-content-end">
-    <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
     <button mat-stroked-button color="primary" [disabled]="isLoading" (click)="submitVatReturn()">{{
-        commonLocaleData?.app_submit }}</button>
+        localeData?.submit_file_return }}</button>
+    <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+    
 </div>

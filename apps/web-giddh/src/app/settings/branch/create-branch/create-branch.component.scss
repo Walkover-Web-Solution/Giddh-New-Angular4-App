@@ -39,6 +39,10 @@
         }
     }
     .branch-form {
+        .mat-mdc-select-multiple {
+            display: none !important;
+        }
+
         .branch-form-field {
             font-size: var(--font-size-15);
             display: flex;
@@ -95,14 +99,10 @@
                     }
                 }
             }
+            mat-form-field {
+                max-width: 350px;
+            }
         }
-    }
-}
-.footer-btn {
-    background-color: var(--color-dark-fog);
-    padding: 15px;
-    .clear-btn-width{
-        min-width: 111px;
     }
 }
 .address-dropdown sales-sh-select::ng-deep .menu {
@@ -157,6 +157,12 @@
                 }
             }
         }
+    }
+}
+
+.bg-grey-on-hover {
+    &:hover {
+        background: var(--color-dark-fog) !important;
     }
 }
 /* create warehouse css end */

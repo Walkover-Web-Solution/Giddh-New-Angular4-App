@@ -7,11 +7,11 @@
 >
     <div class="clearfix" *ngIf="!isMobileScreen">
         <div class="row">
-            <div class="col-xl-9 col-lg-12 col-md-12">
+            <div class="col-12 d-flex justify-content-between align-items-center">
                 <form
                     [formGroup]="filterForm"
                     (submit)="filterData()"
-                    class="form-inline financial-select-year"
+                    class="form-inline financial-select-year row-gap5"
                     name="fromToDateForm"
                     novalidate
                 >
@@ -19,9 +19,9 @@
                         <div
                             class="form-group mr-r15 linked-entities"
                             *ngIf="
-                                showLabels &&
+                                showLabels && !isProjectWiseAccounting &&
                                 currentCompanyBranches?.length > 2 &&
-                                currentOrganizationType === 'COMPANY'
+                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                             "
                         >
                             <div class="form-group">
@@ -35,7 +35,7 @@
                                     (selected)="handleBranchChange($event)"
                                     [isFilterEnabled]="true"
                                     [placeholder]="commonLocaleData?.app_select_entity"
-                                    [fixedValue]="currentBranch?.alias"
+                                    [fixedValue]="currentBranch?.name"
                                     [forceClearReactive]="forceClear$ | async"
                                 >
                                     <ng-template #optionTemplate let-option="option">
@@ -43,7 +43,11 @@
                                             <a href="javascript:void(0)" class="list-item d-flex">
                                                 <span class="entity-icon">
                                                     <i
-                                                        class="icon-branch-icon pull-right"
+                                                        [ngClass]="{
+                                                            'icon-company-profile': option.consolidatedBranch,
+                                                            'icon-branch-icon': !option.consolidatedBranch
+                                                        }"
+                                                        class="pull-right"
                                                         *ngIf="!option.isCompany"
                                                         [tooltip]="commonLocaleData?.app_branch"
                                                     ></i>
@@ -93,8 +97,7 @@
                                     [showClear]="false"
                                     (selected)="selectFinancialYearOption($event)"
                                     [ItemHeight]="33"
-                                >
-                                </sh-select>
+                                ></sh-select>
                             </div>
                         </div>
                         <div
@@ -112,7 +115,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!showLoader">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
+                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="!isProjectWiseAccounting && tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select
                                 [options]="tags"
@@ -152,38 +155,41 @@
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="col-xl-3 col-lg-12 col-md-12 download-data-icon">
-                <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
-                    <span class="icon-refresh"></span>
-                </a>
-                <div class="ml-1">
-                    <trial-balance-export-csv
-                        *ngIf="tbExportCsv"
-                        [trialBalanceRequest]="filterForm?.value"
-                        [selectedCompany]="selectedCompany"
-                        (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
-                        class="pull-right"
-                    >
-                    </trial-balance-export-csv>
-                    <trial-balance-export-xls
-                        *ngIf="tbExportXLS"
-                        [trialBalanceRequest]="filterForm?.value"
-                        class="pull-right mr-r05"
-                    >
-                    </trial-balance-export-xls>
-                    <profit-loss-export-xls
-                        *ngIf="plBsExportXLS"
-                        [fy]="filterForm.controls['fy']?.value"
-                        [filters]="filterForm?.value"
-                        class="pull-right"
-                    ></profit-loss-export-xls>
-                    <balance-sheet-export-xls
-                        *ngIf="BsExportXLS"
-                        [fy]="filterForm.controls['fy']?.value"
-                        [filters]="filterForm?.value"
-                        class="pull-right"
-                    ></balance-sheet-export-xls>
+                <div class="d-flex align-items-center column-gap1 download-data-icon">
+                    <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
+                        <span class="icon-refresh"></span>
+                    </a>
+                    <button class="ml-1" *ngIf="isProjectWiseAccounting" [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
+                        {{ commonLocaleData?.app_back }}
+                    </button>
+                    <div class="d-flex column-gap1">
+                        <trial-balance-export-csv
+                            *ngIf="tbExportCsv"
+                            [trialBalanceRequest]="filterForm?.value"
+                            [selectedCompany]="selectedCompany"
+                            (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
+                            class="pull-right"
+                        >
+                        </trial-balance-export-csv>
+                        <trial-balance-export-xls
+                            *ngIf="tbExportXLS"
+                            [trialBalanceRequest]="filterForm?.value"
+                            class="pull-right mr-r05"
+                        >
+                        </trial-balance-export-xls>
+                        <profit-loss-export-xls
+                            *ngIf="plBsExportXLS"
+                            [fy]="filterForm.controls['fy']?.value"
+                            [filters]="filterForm?.value"
+                            class="pull-right"
+                        ></profit-loss-export-xls>
+                        <balance-sheet-export-xls
+                            *ngIf="BsExportXLS"
+                            [fy]="filterForm.controls['fy']?.value"
+                            [filters]="filterForm?.value"
+                            class="pull-right"
+                        ></balance-sheet-export-xls>
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,7 +206,7 @@
             <div class="d-flex flex-column">
                 <div
                     class="form-group mr-r15 linked-entities"
-                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -213,14 +219,15 @@
                             (selected)="handleBranchChange($event)"
                             [isFilterEnabled]="true"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.alias"
+                            [fixedValue]="currentBranch?.name"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
+                                                class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 [tooltip]="commonLocaleData?.app_branch"
                                             ></i>

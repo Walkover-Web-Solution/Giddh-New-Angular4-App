@@ -15,7 +15,6 @@ import { SettingPermissionComponent } from './permissions/setting.permission.com
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingsComponent } from './settings.component';
 import { SettingRountingModule } from './settings.routing.module';
-import { SettingsTagsComponent } from './tags/tags.component';
 import { DeleteTaxConfirmationModelComponent } from './taxes/confirmation/confirmation.model.component';
 import { SettingTaxesComponent } from './taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './trigger/setting.trigger.component';
@@ -27,12 +26,12 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { NoDataModule } from '../shared/no-data/no-data.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -51,14 +50,31 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
 import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { CreateAddressModule } from '../shared/create-address/create-address.module';
+import { CommonModule } from '@angular/common';
+import { TagsModule } from './tags/tags.module';
+import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
+import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
+import { MatListModule } from '@angular/material/list';
+import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { TriggersComponent } from './triggers/triggers.component';
+import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
+import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
+import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [
@@ -75,7 +91,10 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
-        SettingsTagsComponent,
+        TriggersComponent,
+        ShopifyIntegrationComponent,
+        CustomerPortalComponent,
+        TallyIntegrationComponent,
         SettingTriggerComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
@@ -84,13 +103,16 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        SettingCampaignComponent
+        InstitutionsListComponent
     ],
     imports: [
+        CommonModule,
         SharedModule,
+        MatListModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
+        FormsModule,
         ReactiveFormsModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
@@ -120,12 +142,24 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         MatChipsModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
+        MatRadioModule,
+        MatTooltipModule,
+        MatDividerModule,
+        MatMenuModule,
+        MatDatepickerModule,
         NgxPlaidLinkModule,
         AsideMenuAccountModule,
         AccountNumberMaskModule,
         WatchVideoModule,
-        CreateAddressModule
-    ]
+        CreateAddressModule,
+        TagsModule,
+        TaxAuthorityModule,
+        NgxMatSelectSearchModule,
+        D3TreeChartModule,
+        BankIntegrationModule,
+        SerialNumberPipe,
+        NewConfirmModalModule
+    ],
 })
 
 export class SettingsModule {

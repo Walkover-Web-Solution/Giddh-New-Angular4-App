@@ -50,7 +50,7 @@
     font-size: var(--font-size-15);
 }
 
-.total-box > span {
+.total-box>span {
     margin: 0 8px;
     display: inline-block;
     min-width: 120px;
@@ -135,6 +135,7 @@ textarea[name="narration"]:focus {
 :host ::ng-deep .menu {
     border-left: 0 !important;
 }
+
 @media (max-width: 991px) {
     .account-wrapper {
         margin-top: 50px;

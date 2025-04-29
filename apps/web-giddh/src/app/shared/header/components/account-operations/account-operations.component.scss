@@ -21,7 +21,9 @@
     width: 100px;
     margin-bottom: 5px;
 }
-
+.dropdown-wrapper{
+    height: calc(100vh - 170px);
+}
 @media (min-width: 576px) and (max-width: 767px) {
     .modal-share-group {
         max-width: 500px !important;
@@ -31,4 +33,8 @@
     display: inline-block;
     width: 100%;
     text-align: center;
+}
+
+.master-export-btn {
+    height: calc(100vh - 94px);
 }

@@ -30,6 +30,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
+import { BranchHierarchyType } from '../app.constant';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -104,6 +105,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public branchTransferMode: string = "";
     /** This will use for bootstrap modal refrence */
     public modalRef: BsModalRef;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -137,6 +140,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion === 2) {
             document.querySelector("body")?.classList?.add("inventory-v2");
@@ -406,6 +415,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!this.getBranchesInitiated) {
             this.getBranchesInitiated = true;
             let branchFilterRequest = new BranchFilterRequest();
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         }
     }
@@ -458,7 +468,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.GroupStockReportRequest.branchUniqueName =
                 this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
                     this.currentBranchAndWarehouseFilterValues.branch : null;
-            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
+            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;
             this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
         });
     }
@@ -539,7 +549,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch?.uniqueName }));
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${ branch.name}`, value: branch?.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
         }
     }

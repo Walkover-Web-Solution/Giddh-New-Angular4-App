@@ -1,7 +1,5 @@
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, Observable, combineLatest } from "rxjs";
-import { takeUntil, map, startWith } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { StockUnitRequest } from "../../models/api-models/Inventory";
 import { select, Store } from "@ngrx/store";
@@ -10,6 +8,7 @@ import { CustomStockUnitAction } from "../../actions/inventory/custom-stock-unit
 import { Router } from "@angular/router";
 import { cloneDeep } from "../../lodash-optimized";
 import { ToasterService } from "../../services/toaster.service";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 
 
 @Component({
@@ -22,8 +21,6 @@ import { ToasterService } from "../../services/toaster.service";
 export class UnitMappingComponent implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /** this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds active company GST number */
@@ -34,8 +31,12 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     public stockUnit$: Observable<StockUnitRequest[]>;
     /** Holds unit array list */
     public unitsArray: any[] = [];
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router, private changeDetection: ChangeDetectorRef) {
+    constructor(private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router, private changeDetection: ChangeDetectorRef) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
@@ -54,17 +55,6 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.customStockAction.getStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');
         document.querySelector('body').classList.add('unit-mapping-page');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
-
-
         combineLatest([this.commonService.getGstUnits(), this.stockUnit$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1]) {
                 this.unitsArray = [];

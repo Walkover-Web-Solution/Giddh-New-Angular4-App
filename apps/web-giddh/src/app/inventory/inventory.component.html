@@ -35,7 +35,9 @@
                                     <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
                                         <sh-select
                                             *ngIf="
-                                                currentOrganizationType === 'COMPANY' && branches && branches.length > 2
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                branches &&
+                                                branches.length > 2
                                             "
                                             class="multi-select branch-filter sh-select-border"
                                             (ngModelChange)="loadReportByBranch($event)"
@@ -80,6 +82,7 @@
                     heading="Job Work"
                     (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
                     [active]="activeTabIndex === 1"
+                    [id]="activeTabIndex === 1 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 1">
                         <jobwork></jobwork>

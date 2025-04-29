@@ -5,11 +5,14 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="import-table-container">
+    <div class="import-table-container overflow-visible">
         <div class="d-flex pd-t15 pd-b15">
             <div
                 class="activity-filter-wrap"
-                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                *ngIf="
+                    currentCompanyBranches?.length > 2 &&
+                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                "
             >
                 <div class="clearfix">
                     <div class="col-xs-12 col-sm-12">
@@ -25,7 +28,7 @@
                                         (selected)="handleBranchChange($event)"
                                         [isFilterEnabled]="true"
                                         [placeholder]="commonLocaleData?.app_select_entity"
-                                        [fixedValue]="currentBranch?.alias"
+                                        [fixedValue]="currentBranch?.name"
                                         class="entity-dropdown"
                                     >
                                         <ng-template #optionTemplate let-option="option">
@@ -33,7 +36,11 @@
                                                 <a href="javascript:void(0)" class="list-item d-flex">
                                                     <span class="entity-icon">
                                                         <i
-                                                            class="icon-branch-icon pull-right"
+                                                            class="pull-right"
+                                                            [ngClass]="{
+                                                                'icon-company-profile': option.consolidatedBranch,
+                                                                'icon-branch-icon': !option.consolidatedBranch
+                                                            }"
                                                             *ngIf="!option.isCompany"
                                                             tooltip="{{ commonLocaleData?.app_branch }}"
                                                         ></i>
@@ -80,7 +87,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-responsive table-content" *ngIf="!isLoading && dataSource?.length">
+        <div class="table-responsive table-content overflow-visible" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="import-table">
                 <!-- Requested importDate Column -->
                 <ng-container matColumnDef="importDate">
@@ -103,6 +110,7 @@
                     <td mat-cell *matCellDef="let element">
                         <a
                             target="_blank"
+                            *ngIf="!isElectron"
                             [href]="element.path"
                             mat-stroked-button
                             color="primary"
@@ -110,6 +118,15 @@
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
+                        <a
+                            *ngIf="isElectron"
+                            (click)="downloadFile(element.path)"
+                            mat-stroked-button
+                            color="primary"
+                            class="import-button-status"
+                        >
+                            {{ commonLocaleData?.app_download }}</a
+                        >
                     </td>
                 </ng-container>
                 <!-- Count Column -->

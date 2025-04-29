@@ -32,9 +32,8 @@ import { FilingOverviewComponent } from './filing/tabs/overview/overview.compone
 import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { SharedModule } from '../shared/shared.module';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -49,6 +48,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GstSettingComponent } from './gst-setting/gst-setting.component';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -56,31 +65,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent, GstSettingComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
-        PaginationModule.forRoot(),
-        BsDatepickerModule.forRoot(),
-        BsDropdownModule.forRoot(),
         Daterangepicker,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
         HighlightModule,
-        TooltipModule.forRoot(),
         ClickOutsideModule,
-        TabsModule.forRoot(),
         ElementViewChildModule,
         DecimalDigitsModule,
-        ModalModule.forRoot(),
+        TranslateDirectiveModule,
         PurchaseModule,
         InvoiceModule,
         CurrencyModule,
         ConfirmModalModule,
         SharedModule,
-        ShSelectModule,
         TaxSidebarModule,
         MatGridListModule,
         FormFieldsModule,
@@ -91,7 +94,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatDatepickerModule,
         MatNativeDateModule,
         WatchVideoModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatDividerModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatPaginatorModule,
+        MatMenuModule,
+        MatListModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

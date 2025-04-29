@@ -9,11 +9,17 @@ import { DeleteRoleConfirmationModelComponent } from './components/confirmation/
 import { PermissionModelComponent } from './components/model/permission.model.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { CapitalizePipe } from './capitalize.pipe';
-import { LaddaModule } from 'angular2-ladda';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 import { SortByModule } from '../shared/helpers/pipes/sort-by/sort-by.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 
 const PERMISSION_ROUTES: Routes = [
     { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full' },
@@ -49,14 +55,17 @@ const PERMISSION_ROUTES: Routes = [
         CommonModule,
         FormsModule,
         RouterModule.forChild(PERMISSION_ROUTES),
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
-        ModalModule.forRoot(),
-        BsDropdownModule.forRoot(),
         SharedModule,
-        SortByModule
+        SortByModule,
+        FormFieldsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatListModule,
+        MatTooltipModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatSelectModule
     ],
     exports: [
         RouterModule,

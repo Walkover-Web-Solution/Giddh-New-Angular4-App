@@ -24,7 +24,7 @@ export class VoucherCopyLinkPipe implements PipeTransform {
      */
     transform(voucherType: string, localeData: any): string {
         let copyText = "";
-        let voucherName = this.vouchersUtilityService.getVoucherNameByType(voucherType, localeData);
+        let voucherName = this.vouchersUtilityService.getVoucherNameByType(voucherType, localeData, true);
 
         switch (voucherType) {
             case VoucherTypeEnum.debitNote:

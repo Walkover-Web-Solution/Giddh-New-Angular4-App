@@ -30,7 +30,8 @@
                 </div>
                 <button
                     *ngIf="
-                        inputData?.isOwner && inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
+                        inputData?.rowData?.isOwner &&
+                        inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
                     "
                     (click)="createCompanyInSubscription()"
                     mat-stroked-button
@@ -86,7 +87,7 @@
                                 <div class="d-flex align-items-center">
                                     {{ element.status }}
                                     <button
-                                        *ngIf="inputData?.isOwner"
+                                        *ngIf="inputData?.rowData?.isOwner"
                                         mat-icon-button
                                         id="edit-model-basic"
                                         class="table-menu-first-td"
@@ -100,8 +101,16 @@
                                 <mat-menu #editModelBasic="matMenu">
                                     <div class="account-detail-custom-header">
                                         <button
+                                            *ngIf="element?.status === 'USER_ARCHIVED'"
                                             mat-menu-item
+                                            (click)="archiveCompany(element, 'UNARCHIVED')"
+                                            aria-label="details"
+                                        >
+                                            {{ commonLocaleData?.app_unarchive }}
+                                        </button>
+                                        <button
                                             *ngIf="element?.status === 'UNARCHIVED'"
+                                            mat-menu-item
                                             (click)="archiveCompany(element, 'USER_ARCHIVED')"
                                             aria-label="details"
                                         >
@@ -122,7 +131,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="table-row" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </section>
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length">

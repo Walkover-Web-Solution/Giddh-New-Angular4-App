@@ -10,6 +10,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'cr-dr-list',
@@ -61,6 +62,12 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public giddhBalanceDecimalPlaces: number = 2;
     /** This will use for table heading */
     public displayedColumns: string[] = ['name', 'latestInvoiceDate', 'latestBillAmount', 'closingBalance'];
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
@@ -73,6 +80,8 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -90,6 +99,18 @@ export class CrDrComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+            }
+        });
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
+            }
+        });
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
     }

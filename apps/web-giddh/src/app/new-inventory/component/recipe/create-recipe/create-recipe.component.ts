@@ -752,6 +752,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public formatRecipeRequest(): any {
         let recipeObject = { manufacturingDetails: [] };
+        if (!this.recipeObject?.manufacturingDetails) {
+            return recipeObject; // Return empty recipeObject if manufacturingDetails is missing
+        }
         this.recipeObject.manufacturingDetails?.forEach(manufacturingDetail => {
             if (manufacturingDetail?.variant?.uniqueName && ((manufacturingDetail?.linkedStocks?.length > 0 && manufacturingDetail.linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0) || (manufacturingDetail.byProducts?.length > 0 && manufacturingDetail.byProducts?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0))) {
                 let linkedStocks = [];

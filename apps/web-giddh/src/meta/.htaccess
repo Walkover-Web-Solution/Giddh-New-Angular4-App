@@ -3,6 +3,8 @@
     Header set Pragma "no-cache"
     Header set Expires 0
 
+    Header set Access-Control-Allow-Origin *.cobrowse.io
+
     # Serve brotli compressed CSS files if they exist
     # and the client accepts brotli.
     RewriteCond "%{HTTP:Accept-encoding}" "br"

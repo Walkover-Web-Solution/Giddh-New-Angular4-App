@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
@@ -13,11 +13,16 @@ import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { GstReport } from '../../constants/gst.constant';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../../shared/helpers/defaultDateFormat';
+import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
+import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -57,12 +62,22 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** True if current organization is company */
     @Input() public isCompany: boolean;
-    @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
+    /** True if current organization is consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
+    /** Holds cancel confirmation dialog template ref */
+    @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
+    /** Holds cancel confirmation dialog ref */
+    public cancelConfirmationDialogRef: MatDialogRef<any>;
+    /** Holds cancel push to portal dialog template ref */
+    @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
     /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
+    /** Aside authentication dialog open */
+    @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;
-    public GstAsidePaneState: string = 'out';
-    public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
+    public selectedService: TaxServiceType;
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
     public imgPath: string = '';
@@ -81,16 +96,28 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public showGstFiling: boolean = false;
     /** This will use for selected month on datepicker*/
     public selectedMonth: any = null;
-    /** This will use for date selected */
-    public dateSelected: boolean = false;
     /** This will use for hold url */
     public holdActiveRoute: boolean;
     /** This will use for date show */
     public showDate: boolean = true;
-    /** This will use for string date show */
-    public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
+    /** Holds aside authentication dialog ref */
+    public asideAuthenticationDialogRef: MatDialogRef<any>;
+    /** Custom selected month */
+    public customMonth: string = '';
+    /** Holds start month/year */
+    public startAt: Date = new Date();
+    /** Holds selected date */
+    public date: FormControl<string | null> = new FormControl<string | null>('');
+    /** Active company details */
+    public activeCompany: any = null;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** Holds Tax Service Enum */
+    public taxServiceEnum = TaxServiceEnum;
+    /** Holds true, if screen size  less than or equals to 1366px */
+    public isSmallDesktop: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -101,17 +128,23 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
-        private router: Router
+        private router: Router,
+        public dialog: MatDialog,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
         this.gstSessionResponse$ = this.store.pipe(select(p => p.gstR.gstSessionResponse), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.activeCompany = response;
+        });
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
             if (this.holdActiveRoute) {
@@ -143,11 +176,28 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 };
                 if (!this.selectedMonth) {
                     this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                    this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
                 }
-                this.visibleSelectMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MMMM YYYY');
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
+        });
+
+        let request: GstOverViewRequest = new GstOverViewRequest();
+        request.from = this.currentPeriod.from;
+        request.to = this.currentPeriod.to;
+        request.gstin = this.activeCompanyGstNumber;
+        if (this.selectedGst === GstReport.Gstr1) {
+            this.navigateToOverview();
+            this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
+        } else if (this.selectedGst === GstReport.Gstr2) {
+            this.navigateToOverview();
+            this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
+        }
+        this.breakPointObservar.observe([
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE,
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isSmallDesktop = result?.matches;
         });
     }
 
@@ -175,39 +225,39 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.toggleSettingAsidePane(null, 'TAXPRO');
+                this.openSettingAsidePane(null, this.taxServiceEnum.TAXPRO);
             }
         }
 
         if (s && s.fileGstr3b && s.fileGstr3b.currentValue?.via) {
             let gsp = s.fileGstr3b.currentValue.via;
             if (this.gstAuthenticated) {
-                if (gsp === 'VAYANA' && this.isVayanaAuthenticated) {
+                if (gsp === this.taxServiceEnum.VAYANA && this.isVayanaAuthenticated) {
                     this.fileGstr3B(gsp);
-                } else if (gsp === 'VAYANA' && !this.isVayanaAuthenticated) {
-                    this.toggleSettingAsidePane(null, gsp);
+                } else if (gsp === this.taxServiceEnum.VAYANA && !this.isVayanaAuthenticated) {
+                    this.openSettingAsidePane(null, gsp);
                 }
 
-                if (gsp === 'TAXPRO' && this.isTaxproAuthenticated) {
+                if (gsp === this.taxServiceEnum.TAXPRO && this.isTaxproAuthenticated) {
                     this.fileGstr3B(gsp);
-                } else if (gsp === 'TAXPRO' && !this.isTaxproAuthenticated) {
-                    this.toggleSettingAsidePane(null, gsp);
+                } else if (gsp === this.taxServiceEnum.TAXPRO && !this.isTaxproAuthenticated) {
+                    this.openSettingAsidePane(null, gsp);
                 }
 
             } else {
-                this.toggleSettingAsidePane(null, gsp);
+                this.openSettingAsidePane(null, gsp);
             }
         }
     }
 
     /**
-     * Toggle Setting Aside Pane
+     * Open setting aside pane dialog
      *
      * @param {*} event
-     * @param {('JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA')} [selectedService]
+     * @param {TaxServiceType} [selectedService]
      * @memberof FilingHeaderComponent
      */
-    public toggleSettingAsidePane(event, selectedService?: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA'): void {
+    public openSettingAsidePane(event: any, selectedService?: TaxServiceType): void {
         if (event) {
             event.preventDefault();
         }
@@ -215,11 +265,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (selectedService) {
             this.selectedService = selectedService;
         }
-        this.GstAsidePaneState = this.GstAsidePaneState === 'out' ? 'in' : 'out';
-    }
-
-    public closeAsidePane() {
-        this.GstAsidePaneState = 'out';
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            disableClose: true,
+            autoFocus: false
+        })
     }
 
     /**
@@ -239,7 +294,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
             this.store.dispatch(this.reconcileAction.DownloadGstrSheet(request));
         } else {
-            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.showSnackBar('error', this.localeData?.filing?.gst_unavailable);
         }
     }
 
@@ -257,7 +312,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (this.activeCompanyGstNumber) {
             this.store.dispatch(this.invoicePurchaseActions.FileJioGstReturn(this.currentPeriod, this.activeCompanyGstNumber, Via));
         } else {
-            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.showSnackBar('error', this.localeData?.filing?.gst_unavailable);
         }
     }
 
@@ -267,13 +322,13 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 gstin: this.activeCompanyGstNumber,
                 from: this.currentPeriod.from,
                 to: this.currentPeriod.to,
-                gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO',
+                gsp: this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO,
                 currentDateTime: this.generalService.getCurrentDateTime()
             }));
         }
         if (this.selectedGst === GstReport.Gstr3b) {
             let gsp;
-            gsp = this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO';
+            gsp = this.isVayanaAuthenticated ? this.taxServiceEnum.VAYANA : this.taxServiceEnum.TAXPRO;
             this.fileGstr3B(gsp);
         }
     }
@@ -282,8 +337,27 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.store.dispatch(this.invoicePurchaseActions.FileGSTR3B({ from: this.currentPeriod.from, to: this.currentPeriod.to }, this.activeCompanyGstNumber, via));
     }
 
-    public toggleCancelModel() {
-        this.cancelConfirmationModel.toggle();
+    /**
+     * Open cancel confirmation dialog
+     *
+     * @memberof FilingHeaderComponent
+     */
+    public openCancelConfirmationDialog(): void {
+        this.cancelConfirmationDialogRef = this.dialog.open(this.cancelConfirmationDialog, {
+            panelClass: ['mat-dialog-sm'],
+            disableClose: true
+        });
+    }
+
+    /**
+     * Open push to portal dialog
+     *
+     * @memberof FilingHeaderComponent
+     */
+    public openPushToPortalDialog(): void {
+        this.dialog.open(this.pushToPortalDialog, {
+            disableClose: true
+        });
     }
 
     /**
@@ -292,27 +366,22 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} ev
      * @memberof FilingHeaderComponent
      */
-    public periodChanged(event?: any): void {
-        if (event) {
-            this.selectedMonth = event;
+    public periodChanged(date: any): void {
+        if (date) {
+            this.selectedMonth = date;
             this.currentPeriod = {
-                from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(date?.from).format(GIDDH_DATE_FORMAT),
+                to: dayjs(date?.to).format(GIDDH_DATE_FORMAT)
             };
-            this.dateSelected = true;
+            this.isMonthSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
-            let request: GstOverViewRequest = new GstOverViewRequest();
-            request.from = this.currentPeriod.from;
-            request.to = this.currentPeriod.to;
-            request.gstin = this.activeCompanyGstNumber;
             if (this.selectedGst === GstReport.Gstr1) {
                 this.navigateToOverview();
-                this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
             } else {
                 this.navigateToOverview();
-                this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
             }
         }
+
     }
 
     /**
@@ -333,11 +402,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
                     return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
                 } else {
-                    this.toasty.errorToast(res?.message);
+                    this.toasty.showSnackBar('error', res?.message);
                 }
             });
         } else {
-            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+            this.toasty.showSnackBar('error', this.localeData?.filing?.gst_unavailable);
         }
     }
 
@@ -355,5 +424,41 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
                 queryParamsHandling: 'merge'
             });
+    }
+
+    /**
+     * Sets month/year
+     *
+     * @param {*} date
+     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @memberof FilingHeaderComponent
+     */
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker?.close();
+        const selectedMonth = new Date(date);
+        const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        this.dateSelected([firstDay, lastDay]);
+    }
+
+    /**
+     * Selects date and call api
+     *
+     * @param {*} event
+     * @memberof FilingHeaderComponent
+     */
+    public dateSelected(event: any): void {
+        this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
+        this.date.setValue(this.customMonth);
+        this.periodChanged({ from: event[0], to: event[1] });
+    }
+
+    /**
+    * Navigates to the page for buy plan.
+    * @memberof FilingHeaderComponent
+    * @param subscriptionId
+    */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }

@@ -231,10 +231,8 @@ class AppDatabase extends Dexie {
             res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
-                setTimeout(() => {
-                    return this.companies.get(key);
-                }, 500);
-            }).catch((err) => (err));
+                return this.companies.get(key);
+            }).catch((err) => (err)); 
         }).catch((err) => {
             console.log('error while deleting item', err);
         });

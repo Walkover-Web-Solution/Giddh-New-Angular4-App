@@ -17,6 +17,8 @@
 	"max_character_limit_error": "अधिकतम वर्ण सीमा: 100",
 	"select_business_type": "व्यवसाय का प्रकार चुनें",
 	"select_business_nature": "व्यवसाय प्रकृति का चयन करें",
+    "other_business_nature": "अन्य व्यवसायिक प्रकृति",
+    "enter_business_nature": "व्यावसायिक प्रकृति दर्ज करें",
 	"enter_tax": "[TAX_NAME] दर्ज करें",
     "invalid_tax": "अमान्य [TAX_NAME]",
 	"same_as_company": "कंपनी के समान",

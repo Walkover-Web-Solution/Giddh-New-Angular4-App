@@ -68,8 +68,7 @@
 .icon-pointer .glyphicon {
     cursor: pointer;
 }
-.icon-pointer .glyphicon:hover {
-}
+
 .td-search-box div i:hover {
     color: var(--color-gray);
 }
@@ -157,6 +156,7 @@ button[aria-expanded="true"] i {
 }
 .right-bar {
     width: calc(100% - 260px);
+    margin-top: 45px;
 }
 .unit-badge {
     display: inline-block;

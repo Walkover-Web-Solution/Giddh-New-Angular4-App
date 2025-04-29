@@ -18,10 +18,10 @@
 	"from_to_placeholder": "दिनांक सीमा चुनें",
 	"select_past_period_label": "पिछली अवधि का चयन करें",
 	"select_past_period_placeholder": "दिनों में संख्या",
-	"ip_addresses": "आईपी ​​पते",
 	"cidr_example": "192.168.1.0/24",
 	"ip_example": "192.168.1.0",
 	"create_user_permission": "उपयोगकर्ता अनुमति बनाएं",
+	"delete_user_permission": "क्या आप वाकई इस उपयोगकर्ता की अनुमति को हटाना चाहते हैं?",
 	"past_period_duration": "पिछला [DURATION] [PERIOD]S",
 	"invalid_date": "अमान्य तिथि",
 	"add_custom_role": "कस्टम भूमिका"

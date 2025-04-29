@@ -43,11 +43,17 @@
                         "styles": [
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css",
+                            "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+                            "node_modules/froala-editor/css/froala_style.min.css",
+                            "node_modules/tributejs/dist/tribute.css",
+                            "node_modules/froala-editor/css/themes/gray.min.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "apps/web-giddh/src/assets/js/intl-tel-input.js"
+                            "apps/web-giddh/src/assets/js/intl-tel-input.js",
+                            "node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+                            "node_modules/tributejs/dist/tribute.js"
                         ]
                     },
                     "configurations": {
@@ -284,11 +290,17 @@
                         "styles": [
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css",
+                            "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+                            "node_modules/froala-editor/css/froala_style.min.css",
+                            "node_modules/tributejs/dist/tribute.css",
+                            "node_modules/froala-editor/css/themes/gray.min.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "apps/web-giddh/src/assets/js/intl-tel-input.js"
+                            "apps/web-giddh/src/assets/js/intl-tel-input.js",
+                            "node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+                            "node_modules/tributejs/dist/tribute.js"
                         ],
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.partial.js",
@@ -383,7 +395,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://app.giddh.com/",
+                            "baseHref": "https://books.giddh.com/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",

@@ -66,7 +66,6 @@
     "vendors": "विक्रेता",
     "vendors_selected": "विक्रेते निवडले",
     "select_payor": "पेअर निवडा",
-    "connect_icici_bank": "आईसीआईसीआई बँक कनेक्ट करा",
     "pending_approval": "मंजूरीसाठी प्रलंबित",
     "due": "देय",
     "bulk_payment_unsupported_error": "मोठ्या प्रमाणात पेमेंट समर्थित नाही.",
@@ -84,5 +83,6 @@
     "show_bank_balance":"बँक शिल्लक दाखवा",
     "hide_bank_balance":"बँक शिल्लक लपवा",
     "unpaid_invoices": "न भरलेल्या पावत्या",
-    "connect_bank": "बँक कनेक्ट करा"
+    "connect_bank": "बँक कनेक्ट करा",
+    "send_bulk_email": "मोठ्या प्रमाणात ईमेल पाठवा"
 }

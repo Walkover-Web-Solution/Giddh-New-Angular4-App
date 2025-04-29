@@ -17,12 +17,12 @@ const routes: Routes = [
                 pathMatch: "full"
             },
             {
-                path: ":voucherType/list",
-                component: VoucherListComponent
+                path: "view/:voucherType/:voucherUniqueName",
+                component: VouchersPreviewComponent
             },
             {
-                path: ":voucherType/preview",
-                component: VouchersPreviewComponent
+                path: "preview/:voucherType/:module",
+                component: VoucherListComponent
             },
             {
                 path: ":voucherType/create",
@@ -30,8 +30,14 @@ const routes: Routes = [
                 canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
-                path: ":voucherType/:accountUniqueName/:uniqueName/edit",
-                component: VoucherCreateComponent
+                path: ":voucherType/:accountUniqueName/create",
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
+            },
+            {
+                path: ":voucherType/:accountUniqueName/:uniqueName/:action",
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }

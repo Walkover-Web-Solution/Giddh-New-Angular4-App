@@ -19,8 +19,8 @@
         }
         .help-aside-body {
             .gst-menu-items {
-                ul {
-                    li {
+                mat-list {
+                    mat-list-item {
                         padding: 0px;
                         &.disabled {
                             cursor: not-allowed;
@@ -62,13 +62,13 @@
 
 .gst-menu-items {
     padding: 15px 0 0;
-    ul {
+    mat-list {
         padding: 0;
         list-style: none;
         font-size: var(--font-size-15);
         font-family: var(--font-semibold);
         color: var(--color-primary-tax-sidebar-gst-menu-items-ul);
-        li {
+        mat-list-item {
             padding: 6px 20px;
             margin-bottom: 0px;
             &.disabled {
@@ -127,6 +127,6 @@
 @media (max-height: 700px) {
     .help-aside-body {
         height: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 }

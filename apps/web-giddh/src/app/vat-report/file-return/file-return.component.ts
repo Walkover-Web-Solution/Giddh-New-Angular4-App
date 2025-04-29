@@ -32,8 +32,6 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** File Return confirmation popup configuration */
     public fileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
-    /** Hold client ip address */
-    public clientIp: string = "";
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
@@ -59,13 +57,6 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     * @memberof FileReturnComponent
     */
     public ngOnInit(): void {
-
-        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.ipAddress) {
-                this.clientIp = response.ipAddress;
-            }
-        });
-
         this.getReport();
     }
 
@@ -111,17 +102,17 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         };
 
         this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
-
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
                 configuration: this.fileReturnConfirmationConfiguration
-            }
+            },
+            disableClose: true
         });
 
         confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response === "Yes") {
-                this.vatService.fileVatReturn(this.inputData.companyUniqueName, model, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (response === this.localeData?.submit_file_return) {
+                this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res.status === 'success') {
                         if (res?.body) {
                             this.toaster.showSnackBar('success', res.body);

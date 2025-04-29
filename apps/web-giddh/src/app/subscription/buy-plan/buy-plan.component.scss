@@ -3,17 +3,31 @@
         border: 1px solid var(--color-red-border) !important;
     }
 
-    .country-dropdown {
-        min-width: 274px;
-        width: 274px;
+    .dropdown-wrapper {
+        .country-dropdown {
+            width: max-content;
+            img {
+                &.flag {
+                    border-radius: 50%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+            mat-select {
+                 visibility: hidden;
+                 width: 0;
+                 height: 0;
+                 transform: translateY(-10px);
+            }
+        }
     }
 
     .plan-content {
-        padding: 10px 8px 20px 8px;
-        height: calc(100% - 36px);
+        padding: 8px 8px 36px 8px;
 
         .plan-title {
             min-height: 72px;
+            font-weight: 400;
         }
 
         h2,
@@ -65,25 +79,24 @@
         min-width: 230px;
         font-weight: 500;
         font-size: var(--font-size-15);
-        border-right: 1px solid var(--color-iron);
         border-left: 1px solid var(--color-iron);
     }
 
     .plan-table {
         width: min-content;
         float: left !important;
-
         overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
         border: 1px solid var(--color-iron);
+        border-radius: 4px;
     }
 
     .plan-table {
         .grid-list-div {
             display: inline-flex;
             float: left;
-            height: 47px;
+            height: 50px;
         }
     }
 
@@ -115,36 +128,24 @@
     }
 
     .active-plan {
-        border-top: 2px solid var(--color-primary-header-background);
-        border-left: 2px solid var(--color-primary-header-background);
-        border-right: 2px solid var(--color-primary-header-background);
+        border-top: 2px solid var(--color-primary-common);
+        border-left: 2px solid var(--color-primary-common);
+        border-right: 2px solid var(--color-primary-common);
     }
 
     .selected-plan-button {
         min-width: 160px;
+        min-height: 36px;
         width: 160px;
         margin: 0 auto;
     }
 
-    .popular-txt {
-        height: 36px;
-        background-color: var(--color-giddh-blue);
-
-        span {
-            color: var(--color-white);
-        }
-    }
-
     .selected-plan {
-        background-color: var(--color-giddh-blue);
+        background-color: var(--color-primary-common);
 
         span {
             color: var(--color-white);
         }
-    }
-
-    .popular-txt-height {
-        height: 36px;
     }
 
     .active-plan-td {
@@ -163,7 +164,7 @@
     }
 
     .plan-summary-heading {
-        height: 47px;
+        height: 50px;
     }
 
     .plan-summary {
@@ -173,6 +174,9 @@
 
         .plan-width {
             min-width: 500px;
+            .plan-header{
+                height: 50px;
+            }
         }
     }
 
@@ -188,6 +192,10 @@
         h4 {
             height: 38px;
         }
+    }
+    amount-field {
+        display: inline-block;
+        text-decoration: inherit;
     }
 }
 
@@ -232,6 +240,12 @@
                 }
             }
         }
+    }
+}
+
+.custom-tab {
+    .mat-button-toggle {
+        min-width: 70px;
     }
 }
 

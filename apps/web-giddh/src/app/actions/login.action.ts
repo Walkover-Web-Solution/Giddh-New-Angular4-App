@@ -31,6 +31,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
 import { LocaleService } from '../services/locale.service';
+import { COUNTRY_REGION_MAP } from '../app.constant';
 
 @Injectable()
 export class LoginActions {
@@ -216,9 +217,9 @@ export class LoginActions {
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
-                                    this._router.navigate(['/pages/subscription']);
+                                    this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                    this._router.navigate(['/pages/user-details/subscription/buy-plan']);
                                 }
                             })
                         ).subscribe();
@@ -292,9 +293,9 @@ export class LoginActions {
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
-                                    this._router.navigate(['/pages/subscription']);
+                                    this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                    this._router.navigate(['/pages/user-details/subscription/buy-plan']);
                                 }
                             })
                         ).subscribe();
@@ -342,7 +343,7 @@ export class LoginActions {
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://giddh.com/login/';
+                    window.location.href = this._generalService.getGiddhRegionUrl();
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();

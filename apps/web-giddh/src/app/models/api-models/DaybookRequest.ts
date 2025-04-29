@@ -25,14 +25,16 @@ export class ExportBodyRequest {
     accountUniqueName?: string;
     exportType?: string;
     branchUniqueName?: string;
-    fileType?: string;
     tagName?: string;
+    fileType?: string;
     interval?: string;
     isExpanded?: boolean;
     columnsToExport?: any[];
     q?: any;
     tagNames?: any[];
     includeTag?: boolean;
+    groupUniqueNames?: any;
+    inventoryType?: string;
 }
 
 export interface DayBookRequestModel {
@@ -61,7 +63,7 @@ export interface Inventory {
     quantityGreaterThan: boolean;
     includeItemValue: boolean;
     itemValue?: any;
-    includeItemLessThan: boolean;
-    includeItemEqualTo: boolean;
-    includeItemGreaterThan: boolean;
+    itemValueLessThan: boolean;
+    itemValueEqualTo: boolean;
+    itemValueGreaterThan: boolean;
 }

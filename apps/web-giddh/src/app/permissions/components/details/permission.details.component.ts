@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -7,7 +7,7 @@ import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
-import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permission.utility';
+import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
@@ -16,8 +16,8 @@ import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remo
     styleUrls: [`./permission.details.scss`]
 })
 
-export class PermissionDetailsComponent implements OnInit, OnDestroy {
-    public pageList: IPageStr[];
+export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+    public pageList: any[];
     public newRole: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allRoles: any;
@@ -33,6 +33,10 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* Holds Table column */
+    public displayedColumns: string[] = ['admin', 'adminicon', 'view'];
+    /** Holds original page list */
+    private originalPageList: any[];
 
     constructor(private router: Router,
         private store: Store<AppState>,
@@ -65,7 +69,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
                 this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
             }
             this.newRole = permission.newRole;
-            this.pageList = permission.pages;
+            this.originalPageList = permission.pages;
         });
 
         // listener for add update role case
@@ -84,6 +88,23 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         } else {
             this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), this.newRole.isFresh, this.checkForRoleUniqueName());
         }
+    }
+
+    /**
+    * This hook will be use for component after initialization
+    *
+    * @memberof PermissionDetailsComponent
+    */
+    public ngAfterViewInit(): void {
+        this.checkExistsDataInPageResponse();
+
+        if (this.roleObj?.scopes) {
+            this.roleObj.scopes = this.roleObj?.scopes.map(item => {
+                item.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
+                return item;
+            });
+        }
+
     }
 
     public handleShareSituation(roleObj: NewRoleClass) {
@@ -112,12 +133,16 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             pageObj.permissions = pageObj.permissions.map((o: Permission) => {
                 return o = new NewPermissionObj(o.code, false);
             });
-            this.roleObj.scopes.push(pageObj);
+            pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
+            this.roleObj?.scopes?.push(pageObj);
+            this.checkExistsDataInPageResponse();
+            this.pageName = null;
         }
     }
 
     public removePageFromScope(page: string) {
         this.roleObj.scopes.splice(this.roleObj.scopes?.findIndex((o: Scope) => o.name === page), 1);
+        this.checkExistsDataInPageResponse();
     }
 
     public checkForAlreadyExistInPageArray(page: string): boolean {
@@ -138,14 +163,15 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public getScopeDataReadyForAPI(data): Scope[] {
         let arr: Scope[];
         arr = forEach(data?.scopes, (page: Scope) => {
-            remove(page.permissions, (o: Permission) => !o.isSelected);
+            remove(page.permissions, (permission: Permission) => !permission.isSelected || permission.code === 'SELECT-ALL');
         });
-        return filter(arr, (o: Scope) => o.permissions?.length > 0);
+        return filter(arr, (scope: Scope) => scope.permissions?.length > 0);
     }
 
     public addNewRole(): any {
         let data = cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
+
         if (data.scopes?.length < 1) {
             return this._toaster.errorToast(this.localeData?.add_role_error);
         }
@@ -165,12 +191,29 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public setScopeForCurrentRole(): Scope[] {
+        let response;
         if (this.newRole.isFresh) {
             // fresh role logic here
-            return this.generateFreshUI();
+            response = this.generateFreshUI();
+
         } else {
             // copy role scenario
-            return this.generateUIFromExistedRole();
+            response = this.generateUIFromExistedRole();
+        }
+
+        if (response) {
+            response.forEach(item => {
+                let count = 0;
+                item?.permissions?.forEach(item => {
+                    if (item.code !== 'SELECT-ALL' && item.isSelected) {
+                        count++;
+                    }
+                });
+                if ((item.permissions.length - 1) === count) {
+                    item.permissions[0].isSelected = true;
+                }
+            });
+            return response;
         }
     }
 
@@ -194,7 +237,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
                     }
                 });
                 if (count === obj.permissions?.length) {
-                    obj.selectAll = true;
+                    obj.permissions[0].isSelected = true;
                 }
             });
             return res.scopes;
@@ -291,24 +334,42 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public toggleItems(pageName: string, event: any) {
+
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (res) {
-            map(res.permissions, (o: Permission) => o.isSelected = event.target?.checked ? true : false);
+            map(res.permissions, (permission: Permission) => permission.isSelected = event.checked ? true : false);
         }
     }
 
     public toggleItem(pageName: string, item: Permission, event: any) {
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
-        if (event.target?.checked) {
-            let idx = findIndex(res.permissions, (o: Permission) => o.isSelected === false);
+        if (event.checked) {
+            let idx = findIndex(res.permissions, (permission: Permission) => {
+                return permission.isSelected === false && permission.code !== 'SELECT-ALL';
+            });
+
             if (idx !== -1) {
-                return res.selectAll = false;
+                return res.permissions[0].isSelected = false;
             } else {
-                return res.selectAll = true;
+                return res.permissions[0].isSelected = true;
             }
         } else {
-            return res.selectAll = false;
+            return res.permissions[0].isSelected = false;
         }
+    }
+
+    /**
+     * Checks if the page list already contains the current page. If not, adds it to the page list.//+
+     *
+     * @memberof PermissionDetailsComponent
+     */
+    public checkExistsDataInPageResponse(): void {
+        this.pageList = [];
+        this.originalPageList?.forEach(item => {
+            if (!this.checkForAlreadyExistInPageArray(String(item))) {
+                this.pageList.push({ label: item, value: item, additional: { isDisabled: false } });
+            }
+        });
     }
 
 }

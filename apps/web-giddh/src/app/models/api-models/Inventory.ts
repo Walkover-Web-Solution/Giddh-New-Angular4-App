@@ -171,6 +171,7 @@ export class StockTransactionReportRequest {
     public stocks?: any[];
     public variants?: any[];
     public inventoryType?: string;
+    public archived?: boolean;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -199,6 +200,7 @@ export class SearchStockTransactionReportRequest {
     public totalPages?: number;
     public searchPage?: string;
     public inventoryType?: string;
+    public loadMore?: boolean;
     constructor() {
         this.count = API_COUNT_LIMIT;
         this.page = 1;
@@ -234,6 +236,67 @@ export class BalanceStockTransactionReportRequest {
         this.branchUniqueNames = [];
         this.variantUniqueNames = [];
         this.voucherTypes = [];
+    }
+}
+
+export class StockTransactionReportRequestExport {
+    public stockGroupUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public transactionType: string;
+    public accountName: string;
+    public voucherTypes?: any[];
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    public inventoryType?: string;
+    public showStockName?: boolean;
+    public showGroupName?: boolean;
+    public showUnitName?: boolean;
+    public showOpeningStockQty?: boolean;
+    public showOpeningStockValue?: boolean;
+    public showInwardsQty?: boolean;
+    public showInwardsValue?: boolean;
+    public showOutwardsQty?: boolean;
+    public showOutwardsValue?: boolean;
+    public showClosingStockQty?: boolean;
+    public showClosingStockValue?: boolean;
+    public showVariantName?: boolean;
+    public showDate?: boolean;
+    public showAccountUniqueName?: boolean;
+    public showRate?: boolean;
+    public showValue?: boolean;
+    constructor() {
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.accountName = "";
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.voucherTypes = [];
+        this.showStockName = false;
+        this.showGroupName = false;
+        this.showUnitName = false;
+        this.showOpeningStockQty = false;
+        this.showOpeningStockValue = false;
+        this.showInwardsQty = false;
+        this.showInwardsValue = false;
+        this.showOutwardsQty = false;
+        this.showOutwardsValue = false;
+        this.showClosingStockQty = false;
+        this.showClosingStockValue = false;
+        this.showVariantName = false;
+        this.showDate = false;
+        this.showAccountUniqueName = false;
+        this.showRate = false;
+        this.showValue = false;
     }
 }
 
@@ -448,6 +511,50 @@ export class InventoryReportRequest {
     }
 }
 
+export class InventoryReportRequestExport {
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public stockGroupUniqueNames?: any[];
+    public stockUniqueNames?: any[];
+    public warehouseUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    public inventoryType?: string;
+    public showStockName?: boolean;
+    public showGroupName?: boolean;
+    public showUnitName?: boolean;
+    public showOpeningStockQty?: boolean;
+    public showOpeningStockValue?: boolean;
+    public showInwardsQty?: boolean;
+    public showInwardsValue?: boolean;
+    public showOutwardsQty?: boolean;
+    public showOutwardsValue?: boolean;
+    public showClosingStockQty?: boolean;
+    public showClosingStockValue?: boolean;
+    constructor() {
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.warehouseUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.showStockName = false;
+        this.showGroupName = false;
+        this.showUnitName = false;
+        this.showOpeningStockQty = false;
+        this.showOpeningStockValue = false;
+        this.showInwardsQty = false;
+        this.showInwardsValue = false;
+        this.showOutwardsQty = false;
+        this.showOutwardsValue = false;
+        this.showClosingStockQty = false;
+        this.showClosingStockValue = false;
+    }
+}
+
 export class InventoryReportResponse {
     public count: number;
     public page: number;
@@ -511,4 +618,44 @@ export class CreateDiscount {
         this.customerVendorAccountUniqueName = customerVendorAccountUniqueName;
         this.customerVendorGroupUniqueName = customerVendorGroupUniqueName;
     }
+}
+
+export class AdjustInventoryListResponse {
+    public count: number;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public results: InventorytAdjustReport[];
+}
+
+export class InventorytAdjustReport {
+    public date: string;
+    public refNo: string;
+    public reason: InventoryAdjustCommonUse;
+    public adjustmentMethod: string;
+    public entity: string;
+    public status: string;
+    public adjustedProduct: InventoryAdjustCommonUse;
+    public adjustedBy: InventoryAdjustCommonUse;
+    public failureReason: string;
+}
+
+export class InventoryAdjustCommonUse {
+    name: string;
+    uniqueName: string;
+}
+
+export class InventorytAdjustReportQueryRequest {
+    public q: string = '';
+    public from?: string = '';
+    public to?: string = '';
+    public page: number = 1;
+    public count: number = API_COUNT_LIMIT;
+    public totalPages: number = 0;
+    public totalItems: number = 0;
+    public sortBy: string = '';
+    public sort: 'asc' | 'desc' = 'desc';
+    public searchBy: string = '';
+    public branchUniqueName?: string;
+    public inventoryType: string;
 }

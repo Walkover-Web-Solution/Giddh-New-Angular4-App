@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { MainComponent } from "./main.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, TitleCasePipe } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { VouchersRoutingModule } from "./vouchers.routing.module";
@@ -23,7 +23,6 @@ import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
-import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
@@ -75,6 +74,23 @@ import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
+import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
+import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
+import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
+import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
+import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
+import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
+import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
+import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
+import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
+import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
+import { A11yModule } from "@angular/cdk/a11y";
+import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
+import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
+import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
 
 @NgModule({
     declarations: [
@@ -97,7 +113,9 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         DesignFilterComponent,
         ContentFilterComponent,
         ConvertBillDialogComponent,
-        FullAddressComponent
+        FullAddressComponent,
+        DownloadVoucherComponent,
+        CancelEInvoiceDialogComponent
     ],
     imports: [
         CommonModule,
@@ -156,11 +174,25 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         ConfirmationModalModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
-        NgxMaskModule
+        NgxMaskModule,
+        GenerateEWayBillModule,
+        DatepickerWrapperModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        PurchaseSettingModule,
+        InvoiceSettingModule,
+        InvoiceGenerateModule,
+        InvoiceTemplatesModule,
+        CdkScrollModule,
+        TrimPipeModule,
+        A11yModule,
+        ValidateSectionPermissionDirectiveModule,
+        SubscriptionUpgradeButtonModule
     ],
     exports: [
 
-    ]
+    ],
+    providers: [TitleCasePipe, InvoiceUiDataService]
 })
 export class VouchersModule {
 

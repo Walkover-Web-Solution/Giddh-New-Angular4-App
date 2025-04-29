@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { delay, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -17,8 +17,10 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BootstrapToggleSwitch } from '../../app.constant'
+import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { MatDialog } from '@angular/material/dialog';
+import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -70,7 +72,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Stores the active company information */
+    /** Stores the active company information observable */
     public activeCompany$: Observable<any> = null;
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
@@ -84,9 +86,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
+    /** Active company details */
+    public activeCompany: any = null;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private commonActions: CommonActions,
+        private dialog: MatDialog,
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -98,6 +105,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
 
     /**
@@ -107,15 +115,16 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.activeCompany = response;
+        });
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
         this.initSettingObj();
 
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+        this._route.queryParams.pipe(delay(200), takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
@@ -136,10 +145,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     });
                 }
             } else {
-                let companyCountry;
-                this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
-                    companyCountry = response?.countryV2?.alpha2CountryCode;
-                });
+                let companyCountry = this.activeCompany?.countryV2?.alpha2CountryCode;
                 if (companyCountry === 'IN') {
                     const requestObject = {
                         formName: 'onboarding',
@@ -246,6 +252,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  InvoiceSettingComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
+    }
+
+    /**
      * Save Webhook
      */
     public saveWebhook(webhook) {
@@ -294,7 +309,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
             if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
-                this._toasty.errorToast('All fields are required for E-invoicing Authentication');
+                this._toasty.errorToast(this.localeData?.e_invoice_fields_required_error_message);
                 return;
             }
             if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
@@ -306,7 +321,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (!isValid) {
-                    this._toasty.errorToast('Please provide a valid GSTIN');
+                    this._toasty.errorToast(this.localeData?.e_invoice_invalid_gstin_error_message);
                     return;
                 }
             }
@@ -597,5 +612,35 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: any): void {
         this.selectedTabIndex = event?.index;
+    }
+
+    /**
+     * Open custom email dialog
+     *
+     * @param {string} voucherType
+     * @memberof InvoiceSettingComponent
+     */
+    public openCustomEmailDialog(voucherType: string): void {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: voucherType,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+    }
+
+    /**
+     * Send voucher type whatsapp option.
+     *
+     * @param {string} voucherType
+     * @returns {boolean}
+     * @memberof InvoiceSettingComponent
+     */
+    public getWhatsappSettingLabel(voucherType: string): string {
+        return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
     }
 }

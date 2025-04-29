@@ -310,4 +310,81 @@ export class GstReconcileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
     }
+
+    /**
+     *This will be use for get lut number list
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof GstReconcileService
+     */
+    public getLutNumberList(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.GET_LUT_NUMBER_LIST
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+        return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
+    }
+
+    /**
+     * This will be use for delete lut number
+     *
+     * @param {*} lutNumberUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof GstReconcileService
+     */
+    public deleteLutNumber(lutNumberUniqueName: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.DELETE_LUT_NUMBER
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':lutNumberUniqueName', lutNumberUniqueName)
+        return this.http.delete(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
+    }
+
+    /**
+     * This will be use for create LUT Number
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof GstReconcileService
+     */
+    public createLutNumber(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + GSTR_API.CREATE_LUT_NUMBER
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+            model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                })
+                , catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * This will be use for update LUT Number
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof GstReconcileService
+     */
+    public updateLutNumber(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + GSTR_API.UPDATE_LUT_NUMBER
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':lutNumberUniqueName', encodeURIComponent(model?.uniqueName)),
+            model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                })
+                , catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
 }

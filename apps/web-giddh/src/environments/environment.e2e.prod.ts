@@ -10,6 +10,7 @@ export const environment: Environment = {
     showDevModule: true,
     AppUrl: '',
     ApiUrl: '',
+    UkApiUrl: '',
     isElectron: false,
     APP_FOLDER: '',
     /** Angular debug tools in the dev console

@@ -245,6 +245,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+        exportRequest.from = this.fromDate;
+        exportRequest.to = this.toDate;
 
         this.dialogRef.close({
             isShowColumnarTable: true,
@@ -302,10 +304,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Releases memory
- *
- * @memberof ExportLedgerComponent
- */
+     * Releases memory
+     *
+     * @memberof ExportLedgerComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

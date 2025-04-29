@@ -4,7 +4,7 @@
             <div class="d-flex flex-wrap">
                 <div
                     class="file-type-label mr-r15 linked-entities"
-                    *ngIf="currentCompanyBranches?.length > 1 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="currentCompanyBranches?.length > 1 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <label class="d-block">{{commonLocaleData?.app_entity}}</label>
                     <div class="form-group">
@@ -17,14 +17,15 @@
                             (selected)="handleBranchChange($event)"
                             [isFilterEnabled]="true"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.alias"
+                            [fixedValue]="currentBranch?.name"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                                class="pull-right"
+                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
                                                 *ngIf="!option.isCompany"
                                                 tooltip="{{commonLocaleData?.app_branch}}"
                                             ></i>

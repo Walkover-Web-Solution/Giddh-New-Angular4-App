@@ -47,9 +47,9 @@ export class UserAuthenticated  {
                         tap(response => {
                             const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                             if (hasSubscriptionPermission) {
-                                this.router.navigate(['/pages/subscription']);
+                                this.router.navigate(['/pages/user-details/subscription']);
                             } else {
-                                this.router.navigate(['/pages/subscription/buy-plan']);
+                                this.router.navigate(['/pages/user-details/subscription/buy-plan']);
                             }
                         })
                     ).subscribe();

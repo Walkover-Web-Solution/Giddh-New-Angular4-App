@@ -1,89 +1,84 @@
-<div (clickOutside)="hideDiscountMenu()">
-    <label class="font-12">{{ commonLocaleData?.app_discount }}</label>
-    <a id="discount">
-        <div class="multi-select adjust text-right">
-            <input
-                matInput
-                [prefix]="prefixInput"
-                id="ledger-discount"
-                [suffix]="suffixInput"
-                [mask]="maskInput"
-                name="discountTotal"
-                class="form-control cursor-pointer text-right mat-field-border"
-                (focus)="discountMenu = true; hideOtherPopups.emit(true)"
-                [(ngModel)]="discountTotal"
-                readonly
-            />
-            <span class="caret"></span>
-        </div>
-    </a>
-    <div
-        class="my-dropdown-menu pd-1"
-        (click)="$event.stopPropagation()"
-        [ngStyle]="{ 'display': discountMenu ? 'block' : 'none' }"
-        #disInptEle
-    >
-        <div class="value-wrapper">
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{
-                    commonLocaleData?.app_percent
-                }}</label>
-                <div class="position-relative percent-wrapper">
-                    <input
-                        matInput
-                        id="ledger-discount-percent"
-                        class="form-control text-right cursor-pointer mat-field-border"
+<div class="custom-mat-form-field">
+    <input-field
+        (keydown.enter)="$event.preventDefault(); toggleDiscountMenu(true)"
+        id="ledger-discount"
+        [autocomplete]="'off'"
+        [prefix]="prefixInput"
+        [suffix]="suffixInput"
+        [mask]="maskInput"
+        [useMask]="true"
+        [type]="'text'"
+        [cssClass]="'cursor-pointer text-right pr-1'"
+        [name]="'discountTotal'"
+        [(ngModel)]="discountTotal"
+        [readonly]="readonly"
+        [label]="commonLocaleData?.app_discount"
+        [matMenuTriggerFor]="discountMenu"
+    ></input-field>
+    
+    <mat-menu #discountMenu="matMenu" [hasBackdrop]="false">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper pd-1">
+            <div class="value-wrapper">
+                <div class="mr-b1">
+                    <input-field
+                        [type]="'number'"
+                        [id]="'ledger-discount-percent'"
+                        [name]="'discountPercentageModal'"
+                        [label]="commonLocaleData?.app_percent"
                         [disabled]="!discountFromPer"
-                        decimalDigitsDirective
-                        [DecimalPlaces]="2"
-                        name="discountPercentageModal"
+                        [allowDecimalDigitsOnly]="true"
+                        [customDecimalPlaces]="2"
+                        [min]="0"
+                        [cssClass]="'text-right'"
+                        [matSuffix]="'%'"
                         [(ngModel)]="discountPercentageModal"
                         (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
-                    />
-                    <i class="fa fa-percent position-absolute"></i>
+                    ></input-field>
                 </div>
-            </div>
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{ commonLocaleData?.app_value }}</label>
-                <div class="position-relative">
-                    <input
-                        matInput
-                        id="ledger-discount-value"
-                        class="form-control text-right cursor-pointer mat-field-border"
+                <div class="mr-b1">
+                    <input-field
+                        [type]="'number'"
+                        [id]="'ledger-discount-value'"
+                        [name]="'discountFixedValueModal'"
+                        [label]="commonLocaleData?.app_value"
                         [disabled]="!discountFromVal"
-                        decimalDigitsDirective
-                        [DecimalPlaces]="2"
-                        name="discountFixedValueModal"
+                        [allowDecimalDigitsOnly]="true"
+                        [customDecimalPlaces]="2"
+                        [min]="0"
+                        [cssClass]="'text-right'"
                         [(ngModel)]="discountFixedValueModal"
                         (input)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
-                    />
+                    ></input-field>
                 </div>
             </div>
+            <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
+                <span class="or-line">{{ commonLocaleData?.app_and }}</span>
+            </div>
+            <div *ngIf="discountAccountsDetails?.length > 1">
+                <ul class="discount-list">
+                    <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
+                        <li *ngIf="idx > 0" class="discount-item cursor-pointer">
+                            <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
+                                <mat-checkbox
+                                    color="primary"
+                                    [id]="'discount-checkbox-' + idx"
+                                    class="pull-left"
+                                    name="tax_{{ idx }}"
+                                    [(ngModel)]="discount.isActive"
+                                    (change)="change($event, discount)"
+                                    (click)="$event.stopPropagation()"
+                                >                        
+                                {{ discount?.name }}
+                            </mat-checkbox>
+                            </label>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+            </div>
         </div>
-        <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
-            <span class="or-line">{{ commonLocaleData?.app_and }}</span>
-        </div>
-        <div *ngIf="discountAccountsDetails?.length > 1">
-            <ul class="discount-list">
-                <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
-                    <li *ngIf="idx > 0" class="discount-item cursor-pointer">
-                        <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
-                            <mat-checkbox
-                                color="primary"
-                                [id]="'discount-checkbox-' + idx"
-                                class="pull-left"
-                                name="tax_{{ idx }}"
-                                [(ngModel)]="discount.isActive"
-                                (change)="change($event, discount)"
-                                (click)="$event.stopPropagation()"
-                            >                        
-                            {{ discount.name }}
-                        </mat-checkbox>
-                        </label>
-                    </li>
-                </ng-container>
-            </ul>
-        </div>
-    </div>
+    </mat-menu>
     <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </div>

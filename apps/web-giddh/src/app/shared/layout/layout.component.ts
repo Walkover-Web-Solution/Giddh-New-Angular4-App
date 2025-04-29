@@ -17,7 +17,7 @@ export class LayoutComponent {
     ) {
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
-                if (this.router.url.includes("/pages/subscription")) {
+                if (this.router.url.includes("/pages/user-details/subscription")) {
                     this.isSubscriptionPage = true;
                 } else {
                     this.isSubscriptionPage = false;

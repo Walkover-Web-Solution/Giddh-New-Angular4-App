@@ -1,5 +1,5 @@
 #content-wrapper {
-    min-height: calc(100vh - 120px);
-    height: 100%;
+    height: calc(100vh - 120px);
     padding-bottom: 25px;
+    overflow-y: scroll;
 }

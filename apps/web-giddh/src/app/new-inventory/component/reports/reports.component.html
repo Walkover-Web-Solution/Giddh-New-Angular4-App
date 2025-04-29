@@ -7,27 +7,31 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="transaction-report-wrapper" *ngIf="showContent">
-        <report-filters
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            [moduleName]="moduleName"
-            [customiseColumns]="customiseColumns"
-            [reportUniqueName]="reportUniqueName"
-            [moduleType]="moduleType"
-            [fromToDate]="fromToDate"
-            [stockReportRequest]="stockReportRequest"
-            [balanceStockReportRequest]="balanceStockReportRequest"
-            [advanceSearchModalResponse]="advanceSearchModalResponse"
-            [pullUniversalDate]="pullUniversalDate"
-            (filters)="getSelectedFilters($event)"
-            (resetFilters)="resetFilter()"
-            [searchPage]="reportType"
-            (isLoading)="isLoading = $event"
-            (selectedColumns)="getCustomiseHeaderColumns($event)"
-        ></report-filters>
-        <div class="inventory-transaction-list" *ngIf="!isLoading">
-            <div *ngIf="isDataAvailable">
+    <div class="transaction-report-wrapper overflow-visible" *ngIf="showContent">
+        <div class="position-sticky">
+            <report-filters
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [moduleName]="moduleName"
+                [customiseColumns]="customiseColumns"
+                [reportUniqueName]="reportUniqueName"
+                [moduleType]="moduleType"
+                [fromToDate]="fromToDate"
+                [stockReportRequest]="stockReportRequest"
+                [balanceStockReportRequest]="balanceStockReportRequest"
+                [stockReportRequestExport]="stockReportRequestExport"
+                [advanceSearchModalResponse]="advanceSearchModalResponse"
+                [pullUniversalDate]="pullUniversalDate"
+                (filters)="getSelectedFilters($event)"
+                (resetFilters)="resetFilter()"
+                [searchPage]="reportType"
+                (isLoading)="isLoading = $event"
+                (selectedColumns)="getCustomiseHeaderColumns($event)"
+                (selectedDynamicColumns)="getCustomiseDynamicHeaderColumns($event)"
+            ></report-filters>
+        </div>
+        <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
+            <div *ngIf="isDataAvailable" class="position-sticky">
                 <div class="row">
                     <div class="col-12">
                         <div class="top-content">
@@ -325,9 +329,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="isDataAvailable">
-                <div class="col-12 horizontal-padding">
-                    <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
+            <div class="row overflow-visible" *ngIf="isDataAvailable">
+                <div class="col-12 horizontal-padding overflow-visible">
+                    <div
+                        class="table-responsive inventory-report-table overflow-visible table-header-sticky"
+                        *ngIf="displayedColumns?.length"
+                    >
                         <table
                             mat-table
                             [dataSource]="dataSource"
@@ -335,7 +342,7 @@
                             (matSortChange)="sortChange($event)"
                             [matSortActive]="stockReportRequest?.sortBy"
                             [matSortDirection]="stockReportRequest?.sort"
-                            class="table giddh-table on-mobile-view"
+                            class="table giddh-table on-mobile-view pd-t5"
                         >
                             <ng-container matColumnDef="group_name">
                                 <th class="report-th-column" mat-header-cell *matHeaderCellDef>
@@ -413,7 +420,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="unit_name">
-                                <th class="group-column" mat-header-cell *matHeaderCellDef>
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.unit_name }}
                                 </th>
                                 <td
@@ -426,7 +433,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="opening_quantity">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right"
+                                    [ngClass]="{ 'opening-column': !displayedColumns?.includes('opening_amount') }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
@@ -452,7 +465,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="opening_amount">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right opening-column"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
@@ -480,7 +498,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="inward_quantity">
-                                <th class="inward-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="inward-column text-right"
+                                    [ngClass]="{ 'inward-column': !displayedColumns?.includes('inward_amount') }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
@@ -502,7 +526,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="inward_amount">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right inward-column"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
@@ -530,7 +559,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="outward_quantity">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right"
+                                    [ngClass]="{ 'outward-column': !displayedColumns?.includes('outward_amount') }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
@@ -552,7 +587,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="outward_amount">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right outward-column"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
@@ -580,7 +620,13 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="closing_quantity">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right"
+                                    [ngClass]="{ 'closing-column': !displayedColumns?.includes('closing_amount') }"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
@@ -602,7 +648,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="closing_amount">
-                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th
+                                    class="group-column text-right closing-column"
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                >
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
@@ -629,74 +680,41 @@
                                     </span>
                                 </td>
                             </ng-container>
-
-                            <ng-container matColumnDef="entity_group_name">
-                                <th
-                                    class="text-right"
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    [attr.colspan]="headerColumns['entity_group_name'].colSpan"
-                                ></th>
-                            </ng-container>
-                            <!-- Opening Stock group -->
-                            <ng-container matColumnDef="opening_stock">
-                                <th
-                                    class="text-right"
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    [attr.colspan]="headerColumns['opening_stock'].colSpan"
+                            <ng-container *ngIf="newCustomFieldsColumns?.length">
+                                <ng-container
+                                    *ngFor="let column of newCustomFieldsColumns"
+                                    [matColumnDef]="column?.value"
                                 >
-                                    {{ localeData?.reports?.opening_stock }}
-                                </th>
+                                    <th class="report-th-column" mat-header-cell *matHeaderCellDef>
+                                        {{ column?.label }}
+                                    </th>
+                                    <td
+                                        [data-title]="column?.label"
+                                        class="word-wrap cursor-pointer report-td-column"
+                                        mat-cell
+                                        *matCellDef="let element"
+                                    >
+                                        {{ getCustomFieldValue(element, column?.value) }}
+                                    </td>
+                                </ng-container>
                             </ng-container>
-
-                            <!-- Inwards group -->
-                            <ng-container matColumnDef="inwards">
-                                <th
-                                    class="text-right"
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    [attr.colspan]="headerColumns['inwards'].colSpan"
-                                >
-                                    {{ localeData?.reports?.inwards }}
-                                </th>
-                            </ng-container>
-
-                            <!-- Outwards group -->
-                            <ng-container matColumnDef="outwards">
-                                <th
-                                    class="text-right"
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    [attr.colspan]="headerColumns['outwards'].colSpan"
-                                >
-                                    {{ localeData?.reports?.outwards }}
-                                </th>
-                            </ng-container>
-
-                            <!-- Closing Stock group -->
-                            <ng-container matColumnDef="closing_stock">
-                                <th
-                                    class="text-right"
-                                    mat-header-cell
-                                    *matHeaderCellDef
-                                    [attr.colspan]="headerColumns['closing_stock'].colSpan"
-                                >
-                                    {{ localeData?.reports?.closing_stock }}
-                                </th>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr
+                                mat-header-row
+                                *matHeaderRowDef="displayedColumns; sticky: true"
+                                class="second-header-border"
+                            ></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <div class="pagination-wrapper mt-2">
+                    <div
+                        class="pagination-wrapper mt-2"
+                        *ngIf="
+                            stockReportRequest?.totalItems > stockReportRequest?.count &&
+                            !isLoading &&
+                            displayedColumns?.length
+                        "
+                    >
                         <pagination
-                            *ngIf="
-                                stockReportRequest?.totalItems > stockReportRequest?.count &&
-                                !isLoading &&
-                                displayedColumns?.length
-                            "
                             [totalItems]="stockReportRequest?.totalItems"
                             [(ngModel)]="stockReportRequest.page"
                             [maxSize]="5"

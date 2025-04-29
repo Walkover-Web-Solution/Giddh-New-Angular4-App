@@ -12,5 +12,7 @@
     "plus_minus_toggle":" +/-",
     "export_group_ledger": "Export Group Ledger",
     "ledger": "Ledger",
-     "bill_to_bill": "Bill to Bill"
+     "bill_to_bill": "Bill to Bill",
+     "ledger_entries": "Ledger Entries",
+     "account": "Account"
 }

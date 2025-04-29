@@ -5,7 +5,6 @@
     border: 1px solid var(--color-iron);
     vertical-align: middle;
     height: 36px;
-
     font-size: var(--font-size-15);
 }
 .tb-btn-apply {
@@ -142,10 +141,10 @@
         }
     }
     .form-inline.financial-select-year {
-        flex-flow: row nowrap !important;
+        flex-flow: wrap;
     }
     .download-data-icon {
-        margin: 10px 0 2px;
+        margin: 2px 0 2px;
     }
 }
 @media screen and (max-width: 767px) {

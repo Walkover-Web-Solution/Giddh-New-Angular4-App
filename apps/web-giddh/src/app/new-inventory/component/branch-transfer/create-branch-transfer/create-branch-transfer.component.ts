@@ -911,7 +911,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             if (branches) {
                 if (branches.results?.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(branch => ({
-                        label: `${branch.alias}`,
+                        label: `${branch.name}`,
                         value: branch?.uniqueName,
                         additional: branch
                     }));
@@ -1138,7 +1138,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
                 this.resetDestinationWarehouses(0);
                 this.resetSourceWarehouses(0);
-
                 setTimeout(() => {
                     this.isDefaultLoad = false;
                 }, 1000);
@@ -1316,12 +1315,12 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
         if (data && data.length > 0) {
             data.forEach(res => {
-                if (res && !res.isCompany) {
+                if (res && !res.isCompany && !res.isConsolidatedBranch) {
                     res.warehouses?.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
                     if (this.editBranchTransferUniqueName || !res.isArchived) {
-                        branches.push(new LinkedStocksVM(res.name, res?.uniqueName, false, res.alias, res.warehouses, res.isArchived));
+                        branches.push(new LinkedStocksVM(res.name, res?.uniqueName, false, res.name, res.warehouses, res.isArchived));
                     }
                     if (res.warehouses?.length) {
                         this.senderWarehouses[res?.uniqueName] = [];
@@ -1660,11 +1659,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
             if (sourcesArray && sourceFormGroup && sourceFormGroup.get('uniqueName')?.value) {
                 // Update source warehouses
-                this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                let initSource = false;
+                initSource = this.initializeWarehouseList(this.isUpdateMode, sourceFormGroup, initSource, this.senderWarehouses);
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[sourceFormGroup.get('uniqueName').value]?.forEach(key => {
                         if (destinationsArray && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || '')) {
+                            initSource = this.isUpdateMode && this.initializeWarehouseList(this.isUpdateMode, sourceFormGroup, initSource, this.senderWarehouses);
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1711,11 +1712,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
 
             if (sourceFormGroup && sourceFormGroup.get('uniqueName').value) {
                 // Update source warehouses
-                this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
+                let initSource = false;
+                initSource = this.initializeWarehouseList(this.isUpdateMode, sourceFormGroup, initSource, this.senderWarehouses);
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[sourceFormGroup.get('uniqueName').value].forEach(key => {
                         if (destinationsFormGroup && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || ''))) {
+                            initSource = this.isUpdateMode && this.initializeWarehouseList(this.isUpdateMode, sourceFormGroup, initSource, this.senderWarehouses);
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1773,13 +1776,15 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }
             if (destinationsArray && destinationsFormGroup && destinationsFormGroup.get('uniqueName').value) {
                 // Update Destination warehouses
-                this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
+                let initDestination = false;
+                initDestination = this.initializeWarehouseList(this.isUpdateMode, destinationsFormGroup, initDestination, this.destinationWarehouses);
                 if (this.allWarehouses[destinationsFormGroup.get('uniqueName').value] && this.allWarehouses[destinationsFormGroup.get('uniqueName').value].length > 0) {
 
                     this.allWarehouses[destinationsFormGroup.get('uniqueName').value].forEach(key => {
 
                         if (key?.uniqueName !== sourcesWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || '')) {
+                            initDestination = this.isUpdateMode && this.initializeWarehouseList(this.isUpdateMode, destinationsFormGroup, initDestination, this.destinationWarehouses);
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1825,12 +1830,14 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
             if (destinationsFormGroup && destinationsFormGroup.get('uniqueName').value) {
                 // Update Destination warehouses
-                this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
 
+                let initDestination = false;
+                initDestination = this.initializeWarehouseList(this.isUpdateMode, destinationsFormGroup, initDestination, this.destinationWarehouses);
                 if (this.allWarehouses[destinationsFormGroup.get('uniqueName').value] && this.allWarehouses[destinationsFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[destinationsFormGroup.get('uniqueName').value].forEach(key => {
                         if (sourceFormGroup && sourcesWarehouseFormGroup && key?.uniqueName !== sourceFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || ''))) {
+                            initDestination = this.isUpdateMode && this.initializeWarehouseList(this.isUpdateMode, destinationsFormGroup, initDestination, this.destinationWarehouses);
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
                         }
                     });
@@ -1850,6 +1857,29 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
+    /**
+     * This function resets the warehouse list based on the following conditions:
+     * 
+     * @param isUpdateMode - A boolean indicating whether the form is in update mode.
+     * @param formGroup - The form group containing the warehouse's unique name.
+     * @param isInitialized - A boolean indicating if the warehouse list has already been initialized.
+     * @param warehouseList - An object containing warehouse arrays, indexed by their unique names.
+     * @memberof CreateBranchTransferComponent
+     * @returns A boolean indicating whether the warehouse list was initialized.
+     */
+    private initializeWarehouseList(isUpdateMode: boolean, formGroup: any, isInitialized: boolean, warehouseList: Record<string, any[]>): boolean {
+        const uniqueName = formGroup.get('uniqueName')?.value;
+        if (!uniqueName) {
+            return isInitialized;
+        }
+        if (!isUpdateMode || (!isInitialized && warehouseList[uniqueName]?.length)) {
+            warehouseList[uniqueName] = [];
+            isInitialized = true;
+        }
+        return isInitialized;
+    }
+
+    
     /**
      * This will be use for branch exists
      *

@@ -14,110 +14,99 @@
         (ngSubmit)="actionAccount()"
     >
         <div class="modal-header" *ngIf="localeData?.payment">
-            <h3 class="modal-title">
+            <h3 mat-dialog-title class="modal-title">
                 {{ activeBankAccount ? localeData?.payment?.edit_account : localeData?.payment?.connect_icici_account }}
             </h3>
-            <a
-                data-dismiss="modal"
+            <button
+                mat-icon-button
                 [attr.aria-label]="commonLocaleData?.app_close"
                 class="close hover-orange"
+                type="button"
                 (click)="closeAccountModal()"
             >
                 ×
-            </a>
-        </div>
-        <div class="modal-body icici-account-create-edit">
-            <ng-container *ngIf="!isLoading && localeData?.payment">
-                <div class="clearfix" *ngIf="!activeBankAccount">
-                    <label>{{ localeData?.payment?.icici_login_id }}<span class="red-text">*</span></label>
-                    <input
-                        class="form-control"
-                        required
-                        formControlName="loginId"
-                        name="loginId"
-                        type="text"
-                        [placeholder]="localeData?.payment?.login_id_placeholder"
-                    />
-                </div>
-                <div class="clearfix mr-t1">
-                    <label>{{ localeData?.payment?.account_number_label }}<span class="red-text">*</span></label>
-                    <input
-                        class="form-control"
-                        required
-                        formControlName="accountNumber"
-                        name="accountNumber"
-                        type="text"
-                        [ngClass]="{
-                            'error-box':
-                                accountForm?.get('accountNumber')?.dirty && accountForm?.get('accountNumber')?.errors
-                        }"
-                        [placeholder]="localeData?.payment?.account_number_placeholder"
-                        maxlength="18"
-                    />
-                </div>
-                <div class="clearfix mr-t1">
-                    <label>{{ localeData?.payment?.link_account_label }}<span class="red-text">*</span></label>
-                    <sh-select
-                        formControlName="accountUniqueName"
-                        name="accountUniqueName"
-                        [placeholder]="localeData?.payment?.link_account_placeholder"
-                        [options]="bankAccounts$ | async"
-                        required
-                    ></sh-select>
-                </div>
-                <div class="clearfix mr-t1" *ngIf="!activeBankAccount">
-                    <label>{{ localeData?.payment?.user }}<span class="red-text">*</span></label>
-                    <sh-select
-                        formControlName="userUniqueName"
-                        name="userUniqueName"
-                        [placeholder]="localeData?.payment?.select_user"
-                        [options]="usersList"
-                        required
-                    ></sh-select>
-                </div>
-                <div class="clearfix mr-t1" *ngIf="activeBankAccount?.bank !== 'plaid'">
-                    <label>{{ localeData?.payment?.payment_updates }}</label>
-                    <sh-select
-                        formControlName="paymentAlerts"
-                        name="paymentAlerts"
-                        [placeholder]="localeData?.payment?.select_receipients"
-                        [options]="paymentAlertsUsersList"
-                        [multiple]="true"
-                        [forceClearReactive]="forceClearPaymentUpdates$ | async"
-                        [isSelectAllChecked]="paymentAlerts?.includes(selectAllRecords)"
-                        (clearSingleItem)="clearSingleItem($event)"
-                    >
-                        <ng-template #optionTemplate let-option="option">
-                            <ng-container>
-                                <a
-                                    href="javascript:void(0)"
-                                    class="list-item d-flex"
-                                    (click)="selectPaymentAlertUsers(option)"
-                                >
-                                    <span
-                                        ><input
-                                            type="checkbox"
-                                            class="field-checkbox"
-                                            [checked]="paymentAlerts?.includes(option?.value)"
-                                            [value]="option?.value" /></span
-                                    >&nbsp;
-                                    <span>
-                                        <div class="item">{{ option.label }}</div>
-                                    </span>
-                                </a>
-                            </ng-container>
-                        </ng-template>
-                    </sh-select>
-                </div>
-            </ng-container>
-            <ng-container *ngIf="isLoading || !localeData?.payment">
-                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-            </ng-container>
-        </div>
-        <div class="modal-footer" *ngIf="!isLoading && localeData?.payment">
-            <button type="submit" class="btn btn-success mr-1" [disabled]="accountForm?.invalid">
-                {{ activeBankAccount ? commonLocaleData?.app_update : localeData?.payment?.connect }}
             </button>
         </div>
+        <mat-dialog-content>
+            <div class="modal-body icici-account-create-edit">
+                <ng-container *ngIf="!isLoading && localeData?.payment">
+                    <div class="" *ngIf="!activeBankAccount">
+                        <input-field
+                            [label]="localeData?.payment?.icici_login_id"
+                            [required]="true"
+                            [name]="'loginId'"
+                            formControlName="loginId"
+                            [type]="'text'"
+                            [placeholder]="localeData?.payment?.login_id_placeholder"
+                        ></input-field>
+                    </div>
+                    <div class="mr-t1">
+                        <input-field
+                            [label]="localeData?.payment?.account_number_label"
+                            [required]="true"
+                            [name]="'accountNumber'"
+                            [type]="'text'"
+                            formControlName="accountNumber"
+                            [ngClass]="{
+                                'error-box':
+                                    accountForm?.get('accountNumber')?.dirty &&
+                                    accountForm?.get('accountNumber')?.errors
+                            }"
+                            [placeholder]="localeData?.payment?.account_number_placeholder"
+                            [maxlength]="18"
+                        ></input-field>
+                    </div>
+                    <div class="mr-t1">
+                        <dropdown-field
+                            [label]="localeData?.payment?.link_account_label"
+                            [name]="'accountUniqueName'"
+                            [placeholder]="localeData?.payment?.link_account_placeholder"
+                            [options]="bankAccounts$ | async"
+                            [required]="true"
+                            (selectedOption)="accountForm?.get('accountUniqueName').patchValue($event.value)"
+                        ></dropdown-field>
+                    </div>
+                    <div class="mr-t1" *ngIf="!activeBankAccount">
+                        <dropdown-field
+                            [label]="localeData?.payment?.user"
+                            [name]="'userUniqueName'"
+                            [placeholder]="localeData?.payment?.select_user"
+                            [options]="usersList"
+                            [required]="true"
+                            (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
+                        ></dropdown-field>
+                    </div>
+                    <div class="mr-t1 custom-mat-form-field">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>{{ localeData?.payment?.payment_updates }}</mat-label>
+                            <mat-select formControlName="paymentAlerts" name="paymentAlerts" [multiple]="paymentAlertsUsersList?.length === 0">
+                                <ng-container *ngFor="let item of paymentAlertsUsersList">
+                                    <mat-option (onSelectionChange)="selectPaymentAlertUsers(item)" [value]="item?.value">
+                                        {{ item?.label }}
+                                    </mat-option>
+                                </ng-container>
+                                <mat-option empty disabled *ngIf="paymentAlertsUsersList?.length === 0">
+                                    {{ commonLocaleData?.app_no_result_found }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isLoading || !localeData?.payment">
+                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                </ng-container>
+            </div>
+            <div class="modal-footer" *ngIf="!isLoading && localeData?.payment">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    type="submit"
+                    class="btn mr-1"
+                    [disabled]="accountForm?.invalid"
+                >
+                    {{ activeBankAccount ? commonLocaleData?.app_update : localeData?.payment?.connect }}
+                </button>
+            </div>
+        </mat-dialog-content>
     </form>
 </ng-container>

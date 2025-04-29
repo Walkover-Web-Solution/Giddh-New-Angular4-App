@@ -21,7 +21,7 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                     this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
                     this.currencyDecimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0;
                     if (this.currencyDecimalType) {
-                        localStorage.setItem('currencyDesimalType', this.currencyDecimalType?.toString());
+                        localStorage.setItem('currencyDecimalType', this.currencyDecimalType?.toString());
                     }
                     if (this._currencyNumberType) {
                         localStorage.setItem('currencyNumberType', this._currencyNumberType);
@@ -52,7 +52,7 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
         let result = input?.toString()?.split('.');
         let finaloutput;
         let currencyType = this._currencyNumberType ? this._currencyNumberType : localStorage.getItem('currencyNumberType');
-        let digitAfterDecimallocal: number = parseInt(localStorage.getItem('currencyDesimalType'));
+        let digitAfterDecimallocal: number = parseInt(localStorage.getItem('currencyDecimalType'));
         digitAfterDecimallocal = digitAfterDecimallocal ? digitAfterDecimallocal : 0;
         let digitAfterDecimal: number = customDecimalPlaces ? Number(customDecimalPlaces) : this.currencyDecimalType ? this.currencyDecimalType : digitAfterDecimallocal;
         let lastThree;
@@ -184,6 +184,5 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 break;
         }
         return shouldRemoveTrailingZeros ? finaloutput?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : finaloutput;
-
     }
 }

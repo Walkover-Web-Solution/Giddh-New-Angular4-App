@@ -15,7 +15,6 @@ import { VatReportComponent } from './vat-report.component';
 import { VatReportTransactionsComponent } from './transactions/vat-report-transactions.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { InvoiceModule } from '../invoice/invoice.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -32,6 +31,12 @@ import { ViewReturnComponent } from './view-return/view-return.component';
 import { FileReturnComponent } from './file-return/file-return.component';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
+import { LiabilityReportComponent } from './liability-report/liability-report.component';
+import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
+import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
+import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -40,7 +45,11 @@ import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.
         ObligationsComponent,
         ViewReturnComponent,
         FileReturnComponent,
-        WithHeldSettingComponent
+        WithHeldSettingComponent,
+        LiabilityReportComponent,
+        LiabilityDetailedReportComponent,
+        VatReportFiltersComponent,
+        VatLiabilitiesPayments
     ],
     imports: [
         VatReportRoutingModule,
@@ -57,7 +66,6 @@ import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.
         ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,
-        ShSelectModule,
         SharedModule,
         TaxSidebarModule,
         FormFieldsModule,
@@ -69,10 +77,13 @@ import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.
         GiddhDateRangepickerModule,
         DatepickerWrapperModule,
         GiddhPageLoaderModule,
-        NewConfirmationModalModule
+        NewConfirmationModalModule,
+        MatInputModule,
+        MatPaginatorModule
     ],
     exports: [
-        VatReportRoutingModule
+        VatReportRoutingModule,
+        VatReportFiltersComponent
     ]
 })
 export class VatReportModule {

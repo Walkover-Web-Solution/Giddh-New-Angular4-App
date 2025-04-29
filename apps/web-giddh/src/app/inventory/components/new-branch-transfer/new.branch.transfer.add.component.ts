@@ -155,6 +155,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public giddhBalanceDecimalPlaces: number = 2;
     /** Hold aside menu state for product service  */
     public asideMenuStateForProductService: any;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -163,6 +165,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
         this.getTransportersList();
@@ -191,7 +199,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.isDefaultLoad = true;
         }
         this.isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
-        this.isCompanyWithSingleBranch = this._generalService.currentOrganizationType === OrganizationType.Company && this.branches && this.branches.length === 1;
+        this.isCompanyWithSingleBranch = (this._generalService.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.branches && this.branches.length === 1;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -513,7 +521,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
                     if (this.editBranchTransferUniqueName || !d.isArchived) {
-                        branches.push(new LinkedStocksVM(d.name, d?.uniqueName, false, d.alias, d.warehouses, d.isArchived));
+                        branches.push(new LinkedStocksVM(d.name, d?.uniqueName, false, d.name, d.warehouses, d.isArchived));
                     }
                     if (d.warehouses?.length) {
                         this.senderWarehouses[d?.uniqueName] = [];
@@ -565,7 +573,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (branches) {
                 if (branches.results?.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({
-                        label: `${b.alias}`,
+                        label: `${b.name}`,
                         value: b?.uniqueName,
                         additional: b
                     }));
@@ -1315,14 +1323,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (this.isBranch) {
             // Find the current branch details
             selectedBranch = (branches) ? branches.find(branch => branch?.uniqueName === this._generalService.currentBranchUniqueName) : null;
-            branchName = selectedBranch ? selectedBranch.alias : '';
+            branchName = selectedBranch ? selectedBranch.name : '';
         } else {
             // Company session find the HO branch
             hoBranch = (branches) ? branches.find(branch => !branch.parentBranch) : null;
-            branchName = hoBranch ? hoBranch.alias : '';
+            branchName = hoBranch ? hoBranch.name : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = this.isBranch ? branchName : hoBranch.alias;
+            this.myCurrentCompany = this.isBranch ? branchName : hoBranch?.name;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
                 this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;

@@ -10,6 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { OrganizationProfile } from '../constants/settings.constant';
+import { LedgerViewEnum } from '../../models/api-models/Ledger';
 
 @Component({
     selector: 'other-settings',
@@ -17,7 +18,6 @@ import { OrganizationProfile } from '../constants/settings.constant';
     styleUrls: ['./other-settings.component.scss']
 })
 export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
-
     /** Stores the company number system */
     public numberSystemSource: IOption[] = [];
     /** Stores the company decimal system */
@@ -53,7 +53,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         balanceDisplayFormat: '',
         taxType: '',
         manageInventory: false,
-        withPay: false
+        withPay: false,
+        ledgerView: LedgerViewEnum.TView
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -71,12 +72,18 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public showLanguageChangeMessage: boolean = false;
     /** List of available themes */
     public availableThemes: IOption[] = [];
+    /** List of available ledger view */
+    public availableLedgerView: IOption[] = [];
+    /** Stores the company decimal system */
+    public inventoryType: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
-    /** List of available themes */
-    public exportTypes: IOption[] = [];
-    /** Holds export type */
-    public exportType: string = '';
+    /** Holds Current Theme Label */
+    public currentThemeLabel: string;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Holds ledger view enum */
+    public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -86,6 +93,12 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });
@@ -102,6 +115,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
+        this.availableLedgerView = this.generalService.getAvailableLedgerView();
+
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
@@ -109,7 +124,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
-            this.activeTheme = response?.value;
+            if(response) {
+                this.activeTheme = response?.value;
+                this.currentThemeLabel = this.availableThemes.find(theme => theme.value === this.activeTheme)?.label;
+            }
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -136,15 +154,17 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
+    }
 
-        this.exportTypes = [
-            { label: this.localeData?.with_pay, value: 'yes' },
-            { label: this.localeData?.without_pay, value: 'no' }
-        ];
-
-        if (typeof changes?.profileData?.currentValue?.withPay === "boolean") {
-            this.exportType = (changes?.profileData?.currentValue?.withPay) ? 'yes' : 'no';
-        }
+    /**
+     * Get Dropdown field label by value
+     *
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public getDropdownLabel(options: IOption[], currentValue: string | number): string {
+        const listItem = options.find(item => item.value === currentValue);
+        return listItem ? listItem.label : '';
     }
 
     /**
@@ -169,12 +189,12 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.saveProfileSubject.next(true);
     }
 
-        /**
-     * Inventory type update handler
-     *
-     * @param {boolean} value True, if Product is selected
-     * @memberof OtherSettingsComponent
-     */
+    /**
+ * Inventory type update handler
+ *
+ * @param {boolean} value True, if Product is selected
+ * @memberof OtherSettingsComponent
+ */
     public inventoryTypeUpdated(value: boolean): void {
         this.profileData.manageInventory = value;
         this.profileUpdated('manageInventory');
@@ -216,16 +236,5 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setActiveTheme(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
-    }
-
-    /**
-     * Saves export type
-     *
-     * @memberof OtherSettingsComponent
-     */
-    public setExportType(event?: any): void {
-        this.exportType = event?.value;
-        this.updatedData['withPay'] = event?.value === 'yes' ? true : false;
-        this.saveProfileSubject.next(true);
     }
 }

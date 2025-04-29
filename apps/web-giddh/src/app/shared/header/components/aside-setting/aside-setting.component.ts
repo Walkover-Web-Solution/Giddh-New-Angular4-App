@@ -9,6 +9,7 @@ import { CompanyResponse, Organization } from 'apps/web-giddh/src/app/models/api
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
+import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'aside-setting',
@@ -39,9 +40,18 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public routerUrl: string = "";
     /** Hold selected active company */
     public selectedCompany: CompanyResponse = null;
+    /** Hold true if tag menu is open */
+    public isTagMenuOpened: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
-
     }
 
     /**
@@ -50,6 +60,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -65,6 +81,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
             }
             this.activeLocale = response?.value;
+        });
+
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -117,7 +139,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public closeAsidePaneIfMobile(event?: any): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/pages/invoice/preview/settings/sales")) {
+        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales") && !this.router.url.includes("/pages/vouchers/preview/sales/settings")) {
             this.closeAsideEvent.emit(event);
         }
     }
@@ -148,18 +170,11 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     if (organization) {
                         if (organization.type === OrganizationType.Branch) {
                             organizationIndex = 1;
-                        } else if (organization.type === OrganizationType.Company || !organization.type) {
+                        } else if ((organization.type === OrganizationType.Company || this.isConsolidatedBranch) || !organization.type) {
                             organizationIndex = 0;
                         }
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
-                        settingsPageTabs[organizationIndex][key] = settingsPageTabs[organizationIndex][key]?.map(value => {
-                            if (value?.link === '/pages/user-details/subscription' && (this.selectedCompany?.planVersion === 2 || this.selectedCompany?.subscription?.status === "expired")) {
-                                value.link = "/pages/subscription";
-                            }
-                            return value;
-                        });
-
                         this.settingsPageTabs[loop] = [];
                         this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
                         loop++;
@@ -177,10 +192,27 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public showHideSettingsHeading(url: string): void {
-        if (!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
+        if (!url.includes("/pages/settings")) {
             this.showSettingHeading = true;
         } else {
             this.showSettingHeading = false;
+        }
+    }
+
+    /**
+     * This will add/remove class tag menu
+     *
+     * @param {boolean} menuStatus
+     * @memberof AsideSettingComponent
+     */
+    public toggleTagMenu(menuStatus: boolean): void {
+        this.isTagMenuOpened = menuStatus;
+        if (menuStatus) {
+            document.querySelector("body")?.classList?.add("tags-menu-open");
+        } else {
+            setTimeout(() => {
+                document.querySelector("body")?.classList?.remove("tags-menu-open");
+            }, 500);
         }
     }
 }

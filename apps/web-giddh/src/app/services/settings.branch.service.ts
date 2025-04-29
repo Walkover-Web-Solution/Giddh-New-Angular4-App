@@ -23,21 +23,20 @@ export class SettingsBranchService {
     */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = (request.companyUniqueName) ? request.companyUniqueName : this.generalService.companyUniqueName;
-
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
-
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', from);
         url = url?.replace(':to', to);
+        url = url?.replace(':hierarchyType', request.hierarchyType ?? '');
 
-        let delimiter = '?';
+        let delimiter = '&';
         if (request.query !== undefined) {
-            url = url.concat(`?q=${request.query}`);
-            delimiter = '&';
+            url = url.concat(`&q=${request.query}`);
         }
-        url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
+
+        url = url.concat(`${delimiter}branchUniqueName=`, this.generalService.currentBranchUniqueName); // Empty branch unique name as we don't support sub-branch as of now
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

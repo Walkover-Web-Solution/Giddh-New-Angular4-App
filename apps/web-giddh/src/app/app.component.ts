@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { Configuration } from "./app.constant";
+import { Configuration, COUNTRY_REGION_MAP } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -40,6 +40,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -80,9 +82,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership')  && !window.location.href.includes('dns')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://giddh.com/login/';
+                    window.location.href = this._generalService.getGiddhRegionUrl() + '/';
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -116,6 +118,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
         });
+
+        /* Codemirror */
+        if (window['CodeMirror'] === undefined) {
+            let codeMirrorScriptTag = document.createElement('script');
+            codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
+            codeMirrorScriptTag.type = 'text/javascript';
+            codeMirrorScriptTag.defer = true;
+            document.body.appendChild(codeMirrorScriptTag);
+        }
+        /* Codemirror */
     }
 
     public sidebarStatusChange(event) {
@@ -139,18 +151,24 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, []);
+        reassignNavigationalArray(isMobile, (this._generalService.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+            this._cdr.detectChanges();
+        });
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
         this.breakpointObserver.observe([
-            '(max-width: 480px)'
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result.matches) {
                 this.router.navigate(['/mobile-restricted']);
@@ -188,7 +206,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/toastr.css");
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/css/lightbox.scss");
+            this._generalService.addLinkTag("./assets/css/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -199,17 +217,27 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.body.appendChild(scriptTag);
             }
             /* RAZORPAY */
+
+
+            /* Xml */
+            if (window['xmlScriptTag'] === undefined) {
+                let xmlScriptTag = document.createElement('script');
+                xmlScriptTag.src = './assets/js/xml.min.js';
+                xmlScriptTag.type = 'text/javascript';
+                xmlScriptTag.defer = true;
+                document.body.appendChild(xmlScriptTag);
+            }
+            /* Xml */
         }, 1000);
 
-        if (this._generalService.getUrlParameter("region") === "uk") {
-            this._generalService.setParameterInLocalStorage("Country-Region", "GB");
-        } else if (this._generalService.getUrlParameter("region") === "ae") {
-            this._generalService.setParameterInLocalStorage("Country-Region", "AE");
-        } else if (this._generalService.getUrlParameter("region") === "in") {
-            this._generalService.setParameterInLocalStorage("Country-Region", "IN");
-        } else {
-            this._generalService.setParameterInLocalStorage("Country-Region", "GL");
-        }
+        this._generalService.addLinkTag("./assets/css/code-mirror.css");
+
+
+        // if (this._generalService.getUrlParameter("region") === "uk") {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
+        // } else {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
+        // }
     }
 
     public ngAfterViewInit() {

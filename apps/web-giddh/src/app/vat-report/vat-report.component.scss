@@ -53,38 +53,6 @@
     background: none;
 }
 
-.advance-search-by-date {
-    display: flex;
-    column-gap: 15px;
-
-    .input-wrapper {
-        display: flex;
-
-        .btn-group {
-            button {
-                margin: 0 !important;
-                height: 100%;
-            }
-        }
-    }
-
-    .trn-width {
-        min-width: 280px;
-    }
-    .currency-width {
-        min-width: 100px;
-    }
-
-    .custom-datepicker {
-        &.custom-new-datepicker {
-            input {
-                width: 240px !important;
-                max-width: 240px;
-            }
-        }
-    }
-}
-
 .export-btn {
     display: flex;
     justify-content: flex-end;
@@ -141,10 +109,6 @@
     right: -160px;
     top: 0;
     pointer-events: none;
-}
-
-.tax-heading {
-    max-width: 10%;
 }
 
 .tax-dropdown {

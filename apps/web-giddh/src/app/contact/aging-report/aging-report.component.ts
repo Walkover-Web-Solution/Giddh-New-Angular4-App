@@ -32,11 +32,11 @@ import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSe
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { PAGINATION_LIMIT } from "../../app.constant";
+import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -98,7 +98,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Observable if loading in process */
@@ -138,6 +138,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public minDate: any;
     /** Holds End Date of Financial Year */
     public maxDate: any;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         public dialog: MatDialog,
@@ -195,6 +197,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
@@ -235,13 +242,14 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch?.alias,
+                    label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : "",
                     value: this.activeCompany ? this.activeCompany.uniqueName : "",
                     isCompany: true,
@@ -258,16 +266,15 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : "",
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
-                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : "");
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: "", to: "" }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -683,12 +690,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function returns object with to and from date 
+     * This function returns object with to and from date
      *
      * @private
      * @param {number} intervalCount
      * @param {number} intervaldays
-     * @return {*} 
+     * @return {*}
      * @memberof AgingReportComponent
      */
     private getPriorDate(intervalCount: number, intervaldays: number): any {
@@ -723,7 +730,26 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @return {*}  {*}
      * @memberof AgingReportComponent
      */
-    public domSantizer(str: string): any {
+    private domSantizer(str: string): any {
         return this.sanitizer.bypassSecurityTrustResourceUrl(str);
+    }
+
+    /**
+     * Redirect to invoice preview by unique name
+     * 
+     * @param voucherUniqueName 
+     * @param voucherDate 
+     * @returns 
+     */
+    public getInvoicePreviewUrl(invoice: any): string {
+        if (invoice) {
+            let url: string = '';
+            if (invoice.voucherNumber !== 'OPENING BALANCE' && invoice.uniqueName && invoice.voucherDate) {
+                url = `/pages/vouchers/view/sales/${invoice.uniqueName}?page=1&from=${invoice.voucherDate}&to=${invoice.voucherDate}`;
+            } else {
+                url = 'javascript:;';
+            }
+            return this.domSantizer(url);
+        }
     }
 }

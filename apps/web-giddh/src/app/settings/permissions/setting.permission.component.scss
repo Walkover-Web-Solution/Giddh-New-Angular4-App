@@ -3,6 +3,9 @@
     top: -59px;
     z-index: 9;
 }
+.action-icon-btn {
+    min-width: 45px;
+}
 @media (max-width: 991px) {
     .permission-date-field {
         margin-top: 10px;

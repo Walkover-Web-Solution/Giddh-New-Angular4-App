@@ -10,5 +10,6 @@
 		"as_per_percent": "प्रतिशत के अनुसार"
 	},
 	"delete_discount": "क्या आप वाकई इस छूट को हटाना चाहते हैं?",
-    "discount_value_placeholder": "मान दर्ज करें"
+    "discount_value_placeholder": "मान दर्ज करें",
+    "fixed_value": "निर्धारित मूल्य"
 }

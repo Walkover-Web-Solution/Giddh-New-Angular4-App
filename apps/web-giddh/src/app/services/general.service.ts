@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -8,15 +8,17 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { Router } from '@angular/router';
-import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LedgerViewEnum } from '../models/api-models/Ledger';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Injectable()
 export class GeneralService {
@@ -88,7 +90,10 @@ export class GeneralService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private activatedRoute: ActivatedRoute,
+        private http: HttpClient,
+        @Optional() @Inject(ServiceConfig)
+        private config: IServiceConfigArgs
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -98,7 +103,7 @@ export class GeneralService {
     public createQueryString(url: string, params: any) {
         Object.keys(params).forEach((key, index) => {
             if (params[key] !== undefined) {
-                const delimiter = url.indexOf('?') === -1 ? '?' : '&';
+                const delimiter = url.indexOf('?') === -1 ? '?' : (index === 0 ? '' : '&');
                 url += `${delimiter}${key}=${params[key]}`
             }
         });
@@ -159,6 +164,9 @@ export class GeneralService {
         if (routerParams['utm_content']) {
             localStorage.setItem('utm_content', routerParams['utm_content']);
         }
+        if (routerParams['region']) {
+            localStorage.setItem('region', routerParams['region']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -175,6 +183,7 @@ export class GeneralService {
         localStorage.removeItem("utm_campaign");
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
+        localStorage.removeItem("region");
     }
 
     getLastElement(array) {
@@ -608,6 +617,34 @@ export class GeneralService {
     }
 
     /**
+     *Get cookie value
+     *
+     * @param {*} name
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getCookieValue(name: any): any {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) {
+            const cookieValue = parts.pop().split(';').shift();
+            return cookieValue.toUpperCase();
+        }
+        return null;
+    }
+    /**
+     * This will be use for get giddh region url
+     *
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getGiddhRegionUrl(): string {
+        const countryRegion = localStorage.getItem('Country-Region');
+        const region = COUNTRY_REGION_MAP[countryRegion] || null;
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+    }
+
+    /**
      * Handles the voucher date change modal configuration
      *
      * @param {boolean} isVoucherDateSelected
@@ -680,11 +717,11 @@ export class GeneralService {
     public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
-            text: commonLocaleData?.app_yes,
+            text: localeData?.submit_file_return,
             color: 'primary'
         },
         {
-            text: commonLocaleData?.app_no
+            text: commonLocaleData?.app_cancel
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
@@ -1048,6 +1085,19 @@ export class GeneralService {
         ];
     }
 
+    /**
+     * This will return available ledger view
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableLedgerView(): IOption[] {
+        return [
+            { label: 'T View', value: LedgerViewEnum.TView },
+            { label: 'Statement View', value: LedgerViewEnum.StatementView }
+        ];
+    }
+
     /*
      * Adds tooltip text for grand total and total due amount
      * to item supplied (for Cash/Sales Invoice and CR/DR note)
@@ -1066,14 +1116,15 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, VoucherTypeEnum.purchaseOrder]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
 
+
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2) {
-                grandTotalConversionRate = item.exchangeRate;
+                grandTotalConversionRate = item.exchangeRate ?? 1;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
@@ -1588,24 +1639,6 @@ export class GeneralService {
     };
 
     /**
-     * This will be use for generating random URLs
-     *
-     * @param {string} value
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
-    public generateRandomString(value: string): string {
-        const randomLength = 8; // Adjust the length of the random string as needed
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < randomLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomIndex);
-        }
-        return result + '.' + value;
-    }
-
-    /**
      * Get current date/time in this format - 06-11-2023 02:08:45
      *
      * @returns {string}
@@ -1622,6 +1655,24 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * This will be use for generating random URLs
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public generateRandomString(value: string): string {
+        const randomLength = 8; // Adjust the length of the random string as needed
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < randomLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result + '.' + value;
     }
 
     /**
@@ -1695,6 +1746,19 @@ export class GeneralService {
     }
 
     /**
+    * Check if a given country code is included in the array of supported countries for Gocardless, and return a boolean value
+    * indicating whether the country is supported or not.
+    *
+    * @param {string} countryCode
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public checkCompanySupportGoCardless(countryCode: string): boolean {
+        const gocardlessSupportedCountryCodeList = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
+        return gocardlessSupportedCountryCodeList.includes(countryCode);
+    }
+
+    /**
      * This will return the system current user time zone
      *
      * @return {*}
@@ -1757,7 +1821,7 @@ export class GeneralService {
      * @returns {string} The current timestamp.
      * @memberof GeneralService
      */
-    public getTimesStamp(): any {
+    public getTimeStamp(): any {
         const timestamp = new Date().toISOString();
         return timestamp;
     }
@@ -1909,22 +1973,40 @@ export class GeneralService {
     }
 
     /**
+     * Get Client Screen Size (width, height,scaling-factor
+     * and colour-depth) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientScreens(): string {
+        const screen = window.screen;
+        return `width=${screen.width}&height=${screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${screen.colorDepth}`;
+    }
+
+    /**
+     * Get Client Window Size (width and height) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientWindowSize(): string {
+        return `width=${window.innerWidth}&height=${window.innerHeight}`;
+    }
+
+    /**
      * This will be use for get user agent
      *
      * @param {*} clientIp
      * @return {*}
      * @memberof GeneralService
      */
-    public getUserAgentData(clientIp: any): any {
+    public getUserAgentData(): any {
         let args: any = {};
-        args['os'] = this.getOsConfiguration();
-        args['os-family'] = this.getOSFamily();
-        args['os-version'] = this.getOSVersion();
-        args['device-manufacturer'] = this.getDeviceManufacture();
-        args['device-model'] = this.getDeviceModel();
-        args['timestamp'] = this.getTimesStamp();
-        args['client-ip'] = clientIp;
-        args['Gov-Client-Timezone'] = 'UTC' + this.getUserTimeZone();
+        args["timestamp"] = this.getTimeStamp();
+        args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
+        args["Gov-client-screens"] = this.getClientScreens();
+        args["Gov-client-window-size"] = this.getClientWindowSize();
         return args;
     }
 
@@ -1933,7 +2015,227 @@ export class GeneralService {
      *
      * @memberof GeneralService
      */
-    public getClientIp(): any {
+    public getClientIp(): Observable<any> {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
+
+    /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
+    * This will be use for open window in center
+    *
+    * @param {string} url
+    * @param {string} title
+    * @param {number} width
+    * @param {number} height
+    * @return {*}  {(Window | null)}
+    * @memberof GeneralService
+    */
+    public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+
+        // Open the window and return the reference
+        return window.open(
+            url,
+            title,
+            `width=${width},height=${height},top=${top},left=${left}`
+        );
+    }
+
+    /**
+    * Get Country Flag Image Url by 2 digit country code
+    *
+    * @param {string} countryCode
+    * @return {*}  {string}
+    * @memberof GeneralService
+    */
+    public getCountryFlagUrl(countryCode: string): string {
+        return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
+    }
+
+    /**
+     *This will be use for get complete address information
+     *
+     * @param {*} addr
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getCompleteAddress(addr: any): string {
+        // Check each property and assign to a variable with a fallback to empty string
+        let address1 = addr?.bno ? addr.bno : '';
+        let address2 = addr?.bnm ? addr.bnm : '';
+        let address3 = addr?.st ? addr.st : '';
+        let address4 = addr?.landMark ? addr.landMark : '';
+        let address5 = addr?.loc ? addr.loc : '';
+
+        // Construct the complete address string
+        return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
+    }
+
+    /**
+     * This will be use for delete inventory adjust configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.delete_confirmation_message,
+            messageCssClass,
+            footerText: localeData?.delete_message1,
+            footerCssClass,
+            buttons
+        };
+    }
+
+    /**
+     *  Delete sessions confirmation dialog
+     *
+     * @param confirmationMessage
+     * @param commonLocaleData
+     * @returns
+     */
+    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = confirmationMessage;
+        return {
+            buttons,
+            headerText,
+            headerCssClass,
+            messageCssClass,
+            messageText
+        };
+    }
+
+    /**
+     * This will use for confirmation delete vocher
+     *
+     * @param {string} headerText
+     * @param {string} messageText
+     * @param {string} footerText
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const footerCssClass: string = 'mr-b1 text-light';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: messageText,
+            messageCssClass,
+            footerText: footerText,
+            footerCssClass,
+            buttons
+        };
+    }
+
+    /**
+     * Update current page query params
+     *
+     * @param {Params} queryParams
+     * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @param {boolean} [replaceUrl=true]
+     * @memberof GeneralService
+     */
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', replaceUrl: boolean = true): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams,
+                queryParamsHandling,  // Merge new parameters with existing ones
+                replaceUrl  // Replace current history entry with new URL
+            }
+        );
+    }
+
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @param {number} value
+     * @param {number} [companyDecimalPlaces=2]
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
+        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
+    }
+
+    /**
+     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     *
+     * @param {string} text - The string containing placeholders.
+     * @param {string[]} args - The list of values to replace the placeholders.
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof GeneralService
+     */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+    
+    /**
+     * Replaces placeholders in a URL with corresponding values from a model object.
+     * @param url - The URL containing placeholders like `:key`.
+     * @param model - An object containing key-value pairs to replace in the URL.
+     * @returns The formatted URL with placeholders replaced.
+     * @memberof GeneralService
+     */
+    public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
+        if (!url) return url;
+        const updatedModel = {
+            ...model,
+            companyUniqueName: model?.companyUniqueName ?? this.companyUniqueName
+        };
+        url = this.config.apiUrl + url;
+        return Object.keys(updatedModel).reduce((updatedUrl, key) => {
+            const placeholder = `:${key}`;
+            return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
+        }, url);
+    }
 }
+

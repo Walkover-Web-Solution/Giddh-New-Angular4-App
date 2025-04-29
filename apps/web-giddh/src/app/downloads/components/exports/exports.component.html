@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="download-table-container">
+    <div class="download-table-container overflow-visible">
         <div class="activity-filter-wrap">
             <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -26,7 +26,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div *ngIf="!isLoading && dataSource?.length">
+        <div *ngIf="!isLoading && dataSource?.length" class="overflow-visible">
             <table mat-table [dataSource]="dataSource" class="download-table">
                 <!-- Requested Date Column -->
                 <ng-container matColumnDef="requestedDate">

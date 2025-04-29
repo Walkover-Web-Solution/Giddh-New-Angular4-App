@@ -30,5 +30,7 @@
     "receipt_entry": "Receipt Entry",
     "bill_wise_details": "Bill wise Details for",
     "upto": "Upto",
-    "entry_created": "Entry created successfully"
+    "entry_created": "Entry created successfully",
+    "discount_list": "Discount List",
+    "tax_list": "Tax List"
 }

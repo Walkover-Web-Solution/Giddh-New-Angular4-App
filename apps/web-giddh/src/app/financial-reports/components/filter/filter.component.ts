@@ -11,7 +11,7 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -46,6 +46,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
     /** True, when expand all operation is performed */
     @Input() public expandAll: boolean;
+    /** Controls the visibility of the button and branch fitter for project wise accounting.  */
+    @Input() public isProjectWiseAccounting: boolean = false;
     @Output()
     public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     public showClearSearch: boolean;
@@ -101,15 +103,17 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
+        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private toaster: ToasterService
     ) {
         this.filterForm = this.fb.group({
@@ -160,6 +164,12 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.getTags();
 
         this.breakPointObservar.observe([
@@ -211,7 +221,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
+            if (activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
                 this.activeCompany = activeCompany;
             }
         });
@@ -222,13 +232,14 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.forceClear$ = observableOf({ status: true });
                 this.currentCompanyBranches = [];
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
                     value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
@@ -245,7 +256,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -256,7 +267,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });

@@ -212,6 +212,7 @@ export class TransactionsResponse implements ITransactions {
     public convertedClosingBalance?: IClosingBalance;
     public count: number;
     public creditTotal: number;
+    public debitCreditTransactions: ITransactionItem[];
     public convertedCreditTotal?: number;
     public creditTransactions: ITransactionItem[];
     public creditTransactionsCount: number;
@@ -229,6 +230,8 @@ export class TransactionsResponse implements ITransactions {
     public convertedCurrencySymbol?: string;
     public convertedCurrencyCode?: string;
     public periodClosingBalance?: { amount: number; type: string; };
+    public prevToken?: string;
+    public nextToken?: string;
 }
 
 export class TransactionsRequest {
@@ -242,6 +245,7 @@ export class TransactionsRequest {
     public reversePage: boolean = false;
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
+    public paginationToken?: string = '';
 }
 
 export interface ReconcileRequest {
@@ -366,6 +370,8 @@ export interface ILedgerAdvanceSearchResponse {
     creditTotal: number;
     debitTransactions: DebitTransaction[];
     creditTransactions: any[];
+    prevToken?: string;
+    nextToken?: string;
 }
 
 export interface Inventory {
@@ -378,9 +384,9 @@ export interface Inventory {
     quantityGreaterThan: boolean;
     includeItemValue: boolean;
     itemValue: number;
-    includeItemLessThan: boolean;
-    includeItemEqualTo: boolean;
-    includeItemGreaterThan: boolean;
+    itemValueLessThan: boolean;
+    itemValueEqualTo: boolean;
+    itemValueGreaterThan: boolean;
 }
 
 export interface IForwardedBalance {
@@ -435,4 +441,16 @@ export interface IUnpaidInvoiceListResponse {
 
 export interface IVariant extends IParticular {
     variantDiscount?: any;
+}
+
+/** Type for ledger type */
+export type LedgerType = 'cr' | 'dr';
+
+/** Type for ledger view */
+export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
+
+/** Enum for ledger view */
+export enum LedgerViewEnum  {
+    StatementView = 'STATEMENT_VIEW',
+    TView = 'T_VIEW'
 }

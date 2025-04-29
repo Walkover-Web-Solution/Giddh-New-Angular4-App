@@ -16,31 +16,28 @@
                 >
                     ×
                 </button>
-                <h3 class="unbold" mat-dialog-title>{{ localeData?.page_heading }}</h3>
+                <h3 class="unbold px-0" mat-dialog-title>{{ localeData?.page_heading }}</h3>
             </div>
             <div class="modal-body" id="SharePop">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-12">
                         <div class="modal-wrap">
                             <div class="form-group add-mailer">
-                                <label>{{ localeData?.share_with }}</label>
                                 <!--share account from-->
                                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
-                                    <div class="input-group d-flex justify-content-between">
-                                        <mat-form-field appearance="fill" class="custom-input-field share-input-width">
-                                            <input
-                                                matInput
-                                                name="userEmail"
-                                                class="form-control"
-                                                type="email"
-                                                [(ngModel)]="email"
-                                                required
-                                                [placeholder]="commonLocaleData?.app_email_id"
-                                                class="form-control mat-field-border mt-0 border-radius-5"
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
-                                            />
-                                        </mat-form-field>
-                                        <span class="input-group-btn mr-l1">
+                                    <div class="input-group d-flex align-items-center">
+                                        <input-field
+                                            class="w-75"
+                                            [type]="'email'"
+                                            [name]="'userEmail'"
+                                            [(ngModel)]="email"
+                                            [pattern]="'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$'"
+                                            [required]="true"
+                                            [label]="localeData?.share_with"
+                                            [placeholder]="commonLocaleData?.app_email_id"
+                                        >
+                                        </input-field>
+                                        <span class="input-group-btn mr-l3">
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
@@ -52,12 +49,11 @@
                                                 {{ commonLocaleData?.app_share }}
                                             </button>
                                         </span>
-                                        <!-- /btn-account -->
                                     </div>
                                 </form>
                                 <!--shared with array-->
-                                <div class="row mr-b2" *ngIf="activeAccountSharedWith?.length > 0">
-                                    <div class="col-sm-8">
+                                <div class="row mr-b2 mt-1" *ngIf="activeAccountSharedWith?.length > 0">
+                                    <div class="pd-l15 pd-r1 w-75">
                                         <ul class="shared-list">
                                             <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
                                                 <span class="pull-left">
@@ -90,32 +86,32 @@
                                 </a>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
                             </div>
-                            <div class="input-group d-flex justify-content-between">
-                                <mat-form-field appearance="fill" class="custom-input-field share-input-width">
-                                    <input
-                                        #magicLinkInput
-                                        matInput
-                                        class="form-control dashed mat-field-border border-radius-5"
-                                        [readonly]="true"
-                                        type="text"
-                                        [(ngModel)]="magicLink"
-                                    />
-                                </mat-form-field>
-                                <span class="input-group-btn mr-l1">
+                            <div class="input-group d-flex align-items-center mr-t15 mr-b15">
+                                <input-field
+                                    class="w-75"
+                                    [type]="'text'"
+                                    [name]="'userEmail'"
+                                    [(ngModel)]="magicLink"
+                                    [readonly]="true"
+                                    [disabled]="true"
+                                    [label]="localeData?.url"
+                                >
+                                </input-field>
+                                <span class="input-group-btn mr-l3">
                                     <button
                                         mat-stroked-button
+                                        type="button"
                                         color="primary"
                                         [disabled]="!magicLink ? 'disabled' : null"
                                         class="share-ledger-button d-flex align-items-center"
                                         (click)="toggleIsCopied()"
-                                        [ngxClipboard]="magicLinkInput"
+                                        ngxClipboard
+                                        [cbContent]="magicLink"
                                     >
                                         {{ commonLocaleData?.app_copy }}
                                     </button>
                                 </span>
-                                <!-- /btn-group -->
                             </div>
-                            <!-- /input-group -->
                             <small class="mr-t1 light-gray">{{ localeData?.share_note }}</small>
                         </div>
                     </div>

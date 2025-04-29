@@ -64,6 +64,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public showPrinterDialogWhenPageLoad: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     @Input() public isCompany: boolean;
+    /** True if consolidated branch */
+    @Input() public isConsolidatedBranch: boolean;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -340,16 +342,26 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleEditMode() {
-        if (!this.showEditMode) {
-            this.selectedItemVoucher = this.selectedItem;
-        } else {
-            this.selectedItem = this.selectedItemVoucher;
-        }
-        this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
-        this.showEditMode = !this.showEditMode;
+        if (this.voucherApiVersion === 1) {
+            if (!this.showEditMode) {
+                this.selectedItemVoucher = this.selectedItem;
+            } else {
+                this.selectedItem = this.selectedItemVoucher;
+            }
+            this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
+            this.showEditMode = !this.showEditMode;
 
-        if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
-            this.filterVouchers(this.searchElement.nativeElement.value);
+            if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+                this.filterVouchers(this.searchElement.nativeElement.value);
+            }
+        } else {
+            if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+                this.router.navigate(['/pages/vouchers/estimates/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
+            } else if(this.voucherType === VoucherTypeEnum.generateProforma) {
+                this.router.navigate(['/pages/vouchers/proformas/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
+            } else {
+                this.router.navigate(['/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.uniqueName + '/edit']);
+            }
         }
     }
 
@@ -706,7 +718,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     /**
-     * This will use for print thermal pdf document
+     * This will use for print thermal print
      *
      * @memberof InvoicePreviewDetailsComponent
      */
@@ -777,7 +789,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
                     if (response?.status === 'success') {
-
                         if (this.voucherApiVersion === 2) {
                             const requestObject = {
                                 uniqueName: this.selectedItem?.uniqueName,

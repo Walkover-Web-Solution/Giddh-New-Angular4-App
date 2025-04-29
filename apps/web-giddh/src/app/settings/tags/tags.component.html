@@ -4,178 +4,63 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="box">
-        <form>
+    <div class="box section-center">
+        <form [formGroup]="tagForm" >
             <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="section-head">{{ localeData?.create_tag }}</h1>
-                    <div class="form-group clearfix col-md-12 col-lg-3 col-xs-12 mt-1">
-                        <form (submit)="createTag(newTag)" class="row">
-                            <div class="w-100">
-                                <div class="form-group">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        name="tagName"
-                                        [(ngModel)]="newTag.name"
-                                        [placeholder]="localeData?.tag_name_placeholder"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <textarea
-                                        class="form-control"
-                                        name="tagDescription"
-                                        [(ngModel)]="newTag.description"
-                                        [placeholder]="localeData?.tag_description_placeholder"
-                                    ></textarea>
-                                </div>
-                                <div class="mr-t1">
-                                    <button type="submit" class="btn btn-success btn-sm" [disabled]="!newTag.name">
-                                        {{ commonLocaleData?.app_create }}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                <div class="col-12 px-0">
+                    <div *ngIf="isLoading">
+                        <giddh-page-loader></giddh-page-loader>
                     </div>
-                    <hr class="clearfix" />
-                    <div class="form-group mr-t15 clearfix">
-                        <div>
-                            <span class="pull-left searchTag">
-                                <input
-                                    type="text"
-                                    [(ngModel)]="searchText"
-                                    (keyup)="filterData(searchText)"
-                                    class="form-control"
-                                    name="search_text"
-                                    [placeholder]="localeData?.search_tag_placeholder"
-                                />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="tags-table">
-                        <table class="tags-table basic giddh-table table on-mobile-view">
-                            <thead [hidden]="!tags?.length">
-                                <tr>
-                                    <th>{{ localeData?.s_no }}</th>
-                                    <th>{{ localeData?.tags_name }}</th>
-                                    <th>{{ localeData?.tags_description }}</th>
-                                    <th>{{ commonLocaleData?.app_action }}</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="!isLoading && tags?.length">
-                                <tr *ngFor="let tag of tags; let i = index">
-                                    <td data-title="#">{{ i + 1 }}</td>
-                                    <td [attr.data-title]="localeData?.tags_name">
-                                        <span *ngIf="updateIndex !== i">{{ tag.name }}</span>
-                                        <input
-                                            *ngIf="updateIndex === i"
-                                            type="text"
-                                            class="form-control"
-                                            name="name_of_{{ i }}"
-                                            [(ngModel)]="tag.name"
-                                        />
-                                    </td>
-                                    <td [attr.data-title]="localeData?.tags_description">
-                                        <div *ngIf="updateIndex !== i">{{ tag.description }}</div>
-                                        <textarea
-                                            *ngIf="updateIndex === i"
-                                            class="form-control"
-                                            name="description_of_{{ i }}"
-                                            [(ngModel)]="tag.description"
-                                        ></textarea>
-                                    </td>
-                                    <td class="icon-btn" [attr.data-title]="commonLocaleData?.app_action">
-                                        <button
-                                            aria-label="edit"
-                                            *ngIf="updateIndex !== i"
-                                            (click)="setUpdateIndex(i)"
-                                            type="button"
-                                            class="btn btn-xs"
-                                        >
-                                            <i
-                                                class="icon-edit-pencil"
-                                                aria-hidden="true"
-                                                [tooltip]="commonLocaleData?.app_edit"
-                                            ></i>
-                                        </button>
-                                        <button
-                                            aria-label="delete"
-                                            *ngIf="updateIndex !== i"
-                                            (click)="deleteTag(tag, i)"
-                                            type="button"
-                                            class="btn btn-xs"
-                                        >
-                                            <i
-                                                class="fa fa-trash"
-                                                aria-hidden="true"
-                                                [tooltip]="commonLocaleData?.app_delete"
-                                            ></i>
-                                        </button>
-                                        <button
-                                            aria-label="check"
-                                            *ngIf="updateIndex === i"
-                                            (click)="updateTag(tag, i)"
-                                            type="button"
-                                            class="btn btn-xs"
-                                        >
-                                            <i class="fa fa-check" aria-hidden="true"></i>
-                                        </button>
-                                        <button
-                                            aria-label="cross"
-                                            *ngIf="updateIndex === i"
-                                            (click)="resetUpdateIndex()"
-                                            type="button"
-                                            class="btn btn-xs"
-                                        >
-                                            <i class="icon-cross" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody *ngIf="isLoading">
-                                <tr>
-                                    <td colspan="4" class="text-center empty-table">
-                                        <giddh-page-loader [cssClass]="'mt-0 mb-b'"></giddh-page-loader>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <mat-form-field class="w-100" appearance="outline" *ngIf="!isLoading">
+                        <mat-label>{{ localeData?.tags_name  }}</mat-label>
+                        <mat-chip-grid #chipGrid aria-label="Enter tag">
+                            <mat-chip-row *ngFor="let tag of tags"
+                                        (removed)="deleteTag(tag)"
+                                        [editable]="true"
+                                        (edited)="updateTag(tag, $event)"
+                                        [aria-description]="'press enter to edit ' + tag?.name"
+                            >
+                            {{ tag?.name | titlecase }}
+                            <button matChipRemove [attr.aria-label]="'remove ' + tag?.name">
+                                <i class="icon-cross"></i>
+                            </button>
+                            </mat-chip-row>
+                            <input  
+                                [placeholder]="localeData?.tag_name_placeholder"
+                                [matChipInputFor]="chipGrid"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]="addOnBlur"
+                                (matChipInputTokenEnd)="createTag($event)"
+                            />
+                        </mat-chip-grid>
+                    </mat-form-field>
+                   
+                    <div class="no-data font-24" *ngIf="!isLoading && !tags?.length">
+                        <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
                 </div>
-            </div>
-            <div class="no-data" *ngIf="!isLoading && !tags?.length">
-                <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </form>
     </div>
 
     <!-- add branch modal -->
-    <div
-        bsModal
-        #confirmationModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-md">
+    <ng-template #confirmationModal>
+        <div class="modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                    <button aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">
-                        ×
-                    </button>
+                    <button mat-dialog-close class="close" (click)="onUserConfirmation(false)">×</button>
                 </div>
                 <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                 <div class="modal-footer clearfix">
-                    <button aria-label="yes" (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
+                    <button mat-stroked-button mat-dialog-close color="primary" (click)="onUserConfirmation(true)">
                         {{ commonLocaleData?.app_yes }}
                     </button>
-                    <button aria-label="no" (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
+                    <button mat-stroked-button mat-dialog-close (click)="onUserConfirmation(false)">
                         {{ commonLocaleData?.app_no }}
                     </button>
                 </div>
-                <!-- modal footer -->
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

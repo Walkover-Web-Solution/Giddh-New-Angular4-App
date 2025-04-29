@@ -1,3 +1,21 @@
+.discount {
+    min-height: calc(100vh - 120px);
+
+    .initial-screen {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        button {
+            width: 260px;
+            height: 45px;
+            font-size: var(--font-size-20);
+        }
+    }
+}
+.action-btn{
+    min-width: 42px;
+}
 @media (max-width: 1024px) and (min-width: 768px) {
     .discount-form-setting-tab label,
     .discount-form-setting-tab br {

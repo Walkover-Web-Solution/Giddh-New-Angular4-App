@@ -4,7 +4,7 @@ import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
-import { FILE_ATTACHMENT_TYPE } from "../../app.constant";
+import { BranchHierarchyType, FILE_ATTACHMENT_TYPE } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { CommonService } from "../../services/common.service";
 import { GeneralService } from "../../services/general.service";
@@ -64,6 +64,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public refreshAfterClose: boolean = false;
     /** True if is company */
     public isCompany: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(
         private commonService: CommonService,
@@ -78,7 +80,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
-        
+
     }
 
     /**
@@ -87,13 +89,18 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             } else {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
             }
         });
 

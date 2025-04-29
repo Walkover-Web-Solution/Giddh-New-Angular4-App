@@ -1,0 +1,15 @@
+.advance-search-by-date {
+    .input-width {
+        min-width: 160px;
+        width: 160px;
+    }
+
+    .custom-datepicker {
+        &.custom-new-datepicker {
+            input {
+                width: 240px !important;
+                max-width: 240px;
+            }
+        }
+    }
+}

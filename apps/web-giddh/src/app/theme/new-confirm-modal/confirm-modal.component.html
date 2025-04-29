@@ -4,7 +4,7 @@
         <button aria-hidden="true" class="close" (click)="sendResponse(null)">×</button>
     </div>
     <div class="modal-body">
-        {{ inputData?.body }}
+        <p [innerHTML]="inputData?.body"></p>
         <p class="text-gray font-15 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">
             {{ inputData?.permanentlyDeleteMessage }}
         </p>

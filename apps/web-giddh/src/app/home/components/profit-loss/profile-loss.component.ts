@@ -217,8 +217,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 let expense;
                 let npl;
 
-                if (data && data.incomeStatment && data.incomeStatment.revenue) {
-                    revenue = cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
+                if (data && data.incomeStatement && data.incomeStatement.revenue) {
+                    revenue = cloneDeep(data.incomeStatement.revenue) as GetRevenueResponse;
                     this.totalIncome = giddhRoundOff(revenue.amount, this.giddhBalanceDecimalPlaces);
                     this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
@@ -226,8 +226,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     this.totalIncomeType = '';
                 }
 
-                if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
-                    expense = cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
+                if (data && data.incomeStatement && data.incomeStatement.totalExpenses) {
+                    expense = cloneDeep(data.incomeStatement.totalExpenses) as GetTotalExpenseResponse;
                     this.totalExpense = giddhRoundOff(expense.amount, this.giddhBalanceDecimalPlaces);
                     this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
@@ -235,8 +235,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                     this.totalExpenseType = '';
                 }
 
-                if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
-                    npl = cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
+                if (data && data.incomeStatement && data.incomeStatement.incomeBeforeTaxes) {
+                    npl = cloneDeep(data.incomeStatement.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
                     this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
                     this.netProfitLoss = giddhRoundOff(npl.amount, this.giddhBalanceDecimalPlaces);
                 } else {
@@ -263,7 +263,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalIncome) + "/-";
         let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalExpense) + "/-";
         let label = [totalIncome, totalExpense];
-        let data = [this.totalIncome, this.totalExpense]
+        let data = [this.totalIncome, this.totalExpense];
 
         this.chart?.destroy();
 
@@ -303,7 +303,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 },
                 responsive: true,
                 maintainAspectRatio: false,
-                spacing: 1,
                 cutout: 50,
                 radius: '95%'
             }

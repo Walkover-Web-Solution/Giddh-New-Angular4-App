@@ -40,10 +40,12 @@
     background: var(--color-right-sidebar-primary-journal-voucher-list-hover);
     padding-left: 20px;
 }
+
 .active-parent {
     background: var(--color-right-sidebar-primary-journal-voucher-list-hover);
 }
-.active-child > span {
+
+.active-child>span {
     margin-right: 2px;
 }
 

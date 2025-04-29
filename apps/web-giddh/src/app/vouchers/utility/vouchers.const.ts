@@ -3,13 +3,16 @@ export enum TaxSupportedCountries {
     'UAE' = 'UAE',
     'GB' = 'GB',
     'ZW' = 'ZW',
-    'UK' = 'UK'
+    'KE' = 'KE',
+    'UK' = 'UK',
+    'US' = 'US'
 };
 
 export enum TaxType {
     'GST' = 'GST',
     'TRN' = 'TRN',
-    'VAT' = 'VAT'
+    'VAT' = 'VAT',
+    'SALES_TAX' = 'SALES_TAX'
 };
 
 export enum VoucherTypeEnum {
@@ -44,3 +47,5 @@ export enum AccountType {
 };
 
 export const OtherTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+export const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment];

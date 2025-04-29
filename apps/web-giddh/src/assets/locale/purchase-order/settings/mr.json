@@ -23,5 +23,6 @@
     "gmail_account_added": "जी मेल खाते यशस्वीरित्या जोडले.",
     "enable_voucher_download": "व्हाउचर डाउनलोड सक्षम करा",
     "apply_purchase_round_off": "खरेदी व्हाउचरवर राउंड ऑफ लागू करा",
-    "generate_auto_purchase_number":"बिल आणि डेबिट नोटसाठी सिस्टम जनरेट केलेल्या नंबरला अनुमती द्या"
+    "generate_auto_purchase_number":"बिल आणि डेबिट नोटसाठी सिस्टम जनरेट केलेल्या नंबरला अनुमती द्या",
+    "auto_email_generate": "व्युत्पन्न झाल्यावर ऑटो मेल"
 }

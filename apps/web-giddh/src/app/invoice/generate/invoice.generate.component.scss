@@ -229,19 +229,22 @@ button.btn.btn-filter span.icon-cross {
     }
 }
 
-span.close-modal.cp.pull-right {
-    display: inline-grid;
-    justify-content: center;
-    align-items: center;
-    height: 34px;
-    width: 34px;
-    background-color: var(--color-iron);
-    border: 1px solid var(--color-iron);
-    border-radius: 5px;
-    margin-right: 8px;
-    position: static;
-    transform: inherit;
+span {
+     &.close-modal {
+        display: inline-grid;
+        justify-content: center;
+        align-items: center;
+        height: 34px;
+        width: 34px;
+        background-color: var(--color-iron);
+        border: 1px solid var(--color-iron);
+        border-radius: 5px;
+        margin-right: 8px;
+        position: static;
+        transform: inherit;
+    }
 }
+
 #mobile-nested-table {
     display: none;
 }

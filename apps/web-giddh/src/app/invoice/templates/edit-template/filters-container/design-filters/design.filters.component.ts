@@ -371,6 +371,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public setFontAndFontSize() {
         if (this.customTemplate) {
             if (this.customTemplate.font) {
+                if (this.customTemplate.templateType === 'tally_template') {
+                    this.presetFonts = [
+                        { label: 'Open Sans', value: 'Open Sans' },
+                        { label: 'Roboto', value: 'Roboto' }
+                    ];
+                }
+
                 this.presetFonts.map(font => {
                     if (font?.value === this.customTemplate.font) {
                         this.selectedFont = font.label;
@@ -380,7 +387,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
             if (this.customTemplate.fontSize) {
                 this.presetFontsSize.map(fontSize => {
-                    if (fontSize?.value === this.customTemplate.fontSize) {
+                    if (fontSize?.value == this.customTemplate.fontSize) {
                         this.selectedFontSize = fontSize.label;
                     }
                 });
@@ -411,5 +418,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+    /**
+     * * This is used when the user changes the template.
+     */
+    public showMessage(): void{
+        this._toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
     }
 }

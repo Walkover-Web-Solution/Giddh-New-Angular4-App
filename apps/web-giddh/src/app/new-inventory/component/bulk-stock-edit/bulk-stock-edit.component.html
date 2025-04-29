@@ -9,7 +9,28 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="bulk-stock pd-15 pb-0">
-        <div class="bulk-stock-warpper">
+        <div
+            class="menu-btn-control mr-l1 pull-right"
+            [matTooltip]="localeData?.customize_column"
+        >
+            <select-table-column
+                [moduleName]="inventoryType"
+                [moduleType]="moduleName"
+                [customiseColumns]="hideShowColumnList"
+                (isLoading)="isLoading = $event"
+                (selectedDynamicColumns)="setDisplayColumns($event)"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [iconClass]="'icon-options font-16'"
+                [cssClass]="'bulk-stock-hide-show-button'"
+                [additionalMenuCssClass]="'max-height-50'"
+            >
+            </select-table-column>
+        </div>
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div class="bulk-stock-warpper" *ngIf="!(noDataFound && !(advanceSearchData || searchString)) && !isLoading">
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
@@ -22,7 +43,7 @@
                                 !isLoading
                             "
                             mat-stroked-button
-                            (click)="resetSearch()"
+                            (click)="resetSearch(); isApiCalled = true"
                             aria-label="cross icon"
                         >
                             <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter }}
@@ -33,21 +54,6 @@
                             <p *ngIf="!isLoading" class="mr-r3">
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
-                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">
-                                <select-table-column
-                                    [moduleName]="inventoryType"
-                                    [moduleType]="moduleName"
-                                    [customiseColumns]="hideShowColumnList"
-                                    (isLoading)="isLoading = $event"
-                                    (selectedColumns)="setDisplayColumns($event)"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                    [iconClass]="'icon-options font-16'"
-                                    [cssClass]="'bulk-stock-hide-show-button'"
-                                    [additionalMenuCssClass]="'max-height-50'"
-                                >
-                                </select-table-column>
-                            </div>
                             <button
                                 mat-icon-button
                                 color="primary"
@@ -64,12 +70,7 @@
             </div>
             <div class="bulk-stock-body">
                 <div class="bulk-stock-table d-flex flex-column">
-                    <ng-container *ngIf="isLoading">
-                        <div>
-                            <giddh-page-loader></giddh-page-loader>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!isLoading">
+                    <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
                                 <table class="table table-bordered">
@@ -511,6 +512,11 @@
                                             >
                                                 <h3>{{ localeData?.fixed_asset_tax_inclusive }}</h3>
                                             </th>
+                                            <ng-container *ngFor="let column of tableHeaderDynamicColumns">
+                                                <th>
+                                                    <h3>{{ column?.label }}</h3>
+                                                </th>
+                                            </ng-container>
                                         </tr>
                                     </thead>
                                     <tbody formArrayName="fields">
@@ -1106,6 +1112,24 @@
                                                         </text-field> -->
                                                     </div>
                                                 </td>
+                                                <!-- Custom Fileds (Menu)-->
+                                                <ng-container
+                                                    *ngIf="
+                                                        tableHeaderDynamicColumns.length &&
+                                                        row?.get('customFields')?.value?.length
+                                                    "
+                                                >
+                                                    <td
+                                                        *ngFor="let column of row.get('customFields').value"
+                                                        class="min-width-140"
+                                                    >
+                                                        <div class="border-line">
+                                                            <div class="custom-padding">
+                                                                {{ column?.value }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
                                             </tr>
                                         </ng-container>
                                         <tr *ngIf="noDataFound && !isLoading">
@@ -1137,8 +1161,14 @@
                             ></pagination>
                         </div>
                     </ng-container>
+                    <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">
+                        <h1>{{ commonLocaleData?.app_no_entries_found }}</h1>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div *ngIf="noDataFound && !(advanceSearchData || searchString) && !isLoading" class="no-data mb-5">
+            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
     </div>
 </ng-container>

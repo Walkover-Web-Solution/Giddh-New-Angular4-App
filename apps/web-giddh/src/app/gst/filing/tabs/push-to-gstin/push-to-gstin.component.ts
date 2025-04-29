@@ -64,11 +64,11 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates back
+     * Redirect to gst filing return page
      *
      * @memberof PushToGstInComponent
      */
-    public goBack() {
+    public redirectToGstFilingReturn(): void {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.activeCompanyGstNumber } });
     }
 }

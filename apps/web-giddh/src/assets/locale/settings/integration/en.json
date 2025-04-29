@@ -49,7 +49,8 @@
         "paypal_update_successfully":"Paypal account details have been updated successfully.",
         "unlinked_account_successfully":"Paypal account details have been unlink successfully.",
         "paypal_tab_heading": "Paypal",
-        "razorpay_tab_heading": "Razorpay"
+        "razorpay_tab_heading": "Razorpay",
+        "delete_credentials_message": "Are you sure you want to delete the credentials?"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",
@@ -128,7 +129,16 @@
         "get_instant_overdraft": "Get Instant Overdraft",
         "duration_error": "Please select duration for given amount",
         "required_field_error": "Please fill all required fields",
-        "connect_bank": "Connect Bank"
+        "connect_bank": "Connect Bank",
+        "confirm_bank_delete_message": "Are you sure you want to delete the bank account?",
+        "search_bank":"Search Bank",
+        "institutions":"Institutions",
+        "bank_list":"Bank List",
+        "banks": "Banks",
+        "permission_message":"You do not have permission to access this module.",
+        "link_bank": "Link Bank",
+        "link": "Link",
+        "all_bank_are_linked" : "All bank are Linked"  
     },
     "communication": {
         "tab_heading": "Communication"
@@ -138,5 +148,10 @@
         "copied":"Copied...",
         "api_url":"API URL : ",
         "heading":"Tally"
-    }
+    },
+    "account_deleted_successfully": "Account deleted successfully",
+    "portal_information":"Portal Information",
+    "portal_domain": "Portal Domain",
+    "portal_url": "Portal URL",
+    "payment_gateway": "Payment Gateway"
 }

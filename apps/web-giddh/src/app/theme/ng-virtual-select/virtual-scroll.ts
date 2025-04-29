@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -98,7 +99,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public previousEnd: number;
     public startupLoop: boolean = true;
 
-    constructor(private element: ElementRef, private renderer: Renderer2) {
+    constructor(private element: ElementRef, private renderer: Renderer2, private changeDetectionRef: ChangeDetectorRef) {
     }
 
     get width(): any {
@@ -292,6 +293,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         let maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
         let start = Math.min(maxStart, Math.floor(indexByScrollTop) * d.itemsPerRow);
         this.topPadding = d.childHeight * Math.ceil(start / d.itemsPerRow);
+        this.changeDetectionRef.detectChanges();
         if (start !== this.previousStart || end !== this.previousEnd) {
 
             this.update.emit(items.slice(start, end));

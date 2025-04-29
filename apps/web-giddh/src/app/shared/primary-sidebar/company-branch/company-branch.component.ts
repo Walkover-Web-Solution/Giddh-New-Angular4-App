@@ -173,11 +173,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp?.alias) {
-                return cmp?.name?.toLowerCase().includes(event?.toLowerCase());
-            } else {
-                return cmp?.name?.toLowerCase().includes(event?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(event?.toLowerCase());
-            }
+            return cmp?.name?.toLowerCase().includes(event?.toLowerCase());
         });
     }
 
@@ -220,19 +216,19 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion;
+        this.store.dispatch(this.commonAction.setBranchConsolidated(false));
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
             }
         };
-
         if (selectBranchUniqueName) {
             this.setOrganizationDetails(OrganizationType.Branch, details);
         } else {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
-
         this.store.dispatch(this.loginAction.ChangeCompany(company?.uniqueName, fetchLastState));
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -364,10 +360,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public filterBranchList(event: any): void {
         if (this.companyBranches) {
             this.companyBranches.branches = this.branchList?.filter((branch) => {
-                if (!branch.alias) {
+                if (!branch.name) {
                     return branch.name?.toLowerCase().includes(event?.toLowerCase());
                 } else {
-                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.alias?.toLowerCase().includes(event?.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.name?.toLowerCase().includes(event?.toLowerCase());
                 }
             });
             this.changeDetectorRef.detectChanges();
@@ -381,7 +377,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} branchUniqueName Branch uniqueName
      * @memberof CompanyBranchComponent
      */
-    public changeBranch(company: any, branchUniqueName: string, event: any): void {
+    public changeBranch(company: any, branchUniqueName: string, event: any, branch?: any): void {
         event.stopPropagation();
         event.preventDefault();
 
@@ -392,7 +388,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(true));
-                    this.switchBranch(company, branchUniqueName, event);
+                    this.switchBranch(company, branchUniqueName, event, branch);
                 } else {
                     this.store.dispatch(this.commonAction.bypassUnsavedChanges(false));
                 }
@@ -400,7 +396,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        this.switchBranch(company, branchUniqueName, event);
+        this.switchBranch(company, branchUniqueName, event, branch);
     }
 
     /**
@@ -412,9 +408,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} event
      * @memberof CompanyBranchComponent
      */
-    private switchBranch(company: any, branchUniqueName: string, event: any): void {
+    private switchBranch(company: any, branchUniqueName: string, event: any, branch: any): void {
+        this.store.dispatch(this.commonAction.setBranchConsolidated(branch?.consolidatedBranch ?? false));
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
-
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
             this.changeCompany(company, branchUniqueName, false);
         } else if (branchUniqueName !== this.generalService.currentBranchUniqueName) {
@@ -434,6 +430,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                 }
             });
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**

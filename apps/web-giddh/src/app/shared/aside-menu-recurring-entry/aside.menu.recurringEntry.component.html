@@ -86,7 +86,7 @@
                         <button
                             mat-stroked-button
                             color="warn"
-                            *ngIf="!isCompany"
+                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                             class="btn-sm"
                             [ladda]="isDeleteLoading"
                             (click)="deleteInvoice()"
@@ -96,7 +96,7 @@
                         <button
                             mat-stroked-button
                             color="primary"
-                            *ngIf="!isCompany"
+                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                             class="btn-sm"
                             [ladda]="isLoading"
                             (click)="saveRecurringInvoice()"

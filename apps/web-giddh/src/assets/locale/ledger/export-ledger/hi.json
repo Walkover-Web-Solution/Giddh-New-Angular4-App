@@ -12,5 +12,7 @@
     "plus_minus_toggle":" +/-",
     "export_group_ledger": "निर्यात समूह खाता बही",
     "ledger": "खाता",
-    "bill_to_bill": "बिल टू बिल"
+    "bill_to_bill": "बिल टू बिल",
+    "ledger_entries": "बही प्रविष्टियाँ",
+    "account": "खाते"
 }

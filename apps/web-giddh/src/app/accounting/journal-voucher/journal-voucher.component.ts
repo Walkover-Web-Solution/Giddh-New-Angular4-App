@@ -71,15 +71,16 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
+    {
+        keyCode: 119, // 'F8',
+        key: FUNCTIONAL_KEYS.F8,
+        inputForFn: {
+            page: 'Sales',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
     //{
-    //     keyCode: 119, // 'F8',
-    //     key: FUNCTIONAL_KEYS.F8,
-    //     inputForFn: {
-    //         page: 'Sales',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // }, {
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
     //     altKey: true,
@@ -129,6 +130,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public currentDate: string;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
 
@@ -137,6 +140,12 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Hold show discount event  */
+    public showDiscountEvent: boolean;
+    /** Hold show tax event  */
+    public showTaxEvent: boolean;
+    /** Hold sales entry event  */
+    public salesEntry: boolean;
 
     /** @ignore */
     constructor(
@@ -231,6 +240,12 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @memberof JournalVoucherComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
@@ -238,6 +253,16 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             }
         });
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
+    }
+
+    /**
+     * This will be use for transfer data
+     *
+     * @param {*} event
+     * @memberof JournalVoucherComponent
+     */
+    public getSalesEntryEvent(event: any): void {
+        this.salesEntry = event;
     }
 
     /**

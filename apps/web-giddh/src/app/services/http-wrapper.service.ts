@@ -12,7 +12,7 @@ export class HttpWrapperService {
         private loaderService: LoaderService,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     public get = (
@@ -75,6 +75,7 @@ export class HttpWrapperService {
         options.headers["Session-Id"] = this.generalService.sessionId;
         options.headers["Content-Type"] = "application/json";
         options.headers["Accept"] = "application/json";
+        // options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
         options.headers = new HttpHeaders(options.headers);
         options.body = request;
         this.showLoader();
@@ -118,7 +119,7 @@ export class HttpWrapperService {
         if (sessionId) {
             options.headers["Session-Id"] = sessionId;
         }
-        
+
         options.headers["cache-control"] = "no-cache";
         if (!options.headers["Content-Type"]) {
             options.headers["Content-Type"] = "application/json";
@@ -133,6 +134,7 @@ export class HttpWrapperService {
             delete options.headers["cache-control"];
             delete options.headers["Session-Id"];
         }
+        // options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
         options.headers = new HttpHeaders(options.headers);
         return options;
     }

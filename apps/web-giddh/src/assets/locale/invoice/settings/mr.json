@@ -26,7 +26,7 @@
     "enable_sms_proforma": "एसएमएसद्वारे प्रोफार्मा पाठविणे सक्षम करा",
     "invoice_lock_date": "बीजक लॉक तारीख",
     "show_seal": "देय स्थितीनुसार सील दाखवा",
-    "auto_mail_update": "अद्यतनित केल्यावर ऑटो मेल",
+    "auto_mail_update": "तयार आणि अद्यतनित करताना स्वयंचलित मेल",
     "enable_sms_invoice": "एसएमएसद्वारे बीजक पाठविणे सक्षम करा",
     "custom_invoice_no": "सानुकूल चलन#",
     "branch_prefix": "शाखा उपसर्ग",

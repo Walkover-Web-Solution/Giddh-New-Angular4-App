@@ -19,10 +19,10 @@ export class MobileRestrictedComponent {
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
 
         this.breakpointObserver.observe([
-            '(min-width: 481px)'
+            '(min-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.matches) {
-                this.router.navigate(['/home'])
+            if (result?.matches) {
+                this.router.navigate(['/home']);
             }
         });
     }

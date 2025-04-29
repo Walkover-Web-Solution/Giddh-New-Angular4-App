@@ -53,3 +53,11 @@ export const INVENTORY_COMMON_COLUMNS = [
         "checked": true
     }
 ];
+
+// Enum for export dialog information
+export enum exportTypeEnum {
+    ItemWise = 'INVENTORY_ITEM_WISE_EXPORT',
+    VariantWise = 'INVENTORY_VARIANT_WISE_EXPORT',
+    GroupWise = 'INVENTORY_GROUP_WISE_EXPORT',
+    TransactionWise = 'INVENTORY_TRANSACTION_WISE_EXPORT'
+}

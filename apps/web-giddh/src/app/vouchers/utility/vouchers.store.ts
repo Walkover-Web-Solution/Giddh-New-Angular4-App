@@ -1,7 +1,9 @@
+import { PurchaseOrderService } from './../../services/purchase-order.service';
+import { AuthenticationService } from './../../services/authentication.service';
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Store } from "@ngrx/store";
-import { Observable, switchMap, catchError, EMPTY, of } from "rxjs";
+import { select, Store } from "@ngrx/store";
+import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CustomTemplateResponse } from "../../models/api-models/Invoice";
 import { IDiscountList } from "../../models/api-models/SettingsDiscount";
@@ -24,6 +26,7 @@ export interface VoucherState {
     createUpdateInProgress: boolean;
     deleteAttachmentInProgress: boolean;
     deleteAttachmentIsSuccess: boolean;
+    deleteVoucherIsSuccess: boolean;
     getLastVouchersInProgress: boolean;
     discountsList: IDiscountList[];
     invoiceSettings: InvoiceSetting;
@@ -45,7 +48,37 @@ export interface VoucherState {
     vouchersForAdjustment: any;
     voucherListForCreditDebitNote: any;
     pendingPurchaseOrders: any[];
+    purchaseOrdersList: any[];
     countryList: any[];
+    ledgerEntries: any[];
+    voucherBalances: any;
+    exportVouchersFile: any;
+    eInvoiceGenerated: boolean;
+    bulkUpdateVoucherInProgress: boolean;
+    bulkUpdateVoucherIsSuccess: boolean;
+    bulkExportVoucherInProgress: boolean;
+    bulkExportVoucherResponse: any;
+    actionVoucherInProgress: boolean;
+    actionVoucherIsSuccess: boolean;
+    adjustVoucherIsSuccess: boolean;
+    uploadImageBase64InProgress: boolean;
+    uploadImageBase64Response: any;
+    convertToInvoice: boolean;
+    convertToProforma: boolean;
+    isVoucherDownloadError: boolean;
+    isVoucherDownloading: boolean;
+    downloadVoucherResponse: any;
+    isVoucherFileDownloading: boolean;
+    downloadVoucherFileResponse: any;
+    isVoucherVersionsInProgress: boolean;
+    voucherVersionsResponse: any;
+    uploadFileInProgress: boolean;
+    uploadFileIsSuccess: any;
+    updateAttachmentInVoucherIsSuccess: boolean;
+    cancelEInvoiceInProgress: boolean;
+    cancelEInvoiceIsSuccess: boolean;
+    saveGmailAuthCodeIsSuccess: any;
+    verifyEmailIsSuccess: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -53,6 +86,7 @@ const DEFAULT_STATE: VoucherState = {
     createUpdateInProgress: null,
     deleteAttachmentInProgress: null,
     deleteAttachmentIsSuccess: null,
+    deleteVoucherIsSuccess: null,
     getLastVouchersInProgress: null,
     discountsList: null,
     invoiceSettings: null,
@@ -74,7 +108,37 @@ const DEFAULT_STATE: VoucherState = {
     vouchersForAdjustment: null,
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
-    countryList: null
+    purchaseOrdersList: null,
+    countryList: null,
+    ledgerEntries: null,
+    voucherBalances: null,
+    exportVouchersFile: null,
+    eInvoiceGenerated: null,
+    bulkUpdateVoucherInProgress: null,
+    bulkUpdateVoucherIsSuccess: null,
+    bulkExportVoucherInProgress: null,
+    bulkExportVoucherResponse: null,
+    actionVoucherInProgress: null,
+    actionVoucherIsSuccess: null,
+    adjustVoucherIsSuccess: null,
+    uploadImageBase64InProgress: false,
+    uploadImageBase64Response: null,
+    convertToInvoice: null,
+    convertToProforma: null,
+    isVoucherDownloadError: null,
+    isVoucherDownloading: null,
+    downloadVoucherResponse: null,
+    isVoucherFileDownloading: null,
+    downloadVoucherFileResponse: null,
+    isVoucherVersionsInProgress: null,
+    voucherVersionsResponse: null,
+    uploadFileInProgress: null,
+    uploadFileIsSuccess: null,
+    updateAttachmentInVoucherIsSuccess: null,
+    cancelEInvoiceInProgress: null,
+    cancelEInvoiceIsSuccess: null,
+    saveGmailAuthCodeIsSuccess: null,
+    verifyEmailIsSuccess: null
 };
 
 @Injectable()
@@ -88,7 +152,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private ledgerService: LedgerService,
         private commonService: CommonService,
         private accountService: AccountService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private authenticationService: AuthenticationService,
+        private purchaseOrderService: PurchaseOrderService
     ) {
         super(DEFAULT_STATE);
     }
@@ -97,7 +163,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
     public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
-    public invoiceSettings$ = this.select((state) => state.invoiceSettings);
+    public voucherSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
     public stockVariants$ = this.select((state) => state.stockVariants);
@@ -115,9 +181,41 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
     public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
+    public purchaseOrdersList$ = this.select((state) => state.purchaseOrdersList);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
+    public deleteVoucherIsSuccess$ = this.select((state) => state.deleteVoucherIsSuccess);
+    public ledgerEntries$ = this.select((state) => state.ledgerEntries);
+    public voucherBalances$ = this.select((state) => state.voucherBalances);
+    public exportVouchersFile$ = this.select((state) => state.exportVouchersFile);
+    public eInvoiceGenerated$ = this.select((state) => state.eInvoiceGenerated);
+    public bulkUpdateVoucherInProgress$ = this.select((state) => state.bulkUpdateVoucherInProgress);
+    public bulkUpdateVoucherIsSuccess$ = this.select((state) => state.bulkUpdateVoucherIsSuccess);
+    public bulkExportVoucherInProgress$ = this.select((state) => state.bulkExportVoucherInProgress);
+    public bulkExportVoucherResponse$ = this.select((state) => state.bulkExportVoucherResponse);
+    public actionVoucherInProgress$ = this.select((state) => state.actionVoucherInProgress);
+    public actionVoucherIsSuccess$ = this.select((state) => state.actionVoucherIsSuccess);
+    public adjustVoucherIsSuccess$ = this.select((state) => state.adjustVoucherIsSuccess);
+    public uploadImageBase64InProgress$ = this.select((state) => state.uploadImageBase64InProgress);
+    public uploadImageBase64Response$ = this.select((state) => state.uploadImageBase64Response);
+    public convertToInvoiceIsSuccess$ = this.select((state) => state.convertToInvoice);
+    public convertToProformaIsSuccess$ = this.select((state) => state.convertToProforma);
+    public isVoucherDownloading$ = this.select((state) => state.isVoucherDownloading);
+    public isVoucherDownloadError$ = this.select((state) => state.isVoucherDownloadError);
+    public downloadVoucherResponse$ = this.select((state) => state.downloadVoucherResponse);
+    public isVoucherFileDownloading$ = this.select((state) => state.isVoucherFileDownloading);
+    public downloadVoucherFileResponse$ = this.select((state) => state.downloadVoucherFileResponse);
+    public voucherVersionsResponse$ = this.select((state) => state.voucherVersionsResponse);
+    public isVoucherVersionsInProgress$ = this.select((state) => state.isVoucherVersionsInProgress);
+    public uploadFileIsSuccess$ = this.select((state) => state.uploadFileIsSuccess);
+    public updateAttachmentInVoucherIsSuccess$ = this.select((state) => state.updateAttachmentInVoucherIsSuccess);
+    public cancelEInvoiceInProgress$ = this.select((state) => state.cancelEInvoiceInProgress);
+    public cancelEInvoiceIsSuccess$ = this.select((state) => state.cancelEInvoiceIsSuccess);
+    public saveGmailAuthCodeIsSuccess$ = this.select((state) => state.saveGmailAuthCodeIsSuccess);
+    public verifyEmailIsSuccess$ = this.select((state) => state.verifyEmailIsSuccess);
 
+    public hasInvoiceSettingPermissions$: Observable<any> = this.select(this.store.select(state => state.invoice.hasInvoiceSettingPermissions), (response) => response);
+    public isGmailIntegrated$: Observable<any> = this.select(this.store.select(state => state.settings.isGmailIntegrated), (response) => response);
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
@@ -130,6 +228,14 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public newAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.createdAccountDetails), (response) => response);
     public updatedAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.updatedAccountDetails), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
+    public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
+    public pendingVoucherList$: Observable<any> = this.select(this.store.select(state => state.invoice.ledgers), (response) => response);
+    public isBulkInvoiceGenerated$: Observable<any> = this.select(this.store.select(state => state.invoice.isBulkInvoiceGenerated), (response) => response);
+    public getLedgerDataInProcess$: Observable<any> = this.select(this.store.select(state => state.invoice.isGetAllLedgerDataInProgress), (response) => response);
+    public isAccountUpdated$: Observable<any> = this.select(this.store.select(state => state.common.isAccountUpdated), (response) => response);
+    public universalPendingDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public invoiceSettings$: Observable<any> = this.select(this.store.select(state => state.invoice.settings), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -187,6 +293,10 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<LastVouchersResponse, any>) => {
+                            if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            res.body['voucherType'] = req.type;
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: res?.body ?? {}
@@ -213,6 +323,10 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            res.body['voucherType'] = req.type;
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: res?.body ?? {}
@@ -257,7 +371,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number, autoSelectVariant: boolean }>) => {
         return data.pipe(
-            switchMap((req) => {
+            mergeMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
                     tapResponse(
                         (res: Array<IVariant>) => {
@@ -308,10 +422,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.ledgerService.removeAttachment(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                deleteAttachmentInProgress: false,
-                                deleteAttachmentIsSuccess: true
-                            });
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ deleteAttachmentInProgress: false, deleteAttachmentIsSuccess: false });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
@@ -513,6 +630,56 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly getPurchaseOrderDetails = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getPurchaseOrder(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            let voucherDetails = res?.body ?? {};
+                            voucherDetails.isCopyVoucher = false;
+                            return this.patchState({
+                                voucherDetails: voucherDetails
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getEstimateProformaDetails = this.effect((data: Observable<{ voucherType: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getEstimateProforma(req.payload, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            let voucherDetails = res?.body ?? {};
+                            voucherDetails.isCopyVoucher = false;
+                            return this.patchState({
+                                voucherDetails: voucherDetails
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -677,6 +844,33 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly getPurchaseOrders = this.effect((data: Observable<{ request: any }>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                this.patchState({ getLastVouchersInProgress: true });
+                return this.voucherService.getPurchaseOrderList(req.request).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            res.body['voucherType'] = 'purchase-order';
+                            return this.patchState({
+                                purchaseOrdersList: res.body,
+                                getLastVouchersInProgress: false
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                purchaseOrdersList: null,
+                                getLastVouchersInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     readonly getCountryList = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -691,6 +885,379 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 countryList: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getEntriesByEntryUniqueNames = this.effect((data: Observable<{ accountUniqueName: any, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getEntriesByEntryUniqueNames(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                ledgerEntries: res.body?.entries
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                ledgerEntries: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getVoucherBalances = this.effect((data: Observable<{ requestType: any, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getVoucherBalances(req.payload, req.requestType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                voucherBalances: res.body
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherBalances: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly exportVouchers = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.exportVouchers(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                exportVouchersFile: res.body
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                exportVouchersFile: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly generateEInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    eInvoiceGenerated: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    eInvoiceGenerated: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                eInvoiceGenerated: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly bulkUpdateInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
+                return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: true,
+                                    bulkUpdateVoucherInProgress: false
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: false,
+                                    bulkUpdateVoucherInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                bulkUpdateVoucherIsSuccess: false,
+                                bulkUpdateVoucherInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly bulkExportVoucher = this.effect((data: Observable<{ getRequest: any, postRequest: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    bulkExportVoucherInProgress: true,
+                    bulkExportVoucherResponse: null
+                });
+                return this.voucherService.bulkExport(req.getRequest, req.postRequest).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                if (res.body.type !== "base64") {
+                                    this.toaster.showSnackBar("success", res.body.file);
+                                }
+
+                                this.patchState({
+                                    bulkExportVoucherInProgress: false,
+                                    bulkExportVoucherResponse: res.body
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    bulkExportVoucherInProgress: false,
+                                    bulkExportVoucherResponse: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                bulkExportVoucherInProgress: false,
+                                bulkExportVoucherResponse: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly actionVoucher = this.effect((data: Observable<{ voucherUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    actionVoucherInProgress: true,
+                    actionVoucherIsSuccess: false
+                });
+                return this.voucherService.actionVoucher(req.voucherUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    actionVoucherInProgress: false,
+                                    actionVoucherIsSuccess: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    actionVoucherInProgress: null,
+                                    actionVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                actionVoucherInProgress: null,
+                                actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly actionEstimateProforma = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    actionVoucherIsSuccess: false
+                });
+                return this.voucherService.updateAction(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    actionVoucherIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    actionVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly convertToInvoice = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    convertToInvoice: false
+                });
+                return this.voucherService.generateInvoice(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    convertToInvoice: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    convertToInvoice: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                convertToInvoice: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly convertToProforma = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    convertToProforma: false
+                });
+                return this.voucherService.generateProforma(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    convertToProforma: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    convertToProforma: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                convertToProforma: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly adjustVoucherWithAdvanceReceipts = this.effect((data: Observable<{ adjustments: any, voucherUniqueName: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    adjustVoucherIsSuccess: false
+                });
+                return this.voucherService.adjustAnInvoiceWithAdvanceReceipts(req.adjustments, req.voucherUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    adjustVoucherIsSuccess: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    adjustVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                adjustVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly uploadImageBase64 = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    uploadImageBase64InProgress: true
+                });
+                return this.commonService.uploadImageBase64(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                uploadImageBase64Response: res?.body,
+                                uploadImageBase64InProgress: false
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                uploadImageBase64Response: null,
+                                uploadImageBase64InProgress: false
                             });
                         }
                     ),
@@ -731,5 +1298,509 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    readonly resetGenerateEInvoice = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    eInvoiceGenerated: null
+                });
+                return of(null);
+            })
+        );
+    });
+
+    readonly deleteVoucher = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteVoucherIsSuccess: false });
+                return this.voucherService.deleteReceipt(req.accountUniqueName, req.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success" && typeof res.body === "string") {
+                                this.toaster.showSnackBar("success", res.body);
+                            } else if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                deleteVoucherIsSuccess: true
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly deleteEstimsteProformaVoucher = this.effect((data: Observable<{ payload: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteVoucherIsSuccess: false });
+                return this.voucherService.deleteEstimsteProformaVoucher(req.payload, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success" && typeof res.body === "string") {
+                                this.toaster.showSnackBar("success", res.body);
+                            } else if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                deleteVoucherIsSuccess: true
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly deleteSinglePOVoucher = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteVoucherIsSuccess: false });
+                return this.voucherService.deleteSinglePOVoucher(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success" && typeof res.body === "string") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    deleteVoucherIsSuccess: true
+                                });
+                            } else if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    deleteVoucherIsSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly sendEmailOnPurchaseOrder = this.effect((data: Observable<{ request: any, model: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    sendEmailInProgress: true, sendEmailIsSuccess: null
+                });
+                return this.voucherService.sendEmail(req.request, req.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                res.body && this.toaster.showSnackBar("success", res.body);
+                                this.patchState({
+                                    sendEmailInProgress: false,
+                                    sendEmailIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    sendEmailInProgress: false,
+                                    sendEmailIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                sendEmailInProgress: false,
+                                sendEmailIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly purchaseOrderBulkUpdateAction = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
+                return this.voucherService.bulkUpdate(req.actionType, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                res.body && this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: true,
+                                    bulkUpdateVoucherInProgress: false
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: false,
+                                    bulkUpdateVoucherInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                bulkUpdateVoucherIsSuccess: false,
+                                bulkUpdateVoucherInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+    /**
+     * Purchase order status
+     *
+     * @memberof VoucherComponentStore
+     */
+    readonly purchaseOrderStatusUpdate = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ actionVoucherInProgress: true, actionVoucherIsSuccess: false });
+                return this.voucherService.purchaseOrderStatusUpdate(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    actionVoucherInProgress: false,
+                                    actionVoucherIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    actionVoucherInProgress: null,
+                                    actionVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                actionVoucherInProgress: null,
+                                actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly downloadVoucherPdf = this.effect((data: Observable<{ model: any, type: string, fileType: string, voucherType: string, isDownloadFromDialog: boolean }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                if (req.isDownloadFromDialog) {
+                    this.patchState({ isVoucherFileDownloading: true });
+                } else {
+                    this.patchState({ isVoucherDownloading: true, isVoucherDownloadError: false });
+                }
+                return this.voucherService.downloadPdfFile(req.model, req.type, req.fileType, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                if (req.isDownloadFromDialog) {
+                                    return this.patchState({
+                                        isVoucherFileDownloading: false,
+                                        downloadVoucherFileResponse: res?.body ?? {}
+                                    });
+                                } else {
+                                    return this.patchState({
+                                        isVoucherDownloading: false,
+                                        downloadVoucherResponse: res?.body ?? {}
+                                    });
+                                }
+                            } else if (res.status !== "error") {
+                                if (req.isDownloadFromDialog) {
+                                    return this.patchState({
+                                        isVoucherFileDownloading: false,
+                                        downloadVoucherFileResponse: res ?? {}
+                                    });
+                                } else {
+                                    return this.patchState({
+                                        isVoucherDownloading: false,
+                                        downloadVoucherResponse: res ?? {}
+                                    });
+                                }
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                if (req.isDownloadFromDialog) {
+                                    return this.patchState({
+                                        isVoucherFileDownloading: false,
+                                        downloadVoucherFileResponse: {}
+                                    });
+                                } else {
+                                    return this.patchState({
+                                        isVoucherDownloadError: true,
+                                        isVoucherDownloading: false,
+                                        downloadVoucherResponse: {}
+                                    });
+                                }
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            if (req.isDownloadFromDialog) {
+                                return this.patchState({
+                                    isVoucherFileDownloading: false,
+                                    downloadVoucherFileResponse: null
+                                });
+                            } else {
+                                return this.patchState({
+                                    isVoucherDownloadError: true,
+                                    isVoucherDownloading: false,
+                                    downloadVoucherResponse: null
+                                });
+                            }
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getVoucherVersions = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isVoucherVersionsInProgress: true });
+                return this.voucherService.getVoucherVersions(req.getRequestObject, req.postRequestObject, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    isVoucherVersionsInProgress: false,
+                                    voucherVersionsResponse: res?.body ?? {}
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    isVoucherVersionsInProgress: false,
+                                    voucherVersionsResponse: {}
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isVoucherVersionsInProgress: false,
+                                voucherVersionsResponse: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly uploadFile = this.effect((data: Observable<{ postRequestObject: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ uploadFileInProgress: true });
+                return this.voucherService.uploadFile(req.postRequestObject).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    uploadFileInProgress: false,
+                                    uploadFileIsSuccess: res?.body ?? {}
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    uploadFileInProgress: false,
+                                    uploadFileIsSuccess: {}
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                uploadFileInProgress: false,
+                                uploadFileIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly updateAttachmentInVoucher = this.effect((data: Observable<{ postRequestObject: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.updateAttachmentInVoucher(req.postRequestObject).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    updateAttachmentInVoucherIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    updateAttachmentInVoucherIsSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                updateAttachmentInVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * This will be use for save gmail auth code
+     *
+     * @memberof VoucherComponentStore
+     */
+    readonly saveGmailAuthCode = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ saveGmailAuthCodeIsSuccess: null });
+                return this.authenticationService.saveGmailAuthCode(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === "success") {
+                                return this.patchState({
+                                    saveGmailAuthCodeIsSuccess: res,
+                                });
+                            } else {
+                                this.toaster.showSnackBar('error', res?.message, res?.code);
+                                return this.patchState({
+                                    saveGmailAuthCodeIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                saveGmailAuthCodeIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * This will be use for cancel einvoice
+     *
+     * @memberof VoucherComponentStore
+     */
+    readonly cancelEInvoice = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ cancelEInvoiceInProgress: true });
+                return this.voucherService.cancelEInvoice(req.getRequestObject, req.postRequestObject).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    cancelEInvoiceInProgress: false,
+                                    cancelEInvoiceIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    cancelEInvoiceInProgress: false,
+                                    cancelEInvoiceIsSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                cancelEInvoiceInProgress: false,
+                                cancelEInvoiceIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * This will be use for for verify purchase email address
+     *
+     * @memberof VoucherComponentStore
+     */
+    readonly verifyPurchaseEmail = this.effect((data: Observable<{ getRequestObject: any, postRequestObject: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ verifyEmailIsSuccess: null });
+                return this.purchaseOrderService.updateSettingsEmail(req.getRequestObject, req.postRequestObject).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    verifyEmailIsSuccess: res
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    verifyEmailIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                verifyEmailIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof VoucherComponentStore
+     */
+    public ngOnDestroy(): void {
+        super.ngOnDestroy();
+    }
 
 }

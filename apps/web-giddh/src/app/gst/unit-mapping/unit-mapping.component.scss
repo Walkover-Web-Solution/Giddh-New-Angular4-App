@@ -8,7 +8,11 @@
     .grid-box-content {
         border-right: 1px solid var(--color-common-primary-border);
         .unit-value {
-            width: 110px;
+            width: 130px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            -webkit-box-orient: vertical;
         }
     }
     .grid-box-head {

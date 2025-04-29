@@ -198,16 +198,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedInvoices: any[] = [];
     /** This will hold the search value */
     public invoiceSearch: any = "";
-    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
-    public isCompany: boolean;
-    /** Current branches */
-    public branches: Array<any>;
-    /** This will hold if updated is account in master to refresh the list of vouchers */
-    public isAccountUpdated: boolean = false;
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -222,6 +212,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Current branches */
+    public branches: Array<any>;
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** True, if user has enable GST E-invoice */
     public gstEInvoiceEnable: boolean;
     /** True if selected items needs to be updated */
@@ -246,7 +248,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
     /** Holds Voucher Name that suports csv file export */
-    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase'];
 
     constructor(
         private store: Store<AppState>,
@@ -309,6 +311,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
+        });
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
         });
 
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
@@ -643,13 +651,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Advance search model show hide
      *
-     * @param {boolean} isClosed  Boolean to check model need to close or not
+     *
      * @memberof InvoicePreviewComponent
      */
-    public toggleAdvanceSearchPopup(isClosed: boolean): void {
-        if (isClosed) {
-            this.toggleAllItems(false);
-        }
+    public toggleAdvanceSearchPopup(): void {
         this.advanceSearch.toggle();
     }
 
@@ -1103,7 +1108,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                     }
                 }
-
                 this.selectedItems.push(item?.uniqueName);
                 return item;
             });
@@ -1380,7 +1384,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         item.isSelected = false;
                     });
                     let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName  = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
+                    const fileName = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
                     return saveAs(blob, fileName);
                 } else {
                     this._toaster.errorToast(response.message);
@@ -1399,7 +1403,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     private getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean): string {
-        switch(type){
+        switch (type) {
             case 'sales': return isAllItemsSelected ? this.localeData?.all_invoices : this.localeData?.invoices;
             case 'purchase': return isAllItemsSelected ? this.localeData?.all_purchases : this.localeData?.purchases;
             case 'credit note': return isAllItemsSelected ? this.localeData?.all_credit_notes : this.localeData?.credit_notes;
@@ -1683,7 +1687,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public openSendMailModal(template: TemplateRef<any>, item: any): void {
-        this.sendEmailRequest.email = item.account?.email;
+        this.sendEmailRequest.email = item?.account?.email;
         this.sendEmailRequest.uniqueName = item?.uniqueName;
         this.sendEmailRequest.accountUniqueName = item.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
@@ -1947,7 +1951,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             // }, 0);
                             this.showExportButton = voucherData.items.every(s => s.account?.uniqueName === voucherData.items[0].account?.uniqueName);
                         } else {
-                            // this.totalSale = 0;
                             if (voucherData.page > 1) {
                                 voucherData.totalItems = voucherData.count * (voucherData.page - 1);
                                 this.advanceSearchFilter.page = Math.ceil(voucherData.totalItems / voucherData.count);
@@ -1978,7 +1981,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             allItems.unshift(removedItem);
                             this.toggleBodyClass();
                             setTimeout(() => {
-                                this.selectedInvoiceForDetails = allItems[0];
+                                const itemIndex = allItems.findIndex(item => item.voucherNumber === res[1]);
+                                this.selectedInvoiceForDetails = allItems[itemIndex];
                                 this.itemsListForDetails = cloneDeep(allItems);
                                 this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             }, 1000);

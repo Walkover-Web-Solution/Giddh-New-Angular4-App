@@ -35,7 +35,6 @@
 }
 
 .td-search-box .input-container input {
-    height: 51px;
     width: 100%;
     padding: 11px;
     padding-right: 40px;
@@ -130,7 +129,13 @@ label {
 .dropup-menu {
     transform: translateY(-101%) !important;
 }
-// my css
+
+
+@media screen and (max-width: 1340px) {
+    .table-responsive {
+        height: auto !important; 
+    }
+}
 
 @media (min-width: 768px) {
     .table-responsive.remove-overflow {

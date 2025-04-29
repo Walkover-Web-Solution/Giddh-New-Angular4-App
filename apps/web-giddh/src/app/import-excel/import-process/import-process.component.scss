@@ -48,3 +48,11 @@ table {
 .cdk-virtual-scroll-viewport{
     min-height: calc(100vh - 200px);
 }
+
+.import-field-label {
+    width: 170px;
+}
+
+.import-column {
+    min-width: 200px;
+}

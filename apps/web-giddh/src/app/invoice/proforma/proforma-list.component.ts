@@ -35,9 +35,9 @@ import { Router } from '@angular/router';
 import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 const VOUCHER_TYPES = ['proformas', 'estimates'];
 
@@ -66,6 +66,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public appSideMenubarIsOpen: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
 
@@ -164,12 +166,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedInvoices: any[] = [];
     /** This will hold the search value */
     public invoiceSearch: any = "";
-    /** This will hold if updated is account in master to refresh the list of vouchers */
-    public isAccountUpdated: boolean = false;
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -188,6 +184,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
     /** Decimal places from company settings */
@@ -231,6 +233,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response) {
+                        this.isConsolidatedBranch = response.isBranchConsolidated;
+                    }
+                });
             }
         });
 

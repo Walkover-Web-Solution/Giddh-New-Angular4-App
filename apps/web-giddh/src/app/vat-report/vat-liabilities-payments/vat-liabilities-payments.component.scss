@@ -1,0 +1,17 @@
+.liabilities-payments {
+    min-height: calc(100vh - 90px);
+    
+    .position-center {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .custom-datepicker {
+        input {
+            height: var(--mat-form-field-height);
+            width: 100% !important;
+            min-width: 230px;
+            max-width: unset !important;
+        }
+    }
+}

@@ -10,12 +10,14 @@ import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.a
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { Router } from '@angular/router';
 import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { saveAs } from 'file-saver';
-
+import { MatCheckboxChange } from '@angular/material/checkbox';
+enum InvoicesEnum {
+    Invoices = 'invoices'
+};
 @Component({
     selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
@@ -27,6 +29,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     @Input() public selectedVoucher: any;
     @Input() public base64Data: any;
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
+    /** Hold current voucher filter */
+    @Input() public currentVoucherFilter: string;
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
     @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
@@ -39,14 +43,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public showEditButton: boolean = false;
     public isErrOccured$: Observable<boolean>;
     public invoiceType: string[] = [];
-    public showMore: boolean = false;
-    public emailTabActive: boolean = true;
-    public downloadTabActive: boolean = false;
-    public smsTabActive: boolean = false;
     public isSendSmsEnabled: boolean = false;
     public isElectron = isElectron;
     public voucherRequest = null;
-    public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
     public selectedVoucherType: string = null;
@@ -60,10 +59,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** this will store screen size */
-    public isMobileScreen : boolean = false;
-    /** Stores the current voucher filter applied */
-    public currentVoucherFilter: string;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** Holds voucher unique name */
@@ -72,6 +67,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public voucherHasAttachments: boolean = false;
     /** True if attachment is checked */
     public isAttachment: boolean = false;
+    /** Holds active selected Tab Index  */
+    public selectedTabIndex: number = 0;
+    /** Holds invoice enum */
+    public invoicesEnum: string = InvoicesEnum.Invoices;
 
     constructor(
         private _toasty: ToasterService,
@@ -80,26 +79,19 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         private _invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _router: Router,
-        private breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonService: CommonService
     ) {
-        this.breakpointObserver
-        .observe(['(max-width: 768px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-        });
-
         this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
-        this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.selectedVoucherType = this.selectedVoucher?.voucherType;
+        this.accountUniqueName = this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName;
 
-        if(this.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.selectedVoucher?.voucherType)) {
+        if (this.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.selectedVoucher?.voucherType)) {
             this.invoiceType.push('Original');
 
             let getRequest = {
@@ -125,7 +117,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     let accountUniqueName = (this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName);
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(accountUniqueName, {
-                        invoiceNumber:this.selectedVoucher.voucherNumber,
+                        invoiceNumber: this.selectedVoucher.voucherNumber,
                         voucherType: this.selectedVoucher?.voucherType,
                         uniqueName: this.selectedVoucher?.uniqueName
                     }));
@@ -133,7 +125,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.showPdfWrap = true;
                     this.showEditButton = true;
 
-                    if(result.body.attachments?.length > 0) {
+                    if (result.body.attachments?.length > 0) {
                         this.voucherHasAttachments = true;
                     }
                 }
@@ -182,7 +174,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o) {
                 this.accountUniqueName = o.account?.uniqueName;
-                if(o.templateDetails?.templateUniqueName) {
+                if (o.templateDetails?.templateUniqueName) {
                     this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails?.templateUniqueName));
                 }
             }
@@ -213,7 +205,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      */
     public onSendInvoiceOnMail(email: string) {
         if (isEmpty(email)) {
-            this._toasty.warningToast(this.localeData?.enter_valid_email_error);
+            this._toasty.showSnackBar('warning', this.localeData?.enter_valid_email_error);
             return;
         }
         let emailList = email.split(',');
@@ -221,7 +213,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList, typeOfInvoice: this.invoiceType });
             this.showEmailTextarea = false;
         } else {
-            this._toasty.errorToast(this.localeData?.invalid_emails);
+            this._toasty.showSnackBar('error', this.localeData?.invalid_emails);
         }
     }
 
@@ -241,27 +233,35 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * onSelectInvoiceCopy
+     * Handle on select invoice copy
+     * 
+     * @param event 
      */
-    public onSelectInvoiceCopy(event) {
-        let val = event.target?.value;
-        if (event.target?.checked) {
-            this.invoiceType.push(val);
-        } else {
-            let idx = findIndex(this.invoiceType, (o) => o === val);
-            return this.invoiceType.splice(idx, 1);
+    public onSelectInvoiceCopy(event: MatCheckboxChange): void {
+        if (event) {
+            let val = event.source.value;
+            if (event.checked) {
+                this.invoiceType.push(val);
+            } else {
+                let idx = findIndex(this.invoiceType, (o) => o === val);
+                this.invoiceType.splice(idx, 1);
+            }
         }
     }
 
     public editVoucher() {
-        this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams:  { uniqueName: this.selectedVoucherUniqueName } } );
+        if (this.voucherApiVersion === 2) {
+            this._router.navigate(['/pages/vouchers/' + this.selectedVoucherType?.toString()?.replace(/-/g, " ") + '/' + this.accountUniqueName + '/' + this.selectedVoucherUniqueName + '/edit'], { queryParams: { redirect: this._router.url } });
+        } else {
+            this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams: { uniqueName: this.selectedVoucherUniqueName } });
+        }
     }
 
     /**
      * downloadInvoice
      */
     public downloadInvoice() {
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 copyTypes: this.invoiceType,
                 voucherType: this.selectedVoucher?.voucherType,
@@ -293,14 +293,24 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');
                     }
                 } else {
-                    this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    this._toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
             }, (error => {
-                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                this._toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
             }));
         } else {
             this.downloadInvoiceEvent.emit(this.invoiceType);
         }
+    }
+
+    /**
+     * Handle Tab Change event
+     *
+     * @param {*} selectedTabIndex
+     * @memberof DownloadOrSendInvoiceOnMailComponent
+     */
+    public tabChanged(selectedTabIndex: any): void {
+        this.selectedTabIndex = selectedTabIndex;
     }
 
     public ngOnDestroy() {

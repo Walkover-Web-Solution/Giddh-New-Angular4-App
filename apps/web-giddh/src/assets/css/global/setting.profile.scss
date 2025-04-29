@@ -1,0 +1,67 @@
+.mat-tab-label {
+    opacity: 1 !important;
+    height: 35px !important;
+
+    .mat-tab-label-content {
+        color: var(--color-tab-primary-inactive);
+    }
+
+    &.mat-tab-label-active {
+        .mat-tab-label-content {
+            color: var(--color-tab-primary-active) !important;
+        }
+    }
+}
+
+.mat-tab-group {
+    &.mat-primary {
+        .mat-ink-bar {
+            background-color: var(--color-tab-primary-selected-tab-bottom-border) !important;
+        }
+    }
+}
+
+body {
+
+    &.on-setting-page,
+    &.aside-menu-product-service-page {
+        .cdk-overlay-pane {
+            transform: unset !important;
+        }
+
+        .mat-dialog-container {
+            border-radius: unset !important;
+        }
+    }
+
+    create-address {
+        .mat-dialog-content {
+            overflow: inherit;
+        }
+    }
+
+    icici-account-create-edit,
+    icici-payor-account-create-edit {
+        .mat-dialog-content {
+            margin: 0 !important;
+        }
+    }
+}
+
+body {
+    &.on-setting-page {
+        .linked-entities-options {
+            .mat-mdc-option {
+                &.mdc-list-item {
+                    align-items: flex-start;
+                    padding-top: 10px;
+                    padding-bottom: 4px;
+                }
+            }
+    
+            .mdc-list-item__primary-text {
+                width: 100%;
+            }
+        }
+    }
+}

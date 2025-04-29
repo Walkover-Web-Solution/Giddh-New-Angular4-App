@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@a
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
@@ -137,6 +137,8 @@ export class ListBranchTransferComponent implements OnInit {
     public showReceiver = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         return (
@@ -183,6 +185,12 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransfer
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initAllForms();
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -202,13 +210,14 @@ export class ListBranchTransferComponent implements OnInit {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
@@ -225,7 +234,7 @@ export class ListBranchTransferComponent implements OnInit {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
@@ -233,7 +242,7 @@ export class ListBranchTransferComponent implements OnInit {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });

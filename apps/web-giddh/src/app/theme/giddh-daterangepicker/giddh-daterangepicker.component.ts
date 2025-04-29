@@ -121,7 +121,7 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      */
     public openDatepicker(): void {
         if (this.picker) {
-            this.picker.open();
+            this.picker?.open();
         }
     }
 }

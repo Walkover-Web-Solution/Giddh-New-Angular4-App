@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Optional, Output, Self, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -60,6 +60,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public useMask: boolean = false;
     /** It will show mask in the text field */
     @Input() public mask: any;
+    /** It will show currency symbol which direction is rtl ex. AED */
+    @Input() public allowUnsupportedPrefix: boolean = false;
     /** It will show prefix in the text field */
     @Input() public prefix: any;
     /** It will show suffix in the text field */
@@ -78,8 +80,28 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public floatLabel: any = 'auto';
     /** Holds Mat Input Label */
     @Input() public label: string;
+    /** Holds Mat Input Value */
+    @Input() public defaultValue: any;
+    /** True if need to show label icon */
+    @Input() public showLabelIcon: boolean = false;
+    /** Label icon class which show to specific icon */
+    @Input() public labelIconClass: string = "fa fa-info-circle";
+    /** Label icon tooltip */
+    @Input() public labelIconTooltip: string = null;
+    /** It will show Icon prefix in the text field */
+    @Input() public matPrefixIcon: string = "";
+    /** It will show tooltip text in suffix icon */
+    @Input() public suffixTooltipText: string = "";
+    /** It will show Icon suffix in the text field */
+    @Input() public matSuffixIcon: string = "";
+    /** Emits event when content is pasted */
+    @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits event when content is focus */
+    @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits on suffix icon click */
+    @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -103,7 +125,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public ngOnChanges(): void {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.defaultValue) {
+            this.ngModel = this.defaultValue;
+        }
+
         if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();
@@ -227,5 +253,32 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public emitBlurEvent(): void {
         this.onChange.emit(this.value);
+    }
+
+    /**
+     * Handles paste event to process pasted content
+     *
+     * @param {ClipboardEvent} event
+     */
+    public handlePaste(event: Clipboard): void {
+        this.onPaste.emit(event);
+    }
+
+    /**
+     * Handles focus event to process content
+     *
+     * @param {ClipboardEvent} event
+     */
+    public handleFocus(event: Clipboard): void {
+        this.onFocus.emit(event);
+    }
+
+    /**
+     * Emit true if suffix icon or text clicked
+     *
+     * @memberof InputFieldComponent
+     */
+    public handleSuffixClick(): void {
+        this.suffixClick.emit(true);
     }
 }

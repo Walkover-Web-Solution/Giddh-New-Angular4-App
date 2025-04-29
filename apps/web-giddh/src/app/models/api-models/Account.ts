@@ -7,6 +7,7 @@ import { IInheritedTaxes } from '../interfaces/inherited-taxes.interface';
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IDiscountList } from './SettingsDiscount';
 import { CountyList, StateList } from './Company';
+import { TLedgerView } from './Ledger';
 
 /**
  * Model for create account api response
@@ -55,6 +56,7 @@ export class AccountResponse implements IAccountCreate {
     public applicableDiscounts?: any[];
     public category?: string;
     public otherApplicableTaxes?: any[];
+    public ledgerView?: TLedgerView;
 }
 
 /**
@@ -83,7 +85,7 @@ export class AccountRequest implements IAccount {
     public sacNumber: string;
     public stateCode: string;
     public isComposite?: boolean;
-
+    
 }
 
 /**
@@ -181,8 +183,14 @@ export class IAccountAddress {
     public countyCode?: string;
     public county?: CountyList;
 }
+
+export class AccountOpeningBalance {
+    public branch?: string;
+    public openingBalance?: any;
+    public openingBalanceType?: string;
+}
 export class AccountRequestV2 {
-    public addresses: IAccountAddress[];
+    public addresses?: IAccountAddress[];
     public attentionTo?: string;
     public companyName?: string;
     public description?: string;
@@ -191,18 +199,20 @@ export class AccountRequestV2 {
     public openingBalance?: any;
     public openingBalanceDate?: string;
     public openingBalanceType?: string;
-    public name: string;
-    public uniqueName: string;
-    public hsnNumber: string;
-    public country: { countryCode: string };
-    public sacNumber: string;
+    public name?: string;
+    public uniqueName?: string;
+    public hsnNumber?: string;
+    public country?: { countryCode: string };
+    public sacNumber?: string;
     public mobileCode?: string;
     public accountBankDetails?: AccountBankDetails[];
     public currency?: string;
     public applicableDiscounts?: any[];
     public inheritedDiscounts?: any[];
     public customFields?: CustomFieldsData[];
-    public portalDomain?: any
+    public portalDomain?: any;
+    public accountOpeningBalance?: AccountOpeningBalance[];
+    public ledgerView?: TLedgerView;
 }
 
 export class AccountResponseV2 {
@@ -246,7 +256,9 @@ export class AccountResponseV2 {
     public customFields?: CustomFieldsData[];
     public category?: string;
     public otherApplicableTaxes?: any[];
-    public portalDomain?: any
+    public portalDomain?: any;
+    public accountOpeningBalance?: AccountOpeningBalance[];
+    public ledgerView?: TLedgerView;
 }
 
 /*

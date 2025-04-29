@@ -14,6 +14,7 @@
                             </div>
                             <div class="col-sm-9 col-xs-12 custom-datepicker">
                                 <input
+                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
@@ -23,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
                         <div class="row">
                             <div class="col-sm-5 col-xs-12">
@@ -76,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <div class="col-xs-12 col-sm-12">
                         <div class="row">
                             <div class="col-sm-5 col-xs-12">
@@ -210,7 +211,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <mat-accordion class="w-100 m-10" multi>
                         <mat-expansion-panel [expanded]="isExpanded" class="mr-t1">
                             <mat-expansion-panel-header>
@@ -218,7 +219,7 @@
                                     commonLocaleData?.app_other_details
                                 }}</mat-panel-title>
                             </mat-expansion-panel-header>
-    
+
                             <div class="col-xs-12 col-sm-12 mr-t2">
                                 <div class="mr-b1 clearfix">
                                     <div class="row">
@@ -375,7 +376,7 @@
                             </div>
                         </mat-expansion-panel>
                     </mat-accordion>
-    
+
                     <div class="col-xs-12 col-sm-12 text-right">
                         <button
                             mat-stroked-button

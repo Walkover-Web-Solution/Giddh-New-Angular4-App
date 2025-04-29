@@ -1,11 +1,9 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -28,19 +26,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
     selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
     styleUrls: ['./primary-sidebar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
@@ -64,8 +50,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private activeCompanyForDb: ICompAidata;
     /** Stores the navigation modal event subscriptions */
     private subscriptions: Subscription[] = [];
-    /** Modal instance */
-    public modelRef: BsModalRef;
     /** Current ledger name */
     public selectedLedgerName: string;
     /** True, if ledger account is selected */
@@ -86,6 +70,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public apiMenuItems: Array<any> = [];
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
+    /** Holds the template reference of generic aside menu account */
+    @ViewChild('genericAsideMenuAccountTemplate', { static: true }) public genericAsideMenuAccountTemplate: TemplateRef<any>;
     /** Stores the instance of company detail dropdown */
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** Stores the dropdown instances as querylist */
@@ -96,12 +82,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
-    /** This will holds true if we added ledger item in local db once */
-    public isItemAdded: boolean = false;
     /** This will open company branch switch dropdown */
     public showCompanyBranchSwitch: boolean = false;
-    /** This will show/hide account sidepan */
-    public accountAsideMenuState: string = 'out';
+    /** This will holds true if we added ledger item in local db once */
+    public isItemAdded: boolean = false;
     /** This will hold group unique name from CMD+k for creating account */
     public selectedGroupForCreateAccount: any = '';
     /* Observable for create account success */
@@ -111,14 +95,22 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
     public commandkDialogRef: MatDialogRef<any>;
+    /** Holds true if company has no branch */
+    public isCompanyWithoutBranch: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Holds generic aside menu account dialog Ref */
+    public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Hold previous url */
+    private previousUrl: string = "";
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private modalService: BsModalService,
-        private changeDetection: ChangeDetectorRef,
         private router: Router,
         private generalActions: GeneralActions,
         private dbService: DbService,
@@ -216,11 +208,30 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Get clean current url
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof PrimarySidebarComponent
+     */
+    private getCleanCurrentUrl(): string {
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['redirectUrl']; // remove redirectUrl param
+        return this.router.serializeUrl(urlTree);
+    }
+
+    /**
      * Initializes the component
      *
      * @memberof PrimarySidebarComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.updateIndexDbSuccess$ = this.store.pipe(select(appStore => appStore.general.updateIndexDbComplete), takeUntil(this.destroyed$))
@@ -255,9 +266,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
+                this.isCompanyWithoutBranch = response?.length === 1;
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
-                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -290,9 +302,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
+                this.previousUrl = this.currentUrl; // store old before updating
+                this.currentUrl = this.getCleanCurrentUrl(); // always clean
                 const queryParamsIndex = this.router.url?.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
-                    this.router.url.slice(0, queryParamsIndex);
+                this.router.url.slice(0, queryParamsIndex);
                 this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
@@ -343,8 +357,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
-            if (accountDetails && this.accountAsideMenuState === 'in') {
-                this.toggleAccountAsidePane();
+            if (accountDetails) {
+                this.genericAsideMenuAccountDialogRef?.close();
             }
         });
     }
@@ -378,23 +392,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef?.hide();
         if (e[0] === "group") {
-            if (this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
-            }
+            this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
         } else if (e[0] === "account") {
             this.selectedGroupForCreateAccount = e[1]?.uniqueName;
-            if (this.accountAsideMenuState === "out") {
-                this.toggleAccountAsidePane();
-            } else {
-                this.toggleAccountAsidePane();
-                setTimeout(() => {
-                    this.toggleAccountAsidePane();
-                    this.changeDetection.detectChanges();
-                }, 50);
-            }
+            this.openAccountAsidePane();
         }
     }
 
@@ -466,9 +469,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean): void {
-        if (this.modelRef) {
-            this.modelRef.hide();
-        }
 
         setTimeout(() => {
             if (item && item.type === 'MENU') {
@@ -488,14 +488,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
-                if (!isCtrlClicked) {
-                    this.router.navigate([url]); // added link in routerLink
-                }
+                this.router.navigate([url], {
+                    queryParams: { redirectUrl: encodeURIComponent(this.previousUrl) }
+                });
             }
             // save data to db
             item.time = +new Date();
             let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
+            this.closeAccountAsidePane(true);
         }, 200);
     }
 
@@ -636,37 +637,19 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will toggle create account sidepan
-     *
-     * @param {*} [event]
-     * @memberof PrimarySidebarComponent
-     */
-    public toggleAccountAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-
-        this.toggleBodyClass();
-    }
-
-    /**
-     * This will toggle fixed class on body
+     * Open account aside pane dialog
      *
      * @memberof PrimarySidebarComponent
      */
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
-                document.querySelector(".nav-left-bar").classList.add("create-account");
-            }
-            document.querySelector(".sidebar-slide-right")?.classList?.add("z-index-990");
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-            document.querySelector(".nav-left-bar").classList.remove("create-account");
-            document.querySelector(".sidebar-slide-right")?.classList?.remove("z-index-990");
-        }
+    public openAccountAsidePane(): void {
+        this.genericAsideMenuAccountDialogRef = this.dialog.open(this.genericAsideMenuAccountTemplate, {
+            position: {
+                top: '0',
+                right: '0'
+            },
+            height: '100vh',
+            width: 'var(--aside-pane-width)'
+        })
     }
 
     /**
@@ -680,15 +663,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Closes account modal
+     * Closes account dialog
      *
      * @param {*} event
      * @memberof PrimarySidebarComponent
      */
-    public closeAccountModal(event: any): void {
+    public closeAccountAsidePane(event: any): void {
         if (event) {
-            this.accountAsideMenuState = 'out';
-            this.toggleBodyClass();
+            this.genericAsideMenuAccountDialogRef?.close();
         }
     }
 

@@ -20,8 +20,7 @@
 
 .list-inline {
     padding-left: 0;
-    margin-left: -5px;
-    list-style: none;
+        list-style: none;
     > li {
         display: inline-block;
     }
@@ -71,6 +70,9 @@
             }
         }
     }
+    .download-menu {
+       width: 116px;
+    }
 }
 .return-sel {
     font-size: var(--font-size-15) !important;
@@ -93,4 +95,7 @@
             margin-bottom: 8px;
         }
     }
+}
+.filling-header-message {
+    font-weight: 400 !important;
 }

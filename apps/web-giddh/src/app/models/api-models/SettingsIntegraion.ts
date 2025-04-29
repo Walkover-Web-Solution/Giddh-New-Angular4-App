@@ -87,6 +87,7 @@ export class AmazonSellerClass {
 /** For payment request/response   */
 export class PaymentClass {
     public corpId: string;
+    public loginId: string;
     public userId: string;
     public accountNo: string;
     public aliasId: string;
@@ -95,6 +96,7 @@ export class PaymentClass {
     public message?: string;
     constructor() {
         this.corpId = '';
+        this.loginId = '';
         this.userId = '';
         this.accountNo = '';
         this.aliasId = '';
@@ -130,6 +132,7 @@ export class UserAmountRange {
 }
 
 export class IntegratedBankList {
+    loginId: string;
     corpId: string;
     userId: string;
     accountNo: string;
@@ -141,5 +144,15 @@ export class IntegratedBankList {
     message?: any;
     bankUserId: string;
 }
+export class InstitutionsRequest {
+    public count: number;
+    public page: number;
+    public countryCode: string;
+    constructor() {
+        this.count = 250;
+        this.page = 1;
+    }
+}
+
 
 

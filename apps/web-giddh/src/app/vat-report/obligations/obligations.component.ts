@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, MOBILE_NUMBER_SELF_URL } from '../../app.constant';
+import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -8,14 +8,12 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { VatService } from '../../services/vat.service';
-import { ToasterService } from '../../services/toaster.service';
 import { FileReturnComponent } from '../file-return/file-return.component';
 import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { VatReportComponentStore } from '../utility/vat.report.store';
 
 export interface ObligationsStatus {
     label: string;
@@ -24,7 +22,8 @@ export interface ObligationsStatus {
 @Component({
     selector: 'obligations-component',
     templateUrl: './obligations.component.html',
-    styleUrls: ['./obligations.component.scss']
+    styleUrls: ['./obligations.component.scss'],
+    providers: [VatReportComponentStore]
 })
 
 export class ObligationsComponent implements OnInit, OnDestroy {
@@ -38,6 +37,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if current organization is company */
     public isCompanyMode: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds Company Uniquename */
     private companyUniqueName: string;
     /** Holds Branch List */
@@ -72,27 +73,41 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /** Hold system user client ip */
-    public clientIp: string = "";
+    /** Hold HMRC portal url */
+    public connectToHMRCUrl: string = null;
+    /** Observable to store the Tax Number */
+    public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
+    /** True if current company or branch has tax number */
+    public hasTaxNumber: boolean | null = null;
+    /** Observable to store the HMRC portal url */
+    public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
+    /** Observable to store the data of obligation */
+    public obligationList$ = this.componentStore.select(state => state.obligationList);
+    /** Stores the current company */
+    public activeCompany: any = {};
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
-        private gstReconcileService: GstReconcileService,
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private vatService: VatService,
-        private toaster: ToasterService,
         private modalService: BsModalService,
         public dialog: MatDialog,
-        private route: Router
+        private route: Router,
+        private componentStore: VatReportComponentStore
     ) {
+        this.iniObligationsForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.companyUniqueName) {
+            if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
+                this.activeCompany = activeCompany;
+                this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
             }
         });
-        this.iniObligationsForm();
     }
 
     /**
@@ -101,18 +116,18 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.loadTaxDetails();
 
-        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.ipAddress) {
-                this.clientIp = response.ipAddress;
-            }
-        });
-
-        if (this.isCompanyMode) {
+        if (this.isCompanyMode || this.isConsolidatedBranch) {
+            this.loadTaxDetails();
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
                     if (response?.length > 1) {
@@ -121,7 +136,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.branchList = this.branchList.map(branch => {
                             return {
-                                label: branch?.alias,
+                                label: branch?.name,
                                 value: branch?.uniqueName
                             };
                         });
@@ -135,6 +150,80 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             });
         } else {
             this.getFormControl('branchUniqueName').setValue(this.generalService.currentBranchUniqueName);
+            this.getCurrentCompanyBranchTaxNumber();
+        }
+        this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.taxesList = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+                if (this.taxesList.length === 1) {
+                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
+                }
+                if (this.isCompanyMode || this.isConsolidatedBranch) {
+                    this.hasTaxNumber = true;
+                }
+                if (!this.isTaxRestrictedModule) {
+                    this.getURLHMRCAuthorization();
+                }
+            }
+        });
+
+        this.connectToHMRCUrl$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response?.body) {
+                    this.connectToHMRCUrl = response.body;
+                } else {
+                    this.getVatObligations();
+                }
+            }
+        });
+
+        this.obligationList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.obligations) {
+                this.tableDataSource = response.body.obligations.map(item => {
+                    item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
+                    item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
+                    item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);
+                    return item;
+                });
+            }
+        });
+
+        merge(this.componentStore.getObligationListInProgress$, this.componentStore.getTaxNumberInProgress$, this.componentStore.getHMRCInProgress$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.isLoading = response;
+            });
+    }
+
+    /**
+    * Get Current company branches information
+    *
+    * @private
+    * @memberof ObligationsComponent
+    */
+    private getCurrentCompanyBranchTaxNumber(): void {
+        this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                let currentBranch = response.find(branch => branch?.uniqueName === currentBranchUniqueName);
+                this.hasTaxNumber = currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+                if (this.hasTaxNumber) {
+                    this.loadTaxDetails();
+                }
+            }
+        });
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  ObligationsComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        if (subscriptionId) {
+            this.route.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
         }
     }
 
@@ -144,23 +233,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public getVatObligations(): void {
-        this.isLoading = true;
-        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
-            if (response?.status === "success" && response?.body?.obligations) {
-                this.tableDataSource = response?.body?.obligations.map(item => {
-                    item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
-                    item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
-                    item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);
-
-                    return item;
-                });
-            } else if (response?.body?.message) {
-                this.toaster.showSnackBar('error', response?.body?.message);
-            } else if (response?.message) {
-                this.toaster.showSnackBar('error', response?.message);
-            }
-        });
+        this.componentStore.getVatObligations({ companyUniqueName: this.companyUniqueName, payload: this.obligationsForm.value })
     }
 
     /**
@@ -251,10 +324,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         }
 
-        let dialogRef = this.dialog.open(FileReturnComponent, {
+        const dialogRef = this.dialog.open(FileReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -283,7 +357,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.dialog.open(ViewReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
     }
 
@@ -311,14 +386,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     private loadTaxDetails(): void {
-        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.length) {
-                this.taxesList = response.body.map(tax => ({
-                    label: tax,
-                    value: tax
-                }));
-            }
-        });
+        this.componentStore.getTaxNumber();
     }
 
     /**
@@ -391,6 +459,14 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling']);
     }
 
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatReportComponent
+     */
+    public getURLHMRCAuthorization(): void {
+        this.componentStore.getHMRCAuthorization(this.companyUniqueName);
+    }
 
     /**
     * Lifecycle hook for destroy

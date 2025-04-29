@@ -4,6 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
 import { InventoryModuleName } from "../../new-inventory/inventory.enum";
+import { cloneDeep } from "../../lodash-optimized";
 
 @Component({
     selector: "select-table-column",
@@ -18,6 +19,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public commonLocaleData: any = {};
     /** Holds default columns list for customised columns */
     @Input() public customiseColumns: any[] = [];
+    /** Holds default columns list for customised columns */
+    @Input() public dynamicCustomColumns: any[] = [];
     /** Holds inventory type module  */
     @Input() public moduleType: string = "";
     /** Holds module name for customised columns */
@@ -46,6 +49,12 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
+    /** Emits the selected custom fields filters */
+    @Output() public selectedDynamicColumns: EventEmitter<any> = new EventEmitter();
+    /** Get checked columns length */
+    public get checkedColumnsCount(): boolean {
+        return this.dynamicCustomColumns.filter(col => col?.checked).length == 2;
+    }
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -84,10 +93,20 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     public saveSelectedColumns(): void {
         setTimeout(() => {
             this.filteredDisplayColumns();
-            let saveColumnReq = {
-                module: this.moduleType,
-                columns: this.displayedColumns
+            let saveColumnReq;
+            const moduleType = ['ITEM_WISE_REPORT', 'VARIANT_WISE_REPORT', 'INVENTORY_TABLE_REPORT'].includes(this.moduleType);
+            if (moduleType) {
+                saveColumnReq = {
+                    module: this.moduleType,
+                    reportFilterColumns: this.dynamicCustomColumns
+                }
+            } else {
+                saveColumnReq = {
+                    module: this.moduleType,
+                    columns: this.displayedColumns
+                }
             }
+
             this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.isLoading.emit(false);
@@ -119,8 +138,15 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public filteredDisplayColumns(): void {
-        this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
+        if (this.moduleType === InventoryModuleName.stock || this.moduleType === InventoryModuleName.variant || this.moduleType === InventoryModuleName.bulk) {
+            this.displayedColumns = this.customiseColumns
+                .filter(col => col.checked)
+                .map(col => col.value);
+        } else {
+            this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
+        }
         this.selectedColumns.emit(this.displayedColumns);
+        this.selectedDynamicColumns.emit(this.dynamicCustomColumns);
         this.changeDetection.detectChanges();
     }
 
@@ -130,14 +156,23 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     * @memberof SelectTableColumnComponent
     */
     public getSelectedColumns(): void {
-        this.commonService.getSelectedTableColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                if (response.body.columns) {
-                    const displayColumnsSet = new Set(response.body.columns);
-                    this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
+        this.commonService.getSelectedTableColumns(this.moduleType)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (response?.status === 'success' && response.body?.reportFilterColumns) {
+                    if (this.moduleType === InventoryModuleName.stock || this.moduleType === InventoryModuleName.variant || this.moduleType === InventoryModuleName.bulk) {
+                        this.dynamicCustomColumns = [];
+                        if (response.body.reportFilterColumns) {
+                            this.dynamicCustomColumns = response.body.reportFilterColumns;
+                        }
+                    }
+                } else {
+                    if (response?.body?.columns) {
+                        const displayColumnsSet = new Set(response.body.columns);
+                        this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
+                    }
                 }
-            }
-            this.filteredDisplayColumns();
-        });
+                this.filteredDisplayColumns();
+            });
     }
 }

@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { LaddaModule } from "angular2-ladda";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
+import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
         ReactiveFormsModule,
         FormsModule,
         LaddaModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         CreateDiscountComponent

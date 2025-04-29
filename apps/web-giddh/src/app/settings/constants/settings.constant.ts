@@ -1,3 +1,5 @@
+import { LedgerViewEnum } from "../../models/api-models/Ledger";
+
 /** Settings integration tabs */
 export enum SettingsIntegrationTab {
     Communication = 0,
@@ -43,6 +45,7 @@ export interface OrganizationProfile {
     manageInventory?: boolean;
     portalDomain?: string;
     withPay?: any;
+    ledgerView?: LedgerViewEnum.TView
 }
 
 /** Form type in setting aside component */

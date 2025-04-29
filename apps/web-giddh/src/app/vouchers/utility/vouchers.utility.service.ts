@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_VOUCHER_FORM, PAGINATION_LIMIT } from "../../app.constant";
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
 import * as cleaner from 'fast-clean';
+import { ReceiptItem } from "../../models/api-models/recipt";
 
 @Injectable()
 export class VouchersUtilityService {
@@ -17,17 +18,25 @@ export class VouchersUtilityService {
                 return TaxType.GST;
             } else if (countryCode === TaxSupportedCountries.UAE) {
                 return TaxType.TRN;
-            } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW) {
+            } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW || countryCode === TaxSupportedCountries.KE) {
                 return TaxType.VAT;
+            } else if (countryCode === TaxSupportedCountries.US) {
+                return TaxType.SALES_TAX;
             }
         } else {
             return null;
         }
     }
-
-    public getVoucherType(voucherType: string, accountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
-        let isSalesInvoice = voucherType === VoucherTypeEnum.sales;
-        let isCashInvoice = this.voucherTypes.includes(voucherType);
+    public getVoucherType(voucherType: string, isCashVoucher?: any, accountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
+        let isSalesInvoice;
+        let isCashInvoice;
+        if (isCashVoucher === undefined) {
+            isSalesInvoice = voucherType === VoucherTypeEnum.sales;
+            isCashInvoice = this.voucherTypes.includes(voucherType);
+        } else {
+            isSalesInvoice = !isCashVoucher;
+            isCashInvoice = isCashVoucher;
+        }
         let isCreditNote = voucherType === VoucherTypeEnum.creditNote || voucherType === VoucherTypeEnum.cashCreditNote;
         let isDebitNote = voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.cashDebitNote;
         let isPurchaseInvoice = voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill;
@@ -53,8 +62,9 @@ export class VouchersUtilityService {
     }
 
     public createQueryString(url: string, model: any): string {
+        url += '?';
         Object.keys(model).forEach((key, index) => {
-            const delimiter = index === 0 ? '?' : '&'
+            const delimiter = index === 0 ? '' : '&'
             if (model[key] !== undefined) {
                 url += `${delimiter}${key}=${model[key]}`
             }
@@ -96,7 +106,15 @@ export class VouchersUtilityService {
         return requestObject;
     }
 
-    public getVoucherNameByType(voucherType: string, localeData: any): string {
+    /**
+     * Returns the voucher name by voucher type
+     *
+     * @param {string} voucherType
+     * @param {*} localeData
+     * @param {boolean} isCopyVoucher
+     * @memberof VoucherComponent
+     */
+    public getVoucherNameByType(voucherType: string, localeData: any, isCopyVoucher: boolean = false): string {
         let voucherName = "";
 
         switch (voucherType) {
@@ -117,7 +135,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.sales:
-                voucherName = localeData?.invoice_types?.sales;
+                voucherName = isCopyVoucher ? localeData?.invoice_types?.sales : localeData?.invoice_types?.invoice;
                 break;
 
             case VoucherTypeEnum.creditNote:
@@ -151,11 +169,11 @@ export class VouchersUtilityService {
             case VoucherTypeEnum.purchaseOrder:
                 voucherName = localeData?.invoice_types?.purchase_order;
                 break;
-            
+
             case VoucherTypeEnum.receipt:
                 voucherName = localeData?.invoice_types?.receipt;
                 break;
-            
+
             case VoucherTypeEnum.payment:
                 voucherName = localeData?.invoice_types?.payment;
                 break;
@@ -197,7 +215,7 @@ export class VouchersUtilityService {
                 code: defaultAddress.stateCode,
                 name: defaultAddress.stateName
             };
-        } 
+        }
 
         return { defaultAddress, defaultAddressIndex };
     }
@@ -236,10 +254,19 @@ export class VouchersUtilityService {
         entries?.forEach(entry => {
             voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount));
             voucherTotals.totalDiscount += (Number(entry.totalDiscount));
-            voucherTotals.totalTaxableValue += ((Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount)));
-            voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess));
-            voucherTotals.totalCess += (Number(entry.totalCess));
-            voucherTotals.grandTotal += (Number(entry.total?.amountForAccount));
+            if (entry.transactions[0]?.taxableValue) {
+                voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount);
+            } else {
+                voucherTotals.totalTaxableValue += (Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount));
+            }
+            voucherTotals.totalTaxWithoutCess += Number(entry.totalTaxWithoutCess);
+            voucherTotals.totalCess += Number(entry.totalCess);
+
+            if (entry.grandTotal) {
+                voucherTotals.grandTotal += Number(entry.grandTotal?.amountForAccount);
+            } else {
+                voucherTotals.grandTotal += Number(entry.total?.amountForAccount);
+            }
 
             if (entry.otherTax?.type === 'tcs') {
                 voucherTotals.tcsTotal += entry.otherTax?.amount;
@@ -282,63 +309,78 @@ export class VouchersUtilityService {
     }
 
     public cleanVoucherObject(invoiceForm: any): any {
-        if (invoiceForm.deposit) {
-            delete invoiceForm.deposit.currencySymbol;
-        }
-        delete invoiceForm.account.billingDetails.index;
-        delete invoiceForm.account.shippingDetails.index;
-        delete invoiceForm.company.billingDetails.index;
-        delete invoiceForm.company.shippingDetails.index;
-        delete invoiceForm.grandTotalMultiCurrency;
-        delete invoiceForm.chequeNumber;
-        delete invoiceForm.chequeClearanceDate;
-        delete invoiceForm.isAdvanceReceipt;
-        delete invoiceForm.salesAsReceipt;
-        delete invoiceForm.purchaseAsPayment;
-        delete invoiceForm.salesPurchaseAsReceiptPayment;
-
-        invoiceForm?.entries?.forEach(entry => {
-            delete entry.showCodeType;
-            delete entry.totalDiscount;
-            delete entry.totalTax;
-            delete entry.totalTaxWithoutCess;
-            delete entry.totalCess;
-            delete entry.total;
-            delete entry.requiredTax;
-            delete entry.calculateTotal;
-
-            entry.taxes?.forEach(tax => {
-                delete tax.taxType;
-                delete tax.taxDetail;
+        if (invoiceForm) {
+            invoiceForm.deposits?.forEach((response) => {
+                delete response.currencySymbol;
+                delete response.type;
             });
 
-            if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
-                if (!entry.taxes) {
-                    entry.taxes = [];
-                }
-                
-                entry.taxes.push({
-                    uniqueName: entry.otherTax?.uniqueName,
-                    calculationMethod: entry.otherTax?.calculationMethod
+            delete invoiceForm.account.billingDetails.index;
+            delete invoiceForm.account.shippingDetails.index;
+            delete invoiceForm.company.billingDetails.index;
+            delete invoiceForm.company.shippingDetails.index;
+            delete invoiceForm.grandTotalMultiCurrency;
+            delete invoiceForm.chequeNumber;
+            delete invoiceForm.chequeClearanceDate;
+            delete invoiceForm.isAdvanceReceipt;
+            delete invoiceForm.salesPurchaseAsReceiptPayment;
+
+            invoiceForm.entries?.forEach(entry => {
+                delete entry.showCodeType;
+                delete entry.totalDiscount;
+                delete entry.totalTax;
+                delete entry.totalTaxWithoutCess;
+                delete entry.totalCess;
+                delete entry.total;
+                delete entry.requiredTax;
+                delete entry.calculateTotal;
+
+                entry.taxes?.forEach(tax => {
+                    delete tax.taxType;
+                    delete tax.taxDetail;
                 });
-            }
 
-            if (!entry.transactions[0]?.stock?.uniqueName) {
-                delete entry.transactions[0].stock;
-            }
+                if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                    if (!entry.taxes) {
+                        entry.taxes = [];
+                    }
 
-            if (entry.transactions[0].stock) {
-                delete entry.transactions[0].stock.maxQuantity;
-            }
+                    entry.taxes.push({
+                        uniqueName: entry.otherTax?.uniqueName,
+                        calculationMethod: entry.otherTax?.calculationMethod
+                    });
+                }
 
-            delete entry.otherTax;
-        });
+                if (!entry.transactions[0]?.stock?.uniqueName) {
+                    delete entry.transactions[0].stock;
+                }
 
-        invoiceForm = cleaner?.clean(invoiceForm, {
+                if (entry.transactions[0].stock) {
+                    delete entry.transactions[0].stock.maxQuantity;
+                }
+
+                delete entry.otherTax;
+            });
+
+            invoiceForm = cleaner?.clean(invoiceForm, {
+                nullCleaner: true
+            });
+
+            return invoiceForm;
+        }
+    }
+
+    /**
+     * Remove key from object whose value is null
+     *
+     * @param {*} object
+     * @return {*}  {*}
+     * @memberof VouchersUtilityService
+     */
+    public cleanObject(object: any): any {
+        return cleaner?.clean(object, {
             nullCleaner: true
         });
-
-        return invoiceForm;
     }
 
     private getAddress(address: any): string {
@@ -448,5 +490,115 @@ export class VouchersUtilityService {
         }
 
         return invoiceForm;
+    }
+
+    /**
+     * Returns the index of selected address from the address list
+     *
+     * @param {*} addressList
+     * @param {*} selectedAddress
+     * @memberof VoucherComponent
+     */
+    public getSelectedAddressIndex(addressList: any[], selectedAddress: any): number {
+        let selectedAddressIndex = -1;
+        addressList?.forEach((add, index) => {
+            const address = Array.isArray(add?.address) && add?.address[0]
+                ? add.address[0]
+                : (typeof add?.address === "string" ? add.address : "");
+            // Check if selectedAddress.address is an array and has at least one element
+            const selectedAddressAddress = Array.isArray(selectedAddress?.address) && selectedAddress.address[0]
+                ? selectedAddress.address[0]
+                : "";
+            const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
+            const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
+
+            if (address === selectedAddressAddress && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
+                selectedAddressIndex = index;
+            }
+        });
+
+        return selectedAddressIndex;
+    }
+
+    /**
+     * Get Translated file name respect to given voucher
+     *
+     * @private
+     * @param {string} type
+     * @param {boolean} isAllItemsSelected
+     * @param {*} localeData
+     * @returns {string}
+     * @memberof VouchersUtilityService
+     */
+    public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
+        switch (type) {
+            case VoucherTypeEnum.sales: return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
+            case VoucherTypeEnum.purchase: return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
+            case VoucherTypeEnum.creditNote: return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
+            case VoucherTypeEnum.debitNote: return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
+            case VoucherTypeEnum.receipt: return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
+            case VoucherTypeEnum.payment: return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
+        }
+    }
+
+    /**
+     * Returns the Estimate Proforma tooltip text
+     *
+     * @param {*} item
+     * @param {*} giddhBalanceDecimalPlaces
+     * @param {string} baseCurrency
+     * @return {*}  {string}
+     * @memberof VouchersUtilityService
+     */
+    public addEstimateProformaToolTiptext(item: any, giddhBalanceDecimalPlaces: any, baseCurrency: string): string {
+        try {
+            let grandTotalAmountForCompany,
+                grandTotalAmountForAccount;
+
+            if (item.amount) {
+                grandTotalAmountForCompany = Number(item.amount.amountForCompany) || 0;
+                grandTotalAmountForAccount = Number(item.amount.amountForAccount) || 0;
+            }
+
+            let grandTotalConversionRate = 0;
+            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
+            }
+
+            item['grandTotalTooltipText'] = `In ${baseCurrency}: ${grandTotalAmountForCompany}\n(Conversion Rate: ${grandTotalConversionRate})`;
+        } catch (error) {
+
+        }
+        return item;
+    }
+
+    /**
+     * Returns the E-invoice tooltip text
+     *
+     * @param {ReceiptItem} item
+     * @param {*} localeData
+     * @return {*}  {string}
+     * @memberof VouchersUtilityService
+     */
+    public getEInvoiceTooltipText(item: ReceiptItem, localeData: any): string {
+        switch (item?.status?.toLowerCase()) {
+            case EInvoiceStatus.YetToBePushed:
+                return localeData?.e_invoice_statuses.yet_to_be_pushed;
+            case EInvoiceStatus.Pushed:
+                return localeData?.e_invoice_statuses.pushed;
+            case EInvoiceStatus.PushInitiated:
+                return localeData?.e_invoice_statuses.push_initiated;
+            case EInvoiceStatus.Cancelled:
+                // E-invoice got cancelled but invoice didn't cancel
+                return item.balanceStatus !== 'cancel' ? localeData?.e_invoice_statuses.giddh_invoice_not_cancelled : localeData?.e_invoice_statuses.cancelled;
+            case EInvoiceStatus.MarkedAsCancelled:
+                return localeData?.e_invoice_statuses.mark_as_cancelled;
+            case EInvoiceStatus.Failed:
+                return item.errorMessage ?? localeData?.e_invoice_statuses.failed;
+            case EInvoiceStatus.NA:
+                // When invoice is B2C or B2B cancelled invoice
+                return item.errorMessage ?? localeData?.e_invoice_statuses.na;
+            default: return '';
+        }
     }
 }

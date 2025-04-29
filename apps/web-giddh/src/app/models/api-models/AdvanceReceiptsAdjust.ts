@@ -1,7 +1,7 @@
 export class VoucherAdjustments {
-    tdsTaxUniqueName: string;
-    tdsAmount: TdsAmount;
-    description: string;
+    tdsTaxUniqueName?: string;
+    tdsAmount?: TdsAmount;
+    description?: string;
     adjustments: Adjustment[] = [new Adjustment()];
     totalAdjustmentAmount?: number;
     totalAdjustmentCompanyAmount?: number;

@@ -14,8 +14,12 @@ export class CdkScrollComponent implements OnInit, OnDestroy {
     @ViewChild(CdkScrollable) public scrollableWrapper: CdkScrollable | undefined;
     /** True if we need to scroll element by id */
     @Input() public scrollableElementId: '';
-    /** This will use for emit new page query */
+    /** True if we need to scroll element by id */
+    @Input() public scrollTriggerDistance: number = 30;
+    /** This will use for emit next page query */
     @Output() public fetchNextPage: EventEmitter<string> = new EventEmitter();
+    /** This will use for emit previous page query */
+    @Output() public fetchPreviousPage: EventEmitter<string> = new EventEmitter();
     /** This will hold for destory observable */
     private destroy$: Subject<any> = new Subject();
 
@@ -31,14 +35,13 @@ export class CdkScrollComponent implements OnInit, OnDestroy {
             .scrolled()
             .pipe(debounceTime(500), takeUntil(this.destroy$))
             .subscribe((res) => {
-                if (
-                    res &&
-                    (res.getElementRef().nativeElement.id === 'scrollableWrapper' ||
-                        res.getElementRef().nativeElement.id === this.scrollableElementId
-                    ) &&
-                    res.measureScrollOffset('bottom') <= 30
-                ) {
-                    this.fetchNextPage.emit(res.getElementRef().nativeElement.id);
+                if (res && (res.getElementRef().nativeElement.id === 'scrollableWrapper' || res.getElementRef().nativeElement.id === this.scrollableElementId)) {
+                    if (res.measureScrollOffset('bottom') <= this.scrollTriggerDistance) {
+                        this.fetchNextPage.emit(res.getElementRef().nativeElement.id);
+                    }
+                    if (res.measureScrollOffset('top') <= this.scrollTriggerDistance) {
+                        this.fetchPreviousPage.emit(res.getElementRef().nativeElement.id);
+                    }
                 }
             });
     }

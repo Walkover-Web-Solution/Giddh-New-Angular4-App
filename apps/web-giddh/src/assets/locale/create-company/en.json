@@ -17,6 +17,8 @@
     "max_character_limit_error": "Maximum characters limit: 100",
     "select_business_type": "Select Business Type",
     "select_business_nature": "Select Business Nature",
+    "other_business_nature": "Other Business Nature",
+    "enter_business_nature": "Enter Business Nature",
     "enter_tax": "Enter [TAX_NAME]",
     "invalid_tax": "Invalid [TAX_NAME]",
     "same_as_company": "Same as Company",

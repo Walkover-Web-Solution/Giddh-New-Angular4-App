@@ -1,11 +1,12 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
-import { ajax } from 'rxjs/ajax';
 dayjs.extend(quarterOfYear) // use plugin
+import { CountryCodeService } from './services/country-code.service';
 
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
     'APP_FOLDER': APP_FOLDER
 };
@@ -16,6 +17,20 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+/** Branch Hierarchy Type */
+export enum BranchHierarchyType {
+    Flatten = 'flatten',
+    Tree = 'tree'
+};
+
+/** Date Regex for 'MMM D, YYYY' */
+export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Regex for mobile number */
+export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
+export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
+export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
 export const INTL_INPUT_OPTION = {
     nationalMode: true,
@@ -24,60 +39,24 @@ export const INTL_INPUT_OPTION = {
     separateDialCode: false,
     initialCountry: 'auto',
     geoIpLookup: (success: any, failure: any) => {
-        let countryCode = 'in';
-        const fetchIPApi = ajax({
-            url: MOBILE_NUMBER_SELF_URL,
-            method: 'GET',
-        });
-
-        fetchIPApi.subscribe({
-            next: (res: any) => {
-                if (res?.response?.ipAddress) {
-                    const fetchCountryByIpApi = ajax({
-                        url: MOBILE_NUMBER_IP_ADDRESS_URL + res.response.ipAddress,
-                        method: 'GET',
-                    });
-
-                    fetchCountryByIpApi.subscribe({
-                        next: (fetchCountryByIpApiRes: any) => {
-                            if (fetchCountryByIpApiRes?.response?.countryCode) {
-                                return success(fetchCountryByIpApiRes.response.countryCode);
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        error: (fetchCountryByIpApiErr) => {
-                            const fetchCountryByIpInfoApi = ajax({
-                                url: MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}/json`,
-                                method: 'GET',
-                            });
-
-                            fetchCountryByIpInfoApi.subscribe({
-                                next: (fetchCountryByIpInfoApiRes: any) => {
-                                    if (fetchCountryByIpInfoApiRes?.response?.country) {
-                                        return success(fetchCountryByIpInfoApiRes.response.country);
-                                    } else {
-                                        return success(countryCode);
-                                    }
-                                },
-                                error: (fetchCountryByIpInfoApiErr) => {
-                                    return success(countryCode);
-                                },
-                            });
-                        },
-                    });
-                } else {
-                    return success(countryCode);
-                }
-            },
-            error: (err) => {
-                return success(countryCode);
-            },
+        const countryCodeService = new CountryCodeService();
+        countryCodeService.getCountryCode().subscribe({
+            next: (countryCode: string) => success(countryCode),
+            error: () => success('in')
         });
     },
 };
 
+
 export const APP_DEFAULT_TITLE = '';
+export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
+
+/** Restricted modules */
+export enum RestrictedModules {
+    TaxFilling = 'Tax filing',
+    EInvoice = 'E-invoice',
+    Users = 'Users'
+};
 
 export const DEFAULT_TOASTER_OPTIONS = {
     closeButton: true, // show close button
@@ -131,6 +110,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** Pagination count options */
+export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
@@ -140,6 +121,14 @@ export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
+}
+
+/** Adjustment inventory */
+export enum AdjustmentInventory {
+    QuantityWise = 'QUANTITY_WISE',
+    ValueWise = 'VALUE_WISE',
+    Percentage = 'PERCENTAGE',
+    Value = 'VALUE'
 }
 
 /**
@@ -292,10 +281,26 @@ export const FILE_ATTACHMENT_TYPE = {
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
 
-/** Vat supported country codes */
-export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW'
+/** Tax supported country codes */
+export const TAX_SUPPORTED_COUNTRIES = [
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE', 'US'
 ];
+
+/** VAT supported country codes */
+export const VAT_SUPPORTED_COUNTRIES = [
+    'GB', 'ZW', 'KE'
+];
+
+/** TRN supported country codes */
+export const TRN_SUPPORTED_COUNTRIES = [
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+];
+
+/** Sales tax supported country codes */
+export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
+
+/** ZIP Code supported country codes */
+export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
@@ -309,10 +314,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
-
-/** Regex for mobile number */
-export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
-
 
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
@@ -349,8 +350,7 @@ export const ROUTES_WITH_HEADER_BACK_BUTTON = [
 export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/branch',
     '/pages/settings/create-branch',
-    '/pages/settings/financial-year',
-    '/pages/user-details/subscription'
+    '/pages/settings/financial-year'
 ];
 
 /** Settings integration tabs */
@@ -388,7 +388,6 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
@@ -598,13 +597,8 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
-export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
-export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
-export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 
-
-
-export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
+export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
@@ -629,3 +623,25 @@ export const ICICI_ALLOWED_COMPANIES = [
     'iciciiin16929619553650svnjv',
     'aaaain16192663354510ja2o4'
 ];
+
+/** Holds region Supported in www.giddh.com  */
+export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
+    'GB': 'uk',
+    'IN': 'in',
+    'AE': 'ae',
+    'GL': 'gl'
+};
+/** Gst utility download portal link */
+export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
+
+/** Break Point Screen Size*/
+export const BREAKPOINT_SCREEN_SIZE = {
+    SMALL_DESKTOP_SCREEN_SIZE: '(max-width: 1366px)',
+    TAB_SCREEN_SIZE: '(max-width: 1024px)'
+}
+
+/** HTML tag name  */
+export enum HtmlElementEnum {
+    Input = 'INPUT',
+    Textarea = 'TEXTAREA'
+}

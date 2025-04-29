@@ -4,24 +4,26 @@
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
         *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()"
-            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-            [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        <tax-sidebar 
+            (navigateEvent)="handleNavigation()"
+            [exclude]="'#primary-new-header'" 
+            class="gst-sidebar"
+            ></tax-sidebar>
         </div>
     </div>
-    <div class="obligations pd-15">
+    <div class="obligations position-relative pd-15">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
                 <div class="col flex-grow-0">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <input type="text" name="selectedDateRange"
+                        <input matInput type="text" name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </div>
                 </div>
-                <div class="col flex-grow-0">
-                    <dropdown-field [label]="commonLocaleData?.app_tax_number" [options]="taxesList"
-                        (selectedOption)="taxNumberSelected($event)" [placeholder]="localeData?.select_tax_number">
+                <div class="col flex-grow-0" *ngIf="taxesList?.length > 1" >
+                    <dropdown-field [label]="commonLocaleData?.app_vat" [options]="taxesList"
+                        (selectedOption)="taxNumberSelected($event)" [placeholder]="commonLocaleData?.app_enter_vat">
                     </dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
@@ -29,7 +31,7 @@
                         [placeholder]="localeData?.select_status"
                         [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
                 </div>
-                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
+                <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
                     <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
                         (selectedOption)="branchSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
@@ -40,12 +42,12 @@
                 </div>
             </div>
 
-            <div class="mt-5" *ngIf="isLoading">
-                <giddh-page-loader></giddh-page-loader>
+            <div class="position-center position-absolute" *ngIf="isLoading">
+                <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="tableDataSource.length && !isLoading">
+            <div class="row mt-5" *ngIf="!isLoading">
                 <div class="table-responsive">
-                    <table mat-table [dataSource]="tableDataSource" class="w-100">
+                    <table mat-table [dataSource]="tableDataSource" class="w-100" *ngIf="tableDataSource.length">
                         <ng-container matColumnDef="start">
                             <th mat-header-cell *matHeaderCellDef>
                                 {{ commonLocaleData?.app_start_date }}
@@ -98,8 +100,23 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                     <section *ngIf="!tableDataSource?.length">
-                        <div class="no-data">
-                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                        <div *ngIf="hasTaxNumber">
+                            <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
+                                <div class="text-center">
+                                    <a [disabled]="isTaxRestrictedModule" mat-stroked-button color="primary" [href]="connectToHMRCUrl">
+                                        {{ localeData?.connect_to_hmrc }}
+                                    </a>
+                                </div>
+                                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                                    (onUpgradePlan)="buyPlan($event)">
+                                </restricted-module-message>
+                            </div>
+                            <div class="no-data"  *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
+                                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                            </div>
+                        </div>
+                        <div class="no-data" *ngIf="hasTaxNumber === false">
+                            <h1>{{ localeData?.no_vrn_available }}</h1>
                         </div>
                     </section>
                 </div>

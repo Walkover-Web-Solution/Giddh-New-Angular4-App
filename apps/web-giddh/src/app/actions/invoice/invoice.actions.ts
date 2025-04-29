@@ -1380,6 +1380,18 @@ export class InvoiceActions {
     }
 
     /**
+     * Resets the pending data of pending invoices section
+     *
+     * @returns {CustomActions}
+     * @memberof InvoiceActions
+     */
+    public resetPendingData(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_PENDING_DATA
+        };
+    }
+
+    /**
      * Generates bullk e-invoice
      *
      * @returns {CustomActions} Generate bulk e-invoice action

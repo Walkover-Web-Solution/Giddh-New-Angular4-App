@@ -20,8 +20,28 @@
         (sectionName)="onClickSection($event)"
         [voucherType]="voucherType"
         [showGstComposition]="showGstComposition"
+        [activeCompany]="activeCompany"
     >
     </gst-template-a>
+
+    <tally-template
+        *ngSwitchCase="'tally_template'"
+        [fieldsAndVisibility]="fieldsAndVisibility"
+        [isPreviewMode]="isPreviewMode"
+        [showLogo]="showLogo"
+        [imageSignatureSrc]="imageSignatureSrc"
+        [showImageSignature]="showImageSignature"
+        [companyGSTIN]="companyGSTIN"
+        [companyPAN]="companyPAN"
+        [inputTemplate]="inputTemplate"
+        [logoSrc]="logoSrc"
+        [templateUISectionVisibility]="templateUISectionVisibility"
+        (sectionName)="onClickSection($event)"
+        [voucherType]="voucherType"
+        [showGstComposition]="showGstComposition"
+        [activeCompany]="activeCompany"
+    >
+    </tally-template>
 
     <!-- GET_ALL TEMPLATE E -->
     <gst-template-e

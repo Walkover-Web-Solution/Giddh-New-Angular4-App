@@ -30,3 +30,9 @@ export interface ITaxUtilRequest {
     date?: string;
     applicableTaxes?: Array<string>;
 }
+
+export interface ITaxAuthority {
+    name?: string;
+    uniqueName: string;
+    description?: string;
+}

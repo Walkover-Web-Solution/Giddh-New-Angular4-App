@@ -48,6 +48,10 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds Table Display Columns */
+    public displayedColumns: string[] = ['number', 'from', 'to', 'status'];
+    /** Holds Table Data to display */
+    public dataSource: any[];
 
     constructor(
         private store: Store<AppState>,
@@ -105,16 +109,18 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     }
 
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
-        let year = cloneDeep(financialYear);
-        let dataToSend = {
-            lockAll: true,
-            uniqueName: year?.uniqueName
-        };
-        financialYear.isLocked = !financialYear.isLocked;
-        if (financialYear.isLocked) {
-            this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
-        } else {
-            this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
+        if(financialYear) {
+            let year = cloneDeep(financialYear);
+            let dataToSend = {
+                lockAll: true,
+                uniqueName: year?.uniqueName
+            };
+            financialYear.isLocked = !financialYear.isLocked;
+            if (financialYear.isLocked) {
+                this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
+            } else {
+                this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
+            }
         }
     }
 

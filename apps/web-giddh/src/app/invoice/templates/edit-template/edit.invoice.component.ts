@@ -14,6 +14,7 @@ import { InvoiceTemplateModalComponent } from './modals/template-modal/template-
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { InvoiceService } from '../../../services/invoice.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import { GeneralService } from '../../../services/general.service';
 
 /**
  * Created by kunalsaxena on 6/29/17.
@@ -59,132 +60,158 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         fontSize: '10pt',
         sections: [{
             sectionName: 'header',
-            content: [{
-                field: 'companyName',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'gstin',
-                label: 'GSTIN',
-                display: true,
-                width: null
-            }, {
-                field: 'pan',
-                label: 'PAN',
-                display: true,
-                width: null
-            }, {
-                field: 'address',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'invoiceDate',
-                label: 'Date',
-                display: true,
-                width: null
-            }, {
-                field: 'invoiceNumber',
-                label: 'Number',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingDate',
-                label: 'Ship Date',
-                display: true,
-                width: null
-            }, {
-                field: 'shippedVia',
-                label: 'Ship Via',
-                display: true,
-                width: null
-            }, {
-                field: 'trackingNumber',
-                label: 'Tracking No.',
-                display: true,
-                width: null
-            }, {
-                field: 'customerName',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customerEmail',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customerMobileNumber',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'dueDate',
-                label: 'Due Date',
-                display: true,
-                width: null
-            }, {
-                field: 'billingState',
-                label: 'State',
-                display: true,
-                width: null
-            }, {
-                field: 'billingAddress',
-                label: 'Billing Address',
-                display: true,
-                width: null
-            }, {
-                field: 'billingGstin',
-                label: 'GSTIN',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingAddress',
-                label: 'Shipping Address',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingState',
-                label: 'State',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingGstin',
-                label: 'GSTIN',
-                display: true,
-                width: null
-            }, {
-                field: 'customField1',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customField2',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customField3',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'formNameInvoice',
-                label: 'INVOICE',
-                display: true,
-                width: null
-            }, {
-                field: 'formNameTaxInvoice',
-                label: 'TAX INVOICE',
-                display: true,
-                width: null
-            }, {
-                field: 'attentionTo',
-                label: 'Attention To',
-                display: true,
-                width: null
-            }]
+            content: [
+                {
+                    field: 'companyName',
+                    label: '',
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayExchangeRate',
+                    label: "Exchange/Conversion Rate",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayLutNumber',
+                    label: "Lut Number",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayPlaceOfSupply',
+                    label: "Place of Supply",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayPlaceOfCountry',
+                    label: "Place of Country",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'gstin',
+                    label: 'GSTIN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'pan',
+                    label: 'PAN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'address',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'invoiceDate',
+                    label: 'Date',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'invoiceNumber',
+                    label: 'Number',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingDate',
+                    label: 'Ship Date',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippedVia',
+                    label: 'Ship Via',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'trackingNumber',
+                    label: 'Tracking No.',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customerName',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customerEmail',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customerMobileNumber',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'dueDate',
+                    label: 'Due Date',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'billingState',
+                    label: 'State',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'billingAddress',
+                    label: 'Billing Address',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'billingGstin',
+                    label: 'GSTIN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingAddress',
+                    label: 'Shipping Address',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingState',
+                    label: 'State',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingGstin',
+                    label: 'GSTIN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customField1',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customField2',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customField3',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'formNameInvoice',
+                    label: 'INVOICE',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'formNameTaxInvoice',
+                    label: 'TAX INVOICE',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'attentionTo',
+                    label: 'Attention To',
+                    display: true,
+                    width: null
+                }]
         }, {
             sectionName: 'table',
             content: [{
@@ -644,7 +671,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private _activatedRoute: ActivatedRoute,
         private invoiceService: InvoiceService,
-        private _invoiceUiDataService: InvoiceUiDataService
+        private _invoiceUiDataService: InvoiceUiDataService,
+        private generalService: GeneralService
     ) {
 
     }
@@ -662,15 +690,17 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit() {
         this.store.dispatch(this.invoiceActions.getTemplateState());
-        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(route => {
-            if (route && route.selectedType) {
-                if (route.selectedType === VoucherTypeEnum.creditNote || route.selectedType === VoucherTypeEnum.debitNote) {
-                    this.voucherTypeChanged(route.selectedType);
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && (this.generalService.voucherApiVersion === 2 && params.module === 'templates') || (this.generalService.voucherApiVersion === 1)) {
+                if (params.selectedType) {
+                    if (params.selectedType === VoucherTypeEnum.creditNote || params.selectedType === VoucherTypeEnum.debitNote) {
+                        this.voucherTypeChanged(params.selectedType);
+                    } else {
+                        this.voucherTypeChanged("sales");
+                    }
                 } else {
                     this.voucherTypeChanged("sales");
                 }
-            } else {
-                this.voucherTypeChanged("sales");
             }
         });
         // this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -799,7 +829,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             delete data['uniqueName'];
-            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template') {
+            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template' && data.templateType?.toLowerCase() !== 'tally_template') {
                 delete data?.sections?.header?.data?.showCompanyAddress;
                 delete data?.sections?.header?.data?.showQrCode;
                 delete data?.sections?.header?.data?.showEInvoiceDetails;
@@ -807,6 +837,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 delete data?.sections?.footer?.data?.showNotesAtLastPage;
                 delete data?.sections?.footer?.data?.showMessage2;
                 delete data?.sections?.footer?.data?.textUnderSlogan;
+            }
+
+            if (vouchertyp === 'voucher') {
+                data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
+                data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+            } else {
+                data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
+                data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
             }
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {

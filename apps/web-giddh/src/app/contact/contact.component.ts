@@ -1,3 +1,4 @@
+import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
@@ -28,7 +29,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -49,7 +50,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -57,6 +58,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { ContactComponentStore } from "./utility/contact.store";
+import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 
 @Component({
     selector: "contact-detail",
@@ -74,6 +77,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
             transition("out => in", animate("400ms ease-in-out")),
         ]),
     ],
+    providers: [ContactComponentStore]
 })
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
@@ -195,18 +199,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
     public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** True if today selected */
@@ -223,7 +227,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
     @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
-
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
@@ -238,11 +241,23 @@ export class ContactComponent implements OnInit, OnDestroy {
     public moduleType: string = '';
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
+    /** Stores the send email bulk request  */
+    public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
+    /** Observable for bulk email success response */
+    public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** True for only once when get route response */
+    public hasNavigated: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -268,8 +283,15 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.currentUrl = this.router.url;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
@@ -282,14 +304,27 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
-        combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.bulkEmailSuccess$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(success => {
+            if (success) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
+
+        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
             let params = result[0];
             let queryParams = result[1];
             let lastTabType = this.moduleType;
             this.moduleType = (params.type)?.toUpperCase();
 
             if (params) {
-               if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
+                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
                     if (activeTab !== "customer") {
                         this.setActiveTab("customer");
@@ -312,15 +347,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 } else {
                     this.setActiveTab("aging-report");
                 }
+
                 this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
-
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                    if (res) {
-                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                    }
-                });
-
-
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
                     this.customiseColumns.splice(0, 0,
                         {
@@ -380,12 +408,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             "checked": true
                         }
                     );
-                    this.customiseColumns.push(
-                        {
-                            value: "action",
-                            label: "Action",
-                            checked: true
-                        })
+
                     this.moduleType = ContactsTab.vendor;
                     this.displayedColumns = [];
                 }
@@ -394,6 +417,40 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             }
 
+        });
+
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+            if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                let customiseColumns = cloneDeep(this.customiseColumns);
+                if (!this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry)) {
+                    let filteredCustomisColumns = customiseColumns.filter(item => item.value === "action");
+                    if (!filteredCustomisColumns.length) {
+                        this.customiseColumns.push({ value: "action", label: "Action", checked: true });
+                    }
+                } else {
+                    this.customiseColumns = customiseColumns.filter(item => item.value !== "action");
+                }
+                const values = this.customiseColumns.map(item => item.value);
+                this.showSelectedHeaderColumns(values);
+            }
+            this.cdRef.detectChanges();
         });
 
 
@@ -472,13 +529,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch?.alias,
+                    label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : "",
                     value: this.activeCompany ? this.activeCompany.uniqueName : "",
                     isCompany: true,
@@ -495,19 +553,16 @@ export class ContactComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : "",
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    if (this.currentBranch) {
-                        this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : "");
-                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: "", to: "" }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -527,37 +582,38 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.searchStr$.next(searchedText);
             }
         });
-
-        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isIciciAccountPendingForApproval = false;
-            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-            if (response?.integratedBankList?.length > 0) {
-                let approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
-                if (!approvalPendingAccounts?.length) {
-                    this.isIciciAccountPendingForApproval = true;
-                }
-
-                this.isICICIIntegrated = true;
-            } else {
-                this.isICICIIntegrated = false;
-            }
-            this.cdRef.detectChanges();
-        });
     }
 
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 1: // go to ledger
-                this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                if (this.voucherApiVersion === 2) {
+                    const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
+                    this.goToRoute("ledger", additionalParams, account?.uniqueName);
+                } else {
+                    this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                }
                 break;
 
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.activeTab === "customer" ? "sales" : "purchase";
                 if (this.purchaseOrSales === "purchase") {
-                    this.goToRoute("proforma-invoice/invoice/purchase", "", account?.uniqueName);
+                    if (this.voucherApiVersion === 2) {
+                        this.goToRoute("vouchers/purchase/" + account?.uniqueName + "/create", "", "");
+                    } else {
+                        this.goToRoute("proforma-invoice/invoice/purchase", "", account?.uniqueName);
+                    }
                 } else {
                     let isCashInvoice = account?.uniqueName === "cash";
-                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
+                    if (this.voucherApiVersion === 2) {
+                        if (isCashInvoice) {
+                            this.goToRoute("vouchers/cash/create", "", "");
+                        } else {
+                            this.goToRoute("vouchers/sales/" + account?.uniqueName + "/create", "", "");
+                        }
+                    } else {
+                        this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
+                    }
                 }
                 break;
             // case 3: // send sms
@@ -578,13 +634,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
+        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) {
             this.router.navigate([`/pages/${part}/${accUniqueName}`]);
         } else {
+            if (part === 'ledger') {
+                url = url + `?redirectUrl=${this.currentUrl}`;
+            }
             (window as any).open(url);
         }
     }
@@ -608,7 +667,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.currentBranch.name = this.activeCompany.name;
                 this.currentBranch.uniqueName = this.activeCompany?.uniqueName;
-                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
+                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : '';
             }
         }
 
@@ -637,8 +696,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-            this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+            if (!this.hasNavigated) {
+                this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
+                this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+                this.hasNavigated = true;
+            }
         }
     }
 
@@ -1596,10 +1658,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList?.length) {
-            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+            this.selectedAccountsList = this.selectedAccountsList?.filter(itemObject => {
                 return itemObject?.bankPaymentDetails === true;
             });
-            this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
+            this.selectedAccountsList = this.selectedAccountsList?.filter((data, index) => {
                 return this.selectedAccountsList?.indexOf(data) === index;
             });
         }
@@ -1684,5 +1746,50 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private resetColumns(): void {
         this.translationComplete(true);
+    }
+
+    /**
+    * This function will use for send email for template
+    *
+    * @memberof ContactComponent
+    */
+    public sendBulkEmail(type: string): void {
+        const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
+        this.sendBulkEmailRequest = {
+            customerVendorUniqueNames: accountUniqueNames,
+            templateOf: type
+        };
+        this.componentStore.sendBulkEmailTemplate(this.sendBulkEmailRequest);
+    }
+
+    /**
+   * Open custom email dialog
+   *
+   * @param {any} account
+   * @memberof ContactComponent
+   */
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
     }
 }

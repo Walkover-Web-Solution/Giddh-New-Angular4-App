@@ -26,6 +26,8 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
+import { CommonActions } from "../actions/common.actions";
+import { GeneralService } from "../services/general.service";
 
 declare var initSendOTP: any;
 
@@ -78,6 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Show apple login if electron app and mac user */
+    public showAppleLogin: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -88,7 +92,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private commonAction: CommonActions,
+        private generalService: GeneralService
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -141,6 +147,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
@@ -196,6 +203,13 @@ export class LoginComponent implements OnInit, OnDestroy {
                     }
                 });
             });
+            this.showAppleLogin = false;
+        } else {
+            if (navigator.userAgent.indexOf("Mac") > -1) {
+                this.showAppleLogin = true;
+            } else {
+                this.showAppleLogin = false;
+            }
         }
 
         //  get login state and check if twoWayAuth is needed
@@ -233,8 +247,21 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
 
+        window.addEventListener('message', event => {
+            if (event?.data && typeof event?.data === "string") {
+                const data: any = event?.data?.split("&").reduce(function (prev, curr, i, arr) {
+                    var params = curr.split("=");
+                    prev[decodeURIComponent(params[0])] = decodeURIComponent(params[1]);
+                    return prev;
+                }, {});
+                if (data && data.id_token) {
+                    this.loginWithApple(data.code);
+                }
+            }
+        });
+
         if (PRODUCTION_ENV && !isElectron) {
-            window.location.href = 'https://giddh.com/login';
+            window.location.href = this.generalService.getGiddhRegionUrl();
         }
     }
 
@@ -451,6 +478,46 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
+    }
+
+    /**
+     * Shows apple login
+     *
+     * @returns {Promise<void>}
+     * @memberof LoginComponent
+     */
+    public async appleLogin(): Promise<void> {
+        const CLIENT_ID = "com.giddh.appsignin.client"
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : 'https://apitest.giddh.com';
+        const REDIRECT_API_URL = url + "/v2/apple-login-callback";
+
+        window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
+    }
+
+    /**
+     * This will login with apple
+     *
+     * @param {*} data
+     * @param {*} parsedData
+     * @memberof LoginComponent
+     */
+    public loginWithApple(authorizationCode: string): void {
+        let model = {
+            authorizationCode: authorizationCode,
+            requestFromWeb: true
+        };
+
+        this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response.body?.user?.isVerified) {
+                    this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+                } else {
+                    this.toaster.errorToast("Your account is not verified. Please contact support.");
+                }
             } else {
                 this.toaster.errorToast(response?.message);
             }

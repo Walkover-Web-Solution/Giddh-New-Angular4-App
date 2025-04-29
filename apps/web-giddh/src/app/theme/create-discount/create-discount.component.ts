@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from "rxjs";
 import { CreateDiscountComponentStore } from "./utility/create-discount.store";
 import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
     selector: "create-discount",
@@ -27,13 +27,17 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if update mode */
+    public isUpdateMode: boolean = false;
+    /** Holds true if api is in progress */
+    public isLoading: boolean = true;
 
     constructor(
+        @Inject(MAT_DIALOG_DATA) public discountInfo: any,
         private componentStore: CreateDiscountComponentStore,
         private formBuilder: UntypedFormBuilder,
-        public dialogRef: MatDialogRef<any>) {
-        
-    }
+        public dialogRef: MatDialogRef<any>
+    ) { }
 
     /**
      * This will be use for component initialization
@@ -41,7 +45,12 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public ngOnInit(): void {
-        this.initDiscountForm();
+        if (this.discountInfo) {
+            this.isUpdateMode = true;
+            this.initDiscountForm(this.discountInfo);
+        } else {
+            this.initDiscountForm();
+        }
         this.getDiscountAccounts();
 
         this.componentStore.createDiscountSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -57,12 +66,13 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @private
      * @memberof CreateDiscountComponent
      */
-    private initDiscountForm(): void {
+    private initDiscountForm(discount?: any): void {
         this.createDiscountForm = this.formBuilder.group({
-            type: ['PERCENTAGE', Validators.required],
-            name: ['', Validators.required],
-            discountValue: ['', Validators.required],
-            accountUniqueName: ['', Validators.required],
+            type: [discount?.type ?? 'PERCENTAGE', Validators.required],
+            name: [discount?.name ?? '', Validators.required],
+            discountValue: [discount?.discountValue ?? '', Validators.required],
+            accountUniqueName: [discount?.linkAccount?.uniqueName ?? ''],
+            discountUniqueName: [discount?.uniqueName ?? ''],
             accountName: ['']
         });
     }
@@ -79,11 +89,18 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
                 this.componentStore.getDiscountsAccountList();
             } else {
                 this.discountsAccountList$ = observableOf(discountsAccountList);
+                if (this.discountInfo) {
+                    const accountNameObject = discountsAccountList.find(account => account?.value === this.discountInfo.linkAccount?.uniqueName);
+                    if (accountNameObject) {
+                        this.selectDiscount(accountNameObject);
+                    }
+                }
 
                 if (discountsAccountList?.length === 1) {
                     this.createDiscountForm.get('accountName')?.patchValue(discountsAccountList[0]?.label);
                     this.createDiscountForm.get('accountUniqueName')?.patchValue(discountsAccountList[0]?.value);
                 }
+                this.isLoading = false;
             }
         });
     }
@@ -109,7 +126,34 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
-        this.componentStore.saveDiscount(this.createDiscountForm.value);
+        let model = this.createDiscountForm.value;
+        delete model.accountName;
+        delete model.discountUniqueName;
+        if (!model.accountUniqueName) {
+            delete model.accountUniqueName;
+        }
+
+        this.componentStore.saveDiscount(model);
+    }
+
+    /**
+     * This will be use for update discount 
+     *
+     * @return {*}  {void}
+     * @memberof CreateDiscountComponent
+     */
+    public updateDiscount(): void {
+        this.isFormSubmitted = false;
+        if (this.createDiscountForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+        let model = this.createDiscountForm.value;
+        delete model.accountName;
+        if (!model.accountUniqueName) {
+            delete model.accountUniqueName;
+        }
+        this.componentStore.updateDiscount(model);
     }
 
     /**
@@ -118,7 +162,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public cancelDiscount(): void {
-        this.dialogRef.close();
+        this.dialogRef?.close();
     }
 
     /**
@@ -132,6 +176,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         this.createDiscountForm.get('name')?.patchValue('');
         this.createDiscountForm.get('discountValue')?.patchValue('');
         this.createDiscountForm.get('accountUniqueName')?.patchValue('');
+        this.createDiscountForm.get('discountUniqueName')?.patchValue('');
         this.createDiscountForm.get('accountName')?.patchValue('');
     }
 

@@ -1,4 +1,4 @@
-:host {
+.aside-pane {
     position: fixed;
     left: auto;
     top: var(--top-distance);
@@ -16,7 +16,7 @@
     padding: 0 !important;
 }
 
-:host.in #closedialog {
+.aside-pane #close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -28,16 +28,6 @@
     margin-right: 0;
     border: 0;
     border-radius: 0;
-}
-
-:host .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-:host .aside-pane {
-    max-width: 760px;
-    width: 100%;
 }
 .aside-body {
     padding: 0 15px;

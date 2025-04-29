@@ -1,0 +1,15 @@
+.tax-authority {
+    min-height: calc(100vh - 120px);
+
+    .initial-screen {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        button {
+            width: 260px;
+            height: 45px;
+            font-size: var(--font-size-20);
+        }
+    }
+}

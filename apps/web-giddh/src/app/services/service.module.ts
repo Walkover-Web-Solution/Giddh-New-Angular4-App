@@ -19,7 +19,7 @@ import { SearchService } from './search.service';
 import { TlPlService } from './tl-pl.service';
 import { DaybookService } from './daybook.service';
 import { DashboardService } from './dashboard.service';
-import { SettingsIntegrationService } from './settings.integraion.service';
+import { SettingsIntegrationService } from './settings.integration.service';
 import { SettingsProfileService } from './settings.profile.service';
 import { SettingsTaxesService } from './settings.taxes.service';
 import { SalesService } from './sales.service';
@@ -57,19 +57,20 @@ import { EcommerceService } from './ecommerce.service';
 import { ReverseChargeService } from './reversecharge.service';
 import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
-import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { LocaleService } from './locale.service';
 import { PrinterFormatService } from "./printer.format.service";
 import { ThermalService } from "./thermal.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
-import { CustomFieldsService } from "./custom-fields.service";
 import { ImportsService } from "./imports.service";
 import { CampaignIntegrationService } from "./campaign.integration.service";
 import { PageLeaveUtilityService } from "./page-leave-utility.service";
 import { LedgerService } from "./ledger.service";
+import { BulkVoucherExportService } from "./bulkvoucherexport.service";
+import { CustomFieldsService } from "./custom-fields.service";
 import { VoucherService } from "./voucher.service";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
+import { CountryCodeService } from './country-code.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -151,7 +152,8 @@ export class ServiceModule {
                 PageLeaveUtilityService,
                 LedgerService,
                 VoucherService,
-                VouchersUtilityService
+                VouchersUtilityService,
+                CountryCodeService
             ]
         };
     }

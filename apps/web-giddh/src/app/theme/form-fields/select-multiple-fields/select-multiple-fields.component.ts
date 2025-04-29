@@ -1,9 +1,9 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { UntypedFormControl } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { Observable, of, ReplaySubject, Subject } from "rxjs";
+import { debounceTime, takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
@@ -12,7 +12,14 @@ import { IOption } from "../../ng-virtual-select/sh-options.interface";
     selector: "select-multiple-fields",
     templateUrl: "./select-multiple-fields.component.html",
     styleUrls: ["./select-multiple-fields.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SelectMultipleFieldsComponent),
+            multi: true
+        }
+    ]
 })
 export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChanges {
     /** Trigger instance for auto complete */
@@ -25,10 +32,16 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public selectedValues: any[] = [];
     /** Placeholder of search field */
     @Input() public placeholder: any = "";
+    /** Label of search field */
+    @Input() public label: any = "";
     /** List of validations */
     @Input() public validations: any[] = [];
     /** CSS class name to add on the field */
     @Input() public showError: boolean = false;
+    /** Holds prefix of chip text */
+    @Input() public chipPrefix: string = '';
+    /** The parent component can dynamically control the focus of the input field by passing a boolean value. */
+    @Input() public autoFocus: boolean = false;
     /** Name of search field */
     @Input() public name: any = "";
     /** Holds appearance of dropdown field */
@@ -37,26 +50,57 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public isPurchaseOrder: string = '';
     /** Holds module translation data */
     @Input() public localeData: any = {};
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
+    /** Holds CSS class which applied on mat options tag */
+    @Input() public optionClass: string;
+    /** Holds module translation data */
+    @Input() public commonLocaleData: any = {};
+    /** True if the component should be used as dynamic search component instead of static search */
+    @Input() public enableDynamicSearch: boolean;
+    /** True if field is readonly */
+    @Input() public readonly: boolean;
+    /** True if field is disabled */
+    @Input() public disabled: boolean;
+    /** Show Mat Label In with appearance outline Icon */
+    @Input() public showMatLabel: boolean = false;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+    /** Emits dynamic searched query */
+    @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
+    /** Callback for create new option selected */
+    @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Callback for clear selected value */
+    @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
     public chipList: any[] = [];
     /** Search field form control */
-    public searchFormControl = new UntypedFormControl();
+    public searchFormControl = new FormControl();
     /** Filtered options to show in autocomplete list */
-    public fieldFilteredOptions: IOption[] = [];
+    public fieldFilteredOptions$: Observable<IOption[]>;
     /** Emit with seperate code for chiplist */
     public separatorKeysCodes: number[] = [ENTER, COMMA];
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */
-    private allowAddChip: boolean = true;
+    @Input() private allowAddChip: boolean = true;
+    /** Next observable */
+    public next$: Subject<void> = new Subject();
+    /** Function to be called when the control value changes */
+    private onChange: (value: any) => void = () => { };
+    /** Function to be called when the control is touched */
+    private onTouched: () => void = () => { };
+    /** Holds value */
+    public value: any[] = [];
+    /** Holds last search value */
+    public lastSearchString: string = null;
+
 
     constructor(
         private changeDetection: ChangeDetectorRef
-    ) {
-
-    }
+    ) { }
 
     /**
      * Initializes the component
@@ -64,9 +108,38 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public ngOnInit(): void {
-        this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            this.filterOptions(search);
+        this.searchFormControl.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(search => {
+            if (typeof search === 'string') {
+                this.lastSearchString = search;
+                if (this.enableDynamicSearch) {
+                    this.dynamicSearchedQuery.emit(search);
+                    if (!search) {
+                        this.onClear.emit({ label: "", value: "" });
+                    }
+                } else {
+                    if (search === "") {
+                        this.onClear.emit({ label: "", value: "" });
+                    }
+                    this.filterOptions(search);
+                }
+                this.changeDetection.detectChanges();
+            }
         });
+    }
+
+    /**
+     * Writes value in ng value accessor
+     *
+     * @param {*} value
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public writeValue(value: any): void {
+        if (value !== undefined && value !== null) {
+            this.value = value;
+        } else {
+            this.value = [];
+        }
+        this.onChange(value);
     }
 
     /**
@@ -77,7 +150,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
+            this.fieldFilteredOptions$ = of(cloneDeep(changes.options.currentValue));
         }
         if (changes?.selectedValues && changes.selectedValues.currentValue) {
             if (typeof changes.selectedValues.currentValue === "string") {
@@ -99,6 +172,19 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
+     * This function puts the focus in input
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            if (this.autoFocus && this.selectField) {
+                this.selectField.nativeElement.focus();
+            }
+        }, 100);
+    }
+
+    /**
      * Filters the option based on search
      *
      * @private
@@ -113,7 +199,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             }
         });
 
-        this.fieldFilteredOptions = filteredOptions;
+        this.fieldFilteredOptions$ = of(filteredOptions);
         this.changeDetection.detectChanges();
     }
 
@@ -124,16 +210,15 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public selectOption(option: any): void {
-        this.allowAddChip = false;
+        if (this.lastSearchString?.length) {
+            this.searchFormControl.setValue("");
+        }
         const selectOptionValue = option?.option?.value?.label;
-        if (selectOptionValue && !this.chipList.includes(selectOptionValue)) {
-            this.chipList.push(selectOptionValue);
+        this.writeValue([...this.value, option?.option?.value?.value]);
+        if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
+            this.chipList.push(this.chipPrefix + selectOptionValue);
             this.emitList();
         }
-
-        setTimeout(() => {
-            this.allowAddChip = true;
-        }, 300);
     }
 
     /**
@@ -145,8 +230,26 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
+            this.value.splice(index, 1);
+            this.writeValue(this.value);
+            // Close the autocomplete dropdown if it's open
+            setTimeout(() => {
+                if (this.trigger && this.trigger.panelOpen) {
+                    this.closePanel();
+                }
+            }, 100);  // Delay slightly to allow for view update
             this.emitList();
         }
+    }
+
+    /**
+     * Close dropdown menu
+     *
+     * @private
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public closePanel(): void {
+        this.trigger.closePanel();
     }
 
     /**
@@ -161,6 +264,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             const value = event?.value?.trim();
             if (value && (!this.validations?.length || (this.validations?.includes("email") && this.validateEmail(value)) || (this.validations?.includes("mobile") && this.validateMobile(value))) && !this.chipList.includes(value)) {
                 this.chipList?.push(value);
+                this.writeValue([...this.value, value]);
             }
             this.emitList();
         }
@@ -168,6 +272,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             input.value = '';
             this.filterOptions("");
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -201,5 +306,74 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private emitList(): void {
         this.selectedOption.emit(this.chipList);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+   * This will use for close dropdown panel
+   *
+   * @param {*} event Pointer event
+   * @memberof SelectMultipleFieldsComponent
+   */
+    public closeDropdownPanel(event?: any): void {
+        if (event?.currentTarget?.activeElement?.className?.indexOf("select-multiple-field-input") > -1) {
+            /*
+                Don't close the panel if the user clicks at the corner of the input field,
+                handles the edge case when user clicks the corner and the suggestions get hidden
+            */
+            return;
+        }
+        this.closePanel();
+    }
+
+    /**
+     * Callback for onscroll in dropdown
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public onScroll(): void {
+        this.next$.next();
+        this.scrollEnd.emit();
+    }
+
+    /**
+     * On change method
+     *
+     * @param {*} fn
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public registerOnChange(fn: any): void {
+        this.onChange = fn;
+    }
+
+    /**
+     * On touch method
+     *
+     * @param {*} fn
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public registerOnTouched(fn: any): void {
+        this.onTouched = fn;
+    }
+
+    /**
+     * Handle mat autocomplete panel closed
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public panelClosed(): void {
+        this.searchFormControl.setValue(null);
+    }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public panelOpened(): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchedQuery.emit("");
+        } else {
+            this.filterOptions("");
+        }
     }
 }

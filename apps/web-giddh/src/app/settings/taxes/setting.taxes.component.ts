@@ -1,8 +1,8 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import * as dayjs from 'dayjs';
 import { CompanyActions } from '../../actions/company.actions';
@@ -13,6 +13,9 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { IForceClear } from '../../models/api-models/Sales';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { cloneDeep, each, map } from '../../lodash-optimized';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'setting-taxes',
@@ -32,9 +35,10 @@ import { cloneDeep, each, map } from '../../lodash-optimized';
     styleUrls: ['./setting.taxes.component.scss'],
 })
 export class SettingTaxesComponent implements OnInit, OnDestroy {
-
-    @ViewChild('taxConfirmationModel', { static: true }) public taxConfirmationModel: ModalDirective;
-
+    /** Holds template reference for create/update tax dialog */
+    @ViewChild("createUpdateDialog") public createUpdateDialog: TemplateRef<any>;
+    /** Holds template reference for tax confirmation dialog */
+    @ViewChild("taxConfirmationDialog") public taxConfirmationDialog: TemplateRef<any>;
     public availableTaxes: TaxResponse[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
     public dayjs = dayjs;
@@ -50,7 +54,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public taxList: IOption[] = [];
     public duration: IOption[] = [];
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    public taxAsideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -60,23 +63,28 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds table data */
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Holds table display columns */
+    public displayedColumns: string[] = ['index', 'taxNumber', 'name', 'taxAuthority', 'linkedAccount', 'appliedFrom', 'taxPercentage', 'fileDate', 'duration', 'taxType', 'actions'];
+    /** Holds create update dialog reference */
+    public createUpdateDialogRef: MatDialogRef<any>;
+    /** Holds tax delete confirmation dialog reference */
+    public taxConfirmationDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
-        private _settingsTaxesActions: SettingsTaxesActions
-    ) {
-
-    }
+        private _settingsTaxesActions: SettingsTaxesActions,
+        public dialog: MatDialog
+    ) { }
 
     public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
             let day = i?.toString();
             this.days.push({ label: day, value: day });
         }
-
         this.store.dispatch(this._companyActions.getTax());
-
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
                 this.forceClear$ = observableOf({ status: true });
@@ -85,40 +93,65 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                         t.date = dayjs(t.date, GIDDH_DATE_FORMAT);
                     });
                 });
-                this.onCancel();
                 this.availableTaxes = cloneDeep(o.taxes);
+                this.toggleTaxAuthority();
+                this.dataSource.data = this.availableTaxes;
+                this.onCancel();
             }
 
             this.isLoading = o.isTaxesLoading;
         });
 
-        this.store
-            .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
-            .subscribe(result => {
-                if (result && this.taxAsideMenuState === 'in') {
-                    this.toggleTaxAsidePane();
-                }
-            });
+        combineLatest([
+            this.store.pipe(select(state => state.company && state.company.isTaxCreatedSuccessfully)),
+            this.store.pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully))
+        ])
+            .pipe(takeUntil(this.destroyed$)).subscribe(
+                ([isTaxCreatedSuccessfully, isTaxUpdatedSuccessfully]) => {
+                    if (isTaxCreatedSuccessfully || isTaxUpdatedSuccessfully) {
+                        this.createUpdateDialogRef?.close();
+                    }
+                });
     }
-
-    public deleteTax(taxToDelete) {
-        this.newTaxObj = taxToDelete;
+    /**
+     * Delete the tax and open the confirmation dialog
+     * 
+     * @param taxToDelete 
+     * @returns 
+     */
+    public deleteTax(taxToDelete: any): void {
         this.selectedTax = this.availableTaxes.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName);
-        let message = this.localeData?.tax_delete_message;
-        message = message?.replace("[TAX_NAME]", this.selectedTax.name);
-        this.confirmationMessage = message;
+        if (!this.selectedTax) {
+            return;
+        }
+        this.newTaxObj = taxToDelete;
+        this.confirmationMessage = this.localeData?.tax_delete_message?.replace("[TAX_NAME]", this.selectedTax.name);
         this.confirmationFor = 'delete';
-        this.taxConfirmationModel?.show();
+        this.openTaxDeleteUpdateConfirmationDialog();
     }
 
-    public updateTax(taxIndex: number) {
-        let selectedTax = cloneDeep(this.availableTaxes[taxIndex]);
-        this.newTaxObj = selectedTax;
-        let message = this.localeData?.tax_update_message;
-        message = message?.replace("[TAX_NAME]", this.selectedTax.name);
-        this.confirmationMessage = message;
-        this.confirmationFor = 'edit';
-        this.taxConfirmationModel?.show();
+    /**
+     * Open Tax Delete/Update Confirmation Dialog
+     *
+     * @private
+     * @param {*} request
+     * @memberof CompanyListDialogComponent
+     */
+    private openTaxDeleteUpdateConfirmationDialog(): void {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.confirmationMessage,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            },
+            disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.userConfirmation(response);
+        });
     }
 
     public onCancel() {
@@ -126,7 +159,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public userConfirmation(userResponse: boolean) {
-        this.taxConfirmationModel.hide();
         if (userResponse) {
             if (this.confirmationFor === 'delete' && this.newTaxObj.taxType === 'others') {
                 if (this.newTaxObj && this.newTaxObj.accounts && this.newTaxObj.accounts.length) {
@@ -154,6 +186,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         let taxes = cloneDeep(this.availableTaxes);
         taxes[parentIndex].taxDetail.splice(childIndex, 1);
         this.availableTaxes = taxes;
+        this.toggleTaxAuthority();
     }
 
     public reloadTaxList() {
@@ -161,6 +194,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             if (o.taxes) {
                 this.onCancel();
                 this.availableTaxes = cloneDeep(o.taxes);
+                this.toggleTaxAuthority();
             }
         });
     }
@@ -173,20 +207,24 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         return (parseInt(a.label) - parseInt(b.label));
     }
 
-    public toggleTaxAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.taxAsideMenuState = this.taxAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    public toggleBodyClass() {
-        if (this.taxAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    /**
+     * Open create/update tax aside-pane
+     *
+     * @param {*} [tax]
+     * @memberof SettingTaxesComponent
+     */
+    public openCreateUpdateDialog(tax?: TaxResponse): void {
+        this.selectedTax = tax ?? null;
+        this.createUpdateDialogRef = this.dialog.open(this.createUpdateDialog, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: 'var(--aside-pane-width)',
+            height: '100vh !important',
+            disableClose: true,
+            autoFocus: false
+        });
     }
 
     /**
@@ -219,6 +257,23 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 { label: this.commonLocaleData?.app_duration?.half_yearly, value: 'HALFYEARLY' },
                 { label: this.commonLocaleData?.app_duration?.yearly, value: 'YEARLY' }
             ];
+        }
+    }
+
+    /**
+     * Toggle Tax Authority columns
+     *
+     * @private
+     * @memberof SettingTaxesComponent
+     */
+    private toggleTaxAuthority(): void {
+        const hasTaxAuthority = this.availableTaxes?.length && this.availableTaxes[0]?.taxAuthority;
+        const taxAuthorityIndex = this.displayedColumns.indexOf('taxAuthority');
+
+        if (!hasTaxAuthority && taxAuthorityIndex !== -1) {
+            this.displayedColumns = this.displayedColumns?.filter(column => column !== 'taxAuthority');
+        } else if (hasTaxAuthority && taxAuthorityIndex === -1) {
+            this.displayedColumns.splice(3, 0, 'taxAuthority');
         }
     }
 }

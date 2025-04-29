@@ -7,7 +7,7 @@
                         <div class="row font-small">
                             <div class="col-md-12">
                                 <div class="filter-row back-button">
-                                    <a href="javascript:void(0)" (click)="goBack()">
+                                    <a href="javascript:void(0)" (click)="redirectToGstFilingReturn()">
                                         <svg
                                             version="1.1"
                                             id="Layer_1"
@@ -53,6 +53,7 @@
                     <div class="subtabs-box transactions-overview">
                         <hsn-summary
                             [hsnSummary]="gstr1SummaryDetails.data.hsn"
+                            [selectedGst]="selectedGst"
                             [localeData]="localeData"
                             [commonLocaleData]="commonLocaleData"
                         ></hsn-summary>
@@ -113,10 +114,7 @@
                     <!-- </tabset> -->
 
                     <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
-                        <div class="spinner2">
-                            <div class="cube1"></div>
-                            <div class="cube2"></div>
-                        </div>
+                        <giddh-page-loader></giddh-page-loader>
 
                         <div class="empty-msg">
                             <span> {{ localeData?.filing?.loading_data }} </span>

@@ -6,7 +6,6 @@ import { AboutProductServiceDetailComponent } from "./component/about-product-se
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
-import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.component";
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
@@ -21,6 +20,8 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
+import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
+import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
 
 const routes: Routes = [
     {
@@ -71,7 +72,19 @@ const routes: Routes = [
             {
                 path: ":type/bulk-stock-edit",
                 component: BulkStockEditComponent
-            }
+            },
+            {
+                path: ":type/adjust",
+                component: AdjustInventoryListComponent,
+            },
+            {
+                path: ":type/adjust/create",
+                component: AdjustInventoryComponent
+            },
+            {
+                path: ":type/adjust/:refNo",
+                component: AdjustInventoryComponent
+            },
         ],
     },
 
@@ -103,10 +116,6 @@ const routes: Routes = [
     {
         path: "create-custom-field",
         component: CreateCustomFieldComponent,
-    },
-    {
-        path: "adjust-inventory",
-        component: AdjustInventoryComponent,
     },
     {
         path: "adjust-inventory-group",
@@ -151,7 +160,7 @@ const routes: Routes = [
     {
         path: "stock-balance",
         component: StockBalanceComponent,
-    }
+    },
 ];
 
 

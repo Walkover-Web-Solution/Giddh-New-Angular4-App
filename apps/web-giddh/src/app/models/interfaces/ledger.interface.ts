@@ -90,6 +90,7 @@ export interface IForwardBalance extends IClosingBalance {
 
 export interface ITransactionItem {
     amount: number;
+    adjustmentEntry?: string;
     attachedFileName: string;
     attachedFileUniqueName: string;
     chequeClearanceDate: string;

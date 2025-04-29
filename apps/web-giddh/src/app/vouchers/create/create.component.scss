@@ -84,42 +84,12 @@
             }
 
             .vouchers-address-form {
-                display: grid;
-                grid-template-areas:
-                    'address address'
-                    'country state'
-                    'gstin pincode';
-                gap: 15px;
-                padding: 15px;
                 border: 1px solid var(--color-fields-border);
-                border-radius: 4px;
 
                 .address-field {
-                    grid-area: address;
-
                     textarea {
                         border: none;
                     }
-                }
-
-                .country-field {
-                    grid-area: country;
-                    border-bottom: 1px solid var(--color-fields-border);
-                }
-
-                .state-field {
-                    grid-area: state;
-                    border-bottom: 1px solid var(--color-fields-border);
-                }
-
-                .gstin-field {
-                    grid-area: gstin;
-                    border-bottom: 1px solid var(--color-fields-border);
-                }
-
-                .pin-code-field {
-                    grid-area: pincode;
-                    border-bottom: 1px solid var(--color-fields-border);
                 }
 
                 &.form-disabled {
@@ -129,10 +99,9 @@
                 }
 
                 &.without-taxnumber {
-                    grid-template-areas:
-                        'address address'
-                        'country state'
-                        'pincode pincode' !important;
+                    .zip-field-width {
+                        width: 100% !important;
+                    }
                 }
             }
 
@@ -143,7 +112,7 @@
 
             #init-contact-wrapper {
                 input {
-                    height: 48px;
+                    height: var(--mat-form-field-height);
                 }
             }
 
@@ -155,10 +124,6 @@
                         td {
                             padding: 16px 8px;
                             border: 1px solid var(--color-common-secondary-border);
-
-                            &:not(:first-child, :nth-child(2)) {
-                                text-align: right;
-                            }
 
                             &.total-column {
                                 min-width: 120px;
@@ -240,7 +205,7 @@
                 max-width: calc(100% - 36px);
 
                 .vouchers-attachment {
-                    height: 48px;
+                    height: var(--mat-form-field-height);
 
                     .attachment-add-icon {
                         width: 36px;
@@ -305,6 +270,9 @@
                             }
                         }
                     }
+                }
+                .deposit-wrapper {
+                    max-height: 194px;
                 }
             }
 

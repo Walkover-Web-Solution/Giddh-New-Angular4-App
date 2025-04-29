@@ -28,15 +28,17 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public allRoles: INameUniqueName[] = [];
     public newRoleObj: INewRoleFormObj = new NewRoleFormClass();
     public dropdownHeading: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds Fresh options list */
+    public isFreshOptions = [];
+    /** Holds Selected permissions */
+    public selectedValues: any;
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
-
     }
 
     get isFormValid() {
-        if (this.newRoleObj?.name && this.newRoleObj?.isFresh && this.makeCount() > 0) {
+        if (this.newRoleObj?.name && this.newRoleObj?.isFresh && this.getSelectedPagesCount() > 0) {
             return true;
         } else if (this.newRoleObj?.name && !this.newRoleObj?.isFresh && this.newRoleObj?.uniqueName) {
             return true;
@@ -46,6 +48,19 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        setTimeout(() => {
+            if (this.localeData) {
+                this.isFreshOptions = [{
+                    label: this.localeData?.fresh_start,
+                    value: true
+                },
+                {
+                    label: this.localeData?.copy_other_role,
+                    value: false
+                }];
+                this.dropdownHeading = this.localeData?.select_pages;
+            }
+        }, 400);
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
@@ -53,6 +68,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                     this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
                 });
             }
+            this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
             if (p.pages && p.pages.length) {
                 p.pages.forEach((page: IPageStr) => {
@@ -60,8 +76,6 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
-        this.dropdownHeading = this.localeData?.select_pages;
 
         this.store.dispatch(this.permissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
@@ -100,35 +114,44 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectAllPages(event) {
-        if (event.target?.checked) {
+    /**
+     * Select all pages
+     *
+     * @param {*} event
+     * @memberof PermissionModelComponent
+     */
+    public selectAllPages(event): void {
+        if (event.checked) {
+            this.selectedValues = [];
+            this.newRoleObj.pageList.forEach((item: IPage) => {
+                item.isSelected = true;
+                this.selectedValues.push(item);
+            });
             this.newRoleObj.isSelectedAllPages = true;
-            this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = true);
         } else {
-            this.newRoleObj.isSelectedAllPages = false;
+            this.selectedValues = [];
             this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = false);
+            this.newRoleObj.isSelectedAllPages = false;
         }
     }
 
-    public makeCount() {
-        let count: number = 0;
-        this.newRoleObj.pageList.forEach((item: IPage) => {
-            if (item.isSelected) {
-                count += 1;
-            }
-        });
-        return count;
+    /**
+     * Count number of pages are selected
+     *
+     * @returns {number}
+     * @memberof PermissionModelComponent
+     */
+    public getSelectedPagesCount(): number {
+        const selectedPages = this.newRoleObj.pageList.filter((item: IPage) => item.isSelected);
+        return selectedPages?.length || 0;
     }
 
-    public selectPage(event) {
-        if (event.target?.checked) {
-            if (this.makeCount() === this.newRoleObj.pageList?.length) {
-                this.newRoleObj.isSelectedAllPages = true;
-            }
-        } else {
-            if (this.makeCount() === this.newRoleObj.pageList?.length) {
-                this.newRoleObj.isSelectedAllPages = false;
-            }
-        }
+    /**
+     * Enable/ Disable Select all pages checkbox
+     *
+     * @memberof PermissionModelComponent
+     */
+    public enableDisableSelectAll(): void {
+        this.newRoleObj.isSelectedAllPages = this.getSelectedPagesCount() === this.newRoleObj.pageList?.length;
     }
 }

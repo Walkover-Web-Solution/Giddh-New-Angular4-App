@@ -49,7 +49,8 @@
         "paypal_update_successfully": "पेपाल खाता विवरण सफलतापूर्वक अपडेट किए गए हैं।",
         "unlinked_account_successfully": "पेपाल खाता विवरण सफलतापूर्वक अनलिंक किए गए हैं।",
         "paypal_tab_heading": "पेपाल",
-        "razorpay_tab_heading": "रेजरपे"
+        "razorpay_tab_heading": "रेजरपे",
+        "delete_credentials_message": "क्या आप वाकई क्रेडेंशियल्स हटाना चाहते हैं?"
 	},
 	"ecommerce": {
 		"tab_heading": "ई-कॉम",
@@ -128,7 +129,16 @@
         "get_instant_overdraft": "तत्काल ओवरड्राफ्ट प्राप्त करें",
         "duration_error": "कृपया दी गई राशि के लिए अवधि चुनें",
         "required_field_error": "कृपया सभी आवश्यक फ़ील्ड भरें",
-        "connect_bank": "बैंक कनेक्ट करें"
+        "connect_bank": "बैंक कनेक्ट करें",
+        "confirm_bank_delete_message": "क्या आप वाकई बैंक खाता हटाना चाहते हैं?",
+        "search_bank": "बैंक खोजें",
+        "institutions": "संस्थान",
+        "bank_list": "बैंक सूची",
+		"banks": "बैंकों",
+        "permission_message":"आपको इस मॉड्यूल तक पहुंचने की अनुमति नहीं है.",
+		"link_bank": "लिंक बैंक",
+		"link": "जोड़ना",
+		"all_bank_are_linked" : "सभी बैंक लिंक्ड हैं"
 	},
         "communication": {
         "tab_heading": "संचार"
@@ -138,5 +148,10 @@
         "copied":"कॉपी किया गया...",
         "api_url":"एपीआई यूआरएल:",
         "heading":"टेली"
-    }
+    },
+    "account_deleted_successfully": "खाता सफलतापूर्वक हटा दिया गया",
+    "portal_information":"पोर्टल की जानकारी",
+    "portal_domain": "पोर्टल डोमेन",
+    "portal_url": "पोर्टल यूआरएल",
+    "payment_gateway": "अदायगी रास्ता"
 }

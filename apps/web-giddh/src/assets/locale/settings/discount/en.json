@@ -10,5 +10,6 @@
         "as_per_percent": "As per percent"
     },
     "delete_discount": "Do you really want to delete this discount?",
-    "discount_value_placeholder": "Enter value"
+    "discount_value_placeholder": "Enter value",
+    "fixed_value": "Fixed Value"
 }

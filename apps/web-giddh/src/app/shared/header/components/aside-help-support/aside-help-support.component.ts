@@ -47,11 +47,11 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will close the popup
-     *
-     * @param {*} [event]
-     * @memberof AsideHelpSupportComponent
-     */
+    * This will close the popup
+    *
+    * @param {*} [event]
+    * @memberof AsideHelpSupportComponent
+    */
     public closeAsidePane(event?): void {
         this.closeAsideEvent.emit(event);
     }

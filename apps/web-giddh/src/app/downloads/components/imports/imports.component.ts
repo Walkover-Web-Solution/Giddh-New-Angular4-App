@@ -9,7 +9,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -91,6 +91,10 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
 
     constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -102,6 +106,12 @@ export class ImportsComponent implements OnInit, OnDestroy {
      * @memberof ImportsComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('import-page');
 
@@ -117,13 +127,14 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
+                    label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    label: this.activeCompany ? this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
@@ -140,7 +151,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
@@ -163,7 +174,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -342,6 +353,19 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.importRequest.branchUniqueName = selectedEntity?.value;
         this.getImports();
+    }
+
+    /**
+     * Download import file
+     *
+     * @param {*} url
+     * @memberof ImportsComponent
+     */
+    public downloadFile(url: string): void {
+        if (url) {
+            let fileName = url.substring(url.lastIndexOf('/') + 1);
+            download(fileName, url, "");
+        }
     }
 
     /**

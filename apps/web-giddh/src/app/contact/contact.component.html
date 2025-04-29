@@ -11,7 +11,7 @@
 
         <mat-tab-group
             #staticTabs
-            class="custom-mat-tabs customer-aging"
+            class="custom-mat-tabs customer-aging table-header-sticky"
             [ngClass]="{ 'hide-header': activeTab === 'vendor' }"
             (selectedTabChange)="tabChange($event)"
             [selectedIndex]="activeTab === 'customer' || activeTab === 'vendor' ? 0 : 1"
@@ -22,358 +22,379 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div
-                        *ngIf="
-                            (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
-                            (activeTab === 'vendor' && sundryCreditorsAccounts?.length)
-                        "
-                    >
+                    <div class="header-content-sticky vendor-z-index">
                         <div
-                            class="top-bar customer-top-bar clearfix"
-                            [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
-                        >
-                            <div class="customer-form-inline">
-                                <div class="wrap-search-entity d-flex">
-                                    <div class="dis mr-r15 pull-left on-desktop-view">
-                                        <div class="btn-group pull-right d-flex column-gap15">
-                                            <button
-                                                mat-stroked-button
-                                                color="primary"
-                                                *ngIf="activeTab == 'customer'"
-                                                class="mr-0"
-                                                (click)="openAddAndManage('customer')"
-                                                aria-label="new customer"
-                                            >
-                                                {{ localeData?.new_customer }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
-                                                color="primary"
-                                                *ngIf="activeTab == 'vendor'"
-                                                class="mr-0"
-                                                (click)="openAddAndManage('vendor')"
-                                                aria-label="new vendor"
-                                            >
-                                                {{ localeData?.new_vendor }}
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="form-group mr-r15 pull-left linked-entities mb-0"
-                                        name="currentBranch"
-                                        *ngIf="
-                                            currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
-                                        "
-                                    >
-                                        <div>
-                                            <sh-select
-                                                [options]="currentCompanyBranches"
-                                                [(ngModel)]="currentBranch.uniqueName"
-                                                [showClear]="false"
-                                                [ItemHeight]="33"
-                                                width="100%"
-                                                (selected)="handleBranchChange($event)"
-                                                [isFilterEnabled]="true"
-                                                [placeholder]="commonLocaleData?.app_select_entity"
-                                                [fixedValue]="currentBranch?.alias"
-                                            >
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <ng-container>
-                                                        <a
-                                                            href="javascript:void(0);"
-                                                            aria-label="branch company"
-                                                            class="list-item d-flex"
-                                                        >
-                                                            <span class="entity-icon">
-                                                                <i
-                                                                    class="icon-branch-icon pull-right"
-                                                                    *ngIf="!option.isCompany"
-                                                                    tooltip="{{ commonLocaleData?.app_branch }}"
-                                                                ></i>
-                                                                <i
-                                                                    class="icon-company-profile pull-right"
-                                                                    *ngIf="option.isCompany"
-                                                                    tooltip="{{ commonLocaleData?.app_company }}"
-                                                                ></i>
-                                                            </span>
-                                                            <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">
-                                                                    {{ option?.label || "-" }}
-                                                                </div>
-                                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                                    {{ option?.name || "-" }}
-                                                                </div>
-                                                            </span>
-                                                        </a>
-                                                    </ng-container>
-                                                </ng-template>
-                                            </sh-select>
-                                        </div>
-                                    </div>
-                                    <form
-                                        *ngIf="sundryCreditorsAccounts?.length || sundryDebtorsAccounts?.length"
-                                        #invoiceForm="ngForm"
-                                        novalidate
-                                        class="form-inline input-grp-date-range-picker position-relative"
-                                    >
-                                        <div class="form-group mr-r15 d-flex flex-fill">
-                                            <div
-                                                class="form-group custom-datepicker mr-r15"
-                                                (click)="showGiddhDatepicker($event)"
-                                            >
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    name="selectedDateRange"
-                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                    class="giddh-datepicker form-control date-range-picker"
-                                                />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div
-                                    class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
-                                    *ngIf="showClearFilter"
-                                >
-                                    <button
-                                        mat-stroked-button
-                                        class="mr-0"
-                                        (click)="resetAdvanceSearch()"
-                                        aria-label="filter"
-                                    >
-                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-                                    </button>
-                                </div>
-                                <!-- Invoice filter section ends -->
-                                <div class="button-content">
-                                    <button
-                                        mat-stroked-button
-                                        class="desktop-button-filter"
-                                        *ngIf="selectedCheckedContacts?.length > 0"
-                                        (click)="clearSelectedContacts()"
-                                        aria-label="clear"
-                                    >
-                                        <span class="icon-cross icon-font-14"></span>
-                                        {{ commonLocaleData?.app_clear_selected }}
-                                    </button>
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
-                                    <div class="d-flex justify-content-between">
-                                        <div
-                                            class="pull-left header-left d-none"
-                                            [ngClass]="{ 'on-company': currentCompanyBranches?.length >= 2 }"
-                                        >
-                                            <div
-                                                class="form-group max-width-250 search-field mb-0"
-                                                *ngIf="activeTab !== 'aging'"
-                                            >
-                                                <text-field
-                                                    type="text"
-                                                    name="searchStr"
-                                                    [placeholder]="localeData?.name_email_mobile"
-                                                    [cssClass]="'form-control'"
-                                                    [(ngModel)]="searchStr"
-                                                    (ngModelChange)="searchStr$.next($event)"
-                                                ></text-field>
-                                                <span class="input-addon">
-                                                    <i class="icon-search"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="customer-footer-box pull-right">
-                                            <button
-                                                mat-stroked-button
-                                                class="btn-filter mobile-button-filter"
-                                                *ngIf="selectedAccountsList?.length > 0"
-                                                (click)="clearSelectedContacts()"
-                                                aria-label="clear"
-                                            >
-                                                <span class="icon-cross"></span>
-
-                                                <span>{{ commonLocaleData?.app_clear }}</span>
-                                            </button>
-                                        </div>
-                                        <div class="mr-0" *ngIf="activeTab !== 'aging'">
-                                            <select-table-column
-                                                [moduleType]="moduleType"
-                                                [customiseColumns]="customiseColumns"
-                                                (selectedColumns)="showSelectedHeaderColumns($event)"
-                                                [localeData]="localeData"
-                                                [commonLocaleData]="commonLocaleData"
-                                                [iconClass]="'icon-options select-multiple-icon-options'"
-                                                (isLoading)="isLoading = $event"
-                                            >
-                                            </select-table-column>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="top-content">
-                        <div
-                            class="d-flex w-100 justify-content-between overflow-x-auto"
-                            [hidden]="
-                                (activeTab === 'customer' && !sundryDebtorsAccounts?.length) ||
-                                (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
+                            *ngIf="
+                                (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
+                                (activeTab === 'vendor' && sundryCreditorsAccounts?.length)
                             "
                         >
                             <div
-                                class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230"
+                                class="top-bar customer-top-bar clearfix"
+                                [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
                             >
-                                <h5>
-                                    <ng-container *ngIf="!selectedCheckedContacts?.length">{{
-                                        activeTab === "customer" ? localeData?.customers : localeData?.vendors
-                                    }}</ng-container>
-                                    <ng-container *ngIf="selectedCheckedContacts?.length">{{
-                                        activeTab === "customer"
-                                            ? localeData?.customers_selected
-                                            : localeData?.vendors_selected
-                                    }}</ng-container>
-                                    <div>
-                                        <span *ngIf="!selectedCheckedContacts?.length" class="number-total">{{
-                                            activeTab === "customer" ? totalCustomers : totalVendors
-                                        }}</span>
-                                        <span
-                                            *ngIf="selectedCheckedContacts?.length > 0"
-                                            class="number-total total-customer-vendor-count"
-                                            ><strong>{{ selectedCheckedContacts?.length }}</strong
-                                            >/{{ activeTab === "customer" ? totalCustomers : totalVendors }}</span
+                                <div class="customer-form-inline">
+                                    <div class="wrap-search-entity d-flex">
+                                        <div class="dis mr-r15 pull-left on-desktop-view">
+                                            <div class="btn-group pull-right d-flex column-gap15">
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    *ngIf="activeTab == 'customer'"
+                                                    class="mr-0"
+                                                    (click)="openAddAndManage('customer')"
+                                                    aria-label="new customer"
+                                                >
+                                                    {{ localeData?.new_customer }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    *ngIf="activeTab == 'vendor'"
+                                                    class="mr-0"
+                                                    (click)="openAddAndManage('vendor')"
+                                                    aria-label="new vendor"
+                                                >
+                                                    {{ localeData?.new_vendor }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="form-group mr-r15 pull-left linked-entities mb-0"
+                                            name="currentBranch"
+                                            *ngIf="
+                                                currentCompanyBranches?.length > 2 &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                            "
                                         >
+                                            <div>
+                                                <sh-select
+                                                    [options]="currentCompanyBranches"
+                                                    [(ngModel)]="currentBranch.uniqueName"
+                                                    [showClear]="false"
+                                                    [ItemHeight]="33"
+                                                    width="100%"
+                                                    (selected)="handleBranchChange($event)"
+                                                    [isFilterEnabled]="true"
+                                                    [placeholder]="commonLocaleData?.app_select_entity"
+                                                    [fixedValue]="currentBranch?.name"
+                                                >
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <ng-container>
+                                                            <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="branch company"
+                                                                class="list-item d-flex"
+                                                            >
+                                                                <span class="entity-icon">
+                                                                    <i
+                                                                        class="pull-right"
+                                                                        [ngClass]="{
+                                                                            'icon-company-profile':
+                                                                                option?.consolidatedBranch,
+                                                                            'icon-branch-icon':
+                                                                                !option?.consolidatedBranch
+                                                                        }"
+                                                                        *ngIf="!option.isCompany"
+                                                                        tooltip="{{ commonLocaleData?.app_branch }}"
+                                                                    ></i>
+                                                                    <i
+                                                                        class="icon-company-profile pull-right"
+                                                                        *ngIf="option.isCompany"
+                                                                        tooltip="{{ commonLocaleData?.app_company }}"
+                                                                    ></i>
+                                                                </span>
+                                                                <span class="entity-details">
+                                                                    <div class="item giddh-limit single-line-clamp">
+                                                                        {{ option?.label || "-" }}
+                                                                    </div>
+                                                                    <div
+                                                                        class="item-unique giddh-limit single-line-clamp"
+                                                                    >
+                                                                        {{ option?.name || "-" }}
+                                                                    </div>
+                                                                </span>
+                                                            </a>
+                                                        </ng-container>
+                                                    </ng-template>
+                                                </sh-select>
+                                            </div>
+                                        </div>
+                                        <form
+                                            *ngIf="sundryCreditorsAccounts?.length || sundryDebtorsAccounts?.length"
+                                            #invoiceForm="ngForm"
+                                            novalidate
+                                            class="form-inline input-grp-date-range-picker position-relative"
+                                        >
+                                            <div class="form-group mr-r15 d-flex flex-fill">
+                                                <div
+                                                    class="form-group custom-datepicker mr-r15"
+                                                    (click)="showGiddhDatepicker($event)"
+                                                >
+                                                    <input
+                                                        matInput
+                                                        type="text"
+                                                        name="selectedDateRange"
+                                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                        class="giddh-datepicker form-control date-range-picker"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </h5>
-                                <div class="more-button align-items-center">
-                                    <button
-                                        mat-icon-button
-                                        class="pos-abs arrow-icon"
-                                        [matMenuTriggerFor]="downloadCsvEmail"
-                                        id="button-basic"
-                                        aria-label="customer"
+                                    <div
+                                        class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                                        *ngIf="showClearFilter"
                                     >
-                                        <span class="icon-arrow-down"></span>
-                                    </button>
-                                    <mat-menu #downloadCsvEmail="matMenu">
-                                        <!-- <button
-                                            mat-menu-item
-                                            *ngIf="selectedCheckedContacts?.length"
-                                            (click)="openEmailDialog()"
-                                        >
-                                            {{ commonLocaleData?.app_email }}
-                                        </button> -->
-                                        <button mat-menu-item (click)="downloadCSV()" aria-label="download csv">
-                                            {{ commonLocaleData?.app_download_csv }}
-                                        </button>
                                         <button
-                                            mat-menu-item
-                                            *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
-                                            (click)="openBulkPaymentModal()"
-                                            aria-label="bulk payment"
+                                            mat-stroked-button
+                                            class="mr-0"
+                                            (click)="resetAdvanceSearch()"
+                                            aria-label="filter"
                                         >
-                                            {{ localeData?.bulk_payment }}
+                                            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                         </button>
-                                    </mat-menu>
+                                    </div>
+                                    <!-- Invoice filter section ends -->
+                                    <div class="button-content">
+                                        <button
+                                            mat-stroked-button
+                                            class="desktop-button-filter"
+                                            *ngIf="selectedCheckedContacts?.length > 0"
+                                            (click)="clearSelectedContacts()"
+                                            aria-label="clear"
+                                        >
+                                            <span class="icon-cross icon-font-14"></span>
+                                            {{ commonLocaleData?.app_clear_selected }}
+                                        </button>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
+                                        <div class="d-flex justify-content-between">
+                                            <div
+                                                class="pull-left header-left d-none"
+                                                [ngClass]="{ 'on-company': currentCompanyBranches?.length >= 2 }"
+                                            >
+                                                <div
+                                                    class="form-group max-width-250 search-field mb-0"
+                                                    *ngIf="activeTab !== 'aging'"
+                                                >
+                                                    <text-field
+                                                        type="text"
+                                                        name="searchStr"
+                                                        [placeholder]="localeData?.name_email_mobile"
+                                                        [cssClass]="'form-control'"
+                                                        [(ngModel)]="searchStr"
+                                                        (ngModelChange)="searchStr$.next($event)"
+                                                    ></text-field>
+                                                    <span class="input-addon">
+                                                        <i class="icon-search"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="customer-footer-box pull-right">
+                                                <button
+                                                    mat-stroked-button
+                                                    class="btn-filter mobile-button-filter"
+                                                    *ngIf="selectedAccountsList?.length > 0"
+                                                    (click)="clearSelectedContacts()"
+                                                    aria-label="clear"
+                                                >
+                                                    <span class="icon-cross"></span>
+
+                                                    <span>{{ commonLocaleData?.app_clear }}</span>
+                                                </button>
+                                            </div>
+                                            <div class="mr-0" *ngIf="activeTab !== 'aging'">
+                                                <select-table-column
+                                                    [moduleType]="moduleType"
+                                                    [customiseColumns]="customiseColumns"
+                                                    (selectedColumns)="showSelectedHeaderColumns($event)"
+                                                    [localeData]="localeData"
+                                                    [commonLocaleData]="commonLocaleData"
+                                                    [iconClass]="'icon-options select-multiple-icon-options'"
+                                                    (isLoading)="isLoading = $event"
+                                                >
+                                                </select-table-column>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="total-details-box mr-r05 border-none opening-box min-width-230">
-                                <h5>
-                                    {{ localeData?.opening }}
-                                    <div>
-                                        <span
-                                            class="d-inline-flex number-total"
-                                            *ngIf="
-                                                activeTab === 'customer' &&
-                                                openingBalance?.type === 'CREDIT' &&
-                                                formatAmountInCurrency(openingBalance?.amount) > 0
-                                            "
-                                            >-</span
+                        </div>
+                        <div class="top-content">
+                            <div
+                                class="d-flex w-100 justify-content-between overflow-x-auto"
+                                [hidden]="
+                                    (activeTab === 'customer' && !sundryDebtorsAccounts?.length) ||
+                                    (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
+                                "
+                            >
+                                <div
+                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230"
+                                >
+                                    <h5>
+                                        <ng-container *ngIf="!selectedCheckedContacts?.length">{{
+                                            activeTab === "customer" ? localeData?.customers : localeData?.vendors
+                                        }}</ng-container>
+                                        <ng-container *ngIf="selectedCheckedContacts?.length">{{
+                                            activeTab === "customer"
+                                                ? localeData?.customers_selected
+                                                : localeData?.vendors_selected
+                                        }}</ng-container>
+                                        <div>
+                                            <span *ngIf="!selectedCheckedContacts?.length" class="number-total">{{
+                                                activeTab === "customer" ? totalCustomers : totalVendors
+                                            }}</span>
+                                            <span
+                                                *ngIf="selectedCheckedContacts?.length > 0"
+                                                class="number-total total-customer-vendor-count"
+                                                ><strong>{{ selectedCheckedContacts?.length }}</strong
+                                                >/{{ activeTab === "customer" ? totalCustomers : totalVendors }}</span
+                                            >
+                                        </div>
+                                    </h5>
+                                    <div class="more-button align-items-center">
+                                        <button
+                                            mat-icon-button
+                                            class="pos-abs arrow-icon"
+                                            [matMenuTriggerFor]="downloadCsvEmail"
+                                            id="button-basic"
+                                            aria-label="customer"
                                         >
-                                        <span
-                                            class="d-inline-flex number-total"
-                                            *ngIf="
-                                                activeTab === 'vendor' &&
-                                                openingBalance?.type === 'DEBIT' &&
-                                                formatAmountInCurrency(openingBalance?.amount) > 0
-                                            "
-                                            >-</span
-                                        >
-                                        <span class="d-inline-flex number-total">
-                                            <amount-field
-                                                [amount]="openingBalance?.amount"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
-                                            ></amount-field
-                                            >/-
-                                        </span>
-                                    </div>
-                                </h5>
-                            </div>
-                            <div class="total-details-box mr-r05 border-none sales-purchase min-width-230">
-                                <h5>
-                                    <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
-                                    <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
-                                    <div>
-                                        <span class="d-inline-flex number-total">
-                                            <amount-field
-                                                [amount]="totalSales"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
+                                            <span class="icon-arrow-down"></span>
+                                        </button>
+                                        <mat-menu #downloadCsvEmail="matMenu">
+                                            <!-- <button
+                                                mat-menu-item
+                                                *ngIf="selectedCheckedContacts?.length"
+                                                (click)="openEmailDialog()"
                                             >
-                                            </amount-field
-                                            >/-
-                                        </span>
-                                    </div>
-                                </h5>
-                            </div>
-                            <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
-                                <h5>
-                                    <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
-                                    <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_receipt }}</span>
-                                    <div>
-                                        <span class="d-inline-flex number-total">
-                                            <amount-field
-                                                [amount]="totalReceipts"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
+                                                {{ commonLocaleData?.app_email }}
+                                            </button> -->
+                                            <button mat-menu-item (click)="downloadCSV()" aria-label="download csv">
+                                                {{ commonLocaleData?.app_download_csv }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
+                                                (click)="openBulkPaymentModal()"
+                                                aria-label="bulk payment"
                                             >
-                                            </amount-field
-                                            >/-
-                                        </span>
-                                    </div>
-                                </h5>
-                            </div>
-                            <div class="total-details-box border-none closing-box min-width-230">
-                                <h5>
-                                    {{ localeData?.closing }}
-                                    <div>
-                                        <span class="d-inline-flex number-total">
-                                            <amount-field
-                                                [amount]="closingBalance"
-                                                [currencySymbol]="false"
-                                                [currencyCode]="false"
+                                                {{ localeData?.bulk_payment }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedAccountsList?.length > 0"
+                                                (click)="openCustomEmailDialog(selectedAccountsList, activeTab, true)"
+                                                aria-label="send bulk email"
                                             >
-                                            </amount-field
-                                            >/-
-                                        </span>
+                                                {{ localeData?.send_bulk_email }}
+                                            </button>
+                                        </mat-menu>
                                     </div>
-                                </h5>
+                                </div>
+                                <div class="total-details-box mr-r05 border-none opening-box min-width-230">
+                                    <h5>
+                                        {{ localeData?.opening }}
+                                        <div>
+                                            <span
+                                                class="d-inline-flex number-total"
+                                                *ngIf="
+                                                    activeTab === 'customer' &&
+                                                    openingBalance?.type === 'CREDIT' &&
+                                                    formatAmountInCurrency(openingBalance?.amount) > 0
+                                                "
+                                                >-</span
+                                            >
+                                            <span
+                                                class="d-inline-flex number-total"
+                                                *ngIf="
+                                                    activeTab === 'vendor' &&
+                                                    openingBalance?.type === 'DEBIT' &&
+                                                    formatAmountInCurrency(openingBalance?.amount) > 0
+                                                "
+                                                >-</span
+                                            >
+                                            <span class="d-inline-flex number-total">
+                                                <amount-field
+                                                    [amount]="openingBalance?.amount"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                ></amount-field
+                                                >/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="total-details-box mr-r05 border-none sales-purchase min-width-230">
+                                    <h5>
+                                        <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
+                                        <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
+                                        <div>
+                                            <span class="d-inline-flex number-total">
+                                                <amount-field
+                                                    [amount]="totalSales"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field
+                                                >/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
+                                    <h5>
+                                        <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
+                                        <span *ngIf="activeTab === 'customer'">{{
+                                            commonLocaleData?.app_receipt
+                                        }}</span>
+                                        <div>
+                                            <span class="d-inline-flex number-total">
+                                                <amount-field
+                                                    [amount]="totalReceipts"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field
+                                                >/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="total-details-box border-none closing-box min-width-230">
+                                    <h5>
+                                        {{ localeData?.closing }}
+                                        <div>
+                                            <span class="d-inline-flex number-total">
+                                                <amount-field
+                                                    [amount]="closingBalance"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field
+                                                >/-
+                                            </span>
+                                        </div>
+                                    </h5>
+                                </div>
                             </div>
                         </div>
+                        <div
+                            class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
+                            *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                        >
+                            <p (click)="showGiddhDatepicker($event)">
+                                <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
+                                <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
+                            </p>
+                        </div>
                     </div>
-                    <div
-                        class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                        *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
-                    >
-                        <p (click)="showGiddhDatepicker($event)">
-                            <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
-                            <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                        </p>
-                    </div>
-                    <div class="contact-main customer-page on-mobile-view">
-                        <div class="pd-b2 mr-b1">
-                            <div>
+                    <div class="contact-main customer-page on-mobile-view overflow-visible">
+                        <div class="pd-b2 mr-b1 overflow-visible">
+                            <div class="overflow-visible">
                                 <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
@@ -554,7 +575,7 @@
     </div>
 
     <ng-template #mainTable>
-        <div class="table-responsive vendor-page all-table">
+        <div class="table-responsive vendor-page all-table overflow-visible">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
@@ -589,7 +610,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_customer_name
+                                                    title: commonLocaleData?.app_name
                                                 }
                                             "
                                         ></ng-container>
@@ -608,6 +629,8 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
+                            [matTooltip]="account?.name"
+                            matTooltipPosition="above"
                         >
                             <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
@@ -620,7 +643,7 @@
                                         (change)="selectAccount($event, account)"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="text-ellipsis">{{ account.name }}</span>
                                 </div>
 
                                 <button
@@ -684,6 +707,14 @@
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
                                 </mat-menu>
                             </div>
                         </td>
@@ -863,7 +894,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state" [matTooltip]="account?.state?.name" matTooltipPosition="above">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>
@@ -936,7 +967,7 @@
                                                     $implicit: showNameSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
-                                                    title: commonLocaleData?.app_vendor_name
+                                                    title: commonLocaleData?.app_name
                                                 }
                                             "
                                         ></ng-container>
@@ -956,6 +987,8 @@
                             *matCellDef="let account"
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
+                            [matTooltip]="account?.name"
+                            matTooltipPosition="above"
                         >
                             <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
@@ -968,7 +1001,7 @@
                                         [(ngModel)]="account.isSelected"
                                     >
                                     </mat-checkbox>
-                                    <span>{{ account.name }}</span>
+                                    <span class="text-ellipsis">{{ account.name }}</span>
                                 </div>
                                 <button
                                     mat-icon-button
@@ -1023,6 +1056,14 @@
                                         aria-label="record bill"
                                     >
                                         {{ commonLocaleData?.app_record_bill }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
                                     </button>
                                     <!-- <button
                                         mat-menu-item
@@ -1306,7 +1347,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state">
+                        <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_state" [matTooltip]="account?.state?.name" matTooltipPosition="above">
                             {{ account?.state?.name || "-" }}
                         </td>
                     </ng-container>
@@ -1341,7 +1382,7 @@
                             {{ commonLocaleData?.app_action }}
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_action">
-                            <div class="d-flex column-gap15">
+                            <div class="d-flex column-gap15 justify-content-center">
                                 <button
                                     mat-stroked-button
                                     *ngIf="isGetAllIntegratedBankInProgress"
@@ -1361,16 +1402,12 @@
                                 </button>
                                 <button
                                     mat-stroked-button
-                                    *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
+                                    *ngIf="isPlaidSupportedCountry && !isGetAllIntegratedBankInProgress"
                                     class="btn-small min-width-150 contact-ipad-responsive"
                                     [routerLink]="['/pages/settings/integration/payment']"
                                     aria-label="bank"
                                 >
-                                    {{
-                                        isPlaidSupportedCountry
-                                            ? localeData?.connect_bank
-                                            : localeData?.connect_icici_bank
-                                    }}
+                                    {{ localeData?.connect_bank }}
                                 </button>
                             </div>
                             <ng-container
@@ -1380,7 +1417,7 @@
                                     !isIciciAccountPendingForApproval
                                 "
                             >
-                                <div class="d-flex column-gap15">
+                                <div class="d-flex column-gap15 justify-content-center">
                                     <button
                                         mat-stroked-button
                                         color="primary"
@@ -1391,6 +1428,9 @@
                                     >
                                         {{ commonLocaleData?.app_pay_now }}
                                     </button>
+                                    <span *ngIf="account?.bankPaymentDetails && account?.country?.code !== 'IN'"
+                                        >-</span
+                                    >
                                     <button
                                         mat-stroked-button
                                         *ngIf="!account?.bankPaymentDetails"
@@ -1572,25 +1612,27 @@
         let-fieldName="fieldName"
         let-formControl="formControl"
     >
-        <div class="align-items-center d-flex" [hidden]="show">
-            <button
-                mat-icon-button
-                aria-label="search"
-                (click)="toggleSearch(fieldName)"
-                class="customer-vendor-name-search-icon"
-            >
-                <span class="icon-search"></span>
-            </button>
-            <span> {{ title }}</span>
-        </div>
-        <div class="align-items-center d-flex pd-l14" [hidden]="!show">
-            <text-field
-                [type]="'text'"
-                [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control search-table'"
-                [formControl]="formControl"
-                [autoFocus]="show"
-            ></text-field>
+        <div class="search-table">
+            <div class="align-items-center d-flex" [hidden]="show">
+                <button
+                    mat-icon-button
+                    aria-label="search"
+                    (click)="toggleSearch(fieldName)"
+                    class="customer-vendor-name-search-icon"
+                >
+                    <span class="icon-search"></span>
+                </button>
+                <span> {{ title }}</span>
+            </div>
+            <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+                <text-field
+                    [type]="'text'"
+                    [placeholder]="getSearchFieldText(fieldName)"
+                    [cssClass]="'form-control'"
+                    [formControl]="formControl"
+                    [autoFocus]="show"
+                ></text-field>
+            </div>
         </div>
     </ng-template>
 </ng-container>

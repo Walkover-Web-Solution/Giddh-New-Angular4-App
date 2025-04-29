@@ -20,122 +20,97 @@
         </div>
     </div>
     <div class="container-fluid font-15 mr-t1">
-        <div class="select-financial-year mr-b15">
-            <div
-                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                class="xs-mb-1 inner-button linked-entities"
-            >
-                <sh-select
-                    [options]="currentCompanyBranches"
-                    [(ngModel)]="currentBranch.uniqueName"
-                    [showClear]="false"
-                    [ItemHeight]="33"
-                    width="100%"
-                    (selected)="handleBranchChange($event)"
-                    [isFilterEnabled]="true"
-                    [placeholder]="commonLocaleData?.app_select_entity"
-                    [fixedValue]="currentBranch?.alias"
+        <div class="d-flex justify-content-between">
+            <div class="d-flex mr-b15 custom-mat-form-field">
+                <div
+                    *ngIf="
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
+                    class="mr-r15"
                 >
-                    <ng-template #optionTemplate let-option="option">
-                        <ng-container>
-                            <a href="javascript:void(0)" class="list-item d-flex">
-                                <span class="entity-icon">
-                                    <i
-                                        class="icon-branch-icon pull-right"
-                                        *ngIf="!option?.isCompany"
-                                        [tooltip]="commonLocaleData?.app_branch"
-                                    ></i>
-                                    <i
-                                        class="icon-company-profile pull-right"
-                                        *ngIf="option?.isCompany"
-                                        [tooltip]="commonLocaleData?.app_company"
-                                    ></i>
-                                </span>
-                                <span class="entity-details">
-                                    <div class="item giddh-limit single-line-clamp">{{ option?.label || "-" }}</div>
-                                    <div class="item-unique giddh-limit single-line-clamp">
-                                        {{ option?.name || "-" }}
+                    <dropdown-field
+                        [name]="'branchName'"
+                        [label]="commonLocaleData?.app_entity"
+                        [placeholder]="commonLocaleData?.app_select_entity"
+                        [options]="currentCompanyBranches"
+                        (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
+                        [defaultValue]="currentBranch?.name"
+                        [required]="true"
+                    >
+                    </dropdown-field>
+                </div>
+                <div class="mr-r15 financial-dropdown">
+                    <dropdown-field
+                        [name]="'financialYear'"
+                        [label]="commonLocaleData?.app_financial_year"
+                        [placeholder]="activeFinacialYr?.uniqueName"
+                        [options]="financialOptions"
+                        (selectedOption)="currentActiveFinacialYear.value =  $event?.value; selectFinancialYearOption($event)"
+                        [defaultValue]="activeFinacialYr?.uniqueName"
+                        [required]="true"
+                    >
+                    </dropdown-field>
+                </div>
+                <div class="mr-r15">
+                    <mat-form-field appearance="outline" class="duration-dropdown">
+                        <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
+                        <mat-select #durationMatSelect [value]="selectedType">
+                            <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
+                                {{ commonLocaleData?.app_duration?.monthly }}
+                            </mat-option>
+                            <mat-option (click)="populateRecords(durationEnum.Quarterly)" [value]="commonLocaleData?.app_duration?.quarterly">
+                                {{ commonLocaleData?.app_duration?.quarterly }}
+                            </mat-option>
+                            <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position pointer-event-none">
+                                <span
+                                    class="w-100 d-flex justify-content-between pointer-event-all"
+                                    [matMenuTriggerFor]="monthMenu"
+                                    (click)="$event.stopPropagation()"
+                                >
+                                    <div class="w-50">
+                                        {{ commonLocaleData?.app_duration?.weekly }}
+                                    </div>
+                                    <div class="w-50 pd-l4">
+                                        <i class="icon-dots-three-vertical"></i>
                                     </div>
                                 </span>
-                            </a>
-                        </ng-container>
-                    </ng-template>
-                </sh-select>
-            </div>
-            <div class="xs-mb-1 inner-button">
-                <sh-select
-                    [options]="financialOptions"
-                    [isFilterEnabled]="true"
-                    [placeholder]="activeFinacialYr?.uniqueName"
-                    name="currentActiveFinacialYear"
-                    [(ngModel)]="currentActiveFinacialYear.value"
-                    [showClear]="false"
-                    (selected)="selectFinancialYearOption($event)"
-                    [ItemHeight]="33"
-                    [defaultValue]="activeFinacialYr?.uniqueName"
-                    [isRequired]="true"
-                ></sh-select>
-            </div>
-            <div class="inner-button xs-mb-1 pr-5 xs-pr-0">
-                <div class="btn-group xs-pr-0" dropdown [autoClose]="true">
-                    <button
-                        id="button-nested"
-                        dropdownToggle
-                        type="button"
-                        class="btn text-capitalize dropdown-toggle"
-                        aria-controls="dropdown-nested"
-                    >
-                        {{ selectedType }}<span class="caret"></span>
-                    </button>
-                    <ul
-                        id="dropdown-nested"
-                        *dropdownMenu
-                        class="dropdown-menu sales-register-menu"
-                        role="menu"
-                        aria-labelledby="button-nested"
-                    >
-                        <li role="menuitem" dropdown placement="right" container="body">
-                            <a
-                                dropdownToggle
-                                (click)="populateRecords('monthly')"
-                                class="dropdown-item dropdown-toggle cursor-pointer"
-                                >{{ commonLocaleData?.app_duration?.monthly }}</a
-                            >
-                        </li>
-                        <li role="menuitem" dropdown placement="right" container="body">
-                            <a
-                                dropdownToggle
-                                (click)="populateRecords('quarterly')"
-                                class="dropdown-item dropdown-toggle cursor-pointer"
-                                >{{ commonLocaleData?.app_duration?.quarterly }}</a
-                            >
-                        </li>
-                        <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="(false)"
-                                >{{ commonLocaleData?.app_duration?.weekly }} <span class="caret"></span
-                            ></a>
-                            <ul class="dropdown-menu report-dropdown" role="menu">
-                                <li role="menuitem" *ngFor="let month of monthNames">
-                                    <a (click)="populateRecords('weekly', month)" class="dropdown-item">{{
-                                        month | slice: 0:3
-                                    }}</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
+                        <div class="grid-columns-3 d-grid column-gap5 pd-1">
+                          <button 
+                            mat-menu-item 
+                            *ngFor="let month of monthNames" 
+                            (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
+                            aria-label="Select month"
+                          >
+                            {{ month | slice: 0:3 }}
+                          </button>
+                        </div>
+                    </mat-menu>
                 </div>
             </div>
-            <div class="xs-mb-1 position-absolute dropdown-left">
-                <button type="button" class="btn btn-sky-blue" (click)="export()">
-                    {{ commonLocaleData?.app_export }}
-                </button>
-            </div>
+            <button 
+                mat-stroked-button  
+                (click)="export()"
+                color="primary"
+                [matTooltip]="commonLocaleData?.app_export"
+                [matTooltipPosition]="'above'"
+            >
+                {{ commonLocaleData?.app_export }}
+            </button>
         </div>
-        <purchase-register-table-component
-            [currentBranchUniqueName]="currentBranch?.uniqueName"
-            [reportRespone]="reportRespone"
-            [purchaseRegisterTotal]="purchaseRegisterTotal"
+        <giddh-table
+            *ngIf="localeData"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [tableDataSource]="reportRespone"
+            [columnDefinitions]="columnDefinitions"
+            [tableSecondaryHeader]="purchaseRegisterTotal"
+            (handleClickEvent)="$event && gotoDetailedPurchase($event.item)"
         >
-        </purchase-register-table-component>
+        </giddh-table>
     </div>
 </ng-container>

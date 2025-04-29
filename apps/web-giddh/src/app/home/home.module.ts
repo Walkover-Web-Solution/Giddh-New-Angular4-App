@@ -26,7 +26,9 @@ import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -65,7 +67,10 @@ import { MatIconModule } from '@angular/material/icon';
         GiddhDateRangepickerModule,
         MatDatepickerModule,
         MatFormFieldModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule,
+        BankIntegrationModule,
+        MatTooltipModule
     ],
 })
 export class HomeModule {

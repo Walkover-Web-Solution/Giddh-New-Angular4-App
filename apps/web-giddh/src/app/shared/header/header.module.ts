@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
-import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
@@ -22,10 +21,12 @@ import { AsideHelpSupportComponent } from "./components/aside-help-support/aside
 import { AsideSettingComponent } from "./components/aside-setting/aside-setting.component";
 import { HeaderComponent } from "./header.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { MatMenuModule } from "@angular/material/menu";
 import { ConnectPlaidComponent } from "../../theme/connect-plaid/connect-plaid.component";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { MatDividerModule } from "@angular/material/divider";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
+import { TagsModule } from "../../settings/tags/tags.module";
 
 @NgModule({
     declarations: [
@@ -57,12 +58,13 @@ import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/gen
         MatDialogModule,
         MatListModule,
         MatButtonModule,
-        MatMenuModule,
         MatTreeModule,
+        MatMenuModule,
         CommandKModule,
         MatDividerModule,
         GenericAsideMenuAccountModule,
-        MatTooltipModule
+        MatTooltipModule,
+        TagsModule
     ],
     exports: [
         HeaderComponent,

@@ -1,3 +1,9 @@
+:host {
+    &:has(mat-label) {
+        display: inherit;
+        margin-top: 10px;
+    }
+}
 .chiplist-error {
     border-bottom: 2px solid var(--color-red) !important;
     float: left;
@@ -9,8 +15,4 @@
     width: 100%;
     font-weight: normal !important;
     font-size: var(--font-size-15) !important;
-}
-
-.communication-input {
-    border-bottom: 1px solid var(--color-common-primary-border);
 }

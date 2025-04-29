@@ -23,6 +23,10 @@
     }
 }
 
+.vendor-z-index {
+    z-index: 101;
+}
+
 .dis {
     display: flex;
     .btn-group{
@@ -186,7 +190,6 @@ td.comment-field {
 .date-range-picker {
     width: 225px !important;
 }
-
 //  my css
 .aging-table tbody tr:first-child td {
     border-top: none;
@@ -814,7 +817,6 @@ button.btn.btn-filter {
         padding-top: 0;
         float: none !important;
     }
-
     .position-relative.word-wrap .icon-dots-three-vertical {
         display: block;
     }
@@ -919,14 +921,6 @@ button.btn.btn-filter {
 
 .padding-left-25{
     padding-left: 25px;
-}
-
-::ng-deep.search-table {
-    position: relative;
-    right: 8px;
-    border-color: var(--color-sidebar-primary-search-bar-background);
-    background-color: var(--color-sidebar-primary-search-bar-background) !important;
-    min-width: 110px;
 }
 
 :hover.menu-table-item {

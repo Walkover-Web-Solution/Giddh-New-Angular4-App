@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -7,7 +8,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
-import { fromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
@@ -24,7 +25,8 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
-
+import { FormControl } from '@angular/forms';
+import { BranchHierarchyType } from '../../app.constant';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -45,10 +47,15 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
-    @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
+    /** Holds Status Dialog Template Reference */
+    @ViewChild('statusDialog', { static: true }) public statusDialog: any;
+    /** Holds Add Company Dialog Template Reference */
+    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: any;
+    /** Holds Close Address Dialog Template Reference */
+    @ViewChild('addressAsidePane', { static: true }) public addressAsidePane: any;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -72,14 +79,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
-    /** Holds the state of aside menu */
-    public closeAddressSidePane: string = 'out';
     /** True if branch update is in progress, used to show ladda loader in aside menu */
     public isBranchChangeInProgress: boolean = false;
     /** Stores all the branches */
     public unFilteredBranchList: Array<any>;
     /** Stores the branch searcch query */
-    public searchBranchQuery: string;
+    public searchBranchQuery: FormControl = new FormControl('');
     /** Branch search field instance */
     @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
     /** Stores the address configuration */
@@ -102,6 +107,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds branch to archive/unarchive */
     public branchStatusToUpdate: any;
+    /** Holds Status MatDailog Reference */
+    public statusDialogRef: any;
+    /** Holds Close Address MatDailog Reference */
+    public addressAsidePaneRef: any;
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
+    /** Active tab name */
+    public activeTab: string;
+    /** This will hold tree response data */
+    public data: any[] = [];
 
     constructor(
         private router: Router,
@@ -115,14 +130,24 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private _generalService: GeneralService,
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService,
-        private settingsBranchService: SettingsBranchService
+        private settingsBranchService: SettingsBranchService,
+        public dialog: MatDialog
     ) {
 
     }
 
     public ngOnInit() {
+        document.querySelector("body")?.classList?.add("setting-branch-body");
         this.getOnboardingForm();
-
+        this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
+            if (query !== undefined && query !== null) {
+                if (query) {
+                    this.handleBranchSearch(query);
+                } else {
+                    this.resetFilter();
+                }
+            }
+        });
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -154,6 +179,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.unFilteredBranchList = [];
                     this.branches$ = observableOf(null);
                 }
+                this.data = this.unFilteredBranchList;
                 this.showLoader = false;
             }
             if (companies && companies.length && branches) {
@@ -190,29 +216,45 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        fromEvent(this.branchSearch?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.handleBranchSearch(event.target?.value);
-        });
-
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
-     * Performs local search among branches
-     *
-     * @param {string} query Searched query
-     * @memberof BranchComponent
-     */
+ * Performs local search among branches
+ *
+ * @param {string} query Searched query
+ * @memberof BranchComponent
+ */
     public handleBranchSearch(query: string): void {
         let branches = [...this.unFilteredBranchList];
         if (query) {
             const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
 
-    public ngAfterViewInit() {
+    /**
+     * This hook will be use for component after initialization
+     *
+     * @memberof BranchComponent
+     */
+    public ngAfterViewInit(): void {
+        if (this.isBranch) {
+            this.openCreateCompanyDialog();
+        }
+    }
+
+    /**
+     * Open Create company dialog
+     *
+     * @memberof BranchComponent
+     */
+    public openCreateCompanyDialog(): void {
+        this.dialog.open(this.addCompanyModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**
@@ -223,12 +265,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public updateBranch(branch: any): void {
         this.branchDetails = branch;
-
         this.loadAddresses('GET', () => {
             this.branchToUpdate = {
                 name: branch.name,
-                alias: branch.alias,
-                linkedEntities: branch.addresses || []
+                alias: branch.name,
+                linkedEntities: branch.addresses || [],
+                parentBranchName: branch?.parentBranch?.name
             };
             this.toggleAsidePane();
         });
@@ -292,10 +334,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        document.querySelector("body")?.classList?.remove("setting-branch-body");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Get all branches
+     *
+     * @memberof BranchComponent
+     */
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
@@ -303,6 +351,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }
@@ -372,22 +421,19 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.closeAddressSidePane = this.closeAddressSidePane === 'out' ? 'in' : 'out';
         this.isBranchChangeInProgress = false;
-        this.toggleBodyClass();
-    }
 
-    /**
-     * Toggles fixed body class when aside menu is udpated
-     *
-     * @memberof BranchComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.closeAddressSidePane === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        this.addressAsidePaneRef = this.dialog.open(this.addressAsidePane,
+            {
+                position: {
+                    right: '0'
+                },
+                disableClose: true,
+                width: '760px',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
+
     }
 
     /**
@@ -397,30 +443,32 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public updateBranchInfo(branchDetails: any): void {
-        branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
-        this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity?.uniqueName,
-            isDefault: filteredEntity.isDefault,
-        }));
-        const requestObj = {
-            name: branchDetails.formValue.name,
-            alias: branchDetails.formValue.alias,
-            branchUniqueName: this.branchDetails?.uniqueName,
-            linkAddresses
-        };
-        this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.closeAddressSidePane = 'out';
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
-                this.toasterService.successToast(this.localeData?.branch_updated);
-            } else {
-                this.toasterService.errorToast(response?.message);
-            }
-            this.isBranchChangeInProgress = false;
-        }, () => {
-            this.isBranchChangeInProgress = false;
-        });
+        if (branchDetails) {
+            branchDetails.formValue.linkedEntity = branchDetails.formValue?.linkedEntity || [];
+            this.isBranchChangeInProgress = true;
+            const linkAddresses = branchDetails.addressDetails?.linkedEntities?.filter(entity => (branchDetails.formValue?.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
+                uniqueName: filteredEntity?.uniqueName,
+                isDefault: filteredEntity?.isDefault,
+            }));
+            const requestObj = {
+                name: branchDetails.formValue?.name,
+                alias: branchDetails.formValue?.alias,
+                branchUniqueName: this.branchDetails?.uniqueName,
+                linkAddresses
+            };
+            this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.addressAsidePaneRef?.close();
+                    this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                    this.toasterService.successToast(this.localeData?.branch_updated);
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+                this.isBranchChangeInProgress = false;
+            }, () => {
+                this.isBranchChangeInProgress = false;
+            });
+        }
     }
 
     /**
@@ -469,9 +517,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         });
     }
+
 
     /**
      * Resets the branch filter
@@ -479,8 +528,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public resetFilter(): void {
-        this.searchBranchQuery = '';
-        this.handleBranchSearch(this.searchBranchQuery);
+        this.searchBranchQuery.reset();
+        this.handleBranchSearch(this.searchBranchQuery.value);
     }
 
     /**
@@ -527,7 +576,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * This will show confirmation modal for branch archive/unarchive
+     * This will show confirmation dialog for branch archive/unarchive
      *
      * @param {*} branch
      * @memberof BranchComponent
@@ -536,11 +585,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
         if (unarchivedBranches?.length > 1 || branch?.isArchived) {
             this.branchStatusToUpdate = branch;
-            this.statusModal?.show();
+            this.statusDialogRef = this.dialog.open(this.statusDialog, {
+                panelClass: 'modal-dialog',
+                width: '1000px'
+            });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);
         }
-
     }
 
     /**
@@ -555,12 +606,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 let branchFilterRequest = new BranchFilterRequest();
                 branchFilterRequest.from = this.filters['from'];
                 branchFilterRequest.to = this.filters['to'];
+                branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
                 this.toasterService.successToast((isArchived) ? this.localeData?.branch_archived : this.localeData?.branch_unarchived);
             } else {
                 this.toasterService.errorToast(response?.message);
             }
-            this.statusModal?.hide();
+            this.statusDialogRef?.close();
         });
     }
 }

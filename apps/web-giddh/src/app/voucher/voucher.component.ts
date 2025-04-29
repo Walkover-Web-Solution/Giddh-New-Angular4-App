@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
@@ -29,7 +29,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -72,6 +72,7 @@ import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/drop
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { CommonService } from '../services/common.service';
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
+import { ServiceConfig } from '../services/service.config';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -581,6 +582,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public countryStates: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
     /** This will hold if voucher date is manually changed */
@@ -758,7 +761,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Hold purchase shipping index  */
     public purchaseShippingIndex: number = 0;
     /** Holds Array of VAT supported Countries */
-    public vatSupportedCountries = ['United Kingdom', 'Zimbabwe'];
+    public vatSupportedCountries = ['United Kingdom', 'Zimbabwe', 'Kenya'];
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -847,6 +850,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private settingsDiscountService: SettingsDiscountService,
         private http: HttpClient,
         public dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService
     ) {
@@ -885,7 +889,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -937,7 +947,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             } else {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
             }
         });
 
@@ -2580,7 +2590,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
             data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
-            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(typeof(data.voucherDetails.voucherDate) === "object" ? dayjs(data.voucherDetails.voucherDate).toDate() : dayjs(data.voucherDetails.voucherDate , GIDDH_DATE_FORMAT), 'd')) {
                 this.isShowLoader = false;
                 this.startLoader(false);
                 let dateText = this.commonLocaleData?.app_invoice;
@@ -4156,10 +4166,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public closeTaxControlPopup() {
+    /**
+     * Close all tax control dropdown
+     *
+     * @memberof VoucherComponent
+     */
+    public closeTaxControlPopup(): void {
         if (this.taxControlComponent) {
             this.taxControlComponent.forEach(taxComp => {
-                taxComp.showTaxPopup = false;
+                taxComp.toggleTaxMenu(false);
             });
         }
     }
@@ -4800,14 +4815,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.showVATNo) {
             if (data?.account) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.account?.billingDetails?.state;
                     delete data.account?.billingDetails?.stateCode;
                     delete data.account?.billingDetails?.stateName;
                 }
                 delete data.account?.billingDetails?.gstNumber;
 
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.account?.shippingDetails?.state;
                     delete data.account?.shippingDetails?.stateCode;
                     delete data.account?.shippingDetails?.stateName;
@@ -4815,14 +4830,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.account?.shippingDetails?.gstNumber;
             }
             if (data?.accountDetails) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.accountDetails?.billingDetails?.state;
                     delete data.accountDetails?.billingDetails?.stateCode;
                     delete data.accountDetails?.billingDetails?.stateName;
                 }
                 delete data.accountDetails?.billingDetails?.gstNumber;
 
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.accountDetails?.shippingDetails?.state;
                     delete data.accountDetails?.shippingDetails?.stateCode;
                     delete data.accountDetails?.shippingDetails?.stateName;
@@ -4831,7 +4846,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             if (data?.company) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.company?.billingDetails?.state;
                     delete data.company?.billingDetails?.stateCode;
                     delete data.company?.billingDetails?.stateName;
@@ -4844,14 +4859,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.company?.shippingDetails?.gstNumber;
             }
             if (data?.companyDetails) {
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.companyDetails?.billingDetails?.state;
                     delete data.companyDetails?.billingDetails?.stateCode;
                     delete data.companyDetails?.billingDetails?.stateName;
                 }
                 delete data.companyDetails?.billingDetails?.gstNumber;
 
-                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW' && this.selectedCompany?.countryV2?.alpha2CountryCode !== 'KE'){
                     delete data.companyDetails?.shippingDetails?.state;
                     delete data.companyDetails?.shippingDetails?.stateCode;
                     delete data.companyDetails?.shippingDetails?.stateName;
@@ -6193,6 +6208,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     countryCode = 'GB';
                 }else if (name === 'Zimbabwe') {
                     countryCode = 'ZW';
+                }else if (name === 'Kenya') {
+                    countryCode = 'KE';
                 }
                 this.getOnboardingForm(countryCode);
             }
@@ -6955,7 +6972,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     const results = (res.body?.results || res.body?.items || res.body);
-                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));;
+                    this.voucherForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
                     if (results?.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
@@ -9036,7 +9053,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.hsnNumber = cloneDeep(transaction.sacNumber);
                 transaction.sacNumber = null;
             } else {
-                transaction.sacNumber = cloneDeep(transaction.hsnNumber);;
+                transaction.sacNumber = cloneDeep(transaction.hsnNumber);
                 transaction.hsnNumber = null;
             }
             this.changeDetectorRef.detectChanges();

@@ -17,3 +17,12 @@
         padding-bottom: 0 !important;
     }
 }
+
+.aside-help-panel {
+    .mdc-dialog {
+        .mdc-dialog__content{
+            padding: 0 !important;
+            background-color: transparent !important;
+        }
+    }
+}

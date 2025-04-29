@@ -95,5 +95,11 @@
     "save_stock_for_recipe": "Save stock and Create recipe",
     "confirm_delete_option": "Deleting the option will also remove all the variants of the option. Do you still want to delete the option?",
     "unit_group": "Unit Group",
-    "select_unit_group": "Select Unit Group"
+    "select_unit_group": "Select Unit Group",
+    "select_discounts": "Select discounts",
+    "file_uploaded": "File uploaded successfully",
+    "attachment_deleted": "Attachment deleted.",
+    "add_image": "Add Image",
+    "preview_image":"Preview Image",
+    "no_file_chosen":"No file chosen"
 }

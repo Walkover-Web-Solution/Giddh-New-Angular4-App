@@ -93,7 +93,6 @@
             </div>
 
             <div
-                class="row"
                 formArrayName="transactions"
                 *ngFor="let item of transactions.controls; let i = index; let first = first; let last = last"
             >
@@ -160,7 +159,7 @@
             <ng-container *ngIf="mode === 'sender'">
                 <div class="row">
                     <div class="mr-t1 pd-l05 pd-r05">
-                        <div class="col-md-12">
+                        <div class="col-12">
                             <div class="checkbox">
                                 <label for="isManufactured">
                                     <input
@@ -313,7 +312,7 @@
             </ng-container>
 
             <div class="row">
-                <div class="col-md-12 text-left mr-t1">
+                <div class="col-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
                     <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save

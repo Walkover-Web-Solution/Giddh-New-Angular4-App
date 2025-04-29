@@ -5,7 +5,8 @@ import { ChildGroup } from '../../../models/api-models/Search';
 @Pipe({
     // tslint:disable-next-line:pipe-naming
     name: 'financialSearch',
-    pure: true
+    pure: true,
+    standalone: true
 })
 
 export class FinancialSearchPipe implements PipeTransform {
@@ -13,7 +14,6 @@ export class FinancialSearchPipe implements PipeTransform {
 
     constructor(private zone: NgZone
     ) {
-
     }
 
     public transform(input: any, search: string): any {

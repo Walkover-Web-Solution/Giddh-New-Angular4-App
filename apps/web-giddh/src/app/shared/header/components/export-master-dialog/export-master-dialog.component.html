@@ -1,0 +1,27 @@
+<ng-container
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+  <div class="modal-header">
+    <h3>{{ localeData?.export_group_ledger }}</h3>
+    <button aria-hidden="true" class="close" mat-dialog-close>
+      ×
+    </button>
+  </div>
+  <mat-dialog-content>
+    <div class="modal-body">
+      <p class="pb-3">
+        {{ commonLocaleData?.app_note }} :
+        <span [innerHTML]="commonLocaleData.app_export_note">
+          {{ localeData?.export_note }}
+        </span>
+      </p>
+      <master-export-option
+        (exportFormMaster) = "exportFormValue = $event"
+      ></master-export-option>
+      <button mat-stroked-button color="primary" (click)="exportMaster()">{{ commonLocaleData?.app_export }}</button>
+    </div>
+  </mat-dialog-content>
+</ng-container>

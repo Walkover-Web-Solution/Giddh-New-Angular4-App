@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -9,29 +9,32 @@ import { SettingsIntegrationActions } from '../../actions/settings/settings.inte
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, PayPalClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS, SYNC_TALLY_HELP_DOC_URL } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonActions } from '../../actions/common.actions';
+import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss']
+    styleUrls: ['./setting.integration.component.scss'],
+    providers: [SettingIntegrationComponentStore]
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public auth2: any;
@@ -67,19 +70,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public inputMaskFormat: string = '';
     /**This will use for select tab index */
     @Input() public selectedTabParent: number;
-    @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
+    @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: TemplateRef<any>;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
     /** Instance of create new account modal */
-    @ViewChild('createNewAccountModal', { static: false }) public createNewAccountModal: ModalDirective;
+    @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
     /** Instance of edit account modal */
-    @ViewChild('editAccountModal', { static: false }) public editAccountModal: ModalDirective;
+    @ViewChild('editAccountModal', { static: true }) public editAccountModal: TemplateRef<any>;
     /** Instance of create new account user modal */
-    @ViewChild('createNewAccountUserModal', { static: false }) public createNewAccountUserModal: ModalDirective;
-    /** Instance of edit account user modal */
-    @ViewChild('editAccountUserModal', { static: false }) public editAccountUserModal: ModalDirective;
+    @ViewChild('createNewAccountUserModal', { static: true }) public createNewAccountUserModal: TemplateRef<any>;
     /** Instance of delete account user modal */
-    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Edit Account User Dailog Template Reference */
+    @ViewChild('editAccountUserModal', { static: true }) public editAccountUserModal: TemplateRef<any>;
+
     //variable holding account Info
     public registeredAccount;
     public isEcommerceShopifyUserVerified: boolean = false;
@@ -169,10 +173,30 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isIciciBankSupportedCountry: boolean = false;
     /** True, if is add or manage group form outside */
     public isAddAndManageOpenedFromOutside: boolean = false;
+    /** Hold editAccountUserModal mat dailog reference */
+    public editAccountUserModalRef: any;
+    /** Hold confirmationModalRef mat dailog reference */
+    public confirmationModalRef: any;
     /** Holds array of company uniqueNames which ICICI allowed companies */
     public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>;
+    /** Holds Edit New Account Dialog Ref */
+    public editAccountModalRef: MatDialogRef<any>;
+    /** Holds Create New Account User Dialog Ref */
+    public createNewAccountUserModalRef: MatDialogRef<any>;
+    /** Holds Linked account label for selected value */
+    public linkedAccountLabel: string = '';
+    /**  Holds Mat Dialog reference */
+    public removeGmailIntegrationDialogRef: MatDialogRef<any>;
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
+/** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
 
     constructor(
         private router: Router,
@@ -188,9 +212,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
+        public dialog: MatDialog,
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private componentStore: SettingIntegrationComponentStore
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -231,7 +257,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
                     }
-                    this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+                    this.razorPayObj.password = o?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';
                 }
                 this.updateRazor = true;
             } else {
@@ -243,6 +269,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (o?.paypalForm) {
                 if (typeof o?.paypalForm !== "string") {
                     this.paypalObj = cloneDeep(o?.paypalForm);
+                    this.linkedAccountLabel = this.paypalObj?.account?.name;
                     if (this.paypalObj && this.paypalObj.account === null) {
                         this.paypalObj.account = { name: null, uniqueName: null };
                         this.paypalForceClearLinkAccount$ = observableOf({ status: true });
@@ -277,7 +304,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+                //This is not using no due to gocardless
+                // this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
@@ -302,6 +330,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
+                res.userEntityRoles.forEach(role => {
+                    const scopes = role.role.scopes;
+                    if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                        this.hasIntegrationScope = true;
+                    }
+                });
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     res.ecommerceDetails.forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
@@ -314,6 +348,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
                 if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
                     this.isIciciBankSupportedCountry = true;
                 } else {
@@ -357,15 +392,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngAfterViewInit(): void {
-        if (this.selectedTabParent) {
-            this.loadTabData(this.selectedTabParent);
-        }
+        this.loadPaymentData();
     }
 
     public setDummyData() {
         if (this.razorPayObj) {
             this.razorPayObj.userName = '';
-            this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+            this.razorPayObj.password = '';
             this.razorPayObj.account = { name: null, uniqueName: null };
             this.razorPayObj.autoCapturePayment = true;
         }
@@ -404,12 +437,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public selectLinkedAccount(event: IOption): void {
         if (event?.value) {
+            this.linkedAccountLabel = event.label;
             this.paypalAccounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o?.value === event.value);
+                let res = find(arr, (account) => account?.value === event.value);
                 if (res) {
                     this.paypalObj.account.name = res.text;
                 }
             });
+            this.paypalObj.account.uniqueName = event.value;
         }
     }
 
@@ -460,6 +495,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
             data.message = this.localeData?.collection?.unlinked_account_successfully;
             this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
+            this.linkedAccountLabel = '';
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_paypal_message);
         }
@@ -472,6 +508,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public deletePaypalDetails(): void {
         this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
+        this.linkedAccountLabel = '';
     }
 
 
@@ -594,12 +631,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public selectAccount(event: IOption) {
         if (event?.value) {
-            this.accounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o?.value === event.value);
-                if (res) {
-                    this.razorPayObj.account.name = res.text;
-                }
-            });
+            this.razorPayObj.account.uniqueName = event.value;
+            this.razorPayObj.account.name = event.label;
         }
     }
 
@@ -628,6 +661,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public deleteRazorPayDetails() {
         this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
+    }
+
+    /**
+     * Open confirmation dialog
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public openRemoveGmailIntegrationDialog(): void {
+        this.removeGmailIntegrationDialogRef = this.dialog.open(this.removegmailintegration, {
+            width: '630px'
+        });
     }
 
     public removeGmailAccount() {
@@ -867,7 +911,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
             this.isAddAndManageOpenedFromOutside = result;
         });
-        if (event && event instanceof TabDirective || !event) {
+        if (event || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
@@ -1101,6 +1145,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1111,7 +1158,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public openCreateNewAccountModal(): void {
-        this.createNewAccountModal?.show();
+        this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
+            width: '630px',
+            disableClose: true
+        });
     }
 
     /**
@@ -1131,13 +1181,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public selectBankAccount(event: any, bank: any): void {
-        if (event) {
+        if (event?.value) {
             let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
             let accountForm = {
                 accountNumber: bank?.bankResource?.accountNumber,
                 accountUniqueName: event?.value,
-                paymentAlerts: [],
-                bankName: 'plaid'
+                paymentAlerts: []
             };
             this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
@@ -1154,15 +1203,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will close the create new account modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public closeCreateNewAccountModal(): void {
-        this.createNewAccountModal?.hide();
-    }
-
-    /**
      * This will open the create new account user modal
      *
      * @param {*} bankAccount
@@ -1170,7 +1210,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openCreateNewAccountUserModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
-        this.createNewAccountUserModal?.show();
+        this.createNewAccountUserModalRef = this.dialog.open(this.createNewAccountUserModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**
@@ -1178,9 +1221,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public closeCreateNewAccountUserModal(): void {
-        this.createNewAccountUserModal?.hide();
-    }
 
     /**
      * This will get all connected bank accounts
@@ -1260,7 +1300,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
             if (response?.status === "success") {
                 this.getAllBankAccounts();
-                this.confirmationModal?.hide();
             } else {
                 this.toasty.clearAllToaster();
                 this.toasty.errorToast(response?.message);
@@ -1281,16 +1320,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         } else {
             this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
         }
-        this.confirmationModal?.show();
-    }
-
-    /**
-     * This will close the delete bank account login confirmation modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public closeDeleteBankAccountLoginConfirmationModal(): void {
-        this.confirmationModal?.hide();
+        this.confirmationModalRef = this.dialog.open(this.confirmationModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**
@@ -1303,16 +1336,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openEditAccountUserModal(bankAccount: any, payor: any): void {
         this.activeBankAccount = bankAccount;
         this.activePayorAccount = payor;
-        this.editAccountUserModal?.show();
-    }
-
-    /**
-     * This will close the edit account user modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public closeEditAccountUserModal(): void {
-        this.editAccountUserModal?.hide();
+        this.editAccountUserModalRef = this.dialog.open(this.editAccountUserModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**
@@ -1323,16 +1350,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
-        this.editAccountModal?.show();
-    }
-
-    /**
-     * This will close the edit account modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    public closeEditAccountModal(): void {
-        this.editAccountModal?.hide();
+        this.editAccountModalRef = this.dialog.open(this.editAccountModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px'
+        });
     }
 
     /**
@@ -1343,21 +1364,23 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-        let request;
+        if (bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length) {
+            let request;
 
-        if (this.isPlaidSupportedCountry) {
-            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
-        } else {
-            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn };
-        }
-
-        this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
-            payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
-
-            if (!payor.isConnected && response?.body?.message) {
-                this.toasty.errorToast(response?.body?.message);
+            if (this.isPlaidSupportedCountry) {
+                request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, urn: payor.urn };
+            } else {
+                request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, bankUserId: payor.urn };
             }
-        });
+
+            this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
+                payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
+
+                if (!payor.isConnected && response?.body?.message) {
+                    this.toasty.errorToast(response?.body?.message);
+                }
+            });
+        }
     }
 
 
@@ -1371,6 +1394,30 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
+    }
+
+    /**
+     * This will be use for delete bank account
+     *
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public deleteBankAccount(bank: any): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.payment?.confirm_bank_delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
+            }
+        });
     }
 }
 
