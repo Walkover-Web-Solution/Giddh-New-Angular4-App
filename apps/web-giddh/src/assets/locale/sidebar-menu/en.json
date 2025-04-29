@@ -118,6 +118,10 @@
                     "icon": "icon-reciept-new",
                     "description": "Advance, normal, total, & unused receipts",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/receipt/create"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -257,6 +261,10 @@
                     "icon": "icon-reciept-new",
                     "description": "Total, & unused payments",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/payment/create"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
