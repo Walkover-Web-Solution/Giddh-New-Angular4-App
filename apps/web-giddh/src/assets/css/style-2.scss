@@ -2380,6 +2380,10 @@ ul.sub-list {
     color: var(--color-gray);
 }
 
+.text-saffron {
+    color: var(--color-deep-saffron) !important;
+}
+
 .advance-search .input-group-addon {
     border: 1px solid var(--color-primary-button-border);
     background: none;
@@ -13929,14 +13933,14 @@ mat-list {
     }
 }
 
-// For CompareWithDateRangePickerComponent 
+// For CompareWithDateRangePickerComponent
 .compare-with-menu {
     .mdc-list-item__start {
         margin-right: 0px !important;
     }
 }
 
-/** Use this class on black color image (icon) 
+/** Use this class on black color image (icon)
  to  change color in dark theme **/
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
