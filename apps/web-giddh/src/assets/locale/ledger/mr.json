@@ -221,5 +221,5 @@
     "import_voucher": "व्हाउचर आयात करा",
     "import_bank_statement": "बँक स्टेटमेंट आयात करा",
     "no_data_found_message":"कोणतेही व्यवहार सापडले नाहीत. कृपया व्यवहार मिळवण्यासाठी पृष्ठ बदला.",
-    "opening_closing_balance_filter_message": "फिल्टर लागू केल्यावर आम्ही ओपनिंग आणि क्लोजिंग बॅलन्स दाखवत नाही."
+    "opening_closing_balance_filter_message": "फिल्टर लागू केल्यावर आम्ही ओपनिंग आणि क्लोजिंग बॅलन्स दाखवत नाही"
 }

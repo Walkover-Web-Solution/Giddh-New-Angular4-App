@@ -1658,7 +1658,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Set the blank ledger transactions
-     * 
+     *
      * @returns {void}
      */
     private setBlankLedgerTransactions(): void {
@@ -1676,7 +1676,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Reset the blank transaction
-     * 
+     *
      * @returns {void}
      */
     public resetBlankTransaction(): void {
@@ -3671,7 +3671,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public getLedgerStatementViewGridColumnsValue() {
+    public getLedgerStatementViewGridColumnsValue(): void {
         if (this.searchText || this.isAdvanceSearchImplemented) {
             this.ledgerStatementViewGridTotalColumns = 9;
             if (this.ledgerStatementViewGridColumnsValue.length > 4) {
