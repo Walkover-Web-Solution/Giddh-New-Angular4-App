@@ -291,20 +291,20 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
         endDate.isSame(dayjs().toDate(), 'day') &&
         startDate.isSame(endDate, 'month') &&
         startDate.isSame(endDate, 'year')) ||
-      this.isThisMonth();
+      this.isThisMonth() || (dayCount <= 31);
 
     const isSameQuarter =
       (startDate.isSame(startOfQuarter, 'day') &&
         endDate.isSame(endOfQuarter, 'day') &&
         startDate.isSame(endDate, 'quarter') &&
         startDate.isSame(endDate, 'year')) ||
-      this.isThisQuarterToDate();
+      this.isThisQuarterToDate() || (dayCount <= 90);
 
     const isYearSelected =
       ((startDate.isSame(startOfMonth, 'day') &&
         endDate.isSame(endOfMonth, 'day')) &&
         (dayCount === 365 || dayCount === 366)) ||
-      this.isThisFinancialYearToDate();
+      this.isThisFinancialYearToDate() || (dayCount <= 365);
     
     return {
       isMonthSelected: isSameMonth || (!isSameMonth && !isYearSelected && !isSameQuarter && dayCount <= 31),
