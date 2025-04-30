@@ -1555,7 +1555,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 allVouchersSelected: this.allVouchersSelected,
                 localeData: this.localeData
             },
-            panelClass: ['mat-dialog-md'],
+            maxHeight: '80vh',
             disableClose: true
         });
 

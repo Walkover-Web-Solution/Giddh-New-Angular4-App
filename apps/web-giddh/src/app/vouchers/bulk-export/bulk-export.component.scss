@@ -1,19 +1,30 @@
-table {
-    &.column-setting {
-        > tr {
-            > td {
-                padding: 15px 20px;
+.column-setting {
+    grid-template-columns: repeat(3, 1fr);
+    @media screen and (max-width: 1280px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    > .setting {
+        padding: 15px 20px;
+        align-self: stretch;
 
-                &:first-child {
-                    border-right: 1px solid var(--color-common-primary-border);
-                }
-                &:last-child {
-                    text-align: right;
-                }
+        &:last-child {
+            text-align: right;
+        }
 
-                label {
-                    margin-right: 15px;
-                }
+        label {
+            margin-right: 15px;
+        }
+
+        @media screen and (min-width: 1280px) {
+            &:nth-child(3n + 2) {
+                border-left: 1px solid var(--color-common-primary-border);
+                border-right: 1px solid var(--color-common-primary-border);
+            }
+        }
+
+        @media screen and (max-width: 1280px) {
+            &:nth-child(2n + 2) {
+                border-left: 1px solid var(--color-common-primary-border);
             }
         }
     }

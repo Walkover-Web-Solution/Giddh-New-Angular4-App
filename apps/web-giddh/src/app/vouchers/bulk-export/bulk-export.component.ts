@@ -92,15 +92,18 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             fileNameFormat: "",
             showAccountCustomFields: new FormControl<boolean>(false, { nonNullable: true }),
             showVoucherCustomFields: new FormControl<boolean>(false, { nonNullable: true }),
-            showBillingTaxNumber: new FormControl<boolean>(false, { nonNullable: true }),
-            showBillingPinCode: new FormControl<boolean>(false, { nonNullable: true }),
-            showBillingStateName: new FormControl<boolean>(false, { nonNullable: true }),
-            showBillingCountryName: new FormControl<boolean>(false, { nonNullable: true }),
+            showBillingAddress: new FormControl<boolean>(false, { nonNullable: true }),
             showShippingAddress: new FormControl<boolean>(false, { nonNullable: true }),
-            showShippingTaxNumber: new FormControl<boolean>(false, { nonNullable: true }),
-            showShippingPinCode: new FormControl<boolean>(false, { nonNullable: true }),
-            showShippingStateName: new FormControl<boolean>(false, { nonNullable: true }),
-            showShippingCountryName: new FormControl<boolean>(false, { nonNullable: true })
+            showShippingDetails: new FormControl<boolean>(false, { nonNullable: true }),
+            showTaxableValueBeforeDiscount: new FormControl<boolean>(false, { nonNullable: true }),
+            showDiscountValue: new FormControl<boolean>(false, { nonNullable: true }),
+            showTaxValue: new FormControl<boolean>(false, { nonNullable: true }),
+            showVoucherNote: new FormControl<boolean>(false, { nonNullable: true }),
+            showEInvoiceDetails: new FormControl<boolean>(false, { nonNullable: true }),
+            showMobileNumber: new FormControl<boolean>(false, { nonNullable: true }),
+            showAttentionTo: new FormControl<boolean>(false, { nonNullable: true }),
+            showEmail: new FormControl<boolean>(false, { nonNullable: true }),
+            showOtherTaxValue: new FormControl<boolean>(false, { nonNullable: true })
         });
 
         if (this.vouchersOnlySupportExcelExport.includes(this.inputData?.voucherType)) {
@@ -322,15 +325,18 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             exportType,
             showAccountCustomFields,
             showVoucherCustomFields,
-            showBillingTaxNumber,
-            showBillingPinCode,
-            showBillingStateName,
-            showBillingCountryName,
+            showBillingAddress,
             showShippingAddress,
-            showShippingTaxNumber,
-            showShippingPinCode,
-            showShippingStateName,
-            showShippingCountryName
+            showShippingDetails,
+            showTaxableValueBeforeDiscount,
+            showDiscountValue,
+            showTaxValue,
+            showVoucherNote,
+            showEInvoiceDetails,
+            showMobileNumber,
+            showAttentionTo,
+            showEmail,
+            showOtherTaxValue
         } = this.exportForm.value;
 
         this.componentStore.exportVouchers({
@@ -342,15 +348,18 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                 uniqueNames: this.inputData?.voucherUniqueNames,
                 showAccountCustomFields,
                 showVoucherCustomFields,
-                showBillingPinCode,
-                showBillingTaxNumber,
-                showBillingStateName,
-                showBillingCountryName,
+                showBillingAddress,
                 showShippingAddress,
-                showShippingTaxNumber,
-                showShippingPinCode,
-                showShippingStateName,
-                showShippingCountryName
+                showShippingDetails,
+                showTaxableValueBeforeDiscount,
+                showDiscountValue,
+                showTaxValue,
+                showVoucherNote,
+                showEInvoiceDetails,
+                showMobileNumber,
+                showAttentionTo,
+                showEmail,
+                showOtherTaxValue
             }
         });
     }
