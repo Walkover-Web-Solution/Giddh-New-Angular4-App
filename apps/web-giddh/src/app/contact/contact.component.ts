@@ -290,6 +290,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
         this.currentUrl = this.router.url;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -327,11 +328,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         combineLatest([this.route.params, this.route.queryParams])
             .pipe(debounceTime(50), takeUntil(this.destroyed$))
             .subscribe(([params, queryParams]) => {
+
                 const lastTabType = this.moduleType;
                 const typeParam = params?.type?.toLowerCase();
                 const tabQueryParam = queryParams?.tab?.toLowerCase();
 
                 this.moduleType = params.type?.toUpperCase();
+                this.activeTab = typeParam;
                 console.log("this.moduleType", this.moduleType);
                 console.log("params", params);
                 console.log("queryParams", queryParams);
@@ -339,7 +342,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 console.log("tabQueryParam", tabQueryParam);
                 console.log("lastTabType", lastTabType);
                 console.log("activeTab", this.activeTab);
-
 
                 const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
                 const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
@@ -360,49 +362,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                     } else {
                         this.setActiveTab('aging-report');
                     }
-
-                    if (lastTabType) {
-                        this.translationComplete(true);
-                    }
-                }
-            });
-
-        combineLatest([this.route.params, this.route.queryParams]).pipe(debounceTime(50), takeUntil(this.destroyed$)).subscribe(result => {
-            let params = result[0];
-            let queryParams = result[1];
-            let lastTabType = this.moduleType;
-            this.moduleType = (params.type)?.toUpperCase();
-            if (params) {
-                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
-                    const activeTab = this.activeTab;
-                    if (activeTab !== "customer") {
-                        this.setActiveTab("customer");
-                    }
-                    if (activeTab === "vendor" && this.localeData?.page_heading) {
-                        this.showNameSearch = false;
-                        this.searchedName?.reset();
-                        this.translationComplete(true);
-                    }
-                } else if ((params["type"] && params["type"].indexOf("vendor") > -1) || (queryParams && queryParams.tab && queryParams.tab === "vendor")) {
-                    const activeTab = this.activeTab;
-                    if (activeTab !== "vendor") {
-                        this.setActiveTab("vendor");
-                    }
-                    if (activeTab === "customer" && this.localeData?.page_heading) {
-                        this.showNameSearch = false;
-                        this.searchedName?.reset();
-                        this.translationComplete(true);
-                    }
-                } else {
-                    this.setActiveTab("aging-report");
-                }
-
-                if (lastTabType) {
                     this.translationComplete(true);
                 }
-            }
-
-        });
+            });
 
         this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -1775,13 +1737,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
- /**
-  * Helper to reset name search if tab switched
-  *
-  * @private
-  * @param {string} previousTab
-  * @memberof ContactComponent
-  */
+    /**
+     * Helper to reset name search if tab switched
+     *
+     * @private
+     * @param {string} previousTab
+     * @memberof ContactComponent
+     */
     private resetSearchIfSwitched(previousTab: string): void {
         if (this.activeTab === previousTab && this.localeData?.page_heading) {
             this.showNameSearch = false;
