@@ -225,14 +225,14 @@
                         </div>
                         <div class="top-content">
                             <div
-                                class="d-flex w-100 justify-content-between overflow-x-auto"
+                                class="d-flex w-100 overflow-x-auto"
                                 [hidden]="
                                     (activeTab === 'customer' && !sundryDebtorsAccounts?.length) ||
                                     (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
                                 "
                             >
                                 <div
-                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230"
+                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230 max-width-378"
                                 >
                                     <h5>
                                         <ng-container *ngIf="!selectedCheckedContacts?.length">{{
@@ -295,7 +295,7 @@
                                         </mat-menu>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none opening-box min-width-230">
+                                <div class="total-details-box mr-r05 border-none opening-box min-width-230 max-width-378">
                                     <h5>
                                         {{ localeData?.opening }}
                                         <div>
@@ -328,7 +328,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none sales-purchase min-width-230">
+                                <div class="total-details-box mr-r05 border-none sales-purchase min-width-230 max-width-378">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -345,7 +345,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
+                                <div class="total-details-box mr-r05 border-none payment-receipt min-width-230 max-width-378">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{
@@ -364,7 +364,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box border-none closing-box min-width-230">
+                                <div class="total-details-box border-none closing-box min-width-230 max-width-378">
                                     <h5>
                                         {{ localeData?.closing }}
                                         <div>
