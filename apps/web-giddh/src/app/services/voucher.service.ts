@@ -495,7 +495,7 @@ export class VoucherService {
                 data.request = model;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
     }
 
     /**
