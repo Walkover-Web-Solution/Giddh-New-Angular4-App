@@ -129,7 +129,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
-    public isGstValid$: Observable<boolean> = observableOf(true);
+    public isGstValid: boolean = true;
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
     public selectedCountryCode: string;
@@ -206,6 +206,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     };
     /** True if update data on temp bulk data  */
     public isBulkDataUpdated: boolean = false;
+    /** True if valid from date is selected */
+    public isVaildFrom: boolean = true;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -506,21 +508,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
             const countryName = this.activeCompany.countryV2.countryName;
-            this.addAccountForm.get('country').get('countryCode')?.setValue(countryCode);
+            this.addAccountForm.get('country').get('countryCode')?.patchValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
-            this.addAccountForm.get('currency')?.setValue(company?.baseCurrency);
+            this.addAccountForm.get('currency')?.patchValue(company?.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
-            this.addAccountForm.get('country').get('countryCode')?.setValue('IN');
+            this.addAccountForm.get('country').get('countryCode')?.patchValue('IN');
             this.selectedCountry = 'IN - India';
             this.selectedCountryCode = 'IN';
-            this.addAccountForm.get('currency')?.setValue('IN');
+            this.addAccountForm.get('currency')?.patchValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
         }
-
         this.toggleStateRequired();
     }
 
@@ -792,6 +793,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
+        if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
+            this.isVaildFrom = false;
+            return;
+        }
+        
         if (!this.addAccountForm.get('openingBalance')?.value) {
             this.addAccountForm.get('openingBalance')?.setValue('0');
         }
@@ -938,14 +944,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectCountry(event: IOption) {
+        
         if (event && event.value) {
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode')?.setValue(phoneCode);
+            this.addAccountForm.get('mobileCode')?.patchValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency')?.setValue(currencyCode);
+            this.addAccountForm.get('currency')?.patchValue(currencyCode);
             this.getStates(event.value);
             this.toggleStateRequired();
             this.resetGstStateForm();
@@ -1076,17 +1083,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
                 ele.classList.add('error-box');
-                this.isGstValid$ = observableOf(false);
+                this.isGstValid = false;
             } else {
                 ele.classList.remove('error-box');
-                this.isGstValid$ = observableOf(true);
+                this.isGstValid = true;
                 if (this.selectedCountryCode === 'IN') {
                     this.getGstConfirmationPopup();
                 }
             }
         } else {
             ele.classList.remove('error-box');
-            this.isGstValid$ = observableOf(true);
+            this.isGstValid = true;
         }
     }
 
