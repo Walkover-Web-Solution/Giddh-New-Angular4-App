@@ -259,6 +259,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public get visibleDynamicCustomColumns(): any[] {
         return this.dynamicCustomColumns?.filter(col => col.checked) || [];
     }
+    /** Returns only the columns marked as checked */
     public ContactsColumn = ContactsColumn;
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
@@ -328,37 +329,32 @@ export class ContactComponent implements OnInit, OnDestroy {
         combineLatest([this.route.params, this.route.queryParams])
             .pipe(debounceTime(50), takeUntil(this.destroyed$))
             .subscribe(([params, queryParams]) => {
-
                 const lastTabType = this.moduleType;
                 const typeParam = params?.type?.toLowerCase();
                 const tabQueryParam = queryParams?.tab?.toLowerCase();
 
                 this.moduleType = params.type?.toUpperCase();
+
                 const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
                 const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
 
-                if (params) {
-                    const activeTab = typeParam?.includes('customer') ? 'customer' : 'vendor';
+                const newTab = isCustomer ? 'customer'
+                    : isVendor ? 'vendor'
+                        : 'aging-report';
 
-                    if (isCustomer) {
-                        if (activeTab !== 'customer') {
-                            this.setActiveTab('customer');
-                        }
-                        this.resetSearchIfSwitched('vendor');
-                    } else if (isVendor) {
-                        if (activeTab !== 'vendor') {
-                            this.setActiveTab('vendor');
-                        }
-                        this.resetSearchIfSwitched('customer');
-                    } else {
-                        this.setActiveTab('aging-report');
-                    }
+                const previousTab = this.activeTab;
 
-                    if (lastTabType) {
-                        this.translationComplete(true);
-                    }
+                if (newTab !== previousTab) {
+                    this.setActiveTab(newTab);
+                    this.resetSearchIfSwitched(previousTab);
+                }
+
+                if (lastTabType) {
+                    this.translationComplete(true);
                 }
             });
+
+
 
         this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -401,7 +397,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.dynamicCustomColumns = dynamicCustomColumns;
                     this.displayedColumns = displayedColumns;
                 }
-            }, 1000);
+            }, 3000);
 
             this.cdRef.detectChanges();
         });
@@ -622,7 +618,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : '';
             }
         }
-
+        if (tabName === this.activeTab) {
+            this.activeTab = '';
+        }
         if (tabName !== this.activeTab) {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
