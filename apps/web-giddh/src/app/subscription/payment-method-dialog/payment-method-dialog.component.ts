@@ -207,7 +207,7 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.paymentMethodForm.get('paymentProvider').setValue("");
         this.paymentProvideLabel = '';
         this.paymentMethodForm.reset();
-    }
+    } 
 
 
     /**

@@ -136,7 +136,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accounts: IOption[];
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
-    public isGstValid$: Observable<boolean> = observableOf(true);
+    public isGstValid: boolean = true;
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
@@ -254,6 +254,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     };
     /** True if update data on temp bulk data  */
     public isBulkDataUpdated: boolean = false;
+    /** True if valid from date is selected */
+    public isVaildFrom: boolean = true;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -275,7 +277,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private http: HttpClient,
         public dialog: MatDialog,
         private settingsBranchAction: SettingsBranchActions,
-        private readonly componentStore: AccountAddNewDetailsComponentStore
+        private readonly componentStore: AccountAddNewDetailsComponentStore,
     ) {
 
     }
@@ -726,6 +728,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             control.get('stateCode')?.patchValue(null);
             control.get('countyCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
+            control.get('state').get('name')?.patchValue(null);
             control.get('gstNumber')?.setValue("");
         }
     }
@@ -879,13 +882,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (currentState) {
                         gstForm.get('stateCode')?.patchValue(currentState.value);
                         gstForm.get('state').get('code')?.patchValue(currentState.value);
-
+                        const name = currentState.label.split(' - ')[1];
+                        gstForm.get('state').get('name')?.patchValue(name);
                     } else {
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
                             if (this.isIndia) {
                                 gstForm.get('stateCode')?.patchValue(null);
                                 gstForm.get('state').get('code')?.patchValue(null);
+                                gstForm.get('state').get('name')?.patchValue(null);
                             }
 
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
@@ -925,6 +930,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public submit() {
+        if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
+            this.isVaildFrom = false;
+            return;
+        }
+
         if (!this.addAccountForm.get('openingBalance')?.value) {
             this.addAccountForm.get('openingBalance')?.setValue('0');
         }
@@ -1112,7 +1122,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
-
+            const name = event.label.split(' - ')[1];
+            gstForm.get('state').get('name')?.patchValue(name);
         }
     }
 
@@ -1228,18 +1239,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 isValid = true;
             }
-
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
-                ele.classList.add('error-box');
-                this.isGstValid$ = observableOf(false);
+                ele?.classList?.add('error-box');
+                this.isGstValid = false;
             } else {
-                ele.classList.remove('error-box');
-                this.isGstValid$ = observableOf(true);
+                ele?.classList?.remove('error-box');
+                this.isGstValid = true;
             }
         } else {
-            ele.classList.remove('error-box');
-            this.isGstValid$ = observableOf(true);
+            ele?.classList?.remove('error-box');
+            this.isGstValid = true;
         }
     }
 
@@ -1324,6 +1334,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         break;
                     default: this.partyTypeSource = res;
                 }
+                this.partyTypeSource.forEach(item => {
+                    item.value = item.label;
+                });
             } else {
                 this.store.dispatch(this.commonActions.GetPartyType());
             }
@@ -1575,24 +1588,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
-                    element.classList.add('error-box');
+                    element?.classList?.add('error-box');
                 } else {
-                    element.classList.remove('error-box');
+                    element?.classList?.remove('error-box');
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
                     this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
-                    element.classList.add('error-box');
+                    element?.classList?.add('error-box');
                 } else {
-                    element.classList.remove('error-box');
+                    element?.classList?.remove('error-box');
                 }
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
                 this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
-                element.classList.add('error-box');
+                element?.classList?.add('error-box');
             } else {
-                element.classList.remove('error-box');
+                element?.classList?.remove('error-box');
             }
         }
     }
@@ -2314,6 +2327,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
