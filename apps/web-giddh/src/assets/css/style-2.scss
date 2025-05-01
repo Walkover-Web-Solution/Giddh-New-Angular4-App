@@ -5217,6 +5217,10 @@ label {
     display: inline-block !important;
 }
 
+.d-grid {
+    display: grid !important;
+}
+
 .on-hover {
     position: relative;
     transition: all 0.3s ease;
@@ -13609,7 +13613,12 @@ aside-menu-product-service {
 }
 
 .mat-dialog-md {
-    width: 700px;
+    width: 760px;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
 }
 
 // material-pagination

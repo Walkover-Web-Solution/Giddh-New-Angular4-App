@@ -55,3 +55,10 @@
         max-height: calc(100vh - 65px) !important;
     }
 }
+
+// Override material dialog title
+.mdc-dialog__title {
+    &::before {
+        display: none !important;
+    }
+}
