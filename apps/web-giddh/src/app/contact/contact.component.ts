@@ -334,15 +334,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 const tabQueryParam = queryParams?.tab?.toLowerCase();
 
                 this.moduleType = params.type?.toUpperCase();
-                this.activeTab = typeParam;
-                console.log("this.moduleType", this.moduleType);
-                console.log("params", params);
-                console.log("queryParams", queryParams);
-                console.log("typeParam", typeParam);
-                console.log("tabQueryParam", tabQueryParam);
-                console.log("lastTabType", lastTabType);
-                console.log("activeTab", this.activeTab);
-
                 const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
                 const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
 
@@ -362,7 +353,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                     } else {
                         this.setActiveTab('aging-report');
                     }
-                    this.translationComplete(true);
+
+                    if (lastTabType) {
+                        this.translationComplete(true);
+                    }
                 }
             });
 
