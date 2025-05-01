@@ -378,9 +378,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
     /** Hold ledger grid total columns static value */
-    public ledgerStatementViewGridTotalColumns: number = 9;
+    public ledgerStatementViewGridTotalColumns: number = 11;
     /** Hold ledger grid total columns value */
-    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2]
+    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2, 2]
     /** True if update account is bank account */
     public isUpdateAccount: boolean = false;
 
@@ -622,6 +622,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         };
+
 
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
@@ -997,6 +998,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (term || this.trxRequest.q || searchCleared) {
                     this.trxRequest.paginationToken = "";
                     this.getTransactionData();
+                    this.getLedgerStatementViewGridColumnsValue();
                 }
             });
 
@@ -1865,6 +1867,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
         this.getTransactionData();
+        this.getLedgerStatementViewGridColumnsValue();
     }
 
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
@@ -2095,6 +2098,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
+            this.getLedgerStatementViewGridColumnsValue();
             this.createLedgerBalance(true);
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
@@ -2562,6 +2566,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
+        this.getLedgerStatementViewGridColumnsValue();
         this.cdRf.detectChanges();
     }
 
@@ -2734,11 +2739,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             event.exportRequest.to = dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
         }
 
-            this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
-            this.columnarReportExportRequest = event.exportRequest;
+        this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
+        this.columnarReportExportRequest = event.exportRequest;
 
-            this.cdRf.detectChanges();
-        }
+        this.cdRf.detectChanges();
+    }
 
     /**
      * This will toggle transaction type for mobile
@@ -3570,5 +3575,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.carouselNext = false;
         }, 100);
+    }
+
+    /**
+     * Get ledger statement view grid columns value
+     *
+     * @memberof LedgerComponent
+     */
+    public getLedgerStatementViewGridColumnsValue(): void {
+        if (this.searchText || this.isAdvanceSearchImplemented) {
+            this.ledgerStatementViewGridTotalColumns = 9;
+            if (this.ledgerStatementViewGridColumnsValue.length > 4) {
+                this.ledgerStatementViewGridColumnsValue.pop();
+            }
+        } else {
+            this.ledgerStatementViewGridTotalColumns = 11;
+            this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 2];
+        }
     }
 }
