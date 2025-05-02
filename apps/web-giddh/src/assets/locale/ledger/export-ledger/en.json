@@ -8,11 +8,26 @@
     "voucher_total": "Voucher Total",
     "entry_no": "Entry No.",
     "description": "Description",
-    "cr_dr_toggle":"Cr/Dr",
-    "plus_minus_toggle":" +/-",
+    "cr_dr_toggle": "Cr/Dr",
+    "plus_minus_toggle": " +/-",
     "export_group_ledger": "Export Group Ledger",
     "ledger": "Ledger",
-     "bill_to_bill": "Bill to Bill",
-     "ledger_entries": "Ledger Entries",
-     "account": "Account"
+    "bill_to_bill": "Bill to Bill",
+    "ledger_entries": "Ledger Entries",
+    "account": "Account",
+    "ledger_view": "Ledger View",
+    "statement_view": "Statement View",
+    "t_view": "T View",
+    "export_attachment": "Export Attachment",
+    "export_voucher": "Export Voucher",
+    "invoice_copy_options": {
+        "original": "Original",
+        "customer": "Customer",
+        "transport": "Transport",
+        "attachment": "Attachment"
+    },
+    "single_pdf": "Single PDF",
+    "multiple_pdf": "Multiple PDF",
+    "select_copy": "Select Copy",
+    "select_order": "Select Order"
 }
