@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import * as dayjs from 'dayjs';
 import { ToasterService } from '../../services/toaster.service';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
+import { TextFieldComponent } from '../../theme/form-fields/text-field/text-field.component';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
 enum CompareTypeEnum {
@@ -45,6 +46,8 @@ interface DateCheckResult {
 export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, OnDestroy {
   /** Holds trigger */
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  /** Holds custom input reference */
+  @ViewChild('customInput') customInput: TextFieldComponent;
   /** Holds compare with field */
   public compareWithField: FormControl = new FormControl<string>('None');
   /** Holds compare options form */
@@ -291,19 +294,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       isMonthSelected: isSameMonth || (!isSameMonth && !isYearSelected && !isSameQuarter && dayCount <= 31),
       isQuarterSelected: isSameQuarter || (!isSameQuarter && !isYearSelected && dayCount <= 90),
       isYearSelected: isYearSelected || (!isYearSelected && dayCount <= 365),
-      isRandomDateSelected: !isSameMonth && !isYearSelected && !isSameQuarter,
+      isRandomDateSelected: (!isSameMonth && !isYearSelected && !isSameQuarter) || this.isThisQuarterToDate() || this.isThisFinancialYearToDate(),
       dayCount: dayCount,
     };
-  }
-
-  /**
-   * This method will be use for checking if the universal date range label is this month
-   *
-   * @returns {boolean}
-   * @memberof CompareWithDateRangePickerComponent
-   */
-  private isThisMonth(): boolean {
-    return this.universalDateRangeLabel === DatePickerDefaultRangeEnum.ThisMonth;
   }
 
   /**
@@ -340,6 +333,17 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       isRandomDateSelected: false,
       dayCount: 0
     };
+  }
+
+  /**
+   * This method will be use for focusing the custom input
+   *
+   * @memberof CompareWithDateRangePickerComponent
+   */
+  public focusCustomInput(): void {
+    setTimeout(() => {
+      this.customInput?.textField?.nativeElement?.focus();
+    }, 200);
   }
 
   /**
