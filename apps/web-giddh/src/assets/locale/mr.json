@@ -765,10 +765,12 @@
     "app_choose_file": "फाईल निवडा",
     "app_password": "पासवर्ड",
     "app_select_column": "स्तंभ निवडा",
+    "app_allow_manufacturing_sales_transactions": "विक्री व्यवहारांच्या दरम्यान उत्पादन सुरू ठेवण्याची परवानगी द्या",
+    "app_file_format": "फाइल स्वरूप",
+    "app_select_file": "फाइल निवडा",
     "app_ledger_view": {
         "t_view": "टी व्ह्यू",
         "statement_view": "विधान दृश्य"
     },
-    "app_allow_manufacturing_sales_transactions": "विक्री व्यवहारांच्या दरम्यान उत्पादन सुरू ठेवण्याची परवानगी द्या",
     "app_closing_balance": "बंद होणारी शिल्लक"
 }

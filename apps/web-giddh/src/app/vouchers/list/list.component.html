@@ -70,6 +70,9 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                     </div>
                     <div class="table-responsive overflow-visible">
@@ -399,6 +402,9 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                     </div>
                     <div class="table-responsive overflow-visible">
@@ -718,17 +724,6 @@
                                 (click)="openCancelEInvoiceDialog()"
                             >
                                 {{ localeData?.cancel_e_invoice }}
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
                             </button>
                             <button
                                 mat-stroked-button
@@ -1132,17 +1127,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -1478,17 +1462,6 @@
                                 (click)="openCancelEInvoiceDialog()"
                             >
                                 {{ localeData?.cancel_e_invoice }}
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
                             </button>
                             <button
                                 mat-stroked-button
@@ -1843,6 +1816,9 @@
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
@@ -2079,6 +2055,9 @@
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                     </div>
@@ -2666,17 +2645,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -3011,17 +2979,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -3314,6 +3271,9 @@
                                     <span class="icon-cross font-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">

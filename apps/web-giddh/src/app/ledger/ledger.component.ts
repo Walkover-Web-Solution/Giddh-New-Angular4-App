@@ -1777,12 +1777,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 })
             });
         }
-
+        
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
             width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
+                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName}))
             },
             role: 'alertdialog',
             ariaLabel: 'export'

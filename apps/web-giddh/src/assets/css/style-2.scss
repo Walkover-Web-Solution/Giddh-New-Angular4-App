@@ -5232,6 +5232,10 @@ label {
     display: inline-block !important;
 }
 
+.d-grid {
+    display: grid !important;
+}
+
 .on-hover {
     position: relative;
     transition: all 0.3s ease;
@@ -13596,7 +13600,12 @@ aside-menu-product-service {
 }
 
 .mat-dialog-md {
-    width: 700px;
+    width: 760px;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
 }
 
 // material-pagination
@@ -13899,6 +13908,9 @@ mat-list {
     }
 }
 
+.w150 {
+    width: 150px !important;
+}
 /** Use this class on black color image (icon)
  to  change color in dark theme **/
 .image-as-icon-color {
