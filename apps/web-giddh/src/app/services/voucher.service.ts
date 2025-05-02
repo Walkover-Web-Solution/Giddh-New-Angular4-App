@@ -747,10 +747,8 @@ export class VoucherService {
         url = url?.replace(':q', getRequest.q);
         url = url?.replace(':accountUniqueName', getRequest.accountUniqueName);
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-        if (!getRequest.accountUniqueName) {
-            delete postRequest.from;
-            delete postRequest.to;
-        }
+        delete postRequest.from;
+        delete postRequest.to;
 
         return this.http.post(url, postRequest).pipe(
             map((res) => {
