@@ -19,7 +19,7 @@ import { SearchService } from './search.service';
 import { TlPlService } from './tl-pl.service';
 import { DaybookService } from './daybook.service';
 import { DashboardService } from './dashboard.service';
-import { SettingsIntegrationService } from './settings.integraion.service';
+import { SettingsIntegrationService } from './settings.integration.service';
 import { SettingsProfileService } from './settings.profile.service';
 import { SettingsTaxesService } from './settings.taxes.service';
 import { SalesService } from './sales.service';

@@ -27,6 +27,7 @@
                         [(ngModel)]="vm.selectedLedger.entryDate"
                         (dateSelected)="resetInvoiceList()"
                         (datepickerState)="datepickerState($event)"
+                        [closeDatepickerOnFocus]="true"
                     >
                     </giddh-datepicker>
                 </span>
@@ -1645,9 +1646,12 @@
                                         [useMask]="true"
                                         [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
-                                        (focus)="hideDiscountTax()"
+                                        (onFocus)="hideDiscountTax()"
                                         [(ngModel)]="vm.totalAmount"
-                                        (change)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
+                                        (change)="
+                                            vm.updateFirstEntryAmount();
+                                            vm.inventoryAmountChanged();
+                                        "
                                     >
                                     </input-field>
                                     <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
@@ -1691,7 +1695,7 @@
                                     "
                                     class="text-right min-width-0"
                                 >
-                                    <span auto-close="outsideClick">
+                                    <span>
                                         <update-ledger-discount
                                             id="update-ledger-discount-amount"
                                             #discount
@@ -1711,6 +1715,7 @@
                                             (discountTotalUpdated)="
                                                 vm.handleDiscountEntry($event); vm.generateGrandTotal()
                                             "
+                                            [discountsList]="discountsList"
                                             (hideOtherPopups)="hideTax()"
                                             [readonly]="isEinvoiceGenerated"
                                             (createNewDiscount)="showCreateDiscountDialog()"
@@ -1734,7 +1739,6 @@
                                     class="text-center icon-box"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (vm.companyTaxesList$ | async)?.length &&
                                         (!vm.isPaymentReceipt ||
                                             (vm.isPaymentReceipt &&
                                                 vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
@@ -1746,24 +1750,20 @@
                                 <div
                                     class="text-center icon-box"
                                     *ngIf="
-                                        (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        !(vm.companyTaxesList$ | async)?.length
+                                        (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)
                                     "
                                 >
                                     <label class="font-16 mr-t05">=</label>
                                 </div>
-
                                 <div
                                     class="dropdown-container dropdown-left text-right min-width-0"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (vm.companyTaxesList$ | async)?.length &&
                                         (!vm.isPaymentReceipt ||
-                                            (vm.isPaymentReceipt &&
-                                                vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
+                                        (vm.isPaymentReceipt && vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
-                                    <span auto-close="outsideClick">
+                                    <span>
                                         <update-ledger-tax-control
                                             id="update-ledger-tax-amount"
                                             #tax
@@ -1818,7 +1818,6 @@
                                     class="text-center icon-box"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (vm.companyTaxesList$ | async)?.length &&
                                         (!vm.isPaymentReceipt ||
                                             (vm.isPaymentReceipt &&
                                                 vm.selectedLedger.voucher.shortCode === 'advance-receipt'))

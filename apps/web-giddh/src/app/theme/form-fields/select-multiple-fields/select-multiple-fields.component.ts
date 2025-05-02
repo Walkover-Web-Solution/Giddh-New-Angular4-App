@@ -50,6 +50,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public isPurchaseOrder: string = '';
     /** Holds module translation data */
     @Input() public localeData: any = {};
+    /** Holds autocomplete position */
+    @Input() public autoCompletePosition: string = 'auto';
+    /** Holds CSS class which applied on mat options tag */
+    @Input() public optionClass: string;
     /** Holds module translation data */
     @Input() public commonLocaleData: any = {};
     /** True if the component should be used as dynamic search component instead of static search */
@@ -60,8 +64,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public disabled: boolean;
     /** Show Mat Label In with appearance outline Icon */
     @Input() public showMatLabel: boolean = false;
-    /** Prevent to close dropdown menu after select */
-    @Input() public keepMenuOpenAfterSelect: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -113,17 +115,15 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                     this.dynamicSearchedQuery.emit(search);
                     if (!search) {
                         this.onClear.emit({ label: "", value: "" });
-                        this.writeValue("");
                     }
                 } else {
                     if (search === "") {
                         this.onClear.emit({ label: "", value: "" });
-                        this.writeValue("");
                     }
                     this.filterOptions(search);
                 }
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -213,9 +213,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (this.lastSearchString?.length) {
             this.searchFormControl.setValue("");
         }
-        if (this.keepMenuOpenAfterSelect) {
-            this.handleItemSelected();
-        }
         const selectOptionValue = option?.option?.value?.label;
         this.writeValue([...this.value, option?.option?.value?.value]);
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
@@ -233,7 +230,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
-            this.writeValue(this.value.splice(index, 1));
+            this.value.splice(index, 1);
+            this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
             setTimeout(() => {
                 if (this.trigger && this.trigger.panelOpen) {
@@ -358,14 +356,24 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * Reopen dropdown after option selected
+     * Handle mat autocomplete panel closed
      *
-     * @private
      * @memberof SelectMultipleFieldsComponent
      */
-    private handleItemSelected(): void {
-        setTimeout(() => {
-            this.trigger.openPanel();
-        }, 50);
+    public panelClosed(): void {
+        this.searchFormControl.setValue(null);
+    }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public panelOpened(): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchedQuery.emit("");
+        } else {
+            this.filterOptions("");
+        }
     }
 }

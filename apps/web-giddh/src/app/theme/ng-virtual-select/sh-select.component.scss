@@ -112,7 +112,7 @@ i.close.icon.clear:hover::after {
     cursor: not-allowed;
     pointer-events: none;
     color: var(--color-common-secondary-disabled) !important;
-    background: var(--color-input-primary-background) !important;
+    background: var(--color-input-secondary-background) !important;
 }
 
 :host(.disabled-ledger) {

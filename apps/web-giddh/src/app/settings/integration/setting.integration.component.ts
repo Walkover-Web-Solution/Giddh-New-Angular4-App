@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, pipe, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
@@ -18,7 +18,7 @@ import { EcommerceService } from '../../services/ecommerce.service';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
@@ -28,7 +28,6 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
-import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
@@ -192,26 +191,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public linkedAccountLabel: string = '';
     /**  Holds Mat Dialog reference */
     public removeGmailIntegrationDialogRef: MatDialogRef<any>;
-    /** Holds Store Delete end user agreement  API success state as observable*/
-    public deleteEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
-    /** Hold reference number */
-    public referenceNumber: string = '';
-    /** Holds Store Requisition API success state as observable*/
-    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
-    /** True, if is integration module are in scope  */
+/** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
     /** Holds help documentation url for syncing with Tally */
     public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
-    /** Holds Store Save payment provider company API success state as observable*/
-    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
-    /** This will use for open window */
-    public openedWindow: Window | null = null;
-    /** Hold reconnect bank response */
-    public reconnectBankResponse: any = null;
-    /** Hold callback broadcast event */
-    public callBackBroadcast: any;
 
     constructor(
         private router: Router,
@@ -372,14 +357,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.openWindow(response.link);
-                localStorage.setItem('refNo', response.reference);
-                this.referenceNumber = response.reference;
-            }
-        });
-
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
@@ -407,33 +384,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadPaymentData();
             }
         };
-
-        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
-        this.callBackBroadcast.onmessage = (event) => {
-            if (event?.data?.success) {
-                const referNo = localStorage.getItem('refNo');
-                    if (referNo !==null && referNo !== undefined) {
-                        this.componentStore.getRequisition(referNo);
-                    }
-            }
-        };
-
-        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.loadPaymentData();
-            }
-        });
-
-        this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
-                    this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
-                } else {
-                    this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
-                    this.loadPaymentData();
-                }
-            }
-        });
     }
 
     /**
@@ -442,9 +392,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngAfterViewInit(): void {
-        if (this.selectedTabParent) {
-            this.loadTabData(this.selectedTabParent);
-        }
+        this.loadPaymentData();
     }
 
     public setDummyData() {
@@ -963,7 +911,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
             this.isAddAndManageOpenedFromOutside = result;
         });
-        if (event && event instanceof TabDirective || !event) {
+        if (event || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
@@ -1226,32 +1174,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-    * This function will use for get institutions details
-    *
-    * @param {*} element
-    * @memberof SettingIntegrationComponent
-    */
-    public openInstitutionsDialog(): void {
-        let data = {
-            localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData,
-        }
-        const dialogRef = this.dialog.open(InstitutionsListComponent, {
-            data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'institutionsListDialog'
-        });
-        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                localStorage.setItem('refNo', response);
-                this.referenceNumber = cloneDeep(response);
-            }
-        });
-    }
-
-    /**
      * This will use for select bank account only for plaid integration
      *
      * @param {*} event
@@ -1496,30 +1418,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }
         });
-    }
-
-    /**
-     *
-         * This will be use for reconnect bank
-     * @param {*} bank
-     * @memberof SettingIntegrationComponent
-     */
-    public reconnectBank(bank: any): void {
-        this.reconnectBankResponse = bank;
-        this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
-    }
-
-    /**
-    * This will be open window by url
-    *
-    * @param {string} url
-    * @memberof SettingIntegrationComponent
-    */
-    public openWindow(url: string): void {
-        const width = 800;
-        const height = 900;
-
-        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
     }
 }
 

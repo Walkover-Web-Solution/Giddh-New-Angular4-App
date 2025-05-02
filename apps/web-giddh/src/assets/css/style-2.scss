@@ -49,6 +49,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/vouchers-preview.scss";
 @import "../css/global/custom-paginator.scss";
 @import "../css/global/mat-chip.scss";
+@import "../css/global/select-multiple-fields.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1195,7 +1196,7 @@ textarea {
                 background-color: var(--color-transparent-background) !important;
             }
         }
-        .readonly-field { 
+        .readonly-field {
             .mat-mdc-form-field {
                 background-color: var(--color-transparent-background) !important;
             }
@@ -1205,6 +1206,16 @@ textarea {
 
 .border-top {
     border-top: 1px solid var(--color-common-secondary-border) !important;
+}
+
+body {
+    &.template-wrapper {
+        mat-tab-body {
+            &.mat-mdc-tab-body-active {
+                z-index: unset !important;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -2370,6 +2381,10 @@ ul.sub-list {
     color: var(--color-gray);
 }
 
+.text-saffron {
+    color: var(--color-deep-saffron) !important;
+}
+
 .advance-search .input-group-addon {
     border: 1px solid var(--color-primary-button-border);
     background: none;
@@ -2831,7 +2846,7 @@ modal-container.modal {
 
     &.custom-new-datepicker {
         input {
-            height: 48px;
+            height: var(--mat-form-field-height);
             border-radius: 0.5rem;
         }
 
@@ -4167,7 +4182,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .w125 {
-    width: 125px;
+    width: 125px !important;
 }
 
 .multi-select {
@@ -10132,12 +10147,6 @@ button#more-btn-inventory,
     max-height: 250px;
 }
 
-.transaction-list-sh-select input {
-    min-height: 49px;
-    height: 49px;
-    border: 0 none !important;
-}
-
 .inventory-dashboard .box {
     border: 1px solid var(--color-iron);
     border-radius: 2px;
@@ -10296,17 +10305,6 @@ giddh-datepicker {
                                     .entry-modal {
                                         .ledger-panel {
                                             z-index: 9;
-                                        }
-                                    }
-                                }
-                            }
-
-                            #ledger-transaction-left-list,
-                            #ledger-transaction-right-list {
-                                .transaction-list-sh-select {
-                                    sh-select-menu {
-                                        .menu {
-                                            z-index: 10;
                                         }
                                     }
                                 }
@@ -11534,7 +11532,6 @@ body {
         flex: 1;
         max-width: 100%;
         height: 50px !important;
-        left: 4px;
         min-height: auto !important;
 
         .menu-list {
@@ -11607,15 +11604,6 @@ body {
         position: relative;
     }
 
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        position: absolute;
-        width: 104%;
-        top: -50px;
-        padding-top: 5px !important;
-        margin: 0;
-        left: -16px;
-        right: 0;
-    }
 
     .sub-filter-nav-band .nav-tabs {
         overflow-x: auto;
@@ -12220,7 +12208,6 @@ body.prevent-body-scroll {
     fill: var(--color-toast-primary-text);
 }
 
-.mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: var(--color-toast-primary-text) !important;
@@ -12827,7 +12814,7 @@ hamburger-menu {
             }
 
             .customise-width {
-                width: 33%;
+                width: 39%;
             }
 
             .customise-filter-button {
@@ -13174,8 +13161,8 @@ body.hide-scroll-body.master-page {
 }
 
 .ledger-main {
-    input {
-        &:disabled {
+    .readonly-field {
+        .mat-mdc-form-field {
             background-color: var(--color-white) !important;
         }
     }
@@ -13422,12 +13409,12 @@ voucher-component {
     .dropdown-bg {
         background-color: var(--color-transparent-background) !important;
     }
-    
+
     .mdc-text-field__input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
     .mat-mdc-form-field input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
@@ -13722,7 +13709,7 @@ aside-menu-product-service {
 // This Class will use globllay for border like mat input field
 .mat-form-field-border {
     &.mat-form-field-height {
-        height: 48px !important;
+        height: var(--mat-form-field-height) !important;
     }
 
     border-radius: 4px !important;
@@ -13774,7 +13761,7 @@ aside-menu-product-service {
 }
 
 .text-black {
-    color: var(--color-common-primary-text);
+    color: var(--color-common-primary-text) !important;
 }
 
 .bg-grey {
@@ -13814,6 +13801,11 @@ import-wizard {
     }
 }
 
+.rotate-icon-130deg {
+    .mdc-button__label {
+        transform: rotate(130deg);
+    }
+}
 .z-index-0 {
     z-index: 0;
 }
@@ -13918,4 +13910,9 @@ mat-list {
 
 .w150 {
     width: 150px !important;
+}
+/** Use this class on black color image (icon)
+ to  change color in dark theme **/
+.image-as-icon-color {
+    filter: var(--color-image-filter-quaternary);
 }

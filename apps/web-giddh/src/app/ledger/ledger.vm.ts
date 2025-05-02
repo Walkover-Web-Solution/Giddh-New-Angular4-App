@@ -207,6 +207,7 @@ export class LedgerVM {
                 if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
+                data['accountName'] = accountName;
                 this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
         }

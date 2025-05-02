@@ -602,6 +602,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (response) {
                 this.expandSidebar(true);
+
             } else {
                 this.collapseSidebar(true);
             }
@@ -807,6 +808,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
                     this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
+                    this.subscribedPlan.paymentPending = res.paymentPending;
                 }
                 this.activeCompany = res;
                 this.isUKCompany = res.country === "United Kingdom";
@@ -1334,8 +1336,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
      * Navigates to obligation
-     * 
-     * @returns {*} 
+     *
+     * @returns {*}
      * @memberof HeaderComponent
      */
     public goToObligation(): void {
@@ -1357,7 +1359,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * Placeholders are denoted as `[placeholder]` and replaced sequentially.
      *
      * @param {string} text
-     * @param {string[]} args 
+     * @param {string[]} args
      * @returns {string} A string where placeholders are replaced with corresponding arguments.
      * @memberof HeaderComponent
      */
@@ -1877,7 +1879,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && this.selectedPlanStatus === 'expired' && this.subscribedPlan?.paymentPending && !this.isCurrentSubscriptionTrialOrCancelled) {
             return this.localeData?.subscription_expire_renewal_message ?? "";
         }
         return this.getExpiredMessage(
