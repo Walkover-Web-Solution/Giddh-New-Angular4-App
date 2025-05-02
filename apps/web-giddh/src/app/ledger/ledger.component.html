@@ -53,7 +53,7 @@
                 </div>
                 <!-- region ledger table-->
                 <div class="ledg-head transactions-page position-relative">
-                    <p class="w-100 float-left text-center font-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</p>
+                    <!-- <p class="w-100 float-left text-center font-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</p> New Code -->
                     <!-- region ledger header -->
                     <div class="clearfix row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
                         <!-- region currency toggle -->
@@ -1464,7 +1464,10 @@
                                         ></mat-checkbox>
                                     </mat-grid-tile>
                                     <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerGridColumnsValue[1]}}>
-                                        <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">{{
+                                        <!-- <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">{{
+                                            localeData?.to_balance_bf
+                                        }}</span> New Code -->
+                                        <span *ngIf="(lc.transactionData$ | async)?.page <= 1">{{
                                             localeData?.to_balance_bf
                                         }}</span>
                                     </mat-grid-tile>
@@ -1474,7 +1477,8 @@
                                         class="no-right-border"
                                     >
                                         <div class="d-flex flex-column">
-                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
+                                            <!-- <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">  New Code -->
+                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
                                                     <amount-field
                                                         [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
@@ -1860,7 +1864,10 @@
                                         ></mat-checkbox>
                                     </mat-grid-tile>
                                     <mat-grid-tile [attr.data-title]="localeData?.bf_balance" colspan={{ledgerGridColumnsValue[1]}}>
-                                        <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
+                                        <!-- <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
+                                            {{ localeData?.by_balance_bf }}
+                                        </span> New Code -->
+                                        <span *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                             {{ localeData?.by_balance_bf }}
                                         </span>
                                     </mat-grid-tile>
@@ -1870,7 +1877,8 @@
                                         class="text-right no-right-border"
                                     >
                                         <div class="d-flex flex-column">
-                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
+                                            <!-- <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented"> New Code -->
+                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                                     <amount-field
                                                         [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
@@ -2990,11 +2998,11 @@
                         </mat-grid-tile>
 
                         <!-- Balance Column -->
-                        <mat-grid-tile class="bold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                        <!-- <mat-grid-tile class="bold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
                                 {{ commonLocaleData?.app_closing_balance }}
                             </div>
-                        </mat-grid-tile>
+                        </mat-grid-tile> -->
                     </mat-grid-list>
 
                     <!-- Mat grid list #2 (Select all checkbox and Forwarded Balance in header)-->
@@ -3020,8 +3028,9 @@
 
                         <!-- Particular Column -->
                         <mat-grid-tile colspan={{ledgerStatementViewGridColumnsValue[1]}}>
+                              <!-- *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && (lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented New Code -->
                             <div
-                                *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && (lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented"
+                                *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && (lc.transactionData$ | async)?.page <= 1"
                                 class="p-2 d-flex align-items-center column-gap5 w-100 h-100"
                             >
                                 <span>{{ localeData?.to_balance_bf }}</span>
@@ -3030,7 +3039,8 @@
 
                         <!-- Debit Column -->
                         <mat-grid-tile colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
-                            <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && !isAdvanceSearchImplemented && !searchText">
+                            <!-- <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && !isAdvanceSearchImplemented && !searchText"> New Code -->
+                            <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0">
                                 <div
                                     class="p-2 d-flex flex-column align-items-end justify-content-center w-100 h-100"
                                 >
@@ -3059,7 +3069,8 @@
 
                         <!-- Credit Column -->
                         <mat-grid-tile colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
-                            <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && !isAdvanceSearchImplemented && !searchText">
+                            <!-- <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && !isAdvanceSearchImplemented && !searchText"> New Code -->
+                            <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0">
                                 <div
                                     class="p-2 d-flex flex-column align-items-end justify-content-center w-100 h-100"
                                 >
@@ -3084,8 +3095,8 @@
                         </mat-grid-tile>
 
                         <!-- Balance Column -->
-                        <mat-grid-tile *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
-                        </mat-grid-tile>
+                        <!-- <mat-grid-tile *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                        </mat-grid-tile> -->
 
                         <ng-template #zeroAmount>
                             <amount-field
