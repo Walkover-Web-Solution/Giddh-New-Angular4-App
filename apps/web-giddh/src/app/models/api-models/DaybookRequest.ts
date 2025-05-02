@@ -35,6 +35,12 @@ export class ExportBodyRequest {
     includeTag?: boolean;
     groupUniqueNames?: any;
     inventoryType?: string;
+    attachmentExport?: boolean;
+    voucherExport?: boolean;
+    fileNameFormat?: string;
+    ledgerView?: boolean;
+    mergePdf?: boolean;
+    copyTypes?: any[];
 }
 
 export interface DayBookRequestModel {
