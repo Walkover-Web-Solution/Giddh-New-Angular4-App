@@ -347,17 +347,6 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
   }
 
   /**
-   * This method will be use for checking if the custom input is focused
-   *
-   * @returns {boolean}
-   * @memberof CompareWithDateRangePickerComponent
-   */
-  public isCustomInputFocused(): boolean {
-    return document.activeElement?.id == this.customInput?.textField?.nativeElement?.id;
-  }
-
-
-  /**
    * This method will be use for destroying the component
    *
    * @memberof CompareWithDateRangePickerComponent
