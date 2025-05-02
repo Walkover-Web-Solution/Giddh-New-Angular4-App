@@ -246,9 +246,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 let postRequest: any = {
                     attachmentExport: this.exportRequest.attachmentExport,
                     voucherExport: this.exportRequest.voucherExport,
-                    entryUniqueNames: this.inputData?.selectEntryUniqueName,
-                    from: this.fromDate,
-                    to: this.toDate
+                    entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
                 if (this.exportRequest.attachmentExport) {
                     postRequest.fileNameFormat = this.selectedFormatList.length ? this.exportRequest.fileNameFormat : (this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}");
@@ -257,7 +255,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
                     postRequest.copyTypes = this.exportRequest.copyTypes;
                 }
-                this.componentStore.bulkExportVoucher({ getRequest: { accountUniqueName: this.inputData?.accountUniqueName }, postRequest: postRequest });
+                const getRequest = {
+                    accountUniqueName: this.inputData?.accountUniqueName,
+                    from: this.fromDate,
+                    to: this.toDate
+                };
+                this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
