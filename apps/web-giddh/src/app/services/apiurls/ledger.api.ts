@@ -58,5 +58,5 @@ export const LEDGER_API = {
 
     GET_DOWNLOAD_ATTACHMENT: "company/:companyUniqueName/imports/signed-url?fileName=:fileName",
     IMPORT_VOUCHER: "company/:companyUniqueName/imports/v2/upload?subType=:subType&accountUniqueName=:accountUniqueName&type=:type&isHeaderProvided=:isHeaderProvided&voucherType=:voucherType",
-    BULK_EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-export'
+    BULK_EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-export?from=:from&to=:to'
 };
