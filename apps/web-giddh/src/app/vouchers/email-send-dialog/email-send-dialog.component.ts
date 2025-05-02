@@ -113,10 +113,10 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
         const emailsArray = this.sendEmailForm.get('email.to').value?.split(',').map(email => email.trim());
-        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
-            this.successEvent.emit({ 
-                email: emailsArray, 
-                invoiceType: this.copyTypes.value, 
+        if (this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+            this.successEvent.emit({
+                email: emailsArray,
+                invoiceType: this.copyTypes.value,
                 uniqueName: this.selectedItem?.uniqueName });
         } else {
             this.successEvent.emit(emailsArray);
