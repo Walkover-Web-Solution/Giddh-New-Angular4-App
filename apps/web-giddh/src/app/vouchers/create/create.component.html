@@ -1833,7 +1833,7 @@
                                         <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder)" (click)="generateVoucher()">{{ commonLocaleData?.app_save }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isReceiptInvoice" (click)="generateVoucher()">{{ localeData?.create_receipt }}</button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isPaymentInvoice" (click)="generateVoucher()">{{ localeData?.create_payment }}</button>
-                                        <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice"><i class="caret"></i></button>
+                                        <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice"><i class="caret"></i></button>
                                         <mat-menu #moreOptions="matMenu">
                                             <button mat-menu-item (click)="createSendVoucher()">{{ localeData?.create_send
                                                 }}</button>
