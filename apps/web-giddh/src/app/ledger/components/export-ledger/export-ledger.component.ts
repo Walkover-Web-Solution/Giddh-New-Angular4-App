@@ -246,7 +246,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 let postRequest: any = {
                     attachmentExport: this.exportRequest.attachmentExport,
                     voucherExport: this.exportRequest.voucherExport,
-                    entryUniqueNames: this.inputData?.selectEntryUniqueName
+                    entryUniqueNames: this.inputData?.selectEntryUniqueName,
+                    from: this.fromDate,
+                    to: this.toDate
                 };
                 if (this.exportRequest.attachmentExport) {
                     postRequest.fileNameFormat = this.selectedFormatList.length ? this.exportRequest.fileNameFormat : (this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}");
