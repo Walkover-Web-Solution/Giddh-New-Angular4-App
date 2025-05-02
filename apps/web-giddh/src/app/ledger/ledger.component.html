@@ -2997,7 +2997,7 @@
                             </div>
                         </mat-grid-tile>
 
-                        <!-- Balance Column -->
+                        <!-- Balance Column -- New Code -->
                         <!-- <mat-grid-tile class="bold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
                                 {{ commonLocaleData?.app_closing_balance }}
@@ -3094,7 +3094,7 @@
                             </ng-container>
                         </mat-grid-tile>
 
-                        <!-- Balance Column -->
+                        <!-- Balance Column -- New Code -->
                         <!-- <mat-grid-tile *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
                         </mat-grid-tile> -->
 
@@ -3212,8 +3212,8 @@
                             </ng-container>
                         </mat-grid-tile>
 
-                        <!-- Balance Column -->
-                        <mat-grid-tile [attr.data-title]="commonLocaleData?.app_closing_balance"  *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                        <!-- Balance Column -- New Code -->
+                        <!-- <mat-grid-tile [attr.data-title]="commonLocaleData?.app_closing_balance"  *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
                                 <div class="p-2 w-100 text-right">
                                     <amount-field
                                         [amount]="txn?.closing?.amount"
@@ -3232,7 +3232,7 @@
                                     }}
                                     </span>
                                 </div>
-                        </mat-grid-tile>
+                        </mat-grid-tile> -->
 
                         <ng-template #amountFieldTemplate let-txn>
                             <amount-field
