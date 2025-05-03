@@ -3323,7 +3323,7 @@
                                                 ?.purchaseTaxInclusive &&
                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('DEBIT', i); txn.amount = txn.debitAmount || 0; txn.creditAmount = 0"
+                                        (input)="handleAmountInput(txn); lc.changeTransactionType('DEBIT', i); txn.amount = txn.debitAmount || 0; txn.creditAmount = 0"
                                         (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
@@ -3367,7 +3367,7 @@
                                                 ?.purchaseTaxInclusive &&
                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('CREDIT', i); txn.amount = txn.creditAmount || 0; txn.debitAmount = 0;"
+                                        (input)="handleAmountInput(txn); lc.changeTransactionType('CREDIT', i); txn.amount = txn.creditAmount || 0; txn.debitAmount = 0;"
                                         (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />

@@ -1606,7 +1606,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.ledgerView === LedgerViewEnum.StatementView) {
-                // this.dropdowns[this.dropdowns?.length - 1]?.openDropdownPanel();
                 const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT') || dropdown?.cssClass?.includes('CREDIT'));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
@@ -3653,7 +3652,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Handle carousel next event
+     * Handle carousel next event
      *
      * @param {boolean} event
      * @memberof LedgerComponent
