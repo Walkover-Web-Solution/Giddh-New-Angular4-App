@@ -2488,6 +2488,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
+                this.ledgerAsidePaneDialogRef = undefined;
             }, 100);
         });
 
@@ -3601,5 +3602,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.carouselNext = false;
         }, 100);
+    }
+
+    /**
+     * Handle close other dialog/menu
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public handleCloseOtherDialogMenu(event: boolean): void {
+        if (event) {
+            this.closeAllAccountDropdown();
+        }
     }
 }
