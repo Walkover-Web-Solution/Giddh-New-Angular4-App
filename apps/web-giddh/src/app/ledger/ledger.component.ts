@@ -2543,6 +2543,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
+                this.ledgerAsidePaneDialogRef = undefined;
             }, 100);
         });
 
@@ -3680,6 +3681,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.ledgerStatementViewGridTotalColumns = 11;
             this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 2];
+        }
+    }
+
+    /**
+     * Handle close other dialog/menu
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public handleCloseOtherDialogMenu(event: boolean): void {
+        if (event) {
+            this.closeAllAccountDropdown();
         }
     }
 }

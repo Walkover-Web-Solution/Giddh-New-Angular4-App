@@ -832,6 +832,7 @@
                                                             >
                                                                 <new-ledger-entry-panel
                                                                     #newLedPanel
+                                                                    [blankLedgerIndex]="i"
                                                                     [trxRequest]="advanceSearchRequest"
                                                                     [isBankTransaction]="true"
                                                                     [blankLedger]="item"
@@ -1090,6 +1091,7 @@
                                                             >
                                                                 <new-ledger-entry-panel
                                                                     #newLedPanel
+                                                                    [blankLedgerIndex]="i"
                                                                     [trxRequest]="advanceSearchRequest"
                                                                     [isBankTransaction]="true"
                                                                     [blankLedger]="item"
@@ -1764,6 +1766,7 @@
                                             >
                                                 <new-ledger-entry-panel
                                                     #newLedPanel
+                                                    [blankLedgerIndex]="i"
                                                     [blankLedger]="lc.blankLedger"
                                                     [currentTxn]="lc.currentBlankTxn"
                                                     [needToReCalculate]="needToReCalculate"
@@ -2153,6 +2156,7 @@
                                             >
                                                 <new-ledger-entry-panel
                                                     #newLedPanel
+                                                    [blankLedgerIndex]="i"
                                                     [blankLedger]="lc.blankLedger"
                                                     [currentTxn]="lc.currentBlankTxn"
                                                     [needToReCalculate]="needToReCalculate"
@@ -3300,8 +3304,8 @@
                                                 ?.purchaseTaxInclusive ||
                                             txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); txn.creditTotal = 0; lc.changeTransactionType('DEBIT', i); txn.total = txn.debitTotal"
-                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('DEBIT', i); txn.total = txn.debitTotal || 0; txn.creditTotal = 0"
+                                        (click)="showNewLedgerEntryPopup(txn);"
                                         autocomplete="off"
                                     />
                                     <input
@@ -3319,8 +3323,8 @@
                                                 ?.purchaseTaxInclusive &&
                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="handleAmountInput(txn); txn.creditAmount = 0; lc.changeTransactionType('DEBIT', i); txn.amount = txn.debitAmount"
-                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('DEBIT', i); txn.amount = txn.debitAmount || 0; txn.creditAmount = 0"
+                                        (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
                                 </div>
@@ -3344,8 +3348,8 @@
                                                 ?.purchaseTaxInclusive ||
                                             txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); txn.debitTotal = 0; lc.changeTransactionType('CREDIT', i); txn.total = txn.creditTotal"
-                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('CREDIT', i); txn.total = txn.creditTotal || 0; txn.debitTotal = 0"
+                                        (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
                                     <input
@@ -3363,8 +3367,8 @@
                                                 ?.purchaseTaxInclusive &&
                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="handleAmountInput(txn); txn.debitAmount = 0; lc.changeTransactionType('CREDIT', i); txn.amount = txn.creditAmount"
-                                        (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('CREDIT', i); txn.amount = txn.creditAmount || 0; txn.debitAmount = 0;"
+                                        (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
                                 </div>
@@ -3383,6 +3387,7 @@
                             <new-ledger-entry-panel
                                 #newLedPanel
                                 [blankLedgerIndex]="i"
+                                [openedDialogsRef]="[ledgerAsidePaneDialogRef]"
                                 [blankLedger]="lc.blankLedger"
                                 [currentTxn]="lc.currentBlankTxn"
                                 [needToReCalculate]="needToReCalculate"
@@ -3397,6 +3402,7 @@
                                 [isLedgerAccountAllowsMultiCurrency]="
                                     isLedgerAccountAllowsMultiCurrency
                                 "
+                                (closeOtherDialogMenu)="handleCloseOtherDialogMenu($event)"
                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                 (changeTransactionType)="toggleTransactionType($event)"
                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
