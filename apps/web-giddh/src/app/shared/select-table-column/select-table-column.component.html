@@ -9,26 +9,52 @@
     <i [ngClass]="iconClass"> </i> <span class="pl-3">{{ buttonText }}</span>
 </button>
 <mat-menu #menu="matMenu" [class]="'columns-wrapper ' + additionalMenuCssClass">
-    <ng-container *ngFor="let item of (isDynamicMode ? dynamicCustomColumns : customiseColumns)">
-        <button
-            class="menu-buttons"
-            [ngClass]="{ 'disabled-button': item.checked && (isDynamicMode ? checkedColumnsCount : displayedColumns.length === 2) }"
-            mat-menu-item
-            (click)="$event.stopPropagation()"
-            (keydown.enter)="$event.stopPropagation(); onKeydownEnter(item)"
-            aria-label="option check"
-        >
-            <mat-checkbox
-                class="inventory-checkbox"
-                color="primary"
-                [name]="item.value"
-                (ngModelChange)="saveSelectedColumns()"
-                [(ngModel)]="item.checked"
-                [disabled]="item.checked && (isDynamicMode ? checkedColumnsCount : displayedColumns.length === 2)"
-                (click)="$event.stopPropagation()"
+    <ng-container *ngIf="moduleType !== 'ITEM_WISE_REPORT' && moduleType !== 'VARIANT_WISE_REPORT'">
+        <ng-container *ngFor="let item of customiseColumns">
+            <button
+                class="menu-buttons"
+                [ngClass]="{ 'disabled-button': item.checked && displayedColumns.length === 2 }"
+                mat-menu-item
+                (click)="$event?.stopPropagation()"
+                (keydown.enter)="$event?.stopPropagation(); onKeydownEnter(item)"
+                aria-label="option check"
             >
-                {{ item.label }}
-            </mat-checkbox>
-        </button>
+                <mat-checkbox
+                    class="inventory-checkbox"
+                    color="primary"
+                    [name]="item.value"
+                    (ngModelChange)="saveSelectedColumns()"
+                    [(ngModel)]="item.checked"
+                    [disabled]="item.checked && displayedColumns.length === 2"
+                    (click)="$event?.stopPropagation()"
+                >
+                    {{ item.label }}</mat-checkbox
+                >
+            </button>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="['ITEM_WISE_REPORT', 'VARIANT_WISE_REPORT', 'INVENTORY_TABLE_REPORT'].includes(moduleType)">
+        <ng-container *ngFor="let item of dynamicCustomColumns">
+            <button
+                class="menu-buttons"
+                [ngClass]="{ 'disabled-button': item.checked && checkedColumnsCount }"
+                mat-menu-item
+                (click)="$event?.stopPropagation()"
+                (keydown.enter)="$event?.stopPropagation(); onKeydownEnter(item)"
+                aria-label="option check"
+            >
+                <mat-checkbox
+                    class="inventory-checkbox"
+                    color="primary"
+                    [name]="item.value"
+                    (ngModelChange)="saveSelectedColumns()"
+                    [(ngModel)]="item.checked"
+                    [disabled]="item.checked && checkedColumnsCount"
+                    (click)="$event?.stopPropagation()"
+                >
+                    {{ item.label }}</mat-checkbox
+                >
+            </button>
+        </ng-container>
     </ng-container>
 </mat-menu>

@@ -29,19 +29,3 @@ export const CONTACTS_COMMON_COLUMNS = [
         "checked": true
     }
 ];
-export enum ContactsColumn {
-    CUSTOMER_NAME = 'customer_name',
-    PARENT_GROUP = 'parent_group',
-    OPENING = 'opening',
-    SALES = 'sales',
-    RECEIPT = 'receipt',
-    CLOSING = 'closing',
-    CONTACTS = 'contacts',
-    GSTIN = 'gstin',
-    STATE = 'state',
-    COMMENT = 'comment',
-    VENDOR_NAME = 'vendor_name',
-    PURCHASE = 'purchase',
-    PAYMENT = 'payment',
-    ACTION = 'action'
-}

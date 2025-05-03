@@ -8,26 +8,11 @@
     "voucher_total": "व्हाउचर एकूण",
     "entry_no": "प्रवेश क्र.",
     "description": "वर्णन",
-    "cr_dr_toggle": "सीआर/डॉ",
-    "plus_minus_toggle": " +/-",
+    "cr_dr_toggle":"सीआर/डॉ",
+    "plus_minus_toggle":" +/-",
     "export_group_ledger": "निर्यात गट लेजर",
     "ledger": "लेजर",
     "bill_to_bill": "बिल ते बिल",
     "ledger_entries": "लेजर नोंदी",
-    "account": "खाता",
-    "ledger_view": "लेजर दृश्य",
-    "statement_view": "स्टेटमेंट दृश्य",
-    "t_view": "टी दृश्य",
-    "export_attachment": "संलग्नक निर्यात करा",
-    "export_voucher": "व्हाउचर निर्यात करा",
-    "invoice_copy_options": {
-        "original": "मूळ",
-        "customer": "ग्राहक",
-        "transport": "परिवहन",
-        "attachment": "संलग्नक"
-    },
-    "single_pdf": "एकल पीडीएफ",
-    "multiple_pdf": "अनेक पीडीएफ",
-    "select_copy": "प्रतिकृती निवडा",
-    "select_order": "क्रम निवडा"
+    "account": "खाता"
 }

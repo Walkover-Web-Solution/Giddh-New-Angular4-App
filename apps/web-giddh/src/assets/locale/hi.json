@@ -764,12 +764,9 @@
     "app_choose_file": "फ़ाइल चुनें",
     "app_password": "पासवर्ड",
     "app_select_column": "कॉलम चुनें",
-    "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें",
-    "app_file_format": "फाइल प्रारूप",
-    "app_select_file": "फाइल चुनें",
     "app_ledger_view": {
         "t_view": "टी दृश्य",
         "statement_view": "वक्तव्य दृश्य"
     },
-    "app_closing_balance": "जमा शेष"
+    "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें"
 }
