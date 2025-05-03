@@ -1196,7 +1196,7 @@ textarea {
                 background-color: var(--color-transparent-background) !important;
             }
         }
-        .readonly-field { 
+        .readonly-field {
             .mat-mdc-form-field {
                 background-color: var(--color-transparent-background) !important;
             }
@@ -2379,6 +2379,10 @@ ul.sub-list {
 
 .text-gray {
     color: var(--color-gray);
+}
+
+.text-saffron {
+    color: var(--color-deep-saffron) !important;
 }
 
 .advance-search .input-group-addon {
@@ -5230,6 +5234,10 @@ label {
 
 .d-inline-block {
     display: inline-block !important;
+}
+
+.d-grid {
+    display: grid !important;
 }
 
 .on-hover {
@@ -12204,7 +12212,6 @@ body.prevent-body-scroll {
     fill: var(--color-toast-primary-text);
 }
 
-.mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: var(--color-toast-primary-text) !important;
@@ -13406,12 +13413,12 @@ voucher-component {
     .dropdown-bg {
         background-color: var(--color-transparent-background) !important;
     }
-    
+
     .mdc-text-field__input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
     .mat-mdc-form-field input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
@@ -13597,7 +13604,12 @@ aside-menu-product-service {
 }
 
 .mat-dialog-md {
-    width: 700px;
+    width: 760px;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
 }
 
 // material-pagination
@@ -13900,7 +13912,10 @@ mat-list {
     }
 }
 
-/** Use this class on black color image (icon) 
+.w150 {
+    width: 150px !important;
+}
+/** Use this class on black color image (icon)
  to  change color in dark theme **/
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);

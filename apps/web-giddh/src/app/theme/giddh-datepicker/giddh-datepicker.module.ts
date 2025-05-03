@@ -21,11 +21,27 @@ export const GIDDH_DATEPICKER_FORMAT = {
 };
 
 export class PickDateAdapter extends NativeDateAdapter {
+    parse(value: any, parseFormat: string | any): Date | null {
+        if (typeof value === 'string') {
+            const parts = value.split('-');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed
+                const year = parseInt(parts[2], 10);
+                const date = new Date(year, month, day);
+                if (!isNaN(date.getTime())) {
+                    return date;
+                }
+            }
+        }
+        return super.parse(value, parseFormat); // Fallback to default parsing
+    }
+
     format(date: Date, displayFormat: Object): string {
         if (displayFormat === 'input') {
             return formatDate(date, 'dd-MM-yyyy', this.locale);
         } else {
-            return formatDate(date, 'MMM yyyy', this.locale);
+            return formatDate(date, 'MMM dd, yyyy', this.locale);
         }
     }
 }
