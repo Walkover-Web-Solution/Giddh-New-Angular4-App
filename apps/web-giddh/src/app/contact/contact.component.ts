@@ -50,7 +50,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { FormControl } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -60,6 +60,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Component({
     selector: "contact-detail",
@@ -259,6 +260,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
     /** Returns only the columns marked as checked */
     public ContactsColumn = ContactsColumn;
+    /** This will use for account filter options */
+    public archivedOptions: IOption[] = [];
+    /** This will use for account filter form */
+    public filterForm: FormGroup = new FormGroup({
+        accountArchiveStatus: new FormControl<string>(AccountArchivedStatusEnum.UNARCHIVED),
+    });
+    /** Holds account archived status enum  */
+    public accountArchivedStatusEnum = AccountArchivedStatusEnum;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -341,6 +350,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                         : 'aging-report';
 
                 const previousTab = this.activeTab;
+
+                this.filterForm.patchValue({
+                    accountArchiveStatus: AccountArchivedStatusEnum.UNARCHIVED
+                });
 
                 if (newTab !== previousTab) {
                     this.setActiveTab(newTab);
@@ -1193,8 +1206,18 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} [branchUniqueName] Current branch selected
      * @memberof ContactComponent
      */
-    private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
-        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
+    private getAccounts(
+        fromDate: string,
+        toDate: string,
+        pageNumber?: number,
+        refresh?: string,
+        count: number = PAGINATION_LIMIT,
+        query?: string,
+        sortBy: string = "",
+        order: string = "asc",
+        branchUniqueName?: string,
+        accountArchiveStatus: string = AccountArchivedStatusEnum.UNARCHIVED
+    ): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
@@ -1207,7 +1230,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName, accountArchiveStatus).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.body && res.status === "success") {
                 this.openingBalance = res.body.openingBalance;
 
@@ -1531,6 +1554,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
+
+            this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }
     }
 
@@ -1740,5 +1765,20 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchedName?.reset();
             this.translationComplete(true);
         }
+    }
+
+    public onArchivedOptions(event: any) {
+        this.getAccounts(
+            this.fromDate, 
+            this.toDate,
+            null,
+            "false",
+            PAGINATION_LIMIT,
+            this.searchStr,
+            this.key,
+            this.order,
+            (this.currentBranch ? this.currentBranch.uniqueName : ""),
+            event.value
+        );
     }
 }

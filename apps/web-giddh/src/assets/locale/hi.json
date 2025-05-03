@@ -771,5 +771,7 @@
         "t_view": "टी दृश्य",
         "statement_view": "वक्तव्य दृश्य"
     },
-    "app_closing_balance": "जमा शेष"
+    "app_closing_balance": "जमा शेष",
+    "app_account_status": "खाता स्थिति",
+    "app_both": "दोनों"
 }
