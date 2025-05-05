@@ -334,11 +334,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (change.get('email').value) {
                     change.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
-                    console.log("required");
                 } else {
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
-                    console.log("not required");
                 }
                 change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
