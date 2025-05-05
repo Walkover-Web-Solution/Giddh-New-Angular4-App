@@ -13,7 +13,7 @@ import {
     Output,
     ViewChild
 } from '@angular/core';
-import { AbstractControl, FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
@@ -53,7 +53,7 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    public addAccountForm: UntypedFormGroup;
+    public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
@@ -206,11 +206,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     };
     /** True if update data on temp bulk data  */
     public isBulkDataUpdated: boolean = false;
-    /** True if valid from date is selected */
-    public isVaildFrom: boolean = true;
+    /** True if form is valid */
+    public isValidForm: boolean = true;
 
     constructor(
-        private _fb: UntypedFormBuilder,
+        private _fb: FormBuilder,
         private store: Store<AppState>,
         private _toaster: ToasterService,
         private commonActions: CommonActions,
@@ -305,7 +305,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged(isEqual)).subscribe((res) => {
 
             if (this.portalIndex === null || this.portalIndex === undefined) {
@@ -334,9 +334,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (change.get('email').value) {
                     change.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
+                    console.log("required");
                 } else {
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
+                    console.log("not required");
                 }
                 change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
@@ -358,7 +360,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
             takeUntil(this.destroyed$))
             .subscribe((response) => {
-                const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                const users = this.addAccountForm.get('portalDomain') as FormArray;
                 let mobileNo = '';
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     if (response?.mobileNo && this.intl) {
@@ -395,7 +397,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
-                const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+                const addresses = this.addAccountForm.get('addresses') as FormArray;
                 if (addresses?.controls?.length === 0) {
                     this.addBlankGstForm();
                 }
@@ -444,20 +446,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (this.activeCompany.state) {
             setTimeout(() => {
-                let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(0);
+                let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
                 addresses?.get('stateCode')?.patchValue(this.activeCompany.state);
             }, 500);
         } else {
             if (this.activeCompany?.addresses?.length && this.activeCompany?.addresses[0]?.stateCode) {
                 setTimeout(() => {
-                    let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(0);
+                    let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
                     addresses?.get('stateCode')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
                     addresses?.get('state').get('code')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
                 }, 500);
             }
         }
         setTimeout(() => {
-            let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+            let addresses = this.addAccountForm.get('addresses') as FormArray;
             addresses.controls[0].get('isDefault')?.patchValue(true);
         }, 500);
 
@@ -584,7 +586,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getInvoiceSettings();
     }
 
-    public initialGstDetailsForm(): UntypedFormGroup {
+    public initialGstDetailsForm(): FormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
 
         let gstFields = this._fb.group({
@@ -616,7 +618,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public addNewPortalUser(user?: any): void {
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         let mappingForm = this._fb.group({
             name: [''],
             email: [''],
@@ -656,14 +658,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public removePortalUser(index: number): void {
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         mappings.removeAt(index);
     }
 
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });
 
-        let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('countyCode')?.patchValue(null);
@@ -673,7 +675,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetBankDetailsForm() {
-        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
+        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
         for (let control of accountBankDetails.controls) {
             control.get('bankName')?.patchValue(null);
             control.get('bankAccountNo')?.patchValue(null);
@@ -686,7 +688,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
 
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
         if (addresses?.length > 4) {
             this.moreGstDetailsVisible = false;
@@ -695,12 +697,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public removeGstDetailsForm(i: number) {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
     }
 
     public addBlankGstForm() {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses?.value?.length === 0) {
             addresses.push(this.initialGstDetailsForm());
         }
@@ -715,7 +717,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isDefaultAddressSelected(val: boolean, activeIndex: number): void {
         this.activeIndex = activeIndex;
         if (val) {
-            let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+            let addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
                 control.get('isDefault')?.patchValue(false);
             }
@@ -723,7 +725,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public getStateCode(gstForm: UntypedFormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
+    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
         const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
@@ -762,7 +764,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public showMoreGst() {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         this.gstDetailsLength = addresses?.controls?.length;
         this.moreGstDetailsVisible = true;
     }
@@ -785,16 +787,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetAddAccountForm() {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
-        const countries = this.addAccountForm.get('country') as UntypedFormGroup;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const countries = this.addAccountForm.get('country') as FormGroup;
         addresses.reset();
         countries.reset();
         this.addAccountForm.reset();
     }
 
     public submit() {
+        console.log(this.addAccountForm);
+        console.log(this.isGstValid);
+        console.log(this.isMobileNumberInvalid);
+        console.log((this.addAccountForm.get('portalDomain') as FormArray)?.controls[0]?.get('email')?.valid);
+
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
-            this.isVaildFrom = false;
+            this.isValidForm = false;
             return;
         }
         
@@ -944,7 +951,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectCountry(event: IOption) {
-        
         if (event && event.value) {
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
@@ -960,14 +966,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public selectedState(gstForm: UntypedFormGroup, event) {
+    public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
         }
     }
 
-    public selectedCounty(gstForm: UntypedFormGroup, event) {
+    public selectedCounty(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('countyCode')?.patchValue(event?.value);
             gstForm.get('county').get('code')?.patchValue(event?.value);
@@ -1100,7 +1106,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public getStates(countryCode) {
         this.selectedCountryCode = countryCode;
         if (countryCode && this.addAccountForm) {
-            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
+            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetails.controls) {
                 if (countryCode === 'IN') {
                     control.get('bankAccountNo').setValidators([Validators.minLength(9), Validators.maxLength(18)]);
@@ -1201,7 +1207,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public toggleStateRequired(): void {
         this.isStateRequired = this.checkActiveGroupCountry();
         let i = 0;
-        let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode').setValidators(null);
             control.get('countyCode').setValidators(null);
@@ -1231,7 +1237,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (element?.value && type) {
             // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
-            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
+            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
                     control.get('bankAccountNo')?.patchValue(trim);
@@ -1305,7 +1311,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public addBlankCustomFieldForm(): void {
-        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+        const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField?.value?.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
@@ -1319,7 +1325,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
-        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+        const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
@@ -1332,14 +1338,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @returns {FormGroup}
      * @memberof AccountAddNewDetailsComponent
      */
-    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): UntypedFormGroup {
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
 
         if (value) {
-            customFields?.patchValue(value);
+            customFields?.patchValue({
+                uniqueName: value.uniqueName,
+                value: typeof value.value === 'string' ? value.value : ''
+            });
         }
         return customFields;
     }
@@ -1364,7 +1373,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
-        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+        const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value')?.setValue(isChecked);
     }
 
@@ -1573,13 +1582,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
 
-            const accountAddress = this.addAccountForm.get('addresses') as UntypedFormArray;
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
             let loop = 0;
-            const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+            const addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
                 this.removeGstDetailsForm(loop);
                 loop++;
@@ -1706,7 +1715,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
       * @memberof AccountAddNewDetailsComponent
       */
     public getGstConfirmationPopup(): void {
-        let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(this.activeIndex);
+        let addresses = (this.addAccountForm.get('addresses') as FormArray).at(this.activeIndex);
         if (addresses.get('gstNumber')?.value) {
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
