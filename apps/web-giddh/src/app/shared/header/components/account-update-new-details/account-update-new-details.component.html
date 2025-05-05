@@ -17,6 +17,7 @@
                             [options]="activeAccountGroup"
                             formControlName="activeGroupUniqueName"
                             [required]="true"
+                            [showError]="!isValidForm && !addAccountForm.get('activeGroupUniqueName')?.value"
                             (selectedOption)="selectGroup($event)"
                         >
                         </reactive-dropdown-field>
@@ -24,11 +25,13 @@
                     <div class="col-sm-8">
                         <input-field
                             [name]="'accountName'"
-                            #autoFocusUpdate
                             [label]="localeData?.account_name"
                             [placeholder]="localeData?.account_name"
                             [type]="'text'"
                             formControlName="name"
+                            [autoFocus]="true"
+                            [required]="true"
+                            [showError]="!isValidForm && !addAccountForm.get('name')?.value"
                         >
                         </input-field>
                     </div>
@@ -42,6 +45,7 @@
                             [options]="countrySource"
                             formControlName="countryCode"
                             [required]="true"
+                            [showError]="!isValidForm && !addAccountForm.get('country').get('countryCode')?.value"
                             (selectedOption)="selectCountry($event)"
                         >
                         </reactive-dropdown-field>
@@ -224,10 +228,9 @@
         >
             <mat-tab
                 [label]="localeData?.tabs?.address"
-                *ngIf="!isHsnSacEnabledAcc"
                 class="gstin-address"
             >
-                <div class="pd-t15 overflow-hidden" formArrayName="addresses">
+                <div class="pd-t15 pd-b2 overflow-hidden" formArrayName="addresses">
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls']
@@ -273,8 +276,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row pd-b2">
-                            <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-4 mr-b2">
                                 <reactive-dropdown-field
                                     *ngIf="(statesSource$ | async)?.length"
                                     [label]="commonLocaleData?.app_state"
@@ -283,6 +286,7 @@
                                     [options]="statesSource$ | async"
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
+                                    [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
                                     (selectedOption)="selectedState(gst, $event)"
                                 >
                                 </reactive-dropdown-field>
@@ -294,23 +298,25 @@
                                     [options]="countyList"
                                     formControlName="countyCode"
                                     [required]="isStateRequired"
+                                    [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
                                     (selectedOption)="selectedCounty(gst, $event)"
                                 >
                                 </reactive-dropdown-field>
                             </div>
-                            <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
+                            <div class="col-sm-4 mr-b2" *ngIf="GSTIN_OR_TRN">
                                 <input-field
                                     [name]="'gstNumber'"
                                     [label]="formFields['taxName']?.label"
                                     [placeholder]="taxNamePlaceholder"
                                     [type]="'text'"
+                                    #gstNumberField
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
-                                    (blur)="checkGstNumValidation(gstNumberField); getStateCode(gst, states)"
+                                    (onChange)="checkGstNumValidation(gstNumberField); getStateCode(gst, states)"
                                 >
                                 </input-field>
                             </div>
                             <!-- static code added for the pincode -->
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mr-b2">
                                 <input-field
                                     [name]="'pinCodeNum'"
                                     [label]="zipCodeSupportedCountryList.includes(
@@ -331,13 +337,13 @@
                             </div>
                             <!-- end -->
                             <ng-container *ngIf="['IN', 'ZW', 'KE'].includes(companyCountry)">
-                                <div class="col-sm-4 mr-t2" *ngIf="partyTypeSource.length">
+                                <div class="col-sm-4 mr-b2" *ngIf="partyTypeSource.length">
                                     <reactive-dropdown-field
-                                        [label]="commonLocaleData?.party_type"
+                                        [label]="localeData?.party_type"
                                         [placeholder]="commonLocaleData?.app_select"
                                         [options]="partyTypeSource"
                                         [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
-                                        [labelValue]="partyTypeSource?.[0]?.label"
+                                        [labelValue]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType?.value"
                                     >
                                     </reactive-dropdown-field>
                                 </div>
@@ -361,7 +367,7 @@
                                     </div>
                                 </div> -->
                             </ng-container>
-                            <div class="col-sm-12 mr-t2" *ngIf="!f">
+                            <div class="col-sm-12 mr-b2" *ngIf="!f">
                                 <button
                                     mat-stroked-button
                                     color="warn"
@@ -373,7 +379,7 @@
                             </div>
                         </div>
                         <div
-                            class="d-flex justify-content-between column-gap15"
+                            class="d-flex justify-content-between column-gap15 pd-b2"
                             *ngIf="l && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
                         >
                             <button
@@ -393,7 +399,7 @@
                             > {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
-                        <div *ngIf="l" class="pd-t1">
+                        <div *ngIf="l">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -408,7 +414,6 @@
             <mat-tab
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
-                *ngIf="isHsnSacEnabledAcc"
             >
                 <div class="pd-t15 overflow-hidden">
                     <div class="row pd-b2">
@@ -431,7 +436,7 @@
                                 [id]="'init-contact-update'"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 [placeholder]="localeData?.mobile_no_placeholder"
-                                [floatLabel]="'always'"
+                                [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                 formControlName="mobileNo"
                             >
                             </input-field>
@@ -466,13 +471,14 @@
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden">
                     <div
-                        class="row align-items-center pd-b2"
+                        class="row pd-b2"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
                         [formGroupName]="i"
                     >
                         <div class="w-25 pl-3">
                             <input-field
                                 [name]="'name_' + i"
+                                [id]="'name' + i"
                                 [label]="localeData?.portal_attention_to"
                                 [placeholder]="localeData?.portal_attention_to"
                                 [type]="'email'"
@@ -481,15 +487,17 @@
                             >
                             </input-field>
                         </div>
-                        <div class="w-30 pl-2">
+                        <div class="pl-2">
                             <input-field
                                 [name]="'name_' + i"
+                                [id]="'emailid' + i"
                                 [label]="commonLocaleData?.app_email_id"
                                 [placeholder]="commonLocaleData?.app_email_id"
                                 [type]="'email'"
                                 (input)="portalIndex = i"
                                 formControlName="email"
-                                [required]="true"
+                                [required]="!addAccountForm.get('portalDomain')?.controls[i]?.get('email')?.valid"
+                                [showError]="!isValidForm && !addAccountForm.get('portalDomain')?.controls[i]?.get('email')?.value && !addAccountForm.get('portalDomain')?.controls[i]?.get('email')?.valid"
                             >
                             </input-field>
                             <span
@@ -509,17 +517,17 @@
                                 >{{ localeData?.duplicate_email }}
                             </span>
                         </div>
-                        <div class="w-30 pl-2 mobile-number-portal-wrapper">
+                        <div class="w-30 pl-2 mobile-number mobile-number-wrapper">
                             <input-field
                                 [name]="'contactNo_' + i"
                                 [type]="'tel'"
-                                [cssClass]="'flag-input'"
+                                class="flag-input"
                                 [id]="'init-contact-portal_' + i"
                                 formControlName="contactNo"
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 (input)="portalIndex = i"
-                                [floatLabel]="'always'"
+                                [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
                             <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span>
@@ -572,6 +580,7 @@
                             >
                                 <input-field
                                     [type]="'text'"
+                                    [id]="'beneficiaryName' + i"
                                     [placeholder]="localeData?.beneficiary_name_placeholder"
                                     [label]="localeData?.beneficiary_name_label"                    
                                     [name]="'beneficiaryName_' + i"
@@ -602,6 +611,7 @@
                                         [placeholder]="localeData?.branch_name_placeholder"
                                         [label]="localeData?.branch_name_label"
                                         [name]="'branchName_' + i"
+                                        [id]="'branchName' + i"
                                         formControlName="branchName"
                                     >
                                     </input-field>
@@ -611,13 +621,14 @@
                                 <div>
                                     <input-field
                                         [type]="'text'"
+                                        [id]="'accountNum' + i"
                                         #bankaccount
                                         [placeholder]="commonLocaleData?.app_account_number_placeholder"
                                         [label]="selectedCountryCode === 'IN' ? commonLocaleData?.app_account_number : commonLocaleData?.app_iban"
                                         [maxlength]="bankIbanNumberMaxLength"
                                         [minlength]="bankIbanNumberMinLength"
                                         [name]="'accountNum_' + i"
-                                        (blur)="showBankDetailsValidation(bankaccount, 'bankAccountNo')"
+                                        (onChange)="showBankDetailsValidation(bankaccount, 'bankAccountNo')"
                                         (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
                                         formControlName="bankAccountNo"
                                     >
@@ -627,13 +638,14 @@
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
                                 <input-field
                                     [type]="'text'"
+                                    [id]="'swiftCode' + i"
                                     [placeholder]="commonLocaleData?.app_swift_code_placeholder"
                                     [label]="commonLocaleData?.app_swift_code_label"
                                     [maxlength]="11"
                                     [minlength]="8"
                                     #swiftcode
                                     [name]="'swiftCode_' + i"
-                                    (blur)="showBankDetailsValidation(swiftcode, 'swiftCode')"
+                                    (onChange)="showBankDetailsValidation(swiftcode, 'swiftCode')"
                                     (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')"
                                     formControlName="swiftCode"
                                 >
@@ -642,6 +654,7 @@
                             <div *ngIf="selectedCountryCode !== 'AE'" class="form-group col-sm-3">
                                 <input-field
                                     [type]="'text'"
+                                    [id]="'ifsc' + i"
                                     [placeholder]="commonLocaleData?.app_ifsc_code_placeholder"
                                     [label]="commonLocaleData?.app_ifsc_code_label"
                                     [name]="'ifsc_' + i"
@@ -779,6 +792,7 @@
                                                 [required]="item.isMandatory"
                                                 [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                                 [label]="localeData?.enter_value"
+                                                [showError]="!isValidForm && !addAccountForm.get('customFields')?.controls[i]?.get('value')?.value && item.isMandatory"
                                             >
                                             </input-field>
                                             <input-field
@@ -794,6 +808,7 @@
                                                 [required]="item.isMandatory"
                                                 [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                                 [label]="localeData?.enter_value"
+                                                [showError]="!isValidForm && !addAccountForm.get('customFields')?.controls[i]?.get('value')?.value && item.isMandatory"
                                             >
                                             </input-field>
                                             <mat-radio-group name="ownerPermission" [value]="customFieldsItem.get('value')?.value" *ngIf="item.fieldType?.type === availableFieldTypes.Boolean" class="d-flex flex-column">
@@ -1084,8 +1099,8 @@
                 {{ commonLocaleData?.app_update }}
             </button>
         </div>
-        <!--moveMergedAccount account modal  -->
-        <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
+        <!--moveMergedAccount account modal  not used in present time-->
+        <!-- <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <confirm-modal
@@ -1097,6 +1112,6 @@
                     </confirm-modal>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </ng-container>
