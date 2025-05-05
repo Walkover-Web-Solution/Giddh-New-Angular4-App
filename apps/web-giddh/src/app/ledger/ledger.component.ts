@@ -1606,7 +1606,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.ledgerView === LedgerViewEnum.StatementView) {
-                // this.dropdowns[this.dropdowns?.length - 1]?.openDropdownPanel();
                 const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT') || dropdown?.cssClass?.includes('CREDIT'));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
@@ -2543,6 +2542,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
+                this.ledgerAsidePaneDialogRef = undefined;
             }, 100);
         });
 
@@ -3652,7 +3652,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Handle carousel next event
+     * Handle carousel next event
      *
      * @param {boolean} event
      * @memberof LedgerComponent
@@ -3680,6 +3680,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.ledgerStatementViewGridTotalColumns = 11;
             this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 2];
+        }
+    }
+
+    /**
+     * Handle close other dialog/menu
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public handleCloseOtherDialogMenu(event: boolean): void {
+        if (event) {
+            this.closeAllAccountDropdown();
         }
     }
 }
