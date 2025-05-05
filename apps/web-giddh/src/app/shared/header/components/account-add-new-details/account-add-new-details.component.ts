@@ -795,11 +795,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-        console.log(this.addAccountForm);
-        console.log(this.isGstValid);
-        console.log(this.isMobileNumberInvalid);
-        console.log((this.addAccountForm.get('portalDomain') as FormArray)?.controls[0]?.get('email')?.valid);
-
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
             this.isValidForm = false;
             return;
