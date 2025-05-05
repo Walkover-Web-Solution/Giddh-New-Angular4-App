@@ -12,7 +12,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { AbstractControl, FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
@@ -73,7 +73,7 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
-    public addAccountForm: UntypedFormGroup;
+    public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
@@ -92,8 +92,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
-    public moveAccountForm: UntypedFormGroup;
-    public taxGroupForm: UntypedFormGroup;
+    public moveAccountForm: FormGroup;
+    public taxGroupForm: FormGroup;
     /** Instance of delete account modal */
     @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: TemplateRef<any>;
     @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
@@ -255,10 +255,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if update data on temp bulk data  */
     public isBulkDataUpdated: boolean = false;
     /** True if valid from date is selected */
-    public isVaildFrom: boolean = true;
+    public isValidForm: boolean = true;
 
     constructor(
-        private _fb: UntypedFormBuilder,
+        private _fb: FormBuilder,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
         private searchService: SearchService,
@@ -346,7 +346,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged(isEqual)).subscribe((res) => {
             if (this.portalIndex === null || this.portalIndex === undefined) {
                 return;
@@ -408,7 +408,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
             takeUntil(this.destroyed$))
             .subscribe((response) => {
-                const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     let mobileNo = '';
@@ -599,7 +599,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             this.toggleStateRequired();
         }
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses?.controls?.length === 0) {
             this.addBlankGstForm();
             this.changeDetectorRef.detectChanges();
@@ -689,7 +689,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.getInvoiceSettings();
     }
 
-    public initialGstDetailsForm(val: IAccountAddress = null): UntypedFormGroup {
+    public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
 
         let gstFields = this._fb.group({
@@ -723,7 +723,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });
 
-        let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('countyCode')?.patchValue(null);
@@ -734,7 +734,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public resetBankDetailsForm() {
-        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
+        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
         for (let control of accountBankDetails.controls) {
             control.get('bankName')?.patchValue(null);
             control.get('bankAccountNo')?.patchValue(null);
@@ -759,7 +759,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             mobileNo = user?.contactNo ? ('+' + user?.contactNo) : '';
         }
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         let mappingForm = this._fb.group({
             name: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
@@ -794,13 +794,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * This will be use for remove portal users
      *
-     * @param {UntypedFormGroup} portal
+     * @param {FormGroup} portal
      * @param {number} index
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public removePortalUser(portal: UntypedFormGroup, index: number): void {
+    public removePortalUser(portal: FormGroup, index: number): void {
         if (portal) {
-            let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+            let mappings = this.addAccountForm.get('portalDomain') as FormArray;
             mappings.removeAt(index);
             let data = [{
                 name: portal.value.name,
@@ -829,7 +829,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm(null));
         if (addresses?.length > 4) {
             this.moreGstDetailsVisible = false;
@@ -838,19 +838,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public removeGstDetailsForm(i: number) {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
     }
 
     public addBlankGstForm() {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses?.value?.length === 0) {
             addresses.push(this.initialGstDetailsForm(null));
         }
     }
 
     public renderGstDetails(addressObj: IAccountAddress = null, addressLength: any) {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses?.length < addressLength) {
             addresses.push(this.initialGstDetailsForm(addressObj));
         }
@@ -858,7 +858,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public isDefaultAddressSelected(val: boolean, i: number) {
         if (val) {
-            let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+            let addresses = this.addAccountForm.get('addresses') as FormArray;
             for (let control of addresses.controls) {
                 control.get('isDefault')?.patchValue(false);
             }
@@ -866,7 +866,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public getStateCode(gstForm: UntypedFormGroup, statesEle: ShSelectComponent) {
+    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber')?.value;
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
@@ -904,7 +904,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public showMoreGst() {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
         this.gstDetailsLength = addresses?.controls?.length;
         this.moreGstDetailsVisible = true;
     }
@@ -921,8 +921,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public resetUpdateAccountForm() {
-        const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
-        const countries = this.addAccountForm.get('country') as UntypedFormGroup;
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const countries = this.addAccountForm.get('country') as FormGroup;
         addresses.reset();
         countries.reset();
         this.addAccountForm.reset();
@@ -931,7 +931,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public submit() {
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
-            this.isVaildFrom = false;
+            this.isValidForm = false;
             return;
         }
 
@@ -1118,7 +1118,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public selectedState(gstForm: UntypedFormGroup, event) {
+    public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
@@ -1127,7 +1127,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public selectedCounty(gstForm: UntypedFormGroup, event) {
+    public selectedCounty(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('countyCode')?.patchValue(event?.value);
             gstForm.get('county').get('code')?.patchValue(event?.value);
@@ -1256,7 +1256,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getStates(countryCode, selectedAcountCurrency?: string) {
         this.store.dispatch(this._generalActions.resetStatesList());
         if (countryCode && this.addAccountForm) {
-            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
+            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetails.controls) {
                 if (countryCode === 'IN') {
                     control.get('bankAccountNo').setValidators([Validators.minLength(9), Validators.maxLength(18)]);
@@ -1535,7 +1535,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public toggleStateRequired(): void {
         this.isStateRequired = this.checkActiveGroupCountry();
         let i = 0;
-        let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+        let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode').setValidators(null);
             control.get('countyCode').setValidators(null);
@@ -1565,7 +1565,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             let trim: string = '';
             // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
-            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as UntypedFormArray;
+            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
                     control.get('bankAccountNo')?.patchValue(trim);
@@ -1659,7 +1659,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public addBlankCustomFieldForm(): void {
-        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+        const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField?.value?.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
@@ -1673,7 +1673,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
-        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+        const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
@@ -1686,13 +1686,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @returns {FormGroup}
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): UntypedFormGroup {
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
         if (value) {
-            customFields?.patchValue(value);
+            customFields?.patchValue({
+                uniqueName: value.uniqueName,
+                value: typeof value.value === 'string' ? value.value : ''
+            });
         }
         return customFields;
     }
@@ -1717,7 +1720,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
-        const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+        const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value')?.setValue(isChecked);
     }
 
@@ -2037,7 +2040,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             }, 50);
 
-            const accountAddress = this.addAccountForm.get('addresses') as UntypedFormArray;
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
@@ -2127,7 +2130,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .subscribe((response) => {
                             if (response?.body?.length && response?.status === 'success') {
                                 this.isPortalDefault = false;
-                                let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                                let mappings = this.addAccountForm.get('portalDomain') as FormArray;
                                 mappings.clear();
                                 response.body?.forEach((item) => {
                                     if (item && (item.name || item.email) && item.default) {
@@ -2186,7 +2189,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this._toaster.errorToast(results[1].message);
                 }
                 if (accountDetails.customFields?.length) {
-                    const customField = this.addAccountForm.get('customFields') as UntypedFormArray;
+                    const customField = this.addAccountForm.get('customFields') as FormArray;
                     if (customField.controls?.length) {
                         accountDetails.customFields.forEach(item => {
                             const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
