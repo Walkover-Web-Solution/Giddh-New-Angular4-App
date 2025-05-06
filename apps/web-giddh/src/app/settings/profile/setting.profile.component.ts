@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -26,6 +26,8 @@ import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
 import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { ServiceConfig } from '../../services/service.config';
+import { LedgerViewEnum } from '../../models/api-models/Ledger';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -93,7 +95,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         taxType: '',
         manageInventory: false,
         portalDomain: '',
-        withPay: 'false'
+        withPay: 'false',
+        ledgerView: LedgerViewEnum.TView
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -199,6 +202,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetectorRef: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
@@ -302,7 +306,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -376,7 +380,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         },
                         companyName: response.name,
                         balanceDecimalPlaces: response.balanceDecimalPlaces,
-                        balanceDisplayFormat: response.balanceDisplayFormat
+                        balanceDisplayFormat: response.balanceDisplayFormat,
+                        ledgerView: response.ledgerView
                     }
                 }
             }
@@ -1055,11 +1060,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isAddressChangeInProgress = true;
         addressDetails.formValue.linkedEntity = addressDetails.formValue.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity?.uniqueName,
-            isDefault: filteredEntity.isDefault,
-            entity: filteredEntity.entity
-        }));
+        let linkEntity;
+        if (!addressDetails.hideLinkEntity) {
+            linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+                uniqueName: filteredEntity?.uniqueName,
+                isDefault: filteredEntity.isDefault,
+                entity: filteredEntity.entity
+            }));
+        } else {
+            linkEntity = addressDetails.addressDetails.linkedEntities
+                ?.filter(entity => addressDetails.formValue.linkedEntity.some(linked => linked.uniqueName === entity.uniqueName))
+                .map(filteredEntity => ({
+                    uniqueName: filteredEntity?.uniqueName,
+                    isDefault: filteredEntity.isDefault,
+                    entity: filteredEntity.entity
+                }));
+        }
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
@@ -1200,7 +1216,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,
                 isMultipleCurrency: profileObj.isMultipleCurrency,
                 manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false,
-                withPay: profileObj.withPay
+                withPay: profileObj.withPay,
+                ledgerView: profileObj.ledgerView
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 

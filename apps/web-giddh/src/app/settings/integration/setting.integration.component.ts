@@ -1,7 +1,7 @@
-import { Observable, of as observableOf, pipe, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef, Inject } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -28,9 +28,8 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
-import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { BankIntegrationComponent } from '../../shared/bank-integration/bank-integration.component';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'setting-integration',
@@ -180,7 +179,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Hold confirmationModalRef mat dailog reference */
     public confirmationModalRef: any;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    public iciciAllowedCompanies: any[] = [];
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds Create New Account Dialog Ref */
@@ -193,17 +192,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public linkedAccountLabel: string = '';
     /**  Holds Mat Dialog reference */
     public removeGmailIntegrationDialogRef: MatDialogRef<any>;
-    /** Holds Store Delete end user agreement  API success state as observable*/
-    public deleteEndUseAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
-    /** Hold reference number */
-    public referenceNumber: string = '';
-    /** Holds Store Requisition API success state as observable*/
-    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
-    /** True, if is integration module are in scope  */
+/** True, if is integration module are in scope  */
     public hasIntegrationScope: boolean = false;
-    
+    /** Holds help documentation url for syncing with Tally */
+    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -221,11 +216,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         public dialog: MatDialog,
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetectionRef: ChangeDetectorRef,
         private componentStore: SettingIntegrationComponentStore
 
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl)))?.replace(':client_id', (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID));
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
@@ -239,11 +237,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         let companyUniqueName = this.generalService.companyUniqueName;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
+        this.apiUrl = `${(this.serviceConfig.ApiUrl || ApiUrl)}company/${companyUniqueName}/imports/tally-import`;
 
         // getting all page data of integration page
         this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -390,27 +388,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadPaymentData();
             }
         };
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/settings/integration/payment') {
-                if (event && event.data === "GOCARDLESS") {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                    }
-                }
-            }
-        });
-
-        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.loadPaymentData();
-            }
-        });
-
-        this.deleteEndUseAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.loadPaymentData();
-            }
-        });
     }
 
     /**
@@ -419,9 +396,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngAfterViewInit(): void {
-        if (this.selectedTabParent) {
-            this.loadTabData(this.selectedTabParent);
-        }
+        this.loadPaymentData();
     }
 
     public setDummyData() {
@@ -940,7 +915,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
             this.isAddAndManageOpenedFromOutside = result;
         });
-        if (event && event instanceof TabDirective || !event) {
+        if (event || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
@@ -1174,6 +1149,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1197,32 +1175,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getPlaidLinkToken(itemId?: any): void {
         this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
-    }
-
-    /**
-    * This function will use for get institutions details
-    *
-    * @param {*} element
-    * @memberof SettingIntegrationComponent
-    */
-    public openInstitutionsDialog(): void {
-        let data = {
-            localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData,
-        }
-        const dialogRef = this.dialog.open(InstitutionsListComponent, {
-            data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'institutionsListDialog'
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.referenceNumber = response;
-            }
-        });
     }
 
     /**

@@ -5,6 +5,9 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
+import { MatDialog } from '@angular/material/dialog';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'import-type-select',
@@ -23,10 +26,13 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds a reference to the `VoucherType` enum */
+    public voucherType: typeof VoucherType = VoucherType;
 
     constructor(
         private store: Store<AppState>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        public dialog: MatDialog
     ) {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }

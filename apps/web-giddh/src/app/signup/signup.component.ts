@@ -391,7 +391,7 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @param {*} data
      * @memberof SignupComponent
      */
-     private initiateSignup(data: any): void {
+    private initiateSignup(data: any): void {
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));

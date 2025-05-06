@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
@@ -11,6 +11,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'app-rejected-list',
@@ -55,6 +56,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
         private store: Store<AppState>,
         private toaster: ToasterService,
         private cdRef: ChangeDetectorRef,
+        @Inject(ServiceConfig) private serviceConfig,
         private expenseService: ExpenseService,
         public dialog: MatDialog,
         private lightbox: Lightbox
@@ -228,7 +230,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
             this.rejectedItems = this.pettyCashRejectedReportResponse.results?.map((rejected, index) => {
                 rejected.index = index;
                 return rejected;
-            });;
+            });
             this.reportDates.emit([this.pettyCashRejectedReportResponse.fromDate, this.pettyCashRejectedReportResponse.toDate]);
             setTimeout(() => {
                 this.detectChanges();
@@ -274,7 +276,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
      public openZoomImageView(fileNames: any): void {
         let images = [];
         fileNames?.forEach(file => {
-            images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
+            images.push({ src: (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + file });
         });
         this.lightbox.open(images, 0);
     }

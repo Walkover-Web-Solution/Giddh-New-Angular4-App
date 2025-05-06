@@ -409,24 +409,29 @@ getApi: function () {
     if (region) {
         apiBaseUrl = 'https://gbapi.giddh.com/';
     } else {
-        // Original logic based on hostname
-        switch (window.location.hostname) {
-            case 'localhost':
-            case 'test.giddh.com':
-                apiBaseUrl = 'https://apitest.giddh.com/';
-                break;
-            case 'dev.giddh.com':
-                apiBaseUrl = 'https://apidev.giddh.com/';
-                break;
-            case 'stage.giddh.com':
-                apiBaseUrl = 'https://apitest.giddh.com/';
-                break;
-            case 'giddh.com':
-            case 'books.giddh.com':
-                apiBaseUrl = 'https://api.giddh.com/';
-                break;
-            default:
-                apiBaseUrl = 'https://api.giddh.com/';
+        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+        if (whiteLabelData) {
+       apiBaseUrl = `${whiteLabelData?.body?.giddhWhiteLabel?.apiDomain}/`;
+        } else {
+             // Original logic based on hostname
+            switch (window.location.hostname) {
+                case 'localhost':
+                case 'test.giddh.com':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
+                    break;
+                case 'dev.giddh.com':
+                    apiBaseUrl = 'https://apidev.giddh.com/';
+                    break;
+                case 'stage.giddh.com':
+                    apiBaseUrl = 'https://apitest.giddh.com/';
+                    break;
+                case 'giddh.com':
+                case 'books.giddh.com':
+                    apiBaseUrl = 'https://api.giddh.com/';
+                    break;
+                default:
+                    apiBaseUrl = 'https://api.giddh.com/';
+            }
         }
     }
     return apiBaseUrl;

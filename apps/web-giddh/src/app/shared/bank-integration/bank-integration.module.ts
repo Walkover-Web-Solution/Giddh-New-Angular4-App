@@ -29,9 +29,10 @@ import { SettingIntegrationPaymentModule } from "../../settings/integration/paym
 import { AccountNumberMaskModule } from "../helpers/pipes/accountNumberMaskPipe/accountNumberMask.module";
 import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 import { BankLinkComponent } from "./bank-link/bank-link.component";
+import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-integration-popup.component";
 
 @NgModule({
-    declarations: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent ],
+    declarations: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent ],
     imports: [
         CommonModule,
         MatListModule,
@@ -65,6 +66,6 @@ import { BankLinkComponent } from "./bank-link/bank-link.component";
         GiddhPageLoaderModule
 
     ],
-    exports: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent]
+    exports: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent]
 })
 export class BankIntegrationModule {}

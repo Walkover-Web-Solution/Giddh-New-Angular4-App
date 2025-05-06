@@ -1,0 +1,16 @@
+{
+    "compare_with": "Compare with",    
+    "none": "None",
+    "periods": "period/s",
+    "enter_a_different_number": "Enter a different number",
+    "previous": "Previous",
+    "compare_types": {
+        "month": "Month",
+        "quarter": "Quarter",
+        "year": "Year",
+        "period": "Period",
+        "custom_date_range": "Custom date range"
+    },
+    "options_are_disabled_message": "Options are disabled because the report date range is longer.",
+    "up_to_36_periods_can_be_compared": "Up to 36 periods can be compared"
+}

@@ -663,6 +663,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public templateType: any;
     /** True if user has invoice template permissions */
     public hasInvoiceTemplatePermissions: boolean = true;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
 
     constructor(
         private _toasty: ToasterService,
@@ -689,9 +691,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.invoiceActions.getTemplateState());
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params && (this.generalService.voucherApiVersion === 2 && params.module === 'templates') || (this.generalService.voucherApiVersion === 1)) {
+            if (params && (this.voucherApiVersion === 2 && params.module === 'templates') || (this.voucherApiVersion === 1)) {
                 if (params.selectedType) {
                     if (params.selectedType === VoucherTypeEnum.creditNote || params.selectedType === VoucherTypeEnum.debitNote) {
                         this.voucherTypeChanged(params.selectedType);
@@ -829,7 +832,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             delete data['uniqueName'];
-            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template') {
+            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template' && data.templateType?.toLowerCase() !== 'tally_template') {
                 delete data?.sections?.header?.data?.showCompanyAddress;
                 delete data?.sections?.header?.data?.showQrCode;
                 delete data?.sections?.header?.data?.showEInvoiceDetails;
@@ -837,6 +840,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 delete data?.sections?.footer?.data?.showNotesAtLastPage;
                 delete data?.sections?.footer?.data?.showMessage2;
                 delete data?.sections?.footer?.data?.textUnderSlogan;
+            }
+
+            if (vouchertyp === 'voucher') {
+                data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
+                data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+            } else {
+                data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
+                data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
             }
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {

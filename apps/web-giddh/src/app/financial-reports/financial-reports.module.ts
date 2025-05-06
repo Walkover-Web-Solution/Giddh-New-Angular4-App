@@ -49,6 +49,9 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
+import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
+import { MatButtonModule } from '@angular/material/button';
+import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 
 @NgModule({
     declarations: [
@@ -68,13 +71,20 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         BalanceSheetGridComponent,
         BalanceSheetGridRowComponent,
         FinancialAccordionDirective,
-        FinancialSearchPipe,
         AccountsFilterPipe
     ],
     exports: [
-        FinancialReportsComponent, CurrencyModule
+        FinancialReportsComponent, 
+        CurrencyModule,
+        FinancialReportsComponent, 
+        CurrencyModule,
+        ProfitLossComponent,
+        ProfitLossGridComponent,
+        ProfitLossGridRowComponent,
+        ProfitLossExportXlsComponent,
+        FinancialReportsFilterComponent
     ],
-    providers: [],
+    providers: [ProjectAccountingService],
     imports: [
         CommonModule,
         ModalModule.forRoot(),
@@ -102,7 +112,10 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AmountFieldComponentModule,
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        FinancialSearchPipe,
+        MatButtonModule,
+        CompareWithDateRangePickerComponent
     ],
 })
 export class FinancialReportsModule {

@@ -49,7 +49,7 @@ const APP_PROVIDERS = [
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-    return localStorageSync({ keys: ['session', 'permission','branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
+    return localStorageSync({ keys: ['session', 'permission', 'branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];

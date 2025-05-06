@@ -2,7 +2,6 @@
 voucher-component,
 create-update-group,
 giddh-datepicker,
-add-company,
 stock-create-edit,
 dropdown-field,
 input-field,
@@ -16,7 +15,7 @@ report-filters,
     }
 
     .mat-mdc-form-field {
-        background-color: var(--color-white) !important;
+        background-color: var(--color-transparent-background) !important;
         border-radius: 4px;
 
         .mat-mdc-text-field-wrapper {
@@ -25,8 +24,8 @@ report-filters,
             }
 
             .mat-mdc-form-field-infix {
-                min-height: 48px;
-                max-height: 48px;
+                min-height: var(--mat-form-field-height);
+                max-height: var(--mat-form-field-height);
                 padding: 12px 0 !important;
 
                 .mat-mdc-input-element {
@@ -68,13 +67,13 @@ report-filters,
         .mdc-notched-outline__notch {
             border-color: var(--color-fields-border) !important;
             border-left: none !important;
-        }          
+        }
     }
 
     .mat-form-field-appearance-outline {
         .mat-mdc-form-field-icon-suffix {
             margin-left: 0;
-            margin-right: 10px;
+            margin-right: 15px;
         }
     }
 
@@ -196,12 +195,12 @@ report-filters,
     }
 
     .mdc-text-field--focused {
-
         .mdc-notched-outline__leading,
         .mdc-notched-outline__notch,
         .mdc-notched-outline__trailing {
             border-width: 1px;
         }
+
         .mdc-notched-outline__notch {
             border-left: none !important;
         }
@@ -284,7 +283,43 @@ giddh-datepicker,
     giddh-datepicker {
         .mat-mdc-form-field {
             min-width: 71px;
-            max-width: 100px;
+            max-width: 111px;
+        }
+
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
+
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 86px;
+
+            .mdc-icon-button {
+                svg {
+                    position: absolute;
+                    top: 12px;
+                    left: 0px;
+                }
+            }
+        }
+
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
+
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 86px;
+
+            .mdc-icon-button {
+                svg {
+                    position: absolute;
+                    top: 12px;
+                    left: 0px;
+                }
+            }
         }
     }
 }
@@ -337,7 +372,7 @@ voucher-component {
 
         .mat-form-field-infix {
             .mat-input-element {
-                padding-left: 48px !important;
+                padding-left: var(--mat-form-field-height) !important;
             }
         }
 
@@ -416,12 +451,12 @@ ngx-mat-select-search {
         margin: 0 !important;
     }
 
-    input[type=checkbox][disabled] {
+    input[type="checkbox"][disabled] {
         opacity: 0;
     }
 
-    input[type=checkbox]::before,
-    input[type=checkbox]::after {
+    input[type="checkbox"]::before,
+    input[type="checkbox"]::after {
         display: none;
     }
 }
@@ -452,7 +487,7 @@ ngx-mat-select-search {
     .mdc-radio {
         padding: 0 !important;
 
-        .mdc-radio__native-control:enabled:checked+.mdc-radio__background {
+        .mdc-radio__native-control:enabled:checked + .mdc-radio__background {
             .mdc-radio__outer-circle {
                 border-color: var(--color-giddh-blue) !important;
             }
@@ -463,13 +498,12 @@ ngx-mat-select-search {
         }
 
         &:hover {
-            .mdc-radio__native-control:not([disabled]):not(:focus)~.mdc-radio__background::before {
+            .mdc-radio__native-control:not([disabled]):not(:focus) ~ .mdc-radio__background::before {
                 opacity: 0 !important;
             }
         }
     }
 }
-
 
 /*---- custom ----*/
 .custom-input-field {
@@ -501,18 +535,27 @@ ngx-mat-select-search {
     }
 }
 
-/*----- dropdown-color ----*/
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
+            &:has(.email-dropdown-width) {
+                width: 400px !important;
+            }
+            &:has(.menu-width-150) {
+                width: 150px !important;
+            }
             .mat-mdc-autocomplete-panel {
                 background-color: var(--color-body-background);
+                padding-block: 0 !important;
             }
         }
     }
 
-    div.mat-mdc-select-panel {
-        background-color: var(--color-body-background);
+    /*----- dropdown-color ----*/
+    div {
+        &.mat-mdc-select-panel {
+            background-color: var(--color-body-background);
+        }
     }
 }
 
@@ -590,7 +633,7 @@ report-filters {
 .mat-mdc-option {
     &.mdc-list-item--disabled {
         .mdc-list-item__primary-text {
-            opacity: .78 !important;
+            opacity: 0.78 !important;
         }
     }
 }
@@ -615,6 +658,7 @@ app-cdk-scroll {
     &:not(.mdc-text-field--disabled) {
         .mdc-text-field__input {
             color: var(--color-common-primary-text);
+
             &::placeholder {
                 color: var(--color-gray) !important;
             }
@@ -633,15 +677,19 @@ app-cdk-scroll {
 input-field {
     .prefix-icon-field {
         i {
-            inset: 16px 0 0 0;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
         }
-        &.mat-mdc-form-field  {
-            .mat-mdc-text-field-wrapper {
-                .mat-mdc-form-field-infix {
-                    padding-left: 20px !important;
-                }
-            } 
-            .mdc-text-field--outlined  {
+
+        &.mat-mdc-form-field {
+          .mat-mdc-text-field-wrapper {
+              .mat-mdc-form-field-infix {
+                  padding-left: 20px !important;
+              }
+          }
+
+            .mdc-text-field--outlined {
                 .mdc-notched-outline {
                     .mdc-notched-outline__leading {
                         width: max(40px, var(--mdc-shape-small, 4px)) !important;
@@ -657,8 +705,81 @@ input-field {
         display: none !important;
     }
 
-    .mat-mdc-form-field,  
+    .mat-mdc-form-field,
     .mat-mdc-form-field input{
         background-color: var(--color-primary-input-bar-background) !important;
+    }
+}
+
+reactive-dropdown-field {
+    .dropdown-without-label {
+        mat-form-field {
+            .mat-mdc-text-field-wrapper {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .mat-mdc-radio-group {
+        display: flex;
+        column-gap: 5px;
+    }
+}
+
+mat-option {
+    &.dropdown-tick-icon-position {
+        mat-pseudo-checkbox {
+            position: absolute;
+            pointer-events: none;
+            right: 35px;
+        }
+    }
+}
+
+.mdc-text-field {
+    .mdc-floating-label {
+        color: var(--color-popup-list-input-text) !important;
+    }
+}
+
+.mdc-text-field--outlined {
+    .mdc-notched-outline__leading {
+        border-color: var(--color-fields-border) !important;
+    }
+
+    &.mdc-text-field--focused {
+        .mdc-notched-outline__leading {
+            border-color: var(--color-border-focus) !important;
+        }
+
+        .mdc-notched-outline__notch {
+            border-color: var(--color-border-focus) !important;
+            border-left: none !important;
+        }
+
+        .mdc-notched-outline__trailing {
+            border-color: var(--color-border-focus) !important;
+        }
+    }
+
+    .mdc-notched-outline__notch {
+        border-color: var(--color-fields-border) !important;
+        border-left: none !important;
+    }
+
+    .mdc-notched-outline {
+        .mdc-notched-outline__trailing {
+            border-color: var(--color-fields-border);
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .mat-mdc-radio-group {
+        display: flex;
+        column-gap: 5px;
     }
 }

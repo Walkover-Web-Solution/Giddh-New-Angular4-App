@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -8,7 +8,7 @@ import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
@@ -18,6 +18,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -100,8 +101,10 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Sales Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -115,7 +118,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = this.paginationLimit;
         this.getDetailedsalesRequestFilter.q = '';
@@ -181,12 +184,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe(s => {
-            if (s !== null && s !== undefined) {
+        ).subscribe(searching => {
+            if (searching !== null && searching !== undefined) {
                 this.showClearFilter = true;
                 this.getDetailedsalesRequestFilter.sort = null;
                 this.getDetailedsalesRequestFilter.sortBy = null;
-                this.getDetailedsalesRequestFilter.q = s;
+                this.getDetailedsalesRequestFilter.q = encodeURIComponent(searching);
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
                 this.showSearchInvoiceNo = false;
             }
@@ -572,13 +575,16 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-      * Handle Page Change event and Make API Call
+      * Handle page change event and make API call
       *
       * @param {*} event
       * @memberof SalesRegisterExpandComponent
       */
     public handlePageChange(event: any): void {
-        this.getDetailedsalesRequestFilter.page = event.pageIndex + 1;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        if (event) {
+            this.getDetailedsalesRequestFilter.count = event.pageSize;
+            this.getDetailedsalesRequestFilter.page = event.pageIndex + 1;
+            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        }
     }
 }

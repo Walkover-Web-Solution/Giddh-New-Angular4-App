@@ -2,6 +2,12 @@
     padding: 0 4px;
 }
 
+.edit-icon-position {
+    top: -22px;
+    right: 0px;
+    z-index: 1;
+}
+
 .height-30 {
     height: 30px;
 }
@@ -24,6 +30,14 @@ table.width-100 {
 
 .multi-currency-input {
     padding-right: 35px !important;
+}
+
+.model-header {
+    padding: 0 15px 0 15px;
+}
+.mr-rl {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .modal-header ng-select {
@@ -90,9 +104,8 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .other-tax {
     justify-content: flex-end;
-    padding-top: 25px;
     display: flex;
-    padding-left: 8px;
+    padding-left: 15px;
 }
 
 .total-col span.bd-rt {
@@ -133,13 +146,12 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .total-detail-table .table-amount {
-    width: 100%;
+    min-width: 0;
 }
 
 .icon-box {
     display: flex;
     align-items: center;
-    padding: 10px 10px 0 10px;
     font-size: 12px;
     height: 60px;
     label {
@@ -203,7 +215,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     align-items: center;
     span {
         padding-left: 5px;
-        padding-top: 4px;
+        padding-top: 2px;
     }
     sh-select {
         width: 100%;
@@ -281,13 +293,13 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
 }
 p.edit-message {
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-filter-background);
     text-align: center;
     padding: 8px 0;
-    border-top: 1px solid var(--color-common-secondary-border);
     font-size: var(--font-size-15);
     font-family: var(--font-semibold);
-    margin-top: 15px;
+    margin-top: 0px;
+    bottom: 0;
 }
 
 .collapse-icons {
@@ -313,8 +325,24 @@ p.edit-message {
         font-size: var(--font-size-15);
     }
 }
-/* responsive */
 
+.read-only {
+    background-color: var(--color-primary-input-bar-background) !important;
+}
+
+.no-data-found {
+    background: var(--color-white);
+    text-align: center;
+    font-size: var(--font-size-32);
+    height: 600px;
+    width: 100%;
+    padding: 3rem;
+    color: var(--color-gray);
+}
+.cross-button {
+    font-size: 32px;
+}
+/* responsive */
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
         display: flex;
@@ -330,13 +358,12 @@ p.edit-message {
         width: 100% !important;
         float: left;
         height: initial;
-        display: none;
     }
     .custom-tabs {
         display: block !important;
     }
-    .left-col-new.active,
-    .right-col-new.active {
+    .left-col-new,
+    .right-col-new {
         display: block !important;
     }
     .total-detail-table {
@@ -431,7 +458,7 @@ p.edit-message {
             width: 185px;
             margin-top: 5px;
         }
-    } 
+    }
     .currency-convertor {
         float: right;
         display: block;
@@ -496,10 +523,11 @@ p.edit-message {
 }
 
 .width-datepicker {
-    width: 130px !important;
+    width: 107px !important;
+    margin-top: 7px;
 }
 
-@media screen and (max-width: 1440px) {
+@media screen and (max-width: 1653px) {
     .width-datepicker {
         width: 100px !important;
     }
@@ -532,5 +560,15 @@ p.edit-message {
 @media (min-width: 1301px) and (max-width: 1386px) {
     .reference-invoice {
         width: 150px;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .width-datepicker {
+        width: 78px !important;
+    }
+}
+.update-ledger-account {
+    .read-only { 
+        background-color: var(--color-transparent-background) !important;
     }
 }

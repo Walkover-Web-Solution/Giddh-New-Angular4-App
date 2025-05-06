@@ -2,6 +2,87 @@
 <html id="default" lang="en">
     <head>
         <title></title>
+        <style>
+            :root {
+                --custom-font-size: 14px;
+            }
+            * {
+                font-size: var(--custom-font-size) !important;
+            }
+        </style>
+        <style type="text/css" *ngIf="inputTemplate.font === 'Roboto'">
+            /* Roboto Light (200) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Light.ttf") format("truetype");
+            font-weight: 200;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Light Italic (200 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-LightItalic.ttf") format("truetype");
+            font-weight: 200;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Regular (400) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+            font-weight: 400;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Italic (400 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Italic.ttf") format("truetype");
+            font-weight: 400;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Medium (500) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Medium.ttf") format("truetype");
+            font-weight: 500;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Medium Italic (500 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-MediumItalic.ttf") format("truetype");
+            font-weight: 500;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF;
+            }
+
+            /* Roboto Bold (700) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-Bold.ttf") format("truetype");
+            font-weight: 700;
+            font-style: normal;
+            unicode-range: U+0020-007E, U+00A0-00FF; /* Basic Latin and Latin-1 Supplement */
+            }
+
+            /* Roboto Bold Italic (700 Italic) */
+            @font-face {
+            font-family: "Roboto";
+            src: url("../../../../../../../assets/fonts/Roboto/Roboto-BoldItalic.ttf") format("truetype");
+            font-weight: 700;
+            font-style: italic;
+            unicode-range: U+0020-007E, U+00A0-00FF; /* Basic Latin and Latin-1 Supplement */
+            }
+        </style>
     </head>
 
     <body
@@ -13,7 +94,8 @@
             'padding-bottom': inputTemplate.bottomMargin + 'px',
             'padding-right': inputTemplate.rightMargin + 'px',
             'padding-left': inputTemplate.leftMargin + 'px',
-            'font-size': inputTemplate.fontDefault + 'px'
+            'font-size': inputTemplate.fontDefault + 'px',
+            '--custom-font-size': inputTemplate.fontDefault + 'px'
         }"
     >
     <div>
@@ -40,10 +122,9 @@
                     <tbody>
                         <tr>
                             <td class="padding-0 border-none">
-                                <table>
+                                <table class="mr-t1">
                                     <tr>
-                                        <td class="border-none" width="33%"></td>
-                                        <td class="border-none" width="33%">
+                                        <td class="border-none" width="33%" colspan="100%">
                                             <ng-container
                                                 *ngIf="
                                                     fieldsAndVisibility.header.formNameInvoice?.label &&
@@ -53,9 +134,8 @@
                                                 <h1
                                                     *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display"
                                                     class="text-center"
-                                                    style="font-size: 22px !important"
                                                 >
-                                                    <strong class="strong">
+                                                    <strong class="strong" style="font-size: calc(var(--custom-font-size) + 4px) !important">
                                                         {{
                                                             fieldsAndVisibility.header.formNameTaxInvoice?.display
                                                                 ? fieldsAndVisibility.header.formNameTaxInvoice?.label
@@ -64,9 +144,6 @@
                                                     </strong>
                                                 </h1>
                                             </ng-container>
-                                        </td>
-                                        <td class="border-none text-right" width="33%">
-                                            <!-- This will show typeOfInvoice (Original	for	Recipient) in PDF -->
                                         </td>
                                     </tr>
                                     <tr *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display">
@@ -101,18 +178,18 @@
                                         >
                                             <table>
                                                 <tr>
-                                                    <td class="border-none padding-0" width="90px">IRN</td>
+                                                    <td class="border-none padding-0" width="95px">IRN</td>
                                                     <td class="border-none padding-0" style="word-break: break-all">
                                                         :
                                                         def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="border-none padding-0" width="90px">Ack No</td>
+                                                    <td class="border-none padding-0" width="95px">Ack No</td>
                                                     <td class="border-none padding-0">: 152410022936999</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="border-none padding-0" width="90px">Ack Date</td>
+                                                    <td class="border-none padding-0" width="95px">Ack Date</td>
                                                     <td class="border-none padding-0">: {{ getTodayDate(true) }} 10:08:00</td>
                                                 </tr>
                                             </table>
@@ -158,8 +235,9 @@
                                                                 </td>
                                                                 <td
                                                                     class="padding-0 border-none"
-                                                                    *ngIf="
-                                                                        fieldsAndVisibility?.header?.showCompanyAddress?.display
+                                                                    *ngIf="fieldsAndVisibility.header.companyName?.display ||
+                                                                        fieldsAndVisibility?.header?.showCompanyAddress?.display ||
+                                                                        fieldsAndVisibility.header.gstin?.display
                                                                     "
                                                                 >
                                                                     <h2 class="word-break" *ngIf="fieldsAndVisibility.header.companyName?.display">
@@ -168,7 +246,7 @@
                                                                         </strong>
                                                                     </h2>
 
-                                                                    <p class="margin-0">
+                                                                    <p class="margin-0" *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display">
                                                                         Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2,
                                                                         Old Palasia, Near Greater Kailash Hospital,
                                                                         Indore 452001(M. P.)
@@ -200,6 +278,23 @@
                                                         </table>
                                                     </td>
                                                 </tr>
+                                                <tr *ngIf="fieldsAndVisibility.header.customerName?.display">
+                                                    <td class="border-none border-bottom">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="border-none padding-0" width="95px">
+                                                                    {{
+                                                                        fieldsAndVisibility.header.customerName
+                                                                            ?.label || "Customer Name"
+                                                                    }}
+                                                                </td>
+                                                                <td class="border-none padding-0">
+                                                                    <strong class="strong"> : Green Soft Solutions</strong>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
                                                 <tr *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
                                                     <td class="border-none border-bottom">
                                                         <p class="font-11">
@@ -207,10 +302,6 @@
                                                                 fieldsAndVisibility.header.shippingAddress?.label ||
                                                                     "Consignee (Ship to)"
                                                             }}
-                                                        </p>
-
-                                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                                            <strong class="strong"> Green Soft Solutions </strong>
                                                         </p>
 
                                                         <p>5 A.B. Road</p>
@@ -225,7 +316,7 @@
                                                                     fieldsAndVisibility.header.shippingGstin?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.shippingGstin
                                                                             ?.label || "GSTIN"
@@ -239,7 +330,7 @@
                                                                     fieldsAndVisibility.header.shippingState?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.shippingState
                                                                             ?.label || "State Name"
@@ -249,7 +340,7 @@
                                                             </tr>
 
                                                             <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility?.header?.attentionTo
                                                                             ?.label || "Contact person"
@@ -265,7 +356,7 @@
                                                                     fieldsAndVisibility.header.customerEmail?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     E-mail
                                                                 </td>
                                                                 <td class="border-none padding-0">
@@ -279,7 +370,7 @@
                                                                         ?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     Contact
                                                                 </td>
                                                                 <td class="border-none padding-0">: +91 901212XXXX</td>
@@ -295,11 +386,6 @@
                                                                     "Buyer (Bill to)"
                                                             }}
                                                         </p>
-
-                                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">
-                                                            <strong class="strong"> Green Soft Solutions </strong>
-                                                        </p>
-
                                                         <p>5 A.B. Road</p>
                                                         <p>Indore (M.P.) 452000, Madhya Pradesh</p>
                                                         <p *ngIf="fieldsAndVisibility.header.shippingState?.display">
@@ -310,7 +396,7 @@
                                                             <tr
                                                                 *ngIf="fieldsAndVisibility.header.billingGstin?.display"
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.billingGstin
                                                                             ?.label || "GSTIN"
@@ -322,7 +408,7 @@
                                                             <tr
                                                                 *ngIf="fieldsAndVisibility.header.billingState?.display"
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.billingState
                                                                             ?.label || "State Name"
@@ -337,7 +423,7 @@
                                                                         ?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0 vertical-align-bottom" width="90px">
+                                                                <td class="border-none padding-0 vertical-align-bottom" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility.header.displayPlaceOfSupply
                                                                             ?.label || "Place Of Supply"
@@ -349,7 +435,7 @@
                                                             </tr>
 
                                                             <tr *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     {{
                                                                         fieldsAndVisibility?.header?.attentionTo
                                                                             ?.label || "Contact person"
@@ -365,7 +451,7 @@
                                                                     fieldsAndVisibility.header.customerEmail?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     E-mail
                                                                 </td>
                                                                 <td class="border-none padding-0">
@@ -379,7 +465,7 @@
                                                                         ?.display
                                                                 "
                                                             >
-                                                                <td class="border-none padding-0" width="90px">
+                                                                <td class="border-none padding-0" width="95px">
                                                                     Contact
                                                                 </td>
                                                                 <td class="border-none padding-0">: +91 901212XXXX</td>
@@ -402,10 +488,12 @@
                                                         <ng-container
                                                             *ngIf="fieldsAndVisibility.header.invoiceNumber?.display"
                                                         >
-                                                            <span>{{
-                                                                fieldsAndVisibility.header.invoiceNumber?.label ||
-                                                                    "Invoice No."
-                                                            }}</span>
+                                                            <ng-container *ngIf="voucherType === 'sales'; else voucherNo">
+                                                                {{ fieldsAndVisibility.header.invoiceNumber?.label || "Invoice No." }}
+                                                            </ng-container>
+                                                            <ng-template #voucherNo>
+                                                                {{ fieldsAndVisibility.header.voucherNumber?.label || "Voucher No." }}
+                                                            </ng-template>
                                                             <p class="margin-0">
                                                                 <strong class="strong">{{ getTodayDate(false, true) + "-1" }}</strong>
                                                             </p>
@@ -415,10 +503,14 @@
                                                         <ng-container
                                                             *ngIf="fieldsAndVisibility.header.invoiceDate?.display"
                                                         >
-                                                            <span>{{
-                                                                fieldsAndVisibility.header.invoiceDate?.label ||
-                                                                    "Invoice Date"
-                                                            }}</span>
+                                                            <span>
+                                                                <ng-container *ngIf="voucherType === 'sales'; else voucherDate">
+                                                                    {{ fieldsAndVisibility.header.invoiceDate?.label || "Invoice Date" }}
+                                                                </ng-container>
+                                                                <ng-template #voucherDate>
+                                                                    {{ fieldsAndVisibility.header.voucherDate?.label || "Voucher Date" }}
+                                                                </ng-template>
+                                                            </span>
                                                             <p class="margin-0">
                                                                 <strong class="strong">{{ getTodayDate(false) }}</strong>
                                                             </p>
@@ -501,12 +593,7 @@
                                                 <span class="strong" *ngIf="fieldsAndVisibility.table.item?.display">
                                                     Dummy Product Edition 1
                                                 </span>
-                                                <p
-                                                    *ngIf="
-                                                        fieldsAndVisibility.table.item?.display &&
-                                                        !fieldsAndVisibility.table.showDescriptionInRows?.display
-                                                    "
-                                                >
+                                                <p>
                                                     Dummy Product Description 1
                                                 </p>
 
@@ -562,12 +649,7 @@
                                                 <span class="strong" *ngIf="fieldsAndVisibility.table.item?.display">
                                                     Dummy Product Edition 2
                                                 </span>
-                                                <p
-                                                    *ngIf="
-                                                        fieldsAndVisibility.table.item?.display &&
-                                                        !fieldsAndVisibility.table.showDescriptionInRows?.display
-                                                    "
-                                                >
+                                                <p>
                                                     Dummy Product Description 2
                                                 </p>
 

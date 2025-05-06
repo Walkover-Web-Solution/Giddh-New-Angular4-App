@@ -101,20 +101,16 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="vatLiabilityDetailedReport?.totalPages > 1">
-            <pagination 
-                [totalItems]="vatLiabilityDetailedReport?.totalItems" 
-                [(ngModel)]="vatLiabilityDetailedReport.page"
-                (pageChanged)="pageChanged($event)" 
-                [maxSize]="vatLiabilityDetailedReport?.totalPages >= 5 ? 5 : vatLiabilityDetailedReport?.totalPages" 
-                [boundaryLinks]="true" 
-                [itemsPerPage]="vatLiabilityReportRequest.count"
-                [rotate]="false" 
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous" 
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last" class="pagination-sm"
-            ></pagination>
+        <div *ngIf="vatLiabilityDetailedReport?.totalPages > 1" class="mt-3">
+            <mat-paginator
+                (page)="pageChanged($event)"
+                [length]="vatLiabilityDetailedReport?.totalItems"
+                [pageSize]="vatLiabilityReportRequest.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="vatLiabilityReportRequest.page - 1"
+            ></mat-paginator>
         </div>
     </div>
 </ng-container>

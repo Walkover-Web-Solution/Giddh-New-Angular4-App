@@ -61,24 +61,27 @@
                             </ng-container>
                         </mat-list>
                         <div class="customer-right-side" #stocksContainer>
-                            <div class="right-heading" *ngIf="currentUser?.uniqueName">
-                                <button mat-stroked-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
-                                    localeData?.add_inventory }} </button>
-                                <div class="d-flex align-items-center column-gap15">
-                                    <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'"></watch-video>
-                                    <div class="search-list position-relative" [formGroup]="searchForm"
-                                        *ngIf="!currentUser?.isTempUser">
-                                        <text-field type="text" [placeholder]="commonLocaleData?.app_search"
-                                            [cssClass]="'form-control search-bar'"
-                                            formControlName="stockSearch"></text-field>
-                                        <span>
-                                            <i class="icon-search"></i>
-                                        </span>
+                                <div class="right-heading" *ngIf="currentUser?.uniqueName">
+                                    <button mat-stroked-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
+                                        localeData?.add_inventory }} </button>
+                                    <div class="d-flex align-items-center justify-content-end column-gap5 w-50">
+                                        <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'" *ngIf="!isTabScreen"></watch-video>
+                                        <div class="search-list position-relative" [formGroup]="searchForm"
+                                            *ngIf="!currentUser?.isTempUser">
+                                            <text-field type="text" [placeholder]="commonLocaleData?.app_search"
+                                                [cssClass]="'form-control search-bar'"
+                                                formControlName="stockSearch"></text-field>
+                                            <span>
+                                                <i class="icon-search"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="pull-right mr-t05" *ngIf="isTabScreen">
+                                    <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'"></watch-video>
+                                </div>
                             <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
-                                <div class="stocks-wrapper mr-t2 overflow-auto" [formGroup]="discountForm">
+                                <div class="stocks-wrapper mr-t4 overflow-auto w-100" [formGroup]="discountForm">
                                     <ng-container *ngIf="showSaveDiscardButton">
                                         <div class="save-discount-header position-fixed pr-4" >
                                             <div class="d-flex justify-content-end align-items-center h-100">

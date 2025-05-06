@@ -162,7 +162,6 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     deleteAccountSuccess: true
                                 });

@@ -743,8 +743,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response?.status === 'success') {
                 let d = _.cloneDeep(state);
-                localStorage.setItem('currencyDesimalType', response.body?.balanceDecimalPlaces);
-                localStorage.setItem('currencyNumberType', response.body?.balanceDisplayFormat);
                 let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
                 if (currentCompanyIndx !== -1) {
                     d.companies[currentCompanyIndx].country = response.body?.country;

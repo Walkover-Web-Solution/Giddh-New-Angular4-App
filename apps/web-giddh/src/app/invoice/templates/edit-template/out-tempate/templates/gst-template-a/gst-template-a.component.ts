@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'gst-template-a',
@@ -40,16 +41,20 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     public isBaseCurrencyRupee = true;
     public rupeeSymbol = '&#8377';
     /* This will hold active company*/
-    @Input() public activeCompany : any;
+    @Input() public activeCompany: any;
+    /** Holds images folder path */
+    public imgPath: string = "";
 
 
     constructor(
+        @Inject(ServiceConfig) private serviceConfig,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
         this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);

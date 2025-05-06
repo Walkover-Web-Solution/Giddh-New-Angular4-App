@@ -38,14 +38,14 @@
                                     aria-labelledby="ddl-newinv"
                                 >
                                     <li role="menuitem">
-                                        <a
+                                        <!-- <a
                                             class="dropdown-item"
                                             href="javascript:;"
                                             aria-label="invoice"
                                             (click)="goToInvoice('cash')"
                                             *ngIf="voucherApiVersion === 1"
                                             >{{ localeData?.cash_invoice }}</a
-                                        >
+                                        > -->
                                         <a
                                             class="dropdown-item"
                                             href="javascript:;"
@@ -55,14 +55,14 @@
                                             >{{ localeData?.cash_invoice }}</a>
                                     </li>
                                     <li role="menuitem">
-                                        <a
+                                        <!-- <a
                                             class="dropdown-item"
                                             href="javascript:;"
                                             aria-label="sales invoice"
                                             (click)="goToInvoice('sales')"
                                             *ngIf="voucherApiVersion === 1"
                                             >{{ localeData?.sales_invoice }}</a
-                                        >
+                                        > -->
                                         <a
                                             class="dropdown-item"
                                             href="javascript:;"
@@ -75,13 +75,13 @@
                                 </ul>
                             </div>
                             <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
-                                <button
+                                <!-- <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('purchase')"
                                 >
                                     {{ localeData?.new_bill }}
-                                </button>
+                                </button> -->
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
@@ -91,13 +91,13 @@
                                 </button>
                             </div>
                             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                                <button
+                                <!-- <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('credit note')"
                                 >
                                     {{ localeData?.new_cr_note }}
-                                </button>
+                                </button> -->
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
@@ -107,13 +107,13 @@
                                 </button>
                             </div>
                             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                                <button
+                                <!-- <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('debit note')"
                                 >
                                     {{ localeData?.new_dr_note }}
-                                </button>
+                                </button> -->
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                     class="btn btn-sky-blue desktop-view-btn"
@@ -264,12 +264,12 @@
                         </div>
                         <div class="d-flex ml-auto">
                             <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
+                            <!--  voucherApiVersion !== 2 && -->
                             <div
                                 class="desktop-view-btn"
                                 *ngIf="
-                                    (voucherApiVersion !== 2 &&
                                         selectedItems?.length === 1 &&
-                                        selectedVoucher === 'purchase') ||
+                                        selectedVoucher === 'purchase' ||
                                     (selectedItems?.length > 0 && selectedVoucher !== 'purchase') ||
                                     (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "
@@ -423,14 +423,14 @@
                                             aria-labelledby="ddl-newinv"
                                         >
                                             <li role="menuitem">
-                                                <a
+                                                <!-- <a
                                                     class="dropdown-item"
                                                     href="javascript:;"
                                                     aria-label="cash invoice"
                                                     (click)="goToInvoice('cash')"
                                                     *ngIf="voucherApiVersion === 1"
                                                     >{{ localeData?.cash_invoice }}</a
-                                                >
+                                                > -->
                                                 <a
                                                     class="dropdown-item"
                                                     href="javascript:;"
@@ -441,14 +441,14 @@
                                                 >
                                             </li>
                                             <li role="menuitem">
-                                                <a
+                                                <!-- <a
                                                     class="dropdown-item"
                                                     href="javascript:;"
                                                     aria-label="sales invoice"
                                                     (click)="goToInvoice('sales')"
                                                     *ngIf="voucherApiVersion === 1"
                                                     >{{ localeData?.sales_invoice }}</a
-                                                >
+                                                > -->
                                                 <a
                                                     class="dropdown-item"
                                                     href="javascript:;"
@@ -461,13 +461,13 @@
                                         </ul>
                                     </div>
                                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                                        <button
+                                        <!-- <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('credit note')"
                                         >
                                             {{ localeData?.new_cr_note }}
-                                        </button>
+                                        </button> -->
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                             class="btn btn-sky-blue m-0"
@@ -477,13 +477,13 @@
                                         </button>
                                     </div>
                                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                                        <button
+                                        <!-- <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('debit note')"
                                         >
                                             {{ localeData?.new_dr_note }}
-                                        </button>
+                                        </button> -->
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
                                             class="btn btn-sky-blue m-0"
@@ -2061,10 +2061,10 @@
             role="dialog"
             (onHidden)="closeAdvanceReceiptModal()"
         >
-        <div class="modal-dialog modal-xl">
+        <!-- <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <advance-receipt-adjustment-component
-                    *ngIf="showAdvanceReceiptAdjust"
+                    *ngIf="showAdvanceReceiptAdjust && voucherApiVersion !== 2"
                     #advanceReceiptComponent
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
@@ -2072,13 +2072,13 @@
                     [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()"
                     (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                    [isVoucherModule]="true && voucherApiVersion !== 2"
+                    [isVoucherModule]="true"
                     [voucherForAdjustment]="voucherForAdjustment"
                     [adjustedVoucherType]="selectedVoucher"
                 >
                 </advance-receipt-adjustment-component>
             </div>
-        </div>
+        </div> -->
         </div>
         <!-- end -->
         <ng-template #sendEmailModal>

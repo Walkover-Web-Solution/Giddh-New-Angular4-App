@@ -2,12 +2,13 @@ import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, Temp
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-advance-search',
@@ -82,6 +83,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
+        private generalService: GeneralService,
         private formBuilder: FormBuilder
     ) { }
 
@@ -342,38 +344,49 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public parseAllDateField(): void {
-        const allDateControlName: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'expireTo', 'dueFrom', 'dueTo'];
-        const dueVoucherDate: string[] = ['voucherDate', 'dueDate'];    // For Sales | CR | DR | Bill
-        const expiryDateRange: string[] = ['expireFrom', 'expireTo'];   // For Estimate | Proforma
-        const dueDateRange: string[] = ['dueFrom', 'dueTo'];            // For Purchase-order
+        const allDateControlNames: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'expireTo', 'dueFrom', 'dueTo'];
+        const dueVoucherDates: string[] = ['voucherDate', 'dueDate']; // For Sales | CR | DR | Bill
+        const expiryDateRanges: string[] = ['expireFrom', 'expireTo']; // For Estimate | Proforma
+        const dueDateRanges: string[] = ['dueFrom', 'dueTo']; // For Purchase-order
 
-        // Helper function to format and patch date fields
         const formatDateField = (fieldName: string): void => {
-            const fieldValue = this.searchForm.get(fieldName)?.value;
+            let fieldValue = this.searchForm.get(fieldName)?.value;
             if (fieldValue) {
-                this.searchForm.get(fieldName)?.patchValue(
-                    typeof fieldValue === 'object'
-                        ? dayjs(fieldValue).format(GIDDH_DATE_FORMAT)
-                        : this.advanceFilters[(fieldName?.indexOf('From') > -1 ? 'from' : 'to')]
-                );
+                if (typeof fieldValue === 'string' && DATE_REGEX.test(fieldValue)) {
+                    // If the field value is a string in the format YYYY-MM-DD, reformat it
+                    fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+                } else if (typeof fieldValue === 'object') {
+                    fieldValue = dayjs(fieldValue).format(GIDDH_DATE_FORMAT);
+                    if (DATE_REGEX.test(fieldValue)) {
+                        // If the field value is a string in the format YYYY-MM-DD, reformat it
+                        fieldValue = dayjs(fieldValue, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+                    }
+                }
+
+                // Check if the fieldName exists in advanceFilters, and update it
+                if (this.advanceFilters.hasOwnProperty(fieldName)) {
+                    this.advanceFilters[fieldName] = fieldValue;
+                    // Update the form control with the new advanceFilters value
+                    this.searchForm.get(fieldName)?.patchValue(this.advanceFilters[fieldName]);
+                }
+                this.searchForm.get(fieldName)?.patchValue(fieldValue);
             }
         };
 
-        // Helper function to clear the date fields
+        // Helper function to clear specific date fields
         const clearDateFields = (controlNames: string[]): void => {
             controlNames.forEach(controlName => {
                 this.searchForm.get(controlName)?.patchValue(null);
             });
         };
 
-        // Take one control from range date i.e from and to
-        const allDateFormControlName: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'dueFrom'];
-        allDateFormControlName.forEach(controlName => {
+        // Process each date control based on the type
+        allDateControlNames.forEach(controlName => {
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':
                 case 'purchase':
-                    if (dueVoucherDate.includes(controlName)) {
+                    if (dueVoucherDates.includes(controlName)) {
                         formatDateField('voucherDate');
                         formatDateField('dueDate');
                     } else {
@@ -383,7 +396,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                     break;
 
                 case 'proforma':
-                    if (expiryDateRange.includes(controlName)) {
+                    if (expiryDateRanges.includes(controlName)) {
                         formatDateField('expireFrom');
                         formatDateField('expireTo');
                     } else {
@@ -393,7 +406,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                     break;
 
                 case 'purchase-order':
-                    if (dueDateRange.includes(controlName)) {
+                    if (dueDateRanges.includes(controlName)) {
                         formatDateField('dueFrom');
                         formatDateField('dueTo');
                     } else {
@@ -403,7 +416,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                     break;
 
                 default:
-                    clearDateFields(allDateControlName);
+                    clearDateFields(allDateControlNames);
                     break;
             }
         });

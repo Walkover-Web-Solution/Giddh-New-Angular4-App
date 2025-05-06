@@ -14,16 +14,15 @@
                     <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
                         <mat-form-field [appearance]="'fill'" [floatLabel]="'auto'">
                             <input matInput [matDatepicker]="picker" [placeholder]="date?.value" autocomplete="off"
-                                (focus)="picker.open()" (click)="picker.open()"
+                                (focus)="picker?.open()" (click)="picker?.open()"
                                 [class]="'mat-field-border month-selection form-control text-align-center'" name="date" readonly />
                             <mat-datepicker (monthSelected)="setMonthAndYear($event, picker)" [startView]="'multi-year'"
                                 [startAt]="startAt" #picker></mat-datepicker>
                         </mat-form-field>
-
                     </div>
 
                     <button class="ml-5" mat-stroked-button (click)="initializeForm()" *ngIf="customMonthSelected">
-                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                        <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
@@ -61,14 +60,18 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-
-                    <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1 && !isLoading">
-                        <pagination class="pagination-sm" [(ngModel)]="pagination.page"
-                            [totalItems]="pagination.totalItems" [maxSize]="5" [boundaryLinks]="true"
-                            [itemsPerPage]="pagination.count" [rotate]="false" (pageChanged)="pageChanged($event)"
-                            [firstText]="commonLocaleData?.app_first" [previousText]="commonLocaleData?.app_previous"
-                            [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
-                        </pagination>
+                    <div class="d-flex justify-content-end" *ngIf="pagination.totalPages > 1 && !isLoading">
+                        <mat-paginator
+                            class="mt-3"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [pageIndex]="pageIndex"
+                            (page)="pageChanged($event)"
+                            [length]="pagination.totalItems"
+                            [pageSize]="pagination.count"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                        ></mat-paginator>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!dataSource.length && !isLoading">

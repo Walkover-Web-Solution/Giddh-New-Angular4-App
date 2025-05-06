@@ -70,8 +70,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds user module restriction */
-    public remainingUsers: number = 0;
+    /** True if user module is restricted */
+    public isUserRestricted: boolean = false;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
@@ -143,11 +143,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             } else {
                 this.isSuperAdminCompany = false;
             }
-            if (activeCompany?.moduleRestrictionStatus) {
-                let module = activeCompany.moduleRestrictionStatus.find(
+            if (activeCompany && Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
+                const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
-                this.remainingUsers = module.remainingUsers;
+                this.isUserRestricted = !module?.remainingUsers;
             }
         });
 

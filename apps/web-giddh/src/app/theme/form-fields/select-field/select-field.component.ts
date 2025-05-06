@@ -79,6 +79,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Keyboard shortcut command label */
+    @Input() public showKeyboardCommand: string = '';
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -109,7 +111,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                 }
             });
         } else {
-            this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
                     this.filterOptions(search);
                 } else {
@@ -144,7 +146,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             }
         }
         if (changes?.options) {
-            this.fieldFilteredOptions = changes.options.currentValue;
+            this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");;
         }
     }
 

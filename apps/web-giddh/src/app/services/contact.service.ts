@@ -130,12 +130,12 @@ export class ContactService {
     }
 
     /**
-     * Refresh bank accounts
+     * Refresh go-cardless bank transactions
      *
-     * @returns {Observable<BaseResponse<any, any>>}
+     * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */
-    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, any>> {
+    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, string>> {
         let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
@@ -148,10 +148,10 @@ export class ContactService {
     }
 
     /**
-     * Send bulk email template to specified customers or vendors
-     * @param model Request payload containing customer/vendor unique names and template type
-     * @returns Observable<BaseResponse<any, string>> API response
-     */
+    * Send bulk email template to specified customers or vendors
+    * @param model Request payload containing customer/vendor unique names and template type
+    * @returns Observable<BaseResponse<any, string>> API response
+    */
     public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
         return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
             map((res) => {

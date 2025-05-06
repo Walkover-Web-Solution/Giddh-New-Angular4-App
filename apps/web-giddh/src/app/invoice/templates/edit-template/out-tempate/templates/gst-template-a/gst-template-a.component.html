@@ -46,7 +46,7 @@
                                                     [hidden]="!showLogo"
                                                     [src]="logoSrc"
                                                     class="pull-left"
-                                                    alt="logo"
+                                                    alt="brand-logo"
                                                     [ngStyle]="{ 'height': inputTemplate.logoSize + 'px' }"
                                                 />
                                             </div>
@@ -339,6 +339,10 @@
                 <table class="meta cargoDetail">
                     <tbody>
                         <tr>
+                            <td *ngIf="fieldsAndVisibility.header.customerName?.display">
+                                    <p>Customer Name </p>
+                                    <p>Green Soft Solutions</p>
+                            </td>
                             <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                 <p class="strong">
                                     {{
@@ -347,7 +351,6 @@
                                             : "To"
                                     }}
                                 </p>
-                                <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                                 <p>5 A.B. Road</p>
                                 <p>Indore (M.P.) 452000</p>
                                 <p *ngIf="fieldsAndVisibility.header.billingState?.display">Madhya Pradesh</p>
@@ -360,7 +363,6 @@
                                             : "Shipping Address"
                                     }}
                                 </p>
-                                <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
                                 <p>5 A.B. Road</p>
                                 <p>Indore (M.P.) 452000</p>
                                 <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
@@ -579,6 +581,14 @@
                                             : "#"
                                     }}
                                 </th>
+                                <th *ngIf="fieldsAndVisibility.table.showVariantImage?.display"
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor }">
+                                    {{
+                                    fieldsAndVisibility.table.showVariantImage?.label?.length > 0
+                                    ? fieldsAndVisibility.table.showVariantImage?.label
+                                    : "Display Image"
+                                    }}
+                                </th>
                                 <th
                                     *ngIf="
                                         fieldsAndVisibility.table.item?.display ||
@@ -722,6 +732,10 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">1</td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
                                 <td
                                     class="text-left"
                                     *ngIf="
@@ -805,6 +819,10 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-left">2</td>
+                                <td *ngIf="fieldsAndVisibility.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
                                 <td
                                     class="text-left"
                                     *ngIf="
@@ -1009,11 +1027,11 @@
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor }"
                                 ></th>
                                 <!--<th *ngIf="fieldsAndVisibility.table.rate?.display " class="text-right "
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
-            </th>
-            <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
-            </th>-->
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
+                                </th>
+                                <th *ngIf="fieldsAndVisibility.table.discount?.display " class="text-right "
+                                    [ngStyle]="{ 'background-color': inputTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
+                                </th>-->
                                 <th
                                     *ngIf="fieldsAndVisibility.table.taxableValue?.display"
                                     class="text-right"

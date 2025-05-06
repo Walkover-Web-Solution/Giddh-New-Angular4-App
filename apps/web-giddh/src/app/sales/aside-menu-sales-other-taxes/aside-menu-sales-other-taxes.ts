@@ -21,6 +21,8 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
     public calculationMethodOptions: IOption[];
+    /** Holds calculation method name */
+    public calculationMethodLabel: string = '';
     /** This will hold default data of other taxes */
     public defaultOtherTaxesModal: SalesOtherTaxesModal;
 
@@ -32,6 +34,7 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
         ];
+        this.calculationMethodLabel = this.calculationMethodOptions.find(method => method.value === this.defaultOtherTaxesModal.tcsCalculationMethod).label;
 
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))

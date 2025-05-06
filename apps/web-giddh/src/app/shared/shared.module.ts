@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -57,21 +57,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
 import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CallBackPageModule } from './call-back-page/call-back-page.module';
 import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
-
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
-    {
-        id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
-    }
-], false);
-
-export function provideConfig() {
-    return SOCIAL_CONFIG || { id: null, providers: [] };
-}
-
+import { CallBackPageComponent } from './call-back-page/call-back-page.component';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -138,7 +127,7 @@ export function provideConfig() {
         MatButtonModule,
         MatDialogModule,
         MatTooltipModule,
-        CallBackPageModule,
+        CallBackPageComponent,
         SubscriptionUpgradeButtonModule
     ],
     exports: [
@@ -180,18 +169,31 @@ export function provideConfig() {
         GenericAsideMenuAccountModule,
         MasterComponent,
         MasterExportOptionComponent,
-        CallBackPageModule,
+        CallBackPageComponent,
         D3TreeChartModule,
         SubscriptionUpgradeButtonModule
     ],
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: provideConfig
+            useFactory: (injector: Injector) => {
+                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
+                return new AuthServiceConfig(
+                    [
+                        {
+                            id: GoogleLoginProvider.PROVIDER_ID,
+                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
+                        }
+                    ],
+                    false
+                );
+            },
+            deps: [Injector]
         }
     ]
 })
 export class SharedModule {
+    constructor(private injector: Injector){}
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,

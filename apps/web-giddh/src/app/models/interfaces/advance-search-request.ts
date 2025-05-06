@@ -11,6 +11,7 @@ export class AdvanceSearchRequest {
     public sort: string = 'asc';
     public branchUniqueName: string = '';
     public reversePage: boolean = false;
+    public paginationToken?: string = '';
 
     constructor() {
         this.dataToSend = new AdvanceSearchModel();
@@ -76,7 +77,7 @@ export class AdvanceSearchRequestInventory {
     public quantityGreaterThan: false;
     public includeItemValue: false;
     public itemValue: null;
-    public includeItemLessThan: false;
-    public includeItemEqualTo: false;
-    public includeItemGreaterThan: false;
+    public itemValueLessThan: false;
+    public itemValueEqualTo: false;
+    public itemValueGreaterThan: false;
 }

@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { delay, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
@@ -21,6 +21,7 @@ import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -101,9 +102,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private _authenticationService: AuthenticationService,
         public _route: ActivatedRoute,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl)))?.replace(':client_id', (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID));
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
@@ -491,6 +493,18 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles changes to the GST e-Invoice enable setting.
+     *
+     * @memberof InvoiceSettingComponent
+     */
+    public gstEInvoiceEnableChange(): void {
+        if (!this.invoiceSetting.gstEInvoiceEnable) {
+            this.invoiceSetting.generateEinvoiceShowPopUp = false;
+            this.invoiceSetting.generateAutoEWayBill = false;
+        }
+    }
+
+    /**
      * setInvoiceLockDate
      */
     public setInvoiceLockDate(date) {
@@ -513,7 +527,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             client_secret: GOOGLE_CLIENT_SECRET,
             client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
-            redirect_uri: this.getRedirectUrl(AppUrl)
+            redirect_uri: this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl))
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {

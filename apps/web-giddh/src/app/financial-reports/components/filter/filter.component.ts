@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -20,6 +20,7 @@ import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'financial-filter',
@@ -46,6 +47,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public plBsExportXLSEvent = new EventEmitter<string>();
     /** True, when expand all operation is performed */
     @Input() public expandAll: boolean;
+    /** Controls the visibility of the button and branch fitter for project wise accounting.  */
+    @Input() public isProjectWiseAccounting: boolean = false;
     @Output()
     public expandAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     public showClearSearch: boolean;
@@ -112,7 +115,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.filterForm = this.fb.group({
             from: [''],
@@ -122,7 +126,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             branchUniqueName: [this.generalService.currentBranchUniqueName ?? ''],
             selectedFinancialYearOption: [''],
             refresh: [false],
-            tagName: ['']
+            tagName: [''],
+            compareValue: [null],
+            compareType: [null]
         });
 
         this.newTagForm = this.fb.group({
@@ -177,7 +183,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
         if (!this.showLabels) {
             this.filterForm?.patchValue({ selectedDateOption: '0' });
         }
@@ -219,7 +225,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
+            if (activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
                 this.activeCompany = activeCompany;
             }
         });
@@ -295,7 +301,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectedDate(value: any) {
         this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
         this.filterForm.controls['to'].setValue(dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT));
-        this.filterData();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -308,6 +313,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     from: financialYear.financialYearStarts,
                     fy: index === 0 ? 0 : index * -1
                 });
+                this.toDate = financialYear.financialYearEnds;
+                this.fromDate = financialYear.financialYearStarts;
             }
         } else {
             this.filterForm?.patchValue({
@@ -315,8 +322,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 from: '',
                 fy: ''
             });
+            this.toDate = '';
+            this.fromDate = '';
         }
-        this.filterData();
     }
 
     public filterData() {
@@ -445,10 +453,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedRangeLabel = "";
-
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
+
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -457,7 +465,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
-            this.filterData();
         }
     }
 
@@ -491,5 +498,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.tags = orderBy(response?.body, 'name');
             }
         });
+    }
+    
+    /**
+     * Handle compare with event
+     *
+     * @param {any} event
+     * @memberof FinancialReportsFilterComponent
+     */
+    public handleCompareWithEvent(event: any): void {
+        this.filterForm.patchValue(event);
     }
 }

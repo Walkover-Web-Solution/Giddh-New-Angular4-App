@@ -22,7 +22,7 @@ export class BankLinkComponent implements OnInit, OnDestroy {
     /** List of connected bank accounts */
     public connectedBankAccounts: any[] = [];
     /** Hold selected bank */
-    public defaultSelectedBank$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    public defaultSelectedBank: any;
     /** Subject to unsubscribe from listeners. */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold options of dropdown  */
@@ -47,28 +47,17 @@ export class BankLinkComponent implements OnInit, OnDestroy {
      * @memberof BankLinkComponent
      */
     public ngOnInit(): void {
-        if (!this.inputData?.bankList) {
-            this.getAllBankAccounts();
-        } else {
-            this.setTransformBankListData(this.inputData?.bankList);
-        }
-
         this.componentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.dialogRef.close(true);
+                this.dialogRef?.close(true);
             }
-        })
-
-        this.componentStore.getAllBankAccountsList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response?.body) {
-                this.setTransformBankListData(response.body);
-            }
-        })
+        });
+        this.setTransformBankListData(this.inputData.bankList);
     }
 
     /**
      * This will use for select bank account
-     * 
+     *
      * @param {*} event
      * @memberof BankLinkComponent
      */
@@ -80,7 +69,7 @@ export class BankLinkComponent implements OnInit, OnDestroy {
 
     /**
      * This will link all the connected bank accounts
-     * 
+     *
      * @memberof BankLinkComponent
      */
     public linkBankAccount(): void {
@@ -110,6 +99,8 @@ export class BankLinkComponent implements OnInit, OnDestroy {
      * @memberof BankLinkComponent
      */
     private setTransformBankListData(bankList: any): void {
+        this.bankLinks = [];
+        this.defaultSelectedBank = '';
         this.bankLinks = bankList.filter(bank => Object.keys(bank.account).length === 0).map(item => {
             return {
                 label: `${item.bankName} ****${item.bankResource?.accountNumber ? item.bankResource?.accountNumber.slice(-4) : 'N/A'}`,
@@ -117,11 +108,8 @@ export class BankLinkComponent implements OnInit, OnDestroy {
                 additional: item
             }
         });
-
-        if (this.bankLinks.length === 1) {
-            this.defaultSelectedBank$.next(`${bankList[0]?.bankName} ****${bankList[0]?.bankResource?.accountNumber ? bankList[0]?.bankResource?.accountNumber?.slice(-4) : 'N/A'}`);
-            this.selectedOption(this.bankLinks[0]);
-        }
+        this.defaultSelectedBank = this.bankLinks[0]?.label;
+        this.selectedOption(this.bankLinks[0]);
     }
 
     /**
@@ -132,6 +120,14 @@ export class BankLinkComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.defaultSelectedBank$.complete();
+    }
+
+    /**
+     * This will be use for when close the dialog
+     *
+     * @memberof BankLinkComponent
+     */
+    public closeDialog(): void {
+        this.dialogRef.close(false);
     }
 }

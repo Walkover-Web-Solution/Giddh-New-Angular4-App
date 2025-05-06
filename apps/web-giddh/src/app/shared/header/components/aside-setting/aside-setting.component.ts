@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { CompanyResponse, Organization } from 'apps/web-giddh/src/app/models/api
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
+import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'aside-setting',
@@ -43,9 +45,14 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public isTagMenuOpened: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
 
-    constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
-
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
     }
 
     /**
@@ -66,7 +73,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -75,6 +82,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
             }
             this.activeLocale = response?.value;
+        });
+
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+            }
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {

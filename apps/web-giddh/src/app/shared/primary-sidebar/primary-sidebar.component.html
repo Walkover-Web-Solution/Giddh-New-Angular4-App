@@ -82,7 +82,7 @@
                         <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
-                                    [href]="'/pages/ledger/'+ acc?.uniqueName"
+                                    [routerLink]="['/pages/ledger/'+ acc?.uniqueName]" [queryParams]="{ redirectUrl: currentUrl}"
                                     aria-label="account"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
@@ -239,7 +239,7 @@
                                                                         item?.additional?.createNew?.queryParams?.addCustomer
                                                                         ? 'sundrydebtors'
                                                                         : 'sundrycreditors';
-                                                                        toggleAccountAsidePane()"
+                                                                        openAccountAsidePane()"
                                                                     >
                                                                         {{ item?.additional?.createNew?.label }}
                                                                     </strong>
@@ -288,18 +288,16 @@
         </div>
     </ng-template>
 </ng-container>
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div *ngIf="accountAsideMenuState === 'in'">
+
+<!-- Generic aside menu account template open from cmd+k-->
+<ng-template #genericAsideMenuAccountTemplate>
     <generic-aside-menu-account
-        [class]="accountAsideMenuState"
-        [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)"
-        (closeAccountModal)="closeAccountModal($event)"
+        (closeAsideEvent)="closeAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountAsidePane($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
+        [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
         (addEvent)="addNewAccount($event)"
-        *ngIf="accountAsideMenuState === 'in'"
     >
     </generic-aside-menu-account>
-</div>
+</ng-template>

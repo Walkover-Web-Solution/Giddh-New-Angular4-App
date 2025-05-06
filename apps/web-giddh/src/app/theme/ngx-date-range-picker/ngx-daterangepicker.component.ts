@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import * as localeData from 'dayjs/plugin/localeData' // load on demand
@@ -25,6 +25,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { ServiceConfig } from '../../services/service.config';
 
 export enum DateType {
     start = 'start',
@@ -256,7 +257,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
@@ -311,7 +312,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.activeFinancialYear) {
@@ -946,8 +947,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (this.chosenLabel) {
             this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
-
-        this.emitSelectedDates(false);
+        
+        this.emitSelectedDates(false, true);
         this.hide();
     }
 
@@ -2011,11 +2012,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param {boolean} sendBlankDates
      * @memberof NgxDaterangepickerComponent
      */
-    public emitSelectedDates(sendBlankDates: boolean): void {
+    public emitSelectedDates(sendBlankDates: boolean, resetRangeLabel: boolean = false): void {
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null, event: 'save' });
         } else {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
+            this.datesUpdated.emit({ name: resetRangeLabel ? '' : this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
     }
 

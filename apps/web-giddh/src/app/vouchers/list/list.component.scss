@@ -72,7 +72,6 @@ table {
         td {
             max-width: 240px;
             word-break: break-all;
-            white-space: normal;
 
             &.invoice-column-width{
                 min-width: 162px;
@@ -89,7 +88,7 @@ table {
         }
 
         .invoice-number {
-            width: 25px;
+            min-width: 25px;
         }
 
         &:hover {
@@ -175,14 +174,7 @@ table {
             display: none;
         }
     }
-}
-
-@media screen and (max-width: 1200px) {
-    .invoice-list {
-        .video-link {
-            top: 4px;
-            right: 4px;
-            width: 200px;
-        }
+    .new-cr-width {
+        width: 190px !important;
     }
 }

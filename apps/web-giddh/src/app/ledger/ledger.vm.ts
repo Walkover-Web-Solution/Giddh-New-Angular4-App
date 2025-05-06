@@ -129,6 +129,21 @@ export class LedgerVM {
         // filter transactions which have selected account
         requestObj.transactions = requestObj.transactions?.filter((bl: TransactionVM) => bl.particular);
 
+        // Set amount and total from creditAmount to creditTotal and debitAmount to debitTotal (In case of statement view)
+        requestObj.transactions.forEach(bl => {
+            if (bl.type === 'DEBIT') {
+                bl.amount = bl.debitAmount;
+                bl.total = bl.debitTotal;
+            } else if (bl.type === 'CREDIT') {
+                bl.amount = bl.creditAmount;
+                bl.total = bl.creditTotal;
+            }
+            delete bl.debitAmount;
+            delete bl.creditAmount;
+            delete bl.debitTotal;
+            delete bl.creditTotal;
+        });
+
         // map over transactions array
         requestObj.transactions.map((bl) => {
             if (bl) {
@@ -172,6 +187,16 @@ export class LedgerVM {
         };
     }
 
+    /**
+     * change transaction type
+     * @param {string} type
+     * @param {number} index
+     * @returns {void}
+     */
+    public changeTransactionType(type: string, index: number): void {
+        this.blankLedger.transactions[index].type = type;
+    }
+
     public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups, localeData?: any) {
         if (localeData) {
             let data;
@@ -207,6 +232,7 @@ export class LedgerVM {
                 if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
+                data['accountName'] = accountName;
                 this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
         }
@@ -437,6 +463,8 @@ export class ReferenceVoucher {
 export class TransactionVM {
     public id?: string;
     public amount: number = 0;
+    public creditAmount?: number = 0;
+    public debitAmount?: number = 0;
     public particular: string = '';
     public applyApplicableTaxes: boolean;
     public isInclusiveTax: boolean;
@@ -446,6 +474,8 @@ export class TransactionVM {
     public tax?: number = 0;
     public convertedTax?: number = 0;
     public total: number = 0;
+    public creditTotal?: number = 0;
+    public debitTotal?: number = 0;
     public convertedTotal?: number = 0;
     public discounts: LedgerDiscountClass[];
     public discount?: number = 0;

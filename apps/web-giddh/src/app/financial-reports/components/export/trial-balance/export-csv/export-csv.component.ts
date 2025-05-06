@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { CompanyResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
@@ -14,6 +14,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export interface Total {
     ob: number;
@@ -79,6 +80,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         private recType: RecTypePipe,
         private ledgerService: LedgerService,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private toaster: ToasterService) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
@@ -87,7 +89,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/csv.svg' : AppUrl + APP_FOLDER + 'assets/images/csv.svg';
+        this.imgPath = isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/csv.svg';
     }
 
     public ngOnDestroy() {
@@ -99,7 +101,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         this.showCsvDownloadOptions = false;
         let csv = '';
         let name = '';
-        let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);        
+        let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);
         switch (value) {
             case 'group-wise':
                 csv = this.dataFormatter.formatDataGroupWise(this.localeData, this.trialBalanceRequest.from, this.trialBalanceRequest.to);
@@ -112,7 +114,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
                 break;
             case 'account-wise':
                 this.dataFormatter.formatDataAccountWise(formatCsv);
-                csv = formatCsv.csv();                
+                csv = formatCsv.csv();
                 name = this.localeData?.csv.trial_balance_account_wise_report_file_name;
                 break;
             default:

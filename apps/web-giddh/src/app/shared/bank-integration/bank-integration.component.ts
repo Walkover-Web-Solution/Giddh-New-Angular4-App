@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -9,10 +9,9 @@ import { Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TabDirective } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
-import { isEmpty } from '../../lodash-optimized';
+import { cloneDeep, isEmpty } from '../../lodash-optimized';
 import { BankIntegrationComponentStore } from "./utility/bank-integration.store";
 import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
 import { ToasterService } from "../../services/toaster.service";
@@ -20,6 +19,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: 'bank-integration',
@@ -28,7 +28,7 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
     providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BankIntegrationComponent implements OnInit {
+export class BankIntegrationComponent implements OnInit, OnDestroy {
     public isIciciBankSupportedCountry: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -48,7 +48,7 @@ export class BankIntegrationComponent implements OnInit {
     /**Hold Refrence Number */
     public referenceNumber: string = '';
     /** Holds Store Delete end user agreement  API success state as observable*/
-    public deleteEndUseAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
+    public deleteEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
     /** Holds Store Requisition API success state as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
     /** True if api call in progress */
@@ -60,7 +60,7 @@ export class BankIntegrationComponent implements OnInit {
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    public iciciAllowedCompanies: any[] = [];
     /** Holds image path */
     public imgPath: string = '';
     /** Holds Create New Account Dialog Ref */
@@ -90,12 +90,21 @@ export class BankIntegrationComponent implements OnInit {
     @ViewChild('editAccountUserModal', { static: true }) public editAccountUserModal: TemplateRef<any>;
     /** Instance of delete account user modal */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Holds Store Save payment provider company API success state as observable*/
+    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
+    /** This will use for open window */
+    public openedWindow: Window | null = null;
+    /** Hold reconnect bank response */
+    public reconnectBankResponse: any = null;
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
 
     /** @ignore */
     constructor(
         private _companyActions: CompanyActions,
         private router: Router,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService,
         private settingsPermissionActions: SettingsPermissionActions,
         private activateRoute: ActivatedRoute,
@@ -105,7 +114,11 @@ export class BankIntegrationComponent implements OnInit {
         private changeDetectionRef: ChangeDetectorRef,
         private toasty: ToasterService,
         public dialog: MatDialog
-    ) { }
+    ) {
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
+    }
+    
     /**
     * This function will use for get institutions details
     *
@@ -127,26 +140,10 @@ export class BankIntegrationComponent implements OnInit {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.referenceNumber = response;
-                this.setupGocardlessMessageListener();
+                localStorage.setItem('refNo', response);
+                this.referenceNumber = cloneDeep(response);
             }
         });
-    }
-    /**
-     * This will add and Remove the listener immediately after triggering getRequisition
-     * 
-     * @memberof BankIntegrationComponent
-     */
-    public setupGocardlessMessageListener(): void {
-        const messageHandler = (event) => {
-            if (event && event.data === "GOCARDLESS") {
-                if (this.referenceNumber) {
-                    this.componentStore.getRequisition(this.referenceNumber);
-                    window.removeEventListener('message', messageHandler);
-                }
-            }
-        };
-        window.addEventListener('message', messageHandler);
     }
 
     /**
@@ -168,7 +165,7 @@ export class BankIntegrationComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {
@@ -184,6 +181,14 @@ export class BankIntegrationComponent implements OnInit {
                         }
                     })
                 }
+            }
+        });
+
+        this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.openWindow(response.link);
+                localStorage.setItem('refNo', response.reference);
+                this.referenceNumber = response.reference;
             }
         });
 
@@ -227,15 +232,18 @@ export class BankIntegrationComponent implements OnInit {
                 this.loadPaymentData();
             }
         };
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/settings/integration/payment') {
-                if (event && event.data === "GOCARDLESS") {
-                    if (this.referenceNumber) {
-                        this.componentStore.getRequisition(this.referenceNumber);
-                    }
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
                 }
             }
-        });
+        };
 
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -243,9 +251,14 @@ export class BankIntegrationComponent implements OnInit {
             }
         });
 
-        this.deleteEndUseAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.loadPaymentData();
+                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
+                    this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
+                } else {
+                    this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
+                    this.loadPaymentData();
+                }
             }
         });
 
@@ -342,6 +355,7 @@ export class BankIntegrationComponent implements OnInit {
             width: '1000px'
         });
     }
+
     /**
     * This will open the create new account user modal
     *
@@ -461,5 +475,42 @@ export class BankIntegrationComponent implements OnInit {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }
         });
+    }
+
+    /**
+ * This will be use for reconnect bank
+ *
+ * @param {*} bank
+ * @memberof BankIntegrationComponent
+ */
+    public reconnectBank(bank: any): void {
+        this.reconnectBankResponse = bank;
+        this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
+    }
+
+    /**
+    * This will be open window by url
+    *
+    * @param {string} url
+    * @memberof BankIntegrationComponent
+    */
+    public openWindow(url: string): void {
+        const width = 800;
+        const height = 900;
+
+        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
+    }
+
+    /**
+     * This will be use for component destroy
+     *
+     * @memberof BankIntegrationComponent
+     */
+    public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('refNo');
+        }
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

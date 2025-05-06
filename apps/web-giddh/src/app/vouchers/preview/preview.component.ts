@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
@@ -25,6 +25,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "preview",
@@ -146,7 +147,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Hold true when voucher is downloading */
     public isVoucherDownloading: boolean = false;
     /** Hold true when voucher is download failed */
-    public isVoucherDownloadError: boolean = false;;
+    public isVoucherDownloadError: boolean = false;
     /** Holds true when File Uploading is in progress */
     public isFileUploading: boolean = false;
     /** True, if attachment upload is to be displayed */
@@ -206,6 +207,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private domSanitizer: DomSanitizer,
         private thermalService: ThermalService,
         private toaster: ToasterService,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private adjustmentUtilityService: AdjustmentUtilityService
@@ -239,6 +241,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 if (params?.page) {
                     this.queryParams = params;
                     this.advanceFilters.page = Number(params.page);
+                    this.advanceFilters.count = params.count ? Number(params.count) : PAGINATION_LIMIT;
                     this.advanceFilters.from = params.from ?? '';
                     this.advanceFilters.to = params.to ?? '';
                     const searchString = params.search;
@@ -251,7 +254,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -260,7 +263,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     page: 1,
                     from: this.advanceFilters.from,
                     to: this.advanceFilters.to,
-                    count: this.advanceFilters.count,
+                    count: PAGINATION_LIMIT,
                     q: '',
                     sort: '',
                     sortBy: ''
@@ -293,7 +296,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedInvoice = this.invoiceList?.find(voucher => voucher?.uniqueName === voucherUniqueName);
-        if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+        if (this.selectedInvoice && (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice)) {
             this.getVoucherVersions(this.selectedInvoice);
         }
         if (this.selectedInvoice && !this.isVoucherDownloading) {
@@ -344,6 +347,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.createNewVoucher.text = this.localeData?.new_bill;
                 this.createNewVoucher.link = "/pages/vouchers/purchase/create";
                 break;
+            case VoucherTypeEnum.receipt:
+                this.createNewVoucher.text = this.localeData?.new_receipt;
+                this.createNewVoucher.link = "/pages/vouchers/receipt/create";
+                break;
+            case VoucherTypeEnum.payment:
+                this.createNewVoucher.text = this.localeData?.new_payment;
+                this.createNewVoucher.link = "/pages/vouchers/payment/create";
+                break;
         }
     }
 
@@ -389,7 +400,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     page: 1,
                     from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
                     to: dayjs(response[1]).format(GIDDH_DATE_FORMAT),
-                    count: this.advanceFilters.count,
+                    count: PAGINATION_LIMIT,
                     q: '',
                     sort: '',
                     sortBy: ''
@@ -445,7 +456,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.defaultThermalTemplate = response?.find(response =>  response.isDefault && (response.templateType === 'thermal_template'));
+                this.defaultThermalTemplate = response?.find(response => response.isDefault && (response.templateType === 'thermal_template'));
             }
         });
 
@@ -527,12 +538,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private handleDownloadVoucherPdf(response: any): void {
-        if (response) {
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+        if (typeof response === 'string' || (response?.hasOwnProperty('data') && response.data)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
-                if (response.data) {
+                if (response) {
                     this.isPdfAvailable = true;
-                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data, 'application/pdf', 512);
+                    this.selectedInvoice.blob = this.generalService.base64ToBlob(response.data || response, 'application/pdf', 512);
                     const file = new Blob([this.selectedInvoice.blob], { type: 'application/pdf' });
                     this.attachedDocumentBlob = file;
                     URL.revokeObjectURL(this.pdfFileURL);
@@ -669,7 +680,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public downloadVoucherPdf(fileType: string = ''): void {
-        if (this.selectedInvoice) {
+        if (this.selectedInvoice && this.generalService.voucherApiVersion === 2) {
             this.isVoucherDownloading = true;
             this.isVoucherDownloadError = false;
             this.shouldShowUploadAttachment = false;
@@ -680,7 +691,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.selectedInvoice.hasAttachment = false;
             const fileType = "base64";
 
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 getRequest = {
                     voucherType: this.voucherType,
                     uniqueName: this.selectedInvoice?.uniqueName
@@ -688,7 +699,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.voucherType)) {
                 getRequest = new ProformaDownloadRequest();
                 getRequest.fileType = fileType;
-                getRequest.accountUniqueName = this.selectedInvoice.account?.uniqueName;;
+                getRequest.accountUniqueName = this.selectedInvoice.account?.uniqueName;
 
                 if (this.voucherType === VoucherTypeEnum.generateProforma) {
                     getRequest.proformaNumber = this.selectedInvoice.voucherNumber;
@@ -701,6 +712,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
+            // if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            //     getRequest = {
+            //         accountUniqueName: this.selectedInvoice.account?.uniqueName,
+            //         voucherNumber: [this.selectedInvoice.voucherNumber],
+            //         voucherType: this.voucherType,
+            //         fileType: fileType
+            //     };
+            // }
             this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });
         }
     }
@@ -924,7 +943,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 currentInvoiceList.push(item);
             });
 
-            if ((this.isSearching && (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
+            if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.invoiceList = currentInvoiceList;
             } else {
                 this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
@@ -1098,9 +1117,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             const left = (windowWidth / 2) - 450;
             const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
             printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
+            printWindow.document?.close();
+            printWindow?.focus();
+            printWindow?.print();
         }
     }
 
@@ -1136,7 +1155,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         const queryParams = {
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
-            page: this.advanceFilters.page
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count ?? PAGINATION_LIMIT
         }
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
@@ -1243,6 +1263,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
             queryParams: {
                 page: this.queryParams.page ?? 1,
+                count: this.queryParams.count ?? PAGINATION_LIMIT,
                 from: this.advanceFilters.from,
                 to: this.advanceFilters.to
             }

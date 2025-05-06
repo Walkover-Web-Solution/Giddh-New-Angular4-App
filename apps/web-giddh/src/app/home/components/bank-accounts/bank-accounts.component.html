@@ -1,45 +1,65 @@
-<div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div
+    id="live"
+    appTranslate
+    [file]="'home/bank-accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <mat-card>
         <div class="panel-heading d-flex justify-content-space-between">
             <strong>{{ localeData?.chart_title }}</strong>
-            <div class="dashboard-filter" [ngClass]="{'pointer-event-none cursor-disable': (isBankRefreshing$ | async)}" (click)="refreshBankTransactions()"
-                    aria-label="{{ localeData?.refresh_bank_accounts }}"
-                    matTooltip="{{ localeData?.refresh_bank_accounts }}"
-                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0">
-                    <i class="icon-refresh"></i>
+            <div
+                class="dashboard-filter d-inline-flex align-items-center"
+                [ngClass]="{ 'pointer-event-none cursor-disable': (isBankRefreshing$ | async) }"
+                (click)="refreshBankTransactions()"
+                aria-label="{{ localeData?.refresh_bank_accounts }}"
+                matTooltip="{{ localeData?.refresh_bank_accounts }}"
+                *ngIf="isGocardlessSupportedCountry && hasIntegrationScope && bankAccounts?.length > 0"
+            >
+                <i class="icon-refresh"></i>
             </div>
         </div>
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
-                <cdk-virtual-scroll-viewport [itemSize]="61" *ngIf="!isLoading && bankAccounts?.length > 0"
-                    class="virtual-group-list overflow-x-hidden" tabindex="0">
+                <cdk-virtual-scroll-viewport
+                    [itemSize]="61"
+                    *ngIf="!isLoading && bankAccounts?.length > 0"
+                    class="virtual-group-list overflow-x-hidden"
+                    tabindex="0"
+                >
                     <div class="wrap-single-bank-detail">
-                        <div [matTooltip]="bankaccount?.accountBankTransactionTotal?.transactionLastFetchedAt"
-                            matTooltipPosition="right" class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts"
-                            >
-                            <p class="bank-name">{{ bankaccount.name }}&nbsp;
-                                <span *ngIf="!bankaccount.accountBankTransactionTotal && isGocardlessSupportedCountry && hasIntegrationScope">
-                                    <i class="icon-plus text-primary cursor-pointer font-12"
-                                    [matTooltip]="localeData?.connect_bank" matTooltipPosition="below" (click)="openInstitutionsDialog(bankaccount)"></i>
-                                </span>
+                        <div
+                            [matTooltip]="bankaccount?.accountBankTransactionTotal?.transactionLastFetchedAt"
+                            matTooltipPosition="right"
+                            class="single-bank-detail"
+                            *cdkVirtualFor="let bankaccount of bankAccounts"
+                        >
+                            <p class="bank-name d-flex align-items-center">
+                                {{ bankaccount.name }}&nbsp;
+                                <i
+                                    *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
+                                    class="icon-plus text-primary cursor-pointer font-12"
+                                    [matTooltip]="localeData?.connect_bank"
+                                    matTooltipPosition="below"
+                                    (click)="openBankLinkDialog(bankaccount)"
+                                ></i>
                             </p>
-                            <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
+                            <p class="bank-balance" [ngClass]="{ 'width-86': reLoginRequired }">
                                 <span>{{ localeData?.in_giddh }}</span>
-                                <span>{{ activeCompany.baseCurrencySymbol }}
+                                <span
+                                    >{{ activeCompany.baseCurrencySymbol }}
                                     {{ bankaccount.closingBalance.amount | giddhCurrency }}
                                     <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
                                         localeData?.cr_heading
-                                        }}</span>
+                                    }}</span>
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
-                                        }}</span>
+                                    }}</span>
                                 </span>
                             </p>
                             <ng-container *ngIf="bankaccount?.accountBankTransactionTotal?.bankName">
-                                <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
-                                    <span>{{ bankaccount?.accountBankTransactionTotal?.translatedBankName
-                                        }}</span>
+                                <p class="bank-balance" [ngClass]="{ 'width-86': reLoginRequired }">
+                                    <span>{{ bankaccount?.accountBankTransactionTotal?.translatedBankName }}</span>
                                     <span>
                                         <amount-field
                                             [amount]="bankaccount.accountBankTransactionTotal?.closingBalance?.amount"
@@ -48,13 +68,17 @@
                                         >
                                         </amount-field>
                                         <span
-                                            *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'CREDIT'">{{
-                                            localeData?.cr_heading
-                                            }}</span>
+                                            *ngIf="
+                                                bankaccount.accountBankTransactionTotal.closingBalance.type == 'CREDIT'
+                                            "
+                                            >{{ localeData?.cr_heading }}</span
+                                        >
                                         <span
-                                            *ngIf="bankaccount.accountBankTransactionTotal.closingBalance.type == 'DEBIT'">{{
-                                            localeData?.dr_heading
-                                            }}</span>
+                                            *ngIf="
+                                                bankaccount.accountBankTransactionTotal.closingBalance.type == 'DEBIT'
+                                            "
+                                            >{{ localeData?.dr_heading }}</span
+                                        >
                                     </span>
                                 </p>
                             </ng-container>
@@ -72,11 +96,18 @@
                     </div>
                 </cdk-virtual-scroll-viewport>
 
-                <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0 ">
+                <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0">
                     <p>{{ localeData?.no_banks_found }}</p>
-                    <button type="button" mat-stroked-button color="primary" class="w-50"
+                    <button
+                        type="button"
+                        mat-stroked-button
+                        color="primary"
+                        class="w-50"
                         *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
-                        (click)="openInstitutionsDialog()">{{ localeData?.connect_bank }}</button>
+                        (click)="openInstitutionsDialog()"
+                    >
+                        {{ localeData?.connect_bank }}
+                    </button>
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>

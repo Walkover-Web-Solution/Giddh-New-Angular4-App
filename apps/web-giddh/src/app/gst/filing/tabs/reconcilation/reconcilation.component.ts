@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/gst-reconcile/GstReconcile.reducer';
@@ -10,30 +10,33 @@ import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GstReport } from '../../../constants/gst.constant';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-	selector: 'reconcile',
-	templateUrl: './reconcilation.component.html',
-	styleUrls: ['./reconcilation.component.scss'],
-	providers: [
-		{
-			provide: BsDropdownConfig, useValue: { autoClose: true },
-		},
-		{
-			provide: AlertConfig, useValue: {}
-		}
-	],
-	animations: [
-		trigger('slideInOut', [
-			state('in', style({
-				transform: 'translate3d(0, 0, 0)'
-			})),
-			state('out', style({
-				transform: 'translate3d(100%, 0, 0)'
-			})),
-			transition('in <=> out', animate('400ms ease-in-out')),
-		])
-	]
+    selector: 'reconcile',
+    templateUrl: './reconcilation.component.html',
+    styleUrls: ['./reconcilation.component.scss'],
+    providers: [
+        {
+            provide: BsDropdownConfig, useValue: { autoClose: true },
+        },
+        {
+            provide: AlertConfig, useValue: {}
+        }
+    ],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in <=> out', animate('400ms ease-in-out')),
+        ])
+    ]
 })
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;
@@ -58,9 +61,16 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public get GstReport() {
         return GstReport;
     }
+    /** Holds active tab index */
+    public activeTabIndex: number = 0;
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Hold table page index number */
+    public pageIndex: number = 0;
 
     constructor(
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private reconcileActions: GstReconcileActions
     ) {
         this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
@@ -73,20 +83,53 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
     }
 
-    public reconcileTabChanged(action: string) {
-        this.reconcileActiveTab = GstReconcileActionsEnum[action];
-        this.fireGstReconcileRequest(this.reconcileActiveTab, this.getPageNo());
-    }
+    /**
+     * Handle tab change event and make API call
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof ReconcileComponent
+     */
+    public reconcileTabChanged(event: MatTabChangeEvent): void {
+        if (event) {
+            this.activeTabIndex = event.index;
+            this.selectedTab = event.tab.textLabel;
+            let action = '';
+            switch (event.tab.textLabel) {
+                case this.localeData?.filing?.missing_in_gstn:
+                    action = 'notfoundonportal';
+                    break;
+                case this.localeData?.filing?.missing_in_giddh:
+                    action = 'notfoundongiddh';
+                    break;
+                case this.localeData?.filing?.partially_matched:
+                    action = 'partiallymatched';
+                    break;
+                case this.localeData?.filing?.matched:
+                    action = 'matched';
+                    break;
+                default:
+                    action = 'notfoundonportal';
+            }
 
-    public reconcilePageChanged(event: any, action: string) {
-        this.fireGstReconcileRequest(GstReconcileActionsEnum[action], event.page);
+            this.reconcileActiveTab = GstReconcileActionsEnum[action];
+            const pageInfo = this.getPageInfo();
+            this.fireGstReconcileRequest(this.reconcileActiveTab, pageInfo.pageNumber, false, pageInfo.count);
+        }
     }
-
-    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false) {
+    /**
+     * Handle the fire gst reconcile request
+     *
+     * @param action
+     * @param page
+     * @param refresh
+     * @param count
+     * @returns
+     */
+    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = this.pageSizeOptions[2]) {
         if (!this.currentPeriod) {
             return;
         }
@@ -94,6 +137,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         request.from = this.currentPeriod.from;
         request.to = this.currentPeriod.to;
         request.page = page;
+        request.count = count;
         request.refresh = refresh;
         request.action = action;
         request.gstin = this.activeCompanyGstNumber;
@@ -106,40 +150,68 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getPageNo(): number {
-        let page = 1;
+    /**
+     * Get page info
+     *
+     * @returns {{ pageNumber: number, count: number }}
+     * @memberof ReconcileComponent
+     */
+    public getPageInfo(): { pageNumber: number, count: number } {
+        const page = {
+            pageNumber: 1,
+            count: this.pageSizeOptions[2]
+        }
 
         switch (this.reconcileActiveTab) {
             case GstReconcileActionsEnum.notfoundongiddh:
                 this.gstNotFoundOnGiddhData$.pipe(take(1)).subscribe(data => {
                     if (data && data.data) {
-                        page = data.data.page;
+                        page.pageNumber = data.data.page;
+                        page.count = data.data.count;
                     }
                 });
                 break;
             case GstReconcileActionsEnum.notfoundonportal:
                 this.gstNotFoundOnPortalData$.pipe(take(1)).subscribe(data => {
                     if (data && data.data) {
-                        page = data.data.page;
+                        page.pageNumber = data.data.page;
+                        page.count = data.data.count;
                     }
                 });
                 break;
             case GstReconcileActionsEnum.matched:
                 this.gstMatchedData$.pipe(take(1)).subscribe(data => {
                     if (data && data.data) {
-                        page = data.data.page;
+                        page.pageNumber = data.data.page;
+                        page.count = data.data.count;
                     }
                 });
                 break;
             case GstReconcileActionsEnum.partiallymatched:
                 this.gstPartiallyMatchedData$.pipe(take(1)).subscribe(data => {
                     if (data && data.data) {
-                        page = data.data.page;
+                        page.pageNumber = data.data.page;
+                        page.count = data.data.count;
                     }
                 });
                 break;
         }
 
         return page;
+    }
+
+    /**
+     * Handle page change event and make API call
+     *
+     * @param {*} event
+     * @param {string} action
+     * @memberof ReconcileComponent
+     */
+    public reconcilePageChanged(event: any, action: string): void {
+        if (event) {
+            this.pageIndex = event.pageIndex;
+            const pageIndex = event.pageIndex + 1;
+            this.fireGstReconcileRequest(GstReconcileActionsEnum[action], pageIndex, false, event.pageSize);
+        }
     }
 }

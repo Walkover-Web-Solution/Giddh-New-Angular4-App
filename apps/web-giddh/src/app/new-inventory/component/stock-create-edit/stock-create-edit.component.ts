@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -25,12 +25,17 @@ import { GeneralService } from "../../../services/general.service";
 import { ManufacturingService } from "../../../services/manufacturing.service";
 import { InventoryComponentStore } from "../inventory.store";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
+import { CommonService } from "../../../services/common.service";
+import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-modal/confirmation-modal.component";
+import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
+import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
+import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
-    providers: [InventoryComponentStore]
+    providers: [InventoryComponentStore, VoucherComponentStore]
 })
 export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of stock create/edit form */
@@ -98,6 +103,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         },
         isFsStock: null,
         manufacturingDetails: null,
+        runtimeManufacturing: false,
         accountGroup: null,
         lowStockAlertCount: 0,
         outOfStockSelling: true,
@@ -111,6 +117,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 purchaseTaxInclusive: false,
                 fixedAssetTaxInclusive: false,
                 customFields: [],
+                attachmentUniqueName: null,
+                attachmentName: null,
+                isUploading: false,
                 salesInformation: [
                     {
                         rate: undefined,
@@ -247,6 +256,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
+    /** True if file upload in progress */
+    public isFileUploading: boolean = false;
+    /** Name of the selected file */
+    public selectedFileName: string = '';
+    /** Hold variant index*/
+    public variantIndex: number;
+    /** Upload attachment in progress Observable */
+    public uploadAttachmentInProgress$: Observable<boolean> = this.componentStore.uploadAttachmentInProgress$;
+    /** Preview attachment in progress Observable */
+    public downloadAttachmentInProgress$: Observable<boolean> = this.componentStore.downloadAttachmentInProgress$;
 
     constructor(
         private inventoryService: InventoryService,
@@ -262,8 +281,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private location: Location,
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private manufacturingService: ManufacturingService,
-        private componentStore: InventoryComponentStore
+        private componentStore: InventoryComponentStore,
+        private commonService: CommonService,
+        private voucherComponentStore: VoucherComponentStore
     ) {
     }
 
@@ -274,7 +296,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 
@@ -328,6 +350,30 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             }
         });
+
+        this.componentStore.uploadAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (this.variantIndex >= 0) {
+                    this.updateAttachmentState(response);
+                }
+            });
+
+        this.componentStore.previewAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (response) {
+                    this.openPreviewDialog(response);
+                }
+            });
+
+        this.voucherComponentStore.deleteAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (this.variantIndex >= 0) {
+                    this.handleAttachmentDeletion(response);
+                }
+            });
     }
 
     /**
@@ -900,7 +946,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private getAllDiscounts(): void {
-        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.discountsList = response;
             }
@@ -1175,6 +1221,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             delete variant.fixedAssetAccountDetails;
             delete variant.purchaseAccountDetails;
             delete variant.salesAccountDetails;
+            delete variant.attachmentName;
+            delete variant.isUploading;
             variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
             return variant;
         });
@@ -1237,6 +1285,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.lowStockAlertCount = response.body.lowStockAlertCount;
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
+                this.stockForm.runtimeManufacturing = response.body.runtimeManufacturing;
                 this.stockForm.options = response.body.options?.map(option => {
                     option.values = option?.values?.map((optionValue, optionIndex) => {
                         return { index: optionIndex, value: optionValue };
@@ -1282,7 +1331,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;
-
+                    variant['attachmentUniqueName'] = variant?.image?.uniqueName || null;
+                    variant['attachmentName'] = variant?.image?.uniqueName
+                        ? `data:image/${variant?.image?.fileType};base64,${variant?.image?.uploadedFile}`
+                        : null;
+                    variant['isUploading'] = false;
                     return variant;
                 });
 
@@ -1684,6 +1737,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             },
             isFsStock: null,
             manufacturingDetails: null,
+            runtimeManufacturing: false,
             accountGroup: null,
             lowStockAlertCount: 0,
             outOfStockSelling: true,
@@ -2203,5 +2257,159 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.getStockUnits();
             }
         });
+    }
+
+    /**
+     * This will use for upload file on variant
+     *
+     * @param {Event} event
+     * @param {number} index
+     * @memberof StockCreateEditComponent
+     */
+    public uploadFile(event: Event, index: number): void {
+        const input = event.target as HTMLInputElement;
+        if (input?.files?.length) {
+            this.variantIndex = index;
+            const file = input.files[0];
+            const variant = this.stockForm.variants[this.variantIndex];
+            variant.isUploading = true;
+            this.generalService.getSelectedFile(file, (blob: Blob, selectedFile: File) => {
+                this.componentStore.uploadAttachment({
+                    file: blob,
+                    fileName: selectedFile.name,
+                    type: 'variant'
+                });
+            });
+        }
+    }
+
+    /**
+     * This will be use for delete attachment files
+     *
+     * @param {number} index
+     * @memberof StockCreateEditComponent
+     */
+    public deleteAttachment(index: number): void {
+        if (index >=0) {
+            this.variantIndex = index;
+            const variant = this.stockForm.variants[index];
+            const attachmentDeleteConfig = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-md",
+                data: { configuration: attachmentDeleteConfig }
+            });
+
+            dialogRef.afterClosed()
+                .pipe(take(1))
+                .subscribe(response => {
+                    variant.isUploading = response === this.commonLocaleData?.app_yes;
+                    if (variant.isUploading) {
+                        this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
+                    } else {
+                        this.dialog.closeAll();
+                    }
+                });
+        }
+    }
+
+    /**
+     * This will be use for preview variant image
+     *
+     * @param {string} uniqueName
+     * @memberof StockCreateEditComponent
+     */
+    public previewVariantImage(uniqueName: string): void {
+        if (uniqueName) {
+            this.componentStore.previewVariantImage({ uniqueName: uniqueName, type: 'variant' });
+        }
+    }
+
+    /**
+     * Updates the attachment state based on the response.
+     *
+     * @param response - The response containing the uniqueName, fileType, and uploadedFile.
+     * @returns void
+     */
+    private updateAttachmentState(response: any): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+
+        if (response?.uniqueName) {
+            variant.attachmentUniqueName = response.uniqueName;
+            variant.attachmentName = `data:image/${response.fileType};base64,${response.uploadedFile}`;
+            this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+        } else {
+            this.resetAttachmentState();
+            this.componentStore.resetUploadAttachmentState();
+        }
+
+        variant.isUploading = false;
+    }
+
+    /**
+     * Resets the attachment state for a variant.
+     *
+     * @remarks This function clears the uniqueName and attachmentName of the variant's attachment.
+     * @private
+     * @returns {void}
+     */
+    private resetAttachmentState(): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+        variant.attachmentUniqueName = null;
+        variant.attachmentName = null;
+    }
+
+    /**
+     * Opens a dialog to preview the variant image.
+     *
+     * @param response - The response containing the uniqueName, fileType, and uploadedFile.
+     * @returns void
+     */
+    private openPreviewDialog(response: any): void {
+        if (response) {
+            const variantData = {
+                variant: response,
+                localeData: this.localeData
+            };
+            this.dialog.open(PreviewVariantImageComponent, {
+                data: variantData,
+                role: 'alertdialog',
+                ariaLabel: this.localeData?.preview_image
+            });
+        }
+    }
+
+    /**
+     * Handles the deletion of an attachment.
+     *
+     * @param response - The response containing the uniqueName, fileType, and uploadedFile.
+     * @returns void
+     */
+    private handleAttachmentDeletion(response: any): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+
+        if (response) {
+            this.toaster.showSnackBar("success", this.localeData?.attachment_deleted);
+            this.selectedFileName = "";
+            variant.isUploading = false;
+            variant.attachmentUniqueName = null;
+            this.voucherComponentStore.resetAttachmentState();
+        } else {
+            this.resetVariantAttachmentState();
+            this.componentStore.resetUploadAttachmentState();
+        }
+    }
+
+    /**
+     * Resets the attachment state for a variant.
+     *
+     * @remarks This function clears the uniqueName and attachmentName of the variant's attachment.
+     * @private
+     * @returns {void}
+     */
+    private resetVariantAttachmentState(): void {
+        const variant = this.stockForm.variants[this.variantIndex];
+        variant.attachmentUniqueName = null;
+        variant.attachmentName = null;
+        variant.isUploading = false;
     }
 }

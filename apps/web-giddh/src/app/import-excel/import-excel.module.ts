@@ -18,6 +18,10 @@ import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -47,7 +51,11 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         ScrollingModule,
         PaginationModule.forRoot(),
         SharedModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatSlideToggleModule,
+        MatButtonModule,
+        MatTooltipModule,
+        FormFieldsModule
     ],
 })
 export class ImportExcelModule {

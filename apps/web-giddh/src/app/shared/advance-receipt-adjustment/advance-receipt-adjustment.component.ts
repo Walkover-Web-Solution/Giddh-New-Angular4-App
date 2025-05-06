@@ -135,9 +135,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        if (this.voucherApiVersion !== 2) {
-            this.paginationLimit = 500;
-        }
+        // if (this.voucherApiVersion !== 2) {
+        //     this.paginationLimit = 500;
+        // }
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
@@ -294,6 +294,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
         this.balanceDueAmount = this.invoiceFormDetails.voucherDetails.balanceDue;
         this.offset = this.adjustPayment.balanceDue;
+        this.calculateBalanceDue();
     }
 
     /**
@@ -307,13 +308,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
 
             let apiCallObservable: Observable<any>;
-            if (this.voucherApiVersion !== 2) {
-                const requestObject = {
-                    accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
-                    invoiceDate: this.getAllAdvanceReceiptsRequest.invoiceDate
-                };
-                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
-            } else {
+            // if (this.voucherApiVersion !== 2) {
+            //     const requestObject = {
+            //         accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
+            //         invoiceDate: this.getAllAdvanceReceiptsRequest.invoiceDate
+            //     };
+            //     apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            // } else {
                 const requestObject = {
                     accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
                     voucherType: this.adjustedVoucherType,
@@ -331,7 +332,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 this.referenceVouchersCurrentPage++;
 
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
-            }
+            // }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === 'success') {
@@ -740,7 +741,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (entry && entry.taxRate && entry.adjustmentAmount?.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
-        } else if(this.adjustVoucherForm.adjustments[index]) {
+        } else if (this.adjustVoucherForm.adjustments[index]) {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();
@@ -968,9 +969,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             // Find if the item is present in already adjusted voucher which means the item is already partially adjusted
             const itemPresentInExistingAdjustment = this.advanceReceiptAdjustmentUpdatedData.adjustments.find(adjustment => adjustment?.uniqueName === item?.uniqueName);
             if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
-                if (this.voucherApiVersion !== 2) {
-                    item.balanceDue.amountForAccount += itemPresentInExistingAdjustment?.balanceDue?.amountForAccount;
-                }
+                // if (this.voucherApiVersion !== 2) {
+                //     item.balanceDue.amountForAccount += itemPresentInExistingAdjustment?.balanceDue?.amountForAccount;
+                // }
                 item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment?.adjustmentAmount?.amountForAccount;
             }
         }
@@ -1157,7 +1158,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response.body && (this.voucherApiVersion !== 2 || (this.voucherApiVersion === 2 && response.body.page === requestObject.page))) {
+            // this.voucherApiVersion !== 2 || (
+            if (response && response.body && (this.voucherApiVersion === 2 && response.body.page === requestObject.page)) {
                 let results = (response.body.results || response.body.items);
 
                 if (this.voucherApiVersion === 2) {

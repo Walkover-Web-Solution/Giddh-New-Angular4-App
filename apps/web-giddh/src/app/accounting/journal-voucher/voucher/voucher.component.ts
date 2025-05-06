@@ -745,7 +745,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             });
             this.selectAccUnqName = discountObj?.additional?.uniqueName;
         } else if (taxData) {
-            let filteredTaxData = this.companyTaxesList.filter((item) => {
+            let filteredTaxData = this.companyTaxesList?.filter((item) => {
                 return item.additional.name === (taxData.name ? taxData.name : taxData.label) && item.additional.uniqueName === (taxData.uniqueName ? taxData.uniqueName : taxData?.value);
             });
             newTransactionFormGroup.patchValue({
@@ -1191,7 +1191,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         transactionAtIndex = transactionsFormArray.at(index) as FormGroup;
                         response.body.applicableTaxes.forEach(tax => {
                             if (index !== -1) {
-                                let filteredTaxData = this.companyTaxesList.filter((item) => {
+                                let filteredTaxData = this.companyTaxesList?.filter((item) => {
                                     return item.additional.uniqueName === tax.uniqueName;
                                 });
                                 transactionAtIndex.patchValue({
@@ -1927,7 +1927,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public removeBlankTransaction(transactions: any[]) {
-        return transactions.filter(obj => obj && obj.particular);
+        return transactions?.filter(obj => obj && obj.particular);
     }
 
     /**

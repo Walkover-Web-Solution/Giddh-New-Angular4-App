@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -9,6 +9,7 @@ import { CustomTemplateResponse } from '../../../../../../models/api-models/Invo
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'tally-template',
@@ -21,7 +22,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
     @Input() public fieldsAndVisibility: any = null;
     /** Holds true if preview mode */
     @Input() public isPreviewMode: boolean = false;
-    /** Holds true if show company logo */
+    /** Holds true to show company logo */
     @Input() public showLogo: boolean = true;
     /** Holds true if show company name */
     @Input() public showCompanyName: boolean;
@@ -64,6 +65,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions
     ) {
         this.companySetting$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
@@ -75,8 +77,8 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
      * @memberof TallyTemplateAComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.companySetting$.subscribe(address => {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.companySetting$.pipe(takeUntil(this.destroyed$)).subscribe(address => {
             if (address && address.address) {
                 this.companyAddress = cloneDeep(address.address);
             } else if (!address) {

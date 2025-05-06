@@ -8,7 +8,8 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    TemplateRef
+    TemplateRef,
+    Inject
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -32,7 +33,7 @@ import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSe
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -47,6 +48,7 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
 import { DomSanitizer } from "@angular/platform-browser";
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "aging-report",
@@ -98,7 +100,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Observable if loading in process */
@@ -155,6 +157,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private sanitizer: DomSanitizer) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
@@ -205,7 +208,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.agingReportActions.GetDueRange());
@@ -736,10 +739,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
 
     /**
      * Redirect to invoice preview by unique name
-     * 
-     * @param voucherUniqueName 
-     * @param voucherDate 
-     * @returns 
+     *
+     * @param voucherUniqueName
+     * @param voucherDate
+     * @returns
      */
     public getInvoicePreviewUrl(invoice: any): string {
         if (invoice) {

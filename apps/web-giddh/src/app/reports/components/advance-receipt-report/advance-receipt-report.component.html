@@ -15,7 +15,6 @@
             >
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
-                    <!-- NOTE - This code is only active for Test Environment - Start -->
                     <button
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
@@ -24,7 +23,6 @@
                     >
                         {{ localeData?.new_voucher }}
                     </button>
-                    <!-- NOTE - This code is only active for Test Environment - End -->
                     <div
                         class="input-group linked-entities mr-r15"
                         *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
@@ -258,13 +256,13 @@
                     >
                         <tr>
                             <th width="50px">
+                                <!-- || voucherApiVersion !== 2 -->
                                 <div
                                     *ngIf="
-                                        (voucherApiVersion === 2 &&
+                                        voucherApiVersion === 2 &&
                                             !hoveredReceiptTable &&
-                                            !allReceiptsSelected &&
-                                            !selectedReceipts?.length) ||
-                                        voucherApiVersion !== 2
+                                            !allReceiptsSelected
+
                                     "
                                 >
                                     #
@@ -387,11 +385,11 @@
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
-                                    <i
+                                    <!-- <i
                                         class="icon-search"
                                         *ngIf="voucherApiVersion !== 2"
                                         (click)="searchBy(null, 'paymentMode', true)"
-                                    ></i>
+                                    ></i> -->
                                     <span>{{ localeData?.payment_mode_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
@@ -412,11 +410,11 @@
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showInvoiceSearchBar">
-                                    <i
+                                    <!-- <i
                                         class="icon-search"
                                         *ngIf="voucherApiVersion !== 2"
                                         (click)="searchBy(null, 'invoiceNumber', true)"
-                                    ></i>
+                                    ></i> -->
                                     <span>{{ localeData?.invoice_no_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
@@ -476,13 +474,13 @@
                             (mouseover)="hoveredReceiptUniqueName = receipt?.uniqueName"
                         >
                             <td data-title="#" width="50px">
+                                <!-- || voucherApiVersion !== 2 -->
                                 <div
                                     *ngIf="
                                         (voucherApiVersion === 2 &&
                                             hoveredReceiptUniqueName !== receipt?.uniqueName &&
                                             !receipt.isSelected &&
-                                            !selectedReceipts?.length) ||
-                                        voucherApiVersion !== 2
+                                            !selectedReceipts?.length)
                                     "
                                 >
                                     {{ i + 1 }}
@@ -531,11 +529,11 @@
                                 [ngClass]="{ 'pl-0': voucherApiVersion === 2 }"
                                 [attr.data-title]="localeData?.payment_mode_label"
                             >
-                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                <!-- <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                         {{ paymentMode }}
                                     </div>
-                                </ng-container>
+                                </ng-container> -->
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     {{ receipt?.paymentMode?.name }}
                                 </ng-container>
@@ -547,9 +545,9 @@
                                 *ngIf="receipt?.invoices || receipt?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
-                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                <!-- <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
-                                </ng-container>
+                                </ng-container> -->
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     <ng-container *ngIf="receipt.adjustments?.length > 0">
                                         <ng-container *ngFor="let adjustment of receipt.adjustments">

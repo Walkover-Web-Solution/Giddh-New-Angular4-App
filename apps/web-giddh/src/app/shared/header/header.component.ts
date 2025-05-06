@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } 
 import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -50,6 +50,15 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesActions } from '../../actions/sales/sales.action';
+import { ServiceConfig } from '../../services/service.config';
+
+interface SubscriptionErrorFlags {
+    isObligationExpired: boolean;
+    isLiabilitiesExpired: boolean;
+    isSubscriptionRenewalExpired: boolean;
+    isSubscriptionEnded: boolean;
+    isTransactionLimitExceeded: boolean;
+};
 
 @Component({
     selector: 'app-header',
@@ -84,6 +93,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -258,10 +269,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public broadcast: any;
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
+    /** Hold broadcast event for project wise accounting */
+    public projectBroadcast: any;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Holds true if plan is either trial or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
+    /** Tracks the visibility of error messages related to subscription and plan. */
+    public showAlertMessage: SubscriptionErrorFlags = {
+        isObligationExpired: true,
+        isLiabilitiesExpired: true,
+        isSubscriptionRenewalExpired: true,
+        isSubscriptionEnded: true,
+        isTransactionLimitExceeded: true
+    }
+    /** Holds obligations alert message */
+    public obligation: any = null;
+    /** Holds liabilities alert message */
+    public liabilities: any = null;
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
+    /** Holds true if lister is added on error message */
+    public isErrorMessageListenerAdded: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -303,9 +332,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
         private socialAuthService: AuthService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        @Inject(ServiceConfig) private serviceConfig,
+        private elementRef: ElementRef,
+        private renderer: Renderer2
     ) {
-        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -468,10 +504,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
-                if (this.voucherApiVersion === 1) {
-                    this.showDepreciationMessage = true;
-                    document.querySelector("body")?.classList?.add("depreciation-message");
-                } else {
+                // if (this.voucherApiVersion === 1) {
+                //     this.showDepreciationMessage = true;
+                //     document.querySelector("body")?.classList?.add("depreciation-message");
+                // } else {
+                //     this.showDepreciationMessage = false;
+                //     document.querySelector("body")?.classList?.remove("depreciation-message");
+                // }
+                if (this.voucherApiVersion === 2) {
                     this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");
                 }
@@ -522,6 +562,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
 
+        this.projectBroadcast = new BroadcastChannel("project-wise-accounting");
+        this.projectBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                this.gotToBranchTab();
+            }
+        };
+
         this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
@@ -569,6 +616,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (response) {
                 this.expandSidebar(true);
+
             } else {
                 this.collapseSidebar(true);
             }
@@ -656,11 +704,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // endregion
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
-            .observe(['(min-width: 1020px)'])
+            .observe(['(min-width: 1280px)'])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
@@ -774,14 +820,41 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
                     this.isCurrentSubscriptionTrialOrCancelled = res.subTrialOrCancelled ?? null;
+                    this.subscribedPlan.paymentPending = res.paymentPending;
                 }
                 this.activeCompany = res;
+                this.isUKCompany = res.country === "United Kingdom";
+                this.obligation = res.obligationsAlert && Object.keys(res.obligationsAlert).length ? res.obligationsAlert : null;
+                this.liabilities = res.liabilitiesAlert && Object.keys(res.liabilitiesAlert).length ? res.liabilitiesAlert : null;
                 if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
                     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
                 }
                 this.checkIfCompanyTcsTdsApplicable();
             }
         });
+    }
+
+    /**
+     * Add click listener on error message
+     *
+     * @memberof HeaderComponent
+     */
+    public addListenerErrorMessage(): void {
+        if (!this.isErrorMessageListenerAdded) {
+            this.isErrorMessageListenerAdded = true;
+            const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
+            liabilities.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToLiabilities();
+                });
+            });
+            const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
+            obligation.forEach((link: HTMLElement) => {
+                this.renderer.listen(link, 'click', () => {
+                    this.goToObligation();
+                });
+            });
+        }
     }
 
 
@@ -810,7 +883,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : `https://test.giddh.com/login`;
+                    const whiteLabel = this.generalService.getDecodedWhiteLabel();
+                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -1243,6 +1317,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public backToCompany(): void {
+        this.expandSidebar(true);
         this.router.navigate(['/pages', 'home']);
     }
 
@@ -1270,6 +1345,39 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             });
         }
+    }
+
+    /**
+     * Navigates to obligation
+     *
+     * @returns {*}
+     * @memberof HeaderComponent
+     */
+    public goToObligation(): void {
+        this.router.navigate(['pages/vat-report/obligations']);
+    }
+
+    /**
+     * Navigates to liabilities
+     *
+     * @returns {*}
+     * @memberof HeaderComponent
+     */
+    public goToLiabilities(): void {
+        this.router.navigate(['pages/vat-report/liabilities']);
+    }
+
+    /**
+     * Replaces placeholders in the given text with the provided arguments.
+     * Placeholders are denoted as `[placeholder]` and replaced sequentially.
+     *
+     * @param {string} text
+     * @param {string[]} args
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof HeaderComponent
+     */
+    public getExpiredMessage(text: string = "", ...args: string[]): string {
+        return this.generalService.replacePlaceholders(text, ...args);
     }
 
     /**
@@ -1767,21 +1875,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionEndNote(): string {
         let text = this.localeData?.subscription_end_note;
-        if (this.planVersion === 2) {
-            text = text
-                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-                ?.replace("[PLAN_DURATION_UNIT]", '')
-                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
-        } else {
-            text = text
-                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
-        }
-        return text;
+        return this.getExpiredMessage(
+            text,
+            this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
+            this.planVersion === 2 ? '' : this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
+            this.subscribedPlan?.planDetails?.name,
+            this.subscribedPlan?.expiry
+        ) ?? "";
     }
+
 
     /**
      * This will return plan ended note
@@ -1790,18 +1892,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getSubscriptionEndedNote(): string {
-        let text = "";
-        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && !this.isCurrentSubscriptionTrialOrCancelled) {
-            text = this.localeData?.subscription_expire_renewal_message;
-        } else {
-            text = this.localeData?.subscription_ended_note
-                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
+        if (['MONTHLY', 'DAILY'].includes(this.subscribedPlan?.duration) && this.selectedPlanStatus === 'expired' && this.subscribedPlan?.paymentPending && !this.isCurrentSubscriptionTrialOrCancelled) {
+            return this.localeData?.subscription_expire_renewal_message ?? "";
         }
-        return text;
+        return this.getExpiredMessage(
+            this.localeData?.subscription_ended_note,
+            this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
+            this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
+            this.subscribedPlan?.planDetails?.name,
+            this.subscribedPlan?.expiry
+        ) ?? "";
     }
+
     /**
      * This will return plan transactions ended note
      *
@@ -1823,14 +1925,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getPlanExpiredNote(): string {
-        let text = this.localeData?.plan_expired_note;
-        text = text
-            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
-            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
-            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
-            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
-        return text;
+        return this.getExpiredMessage(
+            this.localeData?.plan_expired_note,
+            this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration,
+            this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase(),
+            this.subscribedPlan?.planDetails?.name,
+            this.subscribedPlan?.expiry
+        ) ?? "";
     }
+
 
     /**
      * This will return transaction limit crossed note

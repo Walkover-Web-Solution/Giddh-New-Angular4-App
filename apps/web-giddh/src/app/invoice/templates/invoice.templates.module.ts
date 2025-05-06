@@ -20,6 +20,7 @@ import { DesignFiltersContainerComponent } from './edit-template/filters-contain
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { TallyTemplateComponent } from './edit-template/out-tempate/templates/tally-template/tally-template.component';
+import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { TallyTemplateComponent } from './edit-template/out-tempate/templates/ta
         CollapseModule.forRoot(),
         HasFocusDirectiveModule,
         BsDropdownModule,
+        ShSelectModule,
         ModalModule,
         ClickOutsideModule,
         DecimalDigitsModule,

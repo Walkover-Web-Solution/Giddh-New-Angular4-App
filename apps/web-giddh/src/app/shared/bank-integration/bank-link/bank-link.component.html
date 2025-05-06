@@ -6,7 +6,7 @@
 >
     <div class="modal-header d-flex align-items-center">
         <h3>{{ localeData?.payment?.link_bank }}</h3>
-        <button class="close" mat-dialog-close>×</button>
+        <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
     </div>
     <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
     <mat-dialog-content class="banklink-dialog-body" *ngIf="!isLoading">
@@ -22,12 +22,18 @@
                             [placeholder]="localeData?.payment?.banks"
                             [options]="bankLinks"
                             (selectedOption)="selectedOption($event)"
-                            [defaultValue]="defaultSelectedBank$ | async"
+                            [defaultValue]="defaultSelectedBank"
                         >
                         </dropdown-field>
                     </div>
                     <div>
-                        <button mat-stroked-button class="mr-15" type="submit" (click)="linkBankAccount()" [disabled]="!selectedBank">
+                        <button
+                            mat-stroked-button
+                            class="mr-15"
+                            type="submit"
+                            (click)="linkBankAccount()"
+                            [disabled]="!selectedBank"
+                        >
                             {{ localeData?.payment?.link }}
                         </button>
                     </div>

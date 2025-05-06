@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -8,7 +8,7 @@ import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
@@ -18,6 +18,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: "purchase-register-expand",
@@ -97,11 +98,14 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Datasource of Purchase Register report */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private activeRoute: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _cd: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
@@ -132,7 +136,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? "assets/icon/" : AppUrl + APP_FOLDER + "assets/icon/";
+        this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
         this.getDetailedPurchaseRequestFilter.q = "";
@@ -201,12 +205,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         this.voucherNumberInput?.valueChanges
             ?.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((s) => {
-                if (s !== null && s !== undefined) {
+            .subscribe((searching) => {
+                if (searching !== null && searching !== undefined) {
                     this.showClearFilter = true;
                     this.getDetailedPurchaseRequestFilter.sort = null;
                     this.getDetailedPurchaseRequestFilter.sortBy = null;
-                    this.getDetailedPurchaseRequestFilter.q = s;
+                    this.getDetailedPurchaseRequestFilter.q = encodeURIComponent(searching);
                     this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
                     this.showSearchInvoiceNo = false;
                 }
@@ -617,13 +621,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Page Change event and Make API Call
+     * Handle page change event and make API call
      *
      * @param {*} event
      * @memberof PurchaseRegisterExpandComponent
      */
     public handlePageChange(event: any): void {
-        this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
-        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+        if (event) {
+            this.getDetailedPurchaseRequestFilter.count = event.pageSize;
+            this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
+            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+        }
     }
 }

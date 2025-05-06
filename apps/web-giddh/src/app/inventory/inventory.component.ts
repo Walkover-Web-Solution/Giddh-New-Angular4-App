@@ -468,7 +468,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.GroupStockReportRequest.branchUniqueName =
                 this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
                     this.currentBranchAndWarehouseFilterValues.branch : null;
-            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
+            this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;
             this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
         });
     }
@@ -549,7 +549,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${ branch.name}`, value: branch?.uniqueName }));
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.name}`, value: branch?.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
         }
     }

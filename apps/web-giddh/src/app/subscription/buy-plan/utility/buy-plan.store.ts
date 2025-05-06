@@ -100,7 +100,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 planList: [],
                                 planListInProgress: false
@@ -143,8 +143,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 createSubscriptionInProgress: false
                             });
@@ -185,8 +184,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 updatePlanInProgress: false
                             });
@@ -222,7 +220,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                           this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
 
                             return this.patchState({
                                 updateSubscriptionPaymentInProgress: false,
@@ -260,7 +258,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                           this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
 
                             return this.patchState({
                                 updateSubscriptionPaymentInProgress: false,
@@ -297,7 +295,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                           this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
 
                             return this.patchState({
                                 generateOrderBySubscriptionIdInProgress: false,
@@ -334,7 +332,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                           this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
 
                             return this.patchState({
                                 getChangePlanDetailsInProgress: false,
@@ -554,12 +552,12 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                 return this.subscriptionService.paypalCaptureOrder(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res.status === "success") {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     paypalCaptureOrderIdSuccess: true
                                 });
                             } else {
-                                res.message && this.toasterService.showSnackBar("error", res.message);
+                                res.message && this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
                                     paypalCaptureOrderIdSuccess: false
                                 });

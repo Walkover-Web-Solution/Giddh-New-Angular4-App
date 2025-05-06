@@ -180,7 +180,7 @@
                         class="form-group"
                         *ngIf="
                             (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e' || 
+                                customTemplate?.templateType === 'gst_template_e' ||
                                 customTemplate?.templateType === 'tally_template') &&
                             showGstComposition &&
                             customTemplate.sections['header'].data['showEInvoiceDetails']
@@ -215,12 +215,12 @@
                     <div
                         class="form-group"
                         *ngIf="
-                            (customTemplate?.templateType === 'gst_template_a' ||
+                            ((customTemplate?.templateType === 'gst_template_a' ||
                                 customTemplate?.templateType === 'gst_template_e' ||
-                                customTemplate?.templateType === 'tally_template' ||
                                 customTemplate?.templateType === 'thermal_template') &&
                             voucherType === 'sales' &&
-                            customTemplate.sections['header'].data['showCompanyAddress']
+                            customTemplate.sections['header'].data['showCompanyAddress'])
+                            || customTemplate?.templateType === 'tally_template'
                         "
                     >
                         <input
@@ -308,16 +308,16 @@
                         </span>
                     </div>
                     <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
-                    <div *ngIf="voucherType === 'sales' || voucherType === ''">
+                    <div *ngIf="voucherType === 'sales' || voucherType === '' || customTemplate?.templateType === 'tally_template' ">
                         <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
                             <input
                                 type="checkbox"
                                 name="invoiceDateCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].display"
-                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="handleInvoiceDateNumberChange(true); onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Invoice Date
+                            {{ customTemplate?.templateType === 'tally_template' && voucherType !== 'sales' ? "Voucher Date" : "Invoice Date" }}
                             <div class="ml-3">
                                 <input
                                     type="text"
@@ -328,7 +328,7 @@
                                     class="form-control"
                                     name="invoiceDate"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="handleInvoiceDateNumberChange(true); onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceDate'].display"
                                 />
                                 <ng-container
@@ -351,21 +351,21 @@
                                 type="checkbox"
                                 name="invoiceNumberCheckbox"
                                 [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].display"
-                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                (ngModelChange)="handleInvoiceDateNumberChange(false); onChangeFieldVisibility(null, null, null)"
                                 checked
                             />
-                            Invoice Number
+                            {{ customTemplate?.templateType === 'tally_template' && voucherType !== 'sales' ? "Voucher Number" : "Invoice Number" }}
                             <div class="ml-3">
                                 <input
                                     type="text"
-                                    hasFocus
+                                    hasFocus    
                                     #invoiceNo="hasFocus"
                                     [class.error-box]="contentForm?.controls['invoiceNo']?.errors?.maxlength"
                                     [maxlength]="customTemplate.templateType === 'thermal_template' ? 14 : 15"
                                     class="form-control"
                                     name="invoiceNo"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="handleInvoiceDateNumberChange(false); onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['invoiceNumber'].display"
                                 />
                                 <ng-container
@@ -384,7 +384,7 @@
                         </div>
                     </div>
                     <!--   .....this is for other voucher type -->
-                    <ng-container *ngIf="voucherType != 'sales'">
+                    <ng-container *ngIf="voucherType != 'sales' && customTemplate?.templateType !== 'tally_template'">
                         <div *ngIf="fieldsAndVisibility.header.voucherDate" class="form-group">
                             <input
                                 type="checkbox"
@@ -457,7 +457,7 @@
                     </ng-container>
                     <div
                         *ngIf="
-                            fieldsAndVisibility.header.dueDate && 
+                            fieldsAndVisibility.header.dueDate &&
                             customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate?.templateType !== 'tally_template'
                         "
@@ -1137,6 +1137,15 @@
                                 </ng-container>
                             </td>
                         </tr>
+                        <tr *ngIf="fieldsAndVisibility.table.showVariantImage && customTemplate.templateType === 'gst_template_a'">
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="variant-image"
+                                        [(ngModel)]="customTemplate.sections['table'].data['showVariantImage'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                                    Show stock/variant image</label>
+                            </td>
+                        </tr>
                         <tr
                             *ngIf="
                                 customTemplate.templateType !== 'thermal_template' && fieldsAndVisibility?.table.date
@@ -1218,7 +1227,8 @@
                             *ngIf="
                                 customTemplate.sections['table'].data['item'].display &&
                                 customTemplate.sections['table'].data['showDescriptionInRows'] &&
-                                customTemplate.templateType !== 'thermal_template'
+                                customTemplate.templateType !== 'thermal_template' &&
+                                customTemplate.templateType !== 'tally_template'
                             "
                         >
                             <td class="pb-3" colspan="2">
@@ -1785,10 +1795,10 @@
                         <tr
                             *ngIf="
                                 (customTemplate?.templateType === 'gst_template_a' ||
-                                    customTemplate?.templateType === 'tally_template' ||
                                     customTemplate?.templateType === 'gst_template_e') &&
                                 voucherType === 'sales' &&
-                                customTemplate.sections['table'].data['totalQuantity']
+                                customTemplate.sections['table'].data['totalQuantity'] ||
+                                customTemplate?.templateType === 'tally_template'
                             "
                         >
                             <td class="pb-3">
@@ -1880,9 +1890,9 @@
                         <div
                             class="form-group"
                             *ngIf="
-                                customTemplate?.templateType === 'tally_template' &&
-                                voucherType === 'sales' &&
-                                customTemplate.sections['footer'].data['taxBifurcation']
+                                customTemplate?.templateType === 'tally_template' ||
+                                (voucherType === 'sales' &&
+                                customTemplate.sections['footer'].data['taxBifurcation'])
                             "
                         >
                             <div class="form-group">
@@ -2137,6 +2147,7 @@
                             customTemplate?.templateType === 'thermal_template' &&
                             voucherType === 'sales' &&
                             customTemplate.sections['table'].data['totalQuantity']
+                            && customTemplate?.templateType !== 'tally_template'
                         "
                         class="clearfix mr-t2"
                     >
@@ -2157,7 +2168,7 @@
                                 class="form-control thanks-input-inline"
                                 hasFocus
                                 #totalQuantity="hasFocus"
-                                [disabled]="!fieldsAndVisibility.table.totalQuantity?.display"
+                                [disabled]="!fieldsAndVisibility.table.quantity?.display"
                                 (keyup)="onFieldChange(null, null, null)"
                                 [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].label"
                                 placeholder="Total Quantity"
@@ -2252,7 +2263,7 @@
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
                             customTemplate?.templateType !== 'gst_template_e' &&
-                            customTemplate?.templateType !== 'thermal_template' && 
+                            customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate?.templateType !== 'tally_template'
                         "
                         class="form-group"

@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, OnDestroy, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export class TemplateDesignUISectionVisibility {
     public templates: boolean = false;
@@ -73,6 +74,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>,
         private _activatedRoute: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private _invoiceTemplatesService: InvoiceTemplatesService,
         private invoiceActions: InvoiceActions,
         private generalService: GeneralService,
@@ -135,7 +137,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                     if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
                         this.showDeleteButton = true;
                         let preview: any = document.getElementById('logoImage');
-                        preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                        preview?.setAttribute('src', (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
                     }
                 }
             }
@@ -371,6 +373,13 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public setFontAndFontSize() {
         if (this.customTemplate) {
             if (this.customTemplate.font) {
+                if (this.customTemplate.templateType === 'tally_template') {
+                    this.presetFonts = [
+                        { label: 'Open Sans', value: 'Open Sans' },
+                        { label: 'Roboto', value: 'Roboto' }
+                    ];
+                }
+
                 this.presetFonts.map(font => {
                     if (font?.value === this.customTemplate.font) {
                         this.selectedFont = font.label;
@@ -380,7 +389,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
             if (this.customTemplate.fontSize) {
                 this.presetFontsSize.map(fontSize => {
-                    if (fontSize?.value === this.customTemplate.fontSize) {
+                    if (fontSize?.value == this.customTemplate.fontSize) {
                         this.selectedFontSize = fontSize.label;
                     }
                 });
@@ -411,5 +420,12 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * * This is used when the user changes the template.
+     */
+    public showMessage(): void{
+        this._toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
     }
 }

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -27,6 +27,7 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
 import { BranchHierarchyType } from '../../app.constant';
+import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -124,6 +125,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsBranchActions: SettingsBranchActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private settingsProfileService: SettingsProfileService,
         private commonActions: CommonActions,
@@ -216,7 +218,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -443,30 +445,32 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public updateBranchInfo(branchDetails: any): void {
-        branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
-        this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity?.uniqueName,
-            isDefault: filteredEntity.isDefault,
-        }));
-        const requestObj = {
-            name: branchDetails.formValue.name,
-            alias: branchDetails.formValue.alias,
-            branchUniqueName: this.branchDetails?.uniqueName,
-            linkAddresses
-        };
-        this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.addressAsidePaneRef?.close();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
-                this.toasterService.successToast(this.localeData?.branch_updated);
-            } else {
-                this.toasterService.errorToast(response?.message);
-            }
-            this.isBranchChangeInProgress = false;
-        }, () => {
-            this.isBranchChangeInProgress = false;
-        });
+        if (branchDetails) {
+            branchDetails.formValue.linkedEntity = branchDetails.formValue?.linkedEntity || [];
+            this.isBranchChangeInProgress = true;
+            const linkAddresses = branchDetails.addressDetails?.linkedEntities?.filter(entity => (branchDetails.formValue?.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
+                uniqueName: filteredEntity?.uniqueName,
+                isDefault: filteredEntity?.isDefault,
+            }));
+            const requestObj = {
+                name: branchDetails.formValue?.name,
+                alias: branchDetails.formValue?.alias,
+                branchUniqueName: this.branchDetails?.uniqueName,
+                linkAddresses
+            };
+            this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.addressAsidePaneRef?.close();
+                    this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                    this.toasterService.successToast(this.localeData?.branch_updated);
+                } else {
+                    this.toasterService.errorToast(response?.message);
+                }
+                this.isBranchChangeInProgress = false;
+            }, () => {
+                this.isBranchChangeInProgress = false;
+            });
+        }
     }
 
     /**
