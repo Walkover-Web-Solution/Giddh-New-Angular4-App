@@ -60,7 +60,12 @@ export class PageLeaveUtilityService {
      */
     public removeBrowserConfirmationDialog(): void {
         this.store.dispatch(this.commonAction.hasUnsavedChanges(false));
-        document.querySelector("body").removeAttribute("onbeforeunload");
+        if ((window as any).require) {
+            const { ipcRenderer } = (window as any).require('electron');
+            ipcRenderer.send('has-unsaved-changes', false);
+        } else {
+            window.onbeforeunload = null;
+        }
         document.querySelector("body").classList?.remove("page-leave-confirmation-modal-wrapper");
     }
 
@@ -73,7 +78,15 @@ export class PageLeaveUtilityService {
         if (saveGlobalUnsavedChange) {
             this.store.dispatch(this.commonAction.hasUnsavedChanges(true));
         }
-        document.querySelector("body").setAttribute("onbeforeunload", "return 'true';");
+
+        if ((window as any).require) {
+            // Running in Electron
+            const { ipcRenderer } = (window as any).require('electron');
+            ipcRenderer.send('has-unsaved-changes', true);
+        } else {
+            window.onbeforeunload = () => 'true';
+        }
+
     }
 
     /**
