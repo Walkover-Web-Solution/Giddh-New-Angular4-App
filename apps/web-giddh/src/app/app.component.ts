@@ -17,6 +17,7 @@ import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { PageLeaveUtilityService } from './services/page-leave-utility.service';
 
 /**
  * App Component
@@ -54,7 +55,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -106,6 +108,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 'PRODUCTION_ENV': PRODUCTION_ENV,
                 'AppUrl': AppUrl,
                 'APP_FOLDER': APP_FOLDER
+            });
+            ipcRenderer.on('app-close-requested', () => {
+                this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                    if (confirmed) {
+                        ipcRenderer.send('force-close');
+                    }
+                });
             });
         }
 
