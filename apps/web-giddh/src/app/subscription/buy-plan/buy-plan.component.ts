@@ -1309,6 +1309,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             duration: this.firstStepForm.get('duration').value,
             countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : this.secondStepForm.get('country').value?.value
         }
+
+        if (this.isChangePlan || this.isRenewPlan) {
+            reqObj['subscriptionId'] = this.subscriptionId;
+        }
+
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
