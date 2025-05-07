@@ -619,14 +619,13 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
     /**
      * Handles archive status filter
-     *
-     * @param {*} items
-     * @param {number} currentIndex
-     * @param {string} value
-     * @memberof MasterComponent
+     * 
+     * @param groupUniqueName 
+     * @param currentIndex 
+     * @param value 
      */
-    public onArchiveStatusFilter(items: any, currentIndex: number, value: string): void {
+    public onArchiveStatusFilter(groupUniqueName: any, currentIndex: number, value: string): void {
         this.selectedArchivedOption = value;
-        this.getMasters(items, currentIndex);
+        this.getMasters(groupUniqueName, currentIndex, true);
     }
 }

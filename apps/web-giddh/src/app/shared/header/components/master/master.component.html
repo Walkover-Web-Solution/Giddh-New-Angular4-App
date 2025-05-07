@@ -30,14 +30,17 @@
 
                     <!-- Account Archive Status Filter Button -->
                     <button 
+                        class="h-auto p-0"
                         mat-icon-button
+                        [matTooltip]="commonLocaleData?.app_filter"
+                        [matTooltipPosition]="'above'"
                         [matMenuTriggerFor]="archiveStatusMenu"
                     >
-                       <i class="icon-advance-filter"></i>
+                       <i class="icon-advance-filter font-15"></i>
                     </button>
                     <mat-menu #archiveStatusMenu="matMenu">
                         <ng-container *ngFor="let option of archivedOptions">
-                            <button mat-menu-item  class="h-auto p-0" aria-label="{{ option.label }}" (click)="onArchiveStatusFilter(items, i, option?.value)">
+                            <button mat-menu-item aria-label="{{ option.label }}" (click)="onArchiveStatusFilter(items?.groupUniqueName, i, option?.value)">
                                 {{ option.label }}
                             </button>
                         </ng-container>

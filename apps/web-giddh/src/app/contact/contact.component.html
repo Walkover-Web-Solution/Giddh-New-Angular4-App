@@ -29,34 +29,34 @@
                         >
                             <div class="customer-form-inline">
                                 <div class="wrap-search-entity d-flex column-gap15">
-                                    <div [formGroup]="filterForm">
-                                        <!-- Branch Dropdown -->
-                                        <reactive-dropdown-field
-                                            *ngIf="
-                                                currentCompanyBranches?.length > 2 &&
-                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                                            "
-                                            [label]="commonLocaleData?.app_branch"
-                                            [placeholder]="commonLocaleData?.app_select_branch"
-                                            [(ngModel)]="currentBranch.uniqueName"
-                                            [name]="'branch'"
-                                            [options]="currentCompanyBranches"
-                                            [labelValue]="currentBranch?.name"
-                                            (selectedOption)="handleBranchChange($event)">
-                                        </reactive-dropdown-field>
-                                    </div>
+                                    <!-- Branch Dropdown -->
+                                    <reactive-dropdown-field
+                                        *ngIf="
+                                            currentCompanyBranches?.length > 2 &&
+                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                        "
+                                        [label]="commonLocaleData?.app_branch"
+                                        [placeholder]="commonLocaleData?.app_select_branch"
+                                        [(ngModel)]="currentBranch.uniqueName"
+                                        [name]="'branch'"
+                                        [options]="currentCompanyBranches"
+                                        [labelValue]="currentBranch?.name"
+                                        (selectedOption)="handleBranchChange($event)">
+                                    </reactive-dropdown-field>
 
                                     <!-- Archive Filter Dropdown -->
-                                    <reactive-dropdown-field
-                                        class="w-100"
-                                        [name]="'accountArchiveStatus'"
-                                        [label]="commonLocaleData?.app_account_status"
-                                        [labelValue]="commonLocaleData?.app_unarchive"
-                                        [placeholder]="commonLocaleData?.app_select"
-                                        formControlName="accountArchiveStatus"
-                                        [options]="archivedOptions"
-                                        (selectedOption)="onArchivedOptions($event)">
-                                    </reactive-dropdown-field>
+                                    <div [formGroup]="filterForm">
+                                        <reactive-dropdown-field
+                                            class="w-100"
+                                            [name]="'accountArchiveStatus'"
+                                            [label]="commonLocaleData?.app_account_status"
+                                            [labelValue]="commonLocaleData?.app_unarchive"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            formControlName="accountArchiveStatus"
+                                            [options]="archivedOptions"
+                                            (selectedOption)="onArchivedOptions($event)">
+                                        </reactive-dropdown-field>
+                                    </div>
 
                                     <!-- Universal Date Range Picker -->
                                     <form
