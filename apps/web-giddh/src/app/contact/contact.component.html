@@ -30,78 +30,35 @@
                             <div class="customer-form-inline">
                                 <div class="wrap-search-entity d-flex column-gap15">
                                     <div [formGroup]="filterForm">
+                                        <!-- Branch Dropdown -->
                                         <reactive-dropdown-field
-                                            class="w-100"
-                                            [name]="'accountArchiveStatus'"
-                                            [label]="commonLocaleData?.app_account_status"
-                                            [labelValue]="commonLocaleData?.app_unarchive"
-                                            [placeholder]="commonLocaleData?.app_select"
-                                            formControlName="accountArchiveStatus"
-                                            [options]="archivedOptions"
-                                            (selectedOption)="onArchivedOptions($event)">
+                                            *ngIf="
+                                                currentCompanyBranches?.length > 2 &&
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                            "
+                                            [label]="commonLocaleData?.app_branch"
+                                            [placeholder]="commonLocaleData?.app_select_branch"
+                                            [(ngModel)]="currentBranch.uniqueName"
+                                            [name]="'branch'"
+                                            [options]="currentCompanyBranches"
+                                            [labelValue]="currentBranch?.name"
+                                            (selectedOption)="handleBranchChange($event)">
                                         </reactive-dropdown-field>
                                     </div>
-                                    <div
-                                        class="form-group mr-r15 pull-left linked-entities mb-0"
-                                        name="currentBranch"
-                                        *ngIf="
-                                            currentCompanyBranches?.length > 2 &&
-                                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                                        "
-                                    >
-                                        <div>
-                                            <sh-select
-                                                [options]="currentCompanyBranches"
-                                                [(ngModel)]="currentBranch.uniqueName"
-                                                [showClear]="false"
-                                                [ItemHeight]="33"
-                                                width="100%"
-                                                (selected)="handleBranchChange($event)"
-                                                [isFilterEnabled]="true"
-                                                [placeholder]="commonLocaleData?.app_select_entity"
-                                                [fixedValue]="currentBranch?.name"
-                                            >
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <ng-container>
-                                                        <a
-                                                            href="javascript:void(0);"
-                                                            aria-label="branch company"
-                                                            class="list-item d-flex"
-                                                        >
-                                                            <span class="entity-icon">
-                                                                <i
-                                                                    class="pull-right"
-                                                                    [ngClass]="{
-                                                                        'icon-company-profile':
-                                                                            option?.consolidatedBranch,
-                                                                        'icon-branch-icon':
-                                                                            !option?.consolidatedBranch
-                                                                    }"
-                                                                    *ngIf="!option.isCompany"
-                                                                    tooltip="{{ commonLocaleData?.app_branch }}"
-                                                                ></i>
-                                                                <i
-                                                                    class="icon-company-profile pull-right"
-                                                                    *ngIf="option.isCompany"
-                                                                    tooltip="{{ commonLocaleData?.app_company }}"
-                                                                ></i>
-                                                            </span>
-                                                            <span class="entity-details">
-                                                                <div class="item giddh-limit single-line-clamp">
-                                                                    {{ option?.label || "-" }}
-                                                                </div>
-                                                                <div
-                                                                    class="item-unique giddh-limit single-line-clamp"
-                                                                >
-                                                                    {{ option?.name || "-" }}
-                                                                </div>
-                                                            </span>
-                                                        </a>
-                                                    </ng-container>
-                                                </ng-template>
-                                            </sh-select>
-                                        </div>
-                                    </div>
+
+                                    <!-- Archive Filter Dropdown -->
+                                    <reactive-dropdown-field
+                                        class="w-100"
+                                        [name]="'accountArchiveStatus'"
+                                        [label]="commonLocaleData?.app_account_status"
+                                        [labelValue]="commonLocaleData?.app_unarchive"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        formControlName="accountArchiveStatus"
+                                        [options]="archivedOptions"
+                                        (selectedOption)="onArchivedOptions($event)">
+                                    </reactive-dropdown-field>
+
+                                    <!-- Universal Date Range Picker -->
                                     <form
                                         #invoiceForm="ngForm"
                                         novalidate

@@ -119,4 +119,7 @@
             </app-cdk-scroll>
         </ng-template>
     </mat-autocomplete>
+    <div *ngIf="showDropdownIcon" class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+        <span class="arrow-dropdown"></span>
+    </div>
 </ng-container>

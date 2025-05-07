@@ -18,15 +18,30 @@
             *ngFor="let items of masterColumnsData; let i = index"
         >
             <div class="new-btn-ul" *ngIf="i !== 0" role="list">
-                <div class="new-btn" role="listitem">
+                <div class="new-btn d-flex align-items-center" role="listitem">
                     <a
                         href="javascript:void(0)"
-                        class="btn-link d-block "
+                        class="btn-link d-block w-100"
                         nav-vr-item
                         *ngIf="showCreateNewButton"
                         (click)="showAddNewForm(items, i)"
                         >{{ localeData?.create_new }}</a
                     >
+
+                    <!-- Account Archive Status Filter Button -->
+                    <button 
+                        mat-icon-button
+                        [matMenuTriggerFor]="archiveStatusMenu"
+                    >
+                       <i class="icon-advance-filter"></i>
+                    </button>
+                    <mat-menu #archiveStatusMenu="matMenu">
+                        <ng-container *ngFor="let option of archivedOptions">
+                            <button mat-menu-item  class="h-auto p-0" aria-label="{{ option.label }}" (click)="onArchiveStatusFilter(items, i, option?.value)">
+                                {{ option.label }}
+                            </button>
+                        </ng-container>
+                    </mat-menu>
                 </div>
             </div>
             <ng-container *ngIf="items?.results?.length">
