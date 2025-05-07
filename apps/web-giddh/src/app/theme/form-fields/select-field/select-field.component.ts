@@ -152,10 +152,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         }
     }
 
-    public logg(): void {
-        console.log("logg");
-    }
-
     public ngAfterViewInit(): void {
         setTimeout(() => {
             if (this.openDropdown) {

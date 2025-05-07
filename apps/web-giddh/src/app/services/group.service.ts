@@ -231,12 +231,22 @@ export class GroupService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
+    /**
+     * Gets master data for a group
+     * 
+     * @param {string} groupUniqueName Unique name of the group
+     * @param {Number} page Page number for pagination
+     * @param {string} [accountArchiveStatus] Filter for archived accounts
+     * @returns {Observable<BaseResponse<GroupResponse, string>>} Observable with group response data
+     * @memberof GroupService
+     */
     public getMasters(groupUniqueName: string, page: Number, accountArchiveStatus?: string): Observable<BaseResponse<GroupResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + GROUP_API.GET_MASTERS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            ?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', '1000');
+            ?.replace(':page', encodeURIComponent(page?.toString()))
+            ?.replace(':count', '1000');
         if (accountArchiveStatus) {
             url = url.concat(`&accountArchiveStatus=${encodeURIComponent(accountArchiveStatus)}`);
         }

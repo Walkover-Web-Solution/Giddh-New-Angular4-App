@@ -302,13 +302,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.closePopupEvent();
     }
 
-    /**
-     * Callback for archived options
-     *
-     * @param {any} event
+     /**
+     * Handles selection of archived filter option
+     * 
+     * @param {any} event Event containing selected filter value
      * @memberof ManageGroupsAccountsComponent
-     */ 
-    public onArchivedOptions(event: IOption): void {
+     */
+     public onArchivedFilterSelected(event: any): void {
         this.selectedArchivedOption = event.value;
         this.searchGroups(this.searchString);
     }

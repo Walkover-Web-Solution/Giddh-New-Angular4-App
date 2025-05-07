@@ -1767,7 +1767,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onArchivedOptions(event: any) {
+    /**
+     * Handles selection of archived filter option
+     * 
+     * @param {any} event Event containing selected filter value
+     * @memberof ContactComponent
+     */
+    public onArchivedFilterSelected(event: any): void {
         this.getAccounts(
             this.fromDate, 
             this.toDate,

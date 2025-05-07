@@ -18,7 +18,7 @@
                 [cssClass]="'form-control mat-field-border'"
                 [placeholder]="commonLocaleData?.app_account_status"
                 [options]="archivedOptions"
-                (selectedOption)="onArchivedOptions($event)"
+                (selectedOption)="onArchivedFilterSelected($event)"
                 [allowValueReset]="true"
                 [defaultValue]="selectedArchivedOption"
                 (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"

@@ -623,6 +623,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @param groupUniqueName 
      * @param currentIndex 
      * @param value 
+     * @memberof MasterComponent
      */
     public onArchiveStatusFilter(groupUniqueName: any, currentIndex: number, value: string): void {
         this.selectedArchivedOption = value;

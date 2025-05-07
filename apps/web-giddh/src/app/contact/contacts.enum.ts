@@ -44,5 +44,4 @@ export enum ContactsColumn {
     PURCHASE = 'purchase',
     PAYMENT = 'payment',
     ACTION = 'action'
-
 }

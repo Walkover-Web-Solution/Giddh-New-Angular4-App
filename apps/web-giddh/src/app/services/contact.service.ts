@@ -39,6 +39,7 @@ export class ContactService {
      * @param {string} [sortBy=''] Sort by item name
      * @param {string} [order='asc'] Sort type
      * @param {string} [branchUniqueName] Current branch selected
+     * @param {string} [accountArchiveStatus]
      * @param {ContactAdvanceSearchModal} [postData] Request model object
      * @returns {Observable<BaseResponse<any, string>>}
      * @memberof ContactService
@@ -55,11 +56,11 @@ export class ContactService {
         order: string = 'asc', 
         postData?: ContactAdvanceSearchModal, 
         branchUniqueName?: string,
-        accountArchiveStatus: string = AccountArchivedStatusEnum.UNARCHIVED
+        accountArchiveStatus?: string
     ): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
-            '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate&accountArchiveStatus=:accountArchiveStatus';
+            '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
         query = (query) ? query : '';
 
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -71,11 +72,13 @@ export class ContactService {
             ?.replace(':sortBy', sortBy)
             ?.replace(':order', order)
             ?.replace(':fromDate', fromDate)
-            ?.replace(':toDate', toDate)
-            ?.replace(':accountArchiveStatus', accountArchiveStatus);
+            ?.replace(':toDate', toDate);
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat('&branchUniqueName=', branchUniqueName);
+        }
+        if (accountArchiveStatus) {
+            url = url.concat('&accountArchiveStatus=', encodeURIComponent(accountArchiveStatus));
         }
         if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
