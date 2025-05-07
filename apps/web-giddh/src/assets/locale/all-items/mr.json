@@ -474,17 +474,6 @@
                 },
                 {
                     "label": "पेमेंट",
-                    "link": "/pages/reports/payment",
-                    "icon": "icon-debit-note-new",
-                    "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
-                    "label": "पेमेंट",
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
