@@ -191,4 +191,19 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
     }
+
+    /**
+     * Retrieves the keys of an object.
+     *
+     * @param obj The object whose keys are to be retrieved.
+     * @returns An array of strings representing the keys of the object, or an empty array if the input is null or undefined.
+     * @memberof ProfitLossGridComponent
+     */
+    public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
+        if (obj) {
+            return Object.keys(obj);
+        } else {
+            return [];
+        }
+    }
 }

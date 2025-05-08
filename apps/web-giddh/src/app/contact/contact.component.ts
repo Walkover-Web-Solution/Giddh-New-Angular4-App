@@ -21,7 +21,7 @@ import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
+import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
 import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
 import { CommonActions } from "../actions/common.actions";
@@ -255,10 +255,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Hold current url */
     private currentUrl: string = "";
     /** Returns only the columns marked as checked */
-    public get visibleDynamicCustomColumns(): any[] {
-        return this.dynamicCustomColumns?.filter(col => col.checked) || [];
-    }
-    /** Returns only the columns marked as checked */
     public ContactsColumn = ContactsColumn;
     /** This will use for account filter options */
     public archivedOptions: IOption[] = [];
@@ -268,6 +264,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     });
     /** Holds account archived status enum  */
     public accountArchivedStatusEnum = AccountArchivedStatusEnum;
+    /** Observable for custom header columns */
+    private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+    /** Observable for custom header columns */
+    public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -333,12 +333,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         combineLatest([this.route.params, this.route.queryParams])
-            .pipe(debounceTime(50), takeUntil(this.destroyed$))
+            .pipe(takeUntil(this.destroyed$))
             .subscribe(([params, queryParams]) => {
                 const lastTabType = this.moduleType;
                 const typeParam = params?.type?.toLowerCase();
                 const tabQueryParam = queryParams?.tab?.toLowerCase();
-
                 this.moduleType = params.type?.toUpperCase();
 
                 const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
@@ -358,6 +357,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }, 0);
 
                 if (newTab !== previousTab) {
+                    this.displayedColumns = [];
+                    this.dynamicCustomColumns = [];
                     this.setActiveTab(newTab);
                     this.resetSearchIfSwitched(previousTab);
                 }
@@ -1232,7 +1233,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName, accountArchiveStatus).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        const contacts$ = this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName, accountArchiveStatus).pipe(takeUntil(this.destroyed$));
+        combineLatest([contacts$, this.customHeaderColumns$]).pipe(takeUntil(this.destroyed$)).subscribe(([res, headerColumns]) => {
             if (res && res.body && res.status === "success") {
                 this.openingBalance = res.body.openingBalance;
 
@@ -1313,10 +1315,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             }
-            setTimeout(() => {
+            if (headerColumns && res) {
                 this.isGetAccountsInProcess = false;
                 this.detectChanges();
-            }, 3000);
+            }
         });
     }
 
@@ -1475,6 +1477,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.dynamicCustomColumns = [];
         this.displayedColumns = [];
         if (event) {
+            this.customHeaderColumnsSubject.next(event);
             this.dynamicCustomColumns = event;
             this.displayedColumns = event
                 .filter(item => item?.checked)
