@@ -296,7 +296,7 @@
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="statesSource$ | async"
-                                    [labelValue]="(statesSource$ | async)?.[0]?.label"
+                                    [labelValue]="gst?.value.state.code && gst?.value.state.name ? gst.value.state.code + ' - ' + gst.value.state.name : (statesSource$ | async)?.[0]?.label"
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
@@ -432,7 +432,7 @@
                             >
                             </input-field>
                         </div>
-                        <div class="col-sm-6 mobile-number-wrapper">
+                        <div class="col-sm-6 mobile-number mobile-number-wrapper voucher-preview-edit">
                             <div class="form-group">
                                 <div class="d-flex">
                                     <input-field
@@ -527,12 +527,12 @@
                                 >{{ localeData?.duplicate_email }}
                             </span>
                         </div>
-                        <div class="w-30 pl-2 mobile-number-portal-wrapper">
+                        <div class="w-30 pl-2 mobile-number mobile-number-wrapper voucher-preview-edit">
                             <input-field
                                 [name]="'contactNo_' + i"
                                 [type]="'tel'"
                                 #initContactAdd2
-                                [cssClass]="'flag-input'"
+                                class="flag-input"
                                 [id]="'init-contact-portal_' + i"
                                 formControlName="contactNo"
                                 [placeholder]="localeData?.mobile_no_placeholder"

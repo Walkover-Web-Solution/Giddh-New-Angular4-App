@@ -208,6 +208,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isBulkDataUpdated: boolean = false;
     /** True if form is valid */
     public isValidForm: boolean = true;
+    /** True if form value is assigned */
+    private formValueAssigned: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -334,11 +336,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (change.get('email').value) {
                     change.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
-                    console.log("required");
                 } else {
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
-                    console.log("not required");
                 }
                 change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
@@ -391,6 +391,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }
                 }
+                if (this.formValueAssigned && response) {
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+                }
             });
 
 
@@ -422,12 +425,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
-
-        if (this.autoFocus !== undefined) {
-            setTimeout(() => {
-                this.autoFocus?.nativeElement?.focus();
-            }, 50);
-        }
 
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
@@ -479,10 +476,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
-        setTimeout(() => {
-            this.onlyPhoneNumber('init-contact-add');
-            this.onlyPhoneNumber('init-contact-portal_0');
-        }, 1000);
+        let interval = setInterval(() => {
+            if (document.getElementById('init-contact-add')) {
+                this.onlyPhoneNumber('init-contact-add');
+                clearInterval(interval);
+            }
+        }, 2000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -491,6 +490,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             this.isDebtorCreditor = true;
         }
+        const mappings = this.addAccountForm.get('portalDomain') as FormArray;
+        mappings.clear();
+        this.addNewPortalUser();
+        setTimeout(() => {
+            this.formValueAssigned = true;
+        }, 4000);
     }
 
     public isShowBankDetails(accountType: string) {
@@ -579,10 +584,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             ]),
         });
 
-        this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-        });
-
         this.getInvoiceSettings();
     }
 
@@ -639,16 +640,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         }
         const lastIndex = mappings.controls.length - 1;
+        const updateNumber = user?.contactNo;
 
-        setTimeout(() => {
-            this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
-            setTimeout(() => {
-                const updateNumber = user?.contactNo;
-                if (this.intl) {
-                    this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
-                }
-            }, 500);
-        }, 100);
+        let interval = setInterval(() => {
+            if (document.getElementById('init-contact-portal_' + (lastIndex))) {
+                this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
+                clearInterval(interval);
+                setTimeout(() => {
+                    if (this.intl) {
+                        this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                    }
+                }, 500);
+            }
+        }, 2000);
     }
 
     /**
@@ -725,11 +729,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
-        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
-        if (keyAvoid.findIndex(key => key === event.key) > -1) {
-            return;
-        }
+    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber')?.value?.trim();
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
@@ -740,17 +740,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-
                     let currentState = state.find(st => st?.value === stateCode);
                     if (currentState) {
                         gstForm.get('stateCode')?.patchValue(currentState.value);
                         gstForm.get('state').get('code')?.patchValue(currentState.value);
+                        const name = currentState.label.split(' - ')[1];
+                        gstForm.get('state').get('name')?.patchValue(name);
                     } else {
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
                             if (this.isIndia) {
                                 gstForm.get('stateCode')?.patchValue(null);
                                 gstForm.get('state').get('code')?.patchValue(null);
+                                gstForm.get('state').get('name')?.patchValue(null);
                             }
 
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
@@ -761,6 +763,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 });
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public showMoreGst() {
@@ -795,11 +798,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-        console.log(this.addAccountForm);
-        console.log(this.isGstValid);
-        console.log(this.isMobileNumberInvalid);
-        console.log((this.addAccountForm.get('portalDomain') as FormArray)?.controls[0]?.get('email')?.valid);
-
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
             this.isValidForm = false;
             return;
@@ -946,6 +944,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public ngOnDestroy() {
         this.resetAddAccountForm();
+        this.store.dispatch(this.accountsAction.resetActiveAccount());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -970,6 +969,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
+            const name = event.label.split(' - ')[1];
+            gstForm.get('state').get('name')?.patchValue(name);
         }
     }
 
@@ -1088,17 +1089,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
-                ele.classList.add('error-box');
+                ele?.classList?.add('error-box');
                 this.isGstValid = false;
             } else {
-                ele.classList.remove('error-box');
+                ele?.classList?.remove('error-box');
                 this.isGstValid = true;
                 if (this.selectedCountryCode === 'IN') {
                     this.getGstConfirmationPopup();
                 }
             }
         } else {
-            ele.classList.remove('error-box');
+            ele?.classList?.remove('error-box');
             this.isGstValid = true;
         }
     }
@@ -1716,7 +1717,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
       */
     public getGstConfirmationPopup(): void {
         let addresses = (this.addAccountForm.get('addresses') as FormArray).at(this.activeIndex);
-        if (addresses.get('gstNumber')?.value) {
+        if (addresses?.get('gstNumber')?.value) {
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
