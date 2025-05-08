@@ -252,7 +252,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     private searchMasters(term: any): void {
         this.searchedMasterData = [];
-        this.groupService.GetGroupsWithAccounts(term, null, this.selectedArchivedOption).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.groupService.getGroupsWithAccounts(term, null, this.selectedArchivedOption).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.searchedMasterData = response?.body;
             }
