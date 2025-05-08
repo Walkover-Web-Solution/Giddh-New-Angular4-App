@@ -131,7 +131,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * This hook will be use for component on changes
    *
    * @param {SimpleChanges} c
-   * @memberof AccountAsVoucherComponent
+   * @memberof CompareWithDateRangePickerComponent
    */
   public ngOnChanges(changes: SimpleChanges): void {
     if (('startDate' in changes) || ('endDate' in changes) || ('universalDateRangeLabel' in changes)) {
@@ -147,7 +147,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * Callback for translation response complete
    *
    * @param {boolean} event
-   * @memberof LedgerComponent
+   * @memberof CompareWithDateRangePickerComponent
    */
   public translationComplete(event: boolean): void {
     if (event) {
@@ -162,9 +162,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    */
   private setCompareValues(): void {
     this.dateRangeInfo = this.checkDateSelectionRange(this.startDate, this.endDate);
-    if (this.dateRangeInfo.isMonthSelected && !this.isThisQuarterToDate() && !this.isThisFinancialYearToDate()) {
+    if (this.dateRangeInfo.isMonthSelected && !this.isSelectedRangeThisQuarterToDate() && !this.isSelectedRangeThisFinancialYearToDate()) {
       this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.month]);
-    } else if (this.dateRangeInfo.isQuarterSelected && !this.isThisFinancialYearToDate()) {
+    } else if (this.dateRangeInfo.isQuarterSelected && !this.isSelectedRangeThisFinancialYearToDate()) {
       this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.quarter]);
     } else if (this.dateRangeInfo.isYearSelected) {
       this.compareOptionsForm.get('compareType')?.patchValue([CompareTypeEnum.year]);
@@ -294,7 +294,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       isMonthSelected: isSameMonth || (!isSameMonth && !isYearSelected && !isSameQuarter && dayCount <= 31),
       isQuarterSelected: isSameQuarter || (!isSameQuarter && !isYearSelected && dayCount <= 90),
       isYearSelected: isYearSelected || (!isYearSelected && dayCount <= 365),
-      isRandomDateSelected: (!isSameMonth && !isYearSelected && !isSameQuarter) || this.isThisQuarterToDate() || this.isThisFinancialYearToDate(),
+      isRandomDateSelected: (!isSameMonth && !isYearSelected && !isSameQuarter) || this.isSelectedRangeThisQuarterToDate() || this.isSelectedRangeThisFinancialYearToDate(),
       dayCount: dayCount,
     };
   }
@@ -305,7 +305,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @returns {boolean}
    * @memberof CompareWithDateRangePickerComponent
    */
-  private isThisQuarterToDate(): boolean {
+  private isSelectedRangeThisQuarterToDate(): boolean {
     return this.universalDateRangeLabel === DatePickerDefaultRangeEnum.ThisQuarterToDate;
   }
 
@@ -315,7 +315,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @returns {boolean}
    * @memberof CompareWithDateRangePickerComponent
    */
-  private isThisFinancialYearToDate(): boolean {
+  private isSelectedRangeThisFinancialYearToDate(): boolean {
     return this.universalDateRangeLabel === DatePickerDefaultRangeEnum.ThisFinancialYearToDate;
   }
 
