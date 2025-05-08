@@ -1,4 +1,4 @@
-<div class="clearfix" appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div class="aside-pane flex-column" appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div class="form-header">
         <h3>
             {{ commonLocaleData?.app_add }}
@@ -9,12 +9,11 @@
         <button id="close" (click)="closeAsidePane()">
             <i class="icon-cross"></i>
         </button>
-        <button mat-stroked-button *ngIf="hideFirstStep" (click)="backButtonPressed()" id="back">
+        <button mat-stroked-button *ngIf="hideFirstStep" (click)="backButtonPressed()" id="back" class="d-flex align-items-center">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
-    <div class="aside-pane">
-        <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
+        <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger px-0" *ngIf="!hideFirstStep">
             <div class="pb-3 text-center">
                 <div class="buttons-wrapper">
                     <ng-container *ngIf="inputData !== 'receipt-note' && inputData !== 'delivery-challan'">
@@ -93,5 +92,4 @@
                 (addEvent)="addNewServiceAccount($event)"
             ></generic-aside-menu-account>
         </div>
-    </div>
 </div>
