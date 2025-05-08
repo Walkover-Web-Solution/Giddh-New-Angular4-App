@@ -775,5 +775,7 @@
     "app_file_format": "फाइल स्वरूप",
     "app_select_file": "फाइल निवडा",
     "app_bank_accounts":"बँक खाती",
-    "app_closing_balance": "बंद होणारी शिल्लक"
+    "app_closing_balance": "बंद होणारी शिल्लक",
+    "app_account_status": "खाता स्थिति",
+    "app_both": "दोन्ही"
 }

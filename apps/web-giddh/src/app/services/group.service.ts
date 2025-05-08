@@ -90,15 +90,20 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public GetGroupsWithAccounts(q: string, branchUniqueName?: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
+    public GetGroupsWithAccounts(q: string, branchUniqueName?: string, accountArchiveStatus?: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''));
+        let url = this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':q', encodeURIComponent(q || ''));
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
         }
+        if (accountArchiveStatus) {
+            url = url.concat(`&accountArchiveStatus=${encodeURIComponent(accountArchiveStatus)}`);
+        }
         if (this.companyUniqueName) {
-            return this.http.get(url).pipe(map((res) => {
+            return this.http.get(url).pipe(map((res) => {   
                 let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
                 data.request = q;
                 return data;
@@ -226,9 +231,26 @@ export class GroupService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
-    public getMasters(groupUniqueName: string, page: Number): Observable<BaseResponse<GroupResponse, string>> {
+    /**
+     * Gets master data for a group
+     * 
+     * @param {string} groupUniqueName Unique name of the group
+     * @param {Number} page Page number for pagination
+     * @param {string} [accountArchiveStatus] Filter for archived accounts
+     * @returns {Observable<BaseResponse<GroupResponse, string>>} Observable with group response data
+     * @memberof GroupService
+     */
+    public getMasters(groupUniqueName: string, page: Number, accountArchiveStatus?: string): Observable<BaseResponse<GroupResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', '1000')).pipe(map((res) => {
+        let url = this.config.apiUrl + GROUP_API.GET_MASTERS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
+            ?.replace(':page', encodeURIComponent(page?.toString()))
+            ?.replace(':count', '1000');
+        if (accountArchiveStatus) {
+            url = url.concat(`&accountArchiveStatus=${encodeURIComponent(accountArchiveStatus)}`);
+        }
+        return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };

@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Injectable()
 export class GeneralService {
@@ -976,6 +977,21 @@ export class GeneralService {
             case AdjustedVoucherType.Journal: return commonLocaleData?.app_voucher_types.journal;
             default: return '';
         }
+    }
+
+    /**
+     * This will return the account archived options
+     *
+     * @param {any} commonLocaleData
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getAccountArchivedOptions(commonLocaleData: any): IOption[] {
+        return [
+            { label: commonLocaleData?.app_unarchive, value: AccountArchivedStatusEnum.UNARCHIVED },
+            { label: commonLocaleData?.app_archived, value: AccountArchivedStatusEnum.ARCHIVED },
+            { label: commonLocaleData?.app_both, value: AccountArchivedStatusEnum.BOTH }
+        ];
     }
 
     /**
