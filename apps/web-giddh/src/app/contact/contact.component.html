@@ -45,8 +45,9 @@
                                     </reactive-dropdown-field>
 
                                     <!-- Archive Filter Dropdown -->
-                                    <div [formGroup]="filterForm">
+                                    <div [formGroup]="filterForm" >
                                         <reactive-dropdown-field
+                                            *ngIf="filterForm?.get('accountArchiveStatus')?.value !== null"
                                             class="w-100"
                                             [name]="'accountArchiveStatus'"
                                             [label]="commonLocaleData?.app_account_status"

@@ -266,7 +266,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public archivedOptions: IOption[] = [];
     /** This will use for account filter form */
     public filterForm: FormGroup = new FormGroup({
-        accountArchiveStatus: new FormControl<string>(AccountArchivedStatusEnum.UNARCHIVED),
+        accountArchiveStatus: new FormControl<string | null>(null),
     });
     /** Holds account archived status enum  */
     public accountArchivedStatusEnum = AccountArchivedStatusEnum;
@@ -300,7 +300,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.currentUrl = this.router.url;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -352,9 +351,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 const previousTab = this.activeTab;
 
-                this.filterForm.patchValue({
-                    accountArchiveStatus: AccountArchivedStatusEnum.UNARCHIVED
-                });
+                this.filterForm.controls.accountArchiveStatus.setValue(null);
+                setTimeout(() => {
+                    this.filterForm.setValue({
+                        accountArchiveStatus: AccountArchivedStatusEnum.UNARCHIVED
+                    });
+                }, 0);
 
                 if (newTab !== previousTab) {
                     this.displayedColumns = [];
