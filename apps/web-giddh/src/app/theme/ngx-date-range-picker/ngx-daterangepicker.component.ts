@@ -2009,6 +2009,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * This is used to emit the selected dates
      *
      * @param {boolean} sendBlankDates
+     * @param {boolean} [resetRangeLabel=false]
      * @memberof NgxDaterangepickerComponent
      */
     public emitSelectedDates(sendBlankDates: boolean, resetRangeLabel: boolean = false): void {
