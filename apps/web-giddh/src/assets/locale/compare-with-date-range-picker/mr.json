@@ -1,0 +1,16 @@
+{
+    "compare_with": "तुलना करा",    
+    "none": "काहीही नाही",
+    "periods": "कालावधी",
+    "enter_a_different_number": "वेगळी संख्या प्रविष्ट करा",
+    "previous": "मागील",
+    "compare_types": {
+        "month": "महिना",
+        "quarter": "त्रैमासिक",
+        "year": "वर्ष",
+        "period": "कालावधी",
+        "custom_date_range": "सानुकूल तारीख श्रेणी"
+    },
+    "options_are_disabled_message": "पर्याय अक्षम केले आहेत कारण अहवाल तारीख श्रेणी जास्त आहे.",
+    "up_to_36_periods_can_be_compared": "36 कालावधी तुलना करण्यास सक्षम आहेत"
+}

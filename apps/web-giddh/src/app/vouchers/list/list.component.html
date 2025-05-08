@@ -2639,6 +2639,14 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                [routerLink]="['/pages/vouchers/receipt/create']"
+                                *ngIf="!isCompany && !isConsolidatedBranch"
+                            >
+                                <span>{{ localeData?.new_receipt }}</span>
+                            </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <input
@@ -2801,7 +2809,12 @@
                                     [matTooltip]="element.voucherNumber"
                                     matTooltipPosition="above"
                                 >
-                                    {{ element.voucherNumber }}
+                                    <a
+                                        href="javascript:;"
+                                        class="btn-link-2"
+                                        (click)="showVoucherPreview(element?.uniqueName)"
+                                        >{{ element?.voucherNumber }}</a
+                                        >
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -2973,6 +2986,14 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                [routerLink]="['/pages/vouchers/payment/create']"
+                                *ngIf="!isCompany && !isConsolidatedBranch"
+                            >
+                                <span>{{ localeData?.new_payment }}</span>
+                            </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <input
@@ -3108,7 +3129,12 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-ellipsis">
-                                    {{ element.voucherNumber }}
+                                    <a
+                                        href="javascript:;"
+                                        class="btn-link-2"
+                                        (click)="showVoucherPreview(element?.uniqueName)"
+                                        >{{ element?.voucherNumber }}
+                                </a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
