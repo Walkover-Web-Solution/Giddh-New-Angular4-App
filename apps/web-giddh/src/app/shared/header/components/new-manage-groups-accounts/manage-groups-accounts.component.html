@@ -7,10 +7,24 @@
     [file]="'accounts'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <!-- start header -->
     <div class="modal-header d-flex flex-row-reverse" role="dialog" id="alb" aria-labelledby="masterdialog" #header>
-        <span class="d-flex">
+        <span class="d-flex align-items-center">
+            <!-- Dropdown for Archive Accounts Filter -->
+            <select-field
+                class="d-block position-relative mr-r1"
+                [cssClass]="'form-control mat-field-border'"
+                [placeholder]="commonLocaleData?.app_account_status"
+                [options]="archivedOptions"
+                (selectedOption)="onArchivedFilterSelected($event)"
+                [allowValueReset]="true"
+                [defaultValue]="selectedArchivedOption"
+                (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"
+                [showDropdownIcon]="true"
+            ></select-field>
+
             <div class="pull-right mr-r1 search-bar-wrapper">
                 <div class="form-inline">
                     <div class="form-group search-bar">

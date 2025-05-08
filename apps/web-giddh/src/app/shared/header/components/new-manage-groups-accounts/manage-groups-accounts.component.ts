@@ -10,6 +10,8 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { MasterComponent } from '../master/master.component';
 import { PageLeaveUtilityService } from 'apps/web-giddh/src/app/services/page-leave-utility.service';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { AccountArchivedStatusEnum } from '../../../Enums/common.enum';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -51,6 +53,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     private isPageLeaveConfirmationOpen: boolean = false;
     /** Hold active group unique name */
     public activeGroupUniqueName: string = '';
+    /** List of archived options */
+    public archivedOptions: IOption[] = [];
+    /** Selected archived option */
+    public selectedArchivedOption: string;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -246,7 +252,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     private searchMasters(term: any): void {
         this.searchedMasterData = [];
-        this.groupService.GetGroupsWithAccounts(term).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.groupService.getGroupsWithAccounts(term, null, this.selectedArchivedOption).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.searchedMasterData = response?.body;
             }
@@ -294,5 +300,28 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @HostListener("document:keyup.esc", ['$event'])
     public onPressEscape(): void {
         this.closePopupEvent();
+    }
+
+     /**
+     * Handles selection of archived filter option
+     * 
+     * @param {any} event Event containing selected filter value
+     * @memberof ManageGroupsAccountsComponent
+     */
+     public onArchivedFilterSelected(event: any): void {
+        this.selectedArchivedOption = event.value;
+        this.searchGroups(this.searchString);
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
+        }
     }
 }

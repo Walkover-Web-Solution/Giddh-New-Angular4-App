@@ -42,8 +42,8 @@
                         </a>
                     </span>
                 </mat-autocomplete>
-                <div *ngIf="showCaretIcon && !value" class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
-                    <span class="arrow-dropdown"></span>
+                <div *ngIf="showCaretIcon && !value" class="dropdown-bg position-absolute" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+                    <span class="arrow-dropdown position-absolute"></span>
                 </div>
                 <i
                     matSuffix
