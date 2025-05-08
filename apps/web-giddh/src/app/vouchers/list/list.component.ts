@@ -2521,10 +2521,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const voucher = this.selectedPendingVouchers[0];
         const uniqueNames = this.selectedPendingVouchers.map(voucher => voucher.uniqueName).join(',');
         if (voucher) {
-            this.router.navigate(
-                [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
-                { queryParams: { entryUniqueNames: uniqueNames, voucherType: this.voucherType } }
-            );
+            let url = `/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create?entryUniqueNames=${uniqueNames}&voucherType=${this.voucherType}`;
+            this.openUrl(url);
         }
     }
 

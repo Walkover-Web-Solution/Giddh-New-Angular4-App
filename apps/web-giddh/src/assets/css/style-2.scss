@@ -50,6 +50,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/custom-paginator.scss";
 @import "../css/global/mat-chip.scss";
 @import "../css/global/select-multiple-fields.scss";
+@import"../css/global/override-material-theme-variables";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -2379,6 +2380,10 @@ ul.sub-list {
 
 .text-gray {
     color: var(--color-gray);
+}
+// This color will same in all theme
+.text-static-white {
+    color: var(--color-white-tertiary) !important;
 }
 
 .text-saffron {
@@ -13915,4 +13920,10 @@ mat-list {
  to  change color in dark theme **/
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
+}
+
+.advance-filter-button {
+    .mdc-button__label {
+            color: var(--color-toast-primary-text) !important;
+        }
 }
