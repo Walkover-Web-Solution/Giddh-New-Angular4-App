@@ -15,6 +15,10 @@
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }
+    &.header-btn {
+        color: var(--color-white-tertiary) !important;
+        border-color: var(--color-white-tertiary) !important;
+    }
 }
 
 /*==========  Material Button Default Font Size Start Here =============*/
@@ -104,7 +108,7 @@ button {
             &::before{
                 opacity: 0;
             }
-        }       
+        }
     }
     &.cdk-keyboard-focused {
         .mat-mdc-button-persistent-ripple{
@@ -116,7 +120,7 @@ button {
 }
  /*Material Button Disabled Cursor*/
 .mat-mdc-button[disabled],
-.mat-mdc-outlined-button[disabled]{        
+.mat-mdc-outlined-button[disabled]{
             cursor: not-allowed !important;
             pointer-events: all !important;
 }
