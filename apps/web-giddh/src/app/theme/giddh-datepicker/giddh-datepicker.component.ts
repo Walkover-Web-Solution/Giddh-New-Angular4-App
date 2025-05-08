@@ -68,6 +68,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private onChangeCallback: (_: any) => void = noop;
     /** This is used to show change date */
     public inputChange: any = '';
+    /** True if datepicker has to be closed on focus */
+    @Input() public closeDatepickerOnFocus: boolean = false;
 
     constructor(
         private adapter: DateAdapter<any>,

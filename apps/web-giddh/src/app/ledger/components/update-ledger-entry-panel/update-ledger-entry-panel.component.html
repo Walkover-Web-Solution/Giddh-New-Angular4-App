@@ -27,6 +27,7 @@
                         [(ngModel)]="vm.selectedLedger.entryDate"
                         (dateSelected)="resetInvoiceList()"
                         (datepickerState)="datepickerState($event)"
+                        [closeDatepickerOnFocus]="true"
                     >
                     </giddh-datepicker>
                 </span>
@@ -1738,7 +1739,6 @@
                                     class="text-center icon-box"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (vm.companyTaxesList$ | async)?.length &&
                                         (!vm.isPaymentReceipt ||
                                             (vm.isPaymentReceipt &&
                                                 vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
@@ -1750,21 +1750,17 @@
                                 <div
                                     class="text-center icon-box"
                                     *ngIf="
-                                        (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        !(vm.companyTaxesList$ | async)?.length
+                                        (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)
                                     "
                                 >
                                     <label class="font-16 mr-t05">=</label>
                                 </div>
-
                                 <div
                                     class="dropdown-container dropdown-left text-right min-width-0"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (vm.companyTaxesList$ | async)?.length &&
                                         (!vm.isPaymentReceipt ||
-                                            (vm.isPaymentReceipt &&
-                                                vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
+                                        (vm.isPaymentReceipt && vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
                                     <span>
@@ -1822,7 +1818,6 @@
                                     class="text-center icon-box"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (vm.companyTaxesList$ | async)?.length &&
                                         (!vm.isPaymentReceipt ||
                                             (vm.isPaymentReceipt &&
                                                 vm.selectedLedger.voucher.shortCode === 'advance-receipt'))

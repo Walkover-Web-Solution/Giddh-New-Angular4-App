@@ -111,6 +111,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public copyTypes: IOption[] = [];
     /** Prefix of format file name */
     public fileFormatPrefix: string = "AS";
+    /* Will check if form is valid */
+    public isValidForm: boolean = true;
 
     constructor(
         private ledgerService: LedgerService,
@@ -236,19 +238,29 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             });
         } else {
             if (this.emailTypeSelected === 'voucher') {
+                if (this.exportRequest.voucherExport && !this.exportRequest.copyTypes.length) {
+                    this.isValidForm = false;
+                    this.isLoading = false;
+                    return;
+                }
                 let postRequest: any = {
                     attachmentExport: this.exportRequest.attachmentExport,
                     voucherExport: this.exportRequest.voucherExport,
                     entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
                 if (this.exportRequest.attachmentExport) {
-                    postRequest.fileNameFormat = this.exportRequest.fileNameFormat;
+                    postRequest.fileNameFormat = this.selectedFormatList.length ? this.exportRequest.fileNameFormat : (this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}");
                 }
                 if (this.exportRequest.voucherExport) {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
                     postRequest.copyTypes = this.exportRequest.copyTypes;
                 }
-                this.componentStore.bulkExportVoucher({ getRequest: { accountUniqueName: this.inputData?.accountUniqueName }, postRequest: postRequest });
+                const getRequest = {
+                    accountUniqueName: this.inputData?.accountUniqueName,
+                    from: this.fromDate,
+                    to: this.toDate
+                };
+                this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -313,6 +325,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+        exportRequest.from = this.fromDate;
+        exportRequest.to = this.toDate;
 
         this.dialogRef.close({
             isShowColumnarTable: true,

@@ -479,7 +479,11 @@ export class VoucherService {
      */
     public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
+        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV
+        ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        ?.replace(':from', encodeURIComponent(model.from))
+        ?.replace(':to', encodeURIComponent(model.to))
+        ?.replace(':fileType', model?.exportType ?? 'base64');
 
         delete model.dataToSend.from;
         delete model.dataToSend.to;
@@ -491,7 +495,7 @@ export class VoucherService {
                 data.request = model;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
     }
 
     /**
@@ -770,7 +774,7 @@ export class VoucherService {
         let httpMethod: 'post' | 'get' = 'post';
         let apiParams = model;
         let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
-        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(voucherType)) {
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(voucherType)) {
             if (this.generalService.voucherApiVersion === 2) {
                 apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
                     ?.replace(':fileType', fileType)

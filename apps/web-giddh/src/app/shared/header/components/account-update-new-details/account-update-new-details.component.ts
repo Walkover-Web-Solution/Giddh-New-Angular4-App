@@ -685,7 +685,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     openingBalance: [''],
                     openingBalanceType: ['']
                 }),
-            ])
+            ]),
+            archive: [true]
         });
 
         this.getInvoiceSettings();
@@ -2166,7 +2167,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (!accountDetails.customFields) {
                     accountDetails.customFields = [];
                 }
-
+                
                 this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;

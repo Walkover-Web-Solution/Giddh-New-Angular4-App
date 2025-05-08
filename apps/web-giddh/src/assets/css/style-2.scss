@@ -1127,7 +1127,7 @@ textarea {
     }
 
     .filter-dropdown-branch {
-        max-width: 350px;
+        max-width: 300px;
     }
 
     .branch-options {
@@ -1195,7 +1195,7 @@ textarea {
                 background-color: var(--color-transparent-background) !important;
             }
         }
-        .readonly-field { 
+        .readonly-field {
             .mat-mdc-form-field {
                 background-color: var(--color-transparent-background) !important;
             }
@@ -2380,6 +2380,10 @@ ul.sub-list {
     color: var(--color-gray);
 }
 
+.text-saffron {
+    color: var(--color-deep-saffron) !important;
+}
+
 .advance-search .input-group-addon {
     border: 1px solid var(--color-primary-button-border);
     background: none;
@@ -3370,6 +3374,10 @@ input[type="checkbox"]:checked:after {
 
 .lh-0 {
     line-height: 0 !important;
+}
+
+.lh-1 {
+    line-height: 1 !important;
 }
 
 .btn-success-green {
@@ -5227,6 +5235,10 @@ label {
     display: inline-block !important;
 }
 
+.d-grid {
+    display: grid !important;
+}
+
 .on-hover {
     position: relative;
     transition: all 0.3s ease;
@@ -6095,8 +6107,26 @@ input[type="checkbox"][disabled]:after {
     border-left: 6px solid var(--color-table-primary-header-bar-border);
 }
 
-.table-container .account {
-    background: var(--color-table-primary-footer);
+.table-container {
+    .account {
+        background: var(--color-table-primary-footer);
+        overflow: visible;
+        min-height: 38px;
+        .pl-sticky-group {
+            background: var(--color-table-primary-footer);
+        }
+    }
+}
+
+.pl-sticky-group {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    background: var(--color-body-background);
+    max-width: 300px !important;
+    min-width: 300px !important;
+    padding-block: 10px !important;
+    padding-left: 15px !important;
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
@@ -9718,6 +9748,9 @@ span#HW_badge_cont:nth-child(3) {
 
 .flex-wrap {
     flex-wrap: wrap;
+}
+.flex-no-wrap {
+    flex-wrap: nowrap !important;
 }
 
 /*flex css start*/
@@ -13397,6 +13430,24 @@ voucher-component {
     color: var(--color-black);
 }
 
+.dropdown-bg {
+    background-color: var(--color-white);
+    width: 20px;
+    height: 20px;
+    z-index: 8;
+    right: 0;
+    top: 15px;
+    .arrow-dropdown {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--color-popup-list-input-text) !important;
+        top: 8px;
+        right: 4px;
+    }
+}
+
 .readonly-field {
     .dropdown-bg {
         display: none !important;
@@ -13409,12 +13460,12 @@ voucher-component {
     .dropdown-bg {
         background-color: var(--color-transparent-background) !important;
     }
-    
+
     .mdc-text-field__input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
     .mat-mdc-form-field input {
-        background-color: var(--color-transparent-background) !important; 
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
@@ -13600,7 +13651,12 @@ aside-menu-product-service {
 }
 
 .mat-dialog-md {
-    width: 700px;
+    width: 760px;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
 }
 
 // material-pagination
@@ -13904,9 +13960,16 @@ mat-list {
     }
 }
 
+// For CompareWithDateRangePickerComponent 
+.compare-with-menu {
+    .mdc-list-item__start {
+        margin-right: 0px !important;
+    }
+}
+
 /** Use this class on black color image (icon) 
  to  change color in dark theme **/
-.image-as-icon-color {
+ .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
 }
 

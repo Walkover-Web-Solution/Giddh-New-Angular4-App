@@ -384,9 +384,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
     /** Hold ledger grid total columns static value */
-    public ledgerStatementViewGridTotalColumns: number = 9;
+    public ledgerStatementViewGridTotalColumns: number = 11;
     /** Hold ledger grid total columns value */
-    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2]
+    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2, 2]
     /** True if update account is bank account */
     public isUpdateAccount: boolean = false;
 
@@ -630,6 +630,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
+
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 this.ledgerAccountResponse = ledgerAccount;
@@ -735,10 +736,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (this.currentOrganizationType === OrganizationType.Branch ||
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
-                        this.lc.blankLedger.transactions = [
-                            this.lc?.addNewTransaction('DEBIT'),
-                            this.lc?.addNewTransaction('CREDIT')
-                        ]
+                        this.setBlankLedgerTransactions();
                     }
                 } else {
                     if (this.generalService.companyUniqueName) {
@@ -1005,6 +1003,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (term || this.trxRequest.q || searchCleared) {
                     this.trxRequest.paginationToken = "";
                     this.getTransactionData();
+                    this.getLedgerStatementViewGridColumnsValue();
                 }
             });
 
@@ -1606,12 +1605,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closeAllAccountDropdown();
 
         setTimeout(() => {
-            if (event?.type === 'DEBIT') {
-                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+            if (this.ledgerView === LedgerViewEnum.StatementView) {
+                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT') || dropdown?.cssClass?.includes('CREDIT'));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
-                const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
-                creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+                if (event?.type === 'DEBIT') {
+                    const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+                    debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
+                } else {
+                    const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
+                    creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+                }
             }
         }, 0);
     }
@@ -1651,15 +1655,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public resetBlankTransaction() {
-        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-        this.lc.blankLedger = this.lc.getBlankLedger();
-        this.lc.blankLedger.transactions =
-            (this.currentOrganizationType === OrganizationType.Branch ||
-                (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
+    /**
+     * Set the blank ledger transactions
+     *
+     * @returns {void}
+     */
+    private setBlankLedgerTransactions(): void {
+        if (this.ledgerView === LedgerViewEnum.StatementView) {
+            this.lc.blankLedger.transactions = [
+                this.lc?.addNewTransaction('DEBIT')
+            ];
+        } else {
+            this.lc.blankLedger.transactions = [
                 this.lc?.addNewTransaction('DEBIT'),
                 this.lc?.addNewTransaction('CREDIT')
-            ] : [];
+            ];
+        }
+    }
+
+    /**
+     * Reset the blank transaction
+     *
+     * @returns {void}
+     */
+    public resetBlankTransaction(): void {
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.lc.blankLedger = this.lc.getBlankLedger();
+        if (this.currentOrganizationType === OrganizationType.Branch || (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+            this.setBlankLedgerTransactions();
+        } else {
+            this.lc.blankLedger.transactions = [];
+        }
+
         this.lc.blankLedger.voucherType = null;
         this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
         this.lc.blankLedger.valuesInAccountCurrency = (this.selectedCurrency === 0);
@@ -1916,6 +1943,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
         this.getTransactionData();
+        this.getLedgerStatementViewGridColumnsValue();
     }
 
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
@@ -2146,6 +2174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         this.advanceSearchRequest.paginationToken = "";
         if (!event.isClose) {
+            this.getLedgerStatementViewGridColumnsValue();
             this.createLedgerBalance(true);
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
@@ -2513,6 +2542,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
+                this.ledgerAsidePaneDialogRef = undefined;
             }, 100);
         });
 
@@ -2598,6 +2628,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             accountUniqueName: this.accountUniqueName
         });
+        if (this.currentOrganizationType === OrganizationType.Branch ||
+            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+            this.setBlankLedgerTransactions();
+        }
     }
 
     public getAdvanceSearchTxn() {
@@ -2613,6 +2647,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
+        this.getLedgerStatementViewGridColumnsValue();
         this.cdRf.detectChanges();
     }
 
@@ -2779,8 +2814,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        event.exportRequest.from = dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-        event.exportRequest.to = dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
+
+        if (!event.isShowColumnarTable) {
+            event.exportRequest.from = dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+            event.exportRequest.to = dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
+        }
 
         this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
         this.columnarReportExportRequest = event.exportRequest;
@@ -3010,6 +3048,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     if (data[0]?.ledgerView) {
                         this.ledgerView = data[0].ledgerView;
+                        if (this.currentOrganizationType === OrganizationType.Branch ||
+                            (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+                            this.setBlankLedgerTransactions();
+                        }
                     }
 
                     this.loadDefaultSearchSuggestions();
@@ -3610,7 +3652,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Handle carousel next event
+     * Handle carousel next event
      *
      * @param {boolean} event
      * @memberof LedgerComponent
@@ -3622,5 +3664,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.carouselNext = false;
         }, 100);
+    }
+
+    /**
+     * Get ledger statement view grid columns value
+     *
+     * @memberof LedgerComponent
+     */
+    public getLedgerStatementViewGridColumnsValue(): void {
+        if (this.searchText || this.isAdvanceSearchImplemented) {
+            this.ledgerStatementViewGridTotalColumns = 9;
+            if (this.ledgerStatementViewGridColumnsValue.length > 4) {
+                this.ledgerStatementViewGridColumnsValue.pop();
+            }
+        } else {
+            this.ledgerStatementViewGridTotalColumns = 11;
+            this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 2];
+        }
+    }
+
+    /**
+     * Handle close other dialog/menu
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public handleCloseOtherDialogMenu(event: boolean): void {
+        if (event) {
+            this.closeAllAccountDropdown();
+        }
     }
 }

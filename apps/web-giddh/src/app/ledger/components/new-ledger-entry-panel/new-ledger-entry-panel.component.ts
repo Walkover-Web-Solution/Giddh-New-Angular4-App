@@ -88,6 +88,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds the index of the current transaction in the blank ledger */
+    @Input() public blankLedgerIndex: number;
     /** Stores true, if the total value is modified by the user */
     @Input() public isTotalChanged: boolean;
     @ViewChild('webFileInput', { static: true }) public webFileInput: ElementRef;
@@ -107,6 +109,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() private referenceVouchersTotalPages: number = 1;
     /** Holds Invoice Setting for auto Generate Voucher From Entry */
     @Input() public autoGenerateVoucherFromEntry: boolean;
+    /** Holds the reference of the opened dialogs */
+    @Input() public openedDialogsRef: MatDialogRef<any>[];
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -125,6 +129,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public stockVariantSelected: EventEmitter<string> = new EventEmitter();
     /** Emitter to update the parent when any field other than total is changed */
     @Output() public isTotalChangedChange: EventEmitter<boolean> = new EventEmitter();
+    /** Emits when other dialog/menu need to be closed */
+    @Output() public closeOtherDialogMenu: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     /** Holds select discount control component reference */
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
@@ -171,6 +177,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedWarehouse: any;
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
+    /** True, if subvoucher is RCM and taxes are not selected */
+    public showRcmEntryError: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: ConfirmationModalConfiguration;
     /** True, if the selected voucher type is 'Receipt' */
@@ -687,6 +695,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public amountChanged() {
         this.isInclusiveEntry = false;
         if (this.currentTxn?.selectedAccount) {
+            this.setBlankLedgerAmount();
             if (this.currentTxn.selectedAccount?.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
                     this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
@@ -732,6 +741,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
+            this.setBlankLedgerAmount();
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
             } else {
@@ -756,6 +766,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isInclusiveEntry = false;
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.highPrecisionRate * this.currentTxn.inventory.quantity).toFixed(this.giddhBalanceDecimalPlaces));
+        this.setBlankLedgerAmount();
         if (this.currentTxn.inventory) {
             this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
         } else {
@@ -774,6 +785,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public calculateAmount() {
         this.isInclusiveEntry = false;
         this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
+        this.setBlankLedgerAmount();
         this.totalForTax = this.currentTxn.amount;
 
         if (this.currentTxn.inventory) {
@@ -846,6 +858,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if ((this.isRcmEntry) && !this.validateTaxes()) {
+            this.showRcmEntryError = true;
+            return;
+        }
         if (this.currentTxn?.isStock && !this.selectedStockVariant.value) {
             return;
         }
@@ -1038,6 +1054,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.closeAddTagDropdown();
         this.closeTaxDropdown();
         this.closeDiscountDropdown();
+        this.closeOtherDialogMenu.emit(true);
     }
 
     /**
@@ -1103,7 +1120,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -2090,6 +2107,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private calculateFieldValuesInclusively(): void {
         this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
+        this.setBlankLedgerAmount();
         if (this.currentTxn.inventory) {
             this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
         } else {
@@ -2220,8 +2238,25 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public closeTaxDialog(): void {
         this.store.dispatch(this.companyActions.getTax());
-        this.taxDialogRef.close();
+        this.taxDialogRef?.close();
         this.cdRef.detectChanges();
-        this.taxDialogRef = undefined;
+        setTimeout(() => {
+            this.taxDialogRef = undefined;
+        }, 800);
+    }
+
+    /**
+     * Sets the blank ledger amount for statement view
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private setBlankLedgerAmount(): void {
+        if (this.blankLedgerIndex !== undefined) {
+            if (this.currentTxn.type === 'DEBIT') {
+                this.blankLedger.transactions[this.blankLedgerIndex].debitAmount = this.currentTxn.amount;
+            } else {
+                this.blankLedger.transactions[this.blankLedgerIndex].creditAmount = this.currentTxn.amount;
+            }
+        }
     }
 }

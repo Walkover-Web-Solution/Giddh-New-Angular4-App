@@ -763,18 +763,21 @@
     "app_upgrade": "Upgrade",
     "app_link_account":"Link Account",
     "app_click_here": "Click here",
+    "go_to_company_mode": "To edit, go to company mode.",
+    "app_bank_accounts":"Bank Accounts",
     "app_upload": "Upload",
     "app_file": "File",
     "app_choose_file": "Choose File",
     "app_password": "Password",
     "app_select_column": "Select Column",
+    "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
+    "app_file_format": "File Format",
+    "app_select_file": "Select file",
     "app_ledger_view": {
         "t_view": "T View",
         "statement_view": "Statement View"
     },
-    "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
-    "app_file_format": "File Format",
-    "app_select_file": "Select file",
-    "app_bank_accounts":"Bank Accounts",
-    "go_to_company_mode": "To edit, go to company mode."
+    "app_closing_balance": "Closing Balance",
+    "app_account_status": "Account Status",
+    "app_both": "Both"
 }

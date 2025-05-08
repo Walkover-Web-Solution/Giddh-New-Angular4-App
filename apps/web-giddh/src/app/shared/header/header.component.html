@@ -426,7 +426,6 @@
                                                     </span>
                                                 </div>
                                             </ng-container>
-                                            <!-- NOTE - This code is only active for Test Environment - End -->
                                             <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
@@ -589,7 +588,7 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="showAlertMessage.isSubscriptionRenewalExpired && 
+        *ngIf="showAlertMessage.isSubscriptionRenewalExpired &&
         subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
@@ -606,7 +605,7 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="showAlertMessage.isTransactionLimitExceeded && 
+        *ngIf="showAlertMessage.isTransactionLimitExceeded &&
         subscribedPlan !== undefined && subscribedPlan.additionalCharges"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
@@ -633,7 +632,7 @@
                 <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
                 <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
             </p>
-            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isObligationExpired = false"></i>     
+            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isObligationExpired = false"></i>
         </div>
     </div>
 

@@ -347,6 +347,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.createNewVoucher.text = this.localeData?.new_bill;
                 this.createNewVoucher.link = "/pages/vouchers/purchase/create";
                 break;
+            case VoucherTypeEnum.receipt:
+                this.createNewVoucher.text = this.localeData?.new_receipt;
+                this.createNewVoucher.link = "/pages/vouchers/receipt/create";
+                break;
+            case VoucherTypeEnum.payment:
+                this.createNewVoucher.text = this.localeData?.new_payment;
+                this.createNewVoucher.link = "/pages/vouchers/payment/create";
+                break;
         }
     }
 
@@ -531,7 +539,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     private handleDownloadVoucherPdf(response: any): void {
         if (typeof response === 'string' || (response?.hasOwnProperty('data') && response.data)) {
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
                 if (response) {
                     this.isPdfAvailable = true;
@@ -683,7 +691,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.selectedInvoice.hasAttachment = false;
             const fileType = "base64";
 
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 getRequest = {
                     voucherType: this.voucherType,
                     uniqueName: this.selectedInvoice?.uniqueName
