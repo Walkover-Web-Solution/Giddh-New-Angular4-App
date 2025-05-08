@@ -630,15 +630,12 @@
                                                     </span>
                                                 </h3>
                                             </div>
-
-                                            <button
-                                                mat-icon-button
-                                                class="account-detail-padding"
+                                            <a
                                                 (click)="updateCustomerAcc('customer', account)"
-                                                aria-label="img"
+                                                class="edit-icon pl-1 pd-t05"
                                             >
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </button>
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <div class="custom-detail">
                                             <h4>{{ account?.mobileNo }}</h4>
@@ -1042,15 +1039,12 @@
                                                         }}</span>
                                                     </h3>
                                                 </div>
-
-                                                <button
-                                                    mat-icon-button
-                                                    class="account-detail-padding"
+                                                <a
                                                     (click)="updateCustomerAcc('vendor', account)"
-                                                    aria-label="img"
+                                                    class="edit-icon pl-1 pd-t05"
                                                 >
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </button>
+                                                    <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                </a>
                                             </div>
                                             <div class="custom-detail">
                                                 <h4>{{ account?.mobileNo }}</h4>

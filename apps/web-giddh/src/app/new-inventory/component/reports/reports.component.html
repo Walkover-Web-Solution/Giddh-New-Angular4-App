@@ -332,7 +332,7 @@
             <div class="row overflow-visible" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding overflow-visible">
                     <div
-                        class="table-responsive inventory-report-table overflow-visible table-header-sticky"
+                        class="table-responsive inventory-report-table overflow-visible table-header-sticky pd-t5"
                         *ngIf="displayedColumns?.length"
                     >
                         <table
@@ -342,7 +342,7 @@
                             (matSortChange)="sortChange($event)"
                             [matSortActive]="stockReportRequest?.sortBy"
                             [matSortDirection]="stockReportRequest?.sort"
-                            class="table giddh-table on-mobile-view pd-t5"
+                            class="table giddh-table on-mobile-view"
                         >
                             <ng-container matColumnDef="group_name">
                                 <th class="report-th-column" mat-header-cell *matHeaderCellDef>
