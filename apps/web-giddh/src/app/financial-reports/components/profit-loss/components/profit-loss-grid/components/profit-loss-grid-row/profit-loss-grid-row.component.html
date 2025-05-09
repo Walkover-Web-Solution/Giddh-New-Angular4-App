@@ -5,10 +5,19 @@
     [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
-        class="col-4 group pl-sticky-group"
-        [innerHTML]="groupDetail.groupName | highlight: search"
-        [ngStyle]="{ 'padding-left': padding + 'px' }"
-    ></div>
+        class="col-4 group pl-sticky-group d-flex align-items-center row-height"
+        [style.padding-left]="padding + 'px !important'"
+    >
+        <mat-checkbox
+            *ngIf="!groupDetail.isCreated"
+            color="primary"
+            (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
+            [(ngModel)]="groupDetail.checked"
+            [checked]="groupDetail?.checked"
+            (click)="$event.stopPropagation()"
+        ></mat-checkbox>
+        <span [innerHTML]="groupDetail.groupName | highlight : search"></span>
+    </div>
     <div class="col bd-rl group pull-right px-0" *ngIf="!groupDetail.level1">
         <span class="d-flex justify-content-between">
             <ng-container *ngFor="let key of getKeys(groupDetail.closingBalance)">
@@ -17,22 +26,23 @@
                         class="col text-right px-0"
                         [ngClass]="{
                             'invisible':
-                                groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
+                                groupDetail?.isOpen &&
+                                (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
                         }"
                     >
                         <span
                             *ngIf="
-                        groupDetail.category === 'income' &&
-                        groupDetail.closingBalance[key].type === 'DEBIT' &&
-                        groupDetail.closingBalance[key].amount !== 0
+                                groupDetail.category === 'income' &&
+                                groupDetail.closingBalance[key].type === 'DEBIT' &&
+                                groupDetail.closingBalance[key].amount !== 0
                             "
                             >-</span
                         >
                         <span
                             *ngIf="
-                        groupDetail.category === 'expenses' &&
-                        groupDetail.closingBalance[key].type === 'CREDIT' &&
-                        groupDetail.closingBalance[key].amount !== 0
+                                groupDetail.category === 'expenses' &&
+                                groupDetail.closingBalance[key].type === 'CREDIT' &&
+                                groupDetail.closingBalance[key].amount !== 0
                             "
                             >-</span
                         >
@@ -46,25 +56,25 @@
                         </span>
                     </span>
                     <span class="col-sm-6 col-12 invisible">
-                            <span class="d-inline-flex">
-                                <amount-field
+                        <span class="d-inline-flex">
+                            <amount-field
                                 [amount]="groupDetail.closingBalance[key].amount"
                                 [currencySymbol]="false"
                                 [currencyCode]="false"
-                                >
+                            >
                             </amount-field>
-                        </span> 
+                        </span>
                     </span>
                 </div>
             </ng-container>
         </span>
-</div>
+    </div>
     <div class="col bd-rl group text-right pull-right px-0" *ngIf="groupDetail.level1">&nbsp;</div>
 </div>
 <cdk-virtual-scroll-viewport
     *ngIf="
         (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
-        (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
+        (groupDetail?.accounts | accountsFilter : !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
     "
     [itemSize]="35"
     minBufferPx="500"
@@ -87,18 +97,19 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section
-        class="row-2 account"
-        [ngClass]="{ 'isHidden': !account.isVisible }"
-        (dblclick)="entryClicked(account)"
-    >
+    <section class="row-2 account" [ngClass]="{ 'isHidden': !account.isVisible }" (dblclick)="entryClicked(account)">
         <div class="pl-grid-row row">
-            <div
-                class="col-4 pl-sticky-group"
-                [ngStyle]="{ 'padding-left': padding + 20 + 'px' }"
-            >
-                <p class="account-name" [innerHTML]="account.name | lowercase | highlight: search"></p>
-        </div>
+            <div class="col-4 pl-sticky-group d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
+                <mat-checkbox
+                    class="mr-l05"
+                    color="primary"
+                    (change)="onItemChecked($event, account?.uniqueName, 'account')"
+                    [(ngModel)]="account.checked"
+                    [checked]="account?.checked"
+                    (click)="$event.stopPropagation()"
+                ></mat-checkbox>
+                <p class="account-name" [innerHTML]="account.name | lowercase | highlight : search"></p>
+            </div>
             <div class="col bd-rl text-left pull-right px-0">
                 <span class="d-flex justify-content-between">
                     <ng-container *ngFor="let key of getKeys(account.closingBalance)">

@@ -103,12 +103,17 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public filterData(request: TrialBalanceRequest) {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
         if (this.isV2) {
+            console.log("request", request);
+            
             this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
+            console.log("request", request);
+
             this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }
     }
@@ -130,5 +135,14 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof TrialBalanceComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

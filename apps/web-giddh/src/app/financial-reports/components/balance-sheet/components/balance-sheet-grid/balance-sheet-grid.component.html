@@ -58,7 +58,7 @@
                                             >
                                                 {{
                                                     dayjs(bsData?.dates?.to, giddhDateFormat)?.toString()
-                                                        | date: "dd MMMM yyyy"
+                                                        | date : "dd MMMM yyyy"
                                                 }}</span
                                             >
                                         </th>
@@ -75,7 +75,7 @@
                                                 {{
                                                     dayjs(bsData?.dates?.from, giddhDateFormat)
                                                         .add(-1, "day")
-                                                        ?.toString() | date: "dd MMMM yyyy"
+                                                        ?.toString() | date : "dd MMMM yyyy"
                                                 }}</span
                                             >
                                         </th>
@@ -84,7 +84,7 @@
                             </table>
                             <!--Grid-->
                             <div class="m-10">
-                                <div >
+                                <div>
                                     <strong class="font-15">{{ localeData?.equity_liabilities }}</strong>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                             <ng-container
                                 *ngTemplateOutlet="
                                     groupDetails;
-                                    context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }
+                                    context: { $implicit: bsData?.liabilities | financialSearch : search, padding: 10 }
                                 "
                             >
                             </ng-container>
@@ -157,7 +157,7 @@
                         <div class="clearfix profit-loss">
                             <!--Grid-->
                             <div class="m-10">
-                                <div >
+                                <div>
                                     <strong class="font-15">{{ localeData?.ii_assets }}</strong>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
                             <ng-container
                                 *ngTemplateOutlet="
                                     groupDetails;
-                                    context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }
+                                    context: { $implicit: bsData?.assets | financialSearch : search, padding: 10 }
                                 "
                             >
                             </ng-container>

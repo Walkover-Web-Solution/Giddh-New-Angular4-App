@@ -18,8 +18,10 @@ import { UntypedFormControl } from '@angular/forms';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
 
 @Component({
     selector: 'trial-balance-grid',
@@ -38,6 +40,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
             transition("out => in", animate("400ms ease-in-out")),
         ]),
     ],
+    providers: [FinancialReportsComponentStore]
 })
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -54,6 +57,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public data$: AccountDetails;
     @Input() public expandAll: boolean;
     @Output() public searchChange = new EventEmitter<string>();
+    @Output() public refresh = new EventEmitter<string>();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -70,8 +74,10 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public activeGroupUniqueName: string = "";
     /** Holds account details */
     public accountDetails: any;
+    /** List of check groups accounts */
+    private listOfCheckGroupsAccounts: any[] = [];
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
+    constructor(private cd: ChangeDetectorRef, private zone: NgZone, private financialReportsComponentStore: FinancialReportsComponentStore) {
 
     }
 
@@ -91,6 +97,13 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                     this.cd.detectChanges();
                 }, 10);
             });
+
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.listOfCheckGroupsAccounts = [];
+                this.refresh.emit();
+            }
+        })
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -212,7 +225,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof TrialBalanceGridComponent
      */
-     public toggleAccountAsidePane(): void {
+    public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
         this.toggleBodyClass();
     }
@@ -238,5 +251,53 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getUpdatedList(event: any): void {
         this.toggleAccountAsidePane();
+    }
+
+    /**
+     * Unchecks all the accounts/groups in the grid
+     *
+     * @param {any} groupAccountDetails group or account details
+     * @param {'group' | 'account'} [entityType='group'] type of entity
+     * @memberof TrialBalanceGridComponent
+     */
+    public uncheckAll(groupAccountDetails: any, entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups(groupAccountDetails, entityType);
+        setTimeout(() => {
+            if (this.listOfCheckGroupsAccounts?.length) {
+                const model = {
+                    reportType: ReportType.TrialBalance,
+                    payload: this.listOfCheckGroupsAccounts
+                };
+                this.financialReportsComponentStore.tailedReportAccountGroup(model);
+            }
+        }, 400);
+    }
+
+    /**
+     * Recursive function to extract checked accounts/groups and store it in listOfCheckGroupsAccounts.
+     * It loops through the groupAccountDetails array and checks if the account/group is checked.
+     * If checked, it adds the account/group to listOfCheckGroupsAccounts with checked set to false.
+     * Then it recursively calls itself on the childGroups and accounts of the group.
+     * @param groupAccountDetails array of account/group objects
+     * @param entityType type of entity, either 'group' or 'account'
+     * @memberof TrialBalanceGridComponent
+     */
+    private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
+        groupAccountDetails.forEach(group => {
+            if (group.checked) {
+                this.listOfCheckGroupsAccounts.push({
+                    uniqueName: group.uniqueName,
+                    entityType,
+                    checked: false
+                });
+            }
+
+            if (group.childGroups?.length) {
+                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            }
+            if (group.accounts?.length) {
+                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            }
+        });
     }
 }

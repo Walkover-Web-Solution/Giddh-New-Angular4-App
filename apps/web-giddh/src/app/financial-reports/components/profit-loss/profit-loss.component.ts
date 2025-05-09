@@ -110,7 +110,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             cogsGrp.isVisible = true;
             cogsGrp.isIncludedInSearch = true;
             cogsGrp.isOpen = false;
-            cogsGrp.level1 = false;
+            cogsGrp.level1 = true;
             cogsGrp.uniqueName = 'cogs';
             cogsGrp.groupName = 'Less: Cost of Goods Sold';
             cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
@@ -127,7 +127,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (i === 0) {
                     Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
                         let childGroup = new ChildGroup();
-                        childGroup.isCreated = false;
+                        childGroup.isCreated = true;
                         childGroup.isVisible = false;
                         childGroup.isIncludedInSearch = true;
                         childGroup.isOpen = false;

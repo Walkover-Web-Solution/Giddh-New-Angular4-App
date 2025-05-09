@@ -2,9 +2,8 @@
     padding: 0;
 }
 
-:host ::ng-deep .table-container .profit-loss section div > div {
+:host ::ng-deep .table-container .profit-loss section > div > div {
     min-width: 275px;
-    
 }
 
 :host ::ng-deep .basic {
@@ -75,6 +74,11 @@
 
 .pl-content-width {
     min-width: 275px;
+}
+
+.uncheck-all-icon {
+    width: 20px;
+    height: 20px;
 }
 
 @media (max-width: 1024px) {
