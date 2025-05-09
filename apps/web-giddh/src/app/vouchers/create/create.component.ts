@@ -777,6 +777,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+
             if (response) {
                 if (!response.isCopyVoucher) {
                     if (response?.cashVoucher) {
@@ -864,10 +866,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
 
+
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
 
                 response.entries?.forEach((entry: any, index: number) => {
+                    console.log(entry, index);
+                    if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+                        this.invoiceForm.get('isAdvanceReceipt').patchValue((entry.subVoucher === SubVoucher.AdvanceReceipt) ? true : false);
+                        this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
+                        this.invoiceForm.get("chequeNumber")?.patchValue(entry?.chequeNumber);
+                    }
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
                     }
@@ -913,6 +922,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
+                console.log('invoiceF', this.invoiceForm);
 
                 this.checkIfEntriesHasStock();
 
@@ -1064,6 +1074,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log('ledger', response);
 
             if (response) {
                 response?.forEach((entry, entryIndex) => {
@@ -2198,6 +2209,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getEntriesFormGroup(entryData?: any, copyUniqueName: boolean = true): FormGroup {
+        console.log('entryData', entryData);
+
         let voucherDate = "";
 
         if (typeof (this.invoiceForm?.get('date')?.value) === "object") {
@@ -3967,8 +3980,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     return entry;
                 });
 
-                delete invoiceForm.chequeNumber;
-                delete invoiceForm.chequeClearanceDate;
 
                 if (invoiceForm.isAdvanceReceipt) {
                     invoiceForm.subVoucher = SubVoucher.AdvanceReceipt;
@@ -5285,18 +5296,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let updateVoucherText = this.localeData?.update_invoice;
         let invoiceType = (
             this.invoiceType.isProformaInvoice ? this.localeData?.invoice_types?.proforma
-            : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
-            : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice
-            : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note
-            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note
-            : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase
-            : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
-            : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
-            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
-            : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
-            : this.invoiceType.isReceiptInvoice ? this.localeData?.invoice_types?.receipt
-            : this.invoiceType.isPaymentInvoice ? this.localeData?.invoice_types?.payment
-            : this.localeData?.invoice_types?.purchase_order);
+                : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
+                    : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice
+                        : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note
+                            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note
+                                : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase
+                                    : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
+                                        : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
+                                            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
+                                                : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
+                                                    : this.invoiceType.isReceiptInvoice ? this.localeData?.invoice_types?.receipt
+                                                        : this.invoiceType.isPaymentInvoice ? this.localeData?.invoice_types?.payment
+                                                            : this.localeData?.invoice_types?.purchase_order);
 
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);
