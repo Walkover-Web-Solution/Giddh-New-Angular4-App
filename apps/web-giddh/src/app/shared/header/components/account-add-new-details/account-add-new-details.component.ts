@@ -736,11 +736,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
-        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
-        if (keyAvoid.findIndex(key => key === event.key) > -1) {
-            return;
-        }
+    /**
+     * Validates and extracts the state code from the GST number entered in the given form.
+     * 
+     * @param gstForm The `FormGroup` containing the GST-related form controls.
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getStateCode(gstForm: FormGroup): void {
         let gstVal: string = gstForm.get('gstNumber')?.value?.trim();
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {

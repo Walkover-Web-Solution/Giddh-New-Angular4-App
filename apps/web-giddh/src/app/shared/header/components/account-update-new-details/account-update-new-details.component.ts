@@ -880,7 +880,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
+    /**
+     * Validates and extracts the state code from the GST number entered in the given form.
+     * 
+     * @param gstForm The `FormGroup` containing the GST-related form controls.
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getStateCode(gstForm: FormGroup): void {
         let gstVal: string = gstForm.get('gstNumber')?.value;
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
