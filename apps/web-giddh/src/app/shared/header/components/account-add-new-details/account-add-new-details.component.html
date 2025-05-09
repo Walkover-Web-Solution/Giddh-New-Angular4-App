@@ -225,6 +225,7 @@
         <mat-tab-group
             #staticTabs
             mat-stretch-tabs="false"
+            (selectedTabChange)="tabChanged($event)"
             id="asidePaneFormTabs"
         >
             <mat-tab
@@ -296,7 +297,7 @@
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="statesSource$ | async"
-                                    [labelValue]="(statesSource$ | async)?.[0]?.label"
+                                    [labelValue]="gst?.value.state.code && gst?.value.state.name ? gst.value.state.code + ' - ' + gst.value.state.name : (statesSource$ | async)?.[0]?.label"
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
@@ -419,7 +420,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.contact" class="contact-form-wrap">
-                <div class="pd-t15 overflow-hidden">
+                <div class="pd-t15 overflow-hidden padding-bottom-100">
                     <div class="row pd-b2">
                         <div class="col-sm-6">
                             <input-field
@@ -432,7 +433,7 @@
                             >
                             </input-field>
                         </div>
-                        <div class="col-sm-6 mobile-number-wrapper">
+                        <div class="col-sm-6 mobile-number mobile-number-wrapper voucher-preview-edit">
                             <div class="form-group">
                                 <div class="d-flex">
                                     <input-field
@@ -453,7 +454,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row  pd-b2">
+                    <div class="row pd-b2">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <input-field
@@ -472,6 +473,7 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
                 </div>
             </mat-tab>
             <mat-tab
@@ -479,7 +481,7 @@
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && isDebtorCreditor"
             >
-                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden">
+                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
                         class="row pd-b2"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
@@ -527,12 +529,12 @@
                                 >{{ localeData?.duplicate_email }}
                             </span>
                         </div>
-                        <div class="w-30 pl-2 mobile-number-portal-wrapper">
+                        <div class="w-30 pl-2 mobile-number mobile-number-wrapper voucher-preview-edit" [ngClass]="{'load-bar-wrap': isActivePortalMobileNumber === i}" (click)="isActivePortalMobileNumber = i">
                             <input-field
                                 [name]="'contactNo_' + i"
                                 [type]="'tel'"
                                 #initContactAdd2
-                                [cssClass]="'flag-input'"
+                                class="flag-input"
                                 [id]="'init-contact-portal_' + i"
                                 formControlName="contactNo"
                                 [placeholder]="localeData?.mobile_no_placeholder"
@@ -561,6 +563,7 @@
                             </a>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
                 </div>
             </mat-tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
@@ -855,17 +858,22 @@
                 >
             </mat-tab>
         </mat-tab-group>
-        <div class="row">
-            <div class="col-sm-12">
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    aria-label="save"
-                    type="submit"
-                >
-                    {{ commonLocaleData?.app_save }}
-                </button>
-            </div>
-        </div>
+        <ng-container *ngIf="!isPortalSelectedTab && !isContactSelectedTab">
+            <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+        </ng-container>
     </form>
 </ng-container>
+<ng-template #templateForSaveButton>
+    <div class="row">
+        <div class="col-sm-12">
+            <button
+                mat-stroked-button
+                color="primary"
+                aria-label="save"
+                type="submit"
+            >
+                {{ commonLocaleData?.app_save }}
+            </button>
+        </div>
+    </div>
+</ng-template>

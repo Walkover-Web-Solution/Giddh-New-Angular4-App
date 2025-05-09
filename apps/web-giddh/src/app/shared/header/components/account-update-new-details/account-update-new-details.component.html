@@ -415,7 +415,7 @@
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
             >
-                <div class="pd-t15 overflow-hidden">
+                <div class="pd-t15 overflow-hidden padding-bottom-100">
                     <div class="row pd-b2">
                         <div class="col-sm-6">
                             <input-field
@@ -427,7 +427,7 @@
                             >
                             </input-field>
                         </div>
-                        <div class="col-sm-6 mobile-number mobile-number-wrapper">
+                        <div class="col-sm-6 mobile-number mobile-number-wrapper voucher-preview-edit">
                             <input-field
                                 [name]="'mobile'"
                                 [type]="'tel'"
@@ -462,6 +462,7 @@
                             >
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                 </div>
             </mat-tab>
             <mat-tab
@@ -469,7 +470,7 @@
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && isDebtorCreditor"
             >
-                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden">
+                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
                         class="row pd-b2"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
@@ -517,7 +518,7 @@
                                 >{{ localeData?.duplicate_email }}
                             </span>
                         </div>
-                        <div class="w-30 pl-2 mobile-number mobile-number-wrapper">
+                        <div class="w-30 pl-2 mobile-number mobile-number-wrapper voucher-preview-edit" [ngClass]="{'load-bar-wrap': isActivePortalMobileNumber === i}" (click)="isActivePortalMobileNumber = i">
                             <input-field
                                 [name]="'contactNo_' + i"
                                 [type]="'tel'"
@@ -543,14 +544,15 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row pd-b2">
                         <div class="col-lg-12">
                             <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
                                 <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
                             </a>
                         </div>
                     </div>
-                </div>
+                    <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
+                </div>                
             </mat-tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
             <mat-tab
@@ -746,7 +748,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row pd-b2">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>{{ localeData?.description_label }}</label>
@@ -857,26 +859,9 @@
             </mat-tab>
         <!-- </tabset> -->
         </mat-tab-group>
-        <div class="d-flex column-gap15 pd-t15" *ngIf="!isOtherSelectedTab">
-            <button
-                *ngIf="showDeleteButton"
-                type="button"
-                mat-stroked-button
-                color="primary"
-                (click)="deleteClicked.emit(true)"
-                aria-label="delete"
-            >
-                {{ commonLocaleData?.app_delete }}
-            </button>
-            <button
-                (click)="submit()"
-                mat-stroked-button
-                color="primary"
-                aria-label="update"
-            >
-                {{ commonLocaleData?.app_update }}
-            </button>
-        </div>
+        <ng-container *ngIf="!isOtherSelectedTab && !isPortalSelectedTab && !isContactSelectedTab">
+            <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
+        </ng-container>
     </form>
     <div class="form" *ngIf="isOtherSelectedTab">
         <div>
@@ -1126,3 +1111,25 @@
         </div> -->
     </div>
 </ng-container>
+<ng-template #templateForDeleteAndUpdate>
+    <div class="d-flex column-gap15">
+        <button
+            *ngIf="showDeleteButton"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="deleteClicked.emit(true)"
+            aria-label="delete"
+        >
+            {{ commonLocaleData?.app_delete }}
+        </button>
+        <button
+            (click)="submit()"
+            mat-stroked-button
+            color="primary"
+            aria-label="update"
+        >
+            {{ commonLocaleData?.app_update }}
+        </button>
+    </div>
+</ng-template>
