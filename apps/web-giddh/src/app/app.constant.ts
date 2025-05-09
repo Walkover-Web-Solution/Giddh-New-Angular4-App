@@ -6,9 +6,15 @@ import { CountryCodeService } from './services/country-code.service';
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'PORTAL_URL': PORTAL_URL,
+    'OTP_WIDGET_ID': OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
     'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER
+    'APP_FOLDER': APP_FOLDER,
+    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY,
 };
 
 /** Add Company business type*/
@@ -22,6 +28,9 @@ export enum BranchHierarchyType {
     Flatten = 'flatten',
     Tree = 'tree'
 };
+
+/** Date Regex for 'MMM D, YYYY' */
+export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
@@ -108,7 +117,7 @@ export enum OnBoardingType {
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
 /** Pagination count options */
-export const PAGE_SIZE_OPTIONS = [20, 50, 100];
+export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
@@ -595,7 +604,7 @@ export enum BootstrapToggleSwitch {
     Size = 'mini'
 }
 
-export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
+export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
 export const OTP_WIDGET_ID = '326a63733354393830313330';
@@ -630,3 +639,16 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
     'AE': 'ae',
     'GL': 'gl'
 };
+/** Gst utility download portal link */
+export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
+
+/** Break Point Screen Size*/
+export const BREAKPOINT_SCREEN_SIZE = {
+    SMALL_DESKTOP_SCREEN_SIZE: '(max-width: 1366px)',
+    TAB_SCREEN_SIZE: '(max-width: 1024px)'
+}
+/** HTML tag name  */
+export enum HtmlElementEnum {
+    Input = 'INPUT',
+    Textarea = 'TEXTAREA'
+}

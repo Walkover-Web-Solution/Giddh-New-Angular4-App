@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL, OTP_WIDGET_ID, OTP_WIDGET_TOKEN } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -26,6 +26,8 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
+import { GeneralService } from "../services/general.service";
+import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 
@@ -68,6 +70,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
+    /* Hold domain url */
+    public giddhDomainUrl: string = "";
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: UntypedFormBuilder,
@@ -78,9 +86,12 @@ export class SignupComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        @Inject(ServiceConfig) private serviceConfig,
+        private generalService : GeneralService
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -126,6 +137,9 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this.fb.group({
@@ -355,8 +369,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_WIDGET_TOKEN,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateSignup(data);

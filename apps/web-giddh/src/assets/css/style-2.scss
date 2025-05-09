@@ -50,6 +50,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/custom-paginator.scss";
 @import "../css/global/mat-chip.scss";
 @import "../css/global/select-multiple-fields.scss";
+@import"../css/global/override-material-theme-variables";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1168,16 +1169,18 @@ textarea {
         color: var(--color-common-primary-text) !important;
     }
 }
+
 .setting-branch-body {
     .mat-mdc-tab-body-content {
         overflow: visible !important;
- }
+    }
 }
 
 .pending-table {
     .mat-mdc-table {
         .mdc-data-table__row {
             height: 70px !important;
+
             &:hover {
                 background-color: var(--color-body-background) !important;
             }
@@ -2378,6 +2381,11 @@ ul.sub-list {
 
 .text-gray {
     color: var(--color-gray);
+}
+
+// This color will same in all theme
+.text-static-white {
+    color: var(--color-white-tertiary) !important;
 }
 
 .text-saffron {
@@ -6129,6 +6137,17 @@ input[type="checkbox"][disabled]:after {
     padding-left: 15px !important;
 }
 
+.pl-sticky-group {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    background: var(--color-body-background);
+    max-width: 300px !important;
+    min-width: 300px !important;
+    padding-block: 10px !important;
+    padding-left: 15px !important;
+}
+
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
 }
@@ -6983,7 +7002,8 @@ GST filing
         .gstr-3b-report {
             tr {
                 height: auto;
-                > th,
+
+                >th,
                 td {
                     border: 1px solid var(--color-table-primary-content-bar-border) !important;
                     padding: 10px 30px 10px 10px !important;
@@ -7304,7 +7324,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: var(--color-abbey);
 }
 
-.tax-engine .table.transactions-table tbody > tr > td {
+.tax-engine .table.transactions-table tbody>tr>td {
     max-width: fit-content;
     font-size: var(--font-size-15);
     padding: 16px 12px;
@@ -7332,18 +7352,19 @@ perfect-scrollbar > .ps > .ps-overlay {
     .table {
         &.transactions-summary-table {
             tbody {
-                & > tr {
-                    &:not(.secondary-row) + tr.secondary-row {
-                        & > td {
+                &>tr {
+                    &:not(.secondary-row)+tr.secondary-row {
+                        &>td {
                             border-top: 1px solid var(--color-table-primary-content-bar-border) !important;
                         }
                     }
 
                     &.secondary-row {
-                        & > td:nth-child(1) {
+                        &>td:nth-child(1) {
                             padding-left: 50px !important;
                         }
-                        & > td {
+
+                        &>td {
                             border: none !important;
                             background-color: var(--color-white) !important;
                             border-right: 1px solid var(--color-table-primary-content-bar-border) !important;
@@ -7357,7 +7378,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     }
 }
 
-.tax-engine .table.transactions-table tbody > tr > td {
+.tax-engine .table.transactions-table tbody>tr>td {
     max-width: fit-content;
     font-size: var(--font-size-15);
     padding: 16px 12px;
@@ -7370,7 +7391,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     vertical-align: middle;
 }
 
-.tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td:first-child {
+.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:first-child {
     border-right: none !important;
 }
 
@@ -7589,8 +7610,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     table-layout: fixed;
 }
 
-.tax-engine .table.reconciliations-table tbody > tr > td:first-child,
-.tax-engine .table.reconciliations-table thead > tr > th:first-child {
+.tax-engine .table.reconciliations-table tbody>tr>td:first-child,
+.tax-engine .table.reconciliations-table thead>tr>th:first-child {
     padding: 13px 13px 13px 20px;
 }
 
@@ -7598,7 +7619,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-top: 1px solid var(--color-table-primary-header-bar-border);
 }
 
-.tax-engine .table.reconciliations-table thead > tr > th {
+.tax-engine .table.reconciliations-table thead>tr>th {
     border-bottom-width: 1px;
     font-size: var(--font-size-12);
 }
@@ -7609,12 +7630,12 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 13px;
 }
 
-.tax-engine .table tbody > tr > td,
-.tax-engine .table tbody > tr > th,
-.tax-engine .table tfoot > tr > td,
-.tax-engine .table tfoot > tr > th,
-.tax-engine .table thead > tr > td,
-.tax-engine .table thead > tr > th {
+.tax-engine .table tbody>tr>td,
+.tax-engine .table tbody>tr>th,
+.tax-engine .table tfoot>tr>td,
+.tax-engine .table tfoot>tr>th,
+.tax-engine .table thead>tr>td,
+.tax-engine .table thead>tr>th {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
@@ -7623,7 +7644,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .details .details-info,
-.warehouses > li div {
+.warehouses>li div {
     word-wrap: break-word;
 }
 
@@ -9753,6 +9774,10 @@ span#HW_badge_cont:nth-child(3) {
     flex-wrap: nowrap !important;
 }
 
+.flex-no-wrap {
+    flex-wrap: nowrap !important;
+}
+
 /*flex css start*/
 .select-border-bottom {
     .form-control {
@@ -9985,7 +10010,7 @@ span#HW_badge_cont:nth-child(3) {
 .linked-entities {
     sh-select {
         .menu {
-          min-width: 300px;
+            min-width: 300px;
         }
     }
 
@@ -10361,9 +10386,9 @@ giddh-datepicker {
 
                     .linked-entities {
                         sh-select {
-                          .menu {
-                            min-width: 300px;
-                          }
+                            .menu {
+                                min-width: 300px;
+                            }
                         }
                     }
                 }
@@ -11578,7 +11603,7 @@ body {
         }
     }
 
-    .users-last-list > li:last-child {
+    .users-last-list>li:last-child {
         height: inherit !important;
     }
 
@@ -11747,7 +11772,7 @@ body {
         display: block;
     }
 
-    .users-last-list > li:last-child {
+    .users-last-list>li:last-child {
         height: inherit !important;
     }
 
@@ -13430,6 +13455,25 @@ voucher-component {
     color: var(--color-black);
 }
 
+.dropdown-bg {
+    background-color: var(--color-white);
+    width: 20px;
+    height: 20px;
+    z-index: 8;
+    right: 0;
+    top: 15px;
+
+    .arrow-dropdown {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--color-popup-list-input-text) !important;
+        top: 8px;
+        right: 4px;
+    }
+}
+
 .readonly-field {
     .dropdown-bg {
         display: none !important;
@@ -13921,7 +13965,7 @@ mat-list {
             &.mat-mdc-chip {
                 &:not(.mdc-evolution-chip--disabled) {
                     --mdc-chip-elevated-container-color: var(--color-filter-background) !important;
-                    border: 1px solid var( --color-primary-button-border);
+                    border: 1px solid var(--color-primary-button-border);
 
                     .mdc-evolution-chip__text-label {
                         --mdc-chip-label-text-color: var(--color-tab-secondary-text) !important;
@@ -13942,19 +13986,25 @@ mat-list {
     }
 }
 
-// For CompareWithDateRangePickerComponent 
+// For CompareWithDateRangePickerComponent
 .compare-with-menu {
     .mdc-list-item__start {
         margin-right: 0px !important;
     }
 }
 
-/** Use this class on black color image (icon) 
+/** Use this class on black color image (icon)
  to  change color in dark theme **/
- .image-as-icon-color {
+.image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
 }
 
-.w150 {
-    width: 150px !important;
+.advance-filter-button {
+    .mdc-button__label {
+        color: var(--color-toast-primary-text) !important;
+    }
+
+    .w150 {
+        width: 150px !important;
+    }
 }

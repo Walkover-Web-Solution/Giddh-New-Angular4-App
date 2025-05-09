@@ -256,6 +256,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isBulkDataUpdated: boolean = false;
     /** True if valid from date is selected */
     public isValidForm: boolean = true;
+    /** True if form value is assigned */
+    private formValueAssigned: boolean = false;
+    /** Indicates whether the "Portal" tab is currently selected */
+    public isPortalSelectedTab: boolean = false;
+    /** Indicates whether the "Contact" tab is currently selected */
+    public isContactSelectedTab: boolean = false;
+    /** Stores the index of the currently active mobile number field under the Portal tab */
+    public isActivePortalMobileNumber: number = -1;
 
     constructor(
         private _fb: FormBuilder,
@@ -413,7 +421,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     let mobileNo = '';
                     if (response?.mobileNo && this.intl) {
-                        mobileNo = this.intl['init-contact-add']?.getNumber();
+                        mobileNo = this.intl['init-contact-update']?.getNumber();
                     }
                     if (user) {
                         if (!this.isPortalDefault) {
@@ -446,13 +454,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                     }
                 }
+                if (this.formValueAssigned && response) {
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+                }
             });
-
-        if (this.autoFocusUpdate !== undefined) {
-            setTimeout(() => {
-                this.autoFocusUpdate?.nativeElement?.focus();
-            }, 50);
-        }
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -493,9 +498,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
-        setTimeout(() => {
-            this.onlyPhoneNumber('init-contact-update');
-        }, 1000);
+        const interval = setInterval(() => {
+            if (document.getElementById('init-contact-update')) {
+                this.onlyPhoneNumber('init-contact-update');
+                clearInterval(interval);
+            }
+        }, 2000);
+
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -514,6 +523,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
         this.prepareTaxDropdown();
+        setTimeout(() => {
+            this.formValueAssigned = true;
+        }, 4000);
     }
 
     public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
@@ -615,6 +627,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTab = event.tab.textLabel;
+            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
+            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
@@ -679,11 +693,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     openingBalance: [''],
                     openingBalanceType: ['']
                 }),
-            ])
-        });
-
-        this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            ]),
+            archive: [true]
         });
 
         this.getInvoiceSettings();
@@ -781,14 +792,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         const lastIndex = mappings.controls.length - 1;
         const updateNumber = mobileNo;
-        setTimeout(() => {
-            this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
-            setTimeout(() => {
-                if (this.intl) {
-                    this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
-                }
-            }, 500);
-        }, 100);
+
+        const interval = setInterval(() => {
+            if (document.getElementById('init-contact-portal_' + lastIndex)) {
+                this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
+                clearInterval(interval);
+                setTimeout(() => {
+                    if (this.intl) {
+                        this.intl['init-contact-portal_' + lastIndex]?.setNumber(updateNumber ?? '');
+                    }
+                }, 500);
+            }
+        }, 500);
     }
 
     /**
@@ -1096,6 +1111,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public ngOnDestroy() {
         this.resetUpdateAccountForm();
+        this.store.dispatch(this.accountsAction.resetActiveAccount());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1226,7 +1242,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-
+        
         if (ele?.value?.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
@@ -2138,6 +2154,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                     }
                                     this.addNewPortalUser(item);
                                 });
+                            } else {
+                                const mappings = this.addAccountForm.get('portalDomain') as FormArray;
+                                mappings.clear();
+                                this.addNewPortalUser();
                             }
                         });
                 }
@@ -2155,7 +2175,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (!accountDetails.customFields) {
                     accountDetails.customFields = [];
                 }
-
+                
                 this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;

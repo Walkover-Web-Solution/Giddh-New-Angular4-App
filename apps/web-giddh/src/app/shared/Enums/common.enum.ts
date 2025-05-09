@@ -10,3 +10,9 @@ export enum CopyType {
     CUSTOMER = "CUSTOMER",
     TRANSPORT = "TRANSPORT"
 }
+
+export enum AccountArchivedStatusEnum {
+    UNARCHIVED = 'UNARCHIVED',
+    ARCHIVED = 'ARCHIVED',
+    BOTH = 'BOTH'
+}

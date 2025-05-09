@@ -168,7 +168,6 @@
                                             <div class="pl-grid-row row">
                                                 <div class="col-4 group pl-sticky-group  pd-l1">{{ localeData?.total_revenue }}</div>
                                                 <div class="col bd-rl group text-right pull-right px-0">
-                                                    <p>Test : {{ plData?.incomeStatement?.revenue | json}}</p>
                                                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.revenue)">
                                                         <span>
                                                             <ng-container
