@@ -1331,8 +1331,8 @@
                                                                   ")"
                                                                 : transactions?.particular?.name
                                                         }}</span>
-                                                        <!-- <span
-                                                            class="download-invoice-ledger d-flex"
+                                                        <span
+                                                            class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion !== 2 &&
                                                                 transactions.attachedFileUniqueName
@@ -1340,16 +1340,16 @@
                                                             (click)="downloadFiles(transactions, 'ATTACHMENT', $event)"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
-                                                        </span> -->
-                                                        <!-- <span
-                                                            class="download-invoice-ledger d-flex"
+                                                        </span>
+                                                        <span
+                                                            class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion !== 2 && transactions.voucherGenerated
                                                             "
                                                             (click)="downloadFiles(transactions, 'VOUCHER', $event)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
-                                                        </span> -->
+                                                        </span>
                                                         <span
                                                             class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
@@ -1579,8 +1579,8 @@
                                             }}
                                         </div>
 
-                                        <!-- <span
-                                            class="download-invoice-ledger d-flex"
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                             (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
@@ -1588,9 +1588,9 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
-                                        </span> -->
-                                        <!-- <span
-                                            class="download-invoice-ledger d-flex"
+                                        </span>
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                             (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
@@ -1606,7 +1606,7 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
-                                        </span> -->
+                                        </span>
                                         <span
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
@@ -1975,8 +1975,8 @@
                                                             : localeData?.to_particular
                                                 }}
                                             </div>
-                                            <!-- <span
-                                                class="download-invoice-ledger d-flex"
+                                            <span
+                                                class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                                 (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                                 [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
@@ -1984,9 +1984,9 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span> -->
-                                            <!-- <span
-                                                class="download-invoice-ledger d-flex"
+                                            </span>
+                                            <span
+                                                class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                                 (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                                 [matTooltip]="
@@ -2002,7 +2002,7 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span> -->
+                                            </span>
                                             <span
                                                 class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="
