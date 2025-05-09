@@ -1,4 +1,15 @@
- #closedialog {
+:host {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 760px;
+    width: 100%;
+    z-index: 99999;
+}
+
+#closedialog {
     display: block;
     position: absolute;
     right: 10px;
