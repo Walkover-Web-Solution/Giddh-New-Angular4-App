@@ -786,6 +786,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+
             if (response) {
                 if (!response.isCopyVoucher) {
                     if (response?.cashVoucher) {
@@ -873,10 +875,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
 
+
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
 
                 response.entries?.forEach((entry: any, index: number) => {
+                    console.log(entry, index);
+                    if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+                        this.invoiceForm.get('isAdvanceReceipt').patchValue((entry.subVoucher === SubVoucher.AdvanceReceipt) ? true : false);
+                        this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
+                        this.invoiceForm.get("chequeNumber")?.patchValue(entry?.chequeNumber);
+                    }
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
                     }
@@ -922,6 +931,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
+                console.log('invoiceF', this.invoiceForm);
 
                 this.checkIfEntriesHasStock();
 
@@ -1073,6 +1083,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log('ledger', response);
 
             if (response) {
                 response?.forEach((entry, entryIndex) => {
@@ -2198,6 +2209,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getEntriesFormGroup(entryData?: any, copyUniqueName: boolean = true): FormGroup {
+        console.log('entryData', entryData);
+
         let voucherDate = "";
 
         if (typeof (this.invoiceForm?.get('date')?.value) === "object") {
@@ -3993,8 +4006,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     return entry;
                 });
 
-                delete invoiceForm.chequeNumber;
-                delete invoiceForm.chequeClearanceDate;
 
                 if (invoiceForm.isAdvanceReceipt) {
                     invoiceForm.subVoucher = SubVoucher.AdvanceReceipt;
