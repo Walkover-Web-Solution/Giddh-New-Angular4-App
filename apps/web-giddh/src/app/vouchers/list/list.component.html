@@ -253,19 +253,33 @@
                                                 <i class="icon-dots-three-vertical"></i>
                                             </span>
                                             <mat-menu #menu="matMenu">
-                                                <button mat-menu-item
-                                                    (click)="actionEstimateProforma(element, 'accepted')">{{
-                                                    localeData?.accepted }}</button>
-                                                <button mat-menu-item
-                                                    (click)="actionEstimateProforma(element, 'decline')">{{
-                                                    localeData?.declined }}</button>
-                                                <button mat-menu-item (click)="convertToProforma(element)">{{
-                                                    localeData?.convert_proforma }}</button>
-                                                <button mat-menu-item (click)="convertToInvoice(element)">{{
-                                                    localeData?.convert_invoice }}</button>
-                                                <button mat-menu-item
-                                                    (click)="actionEstimateProforma(element, 'expired')">{{
-                                                    localeData?.expired }}</button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="actionEstimateProforma(element, 'accepted')"
+                                                >
+                                                    {{ localeData?.accepted }}
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="actionEstimateProforma(element, 'decline')"
+                                                >
+                                                    {{ localeData?.declined }}
+                                                </button>
+                                                <button mat-menu-item (click)="convertToProforma(element)">
+                                                    {{ localeData?.convert_proforma }}
+                                                </button>
+                                                <button mat-menu-item (click)="convertToInvoice(element)">
+                                                    {{ localeData?.convert_invoice }}
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="actionEstimateProforma(element, 'expired')"
+                                                >
+                                                    {{ localeData?.expired }}
+                                                </button>
+                                                <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
                                             </mat-menu>
                                         </ng-container>
                                     </div>
@@ -528,17 +542,21 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item
-                                                (click)="actionEstimateProforma(element, 'accepted')">{{
-                                                localeData?.accepted }}</button>
-                                            <button mat-menu-item
-                                                (click)="actionEstimateProforma(element, 'decline')">{{
-                                                localeData?.declined }}</button>
-                                            <button mat-menu-item (click)="convertToInvoice(element)">{{
-                                                localeData?.convert_invoice }}</button>
-                                            <button mat-menu-item
-                                                (click)="actionEstimateProforma(element, 'expired')">{{
-                                                localeData?.expired }}</button>
+                                            <button mat-menu-item (click)="actionEstimateProforma(element, 'accepted')">
+                                                {{ localeData?.accepted }}
+                                            </button>
+                                            <button mat-menu-item (click)="actionEstimateProforma(element, 'decline')">
+                                                {{ localeData?.declined }}
+                                            </button>
+                                            <button mat-menu-item (click)="convertToInvoice(element)">
+                                                {{ localeData?.convert_invoice }}
+                                            </button>
+                                            <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
+                                                {{ localeData?.expired }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -866,18 +884,27 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{
-                                                commonLocaleData?.app_payment_status?.paid }}</button>
-                                            <button mat-menu-item (click)="showAdjustmentDialog(element)">{{
-                                                commonLocaleData?.app_payment_status?.adjust_amount }}</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">{{
-                                                commonLocaleData?.app_payment_status?.unpaid }}</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'hold')">{{
-                                                commonLocaleData?.app_payment_status?.hold }}</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{
-                                                commonLocaleData?.app_payment_status?.cancel }}</button>
-                                            <button mat-menu-item (click)="showEwayBillDialog(element)">{{
-                                                localeData?.generate_eway_bill }}</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.paid }}
+                                            </button>
+                                            <button mat-menu-item (click)="showAdjustmentDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.adjust_amount }}
+                                            </button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">
+                                                {{ commonLocaleData?.app_payment_status?.unpaid }}
+                                            </button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'hold')">
+                                                {{ commonLocaleData?.app_payment_status?.hold }}
+                                            </button>
+                                            <button mat-menu-item (click)="cancelVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="showEwayBillDialog(element)">
+                                                {{ localeData?.generate_eway_bill }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -946,12 +973,15 @@
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu" class="mr-t05">
-                                <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update
-                                    }}</button>
-                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">{{
-                                    localeData?.create_e_invoice }}</button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete
-                                    }}</button>
+                                <button mat-menu-item (click)="bulkUpdateDialog()">
+                                    {{ localeData?.bulk_update }}
+                                </button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">
+                                    {{ localeData?.create_e_invoice }}
+                                </button>
+                                <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                    {{ commonLocaleData?.app_delete }}
+                                </button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
@@ -1148,10 +1178,15 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{
-                                                commonLocaleData?.app_payment_status?.paid }}</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{
-                                                commonLocaleData?.app_payment_status?.cancel }}</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.paid }}
+                                            </button>
+                                            <button mat-menu-item (click)="cancelVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -1425,10 +1460,15 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{
-                                                commonLocaleData?.app_payment_status?.paid }}</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{
-                                                commonLocaleData?.app_payment_status?.cancel }}</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.paid }}
+                                            </button>
+                                            <button mat-menu-item (click)="cancelVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
                                         </mat-menu>
                                     </div>
                                 </td>
