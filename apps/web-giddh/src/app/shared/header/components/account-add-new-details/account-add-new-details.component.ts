@@ -44,6 +44,7 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'account-add-new-details',
@@ -210,6 +211,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isValidForm: boolean = true;
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
+    /** Indicates whether the "Portal" tab is currently selected */
+    public isPortalSelectedTab: boolean = false;
+    /** Indicates whether the "Contact" tab is currently selected */
+    public isContactSelectedTab: boolean = false;
+    /** Stores the index of the currently active mobile number field under the Portal tab */
+    public isActivePortalMobileNumber: number = -1;
 
     constructor(
         private _fb: FormBuilder,
@@ -476,7 +483,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
-        let interval = setInterval(() => {
+        const interval = setInterval(() => {
             if (document.getElementById('init-contact-add')) {
                 this.onlyPhoneNumber('init-contact-add');
                 clearInterval(interval);
@@ -643,17 +650,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const lastIndex = mappings.controls.length - 1;
         const updateNumber = user?.contactNo;
 
-        let interval = setInterval(() => {
-            if (document.getElementById('init-contact-portal_' + (lastIndex))) {
-                this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
+        const interval = setInterval(() => {
+            if (document.getElementById('init-contact-portal_' + lastIndex)) {
+                this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
                 setTimeout(() => {
                     if (this.intl) {
-                        this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                        this.intl['init-contact-portal_' + lastIndex]?.setNumber(updateNumber ?? '');
                     }
                 }, 500);
             }
-        }, 2000);
+        }, 500);
     }
 
     /**
@@ -730,7 +737,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
+    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
+        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+        if (keyAvoid.findIndex(key => key === event.key) > -1) {
+            return;
+        }
         let gstVal: string = gstForm.get('gstNumber')?.value?.trim();
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
@@ -1281,6 +1292,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 element.classList.remove('error-box');
             }
+        }
+    }
+
+    /**
+     * Handles tab change
+     *
+     * @param {any} event 
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public tabChanged(event: MatTabChangeEvent): void {
+        if (event) {
+            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
+            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
         }
     }
 

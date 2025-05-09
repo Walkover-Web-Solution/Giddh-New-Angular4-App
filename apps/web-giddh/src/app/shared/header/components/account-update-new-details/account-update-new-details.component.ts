@@ -258,6 +258,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isValidForm: boolean = true;
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
+    /** Indicates whether the "Portal" tab is currently selected */
+    public isPortalSelectedTab: boolean = false;
+    /** Indicates whether the "Contact" tab is currently selected */
+    public isContactSelectedTab: boolean = false;
+    /** Stores the index of the currently active mobile number field under the Portal tab */
+    public isActivePortalMobileNumber: number = -1;
 
     constructor(
         private _fb: FormBuilder,
@@ -492,7 +498,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
-        let interval = setInterval(() => {
+        const interval = setInterval(() => {
             if (document.getElementById('init-contact-update')) {
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
@@ -621,6 +627,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTab = event.tab.textLabel;
+            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
+            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
@@ -785,17 +793,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         const lastIndex = mappings.controls.length - 1;
         const updateNumber = mobileNo;
 
-        let interval = setInterval(() => {
-            if (document.getElementById('init-contact-portal_' + (lastIndex))) {
-                this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
+        const interval = setInterval(() => {
+            if (document.getElementById('init-contact-portal_' + lastIndex)) {
+                this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
                 setTimeout(() => {
                     if (this.intl) {
-                        this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                        this.intl['init-contact-portal_' + lastIndex]?.setNumber(updateNumber ?? '');
                     }
                 }, 500);
             }
-        }, 2000);
+        }, 500);
     }
 
     /**
@@ -2147,7 +2155,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                     this.addNewPortalUser(item);
                                 });
                             } else {
-                                let mappings = this.addAccountForm.get('portalDomain') as FormArray;
+                                const mappings = this.addAccountForm.get('portalDomain') as FormArray;
                                 mappings.clear();
                                 this.addNewPortalUser();
                             }
