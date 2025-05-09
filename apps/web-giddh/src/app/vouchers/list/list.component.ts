@@ -2008,7 +2008,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response === this.commonLocaleData?.app_yes) {
+            if (response === this.commonLocaleData?.app_yes) {
                 this.actionVoucher(voucher, 'cancel');
             }
         });
