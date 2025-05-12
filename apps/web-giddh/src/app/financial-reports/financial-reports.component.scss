@@ -12,9 +12,11 @@
     }
 }
 
-:host ::ng-deep .uncheck-all-icon {
-    width: 20px;
-    height: 20px;
+:host ::ng-deep {
+    .uncheck-all-icon {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 @media only screen and (max-width: 767px) {

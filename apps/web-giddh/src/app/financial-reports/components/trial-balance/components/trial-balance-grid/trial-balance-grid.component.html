@@ -54,8 +54,9 @@
                                     [matTooltip]="commonLocaleData?.app_clear_selected"
                                     matTooltipPosition="before"
                                     (click)="uncheckAll(data$.groupDetails)"
+                                    aria-label="clear selection"
                                 >
-                                    <img src="assets/icon/deselect-all.svg" class="uncheck-all-icon" /> 
+                                    <img src="assets/icon/deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
                                 </button>
                                 <span class="pd-r1"
                                     ><strong>{{ localeData?.particular }}</strong></span

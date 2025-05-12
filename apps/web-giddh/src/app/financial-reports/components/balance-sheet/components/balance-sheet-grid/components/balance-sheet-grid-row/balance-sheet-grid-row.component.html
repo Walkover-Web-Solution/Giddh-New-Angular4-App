@@ -16,7 +16,7 @@
             (click)="$event.stopPropagation()"
         >
         </mat-checkbox>
-        <span [innerHTML]="groupDetail.groupName | uppercase | highlight : search"></span>
+        <span [innerHTML]="groupDetail?.groupName | uppercase | highlight : search"></span>
     </div>
     <div class="col-4 group text-right">
         <span>

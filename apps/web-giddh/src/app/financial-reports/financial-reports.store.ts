@@ -24,6 +24,13 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
     }
     public tailedReportIsSuccess$ = this.select((state) => state.tailedReportIsSuccess);
 
+    /**
+     * Tailed report account group
+     *
+     * @param {Observable<any>} data
+     * @returns {Observable<any>}
+     * @memberof FinancialReportsComponentStore
+     */
     readonly tailedReportAccountGroup = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -61,7 +68,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof LedgerComponentStore
+     * @memberof FinancialReportsComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();
