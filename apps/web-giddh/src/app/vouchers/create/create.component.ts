@@ -4893,8 +4893,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber || response.hsnNumber);
             entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
             entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
-
-            let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+            let rate = response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0;
+            if (this.invoiceForm.get('exchangeRate')?.value !== null) {
+                rate = Number((rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+            }
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
             transactionFormGroup.get('stock.skuCode')?.patchValue(response.stock.skuCode);
             transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);
@@ -5285,18 +5287,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let updateVoucherText = this.localeData?.update_invoice;
         let invoiceType = (
             this.invoiceType.isProformaInvoice ? this.localeData?.invoice_types?.proforma
-            : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
-            : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice
-            : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note
-            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note
-            : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase
-            : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
-            : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
-            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
-            : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
-            : this.invoiceType.isReceiptInvoice ? this.localeData?.invoice_types?.receipt
-            : this.invoiceType.isPaymentInvoice ? this.localeData?.invoice_types?.payment
-            : this.localeData?.invoice_types?.purchase_order);
+                : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
+                    : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice
+                        : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note
+                            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note
+                                : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase
+                                    : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
+                                        : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
+                                            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
+                                                : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
+                                                    : this.invoiceType.isReceiptInvoice ? this.localeData?.invoice_types?.receipt
+                                                        : this.invoiceType.isPaymentInvoice ? this.localeData?.invoice_types?.payment
+                                                            : this.localeData?.invoice_types?.purchase_order);
 
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);
