@@ -16,7 +16,7 @@
             [checked]="groupDetail?.checked"
             (click)="$event.stopPropagation()"
         ></mat-checkbox>
-        <span [innerHTML]="groupDetail.groupName | highlight : search"></span>
+        <span [innerHTML]="groupDetail?.groupName | highlight : search"></span>
     </div>
     <div class="col bd-rl group pull-right px-0" *ngIf="!groupDetail.level1">
         <span class="d-flex justify-content-between">
