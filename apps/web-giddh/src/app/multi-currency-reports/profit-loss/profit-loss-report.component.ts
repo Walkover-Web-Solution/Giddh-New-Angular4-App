@@ -62,7 +62,7 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                 if (cogs) {
                     let cogsGrp: ChildGroup = new ChildGroup();
                     cogsGrp.isCreated = true;
-                    cogsGrp.level1 = false;
+                    cogsGrp.level1 = true;
                     cogsGrp.isVisible = true;
                     cogsGrp.isIncludedInSearch = true;
                     cogsGrp.isOpen = false;

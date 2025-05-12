@@ -129,7 +129,6 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                         let childGroup = new ChildGroup();
                         childGroup.isCreated = false;
                         childGroup.isSelfCreatedGroup = true;
-                        childGroup.level1 = false;
                         childGroup.isVisible = false;
                         childGroup.isIncludedInSearch = true;
                         childGroup.isOpen = false;

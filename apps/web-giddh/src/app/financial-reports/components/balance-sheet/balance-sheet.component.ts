@@ -169,7 +169,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     /**
      * Handles the refresh even
      *
-     * @memberof ProfitLossComponent
+     * @memberof BalanceSheetComponent
      */
     public handleRefresh(): void {
         this.filterData(this.request);

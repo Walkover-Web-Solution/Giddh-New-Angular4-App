@@ -222,10 +222,11 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Unchecks all the accounts/groups in the grid
+     * Unchecks all the accounts/groups in the profit loss grid.
      *
-     * @param {any} groupAccountDetails group or account details
-     * @param {'group' | 'account'} [entityType='group'] type of entity
+     * @param {any} incArr - Array of income group/account details.
+     * @param {any} expArr - Array of expense group/account details.
+     * @param {'group' | 'account'} [entityType='group'] - Type of entity to uncheck.
      * @memberof ProfitLossGridComponent
      */
     public uncheckAll(incArr: any, expArr: any, entityType: 'group' | 'account' = 'group'): void {
@@ -259,7 +260,6 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                     checked: false
                 });
             }
-
             if (group.childGroups?.length) {
                 this.extractCheckedAccountsGroups(group.childGroups, 'group');
             }

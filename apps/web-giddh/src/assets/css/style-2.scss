@@ -6130,10 +6130,6 @@ input[type="checkbox"][disabled]:after {
     padding-left: 7px !important;
 }
 
-// .table-container .profit-loss section div > div {
-//     border-right: 0;
-// }
-
 .active-toggle-btn {
     color: var(--color-white) !important;
     background-color: var(--color-blue) !important;
@@ -13944,13 +13940,4 @@ mat-list {
 
 .w150 {
     width: 150px !important;
-}
-
-.tailed-row {
-    &:has(:not(.pl-sticky-group)){
-        background-color: var(--color-success-enable-bg-light) !important;
-    }
-    .pl-sticky-group, .account {
-        background-color: var(--color-success-enable-bg-light) !important;
-    }
 }

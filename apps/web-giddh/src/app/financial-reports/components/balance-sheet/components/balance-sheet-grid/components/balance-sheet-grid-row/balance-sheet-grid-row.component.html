@@ -4,7 +4,10 @@
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
     [ngClass]="{ 'isHidden': !groupDetail.isVisible, 'tailed-row': groupDetail.checked }"
 >
-    <div class="col-4 group d-flex align-items-center row-height" [style.padding-left]="padding + 'px !important'">
+    <div 
+        class="col-4 group d-flex align-items-center row-height" 
+        [style.padding-left]="padding + 'px !important'"
+    >
         <mat-checkbox
             color="primary"
             (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
@@ -68,7 +71,10 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section class="row-2 account pl-grid-row" [ngClass]="{ 'isHidden': !account.isVisible, 'tailed-row': account.checked }">
+    <section
+        class="row-2 account pl-grid-row"
+        [ngClass]="{ 'isHidden': !account.isVisible, 'tailed-row': account.checked }"
+    >
         <div class="row" (dblclick)="entryClicked(account)">
             <div
                 class="col-4 account d-flex align-items-center row-height"

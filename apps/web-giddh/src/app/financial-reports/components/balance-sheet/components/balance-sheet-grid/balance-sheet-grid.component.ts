@@ -178,11 +178,13 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
+    
     /**
-     * Unchecks all the accounts/groups in the grid
+     * Unchecks all the accounts/groups in the balance sheet grid.
      *
-     * @param {any} groupAccountDetails group or account details
-     * @param {'group' | 'account'} [entityType='group'] type of entity
+     * @param {any} liabilities - Array of liability group/account details.
+     * @param {any} assets - Array of asset group/account details.
+     * @param {'group' | 'account'} [entityType='group'] - Type of entity to uncheck.
      * @memberof BalanceSheetGridComponent
      */
     public uncheckAll(liabilities: any, assets: any, entityType: 'group' | 'account' = 'group'): void {
@@ -216,7 +218,6 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                     checked: false
                 });
             }
-
             if (group.childGroups?.length) {
                 this.extractCheckedAccountsGroups(group.childGroups, 'group');
             }

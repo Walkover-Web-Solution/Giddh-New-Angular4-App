@@ -114,12 +114,8 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
         if (this.isV2) {
-            console.log("request", request);
-
             this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
-            console.log("request", request);
-
             this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
         }
     }

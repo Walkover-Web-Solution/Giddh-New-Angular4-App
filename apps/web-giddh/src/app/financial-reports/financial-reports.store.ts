@@ -3,7 +3,6 @@ import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { ToasterService } from "../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
-import { LedgerService } from "../services/ledger.service";
 import { TlPlService } from "../services/tl-pl.service";
 
 export interface FinancialReportsState {
@@ -25,7 +24,6 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
     }
     public tailedReportIsSuccess$ = this.select((state) => state.tailedReportIsSuccess);
 
-    
     readonly tailedReportAccountGroup = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -60,12 +58,10 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
         );
     });
 
-
-
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof ContactComponentStore
+     * @memberof LedgerComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

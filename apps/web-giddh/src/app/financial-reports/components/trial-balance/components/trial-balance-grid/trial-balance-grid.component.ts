@@ -292,7 +292,6 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                     checked: false
                 });
             }
-
             if (group.childGroups?.length) {
                 this.extractCheckedAccountsGroups(group.childGroups, 'group');
             }
