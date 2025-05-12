@@ -127,7 +127,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (i === 0) {
                     Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
                         let childGroup = new ChildGroup();
-                        childGroup.isCreated = true;
+                        childGroup.isCreated = false;
+                        childGroup.isSelfCreatedGroup = true;
+                        childGroup.level1 = false;
                         childGroup.isVisible = false;
                         childGroup.isIncludedInSearch = true;
                         childGroup.isOpen = false;
@@ -143,7 +145,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                         }, {});
                         childGroup.accounts = [];
                         childGroup.childGroups = [];
-                        
+
                         if (['purchasesStockAmount', 'manufacturingExpenses'].includes(item)) {
                             childGroup.groupName = `+ ${childGroup.groupName}`;
                         } else if (['closingInventory', 'debitNoteStockAmount'].includes(item)) {
@@ -230,7 +232,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: ProfitLossRequest) {
+    /**
+     * This function is used to filter the profit and loss report data based on the given request object.
+     * 
+     * @param request The request object to filter the data with.
+     * @memberof ProfitLossComponent
+     */
+    public filterData(request: ProfitLossRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -284,5 +293,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof ProfitLossComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

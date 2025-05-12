@@ -57,6 +57,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public data$: AccountDetails;
     @Input() public expandAll: boolean;
     @Output() public searchChange = new EventEmitter<string>();
+    /** Refresh event emitter */
     @Output() public refresh = new EventEmitter<string>();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -103,7 +104,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.listOfCheckGroupsAccounts = [];
                 this.refresh.emit();
             }
-        })
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {

@@ -102,14 +102,20 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: TrialBalanceRequest) {
+    /**
+     * Filters the trial balance report based on the given request.
+     *
+     * @param request The request that contains the filter data.
+     * @memberof TrialBalanceComponent
+     */
+    public filterData(request: TrialBalanceRequest): void {
         this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
         if (this.isV2) {
             console.log("request", request);
-            
+
             this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
         } else {
             console.log("request", request);

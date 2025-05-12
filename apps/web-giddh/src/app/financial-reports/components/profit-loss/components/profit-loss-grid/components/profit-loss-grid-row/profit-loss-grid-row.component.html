@@ -2,14 +2,14 @@
     class="pl-grid-row row"
     [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
-    [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
+    [ngClass]="{ 'isHidden': !groupDetail.isVisible, 'tailed-row': groupDetail.checked }"
 >
     <div
         class="col-4 group pl-sticky-group d-flex align-items-center row-height"
         [style.padding-left]="padding + 'px !important'"
     >
         <mat-checkbox
-            *ngIf="!groupDetail.isCreated"
+            *ngIf="!groupDetail.level1 && !groupDetail?.isSelfCreatedGroup"
             color="primary"
             (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
             [(ngModel)]="groupDetail.checked"
@@ -98,8 +98,11 @@
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
     <section class="row-2 account" [ngClass]="{ 'isHidden': !account.isVisible }" (dblclick)="entryClicked(account)">
-        <div class="pl-grid-row row">
-            <div class="col-4 pl-sticky-group d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
+        <div class="pl-grid-row row" [ngClass]="{ 'tailed-row': account.checked }">
+            <div
+                class="col-4 pl-sticky-group d-flex align-items-center row-height"
+                [style.padding-left]="padding + 20 + 'px !important'"
+            >
                 <mat-checkbox
                     class="mr-l05"
                     color="primary"

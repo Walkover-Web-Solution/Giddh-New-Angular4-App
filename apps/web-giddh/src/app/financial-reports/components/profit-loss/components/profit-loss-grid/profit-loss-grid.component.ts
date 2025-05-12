@@ -43,6 +43,8 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public expandAll: boolean;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** Refresh event emitter */
+    @Output() public refresh = new EventEmitter<string>();
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
     public dayjs = dayjs;
     public plSearchControl: UntypedFormControl = new UntypedFormControl();
@@ -83,6 +85,13 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                     this.cd.detectChanges();
                 }, 10);
             });
+
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.listOfCheckGroupsAccounts = [];
+                this.refresh.emit();
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -219,8 +228,8 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      * @param {'group' | 'account'} [entityType='group'] type of entity
      * @memberof ProfitLossGridComponent
      */
-    public uncheckAll(groupAccountDetails: any, entityType: 'group' | 'account' = 'group'): void {
-        this.extractCheckedAccountsGroups(groupAccountDetails, entityType);
+    public uncheckAll(incArr: any, expArr: any, entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups([...incArr, ...expArr], entityType);
         setTimeout(() => {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {

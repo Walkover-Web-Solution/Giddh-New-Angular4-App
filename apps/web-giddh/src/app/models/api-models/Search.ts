@@ -57,6 +57,7 @@ export class ChildGroup {
     public level1?: boolean = false;
     public isOpen?: boolean = false;
     public checked?: boolean = false;
+    public isSelfCreatedGroup?: boolean = false;
 }
 
 export interface SearchResponse {
