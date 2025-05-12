@@ -9,6 +9,7 @@ import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, P
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { ReportType } from '../multi-currency-reports/multi-currency.const';
 
 @Injectable()
 export class TlPlService {
@@ -235,7 +236,7 @@ export class TlPlService {
       * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report creation.
       * @memberof TlPlService
       */
-    public creatMultiCurrencyReport(reportType: string, payload: any): Observable<BaseResponse<any, any>> {
+    public createMultiCurrencyReport(reportType: string, payload: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -243,6 +244,28 @@ export class TlPlService {
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Updates the tailed report for the given report type with the given account or group, either adding or removing it based on the value of the checked flag.
+     * 
+     * @param {string} reportType - The type of report to update (e.g., "TrialBalance", "ProfitLoss", "Balance Sheet").
+     * @param {any} payload - The payload data to send in the request, including the uniqueName of the account or group to add or remove, the entityType of the payload (either "account" or "group"), and the checked flag indicating whether to add or remove the account or group.
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report update.
+     * @memberof TlPlService
+     */
+    public tailedReportAccountGroup(reportType: typeof ReportType, payload: {uniqueName: string, entityType: 'account' | 'group', checked: boolean}[]): Observable<BaseResponse<any, any>> {
+        return this.http.post(
+            this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_ACCOUNT_GROUP
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':reportType', reportType?.toString())
+            , payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = payload;
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));

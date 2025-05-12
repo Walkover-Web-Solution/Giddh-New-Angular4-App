@@ -26,6 +26,7 @@
             [from]="from"
             [to]="to"
             (searchChange)="searchChanged($event)"
+            (refresh)="handleRefresh()"
             [expandAll]="expandAll"
             [bsData]="data"
         ></balance-sheet-grid>

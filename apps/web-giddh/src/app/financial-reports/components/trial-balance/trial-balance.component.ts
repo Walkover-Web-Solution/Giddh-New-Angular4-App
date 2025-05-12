@@ -102,7 +102,14 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: TrialBalanceRequest) {
+    /**
+     * Filters the trial balance report based on the given request.
+     *
+     * @param request The request that contains the filter data.
+     * @memberof TrialBalanceComponent
+     */
+    public filterData(request: TrialBalanceRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -130,5 +137,14 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof TrialBalanceComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

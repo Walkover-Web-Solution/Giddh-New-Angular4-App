@@ -30,7 +30,17 @@
                                                     [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
                                                     class="align-items-center"
                                                 >
-                                                    <span class="mr-l15 mr-1">{{ localeData?.account }}</span>
+                                                    <button
+                                                        mat-icon-button
+                                                        class="w-auto h-auto p-0 mr-l1 mr-1"
+                                                        [matTooltip]="commonLocaleData?.app_clear_selected"
+                                                        matTooltipPosition="before"
+                                                        (click)="uncheckAll(plData.incArr, plData.expArr)"
+                                                        aria-label="clear selection"
+                                                    >
+                                                        <img src="assets/icon/deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
+                                                    </button>
+                                                    <span class="mr-l05 mr-1">{{ localeData?.account }}</span>
                                                     <i class="icon-search" (click)="toggleSearch()"></i>
                                                 </div>
                                                 <div [hidden]="!showClearSearch">

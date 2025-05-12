@@ -17,16 +17,19 @@ import { UntypedFormControl } from '@angular/forms';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ProfitLossData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
 
 @Component({
     selector: 'profit-loss-grid',
     templateUrl: './profit-loss-grid.component.html',
     styleUrls: [`./profit-loss-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
 export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
@@ -40,6 +43,8 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public expandAll: boolean;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** Refresh event emitter */
+    @Output() public refresh = new EventEmitter<string>();
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
     public dayjs = dayjs;
     public plSearchControl: UntypedFormControl = new UntypedFormControl();
@@ -55,8 +60,10 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public hideData: boolean;
     /** True, when expand all button is toggled while search is enabled */
     public isExpandToggledDuringSearch: boolean;
+    /** List of check groups accounts */
+    private listOfCheckGroupsAccounts: any[] = [];
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
+    constructor(private cd: ChangeDetectorRef, private zone: NgZone, private financialReportsComponentStore: FinancialReportsComponentStore) {
 
     }
 
@@ -78,6 +85,13 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                     this.cd.detectChanges();
                 }, 10);
             });
+
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.listOfCheckGroupsAccounts = [];
+                this.refresh.emit();
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -205,5 +219,53 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             return [];
         }
+    }
+
+    /**
+     * Unchecks all the accounts/groups in the profit loss grid.
+     *
+     * @param {any} incArr - Array of income group/account details.
+     * @param {any} expArr - Array of expense group/account details.
+     * @param {'group' | 'account'} [entityType='group'] - Type of entity to uncheck.
+     * @memberof ProfitLossGridComponent
+     */
+    public uncheckAll(incArr: any, expArr: any, entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups([...incArr, ...expArr], entityType);
+        setTimeout(() => {
+            if (this.listOfCheckGroupsAccounts?.length) {
+                const model = {
+                    reportType: ReportType.ProfitLoss,
+                    payload: this.listOfCheckGroupsAccounts
+                };
+                this.financialReportsComponentStore.tailedReportAccountGroup(model);
+            }
+        }, 400);
+    }
+
+    /**
+     * Recursive function to extract checked accounts/groups and store it in listOfCheckGroupsAccounts.
+     * It loops through the groupAccountDetails array and checks if the account/group is checked.
+     * If checked, it adds the account/group to listOfCheckGroupsAccounts with checked set to false.
+     * Then it recursively calls itself on the childGroups and accounts of the group.
+     * @param groupAccountDetails array of account/group objects
+     * @param entityType type of entity, either 'group' or 'account'
+     * @memberof ProfitLossGridComponent
+     */
+    private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
+        groupAccountDetails.forEach(group => {
+            if (group.checked) {
+                this.listOfCheckGroupsAccounts.push({
+                    uniqueName: group.uniqueName,
+                    entityType,
+                    checked: false
+                });
+            }
+            if (group.childGroups?.length) {
+                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            }
+            if (group.accounts?.length) {
+                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            }
+        });
     }
 }

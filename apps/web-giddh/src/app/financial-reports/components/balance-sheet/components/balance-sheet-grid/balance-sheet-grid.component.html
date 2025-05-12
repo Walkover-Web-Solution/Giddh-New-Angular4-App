@@ -30,6 +30,16 @@
                                                     [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
                                                     class="d-flex align-items-center"
                                                 >
+                                                    <button
+                                                        mat-icon-button
+                                                        class="w-auto h-auto p-0 mr-l1 mr-1"
+                                                        [matTooltip]="commonLocaleData?.app_clear_selected"
+                                                        matTooltipPosition="before"
+                                                        (click)="uncheckAll(bsData.liabilities, bsData.assets)"
+                                                        aria-label="clear selection"
+                                                    >
+                                                        <img src="assets/icon/deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
+                                                    </button>
                                                     <span class="mr-l15 mr-1">{{ localeData?.particular }}</span>
                                                     <i class="icon-search" (click)="toggleSearch()"></i>
                                                 </div>
@@ -58,7 +68,7 @@
                                             >
                                                 {{
                                                     dayjs(bsData?.dates?.to, giddhDateFormat)?.toString()
-                                                        | date: "dd MMMM yyyy"
+                                                        | date : "dd MMMM yyyy"
                                                 }}</span
                                             >
                                         </th>
@@ -75,7 +85,7 @@
                                                 {{
                                                     dayjs(bsData?.dates?.from, giddhDateFormat)
                                                         .add(-1, "day")
-                                                        ?.toString() | date: "dd MMMM yyyy"
+                                                        ?.toString() | date : "dd MMMM yyyy"
                                                 }}</span
                                             >
                                         </th>
@@ -84,7 +94,7 @@
                             </table>
                             <!--Grid-->
                             <div class="m-10">
-                                <div >
+                                <div>
                                     <strong class="font-15">{{ localeData?.equity_liabilities }}</strong>
                                 </div>
                             </div>
@@ -116,7 +126,7 @@
                             <ng-container
                                 *ngTemplateOutlet="
                                     groupDetails;
-                                    context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }
+                                    context: { $implicit: bsData?.liabilities | financialSearch : search, padding: 10 }
                                 "
                             >
                             </ng-container>
@@ -157,7 +167,7 @@
                         <div class="clearfix profit-loss">
                             <!--Grid-->
                             <div class="m-10">
-                                <div >
+                                <div>
                                     <strong class="font-15">{{ localeData?.ii_assets }}</strong>
                                 </div>
                             </div>
@@ -187,7 +197,7 @@
                             <ng-container
                                 *ngTemplateOutlet="
                                     groupDetails;
-                                    context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }
+                                    context: { $implicit: bsData?.assets | financialSearch : search, padding: 10 }
                                 "
                             >
                             </ng-container>
