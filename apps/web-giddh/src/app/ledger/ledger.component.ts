@@ -19,7 +19,7 @@ import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -385,6 +385,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2, 2]  New Code
     /** True if update account is bank account */
     public isUpdateAccount: boolean = false;
+    /** Holds transaction type */
+    public transactionType: typeof TransactionType = TransactionType;
 
     constructor(
         private store: Store<AppState>,
@@ -888,11 +890,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 if (lt.periodClosingBalance) {
                     this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
+                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
                 }
                 if (lt.closingBalanceForBank) {
                     this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
-                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
+                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
                 }
                 let checkedEntriesName: any[];
                 if (this.ledgerView === LedgerViewEnum.TView) {
@@ -1568,14 +1570,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.ledgerView === LedgerViewEnum.StatementView) {
-                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT') || dropdown?.cssClass?.includes('CREDIT'));
+                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit) || dropdown?.cssClass?.includes(TransactionType.Credit));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
-                if (event?.type === 'DEBIT') {
-                    const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('DEBIT'));
+                if (event?.type === TransactionType.Debit) {
+                    const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit));
                     debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
                 } else {
-                    const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes('CREDIT'));
+                    const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Credit));
                     creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
                 }
             }
@@ -1624,12 +1626,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private setBlankLedgerTransactions(): void {
         if (this.ledgerView === LedgerViewEnum.StatementView) {
             this.lc.blankLedger.transactions = [
-                this.lc?.addNewTransaction('DEBIT')
+                this.lc?.addNewTransaction(TransactionType.Debit)
             ];
         } else {
             this.lc.blankLedger.transactions = [
-                this.lc?.addNewTransaction('DEBIT'),
-                this.lc?.addNewTransaction('CREDIT')
+                this.lc?.addNewTransaction(TransactionType.Debit),
+                this.lc?.addNewTransaction(TransactionType.Credit)
             ];
         }
     }
@@ -2143,7 +2145,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (val) {
                 this.closingBalanceBeforeReconcile = val.periodClosingBalance;
                 if (this.closingBalanceBeforeReconcile) {
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
+                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === TransactionType.Credit ? this.localeData?.cr : this.localeData?.dr;
                 }
             }
         });
@@ -2709,7 +2711,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         const currentLedgerSecondParent: any = this.lc.activeAccount.parentGroups[1]?.uniqueName ?? this.lc.activeAccount.parentGroups[1];
         const selectedAccountSecondParent: any = transaction?.selectedAccount.parentGroups[1]?.uniqueName ?? transaction?.selectedAccount.parentGroups[1];
         this.checkTouristSchemeApplicable(currentLedgerSecondParent, selectedAccountSecondParent);
-        if (currentLedgerSecondParent === 'reversecharge' && transaction?.type === 'CREDIT') {
+        if (currentLedgerSecondParent === 'reversecharge' && transaction?.type === TransactionType.Credit) {
             // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
             if (selectedAccountSecondParent === 'dutiestaxes') {
                 /* Particular account belongs to the Duties and taxes then check the country based on which
@@ -2721,7 +2723,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.shouldShowItcSection = true;
                 }
             }
-        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction?.type === 'DEBIT') {
+        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction?.type === TransactionType.Debit) {
             // Current ledger is of Duties and taxes and user has entered the transaction on the left side (DEBIT) of the ledger
             if (selectedAccountSecondParent === 'reversecharge') {
                 /* Particular account belongs to the Reverse charge then check the country based on which
