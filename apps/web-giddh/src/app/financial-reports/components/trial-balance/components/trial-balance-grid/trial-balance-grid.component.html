@@ -48,6 +48,15 @@
                                 [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
                                 class="align-items-center"
                             >
+                                <button
+                                    mat-icon-button
+                                    class="w-auto h-auto p-0 mr-l1 mr-1"
+                                    [matTooltip]="commonLocaleData?.app_clear_selected"
+                                    matTooltipPosition="before"
+                                    (click)="uncheckAll(data$.groupDetails)"
+                                >
+                                    <img src="assets/icon/deselect-all.svg" class="uncheck-all-icon" /> 
+                                </button>
                                 <span class="pd-r1"
                                     ><strong>{{ localeData?.particular }}</strong></span
                                 >
@@ -150,7 +159,7 @@
                         *ngTemplateOutlet="
                             groupDetails;
                             context: {
-                                $implicit: data$.groupDetails | financialSearch: search,
+                                $implicit: data$.groupDetails | financialSearch : search,
                                 padding: 8,
                                 tbfrom: from,
                                 tbto: to

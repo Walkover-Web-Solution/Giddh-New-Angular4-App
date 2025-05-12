@@ -74,15 +74,15 @@ export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurr
     /**
      * Creates the multi-currency report.
      * 
-     * It triggers the `creatMultiCurrencyReport` method from the `TlPlService`, handles the response, and shows appropriate toasts.
+     * It triggers the `createMultiCurrencyReport` method from the `TlPlService`, handles the response, and shows appropriate toasts.
      * 
      * @readonly
      * @memberof MultiCurrencyReportsComponentStore
      */
-    readonly creatMultiCurrencyReport = this.effect((data: Observable<any>) => {
+    readonly createMultiCurrencyReport = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.TlPlService.creatMultiCurrencyReport(req.reportType, req.payload).pipe(
+                return this.TlPlService.createMultiCurrencyReport(req.reportType, req.payload).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res.body?.file) {

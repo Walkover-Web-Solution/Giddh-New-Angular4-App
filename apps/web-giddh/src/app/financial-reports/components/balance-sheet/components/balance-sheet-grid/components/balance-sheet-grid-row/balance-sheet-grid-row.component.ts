@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
+import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 
 @Component({
     selector: '[balance-sheet-grid-row]',
     templateUrl: './balance-sheet-grid-row.component.html',
     styleUrls: [`./balance-sheet-grid-row.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
 export class BalanceSheetGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
@@ -26,7 +30,7 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     /** Hold current url */
     private currentUrl: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private router: Router) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore) {
         this.currentUrl = this.router.url;
     }
 
@@ -38,7 +42,7 @@ export class BalanceSheetGridRowComponent implements OnChanges {
             this.cd.detectChanges();
         }
     }
-    
+
     /**
      *  This will be redirect to ledger
      *
@@ -74,5 +78,21 @@ export class BalanceSheetGridRowComponent implements OnChanges {
      */
     public trackByFn(index, item: Account): string {
         return item?.uniqueName;
+    }
+
+    /**
+     * Call tailed report api with given account/group unique name
+     * 
+     * @param event MatCheckboxChange event
+     * @param accountGroupUniqueName Unique name of account/group
+     * @param entityType Type of the entity, either 'account' or 'group'
+     * @memberof BalanceSheetGridRowComponent
+     */
+    public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
+        const model = {
+            reportType: ReportType.BalanceSheet,
+            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
+        };
+        this.financialReportsComponentStore.tailedReportAccountGroup(model);
     }
 }
