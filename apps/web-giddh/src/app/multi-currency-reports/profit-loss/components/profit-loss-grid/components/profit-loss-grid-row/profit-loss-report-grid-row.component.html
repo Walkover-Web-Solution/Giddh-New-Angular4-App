@@ -12,7 +12,7 @@
     <div class="col-8 bd-rl group pull-right" *ngIf="!groupDetail.level1">
         <div class="row">
             <span
-                class="col text-right px-0 pd-r15 text-info"
+                class="col bd-rl text-right px-0 pd-r15"
                 [ngClass]="{
                     'invisible':
                         groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
@@ -43,16 +43,6 @@
                     </amount-field>
                 </span>
             </span>
-            <!-- <span class="col-sm-6 col-12 invisible">
-                <span class="d-inline-flex">
-                    <amount-field
-                        [amount]="groupDetail.closingBalance.amount"
-                        [currencySymbol]="false"
-                        [currencyCode]="false"
-                    >
-                    </amount-field>
-                </span>
-            </span> -->
         </div>
     </div>
     <div class="col-8 bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
@@ -95,7 +85,7 @@
             ></div>
             <div class="col-8 bd-rl text-left pull-right">
                 <div class="row d-flex">
-                    <span class="col text-right px-0 pd-r15 text-info">
+                    <span class="col text-right px-0 pd-r15">
                         <span
                             *ngIf="
                                 account.category === 'income' &&
@@ -121,32 +111,6 @@
                             </amount-field>
                         </span>
                     </span>
-                    <!-- <span class="col-sm-6 col-12 invisible">
-                        <span
-                            *ngIf="
-                                account.category === 'income' &&
-                                account.closingBalance.type === 'DEBIT' &&
-                                account.closingBalance.amount !== 0
-                            "
-                            >-</span
-                        >
-                        <span
-                            *ngIf="
-                                account.category === 'expenses' &&
-                                account.closingBalance.type === 'CREDIT' &&
-                                account.closingBalance.amount !== 0
-                            "
-                            >-</span
-                        >
-                        <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="account.closingBalance.amount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </span> -->
                 </div>
             </div>
         </div>

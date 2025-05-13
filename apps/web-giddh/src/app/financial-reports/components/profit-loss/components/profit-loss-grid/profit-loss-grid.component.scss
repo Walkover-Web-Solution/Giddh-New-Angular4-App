@@ -84,6 +84,11 @@
 
 .pl-content-width {
     min-width: 275px;
+    min-height: 38px;
+}
+
+.row-height {
+    min-height: 38px;
 }
 
 @media (max-width: 1024px) {
