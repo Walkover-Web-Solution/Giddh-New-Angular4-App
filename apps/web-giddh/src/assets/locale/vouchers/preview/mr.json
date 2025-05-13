@@ -369,5 +369,6 @@
     "apply_purchase_round_off": "खरेदी व्हाउचरवर राउंड ऑफ लागू करा",
     "generate_auto_purchase_number":"बिल आणि डेबिट नोटसाठी सिस्टम जनरेट केलेल्या नंबरला अनुमती द्या",
     "new_receipt": "+ नवीन पावती",
-    "new_payment": "+ नवीन भरणा"
+    "new_payment": "+ नवीन भरणा",
+    "cancel_voucher_confirmation_message": "तुम्हाला खात्री आहे की तुम्ही हा व्हाउचर रद्द करू इच्छिता?"
 }
