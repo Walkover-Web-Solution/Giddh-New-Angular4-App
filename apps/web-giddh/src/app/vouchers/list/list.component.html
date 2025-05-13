@@ -1816,9 +1816,6 @@
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
-                                {{ commonLocaleData?.app_export }}
-                            </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
@@ -2961,6 +2958,7 @@
                 </div>
             </mat-tab>
             <!-- receipt-content-end -->
+
             <!-- payment-content-start -->
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
@@ -3251,6 +3249,7 @@
                 </div>
             </mat-tab>
             <!-- payment-content-end -->
+
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 3 || activeTabGroup === 4">
                 <div *ngIf="activeModule === 'pending'">
@@ -3297,9 +3296,6 @@
                                     <span class="icon-cross font-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
-                            </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
-                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
@@ -3472,6 +3468,7 @@
                 </div>
             </mat-tab>
             <!-- pending-content-end -->
+
             <!-- setting-content-start -->
             <!-- ===== HIDE THIS TAB FOR NOW ===== -->
             <mat-tab
@@ -4905,6 +4902,7 @@
             <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
         </div>
     </div>
+    
     <!-- table-search -->
     <ng-template
         #searchTemplate
@@ -4937,6 +4935,7 @@
             </div>
         </div>
     </ng-template>
+
     <!-- Universal Datepicker  -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
