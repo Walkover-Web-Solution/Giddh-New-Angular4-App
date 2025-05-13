@@ -2007,6 +2007,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
                 this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
+            } else {
+                this.invoiceForm.get('exchangeRate').patchValue(1);
             }
 
             let defaultAddress = null;
@@ -2366,6 +2368,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.bulkStockAsideMenuRef = this.dialog.open(AddBulkItemsComponent, {
             data: {
                 voucherType: this.voucherType,
+                exchangeRate: this.invoiceForm.get('exchangeRate')?.value ?? 1,
                 customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value
             }
         });
@@ -4925,11 +4928,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber || response.hsnNumber);
             entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
             entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
-            let rate = response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0;
-            if (this.invoiceForm.get('exchangeRate')?.value !== null) {
-                rate = Number((rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
-            }
+
+            const rate = Number(((response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) / (this.invoiceForm.get('exchangeRate')?.value ?? 1)).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
+            console.log(rate);
+            console.log(transactionFormGroup.get('stock.rate.rateForAccount')?.value);
+
             transactionFormGroup.get('stock.skuCode')?.patchValue(response.stock.skuCode);
             transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);
             transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
