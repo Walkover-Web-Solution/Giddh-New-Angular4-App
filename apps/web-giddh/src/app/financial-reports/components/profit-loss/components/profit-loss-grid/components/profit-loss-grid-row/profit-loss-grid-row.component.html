@@ -5,7 +5,7 @@
     [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
-        class="col-4 group pl-sticky-group hero"
+        class="col-4 group pl-sticky-group"
         [innerHTML]="groupDetail.groupName | highlight : search"
         [ngStyle]="{ 'padding-left': padding + 'px' }"
     ></div>
@@ -45,7 +45,7 @@
                 </ng-container>
             <ng-template #elseBlock>
                 <ng-container *ngFor="let key of plHeaders">
-                    <span class="col text-right py-2 px-0 pd-r15 bd-rl row-height">&nbsp;</span>
+                    <span class="col py-2 px-0 bd-rl row-height">&nbsp;</span>
                 </ng-container>
             </ng-template>
         </span>
