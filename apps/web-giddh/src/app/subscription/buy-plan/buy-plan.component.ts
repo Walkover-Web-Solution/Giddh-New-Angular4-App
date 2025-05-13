@@ -1630,7 +1630,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         try {
-            this.razorpay = new window['Razorpay']((request?.duration === 'MONTHLY' && request?.region?.code !== 'GBR')
+            this.razorpay = new window['Razorpay'](((request?.duration === 'MONTHLY' || request?.duration === 'DAILY') && request?.region?.code !== 'GBR')
                 ? razorpayRecurringSubscriptionConfig : options);
             setTimeout(() => { this.razorpay?.open(); }, 100);
         } catch { }
