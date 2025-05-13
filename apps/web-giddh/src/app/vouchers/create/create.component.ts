@@ -786,8 +786,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-
             if (response) {
                 if (!response.isCopyVoucher) {
                     if (response?.cashVoucher) {
@@ -880,7 +878,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entriesFormArray.clear();
 
                 response.entries?.forEach((entry: any, index: number) => {
-                    console.log(entry, index);
                     if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
                         this.invoiceForm.get('isAdvanceReceipt').patchValue((entry.subVoucher === SubVoucher.AdvanceReceipt) ? true : false);
                         this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
@@ -931,8 +928,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
-                console.log('invoiceF', this.invoiceForm);
-
                 this.checkIfEntriesHasStock();
 
                 this.startLoader(false);
@@ -1083,8 +1078,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log('ledger', response);
-
             if (response) {
                 response?.forEach((entry, entryIndex) => {
                     let item = entry.transactions[0];
@@ -2006,7 +1999,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-        
+
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
@@ -2209,8 +2202,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getEntriesFormGroup(entryData?: any, copyUniqueName: boolean = true): FormGroup {
-        console.log('entryData', entryData);
-
         let voucherDate = "";
 
         if (typeof (this.invoiceForm?.get('date')?.value) === "object") {
@@ -3526,7 +3517,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      * @param {any} event using for pinCode and gstNumber
      * @returns {void}
-     * 
+     *
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
