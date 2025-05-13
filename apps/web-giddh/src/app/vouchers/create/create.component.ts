@@ -1982,15 +1982,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.showAccountTaxTypeByCountry(accountData.country?.countryCode);
 
-        let isPartyTypeSez = false;
-        if (accountData?.addresses?.length > 0) {
-            accountData.addresses.forEach(address => {
-                if (address.partyType && address.partyType.toLowerCase() === "sez") {
-                    isPartyTypeSez = true;
-                }
-            });
-        }
-
         if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && this.account?.baseCurrency !== accountData.currency) {
             this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
@@ -2003,8 +1994,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
-        this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
-
+        this.account.excludeTax = !this.showTaxColumn;
+        
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
