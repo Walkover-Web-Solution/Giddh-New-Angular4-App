@@ -4899,9 +4899,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             const rate = Number(((response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) / (this.invoiceForm.get('exchangeRate')?.value ?? 1)).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
-            console.log(rate);
-            console.log(transactionFormGroup.get('stock.rate.rateForAccount')?.value);
-
             transactionFormGroup.get('stock.skuCode')?.patchValue(response.stock.skuCode);
             transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);
             transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
