@@ -1995,12 +1995,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle cancel Voucher Dialog
+     * Handle Cancel Voucher Dialog
      *
      * @param {*} voucher
      * @memberof VoucherListComponent
      */
-    public cancelVoucherDialog(voucher: any): void {
+    public openCancelVoucherDialog(voucher: any): void {
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {

@@ -1047,7 +1047,7 @@
                                             <button mat-menu-item (click)="actionVoucher(element, 'hold')">
                                                 {{ commonLocaleData?.app_payment_status?.hold }}
                                             </button>
-                                            <button mat-menu-item (click)="cancelVoucherDialog(element)">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                                             </button>
                                             <button mat-menu-item (click)="showEwayBillDialog(element)">
@@ -1392,7 +1392,7 @@
                                             <button mat-menu-item (click)="showPaymentDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                             </button>
-                                            <button mat-menu-item (click)="cancelVoucherDialog(element)">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                                             </button>
                                             <button mat-menu-item (click)="deleteVoucherDialog(element)">
@@ -1729,7 +1729,7 @@
                                             <button mat-menu-item (click)="showPaymentDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                             </button>
-                                            <button mat-menu-item (click)="cancelVoucherDialog(element)">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                                             </button>
                                             <button mat-menu-item (click)="deleteVoucherDialog(element)">
