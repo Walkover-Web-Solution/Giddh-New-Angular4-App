@@ -879,7 +879,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 response.entries?.forEach((entry: any, index: number) => {
                     if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
-                        this.invoiceForm.get('isAdvanceReceipt').patchValue((entry.subVoucher === SubVoucher.AdvanceReceipt) ? true : false);
+                        this.invoiceForm.get('isAdvanceReceipt').patchValue(entry.subVoucher === SubVoucher.AdvanceReceipt);
                         this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
                         this.invoiceForm.get("chequeNumber")?.patchValue(entry?.chequeNumber);
                     }
