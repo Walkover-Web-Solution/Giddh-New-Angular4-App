@@ -392,10 +392,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         if (ev) {
             if (ev.value === '0') {
                 this.selectFinancialYearOption(this.financialOptions[0]);
-            } else {
-                this.filterForm?.patchValue({
-                    from: dayjs(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
-                    to: dayjs(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
+            } else {      
+                        this.filterForm?.patchValue({
+                    from: dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT)
                 });
             }
         }
