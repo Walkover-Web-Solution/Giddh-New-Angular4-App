@@ -311,7 +311,7 @@
                                     [type]="'text'"
                                     #gstNumberField
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
-                                    (onChange)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
+                                    (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                 >
                                 </input-field>
                             </div>
@@ -468,7 +468,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor"
+                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && !isPortalHide"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div

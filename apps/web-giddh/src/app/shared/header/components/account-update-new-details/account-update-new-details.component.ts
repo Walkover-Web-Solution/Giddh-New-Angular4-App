@@ -75,6 +75,7 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
+    @Input() public isPortalHide: boolean = false;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
