@@ -222,8 +222,9 @@
         </div>
 
         <mat-tab-group
-            #staticTabs
             mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            [disablePagination]=true
             (selectedTabChange)="tabChanged($event)"
         >
             <mat-tab

@@ -20,7 +20,7 @@ import { PageLeaveUtilityService } from '../../services/page-leave-utility.servi
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Indicates whether the portal section should be hidden*/
+    /** Indicates whether the portal section should be hidden */
     @Input() public isPortalHide: boolean = false;
     @Input() public activeGroupUniqueName: string;
     @Input() public isUpdateAccount: boolean;

@@ -18,7 +18,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     /** This will hold group unique name */
     @Input() public selectedGroupUniqueName: string;
     @Input() public selectedAccountUniqueName: string;
-    /** Indicates whether the portal section should be hidden*/
+    /** Indicates whether the portal section should be hidden */
     @Input() public isPortalHide: boolean = false;
     /** True if creating account from cmd+k */
     @Input() public createAccountFromCommandK: boolean;

@@ -64,7 +64,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
-    /** Indicates whether the portal section should be hidden*/
+    /** Indicates whether the portal section should be hidden */
     @Input() public isPortalHide: boolean = false;
     /** True when this component is used in ledger, required as ledger skips the
      * top level hierarchy groups for creation of new account
