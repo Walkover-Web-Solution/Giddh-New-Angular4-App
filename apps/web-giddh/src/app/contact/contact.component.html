@@ -552,7 +552,7 @@
     <div *ngIf="accountAsideMenuState === 'in'">
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
-            [isPortalHide]="activeTab == 'vendor'"
+            [isPortalHide]="activeTab === 'vendor'"
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="isUpdateAccount"
             class="account-aside-menu-state transform-inherit"
