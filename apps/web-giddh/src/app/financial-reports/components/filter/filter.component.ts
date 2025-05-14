@@ -315,6 +315,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
                 this.toDate = financialYear.financialYearEnds;
                 this.fromDate = financialYear.financialYearStarts;
+                this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
             }
         } else {
             this.filterForm?.patchValue({
