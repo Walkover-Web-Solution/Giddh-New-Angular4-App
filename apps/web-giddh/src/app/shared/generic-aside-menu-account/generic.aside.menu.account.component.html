@@ -18,6 +18,7 @@
                 <account-add-new-details
                     [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)"
+                    [isPortalHide]="isPortalHide"
                     [createAccountInProcess$]="createAccountInProcess$"
                     [isDebtorCreditor]="isDebtorCreditor"
                     [isBankAccount]="isBankAccount"
@@ -36,6 +37,7 @@
             <ng-container *ngIf="selectedAccountUniqueName && activeGroupUniqueName && !createAccountFromCommandK">
                 <account-update-new-details
                     [activeGroupUniqueName]="activeGroupUniqueName"
+                    [isPortalHide]="isPortalHide"
                     [createAccountInProcess$]="createAccountInProcess$"
                     [updateAccountInProcess$]="updateAccountInProcess$"
                     [isGstEnabledAcc]="isGstEnabledAcc"
@@ -53,6 +55,7 @@
             <ng-container *ngIf="createAccountFromCommandK">
                 <account-add-new-details
                     [activeGroupUniqueName]="activeGroupUniqueName"
+                    [isPortalHide]="isPortalHide"
                     (isGroupSelected)="isGroupSelected($event)"
                     [createAccountInProcess$]="createAccountInProcess$"
                     [isDebtorCreditor]="isDebtorCreditor"

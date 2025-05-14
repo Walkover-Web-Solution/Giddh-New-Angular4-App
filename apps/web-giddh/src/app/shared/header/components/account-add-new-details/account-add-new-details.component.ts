@@ -64,6 +64,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
+    /** Indicates whether the portal section should be hidden */
+    @Input() public isPortalHide: boolean = false;
     /** True when this component is used in ledger, required as ledger skips the
      * top level hierarchy groups for creation of new account
      */
@@ -101,9 +103,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
     @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
-    /** Tabs instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
@@ -375,14 +374,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
-                        if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
-                            return;
-                        } else {
-                            user?.get('name').setValue(response?.attentionTo);
-                            user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(mobileNo);
-                            user?.get('default').setValue(true);
-                        }
+                        user?.get('name').setValue(response?.attentionTo);
+                        user?.get('email').setValue(response?.email);
+                        user?.get('contactNo').setValue(mobileNo);
+                        user?.get('default').setValue(true);
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
@@ -397,6 +392,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             this.addNewPortalUser(data);
                         }
                     }
+                    this.changeDetectorRef.detectChanges();
                 }
                 if (this.formValueAssigned && response) {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
@@ -459,6 +455,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
                     addresses?.get('stateCode')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
                     addresses?.get('state').get('code')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
+                    addresses?.get('state').get('name')?.patchValue(this.activeCompany?.addresses[0]?.stateName);
                 }, 500);
             }
         }
@@ -1603,13 +1600,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     private showHideAddressTab(): void {
         if (!this.isHsnSacEnabledAcc) {
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
@@ -1622,13 +1612,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 loop++;
             }
             addresses.push(this.initialGstDetailsForm());
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
     }
 

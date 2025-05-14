@@ -75,6 +75,8 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
+    /** Indicates whether the portal section should be hidden */
+    @Input() public isPortalHide: boolean = false;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
@@ -97,8 +99,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** Instance of delete account modal */
     @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: TemplateRef<any>;
     @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
-    /** Tabs instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -425,14 +425,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                     if (user) {
                         if (!this.isPortalDefault) {
-                            if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
-                                return;
-                            } else {
-                                user?.get('name').setValue(response?.attentionTo);
-                                user?.get('email').setValue(response?.email);
-                                user?.get('contactNo').setValue(mobileNo);
-                                user?.get('default').setValue(true);
-                            }
+                            user?.get('name').setValue(response?.attentionTo);
+                            user?.get('email').setValue(response?.email);
+                            user?.get('contactNo').setValue(mobileNo);
+                            user?.get('default').setValue(true);
                         }
                     } else {
                         let setValue = false;
@@ -453,6 +449,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.addNewPortalUser(data);
                         }
                     }
+                    this.changeDetectorRef.detectChanges();
                 }
                 if (this.formValueAssigned && response) {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
@@ -2055,26 +2052,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     private showHideAddressTab(): void {
         if (!this.isHsnSacEnabledAcc) {
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
             this.addAccountForm.get('addresses').reset();
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
     }
 

@@ -20,6 +20,7 @@
                         #addAccountNewComponent
                         *ngIf="activeGroupUniqueName && !isUpdateAccount"
                         class="mr-t4"
+                        [isPortalHide]="isPortalHide"
                         [activeGroupUniqueName]="activeGroupUniqueName"
                         [isDebtorCreditor]="isDebtorCreditor"
                         [createAccountInProcess$]="createAccountInProcess$"
@@ -35,6 +36,7 @@
                     <account-update-new-details
                         *ngIf="activeGroupUniqueName && isUpdateAccount"
                         [activeGroupUniqueName]="activeGroupUniqueName"
+                        [isPortalHide]="isPortalHide"
                         [isGstEnabledAcc]="isGstEnabledAcc"
                         [activeAccount$]="activeAccount$"
                         [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
