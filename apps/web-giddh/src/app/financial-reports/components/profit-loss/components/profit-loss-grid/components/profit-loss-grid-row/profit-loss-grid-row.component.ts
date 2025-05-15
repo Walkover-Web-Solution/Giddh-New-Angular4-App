@@ -18,6 +18,8 @@ export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public incomeStatement: any;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** Profit loss headers array */
+    @Input() public plHeaders: any[];
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
