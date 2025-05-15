@@ -76,7 +76,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     /** Indicates whether the portal section should be hidden */
-    @Input() public isPortalHide: boolean = false;
+    public isPortalShow: boolean = false;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
@@ -457,6 +457,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
+        this.isPortalShow = this.activeGroupUniqueName === 'sundrydebtors';
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });

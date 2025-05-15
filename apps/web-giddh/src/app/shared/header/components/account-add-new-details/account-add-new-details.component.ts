@@ -65,7 +65,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
     /** Indicates whether the portal section should be hidden */
-    @Input() public isPortalHide: boolean = false;
+    public isPortalShow: boolean = false;
     /** True when this component is used in ledger, required as ledger skips the
      * top level hierarchy groups for creation of new account
      */
@@ -296,6 +296,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
                     this.showHideAddressTab();
+                    this.showHidePortalTab(response.parentGroups);
                 }
             }
         });
@@ -488,6 +489,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }, 2000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
+        this.isPortalShow = activegroupName === 'sundrydebtors';
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
             if (activegroupName === 'sundrycreditors') {
                 this.showBankDetail = true;
@@ -1612,6 +1614,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             addresses.push(this.initialGstDetailsForm());
         }
+    }
+
+    /**
+     * This will show/hide portal tab depending on parent group
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private showHidePortalTab(parentGroups): void {
+        parentGroups.forEach((parentGroup)=>{
+
+        })
     }
 
     /**
