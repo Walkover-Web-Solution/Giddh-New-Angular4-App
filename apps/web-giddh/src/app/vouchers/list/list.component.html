@@ -989,8 +989,13 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button *ngIf="dataSource?.length" mat-stroked-button color="primary"
-                                (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                (click)="showBulkExportDialog()"
+                            >
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
