@@ -460,6 +460,15 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px !important;
 }
+.column-gap3 {
+    column-gap: 30px !important;
+}
+.column-gap4 {
+    column-gap: 40px !important;
+}
+.column-gap5 {
+    column-gap: 50px !important;
+}
 .row-gap5 {
     row-gap: 5px !important;
 }
@@ -479,6 +488,9 @@ aside-menu-account .container-fluid {
 }
 .border-none {
     border: none;
+}
+.border-color-transparent {
+    border-color: var(--color-transparent-background) !important;
 }
 .border-top-none {
     border-top: none !important;
