@@ -61,14 +61,14 @@
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
-                        <div class="cr-dr-account">
+                        <div class="form-group">
                             <div
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
-                                class="obj-gap"
                             >
                                 <input-field
                                     [name]="'number'"
                                     [cssClass]="'text-right'"
+                                    [ngClass]="{ 'w100': addAccountForm.get('openingBalance')?.value > 0 }"
                                     #autoFocusUpdate
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
@@ -80,7 +80,7 @@
                                 >
                                 </input-field>
                                 <div
-                                    class="input-group-addon"
+                                    class="input-group-addon d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -94,7 +94,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon"
+                                    class="input-group-addon d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -127,12 +127,12 @@
                     <div class="form-group col-xs-12 col-sm-4">
                         <div
                             [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
-                            class="obj-gap"
                         >
                             <input-field
                                 [name]="'number'"
                                 [cssClass]="'text-right'"
                                 [label]="localeData?.foreign_opening_balance"
+                                [ngClass]="{ 'w100': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [placeholder]="'0.00'"
                                 [type]="'number'"
                                 formControlName="foreignOpeningBalance"
@@ -142,7 +142,7 @@
                             >
                             </input-field>
                             <div
-                                class="input-group-addon"
+                                class="input-group-addon d-flex align-item-center"
                                 (click)="openingBalanceTypeChanged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
@@ -153,7 +153,7 @@
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
                             <div
-                                class="input-group-addon"
+                                class="input-group-addon d-flex align-item-center"
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
@@ -230,6 +230,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.address"
                 class="gstin-address"
+                *ngIf="!isHsnSacEnabledAcc"
             >
                 <div class="pd-t15 pd-b2 overflow-hidden" formArrayName="addresses">
                     <ng-container
@@ -404,7 +405,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                class="add-address-btn add-new-btn"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
                             > + {{ localeData?.add_address }}
                             </button>
@@ -469,7 +469,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && !isPortalHide"
+                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && isPortalShow"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
@@ -686,7 +686,6 @@
 
                         <div class="form-group col-sm-6">
                             <div
-                                class="input-group"
                                 [ngClass]="{
                                     'input-group': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                 }"
@@ -709,7 +708,7 @@
                                 >
                                 </input-field>
                                 <div
-                                    class="input-group-addon"
+                                    class="input-group-addon d-flex align-item-center"
                                     (click)="closingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -721,7 +720,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon"
+                                    class="input-group-addon d-flex align-item-center"
                                     (click)="closingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -1016,7 +1015,7 @@
 
         <!-- taxes container -->
         <ng-container *ngIf="isTaxableAccount$ | async">
-            <div class="row" *ngIf="selectedTab === 'others'">
+            <div class="row" *ngIf="isOtherSelectedTab">
                 <div class="col-sm-12">
                     <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                         <div class="tax-label">
