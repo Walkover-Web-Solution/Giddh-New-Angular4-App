@@ -296,7 +296,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
                     this.showHideAddressTab();
-                    this.showHidePortalTab(response.parentGroups);
                 }
             }
         });
@@ -1615,17 +1614,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             addresses.push(this.initialGstDetailsForm());
         }
-    }
-
-    /**
-     * This will show/hide portal tab depending on parent group
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    private showHidePortalTab(parentGroups): void {
-        parentGroups.forEach((parentGroup)=>{
-
-        })
     }
 
     /**
