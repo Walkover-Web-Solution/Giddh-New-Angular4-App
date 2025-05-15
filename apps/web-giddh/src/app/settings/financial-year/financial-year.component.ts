@@ -50,6 +50,10 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['number', 'from', 'to', 'status'];
     /** Holds Table Data to display */
     public dataSource: any[];
+    /** Holds true to show add new financial year dropdown */
+    public fyAddNewDropdownIsOpen: boolean = false;
+    /** Holds true to show change financial year period dropdown */
+    public fyPeriodDropdownIsOpen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -90,6 +94,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             this.setYearRange();
             if (o) {
                 this.financialYearObj = cloneDeep(o);
+                this.selectedFYPeriod = this.financialYearObj.financialYearPeriod;
+                this.fyAddNewDropdownIsOpen = false;
+                this.fyPeriodDropdownIsOpen = false;
                 let yearOptions = cloneDeep(this.yearOptions);
                 o.financialYears.forEach((fyear) => {
                     let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
@@ -98,6 +105,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                         yearOptions.splice(yearIndx, 1);
                     }
                 });
+                this.formatDateInFinancialYear(yearOptions);
                 this.yearOptions = cloneDeep(yearOptions);
             } else if (isNull(o)) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
@@ -106,11 +114,31 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Formats the given yearOptions to display the financial year period.
+     *
+     * @param yearOptions The year options to be formatted.
+     * @returns The formatted year options.
+     * @memberof FinancialYearComponent
+     */
+    private formatDateInFinancialYear(yearOptions: IOption[]): IOption[] {
+        if (yearOptions.length === 0) {
+            return [];
+        }
+
+        const financialYearPeriods: string[] = this.selectedFYPeriod.split('-');
+        return yearOptions.map(option => {
+            const year = option.value;
+            option.label = `${financialYearPeriods[0]} ${year} - ${financialYearPeriods[1]} ${year + 1}`;
+            return option;
+        });
+    }
+    
+    /**
      * Lock Unlock Financial Year
      *
      * @memberof FinancialYearComponent
      */
-    public lockUnlockFinancialYear(financialYear: ActiveFinancialYear): void {
+    public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
         if (financialYear) {
             let year = cloneDeep(financialYear);
             let dataToSend = {
