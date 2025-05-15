@@ -113,8 +113,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
-
-
     /**
      * Formats the given yearOptions to display the financial year period.
      *
