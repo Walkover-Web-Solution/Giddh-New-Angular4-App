@@ -2926,14 +2926,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.generalService.getSelectedFile(file, (blob: any, file: any) => {
                 this.isFileUploading = true;
                 this.selectedFileName = file.name;
-
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
-
                     if (response?.status === 'success') {
                         this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                         this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
                     } else {
+                        this.selectedFileName = '';
                         this.invoiceForm.get("attachedFiles")?.patchValue([]);
                         this.toasterService.showSnackBar("error", response.message);
                     }
