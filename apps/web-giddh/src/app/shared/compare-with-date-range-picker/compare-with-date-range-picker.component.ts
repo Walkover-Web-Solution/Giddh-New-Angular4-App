@@ -11,6 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { TextFieldComponent } from '../../theme/form-fields/text-field/text-field.component';
+import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
 enum CompareTypeEnum {
@@ -81,7 +82,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
   ) {
     this.compareOptionsForm = this.formBuilder.group({
       compareValue: new FormControl<number[]>([]),
-      compareType: new FormControl<compareType[]>(['month'])
+      compareType: new FormControl<compareType[]>([])
     });
   }
 
@@ -91,7 +92,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public ngOnInit(): void {
-    this.compareOptionsForm.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+    this.compareOptionsForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
       if (value?.compareValue?.[0] == 'undefined') {
         return;
       }
@@ -135,9 +136,9 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    */
   public ngOnChanges(changes: SimpleChanges): void {
     if (('startDate' in changes) || ('endDate' in changes) || ('universalDateRangeLabel' in changes)) {
-      const startDateObj = dayjs(this.startDate, 'DD-MM-YYYY');
-      const endDateObj = dayjs(this.endDate, 'DD-MM-YYYY');
-      if (startDateObj.isValid() && endDateObj.isValid()) {
+      const startDateObj = dayjs(this.startDate, GIDDH_DATE_FORMAT);
+      const endDateObj = dayjs(this.endDate, GIDDH_DATE_FORMAT);
+      if (startDateObj.isValid() && endDateObj.isValid()) { 
         this.setCompareValues();
       }
     }
@@ -265,8 +266,8 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public checkDateSelectionRange(startDateInput: string, endDateInput: string): DateCheckResult {
-    const startDate = dayjs(startDateInput, 'DD-MM-YYYY');
-    const endDate = dayjs(endDateInput, 'DD-MM-YYYY');
+    const startDate = dayjs(startDateInput, GIDDH_DATE_FORMAT);
+    const endDate = dayjs(endDateInput, GIDDH_DATE_FORMAT);
 
     let dayCount = 0;
     if (startDate.isValid() && endDate.isValid() && endDate.isSameOrAfter(startDate, 'day')) {
