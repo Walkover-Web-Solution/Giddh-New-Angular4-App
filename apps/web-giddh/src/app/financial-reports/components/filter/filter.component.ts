@@ -193,7 +193,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.cd.detectChanges();
             });
 
-        this.universalDate$.subscribe((a) => {
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             if (a) {
                 this.universalDateICurrent = false;
                 // assign dates

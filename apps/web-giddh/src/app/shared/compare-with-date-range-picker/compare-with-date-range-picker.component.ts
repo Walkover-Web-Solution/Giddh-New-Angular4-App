@@ -81,7 +81,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
   ) {
     this.compareOptionsForm = this.formBuilder.group({
       compareValue: new FormControl<number[]>([]),
-      compareType: new FormControl<compareType[]>(['month'])
+      compareType: new FormControl<compareType[]>([])
     });
   }
 
@@ -91,7 +91,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
    * @memberof CompareWithDateRangePickerComponent
    */
   public ngOnInit(): void {
-    this.compareOptionsForm.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+    this.compareOptionsForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
       if (value?.compareValue?.[0] == 'undefined') {
         return;
       }
@@ -137,7 +137,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
     if (('startDate' in changes) || ('endDate' in changes) || ('universalDateRangeLabel' in changes)) {
       const startDateObj = dayjs(this.startDate, 'DD-MM-YYYY');
       const endDateObj = dayjs(this.endDate, 'DD-MM-YYYY');
-      if (startDateObj.isValid() && endDateObj.isValid()) {
+      if (startDateObj.isValid() && endDateObj.isValid()) { 
         this.setCompareValues();
       }
     }
