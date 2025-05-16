@@ -6140,10 +6140,6 @@ input[type="checkbox"][disabled]:after {
     padding-left: 7px !important;
 }
 
-.table-container .profit-loss section div>div {
-    border-right: 0;
-}
-
 .active-toggle-btn {
     color: var(--color-white) !important;
     background-color: var(--color-blue) !important;
@@ -14003,8 +13999,7 @@ mat-list {
     .mdc-button__label {
         color: var(--color-toast-primary-text) !important;
     }
-}
-
-.w150 {
-    width: 150px !important;
+    .w150 {
+        width: 150px !important;
+    }
 }
