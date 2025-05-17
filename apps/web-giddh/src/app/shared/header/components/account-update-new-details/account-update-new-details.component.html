@@ -469,7 +469,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && showPortalTab"
+                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && activeGroupUniqueName === 'sundrydebtors'"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
@@ -1011,6 +1011,7 @@
                         <div class="d-flex justify-content-between align-items-center form-group">
                             <select-multiple-fields
                                 [label]="localeData?.app_default_taxes"
+                                [commonLocaleData]="commonLocaleData"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="companyTaxDropDown$ | async"
                                 (selectedOption)="taxesSelected($event)"
