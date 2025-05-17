@@ -75,8 +75,6 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
-    /** Indicates whether the portal section should be show */
-    public showPortalTab: boolean = false;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
@@ -264,6 +262,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isContactSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
+    /** Holds active selected Tab Index */
+    public selectedTabIndex: number = 0;
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -295,7 +297,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-
+                this.isUKCompany = activeCompany.country === "United Kingdom";
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
@@ -457,7 +459,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
-        this.showPortalTab = this.activeGroupUniqueName === 'sundrydebtors';
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
@@ -550,6 +551,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                            this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                         }
 
                         if (activeAccountTaxHierarchy) {
@@ -625,6 +627,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTab = event.tab.textLabel;
+            this.selectedTabIndex = event.index;
             this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
             this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
@@ -632,6 +635,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.isOtherSelectedTab = false;
             }
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -1108,6 +1112,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * ngOnChanges
      */
     public ngOnChanges(s) {
+        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
@@ -2060,6 +2065,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.addAccountForm.get('addresses').reset();
         }
+        this.selectedTabIndex = null;
+        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
+        this.changeDetectorRef.detectChanges();
+        setTimeout(() => {
+            this.selectedTabIndex = 0;
+            this.changeDetectorRef.detectChanges();
+        }, 0);
     }
 
     /**

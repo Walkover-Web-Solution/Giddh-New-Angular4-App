@@ -68,7 +68,7 @@
                                 <input-field
                                     [name]="'number'"
                                     [cssClass]="'text-right'"
-                                    [ngClass]="{ 'w100': addAccountForm.get('openingBalance')?.value > 0 }"
+                                    [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('openingBalance')?.value > 0 }"
                                     #autoFocusUpdate
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
@@ -94,7 +94,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="only-right-radius input-group-addon d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -132,7 +132,7 @@
                                 [name]="'number'"
                                 [cssClass]="'text-right'"
                                 [label]="localeData?.foreign_opening_balance"
-                                [ngClass]="{ 'w100': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
+                                [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [placeholder]="'0.00'"
                                 [type]="'number'"
                                 formControlName="foreignOpeningBalance"
@@ -153,7 +153,7 @@
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
                             <div
-                                class="input-group-addon d-flex align-item-center"
+                                class="only-right-radius input-group-addon d-flex align-item-center"
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
@@ -225,6 +225,7 @@
             mat-stretch-tabs="false"
             mat-align-tabs="start"
             [disablePagination]=true
+            [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
         >
             <mat-tab
@@ -295,7 +296,7 @@
                                 
                                 <reactive-dropdown-field
                                     *ngIf="countyList?.length"
-                                    [label]="commonLocaleData?.app_region"
+                                    [label]="isUKCompany ? commonLocaleData?.app_county : commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="countyList"
                                     formControlName="countyCode"
@@ -469,7 +470,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && showPortalTab"
+                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && activeGroupUniqueName === 'sundrydebtors'"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
@@ -694,6 +695,7 @@
                                     [type]="'number'"
                                     [min]="'0'"
                                     [cssClass]="'text-right'"
+                                    [ngClass]="{'remove-right-border-radius': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                                     formControlName="closingBalanceTriggerAmount"
                                     [label]="localeData?.balance_for_trigger"
                                     [placeholder]="
@@ -720,7 +722,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
                                     (click)="closingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -1024,6 +1026,7 @@
                         <div class="d-flex justify-content-between align-items-center form-group">
                             <select-multiple-fields
                                 [label]="localeData?.app_default_taxes"
+                                [commonLocaleData]="commonLocaleData"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="companyTaxDropDown$ | async"
                                 (selectedOption)="taxesSelected($event)"
