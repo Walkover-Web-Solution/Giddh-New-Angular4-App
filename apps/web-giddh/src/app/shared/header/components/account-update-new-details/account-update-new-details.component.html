@@ -68,7 +68,7 @@
                                 <input-field
                                     [name]="'number'"
                                     [cssClass]="'text-right'"
-                                    [ngClass]="{ 'w100': addAccountForm.get('openingBalance')?.value > 0 }"
+                                    [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('openingBalance')?.value > 0 }"
                                     #autoFocusUpdate
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
@@ -132,7 +132,7 @@
                                 [name]="'number'"
                                 [cssClass]="'text-right'"
                                 [label]="localeData?.foreign_opening_balance"
-                                [ngClass]="{ 'w100': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
+                                [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [placeholder]="'0.00'"
                                 [type]="'number'"
                                 formControlName="foreignOpeningBalance"
@@ -695,6 +695,7 @@
                                     [type]="'number'"
                                     [min]="'0'"
                                     [cssClass]="'text-right'"
+                                    [ngClass]="{'remove-right-border-radius': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                                     formControlName="closingBalanceTriggerAmount"
                                     [label]="localeData?.balance_for_trigger"
                                     [placeholder]="
