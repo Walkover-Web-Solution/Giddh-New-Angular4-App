@@ -4,14 +4,12 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
-    ElementRef,
     EventEmitter,
     Input,
     OnChanges,
     OnDestroy,
     OnInit,
-    Output,
-    ViewChild
+    Output
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -21,7 +19,6 @@ import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-model
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
@@ -29,7 +26,6 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -214,6 +210,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isContactSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
+    /** Holds active selected Tab Index  */
+    public selectedTabIndex: number = 0;
 
     constructor(
         private _fb: FormBuilder,
@@ -279,7 +277,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
 
         this.initializeNewForm();
-        this.activeGroup$.subscribe(response => {
+        this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
                     this.store.dispatch(this.groupWithAccountsAction.getAccountGroupDetails(this.activeGroupUniqueName));
@@ -294,6 +292,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
                     this.showHideAddressTab();
+                    this.selectedTabIndex = null;
+                    this.changeDetectorRef.detectChanges();
+
+                    setTimeout(() => {
+                        this.selectedTabIndex = 0;
+                        this.changeDetectorRef.detectChanges();
+                    }, 0);
                 }
             }
         });
@@ -810,7 +815,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isValidForm = false;
             return;
         }
-        
+
         if (!this.addAccountForm.get('openingBalance')?.value) {
             this.addAccountForm.get('openingBalance')?.setValue('0');
         }
@@ -1299,6 +1304,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
+            this.selectedTabIndex = event.index;
             this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
             this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
         }

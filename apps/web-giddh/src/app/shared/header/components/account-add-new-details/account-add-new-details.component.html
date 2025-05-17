@@ -223,9 +223,11 @@
             </div>
         </div>
         <mat-tab-group
+            *ngIf="selectedTabIndex !== null"
             mat-stretch-tabs="false"
             mat-align-tabs="start"
             [disablePagination]=true
+            [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
         >
             <mat-tab
