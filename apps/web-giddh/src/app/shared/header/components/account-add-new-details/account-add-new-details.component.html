@@ -91,7 +91,7 @@
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                    'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
                                 }"
                                 *ngIf="
                                     addAccountForm.get('openingBalance')?.value > 0
@@ -100,12 +100,12 @@
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
                             <div
-                                class="input-group-addon d-flex align-item-center"
+                                class="input-group-addon only-right-radius d-flex align-item-center"
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                    'cursor-pointer':
+                                    'cp':
                                         addAccountForm.get('openingBalance')?.value > 0 ||
                                         addAccountForm.get('foreignOpeningBalance')?.value > 0
                                 }"
@@ -150,7 +150,7 @@
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                    'cursor-pointer':
+                                    'cp':
                                         addAccountForm.get('foreignOpeningBalance')?.value > 0
                                 }"
                                 *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -158,12 +158,12 @@
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
                             <div
-                                class="input-group-addon d-flex align-item-center"
+                                class="input-group-addon only-right-radius d-flex align-item-center"
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                    'cursor-pointer':
+                                    'cp':
                                         addAccountForm.get('foreignOpeningBalance')?.value > 0
                                 }"
                                 *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -223,7 +223,6 @@
             </div>
         </div>
         <mat-tab-group
-            *ngIf="selectedTabIndex !== null"
             mat-stretch-tabs="false"
             mat-align-tabs="start"
             [disablePagination]=true
@@ -310,7 +309,7 @@
                                 
                                 <reactive-dropdown-field
                                     *ngIf="countyList?.length"
-                                    [label]="commonLocaleData?.app_region"
+                                    [label]="isUKCompany ? commonLocaleData?.app_county : commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="countyList"
                                     formControlName="countyCode"
@@ -723,7 +722,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
                                     (click)="closingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':

@@ -210,8 +210,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isContactSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
-    /** Holds active selected Tab Index  */
+    /** Holds active selected Tab Index */
     public selectedTabIndex: number = 0;
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -246,6 +248,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
                     this.activeCompany = activeCompany;
+                    this.isUKCompany = activeCompany.country === "United Kingdom";
                     this.getCompanyCustomField();
                 }
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
@@ -293,8 +296,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     this.showHideAddressTab();
                     this.selectedTabIndex = null;
+                    this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                     this.changeDetectorRef.detectChanges();
-
+                    
                     setTimeout(() => {
                         this.selectedTabIndex = 0;
                         this.changeDetectorRef.detectChanges();

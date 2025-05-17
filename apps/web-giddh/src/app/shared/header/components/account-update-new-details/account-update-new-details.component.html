@@ -94,7 +94,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="only-right-radius input-group-addon d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
@@ -153,7 +153,7 @@
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
                             <div
-                                class="input-group-addon d-flex align-item-center"
+                                class="only-right-radius input-group-addon d-flex align-item-center"
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
@@ -225,6 +225,7 @@
             mat-stretch-tabs="false"
             mat-align-tabs="start"
             [disablePagination]=true
+            [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
         >
             <mat-tab
@@ -295,7 +296,7 @@
                                 
                                 <reactive-dropdown-field
                                     *ngIf="countyList?.length"
-                                    [label]="commonLocaleData?.app_region"
+                                    [label]="isUKCompany ? commonLocaleData?.app_county : commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="countyList"
                                     formControlName="countyCode"
@@ -720,7 +721,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
                                     (click)="closingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
