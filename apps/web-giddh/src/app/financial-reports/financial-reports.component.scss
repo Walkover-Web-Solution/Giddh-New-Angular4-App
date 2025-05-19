@@ -1,6 +1,24 @@
 .tb-pl-bs-header-tab {
     padding-top: 55px;
 }
+
+:host ::ng-deep .tailed-row {
+    &:has(:not(.pl-sticky-group)) {
+        background-color: var(--color-success-enable-bg-light) !important;
+    }
+    .pl-sticky-group,
+    .account {
+        background-color: var(--color-success-enable-bg-light) !important;
+    }
+}
+
+:host ::ng-deep {
+    .uncheck-all-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .tb-pl-bs-header-tab {
         padding-top: 15px;

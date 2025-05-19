@@ -873,10 +873,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
 
+
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
 
                 response.entries?.forEach((entry: any, index: number) => {
+                    if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+                        this.invoiceForm.get('isAdvanceReceipt').patchValue(entry.subVoucher === SubVoucher.AdvanceReceipt);
+                        this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
+                        this.invoiceForm.get("chequeNumber")?.patchValue(entry?.chequeNumber);
+                    }
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
                     }
@@ -922,7 +928,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
-
                 this.checkIfEntriesHasStock();
 
                 this.startLoader(false);
@@ -1073,7 +1078,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response) {
                 response?.forEach((entry, entryIndex) => {
                     let item = entry.transactions[0];
@@ -1982,15 +1986,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.showAccountTaxTypeByCountry(accountData.country?.countryCode);
 
-        let isPartyTypeSez = false;
-        if (accountData?.addresses?.length > 0) {
-            accountData.addresses.forEach(address => {
-                if (address.partyType && address.partyType.toLowerCase() === "sez") {
-                    isPartyTypeSez = true;
-                }
-            });
-        }
-
         if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && this.account?.baseCurrency !== accountData.currency) {
             this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
@@ -2003,7 +1998,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
-        this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
+        this.account.excludeTax = !this.showTaxColumn;
 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
@@ -2012,6 +2007,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
                 this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
+            } else {
+                this.invoiceForm.get('exchangeRate').patchValue(1);
             }
 
             let defaultAddress = null;
@@ -2371,6 +2368,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.bulkStockAsideMenuRef = this.dialog.open(AddBulkItemsComponent, {
             data: {
                 voucherType: this.voucherType,
+                exchangeRate: this.invoiceForm.get('exchangeRate')?.value ?? 1,
                 customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value
             }
         });
@@ -3522,7 +3520,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      * @param {any} event using for pinCode and gstNumber
      * @returns {void}
-     * 
+     *
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
@@ -4002,8 +4000,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     return entry;
                 });
 
-                delete invoiceForm.chequeNumber;
-                delete invoiceForm.chequeClearanceDate;
 
                 if (invoiceForm.isAdvanceReceipt) {
                     invoiceForm.subVoucher = SubVoucher.AdvanceReceipt;
@@ -4933,7 +4929,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
             entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
 
-            let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+            const rate = Number(((response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) / (this.invoiceForm.get('exchangeRate')?.value ?? 1)).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
             transactionFormGroup.get('stock.skuCode')?.patchValue(response.stock.skuCode);
             transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);

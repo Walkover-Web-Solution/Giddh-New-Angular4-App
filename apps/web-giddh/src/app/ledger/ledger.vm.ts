@@ -188,7 +188,7 @@ export class LedgerVM {
     }
 
     /**
-     * change transaction type
+     * Change transaction type
      * @param {string} type
      * @param {number} index
      * @returns {void}

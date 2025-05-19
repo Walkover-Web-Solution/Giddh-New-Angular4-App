@@ -97,8 +97,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** Instance of delete account modal */
     @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: TemplateRef<any>;
     @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
-    /** Tabs instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -264,6 +262,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isContactSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
+    /** Holds active selected Tab Index */
+    public selectedTabIndex: number = 0;
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -295,7 +297,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-
+                this.isUKCompany = activeCompany.country === "United Kingdom";
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
@@ -425,14 +427,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                     if (user) {
                         if (!this.isPortalDefault) {
-                            if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
-                                return;
-                            } else {
-                                user?.get('name').setValue(response?.attentionTo);
-                                user?.get('email').setValue(response?.email);
-                                user?.get('contactNo').setValue(mobileNo);
-                                user?.get('default').setValue(true);
-                            }
+                            user?.get('name').setValue(response?.attentionTo);
+                            user?.get('email').setValue(response?.email);
+                            user?.get('contactNo').setValue(mobileNo);
+                            user?.get('default').setValue(true);
                         }
                     } else {
                         let setValue = false;
@@ -453,6 +451,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.addNewPortalUser(data);
                         }
                     }
+                    this.changeDetectorRef.detectChanges();
                 }
                 if (this.formValueAssigned && response) {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
@@ -552,6 +551,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                            this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                         }
 
                         if (activeAccountTaxHierarchy) {
@@ -627,6 +627,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTab = event.tab.textLabel;
+            this.selectedTabIndex = event.index;
             this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
             this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
@@ -634,6 +635,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.isOtherSelectedTab = false;
             }
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -881,7 +883,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
+    /**
+     * Validates and extracts the state code from the GST number entered in the given form.
+     * 
+     * @param gstForm The `FormGroup` containing the GST-related form controls.
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getStateCode(gstForm: FormGroup): void {
         let gstVal: string = gstForm.get('gstNumber')?.value;
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
@@ -1104,6 +1112,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * ngOnChanges
      */
     public ngOnChanges(s) {
+        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
@@ -2049,27 +2058,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     private showHideAddressTab(): void {
         if (!this.isHsnSacEnabledAcc) {
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
             this.addAccountForm.get('addresses').reset();
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
+        this.selectedTabIndex = null;
+        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
+        this.changeDetectorRef.detectChanges();
+        setTimeout(() => {
+            this.selectedTabIndex = 0;
+            this.changeDetectorRef.detectChanges();
+        }, 0);
     }
 
     /**

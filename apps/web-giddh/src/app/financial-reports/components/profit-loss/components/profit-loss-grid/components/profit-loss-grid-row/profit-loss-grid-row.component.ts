@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
+import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 
 @Component({
     selector: '[profit-loss-grid-row]',
     templateUrl: './profit-loss-grid-row.component.html',
     styleUrls: ['./profit-loss-grid-row.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
 export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
@@ -18,6 +22,8 @@ export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public incomeStatement: any;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** Profit loss headers array */
+    @Input() public plHeaders: any[];
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
@@ -27,7 +33,7 @@ export class ProfitLossGridRowComponent implements OnChanges {
     /** Hold current url */
     private currentUrl: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private router: Router) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore) {
         this.currentUrl = this.router.url;
     }
 
@@ -90,5 +96,21 @@ export class ProfitLossGridRowComponent implements OnChanges {
         } else {
             return [];
         }
+    }
+
+    /**
+     * Call tailed report api with given account/group unique name
+     * 
+     * @param event MatCheckboxChange event
+     * @param accountGroupUniqueName Unique name of account/group
+     * @param entityType Type of the entity, either 'account' or 'group'
+     * @memberof ProfitLossGridRowComponent
+     */
+    public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
+        const model = {
+            reportType: ReportType.ProfitLoss,
+            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
+        };
+        this.financialReportsComponentStore.tailedReportAccountGroup(model);
     }
 }

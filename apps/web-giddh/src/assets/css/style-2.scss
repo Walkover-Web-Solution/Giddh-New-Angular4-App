@@ -4195,6 +4195,12 @@ a.btn.btn-xs.btn-link.pull-right {
 .w125 {
     width: 125px !important;
 }
+.w150 {
+    width: 150px !important;
+}
+.w200 {
+    width: 200px !important;
+}
 
 .multi-select {
     position: relative;
@@ -6150,10 +6156,6 @@ input[type="checkbox"][disabled]:after {
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
-}
-
-.table-container .profit-loss section div > div {
-    border-right: 0;
 }
 
 .active-toggle-btn {
@@ -14003,7 +14005,6 @@ mat-list {
     .mdc-button__label {
         color: var(--color-toast-primary-text) !important;
     }
-
     .w150 {
         width: 150px !important;
     }

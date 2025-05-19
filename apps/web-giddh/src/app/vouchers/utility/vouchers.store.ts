@@ -447,6 +447,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getExchangeRate = this.effect((data: Observable<{ fromCurrency: string, toCurrency: string, date: string }>) => {
         return data.pipe(
             switchMap((req) => {
+                this.patchState({ exchangeRate: null });
                 return this.ledgerService.GetCurrencyRateNewApi(req.fromCurrency, req.toCurrency, req.date).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {

@@ -119,7 +119,14 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: ProfitLossRequest) {
+    /**
+     * Triggers the balance sheet data fetch based on the given request.
+     *
+     * @param request The request object with required data.
+     * @memberof BalanceSheetComponent
+     */
+    public filterData(request: ProfitLossRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -157,5 +164,14 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof BalanceSheetComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

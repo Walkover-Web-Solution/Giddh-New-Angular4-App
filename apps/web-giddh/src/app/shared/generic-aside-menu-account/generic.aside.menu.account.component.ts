@@ -157,7 +157,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             this.isServiceCreation = true;
             this.flatAccountWGroupsList$ = of(null);
             this.flatAccountWGroupsList = undefined;
-            if (this.selectedGroupUniqueName === 'purchase') {
+            if (this.selectedGroupUniqueName === 'purchase-order' || this.selectedGroupUniqueName === 'debit note') {
                 this.activeGroupUniqueName = 'operatingcost';
             } else if (this.selectedGroupUniqueName === 'receipt' || this.selectedGroupUniqueName === 'payment') {
                 this.activeGroupUniqueName = 'bankaccounts,cash,loanandoverdraft';

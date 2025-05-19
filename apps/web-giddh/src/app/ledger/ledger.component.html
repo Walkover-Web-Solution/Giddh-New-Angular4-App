@@ -814,7 +814,7 @@
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
                                                                     (click)="blankLedgerAmountClick()"
-                                                                    *ngIf="txn.type === 'DEBIT'"
+                                                                    *ngIf="txn.type === transactionType.Debit"
                                                                     (click)="showBankLedgerPopup(txn, item)"
                                                                 />
                                                             </mat-grid-tile>
@@ -827,7 +827,7 @@
                                                                 *ngIf="
                                                                     lc.showBankLedgerPanel &&
                                                                     lc.selectedBankTxnUniqueName === txn.id &&
-                                                                    txn.type === 'DEBIT'
+                                                                    txn.type === transactionType.Debit
                                                                 "
                                                             >
                                                                 <new-ledger-entry-panel
@@ -1073,7 +1073,7 @@
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
                                                                     (click)="blankLedgerAmountClick()"
-                                                                    *ngIf="txn.type === 'CREDIT'"
+                                                                    *ngIf="txn.type === transactionType.Credit"
                                                                     (click)="showBankLedgerPopup(txn, item)"
                                                                 />
                                                             </mat-grid-tile>
@@ -1086,7 +1086,7 @@
                                                                 *ngIf="
                                                                     lc.showBankLedgerPanel &&
                                                                     lc.selectedBankTxnUniqueName === txn.id &&
-                                                                    txn.type === 'CREDIT'
+                                                                    txn.type === transactionType.Credit
                                                                 "
                                                             >
                                                                 <new-ledger-entry-panel
@@ -1176,11 +1176,11 @@
                                 <table class="w-100">
                                     <tr>
                                         <td colspan="12" class="py-2 px-3 font-15">
-                                            <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
+                                            <div class="pull-right" *ngIf="eLedgType == transactionType.Credit">
                                                 {{ localeData?.cf_balance }}
                                                 <span
                                                     class="pd-l15 digit-blue d-inline-flex"
-                                                    *ngIf="eLedgType == 'CREDIT'"
+                                                    *ngIf="eLedgType == transactionType.Credit"
                                                 >
                                                     <amount-field
                                                         [amount]="eDrBalAmnt"
@@ -1191,12 +1191,12 @@
                                                 </span>
                                             </div>
                                         </td>
-                                        <td colspan="12" class="bd-rl py-2 px-3 font-15" *ngIf="eLedgType == 'DEBIT'">
+                                        <td colspan="12" class="bd-rl py-2 px-3 font-15" *ngIf="eLedgType == transactionType.Debit">
                                             <div class="pull-right">
                                                 {{ localeData?.cf_balance }}
                                                 <span
                                                     class="pd-l15 digit-blue d-inline-flex"
-                                                    *ngIf="eLedgType == 'DEBIT'"
+                                                    *ngIf="eLedgType == transactionType.Debit"
                                                 >
                                                     <amount-field
                                                         [amount]="eCrBalAmnt"
@@ -1314,12 +1314,12 @@
                                                     </span>
                                                     <span class="account-holder-name">
                                                         <span
-                                                            *ngIf="transactions.type === 'CREDIT'"
+                                                            *ngIf="transactions.type === transactionType.Credit"
                                                             class="text-gray mr-r05"
                                                             >{{ localeData?.by }}</span
                                                         >
                                                         <span
-                                                            *ngIf="transactions.type === 'DEBIT'"
+                                                            *ngIf="transactions.type === transactionType.Debit"
                                                             class="text-gray mr-r05"
                                                             >{{ localeData?.to }}</span
                                                         >
@@ -1331,8 +1331,8 @@
                                                                   ")"
                                                                 : transactions?.particular?.name
                                                         }}</span>
-                                                        <!-- <span
-                                                            class="download-invoice-ledger d-flex"
+                                                        <span
+                                                            class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion !== 2 &&
                                                                 transactions.attachedFileUniqueName
@@ -1340,16 +1340,16 @@
                                                             (click)="downloadFiles(transactions, 'ATTACHMENT', $event)"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
-                                                        </span> -->
-                                                        <!-- <span
-                                                            class="download-invoice-ledger d-flex"
+                                                        </span>
+                                                        <span
+                                                            class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion !== 2 && transactions.voucherGenerated
                                                             "
                                                             (click)="downloadFiles(transactions, 'VOUCHER', $event)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
-                                                        </span> -->
+                                                        </span>
                                                         <span
                                                             class="download-invoice-ledger d-flex cursor-pointer"
                                                             *ngIf="
@@ -1451,7 +1451,7 @@
                                 tabindex="-1"
                                 *ngIf="
                                     ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
-                                    ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'
+                                    ledgerTxnBalance?.forwardedBalance?.type === transactionType.Debit
                                 "
                             >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerGridColumnsValue[0]}}>
@@ -1475,7 +1475,7 @@
                                 >
                                     <div class="d-flex flex-column">
                                         <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
-                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
+                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === transactionType.Debit">
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -1494,7 +1494,7 @@
                                                 >
                                                 </amount-field>
                                             </span>
-                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">{{
+                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === transactionType.Credit">{{
                                                 commonLocaleData?.app_numbers?.zero
                                             }}</span>
                                         </ng-container>
@@ -1506,7 +1506,7 @@
                                 cols={{ledgerGridTotalColumns}}
                                 rowHeight="50px"
                                 *ngIf="
-                                    ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT' ||
+                                    ledgerTxnBalance?.forwardedBalance?.type !== transactionType.Debit ||
                                     ledgerTxnBalance?.forwardedBalance?.amount == 0
                                 "
                             >
@@ -1579,8 +1579,8 @@
                                             }}
                                         </div>
 
-                                        <!-- <span
-                                            class="download-invoice-ledger d-flex"
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                             (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
@@ -1588,9 +1588,9 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
-                                        </span> -->
-                                        <!-- <span
-                                            class="download-invoice-ledger d-flex"
+                                        </span>
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                             (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
@@ -1606,7 +1606,7 @@
                                             matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
-                                        </span> -->
+                                        </span>
                                         <span
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
@@ -1668,7 +1668,7 @@
                                     (click)="$event.stopPropagation()"
                                 >
                                     <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
-                                        <div class="width-100 no-left-border" *ngIf="txn.type === 'DEBIT'">
+                                        <div class="width-100 no-left-border" *ngIf="txn.type === transactionType.Debit">
                                             <div class="width-100 ledger-main">
                                                 <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
                                                     <mat-grid-tile
@@ -1760,7 +1760,7 @@
                                                 (click)="closeAllAccountDropdown()"
                                                 *ngIf="
                                                     lc.showNewLedgerPanel &&
-                                                    lc.currentBlankTxn?.type === 'DEBIT' &&
+                                                    lc.currentBlankTxn?.type === transactionType.Debit &&
                                                     lc.currentBlankTxn?.id === txn.id
                                                 "
                                             >
@@ -1848,7 +1848,7 @@
                                     tabindex="-1"
                                     *ngIf="
                                         ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
-                                        ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'
+                                        ledgerTxnBalance?.forwardedBalance?.type === transactionType.Credit
                                     "
                                 >
                                     <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}} [attr.data-title]="commonLocaleData?.app_date">
@@ -1872,7 +1872,7 @@
                                     >
                                         <div class="d-flex flex-column">
                                             <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
-                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === transactionType.Credit">
                                                     <amount-field
                                                         [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -1888,7 +1888,7 @@
                                                     >
                                                     </amount-field>
                                                 </span>
-                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">{{
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === transactionType.Debit">{{
                                                     commonLocaleData?.app_numbers?.zero
                                                 }}</span>
                                             </ng-container>
@@ -1903,7 +1903,7 @@
                                     rowHeight="50px"
                                     class="ledger-row"
                                     *ngIf="
-                                        ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' ||
+                                        ledgerTxnBalance?.forwardedBalance?.type !== transactionType.Credit ||
                                         ledgerTxnBalance?.forwardedBalance?.amount == 0
                                     "
                                 >
@@ -1975,8 +1975,8 @@
                                                             : localeData?.to_particular
                                                 }}
                                             </div>
-                                            <!-- <span
-                                                class="download-invoice-ledger d-flex"
+                                            <span
+                                                class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
                                                 (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                                 [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
@@ -1984,9 +1984,9 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span> -->
-                                            <!-- <span
-                                                class="download-invoice-ledger d-flex"
+                                            </span>
+                                            <span
+                                                class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
                                                 (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                                 [matTooltip]="
@@ -2002,7 +2002,7 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span> -->
+                                            </span>
                                             <span
                                                 class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="
@@ -2059,7 +2059,7 @@
                                 <!-- region blank ledger-->
                                 <div class="width-100" no-tree (click)="$event.stopPropagation()">
                                     <ng-container *ngFor="let txn of lc.blankLedger.transactions; let i = index">
-                                        <div class="width-100" *ngIf="txn.type === 'CREDIT'">
+                                        <div class="width-100" *ngIf="txn.type === transactionType.Credit">
                                             <div class="width-100 h-table ledger-main">
                                                 <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px" class="ledger-row">
                                                     <mat-grid-tile
@@ -2150,7 +2150,7 @@
                                                 (keydown)="$event.stopPropagation()"
                                                 *ngIf="
                                                     lc.showNewLedgerPanel &&
-                                                    lc.currentBlankTxn?.type === 'CREDIT' &&
+                                                    lc.currentBlankTxn?.type === transactionType.Credit &&
                                                     lc.currentBlankTxn?.id === txn.id
                                                 "
                                             >
@@ -2215,7 +2215,7 @@
                         <div class="w-100">
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
-                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'">
+                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Credit">
                                         <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
@@ -2268,7 +2268,7 @@
                             </table>
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
-                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'">
+                                    <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Debit">
                                         <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
@@ -2670,7 +2670,7 @@
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
-                                                    ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
+                                                    ledgerTxnBalance?.closingBalance?.type === transactionType.Debit
                                                         ? lc.ledgerUnderStandingObj.balanceText.dr
                                                         : lc.ledgerUnderStandingObj.balanceText.cr
                                                 "
@@ -2698,7 +2698,7 @@
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
-                                                    ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
+                                                    ledgerTxnBalance?.closingBalance?.type === transactionType.Debit
                                                         ? lc.ledgerUnderStandingObj.balanceText.dr
                                                         : lc.ledgerUnderStandingObj.balanceText.cr
                                                 "
@@ -2834,7 +2834,7 @@
                 let-openDropdown="openDropdown"
             >
                 <reactive-dropdown-field
-                    [data]="isLedgerEntry ? (cr ? 'CREDIT' : 'DEBIT') : null "
+                    [data]="isLedgerEntry ? (cr ? transactionType.Credit : transactionType.Debit) : null "
                     *ngIf="isLedgerEntry || txn.showDropdown"
                     class="w-100"
                     [cssClass]="'bg-transparent pd-l1 pd-r1 ' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
@@ -2844,7 +2844,7 @@
                             isConsolidatedBranch) &&
                         currentCompanyBranches?.length > 2
                     "
-                    [placeholder]="isLedgerEntry ? (txn?.type === 'DEBIT' ? localeData?.to_select_accounts : localeData?.by_select_accounts) : commonLocaleData?.app_select_accounts"
+                    [placeholder]="isLedgerEntry ? (txn?.type === transactionType.Debit ? localeData?.to_select_accounts : localeData?.by_select_accounts) : commonLocaleData?.app_select_accounts"
                     [(ngModel)]="txn.particular"
                     [name]="txn.particular+index"
                     [labelValue]="(txn?.selectedAccount?.label ?? txn?.selectedAccount?.name) | titlecase"
@@ -3036,7 +3036,7 @@
                                 <div
                                     class="p-2 d-flex flex-column align-items-end justify-content-center w-100 h-100"
                                 >
-                                    <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' && (lc.transactionData$ | async)?.page <= 1; else zeroAmount">
+                                    <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.type === transactionType.Debit && (lc.transactionData$ | async)?.page <= 1; else zeroAmount">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -3065,7 +3065,7 @@
                                 <div
                                     class="p-2 d-flex flex-column align-items-end justify-content-center w-100 h-100"
                                 >
-                                    <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT' && (lc.transactionData$ | async)?.page <= 1; else zeroAmount">
+                                    <ng-container *ngIf="ledgerTxnBalance?.forwardedBalance?.type === transactionType.Credit && (lc.transactionData$ | async)?.page <= 1; else zeroAmount">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -3117,9 +3117,9 @@
                             let i = index;
                             trackBy: trackByTransactionUniqueName
                         "
-                        (touchend)="showUpdateLedgerModalIpad(txn, txn.type === 'DEBIT' ? 'dr' : 'cr')"
-                        (dblclick)="showUpdateLedgerModal(txn, txn.type === 'DEBIT' ? 'dr' : 'cr')"
-                        (keydown.enter)="showUpdateLedgerModal(txn, txn.type === 'DEBIT' ? 'dr' : 'cr')"
+                        (touchend)="showUpdateLedgerModalIpad(txn, txn.type === transactionType.Debit ? 'dr' : 'cr')"
+                        (dblclick)="showUpdateLedgerModal(txn, txn.type === transactionType.Debit ? 'dr' : 'cr')"
+                        (keydown.enter)="showUpdateLedgerModal(txn, txn.type === transactionType.Debit ? 'dr' : 'cr')"
                         [ngClass]="{
                             'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                         }"
@@ -3138,7 +3138,7 @@
                                     [hidden]="selectedTrxWhileHovering !== txn.entryUniqueName &&
                                     !txn.isChecked && checkedTrxWhileHovering?.length === 0"
                                     [(ngModel)]="txn.isChecked"
-                                    (change)="entrySelected($event, txn.entryUniqueName, txn.type === 'DEBIT' ? 'debit' : 'credit')"
+                                    (change)="entrySelected($event, txn.entryUniqueName, txn.type === transactionType.Debit ? 'debit' : 'credit')"
                                 ></mat-checkbox>
                                 <span class="lh-1">{{ txn.entryDate }}</span>
                             </div>
@@ -3151,7 +3151,7 @@
                                     {{
                                         txn
                                             | particular
-                                                : (txn.type === 'DEBIT' ? "to" : "by")
+                                                : (txn.type === transactionType.Debit ? "to" : "by")
                                                 : localeData?.by_particular
                                                 : localeData?.to_particular
                                     }}
@@ -3187,7 +3187,7 @@
 
                         <!-- Debit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_debit" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
-                            <ng-container *ngIf="txn.type === 'DEBIT'">
+                            <ng-container *ngIf="txn.type === transactionType.Debit">
                                 <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
                                     <ng-container *ngTemplateOutlet="amountFieldTemplate; context: { $implicit: txn }"></ng-container>
                                 </div>
@@ -3196,7 +3196,7 @@
 
                         <!-- Credit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_credit" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
-                            <ng-container *ngIf="txn.type === 'CREDIT'">
+                            <ng-container *ngIf="txn.type === transactionType.Credit">
                                 <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
                                     <ng-container *ngTemplateOutlet="amountFieldTemplate; context: { $implicit: txn }"></ng-container>
                                 </div>
@@ -3274,8 +3274,8 @@
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerStatementViewGridColumnsValue[1]}} (mousedown)="showNewLedgerEntryPopup(txn)">
                                 <div class="p-2 d-flex align-items-center justify-content-between column-gap1 w-100 h-100">
                                     <div class="ledger-account-label d-flex column-gap5">
-                                        <span *ngIf="txn?.particular">{{ txn.type === 'CREDIT' ? localeData?.by : localeData?.to }}</span>
-                                        <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, cr: txn.type === 'CREDIT', dr: txn.type === 'DEBIT'}"></ng-container>
+                                        <span *ngIf="txn?.particular">{{ txn.type === transactionType.Credit ? localeData?.by : localeData?.to }}</span>
+                                        <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, cr: txn.type === transactionType.Credit, dr: txn.type === transactionType.Debit}"></ng-container>
                                     </div>
                                     <ul
                                         class="no-result-template"
@@ -3304,7 +3304,7 @@
                                                 ?.purchaseTaxInclusive ||
                                             txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('DEBIT', i); txn.total = txn.debitTotal || 0; txn.creditTotal = 0"
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType(transactionType.Debit, i); txn.total = txn.debitTotal || 0; txn.creditTotal = 0"
                                         (click)="showNewLedgerEntryPopup(txn);"
                                         autocomplete="off"
                                     />
@@ -3323,7 +3323,7 @@
                                                 ?.purchaseTaxInclusive &&
                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="handleAmountInput(txn); lc.changeTransactionType('DEBIT', i); txn.amount = txn.debitAmount || 0; txn.creditAmount = 0"
+                                        (input)="handleAmountInput(txn); lc.changeTransactionType(transactionType.Debit, i); txn.amount = txn.debitAmount || 0; txn.creditAmount = 0"
                                         (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
@@ -3348,7 +3348,7 @@
                                                 ?.purchaseTaxInclusive ||
                                             txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType('CREDIT', i); txn.total = txn.creditTotal || 0; txn.debitTotal = 0"
+                                        (input)="isTotalChanged = true; handleAmountInput(txn, true); lc.changeTransactionType(transactionType.Credit, i); txn.total = txn.creditTotal || 0; txn.debitTotal = 0"
                                         (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
@@ -3367,7 +3367,7 @@
                                                 ?.purchaseTaxInclusive &&
                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                         "
-                                        (input)="handleAmountInput(txn); lc.changeTransactionType('CREDIT', i); txn.amount = txn.creditAmount || 0; txn.debitAmount = 0;"
+                                        (input)="handleAmountInput(txn); lc.changeTransactionType(transactionType.Credit, i); txn.amount = txn.creditAmount || 0; txn.debitAmount = 0;"
                                         (click)="showNewLedgerEntryPopup(txn)"
                                         autocomplete="off"
                                     />
@@ -3420,7 +3420,7 @@
                                 (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
-                                [entrySide]="txn.type === 'DEBIT' ? 'dr' : 'cr'"
+                                [entrySide]="txn.type === transactionType.Debit ? 'dr' : 'cr'"
                                 (stockVariantSelected)="
                                     loadDetails(selectedAccountDetails, txn, $event)
                                 "

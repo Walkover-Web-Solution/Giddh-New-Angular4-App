@@ -1,12 +1,12 @@
-.section-head {
-    white-space: normal;
-    word-break: break-word;
-}
-.financial-year-field {
-    flex-direction: column;
-}
-@media (max-width: 767px) {
-    .financial-year-field .btn {
-        margin-top: 10px;
+table {
+    &.financial-year {
+        border-block: 1px solid var(--color-table-primary-content-bar-border) !important;
+
+        tr {
+            th,
+            td {
+                width: unset !important;
+            }
+        }
     }
 }

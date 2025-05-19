@@ -12,3 +12,10 @@
 .pl-content-width {
     min-width: 275px;
 }
+.row-height {
+    height: 38px;
+}
+.pl-grid-row {
+    border-bottom: 1px solid var(--color-dark-fog) !important;
+    min-height: 38px;
+}

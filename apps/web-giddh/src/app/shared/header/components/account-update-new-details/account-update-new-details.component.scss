@@ -87,7 +87,6 @@ span.dr-label {
     .input-group {
         .input-group-addon {
             border-left: 1px solid var(--color-iron) !important;
-            border-radius: 5px;
         }
 
         input {
@@ -209,4 +208,13 @@ form.gstin-form {
 
 .padding-bottom-100 {
     padding-bottom: 100px;
+}
+
+.bg-white {
+    background: var(--color-white) !important;
+}
+
+.only-right-radius {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }

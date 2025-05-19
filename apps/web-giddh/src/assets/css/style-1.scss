@@ -460,6 +460,13 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px !important;
 }
+.column-gap3 {
+    column-gap: 30px !important;
+}
+.column-gap4 {
+    column-gap: 40px !important;
+}
+
 .row-gap5 {
     row-gap: 5px !important;
 }
@@ -479,6 +486,9 @@ aside-menu-account .container-fluid {
 }
 .border-none {
     border: none;
+}
+.border-color-transparent {
+    border-color: var(--color-transparent-background) !important;
 }
 .border-top-none {
     border-top: none !important;
@@ -1062,14 +1072,20 @@ aside-menu-account .container-fluid {
 .table-container > section div.row > div {
     padding-right: 20px;
 }
-.table-container section div > div {
-    margin: 0;
-    border-right: 1px solid transparent;
-    font-weight: 400;
-    padding: 8px 8px 8px 0;
-    font-size: var(--font-size-15);
-    line-height: normal;
-    text-transform: capitalize;
+.table-container {
+    section {
+        > div {
+            > div {
+                margin: 0;
+                border-right: 1px solid transparent;
+                font-weight: 400;
+                padding: 8px 8px 8px 0;
+                font-size: var(--font-size-15);
+                line-height: normal;
+                text-transform: capitalize;
+            }
+        }
+    }
 }
 .table-container > .row {
     margin: 0;

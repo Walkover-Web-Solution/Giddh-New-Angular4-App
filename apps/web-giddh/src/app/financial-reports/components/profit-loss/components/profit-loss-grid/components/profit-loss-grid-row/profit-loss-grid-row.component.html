@@ -2,37 +2,42 @@
     class="pl-grid-row row"
     [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
-    [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
+    [ngClass]="{ 'isHidden': !groupDetail.isVisible, 'tailed-row': groupDetail.checked }"
 >
     <div
-        class="col-4 group pl-sticky-group"
-        [innerHTML]="groupDetail.groupName | highlight: search"
-        [ngStyle]="{ 'padding-left': padding + 'px' }"
-    ></div>
-    <div class="col bd-rl group pull-right px-0" *ngIf="!groupDetail.level1">
-        <span class="d-flex justify-content-between">
-            <ng-container *ngFor="let key of getKeys(groupDetail.closingBalance)">
-                <div class="row w-100 pl-content-width">
+        class="col-4 group pl-sticky-group d-flex align-items-center row-height"
+        [style.padding-left]="padding + 'px !important'"
+    >
+        <mat-checkbox
+            *ngIf="!groupDetail.level1 && !groupDetail?.isSelfCreatedGroup"
+            color="primary"
+            (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
+            [(ngModel)]="groupDetail.checked"
+            [checked]="groupDetail?.checked"
+            (click)="$event.stopPropagation()"
+        ></mat-checkbox>
+        <span [innerHTML]="groupDetail?.groupName | highlight : search"></span>
+    </div>
+    <div class="col group p-0">
+        <span class="row">
+            <ng-container *ngIf="!groupDetail.level1; else elseBlock">
+                <ng-container *ngFor="let key of getKeys(groupDetail.closingBalance) ">
                     <span
-                        class="col text-right px-0"
-                        [ngClass]="{
-                            'invisible':
-                                groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
-                        }"
+                        class="col text-right py-2 px-0 pd-r15 bd-rl row-height"
                     >
                         <span
                             *ngIf="
-                        groupDetail.category === 'income' &&
-                        groupDetail.closingBalance[key].type === 'DEBIT' &&
-                        groupDetail.closingBalance[key].amount !== 0
+                                groupDetail.category === 'income' &&
+                                groupDetail.closingBalance[key].type === 'DEBIT' &&
+                                groupDetail.closingBalance[key].amount !== 0
                             "
                             >-</span
                         >
                         <span
                             *ngIf="
-                        groupDetail.category === 'expenses' &&
-                        groupDetail.closingBalance[key].type === 'CREDIT' &&
-                        groupDetail.closingBalance[key].amount !== 0
+                                groupDetail.category === 'expenses' &&
+                                groupDetail.closingBalance[key].type === 'CREDIT' &&
+                                groupDetail.closingBalance[key].amount !== 0
                             "
                             >-</span
                         >
@@ -45,26 +50,20 @@
                             </amount-field>
                         </span>
                     </span>
-                    <span class="col-sm-6 col-12 invisible">
-                            <span class="d-inline-flex">
-                                <amount-field
-                                [amount]="groupDetail.closingBalance[key].amount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                                >
-                            </amount-field>
-                        </span> 
-                    </span>
-                </div>
+                </ng-container>
             </ng-container>
+            <ng-template #elseBlock>
+                <ng-container *ngFor="let key of plHeaders">
+                    <span class="col py-2 px-0 bd-rl row-height">&nbsp;</span>
+                </ng-container>
+            </ng-template>
         </span>
-</div>
-    <div class="col bd-rl group text-right pull-right px-0" *ngIf="groupDetail.level1">&nbsp;</div>
+    </div>
 </div>
 <cdk-virtual-scroll-viewport
     *ngIf="
         (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
-        (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
+        (groupDetail?.accounts | accountsFilter : !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
     "
     [itemSize]="35"
     minBufferPx="500"
@@ -87,78 +86,50 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section
-        class="row-2 account"
-        [ngClass]="{ 'isHidden': !account.isVisible }"
-        (dblclick)="entryClicked(account)"
-    >
-        <div class="pl-grid-row row">
+    <section class="row-2 account" [ngClass]="{ 'isHidden': !account.isVisible }" (dblclick)="entryClicked(account)">
+        <div class="pl-grid-row row" [ngClass]="{ 'tailed-row': account.checked }">
             <div
-                class="col-4 pl-sticky-group"
-                [ngStyle]="{ 'padding-left': padding + 20 + 'px' }"
+                class="col-4 pl-sticky-group d-flex align-items-center row-height"
+                [style.padding-left]="padding + 20 + 'px !important'"
             >
-                <p class="account-name" [innerHTML]="account.name | lowercase | highlight: search"></p>
-        </div>
-            <div class="col bd-rl text-left pull-right px-0">
-                <span class="d-flex justify-content-between">
-                    <ng-container *ngFor="let key of getKeys(account.closingBalance)">
-                        <div class="row d-flex">
-                            <span class="col text-right px-0">
-                                <span
-                                    *ngIf="
-                                        account.category === 'income' &&
-                                        account.closingBalance[key].type === 'DEBIT' &&
-                                        account.closingBalance[key].amount !== 0
-                                    "
-                                    >-</span
-                                >
-                                <span
-                                    *ngIf="
-                                        account.category === 'expenses' &&
-                                        account.closingBalance[key].type === 'CREDIT' &&
-                                        account.closingBalance[key].amount !== 0
-                                    "
-                                    >-</span
-                                >
-                                <span class="d-inline-flex">
-                                    <amount-field
-                                        [amount]="account.closingBalance[key].amount"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </span>
-                            <span class="col-sm-6 col-12 invisible">
-                                <span
-                                    *ngIf="
-                                        account.category === 'income' &&
-                                        account.closingBalance[key].type === 'DEBIT' &&
-                                        account.closingBalance[key].amount !== 0
-                                    "
-                                    >-</span
-                                >
-                                <span
-                                    *ngIf="
-                                        account.category === 'expenses' &&
-                                        account.closingBalance[key].type === 'CREDIT' &&
-                                        account.closingBalance[key].amount !== 0
-                                    "
-                                    >-</span
-                                >
-                                <span class="d-inline-flex">
-                                    <amount-field
-                                        [amount]="account.closingBalance[key].amount"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </span>
-                        </div>
-                    </ng-container>
-                </span>
+                <mat-checkbox
+                    class="mr-l05"
+                    color="primary"
+                    (change)="onItemChecked($event, account?.uniqueName, 'account')"
+                    [(ngModel)]="account.checked"
+                    [checked]="account?.checked"
+                    (click)="$event.stopPropagation()"
+                ></mat-checkbox>
+                <p class="account-name" [innerHTML]="account.name | lowercase | highlight : search"></p>
             </div>
+            <ng-container *ngFor="let key of getKeys(account.closingBalance)">
+                <div class="col bd-rl text-right px-0 pd-r15">
+                    <span
+                        *ngIf="
+                            account.category === 'income' &&
+                            account.closingBalance[key].type === 'DEBIT' &&
+                            account.closingBalance[key].amount !== 0
+                        "
+                        >-</span
+                    >
+                    <span
+                        *ngIf="
+                            account.category === 'expenses' &&
+                            account.closingBalance[key].type === 'CREDIT' &&
+                            account.closingBalance[key].amount !== 0
+                        "
+                        >-</span
+                    >
+                    <span class="d-inline-flex">
+                        <amount-field
+                            [amount]="account.closingBalance[key].amount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
+                        </amount-field>
+                    </span>
+                </div>
+            </ng-container>
         </div>
     </section>
 </ng-template>

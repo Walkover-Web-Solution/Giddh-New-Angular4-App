@@ -4,14 +4,12 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
-    ElementRef,
     EventEmitter,
     Input,
     OnChanges,
     OnDestroy,
     OnInit,
-    Output,
-    ViewChild
+    Output
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -21,7 +19,6 @@ import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-model
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
@@ -29,7 +26,6 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -101,9 +97,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
     @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
-    /** Tabs instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
@@ -217,6 +210,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isContactSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
+    /** Holds active selected Tab Index */
+    public selectedTabIndex: number = 0;
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -251,6 +248,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
                     this.activeCompany = activeCompany;
+                    this.isUKCompany = activeCompany.country === "United Kingdom";
                     this.getCompanyCustomField();
                 }
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
@@ -282,7 +280,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
 
         this.initializeNewForm();
-        this.activeGroup$.subscribe(response => {
+        this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
                     this.store.dispatch(this.groupWithAccountsAction.getAccountGroupDetails(this.activeGroupUniqueName));
@@ -297,6 +295,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
                     this.showHideAddressTab();
+                    this.selectedTabIndex = null;
+                    this.isContactSelectedTab = this.isHsnSacEnabledAcc;
+                    this.changeDetectorRef.detectChanges();
+                    
+                    setTimeout(() => {
+                        this.selectedTabIndex = 0;
+                        this.changeDetectorRef.detectChanges();
+                    }, 0);
                 }
             }
         });
@@ -375,14 +381,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
-                        if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
-                            return;
-                        } else {
-                            user?.get('name').setValue(response?.attentionTo);
-                            user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(mobileNo);
-                            user?.get('default').setValue(true);
-                        }
+                        user?.get('name').setValue(response?.attentionTo);
+                        user?.get('email').setValue(response?.email);
+                        user?.get('contactNo').setValue(mobileNo);
+                        user?.get('default').setValue(true);
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
@@ -397,6 +399,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             this.addNewPortalUser(data);
                         }
                     }
+                    this.changeDetectorRef.detectChanges();
                 }
                 if (this.formValueAssigned && response) {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
@@ -459,6 +462,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     let addresses = (this.addAccountForm.get('addresses') as FormArray).at(0);
                     addresses?.get('stateCode')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
                     addresses?.get('state').get('code')?.patchValue(this.activeCompany?.addresses[0]?.stateCode);
+                    addresses?.get('state').get('name')?.patchValue(this.activeCompany?.addresses[0]?.stateName);
                 }, 500);
             }
         }
@@ -737,11 +741,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent, event: KeyboardEvent) {
-        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
-        if (keyAvoid.findIndex(key => key === event.key) > -1) {
-            return;
-        }
+    /**
+     * Validates and extracts the state code from the GST number entered in the given form.
+     * 
+     * @param gstForm The `FormGroup` containing the GST-related form controls.
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getStateCode(gstForm: FormGroup): void {
         let gstVal: string = gstForm.get('gstNumber')?.value?.trim();
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
@@ -814,7 +820,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isValidForm = false;
             return;
         }
-        
+
         if (!this.addAccountForm.get('openingBalance')?.value) {
             this.addAccountForm.get('openingBalance')?.setValue('0');
         }
@@ -1303,6 +1309,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
+            this.selectedTabIndex = event.index;
             this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
             this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
         }
@@ -1601,13 +1608,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     private showHideAddressTab(): void {
         if (!this.isHsnSacEnabledAcc) {
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
-                    this.staticTabs.tabs[0].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
-
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
@@ -1620,13 +1620,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 loop++;
             }
             addresses.push(this.initialGstDetailsForm());
-
-            setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
-                    this.staticTabs.tabs[1].active = true;
-                    this.changeDetectorRef.detectChanges();
-                }
-            }, 50);
         }
     }
 

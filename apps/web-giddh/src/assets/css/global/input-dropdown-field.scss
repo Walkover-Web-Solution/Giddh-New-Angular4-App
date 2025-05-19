@@ -777,6 +777,28 @@ mat-option {
     }
 }
 
+.remove-right-border-radius {
+    .mdc-text-field--outlined {
+        .mdc-notched-outline {
+            .mdc-notched-outline__trailing {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+        }
+    }
+}
+
+.remove-left-border-radius {
+    .mdc-text-field--outlined {
+        .mdc-notched-outline {
+            .mdc-notched-outline__leading {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .mat-mdc-radio-group {
         display: flex;

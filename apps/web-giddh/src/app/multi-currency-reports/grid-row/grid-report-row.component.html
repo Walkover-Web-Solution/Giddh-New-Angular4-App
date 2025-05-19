@@ -6,7 +6,7 @@
 >
     <div
         class="col-4 group"
-        [ngStyle]="{ 'padding-left': padding + 'px' }"
+        [style.padding-left]="padding + 'px !important'"
         [innerHTML]="groupDetail.groupName | uppercase | highlight: search"
     ></div>
     <div class="col-2 group text-right">
@@ -72,9 +72,9 @@
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
-            <div class="col-4 account no-select" [ngStyle]="{ 'padding-left': padding + 20 + 'px' }">
+            <div class="col-4 account no-select" [style.padding-left]="padding + 20 + 'px !important'">
                 <div
-                    class="p-0 bd-r-right-none"
+                    class="p-0 bd-r-right-none text-danger"
                     [innerHTML]="account.name | lowercase | highlight: search"
                     [popover]="accountDetailModalTemplate"
                     #accountDetailPopup="bs-popover"

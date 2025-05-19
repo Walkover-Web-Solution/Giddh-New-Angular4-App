@@ -135,7 +135,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * @memberof BalanceSheetReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.BalanceSheet, payload: event });
+        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.BalanceSheet, payload: event });
     }
 
     /**

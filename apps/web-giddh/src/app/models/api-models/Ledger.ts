@@ -454,3 +454,9 @@ export enum LedgerViewEnum  {
     StatementView = 'STATEMENT_VIEW',
     TView = 'T_VIEW'
 }
+
+/** Enum for transaction type i.e  CREDIT or DEBIT */
+export enum TransactionType  {
+    Credit = 'CREDIT',
+    Debit = 'DEBIT'
+}

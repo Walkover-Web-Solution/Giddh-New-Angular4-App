@@ -18,6 +18,7 @@ export interface IFinancialYearResponse {
     companyName: string;
     companyUniqueName: string;
     financialYears: ActiveFinancialYear[];
+    financialYearPeriod: string;
 }
 
 @Injectable()
