@@ -144,7 +144,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnChanges(s: SimpleChanges) {
-
+        
         if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
             this.isCustomerCreation = true;
             this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;
@@ -157,7 +157,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             this.isServiceCreation = true;
             this.flatAccountWGroupsList$ = of(null);
             this.flatAccountWGroupsList = undefined;
-            if (this.selectedGroupUniqueName === 'purchase-order' || this.selectedGroupUniqueName === 'debit note') {
+            if (this.selectedGroupUniqueName === 'purchase-order' || this.selectedGroupUniqueName === 'debit note' || this.selectedGroupUniqueName === 'purchase') {
                 this.activeGroupUniqueName = 'operatingcost';
             } else if (this.selectedGroupUniqueName === 'receipt' || this.selectedGroupUniqueName === 'payment') {
                 this.activeGroupUniqueName = 'bankaccounts,cash,loanandoverdraft';
