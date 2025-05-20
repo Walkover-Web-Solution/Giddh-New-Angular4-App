@@ -73,6 +73,7 @@
                             <input-field
                                 [name]="'number'"
                                 [id]="'numbertel'"
+                                class="flex-grow-1"
                                 [cssClass]="'text-right'"
                                 [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('openingBalance')?.value > 0 }"
                                 #autoFocusUpdate
@@ -85,35 +86,37 @@
                                 [min]="0"
                             >
                             </input-field>
-                            <div
-                                class="input-group-addon d-flex align-item-center"
-                                (click)="openingBalanceTypeChanged('DEBIT')"
-                                [ngClass]="{
-                                    'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
-                                }"
-                                *ngIf="
-                                    addAccountForm.get('openingBalance')?.value > 0
-                                "
-                            >
-                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                            </div>
-                            <div
-                                class="input-group-addon only-right-radius d-flex align-item-center"
-                                (click)="openingBalanceTypeChanged('CREDIT')"
-                                [ngClass]="{
-                                    'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                    'cp':
-                                        addAccountForm.get('openingBalance')?.value > 0 ||
-                                        addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                }"
-                                *ngIf="
-                                    addAccountForm.get('openingBalance')?.value > 0
-                                "
-                            >
-                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                            <div class="d-flex">
+                                <div
+                                    class="input-group-addon d-flex align-item-center"
+                                    (click)="openingBalanceTypeChanged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                    }"
+                                    *ngIf="
+                                        addAccountForm.get('openingBalance')?.value > 0
+                                    "
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                </div>
+                                <div
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
+                                    (click)="openingBalanceTypeChanged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cp':
+                                            addAccountForm.get('openingBalance')?.value > 0 ||
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                    *ngIf="
+                                        addAccountForm.get('openingBalance')?.value > 0
+                                    "
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                </div>
                             </div>
                         </div>
                         <div *ngIf="company?.isActive" class="d-flex justify-content-end">
@@ -133,6 +136,7 @@
                             <input-field
                                 [name]="'number'"
                                 [id]="'accountnumber'"
+                                class="flex-grow-1"
                                 [cssClass]="'text-right'"
                                 [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [label]="localeData?.foreign_opening_balance"
@@ -144,31 +148,33 @@
                                 [min]="0"
                             >
                             </input-field>
-                            <div
-                                class="input-group-addon d-flex align-item-center"
-                                (click)="openingBalanceTypeChanged('DEBIT')"
-                                [ngClass]="{
-                                    'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                    'cp':
-                                        addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                }"
-                                *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
-                            >
-                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                            </div>
-                            <div
-                                class="input-group-addon only-right-radius d-flex align-item-center"
-                                (click)="openingBalanceTypeChanged('CREDIT')"
-                                [ngClass]="{
-                                    'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                    'cp':
-                                        addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                }"
-                                *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
-                            >
-                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                            <div class="d-flex">
+                                <div
+                                    class="input-group-addon d-flex align-item-center"
+                                    (click)="openingBalanceTypeChanged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cp':
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                </div>
+                                <div
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
+                                    (click)="openingBalanceTypeChanged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cp':
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                </div>
                             </div>
                         </div>
                         <div *ngIf="company?.isActive" class="d-flex justify-content-end">
@@ -480,7 +486,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && activeGroupUniqueName === 'sundrydebtors'"
+                *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundrydebtors)"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
@@ -695,6 +701,7 @@
                                 <input-field
                                     [type]="'tel'"
                                     [min]="'0'"
+                                    class="flex-grow-1"
                                     [cssClass]="'text-right'"
                                     [ngClass]="{'remove-right-border-radius': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                                     formControlName="closingBalanceTriggerAmount"
@@ -710,29 +717,31 @@
                                     "
                                 >
                                 </input-field>
-                                <div
-                                    class="input-group-addon d-flex align-item-center"
-                                    (click)="closingBalanceTypeChanged('DEBIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                                </div>
-                                <div
-                                    class="input-group-addon only-right-radius d-flex align-item-center"
-                                    (click)="closingBalanceTypeChanged('CREDIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                <div class="d-flex">
+                                    <div
+                                        class="input-group-addon d-flex align-item-center"
+                                        (click)="closingBalanceTypeChanged('DEBIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                    </div>
+                                    <div
+                                        class="input-group-addon only-right-radius d-flex align-item-center"
+                                        (click)="closingBalanceTypeChanged('CREDIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
