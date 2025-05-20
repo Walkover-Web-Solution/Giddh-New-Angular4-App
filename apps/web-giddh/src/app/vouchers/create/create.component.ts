@@ -5292,8 +5292,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     console.log("taxPercentage 0", taxPercentage);
                     console.log("tdsPercentage null", tdsPercentage);
                     console.log("tcsPercentage 12", tcsPercentage);
-                    console.groupEnd();
-                    
+                console.groupEnd();
+                
                 let taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(entryFormGroup.get('otherTax.calculationMethod')?.value, totalAmount, taxPercentage, tdsPercentage, tcsPercentage);
                 console.log("%c taxableValue -> ", "background:green; color:white;", taxableValue);
                 
@@ -5395,5 +5395,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (selectedUnitCode) {
             transaction.get('stock.stockUnit.code')?.patchValue(selectedUnitCode);
         }
+    }
+
+    /**
+     * Check if voucher is a receipt or payment voucher
+     *
+     * @returns {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    private isReceiptPaymentVoucher(): boolean {
+        return this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice;
     }
 }
