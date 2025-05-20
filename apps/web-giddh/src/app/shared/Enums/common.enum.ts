@@ -16,3 +16,23 @@ export enum AccountArchivedStatusEnum {
     ARCHIVED = 'ARCHIVED',
     BOTH = 'BOTH'
 }
+
+export enum GroupEnum {
+    BankAccounts = 'bankaccounts',
+    CapitalAccount = 'capitalaccount',
+    CurrentAssets = 'currentassets',
+    CurrentLiabilities = 'currentliabilities',
+    DirectExpenses = 'directexpenses',
+    DirectIncome = 'directincome',
+    DutiesAndTaxes = 'dutiesandtaxes',
+    FixedAssets = 'fixedassets',
+    IndirectExpenses = 'indirectexpenses',
+    Investments = 'investments',
+    LoansLiabilities = 'loansliabilities',
+    OperatingCost = 'operatingcost',
+    OtherIncome = 'otherincome',
+    Provisions = 'provisions',
+    RevenueFromOperations = 'revenuefromoperations',
+    SundryCreditors = 'sundrycreditors',
+    SundryDebtors = 'sundrydebtors'
+}
