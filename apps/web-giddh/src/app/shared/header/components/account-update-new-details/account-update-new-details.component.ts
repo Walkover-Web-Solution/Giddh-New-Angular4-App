@@ -267,7 +267,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
-    public isParantSundrydebtors = false;
+    public isParentSundrydebtors = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -501,13 +501,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
      * 
-     * @param parantGroups - Array of parent group objects, each having a `uniqueName` field.
+     * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public checkParantGroup(parantGroups: any[], uniqueName: string): boolean {
-        return parantGroups.some(parant => parant.uniqueName === uniqueName);
+    public checkParentGroup(parentGroups: any[], uniqueName: string): boolean {
+        return parentGroups.some(parent => parent.uniqueName === uniqueName);
     }
     public ngAfterViewInit() {
         const interval = setInterval(() => {
@@ -2105,7 +2105,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.isParantSundrydebtors = this.checkParantGroup(acc.parentGroups, 'sundrydebtors');
+                    this.isParentSundrydebtors = this.checkParentGroup(acc.parentGroups, 'sundrydebtors');
                     this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
                         label: acc.parentGroups[acc.parentGroups?.length - 1]?.name,
                         value: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
