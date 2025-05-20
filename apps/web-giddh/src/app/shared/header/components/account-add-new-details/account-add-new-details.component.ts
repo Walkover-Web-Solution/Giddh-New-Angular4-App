@@ -215,7 +215,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
-    public isParantSundrydebtors = false;
+    public isParentSundrydebtors = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -291,14 +291,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent?.length > 1) {
                         this.isHsnSacEnabledAcc = HSN_SAC_PARENT_GROUPS.some(group =>
-                            this.checkParantGroup(parent, group)
+                            this.checkParentGroup(parent, group)
                         );
                         this.isParentDebtorCreditor(parent[1].uniqueName);
                     } else if (parent?.length === 1) {
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response?.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
-                    this.isParantSundrydebtors = this.checkParantGroup(parent, 'sundrydebtors');
+                    this.isParentSundrydebtors = this.checkParentGroup(parent, 'sundrydebtors');
                     this.showHideAddressTab();
                     this.selectedTabIndex = null;
                     this.isContactSelectedTab = this.isHsnSacEnabledAcc;
@@ -494,13 +494,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
      * 
-     * @param parantGroups - Array of parent group objects, each having a `uniqueName` field.
+     * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
      * @memberof AccountAddNewDetailsComponent
      */
-    public checkParantGroup(parantGroups: any[], uniqueName: string): boolean {
-        return parantGroups.some(parant => parant.uniqueName === uniqueName);
+    public checkParentGroup(parentGroups: any[], uniqueName: string): boolean {
+        return parentGroups.some(parent => parent.uniqueName === uniqueName);
     }
 
     public ngAfterViewInit() {
