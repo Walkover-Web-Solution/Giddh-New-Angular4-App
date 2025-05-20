@@ -2222,5 +2222,20 @@ export class GeneralService {
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
     }
+
+    /**
+     * Checks whether a specific value exists for a given key in any of the parent group objects.
+     *
+     * @param parentGroups - Array of objects representing parent groups (e.g., account groups).
+     * @param value - The value to search for within the specified key.
+     * @param key - The object property to compare the value against. Defaults to 'uniqueName'.
+     * @returns `true` if any object in the array contains the value for the given key; otherwise, `false`.
+     *
+     * @memberof GeneralService
+     */
+    public checkParentGroup(parentGroups: any[], value: string, key: string = 'uniqueName'): boolean {
+        return parentGroups.some(parent => parent[key] === value);
+    }
+
 }
 

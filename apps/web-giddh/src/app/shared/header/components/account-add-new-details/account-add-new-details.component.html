@@ -486,7 +486,7 @@
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && (activeGroupUniqueName === 'sundrydebtors' || isParentSundrydebtors)"
+                *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === 'sundrydebtors' || isParentSundrydebtors)"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div

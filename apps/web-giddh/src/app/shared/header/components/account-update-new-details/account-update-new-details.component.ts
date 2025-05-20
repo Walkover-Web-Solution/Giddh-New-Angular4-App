@@ -64,6 +64,7 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { GroupEnum } from '../../../Enums/common.enum';
 
 @Component({
     selector: 'account-update-new-details',
@@ -498,17 +499,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.loadAccountData();
     }
 
-    /**
-     * Checks whether a given unique group name exists within the list of parent groups.
-     * 
-     * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
-     * @param uniqueName - The unique name to search for in the parent groups.
-     * @returns `true` if any parent group matches the given unique name, otherwise `false`.
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public checkParentGroup(parentGroups: any[], uniqueName: string): boolean {
-        return parentGroups.some(parent => parent.uniqueName === uniqueName);
-    }
     public ngAfterViewInit() {
         const interval = setInterval(() => {
             if (document.getElementById('init-contact-update')) {
@@ -2102,10 +2092,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0]?.uniqueName) {
                     this.accountOpeningBalance = acc.accountOpeningBalance;
-                    let col = acc.parentGroups[0]?.uniqueName;
-                    this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+                    const HSN_SAC_PARENT_GROUPS = [GroupEnum.RevenueFromOperations, GroupEnum.OtherIncome, GroupEnum.OperatingCost, GroupEnum.IndirectExpenses];
+                    this.isHsnSacEnabledAcc = HSN_SAC_PARENT_GROUPS.some(group =>
+                        this.generalService.checkParentGroup(acc.parentGroups, group)
+                    );
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.isParentSundrydebtors = this.checkParentGroup(acc.parentGroups, 'sundrydebtors');
+                    this.isParentSundrydebtors = this.generalService.checkParentGroup(acc.parentGroups, GroupEnum.SundryDebtors);
                     this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
                         label: acc.parentGroups[acc.parentGroups?.length - 1]?.name,
                         value: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
