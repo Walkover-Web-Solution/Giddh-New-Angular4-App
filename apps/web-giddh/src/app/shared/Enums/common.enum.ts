@@ -17,7 +17,8 @@ export enum AccountArchivedStatusEnum {
     BOTH = 'BOTH'
 }
 
-export enum GroupEnum {
+/** Enum representing standard accounting group unique names used for categorizing accounts. */
+export enum AccountingGroupEnum {
     BankAccounts = 'bankaccounts',
     CapitalAccount = 'capitalaccount',
     CurrentAssets = 'currentassets',
