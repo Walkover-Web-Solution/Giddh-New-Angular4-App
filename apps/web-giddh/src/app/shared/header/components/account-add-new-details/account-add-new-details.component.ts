@@ -41,7 +41,7 @@ import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.compo
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GroupEnum } from '../../../Enums/common.enum';
+import { AccountingGroupEnum } from '../../../Enums/common.enum';
 
 @Component({
     selector: 'account-add-new-details',
@@ -216,7 +216,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
-    public isParentSundrydebtors = false;
+    public isParentSundrydebtors: boolean = false;
+    /** Enum representing the types of accounting group type */
+    public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
 
     constructor(
         private _fb: FormBuilder,
@@ -289,22 +291,22 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.store.dispatch(this.groupWithAccountsAction.getAccountGroupDetails(this.activeGroupUniqueName));
                 } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
-                    const HSN_SAC_PARENT_GROUPS = [GroupEnum.RevenueFromOperations, GroupEnum.OtherIncome, GroupEnum.OperatingCost, GroupEnum.IndirectExpenses];
+                    const HSN_SAC_PARENT_GROUPS = [this.accountingGroupEnum.RevenueFromOperations, this.accountingGroupEnum.OtherIncome, this.accountingGroupEnum.OperatingCost, this.accountingGroupEnum.IndirectExpenses];
                     if (parent?.length > 1) {
                         this.isHsnSacEnabledAcc = HSN_SAC_PARENT_GROUPS.some(group =>
-                            this.generalService.checkParentGroup(parent, group)
+                            this.checkParentGroup(parent, group)
                         );
                         this.isParentDebtorCreditor(parent[1].uniqueName);
                     } else if (parent?.length === 1) {
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response?.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
-                    this.isParentSundrydebtors = this.generalService.checkParentGroup(parent, GroupEnum.SundryDebtors);
+                    this.isParentSundrydebtors = this.checkParentGroup(parent, this.accountingGroupEnum.SundryDebtors);
                     this.showHideAddressTab();
                     this.selectedTabIndex = null;
                     this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                     this.changeDetectorRef.detectChanges();
-                    
+
                     setTimeout(() => {
                         this.selectedTabIndex = 0;
                         this.changeDetectorRef.detectChanges();
@@ -986,6 +988,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.resetGstStateForm();
             this.resetBankDetailsForm();
         }
+    }
+
+    /**
+     * Checks whether a given unique group name exists within the list of parent groups.
+     * 
+     * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
+     * @param uniqueName - The unique name to search for in the parent groups.
+     * @returns `true` if any parent group matches the given unique name, otherwise `false`.
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkParentGroup(parentGroups: any[], uniqueName: string): boolean {
+        return parentGroups.some(parent => parent.uniqueName === uniqueName);
     }
 
     public selectedState(gstForm: FormGroup, event) {

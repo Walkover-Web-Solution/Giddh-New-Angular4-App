@@ -5,7 +5,8 @@ export enum FileTypeEnum {
     XLSX = "xlsx"
 }
 
-export enum GroupEnum {
+/** Enum representing standard accounting group unique names used for categorizing accounts. */
+export enum AccountingGroupEnum {
     BankAccounts = 'bankaccounts',
     CapitalAccount = 'capitalaccount',
     CurrentAssets = 'currentassets',
