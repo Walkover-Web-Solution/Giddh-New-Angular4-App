@@ -1299,7 +1299,7 @@
                                                                         [commonLocaleData]="commonLocaleData"
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
-                                                                        (totalTax)="updateTotalTax($event, entry, entryIndex)"></tax-dropdown>
+                                                                        (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
                                                                     <span
                                                                         class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
@@ -1357,7 +1357,8 @@
                                                             </div>
                                                         </ng-container>
                                                         <div class="d-flex align-items-center justify-content-end wrap-td-data"
-                                                            *ngIf="activeEntryIndex === entryIndex" entryOtherTax
+                                                            *ngIf="activeEntryIndex === entryIndex" 
+                                                            entryOtherTax
                                                             [entry]="entry?.value"
                                                             [appliedOtherTax]="entry.get('otherTax')?.value"
                                                             (calculatedAmount)="updateEntryOtherTax(entry, $event)"

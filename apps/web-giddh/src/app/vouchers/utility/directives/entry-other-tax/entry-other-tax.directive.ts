@@ -18,6 +18,9 @@ export class EntryOtherTaxDirective implements OnChanges {
      * @memberof EntryOtherTaxDirective
      */
     public ngOnChanges(): void {
+        if (this.entry.voucherType === "receipt" || this.entry.voucherType === "payment") {
+            return;
+        }
         let taxableValue = 0;
 
         if (this.entry.otherTax) {
