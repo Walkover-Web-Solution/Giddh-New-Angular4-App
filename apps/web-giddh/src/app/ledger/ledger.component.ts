@@ -1020,7 +1020,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerBulkActionSuccess$.subscribe((yes: boolean) => {
             if (yes) {
                 this.entryUniqueNamesForBulkAction = [];
-                this.getTransactionData();
+                if (this.isAdvanceSearchImplemented) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
             }
         });
 
