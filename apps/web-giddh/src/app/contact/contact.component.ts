@@ -587,7 +587,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            ipcRenderer.send('open-url', `/pages/${part}/${accUniqueName}`);
+            url = `${location.origin}${location.pathname}#./pages/${part}`;
+            ipcRenderer.send('open-url', url);
         } else {
             if (part === 'ledger') {
                 url = url + `?redirectUrl=${this.currentUrl}`;
