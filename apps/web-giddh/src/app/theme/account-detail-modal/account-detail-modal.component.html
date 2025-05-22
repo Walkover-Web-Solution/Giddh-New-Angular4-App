@@ -20,10 +20,12 @@
                                 <div class="account-detail-padding flex-grow-1 border-right-0">
                                     <h3 class="account-detail-custom-title">{{ accInfo?.name }}</h3>
                                 </div>
-
-                                <div class="account-detail-padding" (click)="performActions(0, $event)">
-                                    <img  *ngIf="!isLoading" src="./assets/images/path.svg" />
-                                </div>
+                                <a
+                                     (click)="performActions(0, $event)"
+                                    class="edit-icon pl-1 pd-t05"
+                                >
+                                    <i *ngIf="!isLoading" class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                </a>
                             </div>
 
                             <div class="custom-detail account-detail-padding">

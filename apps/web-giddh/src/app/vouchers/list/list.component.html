@@ -193,9 +193,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.customerName | titlecase }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -521,9 +524,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -907,9 +913,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1283,9 +1292,14 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <button
+                                                mat-mini-fab
+                                                color="primary"
+                                                (click)="editAccount(element)"
+                                                class="item-wise-common-btn d-flex align-items-center justify-content-center mr-l1"
+                                            >
+                                                <span class="icon-edit-pencil"></span>
+                                            </button>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1617,9 +1631,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.customerName | titlecase }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1906,9 +1923,12 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
                                                 <h3>{{ element?.account?.name }}</h3>
-                                                <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                             </div>
                                             <mat-card-content class="pt-3">
                                                 <ul class="list-unstyled">
@@ -3387,9 +3407,12 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
                                                 <h3>{{ element?.account?.name }}</h3>
-                                                <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                             </div>
                                             <mat-card-content class="pt-3">
                                                 <ul class="list-unstyled">
