@@ -57,5 +57,6 @@ export const LEDGER_API = {
     GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants',
 
     GET_DOWNLOAD_ATTACHMENT: "company/:companyUniqueName/imports/signed-url?fileName=:fileName",
-    IMPORT_VOUCHER: "company/:companyUniqueName/imports/v2/upload?subType=:subType&accountUniqueName=:accountUniqueName&type=:type&isHeaderProvided=:isHeaderProvided"
+    IMPORT_VOUCHER: "company/:companyUniqueName/imports/v2/upload?subType=:subType&accountUniqueName=:accountUniqueName&type=:type&isHeaderProvided=:isHeaderProvided",
+    BULK_EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-export?from=:from&to=:to'
 };

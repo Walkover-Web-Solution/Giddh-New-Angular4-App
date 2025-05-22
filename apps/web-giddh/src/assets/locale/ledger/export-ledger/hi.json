@@ -8,11 +8,26 @@
     "voucher_total": "वाउचर कुल",
     "entry_no": "प्रवेश संख्या.",
     "description": "विवरण",
-    "cr_dr_toggle":"करोड़/डॉ",
-    "plus_minus_toggle":" +/-",
+    "cr_dr_toggle": "करोड़/डॉ",
+    "plus_minus_toggle": " +/-",
     "export_group_ledger": "निर्यात समूह खाता बही",
     "ledger": "खाता",
     "bill_to_bill": "बिल टू बिल",
     "ledger_entries": "बही प्रविष्टियाँ",
-    "account": "खाते"
+    "account": "खाते",
+    "ledger_view": "लेजर दृश्य",
+    "statement_view": "विवरण दृश्य",
+    "t_view": "टी दृश्य",
+    "export_attachment": "संलग्नक निर्यात करें",
+    "export_voucher": "वाउचर निर्यात करें",
+    "invoice_copy_options": {
+        "original": "मूल",
+        "customer": "ग्राहक",
+        "transport": "परिवहन",
+        "attachment": "संलग्नक"
+    },
+    "single_pdf": "एकल पीडीएफ",
+    "multiple_pdf": "एकाधिक पीडीएफ",
+    "select_copy": "प्रतिलिपि चुनें",
+    "select_order": "क्रम चुनें"
 }

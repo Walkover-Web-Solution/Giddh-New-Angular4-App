@@ -70,6 +70,9 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                     </div>
                     <div class="table-responsive overflow-visible">
@@ -190,9 +193,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.customerName | titlecase }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -399,6 +405,9 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                     </div>
                     <div class="table-responsive overflow-visible">
@@ -515,9 +524,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -722,17 +734,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="moreInvoice"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -912,9 +913,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1132,17 +1136,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -1300,9 +1293,14 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <button
+                                                mat-mini-fab
+                                                color="primary"
+                                                (click)="editAccount(element)"
+                                                class="item-wise-common-btn d-flex align-items-center justify-content-center mr-l1"
+                                            >
+                                                <span class="icon-edit-pencil"></span>
+                                            </button>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1482,17 +1480,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -1645,9 +1632,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.customerName | titlecase }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1843,6 +1833,9 @@
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
@@ -1934,9 +1927,12 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
                                                 <h3>{{ element?.account?.name }}</h3>
-                                                <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                             </div>
                                             <mat-card-content class="pt-3">
                                                 <ul class="list-unstyled">
@@ -2079,6 +2075,9 @@
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                     </div>
@@ -2666,17 +2665,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -3011,17 +2999,6 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                [matTooltip]="commonLocaleData?.app_export"
-                                [matTooltipPosition]="'above'"
-                                *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length"
-                                [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
-                            >
-                                <i class="icon-export-icon"></i>
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -3315,6 +3292,9 @@
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                                {{ commonLocaleData?.app_export }}
+                            </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
@@ -3406,9 +3386,12 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
                                                 <h3>{{ element?.account?.name }}</h3>
-                                                <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                             </div>
                                             <mat-card-content class="pt-3">
                                                 <ul class="list-unstyled">
