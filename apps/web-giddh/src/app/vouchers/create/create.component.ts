@@ -2559,7 +2559,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     entryFormGroup.get('otherTax').reset();
                     console.log("calculateReceiptPaymentAmount 1");
-                    
+
                     this.calculateReceiptPaymentAmount(entryFormGroup);
                 }
             }
@@ -3284,6 +3284,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
         });
 
+        if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+            transactionFormGroup.get('amount.amountForAccount').patchValue(transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100));
+        }
+
         this.calculateTotalTax();
     }
 
@@ -3338,7 +3343,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateTotalTax(totalTax: any, entryFormGroup: FormGroup): void {
         entryFormGroup.get('totalTax').patchValue(totalTax);
-        console.log("calculateReceiptPaymentAmount 3", totalTax);
         // this.calculateReceiptPaymentAmount(entryFormGroup);
     }
 
@@ -3414,9 +3418,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateEntryTotal(entryFormGroup: FormGroup, amount: any): void {
-        if (!this.invoiceForm.get('isAdvanceReceipt')?.value) {
-            entryFormGroup.get('total.amountForAccount').patchValue(amount);
-        }
+        console.log("updateEntryTotal", amount);
+
+        // if (!this.invoiceForm.get('isAdvanceReceipt').value) {
+        entryFormGroup.get('total.amountForAccount').patchValue(amount);
+        // }
 
         this.calculateTotalTax();
         this.calculateVoucherTotals();
@@ -5268,7 +5274,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     tax?.taxDetail?.forEach(taxDetail => {
                                         totalTaxRate += Number(taxDetail.taxValue);
                                     });
-                                } 
+                                }
                                 else {
                                     totalTaxRate += Number(tax?.taxDetail?.taxValue);
                                 }
@@ -5281,13 +5287,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     } else {
                         totalAmount = Number(entryFormGroup.get('total')?.value.amountForAccount);
                     }
-                    
+
                     entryFormGroup.get('taxes')?.value?.forEach(tax => {
                         if (Array.isArray(tax?.taxDetail)) {
                             tax?.taxDetail?.forEach(taxDetail => {
                                 taxPercentage += Number(taxDetail.taxValue);
                             });
-                        } 
+                        }
                         else {
                             taxPercentage += Number(tax?.taxDetail?.taxValue);
                         }
@@ -5309,11 +5315,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             } else if (entryFormGroup.get('otherTax.type')?.value === 'tds') {
                                 totalAmount -= Number(entryFormGroup.get('otherTax').value.amount);
                             }
-                            totalAmount = giddhRoundOff(totalAmount, this.company.giddhBalanceDecimalPlaces); 
+                            totalAmount = giddhRoundOff(totalAmount, this.company.giddhBalanceDecimalPlaces);
                         }
                     }
                 }
-                
+
                 if (this.isUpdateMode) {
                     let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                     transactionFormGroup.get('amount.amountForAccount').patchValue(totalAmount);
