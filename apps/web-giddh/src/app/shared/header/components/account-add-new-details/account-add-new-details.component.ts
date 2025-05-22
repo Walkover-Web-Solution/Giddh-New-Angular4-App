@@ -940,7 +940,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete portalDomain.uniqueName;
         });
 
-        if (!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) {
+        if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !this.isParentSundrydebtors ) {
             delete accountRequest['portalDomain'];
         }
         this.submitClicked.emit({
