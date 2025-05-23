@@ -1023,6 +1023,7 @@
                             <select-multiple-fields
                                 [label]="localeData?.app_default_taxes"
                                 [commonLocaleData]="commonLocaleData"
+                                [selectedValues]="taxGroupForm.get('taxes').value"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="companyTaxDropDown$ | async"
                                 (selectedOption)="taxesSelected($event)"
