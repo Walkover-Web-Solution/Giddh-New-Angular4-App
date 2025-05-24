@@ -41,7 +41,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public _presetFonts = [
         { label: 'Open Sans', value: 'Open Sans' },
         { label: 'Sans-Serif', value: 'Sans-Serif' },
-        { label: 'opensans-regular', value: 'opensans-regular' }
+        { label: 'opensans-regular', value: 'opensans-regular' },
+        { label: 'Roboto', value: 'Roboto' }
     ];
     public _presetFontsSize = [
         { label: '16px', value: 16 },
@@ -425,7 +426,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     /**
      * * This is used when the user changes the template.
      */
-    public showMessage(): void{
+    public showMessage(): void {
         this._toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
     }
 }
