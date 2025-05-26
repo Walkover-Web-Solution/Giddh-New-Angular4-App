@@ -157,13 +157,12 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             this.fieldFilteredOptions$ = of(cloneDeep(changes.options.currentValue));
         }
         if (changes?.selectedValues && changes.selectedValues.currentValue) {
-            console.log("changes.selectedValues.currentValue", changes.selectedValues.currentValue);
             
             if (typeof changes.selectedValues.currentValue === "string") {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue);
-            }`  `
+            }
         }
     }
 

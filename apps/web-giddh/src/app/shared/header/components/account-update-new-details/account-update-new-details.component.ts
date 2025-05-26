@@ -595,7 +595,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (taxResponse) {
                     this.companyTaxDropDown = taxResponse;
                     const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
-
                     this.defaultTaxLabel = selectedTaxes.map(selectTax => {
                         return this.companyTaxDropDown.find(tax => tax.value === selectTax).label;
                     });
