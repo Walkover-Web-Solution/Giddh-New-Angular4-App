@@ -1763,6 +1763,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public taxesSelected(event: any): void {
         if (event) {
             this.isTaxesSaveDisable$ = observableOf(false);
+            this.taxGroupForm.get('taxes').patchValue(event);
         }
     }
 
