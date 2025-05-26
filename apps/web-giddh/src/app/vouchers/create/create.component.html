@@ -1296,10 +1296,14 @@
                                                                         [selectedTaxesList]="entry.get('taxes')?.value"
                                                                         [taxesList]="companyTaxes"
                                                                         [currency]="account.baseCurrencySymbol"
+                                                                        [calculateTaxInclusively]="invoiceForm?.get('isAdvanceReceipt')?.value && !isUpdateMode"
+                                                                        [isAdvanceReceipt]="invoiceForm?.get('isAdvanceReceipt')?.value"
+                                                                        [isUpdateMode]="isUpdateMode"
                                                                         [commonLocaleData]="commonLocaleData"
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
-                                                                        (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
+                                                                        (totalTax)="updateTotalTax($event, entry)"
+                                                                    ></tax-dropdown>
                                                                     <span
                                                                         class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
@@ -1342,7 +1346,7 @@
                                                                         [mask]="company?.inputMaskFormat"
                                                                         decimalDigitsDirective
                                                                         (focus)="entry.get('calculateTotal')?.patchValue(false)"
-                                                                        (blur)="invoiceForm.get('isAdvanceReceipt')?.value ? entry.get('calculateTotal')?.patchValue(false) : entry.get('calculateTotal')?.patchValue(true)"
+                                                                        (blur)="entry.get('calculateTotal')?.patchValue(true)"
                                                                         (input)="doReverseCalculation(entry)"
                                                                         (calculatedAmount)="updateEntryTotal(entry, $event)" />
                                                                 </div>
