@@ -26,3 +26,16 @@
     overflow: auto;
     max-height: 100px;
 }
+
+.my-dropdown-menu {
+    max-width: 228px !important;
+    min-width: 228px !important;
+}
+
+.show-caret-icon {
+    background-image: var(--color-caret-image) !important;
+    background-color: var(--color-white) !important;
+    background-position: 97% !important;
+    background-size: 10px !important;
+    background-repeat: no-repeat;
+}

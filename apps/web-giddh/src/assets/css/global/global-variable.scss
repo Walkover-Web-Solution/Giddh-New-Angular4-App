@@ -4,6 +4,8 @@ body {
     --top-sidebar: 60px;
     --center-content-max-width: 1390px;
     --aside-pane-width: 760px;
+    --mat-form-field-height: 48px;
+    --primary-sidebar-width: 60px;
 
     &.depreciation-message {
         --top-distance: 40px;
@@ -24,7 +26,7 @@ body {
 }
 
 @media screen and (max-width: 1024px) {
-    body {    
+    body {
         &.depreciation-message {
             --top-distance: 58px;
         }

@@ -64,8 +64,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public disabled: boolean;
     /** Show Mat Label In with appearance outline Icon */
     @Input() public showMatLabel: boolean = false;
-    /** Prevent to close dropdown menu after select */
-    @Input() public keepMenuOpenAfterSelect: boolean = false;
+    /** List of selected values represented by their unique names. */
+    @Input() public chipListUniqueName: string[] = [];
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -76,6 +76,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits the updated list of selected option unique names whenever the selection changes. */
+    @Output() public selectedOptionUniqueName: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
     public chipList: any[] = [];
     /** Search field form control */
@@ -117,17 +119,15 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                     this.dynamicSearchedQuery.emit(search);
                     if (!search) {
                         this.onClear.emit({ label: "", value: "" });
-                        this.writeValue("");
                     }
                 } else {
                     if (search === "") {
                         this.onClear.emit({ label: "", value: "" });
-                        this.writeValue("");
                     }
                     this.filterOptions(search);
                 }
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -157,11 +157,13 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             this.fieldFilteredOptions$ = of(cloneDeep(changes.options.currentValue));
         }
         if (changes?.selectedValues && changes.selectedValues.currentValue) {
+            console.log("changes.selectedValues.currentValue", changes.selectedValues.currentValue);
+            
             if (typeof changes.selectedValues.currentValue === "string") {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue);
-            }
+            }`  `
         }
     }
 
@@ -217,12 +219,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (this.lastSearchString?.length) {
             this.searchFormControl.setValue("");
         }
-        if (this.keepMenuOpenAfterSelect) {
-            this.handleItemSelected();
-        }
         const selectOptionValue = option?.option?.value?.label;
         this.writeValue([...this.value, option?.option?.value?.value]);
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
+            this.chipListUniqueName.push(option.option.value.value);
             this.chipList.push(this.chipPrefix + selectOptionValue);
             this.emitList();
         }
@@ -237,7 +237,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public removeOption(index: number): void {
         if (index >= 0) {
             this.chipList.splice(index, 1);
-            this.writeValue(this.value.splice(index, 1));
+            this.chipListUniqueName.splice(index, 1);
+            this.value.splice(index, 1);
+            this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
             setTimeout(() => {
                 if (this.trigger && this.trigger.panelOpen) {
@@ -311,6 +313,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     private emitList(): void {
         this.selectedOption.emit(this.chipList);
+        this.selectedOptionUniqueName.emit(this.chipListUniqueName);
         this.changeDetection.detectChanges();
     }
 
@@ -362,14 +365,24 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * Reopen dropdown after option selected
+     * Handle mat autocomplete panel closed
      *
-     * @private
      * @memberof SelectMultipleFieldsComponent
      */
-    private handleItemSelected(): void {
-        setTimeout(() => {
-            this.trigger.openPanel();
-        }, 50);
+    public panelClosed(): void {
+        this.searchFormControl.setValue(null);
+    }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public panelOpened(): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchedQuery.emit("");
+        } else {
+            this.filterOptions("");
+        }
     }
 }

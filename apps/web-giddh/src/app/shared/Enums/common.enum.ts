@@ -25,3 +25,9 @@ export enum AccountingGroupEnum {
     SundryCreditors = 'sundrycreditors',
     SundryDebtors = 'sundrydebtors'
 }
+
+export enum CopyType {
+    ORIGINAL = "ORIGINAL",
+    CUSTOMER = "CUSTOMER",
+    TRANSPORT = "TRANSPORT"
+}

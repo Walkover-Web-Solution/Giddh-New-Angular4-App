@@ -114,7 +114,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public isTaxableAccount$: Observable<boolean>;
-    public companyTaxDropDown$: Observable<IOption[]>;
+    /** List of available tax options to be shown in the dropdown. */
+    public companyTaxDropDown: IOption[] = [];
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
     public companyCurrency: string;
@@ -271,6 +272,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isParentSundrydebtors: boolean = false;
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
+    /** Stores the list of selected tax labels to display in the UI. */
+    public defaultTaxLabel: string[] = [];
 
     constructor(
         private _fb: FormBuilder,
@@ -541,7 +544,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public prepareTaxDropdown() {
         // prepare drop down for taxes
-        this.companyTaxDropDown$ = this.store.pipe(select(createSelector([
+        this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company && state.company.taxes],
@@ -574,6 +577,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
                             }), 'value');
+
                             return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
@@ -587,7 +591,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 return arr;
-            })), takeUntil(this.destroyed$));
+            })), takeUntil(this.destroyed$)).subscribe((taxResponse)=>{
+                if (taxResponse) {
+                    this.companyTaxDropDown = taxResponse;
+                    const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
+
+                    this.defaultTaxLabel = selectedTaxes.map(selectTax => {
+                        return this.companyTaxDropDown.find(tax => tax.value === selectTax).label;
+                    });
+                }
+            });
     }
 
     public getDiscountList() {

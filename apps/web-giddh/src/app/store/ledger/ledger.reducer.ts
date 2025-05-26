@@ -335,6 +335,16 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return f;
             });
 
+            let debitCreditTransactions = state.transactionsResponse.debitCreditTransactions;
+            debitCreditTransactions.forEach(entry => {
+                res?.forEach(response => {
+                    if (response === entry?.entryUniqueName) {
+                        entry.isChecked = true;
+                    }
+                });
+                return entry;
+            });
+
             return {
                 ...state,
                 transactionsResponse: state.transactionsResponse,
@@ -364,12 +374,23 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 return f;
             });
 
+            let debitCreditTransactions = newState.transactionsResponse.debitCreditTransactions;
+            debitCreditTransactions = debitCreditTransactions.map(entry => {
+                res?.forEach(response => {
+                    if (response === entry?.entryUniqueName) {
+                        entry.isChecked = false;
+                    }
+                });
+                return entry;
+            });
+
             return {
                 ...state,
                 transactionsResponse: {
                     ...state.transactionsResponse,
                     debitTransactions: debitTrx,
-                    creditTransactions: creditTrx
+                    creditTransactions: creditTrx,
+                    debitCreditTransactions: debitCreditTransactions
                 },
                 ledgerBulkActionFailedEntries: []
             };
@@ -432,51 +453,76 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     let newResponse: TransactionsResponse = Object.assign({}, transactionDetails);
     let key = '';
     let reverse = '';
+    const isStatementView = transactionDetails?.debitCreditTransactions?.length > 0;
 
     if (mode === 'all') {
-        key = 'debitTransactions';
-        reverse = 'creditTransactions';
+        if (isStatementView) {
+            key = 'debitCreditTransactions'
+        } else {
+            key = 'debitTransactions';
+            reverse = 'creditTransactions';
+        }
+
 
         newResponse[key].map(dbt => dbt.isChecked = false);
 
         if (isChecked) {
-            newResponse[key].map(dt => {
-                if (dt.isCompoundEntry) {
-                    newResponse[reverse].map(d => {
-                        if (dt.entryUniqueName === d.entryUniqueName) {
-                            return d.isChecked = true;
-                        }
-                        return d;
-                    });
-                    dt.isChecked = true;
-                } else {
-                    dt.isChecked = true;
-                }
-                return dt;
-            });
+            if (isStatementView) {
+                newResponse[key].map( debitTransaction => {
+                    if (debitTransaction.isCompoundEntry) {
+                        newResponse[key].map(debit => {
+                            if (debitTransaction.entryUniqueName === debit.entryUniqueName) {
+                                return debit.isChecked = true;
+                            }
+                            return debit;
+                        });
+                        debitTransaction.isChecked = true;
+                    } else {
+                        debitTransaction.isChecked = true;
+                    }
+                    return debitTransaction;
+                });
+            } else {
+                newResponse[key].map( debitTransaction => {
+                    if (debitTransaction.isCompoundEntry) {
+                        newResponse[reverse].map(debit => {
+                            if (debitTransaction.entryUniqueName === debit.entryUniqueName) {
+                                return debit.isChecked = true;
+                            }
+                            return debit;
+                        });
+                        debitTransaction.isChecked = true;
+                    } else {
+                        debitTransaction.isChecked = true;
+                    }
+                    return debitTransaction;
+                });
+            }
         }
 
-        key = 'creditTransactions';
-        reverse = 'debitTransactions';
-
-        newResponse[key].map(dbt => dbt.isChecked = false);
-
-        if (isChecked) {
-            newResponse[key].map(dt => {
-                if (dt.isCompoundEntry) {
-                    newResponse[reverse].map(d => {
-                        if (dt.entryUniqueName === d.entryUniqueName) {
-                            return d.isChecked = true;
-                        }
-                        return d;
-                    });
-                    dt.isChecked = true;
-                } else {
-                    dt.isChecked = true;
-                }
-                return dt;
-            });
+        if (!isStatementView) {
+            key = 'creditTransactions';
+            reverse = 'debitTransactions';
+            
+            newResponse[key].map(debitCreditTransaction => debitCreditTransaction.isChecked = false);
+            if (isChecked) {
+                newResponse[key].map(debitTransaction => {
+                    if (debitTransaction.isCompoundEntry) {
+                        newResponse[reverse].map(d => {
+                            if (debitTransaction.entryUniqueName === d.entryUniqueName) {
+                                return d.isChecked = true;
+                            }
+                            return d;
+                        });
+                        debitTransaction.isChecked = true;
+                    } else {
+                        debitTransaction.isChecked = true;
+                    }
+                    return debitTransaction;
+                });
+            }
         }
+
     } else {
         key = mode === 'debit' ? 'debitTransactions' : 'creditTransactions';
         reverse = mode === 'debit' ? 'creditTransactions' : 'debitTransactions';
@@ -503,4 +549,3 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
 
     return newResponse;
 };
-

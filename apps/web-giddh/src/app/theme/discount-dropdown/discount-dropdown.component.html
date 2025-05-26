@@ -1,7 +1,7 @@
 <div class="multi-select">
-    <input type="text" class="form-control text-right total-discount-amount" [matMenuTriggerFor]="discountControlMenu" [placeholder]="currency + '0'"
+    <input type="text" class="form-control text-right total-discount-amount" [matMenuTriggerFor]="discountControlMenu" #menuTrigger="matMenuTrigger" [placeholder]="currency + '0'"
         readonly [value]="currency + totalDiscountAmount">
-    <mat-menu #discountControlMenu="matMenu">
+    <mat-menu #discountControlMenu="matMenu" [hasBackdrop]="hasBackdrop">
         <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()" [formGroup]="discountForm">
             <div>
                 <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_percent" [matSuffix]="'%'" class="d-block" [cssClass]="'text-right'" formControlName="percentage" [readonly]="discountForm.get('fixedValue')?.value > 0"></input-field>
@@ -18,7 +18,7 @@
                     </ng-container>
                 </ng-container>
             </div>
-            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+            <div *ngIf="showCreateNew" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
                 <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
             </div>
         </div>

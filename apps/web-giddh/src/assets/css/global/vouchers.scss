@@ -45,20 +45,6 @@
     }
 
     .vouchers-large-container {
-        table {
-            tr {
-                td {
-                    reactive-dropdown-field {
-                        mat-form-field {
-                            .mat-mdc-text-field-wrapper {
-                                padding-left: 0;
-                                padding-right: 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
         .change-currency {
             .currency-input-wrapper {
                 .text-field-container {
@@ -141,11 +127,6 @@
 
 .text-success {
     color: var(--color-teal);
-}
-
-// display
-.d-grid {
-    display: grid;
 }
 
 // template scroll

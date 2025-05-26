@@ -4,7 +4,7 @@
     .more-details {
         background-color: var(--color-white);
         padding: 0 15px 15px;
-        .cheq {
+        .cheque {
             table {
                 td.remove-invoice {
                     span:first-child {
@@ -19,6 +19,78 @@
                     }
                 }
             }
+        }
+    }
+    .basic-detail {
+        .d-grid {
+            --field-width: minmax(200px, 1fr);
+            --label: 30px;
+            --small-field-division: 1.5;
+            --common-column: var(--field-width) var(--label) var(--field-width) var(--label) var(--field-width)
+                var(--label) var(--field-width);
+            --grid-column-with-stock: calc(var(--field-width) / var(--small-field-division))
+                calc(var(--field-width) / var(--small-field-division)) var(--label)
+                calc(var(--field-width) / var(--small-field-division)) var(--label) var(--common-column);
+
+            grid-gap: 5px;
+            grid-template-columns: var(--common-column);
+            &.stock-grid {
+                --field-width: 132px;
+                grid-template-columns: var(--grid-column-with-stock);
+            }
+
+            @media screen and (max-width: 1440px) {
+                --field-width: minmax(170px, 1fr);
+                &.stock-grid {
+                    --label: 20px;
+                    --field-width: 120px;
+                    grid-template-columns: var(--grid-column-with-stock);
+                }
+            }
+
+            @media screen and (max-width: 1280px) {
+                --field-width: minmax(150px, 1fr);
+                &.stock-grid {
+                    --small-field-division: 1;
+                    --field-width: 100px;
+                    grid-template-columns: var(--grid-column-with-stock);
+                }
+            }
+
+            @media screen and (max-width: 992px) {
+                --field-width: minmax(140px, 1fr);
+                &.stock-grid {
+                    --field-width: 90px;
+                    grid-template-columns: var(--grid-column-with-stock);
+                }
+            }
+        }
+    }
+    .more-details {
+        table {
+            tr {
+                td {
+                    padding-right: 10px;
+                    reactive-dropdown-field,
+                    input-field,
+                    ledger-discount,
+                    tax-control {
+                        display: block;
+                        width: 100%;
+                        max-width: 230px;
+
+                        @media screen and (max-width: 1520px) {
+                            max-width: 200px;
+                        }
+                        @media screen and (max-width: 1440px) {
+                            max-width: 160px;
+                        }
+                    }
+                }
+            }
+        }
+        .tag-wrapper {
+            max-width: 445px;
         }
     }
     #ledger-description {
@@ -52,6 +124,7 @@
 .width-70 {
     width: 70px;
     min-width: 70px;
+    max-width: 70px;
 }
 
 .table-minus label {
@@ -84,7 +157,7 @@
         color: var(--color-blue);
     }
 }
-#ledger-unit {
+.ledger-price {
     width: 78px;
 }
 .disabled-item {
@@ -109,7 +182,6 @@
     justify-content: center;
     padding: 10px 10px 0 10px;
     font-size: 12px;
-    height: 60px;
     label {
         margin-top: 10px;
     }
@@ -189,7 +261,7 @@
 
 span {
     &.icon-info {
-        line-height: 40px;        
+        line-height: 40px;
     }
 }
 

@@ -154,13 +154,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         })
         this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.router.url === '/pages/home') {
-                this.getAllBanks();
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
-                this.isDirectlyIntegrated = true;
-                this.componentStore.setState(state => ({
-                    ...state,
-                    requisitionList: null
-                }));
+                if (!this.selectedBankUniqueName) {
+                    this.router.navigate(['/pages/settings/integration/payment']);
+                } else {
+                    this.getAllBanks();
+                    this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
+                    this.isDirectlyIntegrated = true;
+                    this.componentStore.setState(state => ({
+                        ...state,
+                        requisitionList: null
+                    }));
+                }
             }
         });
 
@@ -357,11 +361,6 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @memberof BankAccountsComponent
      */
     public getLinkBankAccount(): void {
-
-        if (!this.selectedBankUniqueName) {
-            this.router.navigate(['/pages/settings/integration/payment']);
-        }
-
         if (this.unlinkBankList.length === 1 && !this.isBankAccountConnected) {
             this.linkBankAccount();
         } else {
