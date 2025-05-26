@@ -3291,6 +3291,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         //         transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100)
         //     );
         // }
+        if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+            transactionFormGroup.get('amount.amountForAccount').patchValue(transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100));
+        }
 
         this.calculateTotalTax();
     }

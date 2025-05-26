@@ -202,4 +202,20 @@ export class TaxDropdownComponent implements OnChanges {
     public createNew(): void {
         this.createNewTax.emit();
     }
+
+    // /**
+    //  * Calculates tax inclusively for Advance receipt else exclusively
+    //  *
+    //  * @private
+    //  * @memberof TaxDropdownComponent
+    //  */
+    // private calculateInclusiveOrExclusiveTaxes(): void {
+    //     if (this.calculateTaxInclusively) {
+    //         // Inclusive tax rate
+    //         this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
+    //     } else {
+    //         // Exclusive tax rate
+    //         this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
+    //     }
+    // }
 }
