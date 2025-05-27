@@ -40,6 +40,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showError: boolean = false;
     /** Holds prefix of chip text */
     @Input() public chipPrefix: string = '';
+    /** Holds sufix of chip text */
+    @Input() public chipSuffix: string = '';
     /** The parent component can dynamically control the focus of the input field by passing a boolean value. */
     @Input() public autoFocus: boolean = false;
     /** Name of search field */
