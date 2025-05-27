@@ -1193,6 +1193,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectGroup(event: IOption) {
         if (event) {
+            this.activeGroupUniqueName = event.value;
             this.isParentDebtorCreditor();
             this.isGroupSelected.emit(event);
         }
