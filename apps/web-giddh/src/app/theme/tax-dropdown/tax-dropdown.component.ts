@@ -33,6 +33,8 @@ export class TaxDropdownComponent implements OnChanges {
      * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
     @Input() public calculateTaxInclusively: boolean;
+    /** Holds true if tax needs to be calculated */
+    @Input() public calculateTax: boolean;
     /** Emitter for create new tax selected */
     @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emitter for selected taxes */
@@ -73,7 +75,7 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.calculateTaxInclusively) {
-            if (changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
+            if (this.calculateTax || changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
                 if (this.taxesList?.length) {
                     this.addTaxesInForm();
                     this.enableDisableTaxes();

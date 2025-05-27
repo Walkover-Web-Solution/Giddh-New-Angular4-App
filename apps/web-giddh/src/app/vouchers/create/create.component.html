@@ -1300,6 +1300,7 @@
                                                                         [isAdvanceReceipt]="invoiceForm?.get('isAdvanceReceipt')?.value"
                                                                         [isUpdateMode]="isUpdateMode"
                                                                         [commonLocaleData]="commonLocaleData"
+                                                                        [calculateTax]="calculateTaxInTaxDropdown"
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
                                                                         (totalTax)="updateTotalTax($event, entry)"
