@@ -526,7 +526,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    this.parentGroups = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups : [{ uniqueName: selectedGroupDetails?.uniqueName }];
+                    this.parentGroups = [...selectedGroupDetails.parentGroups , { uniqueName: selectedGroupDetails?.uniqueName }];
                     this.isParentDebtorCreditor();
                 }
             }
@@ -594,7 +594,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 return arr;
             })), takeUntil(this.destroyed$)).subscribe((taxResponse) => {
-                if (taxResponse) {
+                if (taxResponse.length) {
                     this.companyTaxDropDown = taxResponse;
                     const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
                     this.defaultTaxLabel = selectedTaxes.map(selectTax => {
@@ -643,9 +643,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public determineParentGroupTypes(): void {
-        this.isParentBankAccounts = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.BankAccounts);
-        this.isParentSundryCreditors = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryCreditors);
-        this.isParentSundryDebtors = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryDebtors);
+        this.isParentBankAccounts = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.BankAccounts) || this.activeGroupUniqueName === this.accountingGroupEnum.BankAccounts;
+        this.isParentSundryCreditors = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryCreditors) || this.activeGroupUniqueName === this.accountingGroupEnum.SundryCreditors;
+        this.isParentSundryDebtors = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryDebtors) || this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors;
         this.isDebtorCreditor = this.isParentSundryCreditors || this.isParentSundryDebtors;
     }
 
@@ -2063,10 +2063,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     private filterTaxesForDebtorCreditor(taxes?: Array<any>): Array<any> {
-        if (this.activeGroupUniqueName === 'sundrydebtors' || this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryDebtors)) {
+        if (this.isParentSundryDebtors) {
             // Only allow TDS receivable and TCS payable
             return taxes?.filter(tax => ['tdsrc', 'tcspay']?.indexOf(tax?.additional?.taxType) > -1);
-        } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryCreditors)) {
+        } else if (this.isParentSundryCreditors) {
             // Only allow TDS payable and TCS receivable
             return taxes?.filter(tax => ['tdspay', 'tcsrc']?.indexOf(tax?.additional?.taxType) > -1);
         } else {
