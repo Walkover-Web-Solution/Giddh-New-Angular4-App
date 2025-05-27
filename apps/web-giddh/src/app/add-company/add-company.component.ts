@@ -360,10 +360,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (response?.user?.contactNo) {
                 this.showMobileField = false;
                 this.mobileNo = response.user.contactNo;
-                this.firstStepForm.get('mobileNo')?.removeValidators(Validators.required);
+                this.firstStepForm.get('mobile')?.removeValidators(Validators.required);
             } else {
                 this.showMobileField = true;
-                this.firstStepForm.get('mobileNo')?.addValidators(Validators.required);
+                this.firstStepForm.get('mobile')?.addValidators(Validators.required);
                 this.initMobileNumberField();
             }
         });
