@@ -504,7 +504,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
     }
-    
+
     /**
      * Handle compare with event
      *
