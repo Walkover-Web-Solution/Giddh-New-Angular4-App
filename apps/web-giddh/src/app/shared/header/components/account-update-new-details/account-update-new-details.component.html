@@ -1036,11 +1036,11 @@
                             <select-multiple-fields
                                 [label]="localeData?.app_default_taxes"
                                 [commonLocaleData]="commonLocaleData"
-                                [selectedValues]="taxGroupForm.get('taxes').value"
+                                [selectedValues]="defaultTaxLabel"
                                 [placeholder]="commonLocaleData?.app_select"
-                                [options]="companyTaxDropDown$ | async"
-                                (selectedOption)="taxesSelected($event)"
-                                formControlName="taxes"
+                                [options]="companyTaxDropDown"
+                                [chipListUniqueName]="taxGroupForm.get('taxes').value" 
+                                (selectedOptionUniqueName)="taxesSelected($event)"
                                 class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
                             ></select-multiple-fields>
                             <button

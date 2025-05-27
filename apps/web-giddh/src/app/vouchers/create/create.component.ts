@@ -1999,7 +1999,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
