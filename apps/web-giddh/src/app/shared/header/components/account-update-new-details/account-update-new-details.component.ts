@@ -168,8 +168,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isTaxesSaveDisable$: Observable<boolean> = observableOf(true);
     /** To check applied discounts modified  */
     public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
-    /** This will hold active parent group */
-    public activeParentGroup: string = "";
     /** Stores the search results pagination details for group dropdown */
     public groupsSearchResultsPaginationData = {
         page: 0,
@@ -269,11 +267,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
-    public isParentSundrydebtors: boolean = false;
+    public isParentSundryDebtors: boolean = false;
+    /** Flag to determine if the parent group is "sundrydebtors". */
+    public isParentSundryCreditors: boolean = false;
+    /** Flag to determine if the parent group is "bank accounts". */
+    public isParentBankAccounts: boolean = false;
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Stores the list of selected tax labels to display in the UI. */
     public defaultTaxLabel: string[] = [];
+    /** Store active parent group */
+    public parentGroups: any[] = [];
 
     constructor(
         private _fb: FormBuilder,
@@ -522,10 +526,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails?.uniqueName };
-                    if (parentGroup) {
-                        this.isParentDebtorCreditor(parentGroup.uniqueName);
-                    }
+                    this.parentGroups = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups : [{ uniqueName: selectedGroupDetails?.uniqueName }];
+                    this.isParentDebtorCreditor();
                 }
             }
         });
@@ -591,7 +593,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 return arr;
-            })), takeUntil(this.destroyed$)).subscribe((taxResponse)=>{
+            })), takeUntil(this.destroyed$)).subscribe((taxResponse) => {
                 if (taxResponse) {
                     this.companyTaxDropDown = taxResponse;
                     const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
@@ -633,6 +635,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addBlankGstForm();
             this.changeDetectorRef.detectChanges();
         }
+    }
+
+    /**
+     * Evaluates the parent groups of an account to determine its classification
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public determineParentGroupTypes(): void {
+        this.isParentBankAccounts = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.BankAccounts);
+        this.isParentSundryCreditors = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryCreditors);
+        this.isParentSundryDebtors = this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryDebtors);
+        this.isDebtorCreditor = this.isParentSundryCreditors || this.isParentSundryDebtors;
     }
 
     /**
@@ -1178,22 +1192,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectGroup(event: IOption) {
         if (event) {
-            this.activeGroupUniqueName = event.value;
-            let parent = event.additional;
-            if (parent && parent[1]) {
-                this.isParentDebtorCreditor(parent[1].uniqueName);
-            }
+            this.isParentDebtorCreditor();
             this.isGroupSelected.emit(event);
         }
     }
 
-    public isParentDebtorCreditor(activeParentgroup: string) {
-        this.activeParentGroup = activeParentgroup;
+    /**
+     * Determines and sets the internal flags related to the account group type.
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public isParentDebtorCreditor(): void {
+        this.determineParentGroupTypes();
         this.toggleStateRequired();
-        if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
-            this.isShowBankDetails(activeParentgroup);
+        if (this.isParentSundryDebtors || this.isParentSundryCreditors) {
+            this.showBankDetail = this.isParentSundryCreditors
             this.isDebtorCreditor = true;
-        } else if (activeParentgroup === 'bankaccounts') {
+        } else if (this.isParentBankAccounts) {
             this.isBankAccount = true;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
@@ -1205,13 +1220,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.changeDetectorRef.detectChanges();
     }
 
-    public isShowBankDetails(accountType: string) {
-        if (accountType === 'sundrycreditors') {
-            this.showBankDetail = true;
-        } else {
-            this.showBankDetail = false;
-        }
-    }
     public getCountry() {
         this.store.pipe(select(s => s.common.countriesAll), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -1560,7 +1568,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode')?.value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode')?.value && (this.activeGroupUniqueName === 'sundrycreditors' || this.isParentSundryCreditors || this.activeGroupUniqueName === 'sundrydebtors' || this.isParentSundryDebtors)) {
             return true;
         } else {
             return false;
@@ -2055,10 +2063,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     private filterTaxesForDebtorCreditor(taxes?: Array<any>): Array<any> {
-        if (this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors') {
+        if (this.activeGroupUniqueName === 'sundrydebtors' || this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryDebtors)) {
             // Only allow TDS receivable and TCS payable
             return taxes?.filter(tax => ['tdsrc', 'tcspay']?.indexOf(tax?.additional?.taxType) > -1);
-        } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors') {
+        } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.checkParentGroup(this.parentGroups, this.accountingGroupEnum.SundryCreditors)) {
             // Only allow TDS payable and TCS receivable
             return taxes?.filter(tax => ['tdspay', 'tcsrc']?.indexOf(tax?.additional?.taxType) > -1);
         } else {
@@ -2124,7 +2132,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.checkParentGroup(acc.parentGroups, group)
                     );
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.isParentSundrydebtors = this.checkParentGroup(acc.parentGroups, this.accountingGroupEnum.SundryDebtors);
+                    this.parentGroups = acc.parentGroups;
+                    this.determineParentGroupTypes();
                     this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
                         label: acc.parentGroups[acc.parentGroups?.length - 1]?.name,
                         value: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
