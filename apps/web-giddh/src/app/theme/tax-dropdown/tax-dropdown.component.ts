@@ -75,7 +75,7 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.calculateTaxInclusively) {
-            if (this.calculateTax || changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
+            if (changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
                 if (this.taxesList?.length) {
                     this.addTaxesInForm();
                     this.enableDisableTaxes();
@@ -88,6 +88,10 @@ export class TaxDropdownComponent implements OnChanges {
                     this.enableDisableTaxes();
                 }
             }
+        }
+
+        if (changes?.calculateTax?.currentValue) {
+            this.calculateTaxAmount(true);
         }
     }
 
@@ -163,15 +167,15 @@ export class TaxDropdownComponent implements OnChanges {
      * @private
      * @memberof TaxDropdownComponent
      */
-    private calculateTaxAmount(): void {
+    private calculateTaxAmount(calculateTax: boolean = false): void {
         this.totalTaxAmount = 0;
 
         const taxes = this.taxForm.get('taxes') as FormArray;
         for (let i = 0; i <= taxes.length; i++) {
             if (taxes.controls[i]?.get('isChecked')?.value) {
-                if (this.calculateTaxInclusively) {
+                if (this.calculateTaxInclusively && !calculateTax) {
                     // Inclusive tax rate
-                    this.totalTaxAmount += (Number(this.amount) * (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100)) 
+                    this.totalTaxAmount += (Number(this.amount) * (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100))
                         / (1 + (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100));
                 } else {
                     // Exclusive tax rate

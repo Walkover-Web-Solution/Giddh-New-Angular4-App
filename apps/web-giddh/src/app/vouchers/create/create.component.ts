@@ -2563,8 +2563,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     entryFormGroup.get('otherTax').reset();
-                    console.log("calculateReceiptPaymentAmount 1");
-
                     this.calculateReceiptPaymentAmount(entryFormGroup);
                 }
             }
@@ -3289,16 +3287,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (tax.taxType === 'gstcess') {
                 cessPercentage += tax?.taxDetail?.taxValue;
             } else {
-                console.log("Tax: ", tax?.taxDetail?.taxValue);
                 totalTaxWithoutCess += tax?.taxDetail?.taxValue;
             }
-            
+
             taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
         });
 
         entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
         entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
-    
+
         if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
             transactionFormGroup.get('amount.amountForAccount').patchValue(transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100));
@@ -3336,7 +3333,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
 
-            entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(((taxPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));            
+            entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(((taxPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(((cessPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
 
             if (isNaN(entryFormGroup.get("totalTaxWithoutCess")?.value)) {
@@ -3358,19 +3355,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateTotalTax(totalTax: any, entryFormGroup: FormGroup): void {
         entryFormGroup.get('totalTax').patchValue(totalTax);
-        if (entryFormGroup.get('otherTax.amount')?.value > 0) {
-            let amount: number = 0;
-            if (entryFormGroup.get('otherTax.type').value === 'tds') {
-                amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) + (entryFormGroup.get('otherTax.amount').value ?? 0) - totalTax
-            } else if (entryFormGroup.get('otherTax.type').value === 'tcs') {
-                amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) - (entryFormGroup.get('otherTax.amount').value ?? 0) - totalTax
-            }
-            entryFormGroup.get('transactions.0.amount.amountForAccount').patchValue(amount);
+
+        let amount: number = 0;
+        if (entryFormGroup.get('otherTax.type').value === 'tds') {
+            amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) + (entryFormGroup.get('otherTax.amount').value ?? 0) - totalTax
+        } else if (entryFormGroup.get('otherTax.type').value === 'tcs') {
+            amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) - (entryFormGroup.get('otherTax.amount').value ?? 0) - totalTax
+        } else {
+            amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) - totalTax
         }
-        
+        entryFormGroup.get('transactions.0.amount.amountForAccount').patchValue(amount);
+
         this.calculateTotalTax();
         this.calculateVoucherTotals();
-        // this.calculateReceiptPaymentAmount(entryFormGroup);
     }
 
     /**
@@ -3445,15 +3442,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateEntryTotal(entryFormGroup: FormGroup, amount: any): void {
-        if (!this.invoiceForm.get('isAdvanceReceipt').value) {
+        if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) {
             entryFormGroup.get('total.amountForAccount').patchValue(amount);
         }
-        this.handleCalculateTaxInTaxDropdown();
         this.calculateTotalTax();
         this.calculateVoucherTotals();
     }
 
-    public handleCalculateTaxInTaxDropdown(): void {
+    /**
+     * Calculates tax in tax dropdown component
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private handleCalculateTaxInTaxDropdown(): void {
         this.calculateTaxInTaxDropdown = true;
         setTimeout(() => {
             this.calculateTaxInTaxDropdown = false;
@@ -5322,10 +5324,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 }
                             });
                             if (totalTaxRate > 0) {
-                                    // totalAmount += Number(entryFormGroup.get('otherTax').value.amount) + (totalAmount * totalTaxRate / 100);
-                                    // totalAmount += ((totalAmount * entryFormGroup.get('otherTax').value.taxValue / 100) + (totalAmount * totalTaxRate / 100));
+                                // totalAmount += Number(entryFormGroup.get('otherTax').value.amount) + (totalAmount * totalTaxRate / 100);
+                                // totalAmount += ((totalAmount * entryFormGroup.get('otherTax').value.taxValue / 100) + (totalAmount * totalTaxRate / 100));
                                 if (entryFormGroup.get('otherTax').value.type === 'tds') {
-                                    totalAmount = totalAmount + (totalAmount * totalTaxRate / 100) - Number(entryFormGroup.get('otherTax').value.amount);
+                                    if (entryFormGroup.get('otherTax.calculationMethod')?.value === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                                        totalAmount = totalAmount * (1 + (totalTaxRate / 100)) * (1 - (entryFormGroup.get('otherTax.taxValue')?.value / 100));
+                                    } else {
+                                        totalAmount = totalAmount + (totalAmount * totalTaxRate / 100) - Number(entryFormGroup.get('otherTax').value.amount);
+                                    }
+                                    // advanceReceived = amount * (1 + gstRate / 100) * (1 - tdsRate / 100);
                                     // totalAmount += ((totalAmount * entryFormGroup.get('otherTax').value.taxValue / 100) + (totalAmount * totalTaxRate / 100));
                                 } else {
                                     totalAmount += Number(entryFormGroup.get('otherTax').value.amount) + (totalAmount * totalTaxRate / 100);
@@ -5339,7 +5346,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 }
                             }
                             totalAmount = giddhRoundOff(totalAmount, this.company.giddhBalanceDecimalPlaces);
-                            
+
                         } else if (entryFormGroup.get('taxes')?.value?.length > 0) {
                             let totalTaxRate = 0;
                             entryFormGroup.get('taxes')?.value?.forEach(tax => {
@@ -5384,12 +5391,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
 
-                if (this.isUpdateMode) {
-                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                    transactionFormGroup.get('amount.amountForAccount').patchValue(totalAmount);
-                    transactionFormGroup.get('amount.amountForCompany').patchValue(totalAmount * (this.invoiceForm.get('exchangeRate')?.value ?? 1));
-                }
-
                 if (entryFormGroup.get('otherTax.type')?.value === "tcs") {
                     tcsPercentage += entryFormGroup.get('otherTax.taxValue')?.value;
                 } else {
@@ -5397,27 +5398,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 let taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(entryFormGroup.get('otherTax.calculationMethod')?.value, totalAmount, taxPercentage, tdsPercentage, tcsPercentage);
-                // console.log("%c taxableValue -> ", "background:green; color:white;", taxableValue);
 
-                let taxAmount: number = 0;
+                let taxAmount: number = null;
                 if (entryFormGroup.get('otherTax.calculationMethod')?.value === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                    // taxableValue = (taxableValue + entryFormGroup.get('totalTax')?.value);
-                    // taxableValue = (taxableValue + (taxableValue * taxPercentage / 100));
                     taxAmount = (taxableValue + (taxableValue * taxPercentage / 100));
                 }
 
-                entryFormGroup.get('otherTax.amount').patchValue(taxAmount * +entryFormGroup.get('otherTax.taxValue')?.value / 100);
+                entryFormGroup.get('otherTax.amount').patchValue((taxAmount ?? taxableValue) * +entryFormGroup.get('otherTax.taxValue')?.value / 100);
 
-                // if (taxPercentage > 0) {
-                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                    transactionFormGroup.get('amount.amountForAccount').patchValue(taxableValue);
-                    transactionFormGroup.get('amount.amountForCompany').patchValue(taxableValue * (this.invoiceForm.get('exchangeRate')?.value ?? 1));
+                let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                transactionFormGroup.get('amount.amountForAccount').patchValue(taxableValue);
+                transactionFormGroup.get('amount.amountForCompany').patchValue(taxableValue * (this.invoiceForm.get('exchangeRate')?.value ?? 1));
 
-                    entryFormGroup.get('total.amountForAccount').patchValue(totalAmount);
-                    entryFormGroup.get('total.amountForCompany').patchValue(totalAmount * (this.invoiceForm.get('exchangeRate')?.value ?? 1));
-                    this.calculateVoucherTotals();
-                // }
-            
+                entryFormGroup.get('total.amountForAccount').patchValue(totalAmount);
+                entryFormGroup.get('total.amountForCompany').patchValue(totalAmount * (this.invoiceForm.get('exchangeRate')?.value ?? 1));
+                this.handleCalculateTaxInTaxDropdown();
+                this.calculateVoucherTotals();
             } else {
                 this.doReverseCalculation(entryFormGroup);
             }
