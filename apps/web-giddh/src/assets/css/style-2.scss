@@ -2380,6 +2380,10 @@ ul.sub-list {
 .text-gray {
     color: var(--color-gray);
 }
+// This color will same in all theme
+.text-static-white {
+    color: var(--color-white-tertiary) !important;
+}
 
 // This color will same in all theme
 .text-static-white {
@@ -13969,10 +13973,15 @@ mat-list {
 
 .advance-filter-button {
     .mdc-button__label {
+<<<<<<< HEAD
         color: var(--color-toast-primary-text) !important;
     }
 }
 
 .w150 {
     width: 150px !important;
+=======
+            color: var(--color-toast-primary-text) !important;
+        }
+>>>>>>> d8e7a14536e11706ee3164ecc657aea50ec72b54
 }
