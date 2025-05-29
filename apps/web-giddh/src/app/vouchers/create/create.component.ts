@@ -2295,8 +2295,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 })
             ]),
             total: this.formBuilder.group({ //temp
-                amountForAccount: [0],
-                amountForCompany: [0]
+                amountForAccount: [entryData ? entryData?.transactions[0]?.amount?.amountForAccount : 0],
+                amountForCompany: [entryData ? entryData?.transactions[0]?.amount?.amountForCompany : 0]
             }),
             purchaseOrderItemMapping: this.formBuilder.group({
                 uniqueName: [entryData ? entryData?.purchaseOrderItemMapping?.uniqueName : ''],
