@@ -5,23 +5,31 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { ContactService } from "../../services/contact.service";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../store";
 
 export interface ContactState {
     sendBulkEmailIsSuccess: boolean;
+    getLastAccountsInProgress: boolean;
 }
 
 export const DEFAULT_CONTACT_STATE: ContactState = {
-    sendBulkEmailIsSuccess: null
+    sendBulkEmailIsSuccess: null,
+    getLastAccountsInProgress: false
 };
 
 @Injectable()
 export class ContactComponentStore extends ComponentStore<ContactState> implements OnDestroy {
 
     constructor(private toasterService: ToasterService,
-        private contactService: ContactService
+        private contactService: ContactService,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_CONTACT_STATE);
     }
+
+    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public getLastAccountsInProgress$ = this.select((state) => state.getLastAccountsInProgress);
 
     /**
      * Send email template

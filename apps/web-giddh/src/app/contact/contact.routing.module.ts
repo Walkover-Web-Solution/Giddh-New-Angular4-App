@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ContactComponent } from './contact.component';
+import { ContactPreviewComponent } from './preview/preview.component';
 
 @NgModule({
     imports: [
@@ -11,6 +12,7 @@ import { ContactComponent } from './contact.component';
                 pathMatch: 'full'
             },
             { path: ':type', component: ContactComponent },
+            { path: ':type/:accountUniqueName', component: ContactPreviewComponent },
         ])
     ],
     exports: [RouterModule]

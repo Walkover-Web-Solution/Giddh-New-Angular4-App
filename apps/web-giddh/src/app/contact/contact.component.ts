@@ -259,6 +259,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     /** Observable for custom header columns */
     public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
+    /** Holds advance Filters keys */
+    public advanceFilters: any = {};
+    /** Holds Advance Filters Applied Status */
+    public advanceFiltersApplied: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -1745,5 +1749,28 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchedName?.reset();
             this.translationComplete(true);
         }
+    }
+
+    /**
+     * Set all account to service variable and redirect to view page
+     *
+     * @memberof ContactComponent
+     */
+    public showAccountPreview(accountUniqueName: string): void {
+        const queryParams = {
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+        };
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        };
+
+        this.router.navigate([`/pages/vouchers/view/${this.activeTab}/${accountUniqueName}`], {
+            queryParams: queryParams
+        });
     }
 }

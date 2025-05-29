@@ -46,14 +46,16 @@ import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
-
+import { HamburgerMenuModule } from '../theme/hamburger-menu/hamburger-menu.module';
+import { ContactPreviewComponent } from './preview/preview.component';
 @NgModule({
     declarations: [
         ContactComponent,
         ContactAdvanceSearchComponent,
         AgingReportComponent,
         AgingDropdownComponent,
-        PaymentAsideComponent
+        PaymentAsideComponent,
+        ContactPreviewComponent
     ],
     exports: [
         CurrencyModule

@@ -1,0 +1,131 @@
+.search-field {
+    i {
+        top: 10px;
+        left: 10px;
+    }
+
+    .form-control {
+        padding-left: 15px !important;
+    }
+}
+
+.invoice-preview-wrapper {
+    display: flex;
+    height: calc(100vh - (var(--header-height) + 30px));
+
+    .preview-list {
+        width: 35%;
+        .list-viewport {
+            height: calc(100vh - 185px);
+        }
+
+        .single-invoice-detail {
+            &:hover,
+            &.active {
+                background-color: var(
+                    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover
+                );
+            }
+        }
+    }
+
+    .preview-content {
+        width: 65%;
+        overflow-y: auto;
+
+        .preview-header {
+            background-color: var(--color-primary-invoice-preview-details-background);
+            .action-btn {
+                column-gap: 6px;
+
+                button {
+                    &.mdc-button {
+                        min-width: 36px;
+                        width: 36px;
+                        height: 36px;
+
+                        .mdc-button__label {
+                            line-height: 14px;
+                        }
+                    }
+                }
+            }
+            .invoice-status {
+                user-select: none;
+                max-height: 36px;
+                padding: 5px 10px;
+                color: var(--color-nero);
+                background-color: var(--color-iron);
+                border: 1px solid var(--color-iron);
+            }
+        }
+
+        .preview-box {
+            column-gap: 50px;
+
+            span {
+                width: 35px;
+                height: 35px;
+                background-color: var(--color-iron);
+                border-radius: 50px;
+            }
+        }
+
+        ul {
+            &.invoice-history-list {
+                list-style-type: circle;
+
+                li {
+                    &:not(:last-child) {
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            top: 20px;
+                            left: -10px;
+                            transform: translateX(-90%);
+                            height: 100%;
+                            border: 1px dashed var(--color-common-secondary-border);
+                        }
+                    }
+                }
+            }
+        }
+
+        .pdf-preview {
+            h5 {
+                background-color: var(--color-primary-invoice-preview-details-background);
+            }
+            .error {
+                font-size: var(--font-size-24);
+            }
+
+            .upload-excel {
+                height: 320px;
+                max-width: 500px;
+                margin: 25px auto !important;
+            }
+
+            .dashed-border {
+                border: 2px dashed var(--color-iron);
+            }
+            .img-expand-collapse {
+                padding: 50px 50px 0 50px;
+            }
+
+            #csv-upload-input {
+                inset: 0;
+                z-index: 2;
+            }
+
+            .file-upload-panel {
+                border: 1px solid currentColor;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .list-responsive {
+        flex-wrap: wrap;
+    }
+}

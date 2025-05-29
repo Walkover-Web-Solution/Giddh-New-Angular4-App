@@ -644,7 +644,13 @@
                                             (change)="selectAccount($event, account)"
                                         >
                                         </mat-checkbox>
+                                    <a
+                                        href="javascript:;"
+                                        class="btn-link-2"
+                                        (click)="showAccountPreview(account?.uniqueName)"
+                                    >
                                         <span class="text-ellipsis">{{ account.name }}</span>
+                                    </a>
                                     </div>
 
                                     <button
