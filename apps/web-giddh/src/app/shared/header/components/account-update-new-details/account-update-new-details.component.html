@@ -239,7 +239,7 @@
                 class="gstin-address"
                 *ngIf="!isHsnSacEnabledAcc"
             >
-                <div class="pd-t15 pd-b2 overflow-hidden" formArrayName="addresses">
+                <div class="pd-t15 overflow-hidden" formArrayName="addresses">
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls']
@@ -453,7 +453,7 @@
                         </div>
                     </div>
 
-                    <div class="row pd-b2">
+                    <div class="row">
                         <div class="col-sm-6">
                             <input-field
                                 [name]="'emailId'"
@@ -552,7 +552,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row pd-b2">
+                    <div class="row">
                         <div class="col-lg-12">
                             <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
                                 <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
@@ -1088,7 +1088,7 @@
                 </div>
             </div>
         </ng-container>
-        <div class="d-flex column-gap15 pd-t15" *ngIf="isOtherSelectedTab">
+        <div class="d-flex column-gap15" *ngIf="isOtherSelectedTab">
             <button
                 type="button"
                 *ngIf="showDeleteButton"
@@ -1125,7 +1125,7 @@
     </div>
 </ng-container>
 <ng-template #templateForDeleteAndUpdate>
-    <div class="d-flex column-gap15">
+    <div class="d-flex column-gap15 pd-t2">
         <button
             *ngIf="showDeleteButton"
             type="button"
