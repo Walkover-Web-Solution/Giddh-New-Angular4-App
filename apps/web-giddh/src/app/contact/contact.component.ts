@@ -1769,7 +1769,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             queryParams['search'] = searchString;
         };
 
-        this.router.navigate([`/pages/vouchers/view/${this.activeTab}/${accountUniqueName}`], {
+        this.router.navigate([`/pages/contact/${this.activeTab}/${accountUniqueName}`], {
             queryParams: queryParams
         });
     }

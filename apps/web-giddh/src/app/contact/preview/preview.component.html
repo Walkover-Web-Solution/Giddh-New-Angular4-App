@@ -6,8 +6,11 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
-    <div class="invoice-preview-wrapper" *ngIf="(isSearching || isLoadMore) || !(getAccountsInProgress$ | async)">
+    <giddh-page-loader
+        *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
+        [cssClass]="'no-data'"
+    ></giddh-page-loader>
+    <div class="invoice-preview-wrapper" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
         <div class="preview-list h-100 pd-b15">
             <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
                 <div class="position-relative search-field flex-grow-1">
@@ -23,7 +26,7 @@
                 </div>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap" *ngIf="(getAccountsInProgress$ | async) === false" >
+                <div class="mat-list-wrap" *ngIf="(getAccountsInProgress$ | async) === false">
                     <mat-list>
                         <app-cdk-scroll
                             [scrollTriggerDistance]="30"
@@ -81,12 +84,15 @@
                         </app-cdk-scroll>
                     </mat-list>
                 </div>
-                <giddh-page-loader *ngIf="isSearching && !isLoadMore && (getAccountsInProgress$ | async)" [cssClass]="'no-data'"></giddh-page-loader>
+                <giddh-page-loader
+                    *ngIf="isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
+                    [cssClass]="'no-data'"
+                ></giddh-page-loader>
             </div>
         </div>
         <div class="preview-content">
             <section class="preview-header pd-15">
-                <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap2 flex-row-reverse">
+                <div class="d-flex justify-content-between pd-t15 flex-wrap row-gap2 flex-row-reverse align-items-baseline">
                     <div class="order-1 mr-auto">
                         <h3 class="font-16 fw-bold">Selected Account Name</h3>
                         <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
@@ -98,6 +104,28 @@
                     </div>
                 </div>
             </section>
+            <div class="relative overflow-visible">
+                <div class="clearfix petty-cash overflow-visible">
+                    <mat-tab-group
+                        mat-stretch-tabs="false"
+                        animationDuration="0ms"
+                        [selectedIndex]="selectedTabIndex"
+                        (selectedTabChange)="tabChanged($event)"
+                        [disableRipple]="true"
+                        class="table-header-sticky"
+                    >
+                        <mat-tab [label]="'Transaction'">
+                            <span >0</span>
+                        </mat-tab>
+                        <mat-tab [label]="'Statement'">
+                            <account-statement ></account-statement>
+                        </mat-tab>
+                        <mat-tab [label]="'Account Details'">
+                            <account-update-new-details></account-update-new-details>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
         </div>
     </div>
 </ng-container>

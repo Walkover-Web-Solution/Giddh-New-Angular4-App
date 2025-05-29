@@ -11,6 +11,7 @@ import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
 import { SafeUrl } from "@angular/platform-browser";
 import { ContactComponentStore } from "../utility/contact.store";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 @Component({
     selector: "preview",
@@ -41,6 +42,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Hold day js reference */
     public dayjs: any = dayjs;
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
+    /** Active tab name */
+    public activeTab: string;
     /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
@@ -161,6 +166,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     private isRefresh: boolean = null;
     /** Last vouchers get in progress Observable */
     public getAccountsInProgress$: Observable<any> = this.componentStore.getLastAccountsInProgress$;
+    public selectedTab: string = 'address';
 
     constructor(
         private router: Router,
@@ -412,6 +418,16 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 to: this.advanceFilters.to
             }
         });
+    }
+
+    /**
+     * Handle Tab Change event
+     *
+     * @param {*} activeTab
+     * @memberof ContactPreviewComponent
+     */
+    public tabChanged(event: MatTabChangeEvent) {
+        this.selectedTabIndex = event.index;
     }
 
     /**

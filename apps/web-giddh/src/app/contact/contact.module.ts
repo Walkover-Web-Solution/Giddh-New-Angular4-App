@@ -48,6 +48,7 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { HamburgerMenuModule } from '../theme/hamburger-menu/hamburger-menu.module';
 import { ContactPreviewComponent } from './preview/preview.component';
+import { AccountStatementComponent } from './account-statement/account-statement.component';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -55,7 +56,8 @@ import { ContactPreviewComponent } from './preview/preview.component';
         AgingReportComponent,
         AgingDropdownComponent,
         PaymentAsideComponent,
-        ContactPreviewComponent
+        ContactPreviewComponent,
+        AccountStatementComponent
     ],
     exports: [
         CurrencyModule
