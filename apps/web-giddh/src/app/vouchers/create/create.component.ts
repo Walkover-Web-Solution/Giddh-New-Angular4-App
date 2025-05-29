@@ -4145,10 +4145,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         }
-
-        if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
-
-        }
     }
 
     /**

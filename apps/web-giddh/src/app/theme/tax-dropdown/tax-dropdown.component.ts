@@ -73,21 +73,32 @@ export class TaxDropdownComponent implements OnChanges {
         if (this.calculateTaxInclusively) {
             if (changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
                 if (this.taxesList?.length) {
-                    this.addTaxesInForm();
-                    this.enableDisableTaxes();
+                    this.addTaxesInFormAndEnableDisableTaxes();
                 }
             }
         } else {
             if ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
                 if (this.taxesList?.length) {
-                    this.addTaxesInForm();
-                    this.enableDisableTaxes();
+                    this.addTaxesInFormAndEnableDisableTaxes();
                 }
             }
         }
 
         if (changes?.calculateTax?.currentValue) {
             this.calculateTaxAmount(true);
+        }
+    }
+
+    /**
+     * Adds tax in form group and enable/disable taxes
+     *
+     * @private
+     * @memberof TaxDropdownComponent
+     */
+    private addTaxesInFormAndEnableDisableTaxes(): void {
+        if (this.taxesList?.length) {
+            this.addTaxesInForm();
+            this.enableDisableTaxes();
         }
     }
 
@@ -157,10 +168,11 @@ export class TaxDropdownComponent implements OnChanges {
         this.calculateTaxAmount();
     }
 
-    /**
+    /** 
      * Calculates tax amount
      *
      * @private
+     * @param {boolean} [calculateTax=false]
      * @memberof TaxDropdownComponent
      */
     private calculateTaxAmount(calculateTax: boolean = false): void {
@@ -169,13 +181,14 @@ export class TaxDropdownComponent implements OnChanges {
         const taxes = this.taxForm.get('taxes') as FormArray;
         for (let i = 0; i <= taxes.length; i++) {
             if (taxes.controls[i]?.get('isChecked')?.value) {
+                const taxRate = Number(taxes.controls[i].get('taxDetail')?.value?.taxValue);
                 if (this.calculateTaxInclusively && !calculateTax) {
                     // Inclusive tax rate
-                    this.totalTaxAmount += (Number(this.amount) * (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100))
-                        / (1 + (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100));
+                    this.totalTaxAmount += (Number(this.amount) * (taxRate / 100))
+                        / (1 + (taxRate / 100));
                 } else {
                     // Exclusive tax rate
-                    this.totalTaxAmount += ((Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100) * Number(this.amount));
+                    this.totalTaxAmount += ((taxRate / 100) * Number(this.amount));
                 }
             }
         }
