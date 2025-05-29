@@ -10,6 +10,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
+import { GiddhCurrencyPipe } from "../../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 
 @NgModule({
     declarations: [
@@ -30,6 +31,9 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
     ],
     exports: [
         AddBulkItemsComponent
+    ],
+    providers: [
+        GiddhCurrencyPipe
     ]
 })
 export class AddBulkItemsModule {
