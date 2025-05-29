@@ -1,5 +1,5 @@
 .account {
-    div {
+    .account-name {
         -webkit-line-clamp: 1;
         white-space: nowrap;
         overflow: hidden;
@@ -8,4 +8,10 @@
 }
 .trial-balance-viewport {
     background-color: var(--color-wild-sand);
+}
+.pl-content-width {
+    min-width: 275px;
+}
+.row-height {
+    min-height: 38px;
 }

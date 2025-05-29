@@ -7,15 +7,15 @@
         }}
     </h3>
     <div class="d-inline-block">
-        <button 
-            *ngIf="importStep === importStepEnum.Second" 
-            mat-stroked-button 
-            [matTooltip]="inputData?.commonLocaleData?.app_back" 
-            matTooltipPosition="above" 
-            (click)="importStep = importStepEnum.First" 
-            class="mr-r2 bg-white"
+        <button
+            *ngIf="importStep === importStepEnum.Second"
+            mat-stroked-button
+            [matTooltip]="inputData?.commonLocaleData?.app_back"
+            matTooltipPosition="above"
+            (click)="importStep = importStepEnum.First"
+            class="header-btn mr-r2"
         >
-            {{ inputData?.commonLocaleData?.app_back }}
+             {{ inputData?.commonLocaleData?.app_back }}
         </button>
         <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
     </div>
