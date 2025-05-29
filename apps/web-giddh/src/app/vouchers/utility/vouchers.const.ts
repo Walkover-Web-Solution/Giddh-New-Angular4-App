@@ -49,3 +49,11 @@ export enum AccountType {
 export const OtherTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
 export const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment];
+
+/**
+ * Enum for Other tax types
+ */
+export enum OtherTaxTypeEnum {
+    'TDS' = 'tds',
+    'TCS' = 'tcs'
+};

@@ -25,12 +25,8 @@ export class TaxDropdownComponent implements OnChanges {
     @Input() public date: any;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /* This will hold true if it is advance receipt */
-    @Input() public isAdvanceReceipt: boolean;
-    /* This will hold true if is update mode */
-    @Input() public isUpdateMode: boolean;
     /** True, if current transaction tax needed to be calculated inclusively
-     * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
+     * Required for inclusive tax rate calculation for advance receipt
     */
     @Input() public calculateTaxInclusively: boolean;
     /** Holds true if tax needs to be calculated */
@@ -208,20 +204,4 @@ export class TaxDropdownComponent implements OnChanges {
     public createNew(): void {
         this.createNewTax.emit();
     }
-
-    // /**
-    //  * Calculates tax inclusively for Advance receipt else exclusively
-    //  *
-    //  * @private
-    //  * @memberof TaxDropdownComponent
-    //  */
-    // private calculateInclusiveOrExclusiveTaxes(): void {
-    //     if (this.calculateTaxInclusively) {
-    //         // Inclusive tax rate
-    //         this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
-    //     } else {
-    //         // Exclusive tax rate
-    //         this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
-    //     }
-    // }
 }

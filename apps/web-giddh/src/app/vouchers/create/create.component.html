@@ -1232,7 +1232,7 @@
                                                                             [prefix]="account?.baseCurrencySymbol"
                                                                             [mask]="company?.inputMaskFormat"
                                                                             name="transactionAmount{{entryIndex}}"
-                                                                            [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
+                                                                            [readonly]="invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
                                                                             (keydown.enter)="$event.preventDefault()"
@@ -1320,13 +1320,12 @@
                                                                         [taxesList]="companyTaxes"
                                                                         [currency]="account.baseCurrencySymbol"
                                                                         [calculateTaxInclusively]="invoiceForm?.get('isAdvanceReceipt')?.value && !isUpdateMode"
-                                                                        [isAdvanceReceipt]="invoiceForm?.get('isAdvanceReceipt')?.value"
-                                                                        [isUpdateMode]="isUpdateMode"
                                                                         [commonLocaleData]="commonLocaleData"
                                                                         [calculateTax]="calculateTaxInTaxDropdown"
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
-                                                                        (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
+                                                                        (totalTax)="updateTotalTax($event, entry)">
+                                                                    </tax-dropdown>
                                                                     <span
                                                                         class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
