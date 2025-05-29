@@ -25,6 +25,12 @@ export class TaxDropdownComponent implements OnChanges {
     @Input() public date: any;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True, if current transaction tax needed to be calculated inclusively
+     * Required for inclusive tax rate calculation for advance receipt
+    */
+    @Input() public calculateTaxInclusively: boolean;
+    /** Holds true if tax needs to be calculated */
+    @Input() public calculateTax: boolean;
     /** Emitter for create new tax selected */
     @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emitter for selected taxes */
@@ -64,11 +70,24 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
-            if (this.taxesList?.length) {
-                this.addTaxesInForm();
-                this.enableDisableTaxes();
+        if (this.calculateTaxInclusively) {
+            if (changes?.amount?.firstChange && ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)))) {
+                if (this.taxesList?.length) {
+                    this.addTaxesInForm();
+                    this.enableDisableTaxes();
+                }
             }
+        } else {
+            if ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
+                if (this.taxesList?.length) {
+                    this.addTaxesInForm();
+                    this.enableDisableTaxes();
+                }
+            }
+        }
+
+        if (changes?.calculateTax?.currentValue) {
+            this.calculateTaxAmount(true);
         }
     }
 
@@ -144,13 +163,20 @@ export class TaxDropdownComponent implements OnChanges {
      * @private
      * @memberof TaxDropdownComponent
      */
-    private calculateTaxAmount(): void {
+    private calculateTaxAmount(calculateTax: boolean = false): void {
         this.totalTaxAmount = 0;
 
         const taxes = this.taxForm.get('taxes') as FormArray;
         for (let i = 0; i <= taxes.length; i++) {
             if (taxes.controls[i]?.get('isChecked')?.value) {
-                this.totalTaxAmount += ((Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100) * Number(this.amount));
+                if (this.calculateTaxInclusively && !calculateTax) {
+                    // Inclusive tax rate
+                    this.totalTaxAmount += (Number(this.amount) * (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100))
+                        / (1 + (Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100));
+                } else {
+                    // Exclusive tax rate
+                    this.totalTaxAmount += ((Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100) * Number(this.amount));
+                }
             }
         }
 
