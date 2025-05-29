@@ -659,17 +659,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         }
         const lastIndex = mappings.controls.length - 1;
-        const updateNumber = user?.contactNo;
-
         const interval = setInterval(() => {
             if (document.getElementById('init-contact-portal_' + lastIndex)) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
-                setTimeout(() => {
-                    if (this.intl) {
-                        this.intl['init-contact-portal_' + lastIndex]?.setNumber(updateNumber ?? '');
-                    }
-                }, 500);
             }
         }, 500);
     }

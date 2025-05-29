@@ -579,7 +579,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
                             }), 'value');
-
+                            
                             return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
@@ -593,13 +593,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 return arr;
-            })), takeUntil(this.destroyed$)).subscribe((taxResponse) => {
-                if (taxResponse.length) {
-                    this.companyTaxDropDown = taxResponse;
+            })), takeUntil(this.destroyed$)).subscribe((taxResponse: IOption[]) => {
+                this.companyTaxDropDown = taxResponse;
+                if (this.companyTaxDropDown.length) {
                     const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
                     this.defaultTaxLabel = selectedTaxes.map(selectTax => {
-                        return this.companyTaxDropDown.find(tax => tax.value === selectTax).label;
+                        return this.companyTaxDropDown.find(tax => tax.value === selectTax)?.label;
                     });
+                } else {
+                    this.defaultTaxLabel = [];
                 }
             });
     }
@@ -823,17 +825,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
         }
         const lastIndex = mappings.controls.length - 1;
-        const updateNumber = mobileNo;
-
         const interval = setInterval(() => {
             if (document.getElementById('init-contact-portal_' + lastIndex)) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
-                setTimeout(() => {
-                    if (this.intl) {
-                        this.intl['init-contact-portal_' + lastIndex]?.setNumber(updateNumber ?? '');
-                    }
-                }, 500);
             }
         }, 500);
     }
