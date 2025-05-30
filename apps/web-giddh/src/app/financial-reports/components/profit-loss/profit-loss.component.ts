@@ -64,6 +64,8 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReportTallyOption: boolean;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));

@@ -64,6 +64,8 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     @ViewChild('bsGrid', { static: true }) public bsGrid: BalanceSheetGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReportTallyOption: boolean;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));

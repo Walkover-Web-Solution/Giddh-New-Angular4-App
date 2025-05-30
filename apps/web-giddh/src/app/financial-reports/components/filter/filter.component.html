@@ -166,6 +166,21 @@
                     </button>
                 </form>
                 <div class="d-flex align-items-center column-gap1 download-data-icon">
+                    <button 
+                        *ngIf="!showReportTallyOption"
+                        mat-stroked-button 
+                        type="button" 
+                        (click)="showTallyReportOptions()">
+                        {{ localeData?.tally_report }}
+                    </button>
+                    <button 
+                        *ngIf="showReportTallyOption"
+                        mat-raised-button
+                        color="primary"
+                        type="button" 
+                        (click)="showTallyReportOptions()">
+                        {{ localeData?.tally_report }}
+                    </button>
                     <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
                         <span class="icon-refresh"></span>
                     </a>

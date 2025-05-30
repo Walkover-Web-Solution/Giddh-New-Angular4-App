@@ -33,6 +33,8 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() public isDateSelected: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReportTallyOption: boolean;
 
     constructor(
         private store: Store<AppState>,

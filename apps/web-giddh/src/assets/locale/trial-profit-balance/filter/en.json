@@ -6,5 +6,6 @@
     "reload_data": "Reload Data",
     "create_new_tag": "Create New Tag",
     "tag_name": "Tag Name",
-    "tag_description": "Tag Desciption (optional)"
+    "tag_description": "Tag Desciption (optional)",
+    "tally_report": "Tally Report"
 }

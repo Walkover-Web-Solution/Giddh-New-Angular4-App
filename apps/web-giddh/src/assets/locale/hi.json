@@ -771,5 +771,6 @@
         "t_view": "टी दृश्य",
         "statement_view": "वक्तव्य दृश्य"
     },
-    "app_closing_balance": "जमा शेष"
+    "app_closing_balance": "जमा शेष",
+    "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?"
 }
