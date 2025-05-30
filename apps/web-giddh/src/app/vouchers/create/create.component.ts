@@ -776,6 +776,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     entryFormGroup.get('calculateTotal')?.patchValue(false);
                     const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
                     taxesFormArray.clear();
+                    this.account.excludeTax = false;
                 });
             } else {
                 this.invoiceForm.get('entries')['controls']?.forEach((entryFormGroup: any) => {
@@ -785,6 +786,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     entryFormGroup.get('calculateTotal')?.patchValue(true);
                     const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
                     taxesFormArray.clear();
+                    this.account.excludeTax = true;
                 });
             }
         });
