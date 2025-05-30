@@ -2,16 +2,20 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";      
+import { debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { PAGINATION_LIMIT } from "../../app.constant";
+import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
 import { SafeUrl } from "@angular/platform-browser";
 import { ContactComponentStore } from "../utility/contact.store";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../store";
+import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
+import { ContactAdvanceSearchModal } from "../../models/api-models/Contact";
 
 @Component({
     selector: "preview",
@@ -20,20 +24,8 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
     providers: [ContactComponentStore]
 })
 export class ContactPreviewComponent implements OnInit, OnDestroy {
-    /** Instance of PDF container iframe */
-    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
-    /** Instance of Adjust Payment Dialog */
-    @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
-    /** Instance of Version History Dialog */
-    @ViewChild('historyAsideDialog', { static: true }) public historyAsideDialog: TemplateRef<any>;
-    /** Holds send email dailog template reference send email */
-    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
-    /** Holds Payment template reference */
-    @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
-    /** Attached document preview container instance */
-    @ViewChild('attachedDocumentPreview', { static: false }) attachedDocumentPreview: ElementRef;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
@@ -44,8 +36,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** Index of selected tab */
     public selectedTabIndex: number = 0;
-    /** Active tab name */
-    public activeTab: string;
     /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
@@ -56,14 +46,12 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     };
     /** Holds search voucher form control */
     public search: FormControl = new FormControl('');
-    /** Holds invoice list */
-    public invoiceList: any[] = [];
-    /** Holds Current selected invoice */
-    public selectedInvoice: any;
-    /** Hold invoice  type */
-    public voucherType: any = '';
-    /** Hold url Voucher Type */
-    public urlVoucherType: string = '';
+    /** Holds contact list */
+    public contactList: any[] = [];
+    /** Holds Current selected contact */
+    public selectedContact: any;
+    /** Hold contact  type */
+    public contactType: any = '';
     /** Holds Total Results Count */
     public totalPages: number = 0;
     /** Holds params value */
@@ -79,83 +67,12 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         text: '',
         link: ''
     };
-    /** Holds invoice type boolean status */
-    public invoiceType: any = {
-        isSalesInvoice: true,
-        isCashInvoice: false,
-        isCreditNote: false,
-        isDebitNote: false,
-        isPurchaseInvoice: false,
-        isProformaInvoice: false,
-        isEstimateInvoice: false,
-        isPurchaseOrder: false,
-        isReceiptInvoice: false,
-        isPaymentInvoice: false
-    };
-    /** Send Email Dialog Ref */
-    public sendEmailModalDialogRef: MatDialogRef<any>;
-    /** Holds Voucher Details Dialog Ref */
-    public voucherDetails: any;
-    /** Holds voucher totals */
-    public voucherTotals: any = {
-        totalAmount: 0,
-        totalDiscount: 0,
-        totalTaxableValue: 0,
-        totalTaxWithoutCess: 0,
-        totalCess: 0,
-        grandTotal: 0,
-        roundOff: 0,
-        tcsTotal: 0,
-        tdsTotal: 0,
-        balanceDue: 0
-    };
-    /** Holds company specific data */
-    public company: any = {
-        baseCurrency: '',
-        baseCurrencySymbol: '',
-        inputMaskFormat: '',
-        giddhBalanceDecimalPlaces: 0
-    };
-    /** Deposit Amount */
-    public depositAmount: number = 0;
     /** Holds true if update mode */
     public isUpdateMode: boolean;
-    /** True if round off will be applicable */
-    public applyRoundOff: boolean = true;
     /** Holds array of page numbers who date is present in list */
     private pageNumberHistory: any[] = [];
-    /** Hold true when voucher is downloading */
-    public isVoucherDownloading: boolean = false;
-    /** Hold true when voucher is download failed */
-    public isVoucherDownloadError: boolean = false;
-    /** Holds true when File Uploading is in progress */
-    public isFileUploading: boolean = false;
-    /** True, if attachment upload is to be displayed */
-    public shouldShowUploadAttachment: boolean = false;
-    /** Source of image to be previewed */
-    public imagePreviewSource: SafeUrl;
-    /** Stores the type of attached document for Purchase Record */
-    public attachedDocumentType: any;
-    /** PDF file url created with blob */
-    public sanitizedPdfFileUrl: SafeUrl = null;
-    /** Attached PDF file url created with blob */
-    public attachedPdfFileUrl: any = '';
-    /** Holds PDF file value */
-    public pdfFileURL: string = '';
-    /** This will hold the attached file in Purchase Bill */
-    private attachedAttachmentBlob: Blob;
-    /** This will use for default template */
-    public defaultThermalTemplate: any;
-    /** True if pdf is available */
-    public isPdfAvailable: boolean = true;
-    /* This will hold if pdf preview loaded */
-    public pdfPreviewLoaded: boolean = false;
-    /* This will hold if pdf preview has error */
-    public pdfPreviewHasError: boolean = false;
     /** Hold true if searching */
     public isSearching: boolean;
-    /** Holds true if invoice load more data is trigger */
-    public isLoadMore: boolean;
     /** Holds Get all api call count */
     private getAllApiCallCount: number = 0;
     /** Holds current route query parameters */
@@ -166,15 +83,49 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     private isRefresh: boolean = null;
     /** Last vouchers get in progress Observable */
     public getAccountsInProgress$: Observable<any> = this.componentStore.getLastAccountsInProgress$;
-    public selectedTab: string = 'address';
-
+    public isUpdateAccount: boolean = false;
+    public isGstEnabledAcc: boolean = false;
+    public isHsnSacEnabledAcc: boolean = false;
+    public updateAccountInProcess$: Observable<boolean> = this.componentStore.updateAccountInProcess$;
+    public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
+    public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
+    public activeGroupUniqueName$: Observable<string> = this.componentStore.activeGroupUniqueName$;
+    public showBankDetail: boolean = false;
+    public showVirtualAccount: boolean = false;
+    public isDebtorCreditor: boolean = false;
+    public flatGroupsOptions: any[] = [];
+    public accountDetails: any = {};
+    public activeAccountUniqueName: string;
+    public contactActiveTab: string;
+    /** sorting */
+    public key: string = "name"; // set default
+    public order: string = "asc";
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: "", uniqueName: "" };
+    /** Stores the current company */
+    public activeCompany: any;
+    /** Stores the current branch data */
+    public currentBranchData: any;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
+    public getContactsList$: Observable<any> = this.componentStore.getContactsList$;
+    /** Holds true if invoice load more data is trigger */
+    public isLoadMore: boolean;
+    
     constructor(
         private router: Router,
         public dialog: MatDialog,
         private componentStore: ContactComponentStore,
         private activatedRoute: ActivatedRoute,
         private generalService: GeneralService,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private store: Store<AppState>,
+        private settingsBranchAction: SettingsBranchActions     
     ) { }
 
 
@@ -184,12 +135,57 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     * @memberof ContactPreviewComponent
     */
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch?.name,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : "",
+                    value: this.activeCompany ? this.activeCompany.uniqueName : "",
+                    isCompany: true,
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch?.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : "",
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
+                        };
+                    }
+                    this.currentBranchData = _.cloneDeep(this.currentBranch);
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
+                }
+            }
+        });
         merge(this.activatedRoute.params, this.activatedRoute.queryParams).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
-                if (params?.voucherType) {
+                if (params?.accountUniqueName) {
+                    this.activeAccountUniqueName = params?.accountUniqueName;
+                    this.contactActiveTab = params?.type;
                     this.params = params;
                     this.isSearching = false;
-                    this.urlVoucherType = params?.voucherType;
+                    this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
+                    this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
                     this.subscribeStoreObservable();
                 }
                 if (params?.page) {
@@ -202,7 +198,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     if (searchString) {
                         this.search.setValue(searchString);
                     } else {
-                        this.getAllVouchers();
+                        this.getContactsList(this.params.from, this.params.to, null, "true", PAGINATION_LIMIT, this.params.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     }
                 }
             }
@@ -224,7 +220,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 };
                 this.isSearching = true;
                 this.advanceFilters.q = search;
-                this.getAllVouchers();
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
     }
@@ -263,74 +259,11 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     sort: '',
                     sortBy: ''
                 };
-                this.invoiceList = [];
+                this.contactList = [];
                 this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
             }
         });
 
-    }
-
-    /**
-     * API Call Get All Vouchers
-     *
-     * @private
-     * @param {boolean} [isLoadMore=false]
-     * @param {boolean} [isScrollUp=false]
-     * @return {*}  {void}
-     * @memberof VouchersPreviewComponent
-     */
-    private getAllVouchers(isLoadMore: boolean = false, isScrollUp: boolean = false): void {
-        if (this.isLoadMore) {
-            return;
-        }
-        if (isLoadMore) {
-            this.isLoadMore = true;
-            if (this.totalPages >= this.advanceFilters.page) {
-                if (isScrollUp) {
-                    this.advanceFilters.page = this.pageNumberHistory[0] - 1;
-                } else {
-                    let lastIndex = this.pageNumberHistory.length - 1;
-                    if (this.pageNumberHistory[lastIndex] === this.advanceFilters.page) {
-                        this.advanceFilters.page = this.advanceFilters.page + 1;
-                    } else {
-                        this.advanceFilters.page = this.pageNumberHistory[lastIndex] + 1;
-                    }
-                }
-            } else {
-                return;
-            }
-            if (!isScrollUp && (this.totalPages < this.advanceFilters.page)) {
-                return
-            }
-
-            if (isScrollUp && this.advanceFilters.page === 0) {
-                this.advanceFilters.page = 1;
-                return
-            }
-        }
-
-        // if (this.voucherType?.length) {
-        //     if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-        //         this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
-        //     } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-        //         this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
-        //     } else {
-        //         this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
-        //     }
-        // }
-    }
-
-
-    /**
-    * Open Payment Dialog
-    *
-    * @memberof VouchersPreviewComponent
-    */
-    public showPaymentDialog(): void {
-        this.dialog.open(this.paymentDialog, {
-            panelClass: "mat-dialog-md",
-            disableClose: true
-        });
     }
 
     /**
@@ -340,9 +273,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @param {*} response
      * @memberof VouchersPreviewComponent
      */
-    private handleGetAllVoucherResponse(response: any): void {
-        if (response && response.voucherType === this.voucherType) {
-            const currentInvoiceList = [];
+    private handleGetAllContactResponse(response: any): void {
+        if (response) {
+            const currentContactList = [];
             if (this.pageNumberHistory[0] < response.page) {
                 this.pageNumberHistory.push(response.page);
             } else if (!this.pageNumberHistory.includes(response.page)) {
@@ -351,57 +284,48 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             this.totalPages = response?.totalPages;
 
             if (this.totalPages === 0) {
-                this.invoiceList = [];
+                this.contactList = [];
                 return;
             }
 
             // Handle page number is more than total pages in query params
             if (this.totalPages < this.advanceFilters.page) {
                 this.advanceFilters.page = 1;
-                this.getAllVouchers();
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 return;
             }
-            response.items?.forEach((item: any, index: number) => {
+            response.results?.forEach((item: any, index: number) => {
                 item.index = index + 1;
-
-                // if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                //     item.isSelected = false;
-                //     item.uniqueName = item.proformaNumber || item.estimateNumber;
-                //     item.voucherNumber = item.proformaNumber || item.estimateNumber;
-                //     item.voucherDate = item.proformaDate || item.estimateDate;
-                //     item.account = { customerName: item.customerName, uniqueName: item.customerUniqueName };
-                // }
-
-                // if (this.voucherType === VoucherTypeEnum.purchase) {
-                //     let dueDate = item.dueDate ? dayjs(item.dueDate, GIDDH_DATE_FORMAT) : null;
-                //     if (dueDate) {
-                //         if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
-                //             item.dueDays = null;
-                //         } else {
-                //             let dueDays = dueDate ? dayjs().diff(dueDate, 'day') : null;
-                //             item.dueDays = dueDays;
-                //         }
-                //     } else {
-                //         item.dueDays = null;
-                //     }
-                // }
-                currentInvoiceList.push(item);
+                currentContactList.push(item);
             });
 
             if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
-                this.invoiceList = currentInvoiceList;
+                this.contactList = currentContactList;
             } else {
-                this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
+                this.contactList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.contactList, ...currentContactList] : [...currentContactList, ...this.contactList];
             }
             this.isLoadMore = false;
             this.getAllApiCallCount++;
             this.changeDetection.detectChanges();
 
-            if (this.invoiceList?.length) {
-                // this.setSelectedInvoice(!this.selectedInvoice ? this.params.voucherUniqueName : this.invoiceList[0].uniqueName);
+            if (this.contactList?.length) {
+                this.setSelectedContact(!this.selectedContact ? this.params.accountUniqueName : this.contactList[0].uniqueName);
             }
             this.isRefresh = false;
         }
+    }
+
+    /**
+ * Set selected contact and download PDF Preview
+ *
+ * @param {string} accountUniqueName
+ * @memberof ContactPreviewComponent
+ */
+    public setSelectedContact(accountUniqueName: string, isNewContactSelected: boolean = false): void {
+        if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
+            return;
+        }
+        this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
     }
 
     /**
@@ -410,24 +334,62 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public redirectToGetAllPage(): void {
-        this.router.navigate([`/pages/vouchers/preview/${this.urlVoucherType}/list`], {
-            queryParams: {
-                page: this.queryParams.page ?? 1,
-                count: this.queryParams.count ?? PAGINATION_LIMIT,
-                from: this.advanceFilters.from,
-                to: this.advanceFilters.to
-            }
-        });
+        this.router.navigate([`/pages/contact/${this.contactActiveTab}`]);
     }
 
     /**
      * Handle Tab Change event
      *
-     * @param {*} activeTab
+     * @param {MatTabChangeEvent} event
      * @memberof ContactPreviewComponent
      */
     public tabChanged(event: MatTabChangeEvent) {
         this.selectedTabIndex = event.index;
+    }
+
+    /**
+  * Method to fetch account details from service
+  *
+  * @private
+  * @param {string} fromDate From date
+  * @param {string} toDate To date
+  * @param {string} groupUniqueName Group unique name ('sundrycreditors' or 'sundrydebtors')
+  * @param {number} [pageNumber] Page number of the data to be fetched
+  * @param {string} [refresh] If true, then fetch the most refreshed data instead of cached data
+  * @param {number} [count=20] Page size
+  * @param {string} [query] Query string to be searched such as customer name
+  * @param {string} [sortBy=''] Sorting entity by which we need to sort such as debitTotal, creditTotal or name
+  * @param {string} [order='asc'] Order of sorting (asc or desc)
+  * @param {string} [branchUniqueName] Current branch selected
+  * @memberof ContactComponent
+  */
+    private getContactsList(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
+        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
+        pageNumber = pageNumber ? pageNumber : 1;    
+        refresh = refresh ? refresh : "false";
+        fromDate = (fromDate) ? fromDate : "";
+        toDate = (toDate) ? toDate : "";
+        let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
+
+        this.componentStore.getContactsList({
+            fromDate,
+            toDate,
+            groupUniqueName,
+            pageNumber,
+            refresh,
+            count,
+            query,
+            sortBy,
+            order,
+            postData: this.advanceSearchRequestModal,
+            branchUniqueName
+        })
+
+        this.componentStore.getContactsList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.handleGetAllContactResponse(res);
+            }
+        });
     }
 
     /**

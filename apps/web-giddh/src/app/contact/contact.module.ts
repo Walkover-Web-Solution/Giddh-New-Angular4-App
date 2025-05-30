@@ -46,9 +46,9 @@ import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
-import { HamburgerMenuModule } from '../theme/hamburger-menu/hamburger-menu.module';
 import { ContactPreviewComponent } from './preview/preview.component';
 import { AccountStatementComponent } from './account-statement/account-statement.component';
+import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-statement.module';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -107,7 +107,8 @@ import { AccountStatementComponent } from './account-statement/account-statement
         MatListModule,
         ScrollingModule,
         WatchVideoModule,
-        FroalaTemplateEditorModule
+        FroalaTemplateEditorModule,
+        LedgerStatementModule
     ],
     providers: [
         GiddhCurrencyPipe

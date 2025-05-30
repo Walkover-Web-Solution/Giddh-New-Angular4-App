@@ -26,62 +26,35 @@
                 </div>
             </div>
             <div class="mat-grid-wrapper">
-                <div class="mat-list-wrap" *ngIf="(getAccountsInProgress$ | async) === false">
+                <div
+                    class="mat-list-wrap overflow-auto contact-list"
+                    *ngIf="(getAccountsInProgress$ | async) === false"
+                >
                     <mat-list>
-                        <app-cdk-scroll
-                            [scrollTriggerDistance]="30"
-                            (fetchPreviousPage)="getAllVouchers(true, true)"
-                            (fetchNextPage)="getAllVouchers(true)"
-                            [scrollableElementId]="'invoiceList'"
-                        >
-                            <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport" [id]="'invoiceList'">
-                                <ng-container
-                                    *cdkVirtualFor="let item of invoiceList; let i = index; let lastItem = last"
-                                >
-                                    <mat-list-item
-                                        class="single-invoice-detail cursor-pointer"
-                                        [ngClass]="{
-                                            'active': item?.uniqueName === selectedInvoice?.uniqueName,
-                                            'border-bottom': !lastItem
-                                        }"
-                                        (click)="setSelectedInvoice(item?.uniqueName, true)"
-                                    >
-                                        <div class="d-flex justify-content-between align-items-center column-gap5">
-                                            <div>
-                                                <span class="font-12 text-blue">
-                                                    {{
-                                                        item.voucherNumber
-                                                            ? item.voucherNumber
-                                                            : commonLocaleData?.app_not_available
-                                                    }}
-                                                </span>
-                                                <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                                <p class="black-color pd-r3 text-wrap">
-                                                    {{
-                                                        item?.account?.customerName ||
-                                                            item?.account?.name ||
-                                                            item?.vendor?.name
-                                                    }}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <span class="black-color">
-                                                    <amount-field
-                                                        [amount]="item?.grandTotal?.amountForAccount"
-                                                        [currencySymbol]="item?.account?.currency?.symbol"
-                                                        [currencyCode]="item?.account?.currency?.code"
-                                                    >
-                                                    </amount-field>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </mat-list-item>
-                                </ng-container>
-                                <mat-list-item *ngIf="invoiceList?.length === 0">
-                                    <p class="text-center light-gray">{{ commonLocaleData?.app_no_data_found }}</p>
-                                </mat-list-item>
-                            </cdk-virtual-scroll-viewport>
-                        </app-cdk-scroll>
+                        <ng-container *ngFor="let item of contactList; let i = index; let lastItem = last">
+                            <mat-list-item
+                                class="single-invoice-detail cursor-pointer"
+                                [ngClass]="{
+                                    'active': item?.uniqueName === selectedContact?.uniqueName,
+                                    'border-bottom': !lastItem
+                                }"
+                                (click)="setSelectedContact(item?.uniqueName, true)"
+                            >
+                                <div class="d-flex justify-content-between align-items-center column-gap5">
+                                    <div>
+                                        <span class="font-12 text-blue">
+                                            {{ item?.uniqueName }}
+                                        </span>
+                                        <p class="black-color pd-r3 text-wrap">
+                                            {{ item?.name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </mat-list-item>
+                        </ng-container>
+                        <mat-list-item *ngIf="contactList?.length === 0">
+                            <p class="text-center light-gray">{{ commonLocaleData?.app_no_data_found }}</p>
+                        </mat-list-item>
                     </mat-list>
                 </div>
                 <giddh-page-loader
@@ -92,10 +65,11 @@
         </div>
         <div class="preview-content">
             <section class="preview-header pd-15">
-                <div class="d-flex justify-content-between pd-t15 flex-wrap row-gap2 flex-row-reverse align-items-baseline">
+                <div
+                    class="d-flex justify-content-between pd-t15 flex-wrap row-gap2 flex-row-reverse align-items-baseline"
+                >
                     <div class="order-1 mr-auto">
-                        <h3 class="font-16 fw-bold">Selected Account Name</h3>
-                        <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
+                        <h3 class="font-16 fw-bold">{{ selectedContact?.name }}</h3>
                     </div>
                     <div class="d-flex column-gap1 flex-wrap row-gap1">
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
@@ -115,13 +89,31 @@
                         class="table-header-sticky"
                     >
                         <mat-tab [label]="'Transaction'">
-                            <span >0</span>
+                            <ledger-statement></ledger-statement>
                         </mat-tab>
                         <mat-tab [label]="'Statement'">
-                            <account-statement ></account-statement>
+                            <account-statement></account-statement>
                         </mat-tab>
                         <mat-tab [label]="'Account Details'">
-                            <account-update-new-details></account-update-new-details>
+                            <div class="account-details-wrapper">
+                                <account-update-new-details
+                                    *ngIf="activeAccountUniqueName"
+                                    [activeAccount$]="activeAccount$"
+                                    [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+                                    [isGstEnabledAcc]="isGstEnabledAcc"
+                                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                                    [updateAccountInProcess$]="updateAccountInProcess$"
+                                    (isGroupSelected)="isGroupSelected($event)"
+                                    [accountDetails]="accountDetails"
+                                    [updateAccountIsSuccess$]="updateAccountIsSuccess$"
+                                    (deleteClicked)="showDeleteAccountModal()"
+                                    (submitClicked)="updateAccount($event)"
+                                    [showBankDetail]="showBankDetail"
+                                    [showVirtualAccount]="showVirtualAccount"
+                                    [isDebtorCreditor]="isDebtorCreditor"
+                                >
+                                </account-update-new-details>
+                            </div>
                         </mat-tab>
                     </mat-tab-group>
                 </div>

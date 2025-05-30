@@ -260,10 +260,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Observable for custom header columns */
     public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
     /** Holds advance Filters keys */
-    public advanceFilters: any = {};
-    /** Holds Advance Filters Applied Status */
-    public advanceFiltersApplied: boolean = false;
-
+    public advanceFilters: any = {
+        page: 1,
+        count: PAGINATION_LIMIT,
+        q: '',
+        from: '',
+        to: ''
+    };
+    
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
@@ -422,6 +426,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                                 startDate: dayjs(this.universalDate[0]),
                                 endDate: dayjs(this.universalDate[1]),
                             };
+                            this.advanceFilters.from = this.fromDate;
+                            this.advanceFilters.to = this.toDate;
                             this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         } else {
                             this.universalDate = [];
@@ -455,8 +461,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             .subscribe((term: any) => {
                 if (!this.defaultLoad) {
                     this.searchStr = term;
+                    this.advanceFilters.q = term;
                     this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
+                
                 this.defaultLoad = false;
             });
 
@@ -741,6 +749,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         if (this.currentPage !== event.page) {
             this.checkboxInfo.selectedPage = event.page;
+            this.advanceFilters.page = event.page + 1;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             this.getAccounts(this.fromDate, this.toDate, event.page, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
