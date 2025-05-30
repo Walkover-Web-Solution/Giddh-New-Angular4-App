@@ -279,7 +279,7 @@
                                                             ></text-field>
                                                         </ng-template>
 
-                                                        <!-- <span
+                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
                                                     voucherApiVersion !== 2 &&
@@ -296,9 +296,9 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span> -->
+                                            </span>
 
-                                                        <!-- <span
+                                            <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
                                                     voucherApiVersion !== 2 &&
@@ -322,7 +322,7 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span> -->
+                                            </span>
 
                                                         <span
                                                             class="download-invoice-ledger cursor-pointer"
@@ -595,51 +595,51 @@
                                                             />
                                                         </ng-template>
 
-                                                        <!-- <span
-                                                class="download-invoice-ledger"
-                                                *ngIf="
-                                                    voucherApiVersion !== 2 &&
-                                                    vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    (txn?.particular?.name || txn?.particular?.uniqueName)
-                                                "
-                                                [matTooltipPosition]="'left'"
-                                                [containerClass]="'col-xs-3'"
-                                                [matTooltip]="
-                                                    localeData?.download_file +
-                                                    ' : ' +
-                                                    vm.selectedLedger.attachedFileName
-                                                "
-                                                matTooltipClass="tooltip-black"
-                                                (click)="downloadFiles('ATTACHMENT', $event)"
-                                            >
-                                                <i class="icon-attachment pull-left"></i>
-                                            </span>
+                                                        <span
+                                                            class="download-invoice-ledger"
+                                                            *ngIf="
+                                                                voucherApiVersion !== 2 &&
+                                                                vm.selectedLedger.attachedFile?.length > 0 &&
+                                                                (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                            "
+                                                            [matTooltipPosition]="'left'"
+                                                            [containerClass]="'col-xs-3'"
+                                                            [matTooltip]="
+                                                                localeData?.download_file +
+                                                                ' : ' +
+                                                                vm.selectedLedger.attachedFileName
+                                                            "
+                                                            matTooltipClass="tooltip-black"
+                                                            (click)="downloadFiles('ATTACHMENT', $event)"
+                                                        >
+                                                            <i class="icon-attachment pull-left"></i>
+                                                        </span>
 
-                                            <span
-                                                class="download-invoice-ledger"
-                                                *ngIf="
-                                                    voucherApiVersion !== 2 &&
-                                                    vm.selectedLedger.voucherNumber &&
-                                                    vm.selectedLedger.voucherNumber.length > 0 &&
-                                                    (txn?.particular?.name || txn?.particular?.uniqueName)
-                                                "
-                                                [matTooltipPosition]="'left'"
-                                                [containerClass]="'col-xs-3'"
-                                                [matTooltip]="
-                                                    commonLocaleData?.app_download +
-                                                    ' ' +
-                                                    (vm.selectedLedger.voucherGeneratedType === 'sales'
-                                                        ? commonLocaleData?.app_invoice
-                                                        : commonLocaleData?.app_voucher) +
-                                                    ' : ' +
-                                                    (vm.selectedLedger.voucherNumber ||
-                                                        commonLocaleData?.app_not_available)
-                                                "
-                                                matTooltipClass="tooltip-black"
-                                                (click)="downloadFiles('VOUCHER', $event)"
-                                            >
-                                                <i class="icon-download-circle pull-left"></i>
-                                            </span> -->
+                                                        <span
+                                                            class="download-invoice-ledger"
+                                                            *ngIf="
+                                                                voucherApiVersion !== 2 &&
+                                                                vm.selectedLedger.voucherNumber &&
+                                                                vm.selectedLedger.voucherNumber.length > 0 &&
+                                                                (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                            "
+                                                            [matTooltipPosition]="'left'"
+                                                            [containerClass]="'col-xs-3'"
+                                                            [matTooltip]="
+                                                                commonLocaleData?.app_download +
+                                                                ' ' +
+                                                                (vm.selectedLedger.voucherGeneratedType === 'sales'
+                                                                    ? commonLocaleData?.app_invoice
+                                                                    : commonLocaleData?.app_voucher) +
+                                                                ' : ' +
+                                                                (vm.selectedLedger.voucherNumber ||
+                                                                    commonLocaleData?.app_not_available)
+                                                            "
+                                                            matTooltipClass="tooltip-black"
+                                                            (click)="downloadFiles('VOUCHER', $event)"
+                                                        >
+                                                            <i class="icon-download-circle pull-left"></i>
+                                                        </span>
 
                                                         <span
                                                             class="download-invoice-ledger cursor-pointer"
@@ -909,7 +909,7 @@
                                                     ></text-field>
                                                 </ng-template>
 
-                                                <!-- <span
+                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
                                                     voucherApiVersion !== 2 &&
@@ -926,9 +926,9 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span> -->
+                                            </span>
 
-                                                <!-- <span
+                                            <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
                                                     voucherApiVersion !== 2 &&
@@ -952,7 +952,7 @@
                                                 matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span> -->
+                                            </span>
 
                                                 <span
                                                     class="download-invoice-ledger cursor-pointer"
@@ -1216,7 +1216,7 @@
                                                     />
                                                 </ng-template>
 
-                                                <!-- <span
+                                             <span
                                                 class="download-invoice-ledger"
                                                 *ngIf="
                                                     voucherApiVersion !== 2 &&
@@ -1234,7 +1234,7 @@
                                                 (click)="downloadFiles('ATTACHMENT', $event)"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
-                                            </span>
+                                        </span>
 
                                             <span
                                                 class="download-invoice-ledger"
@@ -1260,7 +1260,7 @@
                                                 (click)="downloadFiles('VOUCHER', $event)"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
-                                            </span> -->
+                                            </span>
 
                                                 <span
                                                     class="download-invoice-ledger cursor-pointer"

@@ -461,7 +461,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 accountPartyType = address.partyType.toLowerCase();
             }
         });
-        if ((this.invoiceType?.isSalesInvoice || this.invoiceType?.isCreditNote) && !this.activeCompany?.withPay && (this.activeCompany?.countryV2?.alpha2CountryCode !== this.account?.countryCode || accountPartyType === 'sez' || accountPartyType === 'deemed export')) {
+        if (
+            (this.invoiceType?.isSalesInvoice || this.invoiceType?.isCreditNote || this.invoiceType?.isProformaInvoice || this.invoiceType?.isEstimateInvoice)
+            && !this.activeCompany?.withPay
+            && (this.activeCompany?.countryV2?.alpha2CountryCode !== this.account?.countryCode || accountPartyType === 'sez' || accountPartyType === 'deemed export')
+        ) {
             return false;
         } else {
             return true;
@@ -1973,15 +1977,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.showAccountTaxTypeByCountry(accountData.country?.countryCode);
 
-        let isPartyTypeSez = false;
-        if (accountData?.addresses?.length > 0) {
-            accountData.addresses.forEach(address => {
-                if (address.partyType && address.partyType.toLowerCase() === "sez") {
-                    isPartyTypeSez = true;
-                }
-            });
-        }
-
         if (!this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice && this.account?.baseCurrency !== accountData.currency) {
             this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
@@ -1994,8 +1989,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
-        this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
-
+        this.account.excludeTax = !this.showTaxColumn;
+        
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
@@ -2003,6 +1998,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
                 this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
+            } else {
+                this.invoiceForm.get('exchangeRate').patchValue(1);
             }
 
             let defaultAddress = null;
@@ -2362,6 +2359,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.bulkStockAsideMenuRef = this.dialog.open(AddBulkItemsComponent, {
             data: {
                 voucherType: this.voucherType,
+                exchangeRate: this.invoiceForm.get('exchangeRate')?.value ?? 1,
                 customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value
             }
         });
@@ -2928,14 +2926,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.generalService.getSelectedFile(file, (blob: any, file: any) => {
                 this.isFileUploading = true;
                 this.selectedFileName = file.name;
-
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
-
                     if (response?.status === 'success') {
                         this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                         this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
                     } else {
+                        this.selectedFileName = '';
                         this.invoiceForm.get("attachedFiles")?.patchValue([]);
                         this.toasterService.showSnackBar("error", response.message);
                     }
@@ -4894,7 +4891,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
             entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
 
-            let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+            const rate = Number(((response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) / (this.invoiceForm.get('exchangeRate')?.value ?? 1)).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
             transactionFormGroup.get('stock.skuCode')?.patchValue(response.stock.skuCode);
             transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);
@@ -5285,18 +5282,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let updateVoucherText = this.localeData?.update_invoice;
         let invoiceType = (
             this.invoiceType.isProformaInvoice ? this.localeData?.invoice_types?.proforma
-            : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
-            : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice
-            : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note
-            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note
-            : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase
-            : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
-            : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
-            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
-            : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
-            : this.invoiceType.isReceiptInvoice ? this.localeData?.invoice_types?.receipt
-            : this.invoiceType.isPaymentInvoice ? this.localeData?.invoice_types?.payment
-            : this.localeData?.invoice_types?.purchase_order);
+                : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
+                    : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice
+                        : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note
+                            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note
+                                : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase
+                                    : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
+                                        : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
+                                            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
+                                                : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
+                                                    : this.localeData?.invoice_types?.purchase_order);
 
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);
