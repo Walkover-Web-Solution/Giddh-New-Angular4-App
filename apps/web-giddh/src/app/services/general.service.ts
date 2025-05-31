@@ -2237,5 +2237,43 @@ export class GeneralService {
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
     }
+
+    /**
+     * Retrieves a list of available voucher types with localized labels.
+     *
+     * @param commonLocaleData 
+     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
+     * @memberof GeneralService
+     */
+    public getVoucherTypeList(commonLocaleData: any): IOption[] {
+        return [{
+            label: commonLocaleData?.app_voucher_types.sales,
+            value: 'sales'
+        }, {
+            label: commonLocaleData?.app_voucher_types.purchase,
+            value: 'purchase'
+        }, {
+            label: commonLocaleData?.app_voucher_types.receipt,
+            value: 'receipt'
+        }, {
+            label: commonLocaleData?.app_voucher_types.payment,
+            value: 'payment'
+        }, {
+            label: commonLocaleData?.app_voucher_types.journal,
+            value: 'journal'
+        }, {
+            label: commonLocaleData?.app_voucher_types.contra,
+            value: 'contra'
+        }, {
+            label: commonLocaleData?.app_voucher_types.debit_note,
+            value: 'debit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.credit_note,
+            value: 'credit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.advance_receipt,
+            value: 'advance-receipt'
+        }];
+    }
 }
 
