@@ -118,6 +118,10 @@
                     "icon": "icon-reciept-new",
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/receipt/create"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -257,6 +261,10 @@
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/payment/create"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -303,6 +311,7 @@
                         }
                     }
                 },
+                // Report to view the purchase register of the organization. This report shows the net and cumulative purchases made by the organization.
                 {
                     "label": "खरेदी नोंदणी",
                     "link": "/pages/reports/purchase-register",

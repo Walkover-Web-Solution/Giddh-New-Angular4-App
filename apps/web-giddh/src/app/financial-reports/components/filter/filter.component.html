@@ -168,6 +168,7 @@
                 <div class="d-flex align-items-center column-gap1 download-data-icon">
                     <button 
                         *ngIf="!showReportTallyOption"
+                        aria-label="show report options"
                         mat-stroked-button 
                         type="button" 
                         (click)="showTallyReportOptions()">
@@ -175,6 +176,7 @@
                     </button>
                     <button 
                         *ngIf="showReportTallyOption"
+                        aria-label="show report options"
                         mat-raised-button
                         color="primary"
                         type="button" 

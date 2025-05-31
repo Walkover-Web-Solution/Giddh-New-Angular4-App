@@ -69,7 +69,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Input() public showLoader: boolean = true;
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
-    /** True, if show Tally Report status */
+    /** Emits true to show Tally Report options */
     @Output() public showReportTally = new EventEmitter<boolean>();
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
     public universalDate$: Observable<any>;

@@ -198,7 +198,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private invoiceService: InvoiceService,
-        // private router: Router
+        private router: Router
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -793,9 +793,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public previewVoucher(receipt: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
-        // }
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
+        }
     }
 
     /**
