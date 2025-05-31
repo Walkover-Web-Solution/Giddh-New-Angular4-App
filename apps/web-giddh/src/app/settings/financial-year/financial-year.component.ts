@@ -3,14 +3,13 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
-import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
 import { ActiveFinancialYear } from '../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IForceClear } from '../../models/api-models/Sales';
 import { cloneDeep, isNull, range } from '../../lodash-optimized';
 
 export interface IGstObj {
@@ -43,7 +42,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         allowClear: true
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -110,7 +108,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.yearOptions = cloneDeep(this.formatDateInFinancialYear(yearOptions));
-                this.forceClear$ = observableOf({ status: true });
             } else if (isNull(o)) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
