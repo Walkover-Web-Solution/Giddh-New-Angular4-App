@@ -1,3 +1,5 @@
+import { ProfitLossDateRangeResponse } from "./tb-pl-bs";
+
 export interface ForwardedBalance {
     amount: number;
     type: string;
@@ -43,7 +45,7 @@ export class ChildGroup {
     public forwardedBalance: ForwardedBalance;
     public creditTotal: number;
     public debitTotal: number;
-    public closingBalance: ClosingBalance;
+    public closingBalance: ProfitLossDateRangeResponse<ClosingBalance>;
     public childGroups: ChildGroup[];
     public accounts: Account[];
     public uniqueName: string;

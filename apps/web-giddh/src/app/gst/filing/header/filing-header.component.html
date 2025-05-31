@@ -20,8 +20,8 @@
 
         <div class="flex-grow-1">
             <ul class="list-inline d-flex column-gap1 align-items-center justify-content-end w-100">
-                <li>
-                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
+                <li  *ngIf="!isTabScreen">  
+                    <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR1' }"></ng-container>
                 </li>
                 <li class="d-flex column-gap1 align-items-center">
                     <button
@@ -63,6 +63,9 @@
                     </button>
                 </li>
             </ul>
+            <div *ngIf="isTabScreen" class="pull-right pd-r0">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR1' }"></ng-container>
+            </div>
             <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
                 <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
                     (onUpgradePlan)="buyPlan($event)">
@@ -91,12 +94,15 @@
         <div class="d-flex flex-column">
             <div class="d-flex column-gap1 justify-content-end align-items-center">
                 <div class="d-inline-flex align-items-center column-gap1">
-                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
+                    <div *ngIf="!isTabScreen">
+                        <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR2' }"></ng-container>
+                    </div>
                     <button
                         mat-stroked-button
                         color="primary"
                         aria-labelledby="button-triggers-manual"
                         [matMenuTriggerFor]="downloadMenu"
+                        class="download-menu"
                     >
                         <i class="icon-download"></i>
                         {{ commonLocaleData?.app_download }}
@@ -130,6 +136,9 @@
                         {{ localeData?.filing?.pull_from_gstn }}
                     </button>
                 </div>
+            </div>
+            <div *ngIf="isTabScreen">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR2' }"></ng-container>
             </div>
             <div class="d-flex justify-content-end filling-header-message">
                 <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
@@ -192,4 +201,8 @@
         #picker
     >
     </mat-datepicker>
+</ng-template>
+
+<ng-template #watchVideoTemplateGSTR let-moduleName>
+    <watch-video [cssClass]="'text-primary'" [moduleName]="moduleName"></watch-video>
 </ng-template>

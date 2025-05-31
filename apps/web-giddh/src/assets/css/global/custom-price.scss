@@ -52,7 +52,7 @@
                                 .discount-input {
                                     .multi-select {
                                         input {
-                                            height: 48px;
+                                            height: var(--mat-form-field-height);
                                             &:focus {
                                                 border-color: var(--color-giddh-blue) !important;
                                             }
