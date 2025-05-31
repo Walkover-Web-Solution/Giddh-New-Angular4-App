@@ -6,5 +6,6 @@
     "reload_data": "डेटा रीलोड करा",
     "create_new_tag": "नवीन टॅग तयार करा",
     "tag_name": "टॅग नाव",
-    "tag_description": "टॅग वर्णन (पर्यायी)"
+    "tag_description": "टॅग वर्णन (पर्यायी)",
+    "tally_report": "टैली रिपोर्ट"
 }

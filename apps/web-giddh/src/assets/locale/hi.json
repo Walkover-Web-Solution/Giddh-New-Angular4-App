@@ -776,5 +776,6 @@
     "app_select_file": "फाइल चुनें",
     "app_closing_balance": "जमा शेष",
     "app_account_status": "खाता स्थिति",
-    "app_both": "दोनों"
+    "app_both": "दोनों",
+    "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?"
 }

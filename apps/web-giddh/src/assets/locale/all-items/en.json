@@ -494,7 +494,7 @@
                         }
                     }
                 },
-                                {
+                {
                     "label": "New Payment",
                     "link": "/pages/vouchers/payment/create",
                     "icon": "icon-reciept-new",
