@@ -109,8 +109,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                         yearOptions.splice(yearIndx, 1);
                     }
                 });
-                this.formatDateInFinancialYear(yearOptions);
-                this.yearOptions = cloneDeep(yearOptions);
+                this.yearOptions = cloneDeep(this.formatDateInFinancialYear(yearOptions));
                 this.forceClear$ = observableOf({ status: true });
             } else if (isNull(o)) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
@@ -126,7 +125,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     private formatDateInFinancialYear(yearOptions: IOption[]): IOption[] {
-        if (yearOptions.length === 0) {
+        if (yearOptions.length === 0 || !this.selectedFYPeriod) {
             return [];
         }
 
@@ -204,7 +203,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
             ];
 
-            if (this.financialYearObj.financialYearPeriod) {
+            if (this.financialYearObj?.financialYearPeriod) {
                 this.setLabelSelectedFYPeriod();
             }
         }
@@ -217,6 +216,6 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     private setLabelSelectedFYPeriod(): void {
-        this.selectedFYPeriod = this.FYPeriodOptions.find(item => item.value === this.financialYearObj.financialYearPeriod)?.label;
+        this.selectedFYPeriod = this.FYPeriodOptions.find(item => item.value === this.financialYearObj?.financialYearPeriod)?.label;
     }
 }
