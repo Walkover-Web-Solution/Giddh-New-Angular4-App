@@ -23,10 +23,9 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { WatchVideoModule } from "../../theme/watch-video/watch-video.module";
 import { NgModule } from "@angular/core";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
-import { SettingIntegrationPaymentModule } from "../../settings/integration/payment/setting.integration.payment.module";
-import { AccountNumberMaskModule } from "../helpers/pipes/accountNumberMaskPipe/accountNumberMask.module";
 import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 import { LedgerStatementComponent } from "./ledger-statement.component";
+import { ValidateSectionPermissionDirectiveModule } from '../validate-section-permission/validate-section-permission.module';
 
 @NgModule({
     declarations: [LedgerStatementComponent],
@@ -58,10 +57,8 @@ import { LedgerStatementComponent } from "./ledger-statement.component";
         MatDatepickerModule,
         WatchVideoModule,
         TranslateDirectiveModule,
-        SettingIntegrationPaymentModule,
-        AccountNumberMaskModule,
-        GiddhPageLoaderModule
-
+        GiddhPageLoaderModule,
+        ValidateSectionPermissionDirectiveModule
     ],
     exports: [LedgerStatementComponent]
 })

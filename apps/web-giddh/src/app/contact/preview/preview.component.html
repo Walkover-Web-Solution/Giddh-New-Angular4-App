@@ -89,7 +89,12 @@
                         class="table-header-sticky"
                     >
                         <mat-tab [label]="'Transaction'">
-                            <ledger-statement></ledger-statement>
+                            <ledger-statement
+                                *ngIf="selectedContact?.uniqueName"
+                                [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                [from]="queryParams.from"
+                                [to]="queryParams.to"
+                            ></ledger-statement>
                         </mat-tab>
                         <mat-tab [label]="'Statement'">
                             <account-statement></account-statement>
@@ -97,9 +102,9 @@
                         <mat-tab [label]="'Account Details'">
                             <div class="account-details-wrapper">
                                 <account-update-new-details
-                                    *ngIf="activeAccountUniqueName"
+                                    *ngIf="activeAccount$ | async"
                                     [activeAccount$]="activeAccount$"
-                                    [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+                                    [activeGroupUniqueName]="parentGroupUniqueName"
                                     [isGstEnabledAcc]="isGstEnabledAcc"
                                     [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
                                     [updateAccountInProcess$]="updateAccountInProcess$"
@@ -121,3 +126,18 @@
         </div>
     </div>
 </ng-container>
+
+<!--delete Account modal  -->
+<div bsModal #deleteAccountModal="bs-modal" class="modal fade align-content-center" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <confirm-modal
+                [title]="localeData?.delete_account_title"
+                [body]="localeData?.delete_account_content"
+                (cancelCallBack)="hideDeleteAccountModal()"
+                (successCallBack)="deleteAccount()"
+            >
+            </confirm-modal>
+        </div>
+    </div>
+</div>

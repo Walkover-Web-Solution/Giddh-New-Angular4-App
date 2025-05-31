@@ -41,6 +41,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), (response) => response);
     public virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), (response) => response);    
     public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);    
+    public showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), (response) => response);    
 
     /**
      * Send email template

@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, takeUntil } from "rxjs";
+import { async, debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
@@ -16,6 +16,9 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { ContactAdvanceSearchModal } from "../../models/api-models/Contact";
+import { ModalDirective } from "ngx-bootstrap/modal";
+import { AccountsAction } from "../../actions/accounts.actions";
+import { AccountRequestV2 } from "../../models/api-models/Account";
 
 @Component({
     selector: "preview",
@@ -90,6 +93,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
     public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
     public activeGroupUniqueName$: Observable<string> = this.componentStore.activeGroupUniqueName$;
+    public virtualAccountEnable$: Observable<any> = this.componentStore.virtualAccountEnable$;
     public showBankDetail: boolean = false;
     public showVirtualAccount: boolean = false;
     public isDebtorCreditor: boolean = false;
@@ -97,6 +101,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public accountDetails: any = {};
     public activeAccountUniqueName: string;
     public contactActiveTab: string;
+    public parentGroupUniqueName: string;
     /** sorting */
     public key: string = "name"; // set default
     public order: string = "asc";
@@ -116,7 +121,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public getContactsList$: Observable<any> = this.componentStore.getContactsList$;
     /** Holds true if invoice load more data is trigger */
     public isLoadMore: boolean;
-    
+    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
+    public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
     constructor(
         private router: Router,
         public dialog: MatDialog,
@@ -125,7 +131,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
-        private settingsBranchAction: SettingsBranchActions     
+        private settingsBranchAction: SettingsBranchActions,
+        private accountsAction: AccountsAction
     ) { }
 
 
@@ -137,9 +144,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
-        this.currentCompanyBranches$.subscribe(response => {
+        this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.length) {
-                this.currentCompanyBranches = response.map(branch => ({
+                this.currentCompanyBranches = response.map((branch: any) => ({
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
@@ -177,10 +184,18 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
             }
         });
+        
         merge(this.activatedRoute.params, this.activatedRoute.queryParams).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                console.log(params);
+                
+                let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
+                this.activeGroupUniqueName$ = of(groupUniqueName);
+                this.parentGroupUniqueName = groupUniqueName;
                 if (params?.accountUniqueName) {
                     this.activeAccountUniqueName = params?.accountUniqueName;
+                    this.store.dispatch(this.accountsAction.resetActiveAccount());
+                    this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountUniqueName));
                     this.contactActiveTab = params?.type;
                     this.params = params;
                     this.isSearching = false;
@@ -203,6 +218,28 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.parentGroups[0]?.uniqueName) {
+                let col = response.parentGroups[0]?.uniqueName;
+                this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+                this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+            }
+        });
+        this.componentStore.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.uniqueName === 'sundrycreditors' || response.uniqueName === 'sundrydebtors') {
+                    this.isDebtorCreditor = true;
+                }
+                this.virtualAccountEnable$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response.companyCashFreeSettings && response.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && (this.parentGroupUniqueName === 'sundrydebtors')) {
+                        this.showVirtualAccount = true;
+                    } else {
+                        this.showVirtualAccount = false;
+                    }
+                });
+            }
+        });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
@@ -223,6 +260,39 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
+    }
+
+    public isGroupSelected(event: any) {
+        if (event) {
+            this.activeGroupUniqueName$ = of(event.value);
+            // in case of sundrycreditors or sundrydebtors no need to show address tab
+            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+                this.isDebtorCreditor = true;
+            }
+        }
+    }
+
+    public showDeleteAccountModal() {
+        this.deleteAccountModal?.show();
+    }
+
+    public hideDeleteAccountModal() {
+        this.deleteAccountModal?.hide();
+    }
+
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+        console.log(accRequestObject);
+        
+        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+    }
+
+    public deleteAccount() {
+        let activeAccUniqueName = null;
+        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
+        let activeGrpName = this.contactActiveTab;
+        this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
+
+        this.hideDeleteAccountModal();
     }
 
     /**
@@ -326,6 +396,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             return;
         }
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
+        this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
     }
 
     /**
