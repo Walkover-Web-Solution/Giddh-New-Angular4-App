@@ -158,7 +158,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private _toaster: ToasterService,
         private modalService: BsModalService,
         private _location: LocationService,
-        private _cd: ChangeDetectorRef,
+        private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
@@ -541,9 +541,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     }
     detectChange() {
-        if (!this._cd['destroyed']) {
-            this._cd.detectChanges();
-        }
+            this.changeDetectorRef.detectChanges();
+        
     }
 
     public preparemodelForFilterEway(): IEwayBillfilter {
@@ -582,7 +581,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (o.gstin) {
             model.gstin = o.gstin;
         }
-
+        if(o.failedRequestLog) {
+            model.failedRequestLog = o.failedRequestLog;    
+        }
+        
         return model;
     }
 
@@ -703,7 +705,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.isDropUp = true;
         }
 
-        this._cd.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -755,8 +757,30 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     public onTabChange(event: MatTabChangeEvent): void {
         if (event) {
+            const extraCols = ['ewbNo', 'ewayBillDate'];
+            if( event.index === 0 && this.activeTabIndex !== event.index) {
+                this.displayedColumns = this.displayedColumns.filter(column => !['status', 'reason'].includes(column));
+                this.displayedColumns.splice(-2, 0, ...extraCols);
+                this.EwayBillfilterRequest.failedRequestLog = false;
+            }else if(event.index === 1) {
+                this.displayedColumns = this.displayedColumns.filter(column => !extraCols.includes(column));
+                this.displayedColumns.splice(-2, 0, ...['status', 'reason']);
+                this.EwayBillfilterRequest.failedRequestLog = true;
+            }
+            
             this.activeTabIndex = event.index;
             this.selectedTab = event.tab.textLabel;
+            this.getAllFilteredInvoice();
         }
     }
+
+    public onGenerateEwayBill(item): void {
+        if (!item?.pincode) {
+                this._toaster.showSnackBar("error", this.localeData?.pincode_required);
+            } else {
+                console.log("run");
+                this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+            }
+    }
+
 }

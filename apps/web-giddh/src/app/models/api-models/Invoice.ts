@@ -672,6 +672,7 @@ export class IEwayBillfilter {
     count?: number;
     branchUniqueName?: string;
     gstin?: string;
+    failedRequestLog?: boolean;
 }
 
 export class InvoicePreviewDetailsVm {
