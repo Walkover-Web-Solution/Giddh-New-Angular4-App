@@ -96,7 +96,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             this.setYearRange();
             if (o) {
                 this.financialYearObj = cloneDeep(o);
-                this.selectedFYPeriod = this.financialYearObj.financialYearPeriod;
+                if (this.FYPeriodOptions?.length) {
+                    this.setLabelSelectedFYPeriod();
+                }
                 this.fyAddNewDropdownIsOpen = false;
                 this.fyPeriodDropdownIsOpen = false;
                 let yearOptions = cloneDeep(this.yearOptions);
@@ -201,6 +203,20 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR' },
                 { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
             ];
+
+            if (this.financialYearObj.financialYearPeriod) {
+                this.setLabelSelectedFYPeriod();
+            }
         }
+    }
+
+    /**
+     * Sets the label of the selected FY period
+     *
+     * @private
+     * @memberof FinancialYearComponent
+     */
+    private setLabelSelectedFYPeriod(): void {
+        this.selectedFYPeriod = this.FYPeriodOptions.find(item => item.value === this.financialYearObj.financialYearPeriod)?.label;
     }
 }
