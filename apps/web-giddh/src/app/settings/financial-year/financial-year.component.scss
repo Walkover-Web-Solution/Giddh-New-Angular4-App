@@ -10,3 +10,26 @@ table {
         }
     }
 }
+.select-financial-year {
+    width: 210px;
+}
+
+@media screen and (max-width: 992px) {
+    .financial-year-header {
+        .border-left {
+            border-left: unset !important;
+        }
+        .pd-l4 {
+            padding-left: unset !important;
+        }
+
+        > div {
+            > :first-child {
+                min-width: 210px !important;
+            }
+            button {
+                min-width: 180px !important;
+            }
+        }
+    }
+}
