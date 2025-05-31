@@ -2380,7 +2380,6 @@ ul.sub-list {
 .text-gray {
     color: var(--color-gray);
 }
-
 // This color will same in all theme
 .text-static-white {
     color: var(--color-white-tertiary) !important;
@@ -3380,6 +3379,10 @@ input[type="checkbox"]:checked:after {
 
 .lh-0 {
     line-height: 0 !important;
+}
+
+.lh-1 {
+    line-height: 1 !important;
 }
 
 .btn-success-green {

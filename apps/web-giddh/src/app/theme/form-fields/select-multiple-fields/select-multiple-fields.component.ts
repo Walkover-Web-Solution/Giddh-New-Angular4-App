@@ -40,6 +40,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showError: boolean = false;
     /** Holds prefix of chip text */
     @Input() public chipPrefix: string = '';
+    /** Holds sufix of chip text */
+    @Input() public chipSuffix: string = '';
     /** The parent component can dynamically control the focus of the input field by passing a boolean value. */
     @Input() public autoFocus: boolean = false;
     /** Name of search field */
@@ -220,9 +222,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         }
         const selectOptionValue = option?.option?.value?.label;
         this.writeValue([...this.value, option?.option?.value?.value]);
-        if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
+        if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
             this.chipListUniqueName.push(option.option.value.value);
-            this.chipList.push(this.chipPrefix + selectOptionValue);
+            this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
             this.emitList();
         }
     }
