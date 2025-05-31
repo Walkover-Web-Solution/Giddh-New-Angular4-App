@@ -15,6 +15,7 @@
             [(ngModel)]="groupDetail.checked"
             [checked]="groupDetail?.checked"
             (click)="$event.stopPropagation()"
+            class="tailed-checkbox"
         ></mat-checkbox>
         <span [innerHTML]="groupDetail?.groupName | highlight : search"></span>
     </div>
@@ -25,31 +26,32 @@
                     <span
                         class="col text-right py-2 px-0 pd-r15 bd-rl row-height"
                     >
-                        <span
-                            *ngIf="
-                                groupDetail.category === 'income' &&
-                                groupDetail.closingBalance[key].type === 'DEBIT' &&
-                                groupDetail.closingBalance[key].amount !== 0
-                            "
-                            >-</span
-                        >
-                        <span
-                            *ngIf="
-                                groupDetail.category === 'expenses' &&
-                                groupDetail.closingBalance[key].type === 'CREDIT' &&
-                                groupDetail.closingBalance[key].amount !== 0
-                            "
-                            >-</span
-                        >
-                        <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="groupDetail.closingBalance[key].amount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
+                            <span
+                                *ngIf="
+                                    groupDetail.category === 'income' &&
+                                    groupDetail.closingBalance[key].type === 'DEBIT' &&
+                                    groupDetail.closingBalance[key].amount !== 0
+                                "
+                                >-</span
                             >
-                            </amount-field>
+                            <span
+                                *ngIf="
+                                    groupDetail.category === 'expenses' &&
+                                    groupDetail.closingBalance[key].type === 'CREDIT' &&
+                                    groupDetail.closingBalance[key].amount !== 0
+                                "
+                                >-</span
+                            >
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="groupDetail.closingBalance[key].amount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
                         </span>
-                    </span>
+                    </ng-container>
                 </ng-container>
             </ng-container>
             <ng-template #elseBlock>
@@ -99,6 +101,7 @@
                     [(ngModel)]="account.checked"
                     [checked]="account?.checked"
                     (click)="$event.stopPropagation()"
+                    class="tailed-checkbox"
                 ></mat-checkbox>
                 <p class="account-name" [innerHTML]="account.name | lowercase | highlight : search"></p>
             </div>

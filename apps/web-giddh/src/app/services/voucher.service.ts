@@ -774,7 +774,7 @@ export class VoucherService {
         let httpMethod: 'post' | 'get' = 'post';
         let apiParams = model;
         let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
-        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(voucherType)) {
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(voucherType)) {
             if (this.generalService.voucherApiVersion === 2) {
                 apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
                     ?.replace(':fileType', fileType)

@@ -69,6 +69,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Input() public showLoader: boolean = true;
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
+    /** True, if show Tally Report status */
+    @Output() public showReportTally = new EventEmitter<boolean>();
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
     public universalDate$: Observable<any>;
     public newTagForm: UntypedFormGroup;
@@ -106,6 +108,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True if show Tally Report options */
+    public showReportTallyOption: boolean = false;
 
     constructor(private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
@@ -513,5 +517,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public handleCompareWithEvent(event: any): void {
         this.filterForm.patchValue(event);
+    }
+
+    /**
+     * Show Tally Report options
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public showTallyReportOptions(): void {
+        this.showReportTallyOption = !this.showReportTallyOption;
+        this.showReportTally.emit(this.showReportTallyOption);
     }
 }

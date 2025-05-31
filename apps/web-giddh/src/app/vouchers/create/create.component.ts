@@ -5474,9 +5474,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                         : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill
                                             : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note
                                                 : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note
-                                                    : this.invoiceType.isReceiptInvoice ? this.localeData?.invoice_types?.receipt
-                                                        : this.invoiceType.isPaymentInvoice ? this.localeData?.invoice_types?.payment
-                                                            : this.localeData?.invoice_types?.purchase_order);
+                                                    : this.localeData?.invoice_types?.purchase_order);
 
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);

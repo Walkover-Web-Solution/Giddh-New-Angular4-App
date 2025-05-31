@@ -14,6 +14,7 @@
             [(ngModel)]="groupDetail.checked"
             [checked]="groupDetail?.checked"
             (click)="$event.stopPropagation()"
+            class="tailed-checkbox"
         >
         </mat-checkbox>
         <span [innerHTML]="groupDetail?.groupName | uppercase | highlight : search"></span>
@@ -86,6 +87,7 @@
                     [(ngModel)]="account.checked"
                     [checked]="account?.checked"
                     (click)="$event.stopPropagation()"
+                    class="tailed-checkbox"
                 ></mat-checkbox>
                 <span [innerHTML]="account.name | lowercase | highlight : search"></span>
             </div>
