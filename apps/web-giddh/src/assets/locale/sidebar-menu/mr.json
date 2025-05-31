@@ -311,7 +311,6 @@
                         }
                     }
                 },
-                // Report to view the purchase register of the organization. This report shows the net and cumulative purchases made by the organization.
                 {
                     "label": "खरेदी नोंदणी",
                     "link": "/pages/reports/purchase-register",
