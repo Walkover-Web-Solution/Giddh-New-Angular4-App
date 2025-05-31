@@ -79,6 +79,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([storeResponse, profitAndLossResponse]) => {
                 if (storeResponse || profitAndLossResponse) {
+                    this.expandAll = false;
                     this.modifyResponse(storeResponse || profitAndLossResponse);
                 } else {
                     this.data = null;

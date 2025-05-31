@@ -71,6 +71,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
         this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
             if (p) {
+                this.expandAll = false;
                 let data = cloneDeep(p) as BalanceSheetData;
                 if (data && data.message) {
                     setTimeout(() => {

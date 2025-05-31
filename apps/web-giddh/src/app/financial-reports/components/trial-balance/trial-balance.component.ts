@@ -65,6 +65,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
             let d = cloneDeep(p) as AccountDetails;
             if (d) {
+                this.expandAll = false;
                 if (d.message) {
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
