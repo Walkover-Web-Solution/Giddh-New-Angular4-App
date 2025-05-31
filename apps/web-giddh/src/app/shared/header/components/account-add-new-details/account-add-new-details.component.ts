@@ -41,7 +41,7 @@ import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.compo
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { AccountingGroupEnum } from '../../../Enums/common.enum';
+import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
 
 @Component({
     selector: 'account-add-new-details',
@@ -51,6 +51,7 @@ import { AccountingGroupEnum } from '../../../Enums/common.enum';
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    /** Holds the reactive form group for adding or editing an account. */
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -124,6 +125,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    /** Flag indicating whether the entered GSTIN number is valid. */
     public isGstValid: boolean = true;
     public GSTIN_OR_TRN: string;
     public selectedCountry: string;
@@ -253,7 +255,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
                     this.activeCompany = activeCompany;
-                    this.isUKCompany = activeCompany.country === "United Kingdom";
+                    this.isUKCompany = activeCompany.country === CountryNames.UNITED_KINGDOM;
                     this.getCompanyCustomField();
                 }
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
@@ -606,6 +608,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getInvoiceSettings();
     }
 
+    /**
+     * Initializes the GST details form with default values and validators.
+     * 
+     * @returns FormGroup
+     * @memberof AccountAddNewDetailsComponent
+     */
     public initialGstDetailsForm(): FormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
 
@@ -995,7 +1003,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return parentGroups.some(parent => parent.uniqueName === uniqueName);
     }
 
-    public selectedState(gstForm: FormGroup, event) {
+    /**
+     * Handles the selection of a state from a dropdown or similar UI component.
+     * 
+     * @param gstForm The `FormGroup` containing GST-related form controls.
+     * @param event The event object containing the selected state's label and value.
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public selectedState(gstForm: FormGroup, event: IOption): void {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
@@ -1004,7 +1019,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public selectedCounty(gstForm: FormGroup, event) {
+    /**
+     * Updates the county information in the GST form based on the selected county event.
+     * 
+     * @param gstForm The `FormGroup` containing GST-related form controls.
+     * @param event The event object containing the selected county's label and value.
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public selectedCounty(gstForm: FormGroup, event: IOption): void {
         if (gstForm && event?.label) {
             gstForm.get('countyCode')?.patchValue(event?.value);
             gstForm.get('county').get('code')?.patchValue(event?.value);

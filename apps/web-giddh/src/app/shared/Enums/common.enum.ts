@@ -31,3 +31,9 @@ export enum CopyType {
     CUSTOMER = "CUSTOMER",
     TRANSPORT = "TRANSPORT"
 }
+
+// Enum representing country names.
+export enum CountryNames {
+    INDIA = "India",
+    UNITED_KINGDOM = "United Kingdom"
+}

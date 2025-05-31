@@ -64,7 +64,7 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { AccountingGroupEnum } from '../../../Enums/common.enum';
+import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
 
 @Component({
     selector: 'account-update-new-details',
@@ -74,6 +74,7 @@ import { AccountingGroupEnum } from '../../../Enums/common.enum';
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+    /** Holds the reactive form group for adding or editing an account. */
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -93,7 +94,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
+    /** Reactive form used for moving an account to a different group.*/
     public moveAccountForm: FormGroup;
+    /** Reactive form used to manage the selected taxes for a tax group. */
     public taxGroupForm: FormGroup;
     /** Instance of delete account modal */
     @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: TemplateRef<any>;
@@ -136,6 +139,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accounts: IOption[];
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    /** Flag indicating whether the entered GSTIN number is valid. */
     public isGstValid: boolean = true;
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
@@ -309,7 +313,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                this.isUKCompany = activeCompany.country === "United Kingdom";
+                this.isUKCompany = activeCompany.country === CountryNames.UNITED_KINGDOM;
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
@@ -526,7 +530,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    this.parentGroups = [...selectedGroupDetails.parentGroups , { uniqueName: selectedGroupDetails?.uniqueName }];
+                    this.parentGroups = [...selectedGroupDetails.parentGroups, { uniqueName: selectedGroupDetails?.uniqueName }];
                     this.isParentDebtorCreditor();
                 }
             }
@@ -579,7 +583,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
                             }), 'value');
-                            
+
                             return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
@@ -734,6 +738,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.getInvoiceSettings();
     }
 
+    /**
+     * Initializes the GST details form with default values and validators.
+     * 
+     * @returns FormGroup
+     * @memberof AccountAddNewDetailsComponent
+     */
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
 
@@ -1168,7 +1178,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public selectedState(gstForm: FormGroup, event) {
+    /**
+     * Handles the selection of a state from a dropdown or similar UI component.
+     * 
+     * @param gstForm The `FormGroup` containing GST-related form controls.
+     * @param event The event object containing the selected state's label and value.
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public selectedState(gstForm: FormGroup, event: IOption): void {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
             gstForm.get('state').get('code')?.patchValue(event?.value);
@@ -1177,6 +1194,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+    /**
+     * Updates the county information in the GST form based on the selected county event.
+     * 
+     * @param gstForm The `FormGroup` containing GST-related form controls.
+     * @param event The event object containing the selected county's label and value.
+     * @memberof AccountAddNewDetailsComponent
+     */
     public selectedCounty(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
             gstForm.get('countyCode')?.patchValue(event?.value);
@@ -1187,6 +1211,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectGroup(event: IOption) {
         if (event) {
+            this.activeGroupUniqueName = event.value;
             this.isParentDebtorCreditor();
             this.isGroupSelected.emit(event);
         }
