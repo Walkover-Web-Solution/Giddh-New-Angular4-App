@@ -270,4 +270,16 @@ export class TlPlService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
+
+    public getReconcileOption(request: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(
+            this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
+            , request).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = request;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
 }

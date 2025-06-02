@@ -166,23 +166,25 @@
                     </button>
                 </form>
                 <div class="d-flex align-items-center column-gap1 download-data-icon">
-                    <button 
-                        *ngIf="!showReportTallyOption"
-                        aria-label="show report options"
-                        mat-stroked-button 
-                        type="button" 
-                        (click)="showTallyReportOptions()">
-                        {{ localeData?.tally_report }}
-                    </button>
-                    <button 
-                        *ngIf="showReportTallyOption"
-                        aria-label="show report options"
-                        mat-raised-button
-                        color="primary"
-                        type="button" 
-                        (click)="showTallyReportOptions()">
-                        {{ localeData?.tally_report }}
-                    </button>
+                    <ng-container *ngIf="showReconcileOption !== null">
+                        <button 
+                            *ngIf="!showReconcileOption"
+                            aria-label="show reconcile options"
+                            mat-stroked-button 
+                            type="button" 
+                            (click)="showTallyReportOptions()">
+                            {{  isReconcileModeDateRange ? localeData?.reconcile_mode : localeData?.switch_back_to_reconcile_mode }}
+                        </button>
+                        <button 
+                            *ngIf="showReconcileOption"
+                            aria-label="show reconcile options"
+                            mat-raised-button
+                            color="primary"
+                            type="button" 
+                            (click)="showTallyReportOptions()">
+                            {{  isReconcileModeDateRange ? localeData?.reconcile_mode : localeData?.switch_back_to_reconcile_mode }}
+                        </button>
+                    </ng-container>
                     <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
                         <span class="icon-refresh"></span>
                     </a>

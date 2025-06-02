@@ -7,10 +7,12 @@ import { TlPlService } from "../services/tl-pl.service";
 
 export interface FinancialReportsState {
     tailedReportIsSuccess: boolean;
+    reconcileOption: boolean | null;
 }
 
 export const DEFAULT_LEDGER_STATE: FinancialReportsState = {
-    tailedReportIsSuccess: null
+    tailedReportIsSuccess: null,
+    reconcileOption: null
 };
 
 @Injectable()
@@ -56,6 +58,45 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
 
                             return this.patchState({
                                 tailedReportIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Get reconcile option
+     * 
+     * @memberof FinancialReportsComponentStore
+     */
+    readonly getReconcileOption = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ reconcileOption: null });
+                return this.tlPlService.getReconcileOption(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    reconcileOption: true
+                                });
+                            } else {
+                                if (res?.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    reconcileOption: null,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+
+                            return this.patchState({
+                                reconcileOption: null
                             });
                         }
                     ),

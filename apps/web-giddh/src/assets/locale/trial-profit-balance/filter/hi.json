@@ -7,5 +7,6 @@
     "create_new_tag": "नया टैग बनाएं",
     "tag_name": "टैग नाम",
     "tag_description": "टैग विवरण (वैकल्पिक)",
-    "tally_report": "टैली रिपोर्ट"
+    "reconcile_mode": "सुलह मोड",
+    "switch_back_to_reconcile_mode": "सुलह मोड पर वापस जाएँ"
 }

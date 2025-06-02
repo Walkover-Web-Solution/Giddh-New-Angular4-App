@@ -108,7 +108,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** True if show Tally Report options */
-    public showReportTallyOption: boolean = false;
+    public showReconcileOption: boolean | null = null;
+    public isReconcileModeDateRange: boolean = false;
 
     constructor(private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
@@ -177,6 +178,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.getTags();
+        this.getReconcileModeStatus();
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -523,7 +525,11 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public showTallyReportOptions(): void {
-        this.showReportTallyOption = !this.showReportTallyOption;
-        this.showReportTally.emit(this.showReportTallyOption);
+        this.showReconcileOption = !this.showReconcileOption;
+        this.showReportTally.emit(this.showReconcileOption);
+    }
+
+    public getReconcileModeStatus(): void {
+        //  
     }
 }
