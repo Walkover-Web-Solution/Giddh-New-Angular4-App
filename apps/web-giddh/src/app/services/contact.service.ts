@@ -55,8 +55,7 @@ export class ContactService {
         sortBy: string = '',
         order: string = 'asc', 
         postData?: ContactAdvanceSearchModal, 
-        branchUniqueName?: string,
-        accountArchiveStatus?: string
+        branchUniqueName?: string
     ): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
@@ -77,9 +76,7 @@ export class ContactService {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat('&branchUniqueName=', branchUniqueName);
         }
-        if (accountArchiveStatus) {
-            url = url.concat('&accountArchiveStatus=', encodeURIComponent(accountArchiveStatus));
-        }
+        
         if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;

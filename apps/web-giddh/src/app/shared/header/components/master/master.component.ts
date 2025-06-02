@@ -71,7 +71,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** List of archived options */
     public archivedOptions: IOption[] = [];
     /** Selected archived option */
-    public selectedArchivedOption: string;
+    public selectedArchivedOption: string = '';
 
     constructor(
         private groupService: GroupService,
@@ -291,6 +291,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         if (changes?.commonLocaleData) {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
+            this.selectedArchivedOption = this.archivedOptions?.[0]?.value;
         }
 
         this.changeDetectorRef.detectChanges();

@@ -57,6 +57,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public archivedOptions: IOption[] = [];
     /** Selected archived option */
     public selectedArchivedOption: string;
+    /** Selected archived label */
+    public selectedArchivedLabel: string;
+    /** True if archived dropdown is open */
+    public archivedDropdownIsOpen: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -306,11 +310,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * Handles selection of archived filter option
      * 
      * @param {any} event Event containing selected filter value
+     * @param {boolean} search Whether to perform search or not
      * @memberof ManageGroupsAccountsComponent
      */
-     public onArchivedFilterSelected(event: any): void {
+     public onArchivedFilterSelected(event: any, search: boolean = true): void {
         this.selectedArchivedOption = event.value;
-        this.searchGroups(this.searchString);
+        this.selectedArchivedLabel = event.label;
+        if (search) {
+            this.searchGroups(this.searchString);
+        }
     }
 
     /**
@@ -322,6 +330,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public translationComplete(event: boolean): void {
         if (event) {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
+            this.onArchivedFilterSelected(this.archivedOptions[0], false);
         }
     }
 }
