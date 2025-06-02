@@ -729,7 +729,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     openingBalanceType: ['']
                 }),
             ]),
-            archive: [true]
+            archive: ['']
         });
 
         this.getInvoiceSettings();
@@ -2518,5 +2518,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             calculateTotal = null;
         }
         this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
+    }
+
+    /**
+     * This will be use for toggling the archive status
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public accountArchiveUnarchive(): void {
+        this.addAccountForm.get('archive')?.patchValue(!this.addAccountForm.get('archive')?.value);
+        this.submit();
     }
 }

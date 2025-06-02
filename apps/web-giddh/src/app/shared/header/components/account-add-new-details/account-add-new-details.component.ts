@@ -600,8 +600,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     openingBalanceType: [''],
                     foreignOpeningBalance: ['']
                 }),
-            ]),
-            archive: [false]
+            ])
         });
 
         this.getInvoiceSettings();
