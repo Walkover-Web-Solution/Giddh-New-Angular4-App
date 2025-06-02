@@ -6,6 +6,14 @@ table {
             th,
             td {
                 width: unset !important;
+
+                $table-padding-inline: 15px;
+                &:first-child {
+                    padding-left: $table-padding-inline !important;
+                }
+                &:last-child {
+                    padding-right: $table-padding-inline !important;
+                }
             }
         }
     }
