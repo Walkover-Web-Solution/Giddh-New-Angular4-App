@@ -193,7 +193,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.cd.detectChanges();
             });
 
-        this.universalDate$.subscribe((a) => {
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             if (a) {
                 this.universalDateICurrent = false;
                 // assign dates
@@ -313,6 +313,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
                 this.toDate = financialYear.financialYearEnds;
                 this.fromDate = financialYear.financialYearStarts;
+                this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
             }
         } else {
             this.filterForm?.patchValue({
@@ -393,10 +394,14 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             if (ev.value === '0') {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
+                const fromDate = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
+                const toDate = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
                 this.filterForm?.patchValue({
-                    from: dayjs(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
-                    to: dayjs(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
+                    from: fromDate,
+                    to: toDate
                 });
+                this.fromDate = fromDate;
+                this.toDate = toDate;
             }
         }
     }
@@ -497,7 +502,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
     }
-    
+
     /**
      * Handle compare with event
      *

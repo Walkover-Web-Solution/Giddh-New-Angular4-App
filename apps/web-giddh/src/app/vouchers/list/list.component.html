@@ -193,9 +193,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.customerName | titlecase }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -314,6 +317,9 @@
                                                     (click)="actionEstimateProforma(element, 'expired')"
                                                 >
                                                     {{ localeData?.expired }}
+                                                </button>
+                                                <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                    {{ commonLocaleData?.app_delete }}
                                                 </button>
                                             </mat-menu>
                                         </ng-container>
@@ -521,9 +527,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -635,6 +644,9 @@
                                             </button>
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
                                                 {{ localeData?.expired }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -907,9 +919,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1041,11 +1056,14 @@
                                             <button mat-menu-item (click)="actionVoucher(element, 'hold')">
                                                 {{ commonLocaleData?.app_payment_status?.hold }}
                                             </button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                                             </button>
                                             <button mat-menu-item (click)="showEwayBillDialog(element)">
                                                 {{ localeData?.generate_eway_bill }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1140,7 +1158,7 @@
                                 <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">
                                     {{ localeData?.create_e_invoice }}
                                 </button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                <button mat-menu-item (click)="deleteVoucherDialog(element)">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
@@ -1151,7 +1169,6 @@
                                 </span>
                             </button>
                             <button
-                                *ngIf="dataSource?.length"
                                 mat-stroked-button
                                 color="primary"
                                 (click)="showBulkExportDialog()"
@@ -1284,9 +1301,14 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <button
+                                                mat-mini-fab
+                                                color="primary"
+                                                (click)="editAccount(element)"
+                                                class="item-wise-common-btn d-flex align-items-center justify-content-center mr-l1"
+                                            >
+                                                <span class="icon-edit-pencil"></span>
+                                            </button>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1383,8 +1405,11 @@
                                             <button mat-menu-item (click)="showPaymentDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                             </button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1618,9 +1643,12 @@
                                             class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                         >
                                             <h3>{{ element?.customerName | titlecase }}</h3>
-                                            <span class="cursor-pointer" (click)="editAccount(element)">
-                                                <img src="{{ imgPath }}path.svg" />
-                                            </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
@@ -1717,8 +1745,11 @@
                                             <button mat-menu-item (click)="showPaymentDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                             </button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1816,9 +1847,6 @@
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
-                                {{ commonLocaleData?.app_export }}
-                            </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
                             <giddh-page-loader *ngIf="isGetAllRequestInProcess$ | async"></giddh-page-loader>
@@ -1910,9 +1938,12 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
                                                 <h3>{{ element?.account?.name }}</h3>
-                                                <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                             </div>
                                             <mat-card-content class="pt-3">
                                                 <ul class="list-unstyled">
@@ -2619,14 +2650,6 @@
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                [routerLink]="['/pages/vouchers/receipt/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
-                            >
-                                <span>{{ localeData?.new_receipt }}</span>
-                            </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <input
@@ -2789,12 +2812,7 @@
                                     [matTooltip]="element.voucherNumber"
                                     matTooltipPosition="above"
                                 >
-                                    <a
-                                        href="javascript:;"
-                                        class="btn-link-2"
-                                        (click)="showVoucherPreview(element?.uniqueName)"
-                                        >{{ element?.voucherNumber }}</a
-                                        >
+                                    {{ element?.voucherNumber }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -2961,19 +2979,12 @@
                 </div>
             </mat-tab>
             <!-- receipt-content-end -->
+
             <!-- payment-content-start -->
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                [routerLink]="['/pages/vouchers/payment/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
-                            >
-                                <span>{{ localeData?.new_payment }}</span>
-                            </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <input
@@ -3109,12 +3120,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-ellipsis">
-                                    <a
-                                        href="javascript:;"
-                                        class="btn-link-2"
-                                        (click)="showVoucherPreview(element?.uniqueName)"
-                                        >{{ element?.voucherNumber }}
-                                </a>
+                                    {{ element?.voucherNumber }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -3251,6 +3257,7 @@
                 </div>
             </mat-tab>
             <!-- payment-content-end -->
+
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 3 || activeTabGroup === 4">
                 <div *ngIf="activeModule === 'pending'">
@@ -3297,9 +3304,6 @@
                                     <span class="icon-cross font-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
-                            </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
-                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
@@ -3392,9 +3396,12 @@
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
                                                 <h3>{{ element?.account?.name }}</h3>
-                                                <span class="cursor-pointer" (click)="editAccount(element)">
-                                                    <img src="{{ imgPath }}path.svg" />
-                                                </span>
+                                            <a
+                                                (click)="editAccount(element)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                             </div>
                                             <mat-card-content class="pt-3">
                                                 <ul class="list-unstyled">
@@ -3472,6 +3479,7 @@
                 </div>
             </mat-tab>
             <!-- pending-content-end -->
+
             <!-- setting-content-start -->
             <!-- ===== HIDE THIS TAB FOR NOW ===== -->
             <mat-tab
@@ -4905,6 +4913,7 @@
             <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
         </div>
     </div>
+    
     <!-- table-search -->
     <ng-template
         #searchTemplate
@@ -4937,6 +4946,7 @@
             </div>
         </div>
     </ng-template>
+
     <!-- Universal Datepicker  -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

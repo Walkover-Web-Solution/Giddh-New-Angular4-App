@@ -46,6 +46,14 @@ export class TemplateFroalaComponent implements OnInit {
     public showCc: boolean = false;
     /** True if show bcc */
     public showBcc: boolean = false;
+    /** Hold froala editor instance */
+    public froalaEditor: any;
+    /** Hold froala editor text trigger */
+    public froalaEditorTextTrigger: string = '{'; // By default froala editor instance is @ if not defined
+    /** Hold email suggestion prefix */
+    public emailSuggestionPrefix: string = '{';
+    /** Hold email suggestion suffix */
+    public emailSuggestionSuffix: string = '}';
     /** Hold froala editor options */
     public froalaOptions: any = {
         key: FROALA_EDITOR_KEY,
@@ -107,8 +115,6 @@ export class TemplateFroalaComponent implements OnInit {
             }
         }
     };
-    /** Hold froala editor instance */
-    public froalaEditor: any;
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -256,13 +262,15 @@ export class TemplateFroalaComponent implements OnInit {
         }
 
         this.froalaTribute = new Tribute({
+            trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">@${item.original.value}</span>`
+            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`
         });
 
         this.subjectTribute = new Tribute({
+            trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `@${item.original.value}`
+            selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
         });
 
         if (this.froalaEditor) {
