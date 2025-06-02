@@ -334,6 +334,7 @@
                                     #gstNumberField
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
+                                    [maxlength]="15"
                                 >
                                 </input-field>
                             </div>
