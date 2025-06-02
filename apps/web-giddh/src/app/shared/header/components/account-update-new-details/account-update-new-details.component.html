@@ -321,6 +321,7 @@
                                     #gstNumberField
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
+                                    [maxlength]="15"
                                 >
                                 </input-field>
                             </div>
@@ -1028,6 +1029,7 @@
                                 [options]="companyTaxDropDown"
                                 [chipListUniqueName]="taxGroupForm.get('taxes').value" 
                                 (selectedOptionUniqueName)="taxesSelected($event)"
+                                (selectedOption)="defaultTaxLabel = $event"
                                 class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
                             ></select-multiple-fields>
                             <button
