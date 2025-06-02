@@ -1,476 +1,57 @@
-@import "../../../assets/css/mixin-common.scss";
-.dropdown-menu > li > a {
-    padding: 2px 10px;
-}
+.account-statement {
+    max-width: 1200px;
 
-.customer-img {
-    height: 360px;
-    width: 489px;
-}
-
-.aging-report-z-index {
-    z-index: 101;
-}
-
-.dis {
-    display: flex;
-}
-
-.pd-1 {
-    padding: 5px;
-}
-
-.icon-pointer {
-    margin-left: 6px;
-    cursor: pointer;
-}
-.icon-search {
-    font-size: 16px;
-}
-
-.linked-entities {
-    width: 200px;
-}
-
-.icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
-    line-height: 0.5;
-    height: 8px;
-}
-
-.icon-pointer .font-xxs {
-    font-size: 16px;
-}
-
-.aging-table {
-    width: 100%;
-    background: transparent;
-}
-
-.wrap-searching-aging {
-    display: none !important;
-}
-
-.advance-icon {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-15);
-    border-radius: 5px;
-    margin-right: 0;
-    width: 73px;
-    position: relative;
-    right: 1px;
-    border-color: var(--color-common-secondary-border);
-    color: var(--color-primary-filter-button-text);
-}
-
-.search-field {
-    position: relative;
-    margin-bottom: 0;
-}
-
-.search-field input {
-    width: 235px;
-    background-color: var(--color-dark-fog) !important;
-    border-color: var(--color-dark-fog) !important;
-}
-
-.search-field input:focus {
-    background-color: var(--color-white) !important;
-    border-color: var(--color-common-primary-blue-border) !important;
-}
-
-span.input-addon {
-    position: absolute;
-    right: 0px;
-    padding: 4px 9px;
-    background-color: var(--color-blue);
-    color: var(--color-white);
-    font-size: var(--font-size-16);
-    border-radius: 5px;
-    top: 0;
-}
-
-tr.aging-table-top td {
-    padding: 8px 0;
-    background-color: var(--color-common-primary-background-for-all-components) !important;
-}
-
-.refresh-btn {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-common-secondary-border);
-    border-radius: 5px;
-    margin-left: 10px !important;
-    button {
-        font-size: var(--font-size-16);
-        align-items: center;
+    .custom-datepicker-wrapper {
         display: flex;
+        text-align: center;
         justify-content: center;
     }
-    .icon-refresh {
-        color: var(--color-abbey);
+
+    .bordered {
+        border: 1px solid var(--color-common-primary-text);
     }
-}
 
-.name-width {
-    width: 210px;
-}
-
-.mobile-view {
-    display: none;
-}
-
-.word-break {
-    word-break: break-word !important;
-}
-
-.input-container {
-    input {
-        height: 36px;
-        min-width: 100%;
-        padding: 11px;
-        padding-right: 40px;
-        color: var(--color-nero);
-        border: none;
-        background-color: var(--color-input-tertiary-background) !important;
-        border-radius: 5px;
+    table {
+        border-collapse: collapse;
     }
-}
 
-.top-aging-table-top {
-    background: none !important;
-}
-
-.empty-table {
-    height: 120px;
-}
-
-tr.mat-header-row {
-    height: 51.5px;
-}
-
-.mat-button {
-    padding: 0;
-    text-decoration: underline;
-    margin-right: 0px !important;
-}
-
-.pull-left {
-    button {
-        width: auto;
-        margin-right: 15px;
+    td,
+    th {
+        padding: 8px;
+        text-align: left;
     }
-}
 
-::ng-deep {
-    .mat-customer-name {
-        .icon-pointer {
-            .font-xxs {
-                color: var(--color-blue) !important;
-            }
+    .address-block {
+        font-style: normal;
+        line-height: 1.5;
+
+        p {
+            color: var(--color-text-gray);
+            opacity: 0.8;
         }
     }
-    .mat-parent-group {
-        padding-left: 10px !important;
-    }
-    .mat-app-days-1,
-    .mat-app-days-2,
-    .mat-app-days-3,
-    .mat-app-days-4 {
-        padding-right: 12px !important;
-    }
-    .mat-header-cell .icon-pointer {
-        margin-left: 0px;
-    }
-    .mat-table tbody {
-        tr {
-            td {
-                &:first-child {
-                    padding-left: 18px;
-                }
-            }
-        }
-    }
-    .mat-flat-button {
-        padding: 0px 11px;
-    }
-    .search-table {
-        margin-left: 7px;
-        min-width: 115px;
-    }
-    .ng-untouched {
-        .pull-right {
-            display: flex;
-            button {
-                min-width: 50px;
-                padding-right: 10px;
-                padding-left: 10px !important;
-            }
-        }
-    }
-    .mat-customer-name span:nth-child(2) {
-        position: relative;
-        right: 3px;
-    }
-}
-::ng-deep {
-    .btn-sky-blue {
-        color: var(--color-secondary-button-text);
-        background-color: var(--color-secondary-button-background);
-        border-color: var(--color-secondary-button-background);
-    }
-}
 
-.btn-filters {
-    @include common-filters(
-        var(--color-giddh-blue),
-        var(--color-primary-filter-background),
-        1px solid var(--color-primary-button-border)
-    );
-}
+    .account-Summary {
+        font-weight: bolder;
+    }
 
-.unpaid-invoice-aside-pane {
-    $header-height: 57.8px;
-    .header {
-        height: $header-height;
-        padding: 20px 15px;
-        background: var(--color-primary-right-side-popup-header-background);
-        color: var(--color-primary-right-side-popup-header-text);
+    .spinner-container {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
-        button {
-            background: var(--color-transparent-background);
-            color: var(--color-primary-right-side-popup-header-text);
-            min-width: 0;
-            border-radius: 0;
-        }
+    .account-table {
+        min-height: 180px;
     }
-    .list-wrapper {
-        .list-viewport {
-            height: calc(100vh - ($header-height + 30px));
-            width: 730px;
-        }
 
-        .list-item {
-            height: 70px;
-            a {
-                & > div {
-                    height: 70px;
-                }
-            }
-            &:not(:last-child) {
-                border-bottom: 1px solid var(--color-common-primary-border);
-            }
-            &:hover {
-                background-color: var(--color-table-row-hover-secondary-background);
-            }
+    .details-column {
+        width: 352px;
+        max-width: 352px;
+    }
 
-            .customer-name {
-                color: var(--color-nero);
-                white-space: normal;
-                word-break: break-all;
-            }
-        }
-    }
-}
 
-// responsive
-@media (min-width: 769px) {
-    .on-mobile-view > .top-aging-table-top {
-        display: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .contact-main .table-aging-report {
-        margin-top: 0 !important;
-    }
-    .table-aging-report span.justify-content-end {
-        justify-content: flex-start !important;
-    }
-    .main-table {
-        tbody {
-            tr {
-                td {
-                    &:first-child {
-                        min-width: 242px !important;
-                    }
-                }
-            }
-        }
-    }
-}
-@media (max-width: 1024px) {
-    .main-table {
-        th {
-            .mat-header-cell {
-                &:first-of-type {
-                    min-width: 242px !important;
-                }
-            }
-        }
-    }
-    .customer-img {
-        height: 360px;
-        width: 489px;
-    }
-}
-
-@media (max-width: 767px) {
-    span.input-addon {
-        top: 0;
-    }
-    .customer-img {
+    .mat-mdc-header-row {
         height: auto;
-        width: 100%;
     }
-    .main-table {
-        margin-top: 0;
-        float: left;
-    }
-    .wrap-searching-aging .max-width-250.default-width {
-        max-width: calc(100% - 90px);
-        width: 100%;
-    }
-    .advance-clear-filter-icons {
-        display: flex;
-        width: auto !important;
-        margin-left: auto !important;
-
-        span {
-            justify-content: center;
-            align-items: center;
-            display: flex;
-
-            i {
-                color: var(--color-abbey);
-            }
-        }
-    }
-    .aging-form-inline {
-        flex-direction: column-reverse;
-        display: flex;
-        margin-bottom: 15px;
-
-        .linked-entities {
-            margin-right: 0;
-            margin-bottom: 0;
-            width: 100%;
-        }
-
-        .btn-group {
-            width: 100%;
-
-            .btn {
-                width: 100%;
-            }
-        }
-    }
-    .wrap-searching-aging {
-        display: flex !important;
-
-        a {
-            color: var(--color-abbey);
-        }
-
-        .max-width-250 {
-            max-width: 250px;
-            width: 100%;
-        }
-    }
-    .wrap-searching-aging .max-width-250.default-width {
-        max-width: 250px;
-        width: 100%;
-    }
-
-    .wrap-searching-aging {
-        float: none !important;
-        justify-content: space-between;
-    }
-    .input-grp-date-range-picker {
-        display: none;
-    }
-    .aging-top-bar {
-        flex-direction: column;
-    }
-    .on-desktop-view {
-        display: none !important;
-    }
-    .mobile-view {
-        display: block;
-    }
-}
-
-@media (max-width: 575px) {
-    .top-aging-table-top {
-        padding: 8px 3px !important;
-        font-size: var(--font-size-15);
-    }
-}
-
-@media (max-width: 575px) {
-    .btn-group.plus-btn {
-        float: none;
-        width: 100%;
-    }
-    .btn-group.plus-btn button {
-        float: none;
-        width: 100%;
-    }
-    .aging-form-inline {
-        .linked-entities {
-            margin-right: 0;
-            margin-bottom: 0;
-            width: 100%;
-        }
-
-        .btn-group {
-            width: 100%;
-
-            .btn {
-                width: 100%;
-            }
-        }
-    }
-}
-
-@media (max-width: 375px) {
-    .wrap-searching-aging + .btn-group {
-        float: left !important;
-    }
-}
-
-.icon-calender {
-    position: absolute;
-    z-index: 9;
-    height: 32px;
-    width: 36px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    height: 36px !important;
-    // border-right: 1px solid var(--color-iron) !important;
-    cursor: pointer;
-}
-
-.m-0 {
-    margin: 0 !important;
-}
-
-::ng-deep.aging-dropdown-table {
-    max-width: 100%;
-    width: 534px;
-    max-width: 534px !important;
-    height: 93px;
-    padding-top: 10px;
-    margin-top: 17px;
-    box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
-}
-
-.icon-cross {
-    line-height: 32px;
 }

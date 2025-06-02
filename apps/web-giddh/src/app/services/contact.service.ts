@@ -6,7 +6,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { CONTACT_API } from './apiurls/contact.api';
+import { ACCOUNT_STATEMENT_API, CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 
@@ -160,6 +160,35 @@ export class ContactService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
+    }
+
+    /**
+* Get Account Statement List API
+*
+* @param {*} model
+* @return {*}  {Observable<BaseResponse<any, any>>}
+* @memberof AccountStatementService
+*/
+    public getAccountStatementList(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(
+            this.config.apiUrl + ACCOUNT_STATEMENT_API.GET
+                .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                .replace(':count', encodeURIComponent(model.count))
+                .replace(':page', encodeURIComponent(model.page))
+                .replace(':from', encodeURIComponent(model.from))
+                .replace(':to', encodeURIComponent(model.to))
+                .replace(':sort', encodeURIComponent(model.sort))
+                .replace(':q', encodeURIComponent(model.q))
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.queryString = { data };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e))
         );
     }
 }

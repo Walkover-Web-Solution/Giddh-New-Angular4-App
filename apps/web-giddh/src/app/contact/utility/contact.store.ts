@@ -12,13 +12,17 @@ import { GetContactsParams } from "../../models/api-models/Contact";
 export interface ContactState {
     sendBulkEmailIsSuccess: boolean;
     getLastAccountsInProgress: boolean;
+    getAccountStatementInProgress: boolean;
     contactsList: any;
+    accountStatementList: any;
 }
 
 export const DEFAULT_CONTACT_STATE: ContactState = {
     sendBulkEmailIsSuccess: null,
     getLastAccountsInProgress: false,
-    contactsList: null
+    getAccountStatementInProgress: false,
+    contactsList: null,
+    accountStatementList: null
 };
 
 @Injectable()
@@ -33,7 +37,8 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
 
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public getLastAccountsInProgress$ = this.select((state) => state.getLastAccountsInProgress);
-    public getContactsList$  = this.select((state) => state.contactsList);
+    public getContactsList$ = this.select((state) => state.contactsList);
+    public getAccountStatementList$ = this.select((state) => state.accountStatementList);
     public updateAccountInProcess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountInProcess), (response) => response);;
     public updateAccountIsSuccess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess), (response) => response);
     public activeAccount$: Observable<any> = this.select(this.store.select(state => state.groupwithaccounts.activeAccount), (response) => response);
@@ -152,6 +157,45 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
             })
         );
     });
+
+    readonly getAccountStatementList = this.effect((data$: Observable<any>) => {
+        return data$.pipe(
+            switchMap(params => {
+                // Optionally patch state to indicate loading if needed
+                this.patchState({ getAccountStatementInProgress: true });
+                return this.contactService.getAccountStatementList(params).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({
+                                    accountStatementList: res?.body ?? [],
+                                    getAccountStatementInProgress: false
+                                });
+                            } else {
+                                if (res?.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    accountStatementList: null,
+                                    getAccountStatementInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+
+                            return this.patchState({
+                                accountStatementList: null,
+                                getAccountStatementInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 
     /**
      * Lifecycle hook for component destroy

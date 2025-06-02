@@ -49,6 +49,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
 import { ContactPreviewComponent } from './preview/preview.component';
 import { AccountStatementComponent } from './account-statement/account-statement.component';
 import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-statement.module';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { LedgerModule } from '../ledger/ledger.module';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -108,7 +111,10 @@ import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-
         ScrollingModule,
         WatchVideoModule,
         FroalaTemplateEditorModule,
-        LedgerStatementModule
+        LedgerStatementModule,
+        MatSortModule,
+        MatPaginatorModule,
+        LedgerModule
     ],
     providers: [
         GiddhCurrencyPipe

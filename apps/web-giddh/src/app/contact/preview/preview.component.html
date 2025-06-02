@@ -89,15 +89,21 @@
                         class="table-header-sticky"
                     >
                         <mat-tab [label]="'Transaction'">
-                            <ledger-statement
+                            ledger
+                            <!-- <ledger-statement
                                 *ngIf="selectedContact?.uniqueName"
                                 [activeAccountUniqueName]="selectedContact?.uniqueName"
                                 [from]="queryParams.from"
                                 [to]="queryParams.to"
-                            ></ledger-statement>
+                            ></ledger-statement> -->
                         </mat-tab>
                         <mat-tab [label]="'Statement'">
-                            <account-statement></account-statement>
+                            <account-statement
+                                *ngIf="selectedContact?.uniqueName"
+                                [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                [from]="queryParams.from"
+                                [to]="queryParams.to"
+                            ></account-statement>
                         </mat-tab>
                         <mat-tab [label]="'Account Details'">
                             <div class="account-details-wrapper">

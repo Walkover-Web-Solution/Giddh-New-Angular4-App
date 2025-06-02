@@ -194,8 +194,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.parentGroupUniqueName = groupUniqueName;
                 if (params?.accountUniqueName) {
                     this.activeAccountUniqueName = params?.accountUniqueName;
-                    this.store.dispatch(this.accountsAction.resetActiveAccount());
-                    this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountUniqueName));
                     this.contactActiveTab = params?.type;
                     this.params = params;
                     this.isSearching = false;

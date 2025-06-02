@@ -1,677 +1,425 @@
-<div class="container-fluid">
-    <div class="header-content-sticky aging-report-z-index">
-        <div
-            *ngIf="
-                (dueAmountReportData$ | async)?.results?.length ||
-                (getAgingReportRequestInProcess$ | async) ||
-                showClearFilter ||
-                isAdvanceSearchApplied
-            "
-            class="top-bar aging-top-bar d-flex justify-content-between"
-        >
-            <div class="aging-form-inline">
-                <div class="btn-group pull-left on-desktop-view">
-                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
-                        {{ localeData?.new_customer }}
-                    </button>
-                </div>
-                <div
-                    class="form-group mr-r15 pull-left linked-entities mb-0"
-                    *ngIf="
-                        currentCompanyBranches?.length > 2 &&
-                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                    "
-                >
-                    <div class="form-group mb-0">
-                        <sh-select
-                            [options]="currentCompanyBranches"
-                            [(ngModel)]="currentBranch.uniqueName"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
-                            [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
+<ng-container
+    appTranslate
+    [file]="'contact/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="common-wrapper" *ngIf="totalRecords !== null && responseAccountList">
+        <div class="account-statement p-20 mr-t20">
+            <table class="w-100">
+                <tr>
+                    <td width="65%" class="vertical-align-top">
+                        <address class="address-block font-20" *ngIf="responseAccountList.accountName">
+                            <h2 class="font-20">{{ responseAccountList.accountName }}</h2>
+                            <ng-container *ngIf="responseAccountList.accountAddress">
+                                <p *ngIf="responseAccountList.accountAddress.email">
+                                    {{ responseAccountList.accountAddress.email }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.address">
+                                    {{ responseAccountList.accountAddress.address }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.taxNumber">
+                                    {{ responseAccountList.accountAddress.taxType }}:
+                                    {{ responseAccountList.accountAddress.taxNumber }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.mobileNo">
+                                    {{ responseAccountList.accountAddress.mobileNo }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.pinCode">
+                                    {{ responseAccountList.accountAddress.pinCode }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.stateName">
+                                    {{ responseAccountList.accountAddress.stateName }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.countryName">
+                                    {{ responseAccountList.accountAddress.countryName }}
+                                </p>
+                            </ng-container>
+                        </address>
+                    </td>
+                    <td width="35%" class="vertical-align-top">
+                        <address class="address-block font-18 text-right" *ngIf="responseAccountList.companyName">
+                            <h2 class="font-20">{{ responseAccountList.companyName }}</h2>
+                            <ng-container *ngIf="responseAccountList.companyGstAddress">
+                                <p *ngIf="responseAccountList.companyGstAddress.email">
+                                    {{ responseAccountList.companyGstAddress.email }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.address">
+                                    {{ responseAccountList.companyGstAddress.address }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.taxNumber">
+                                    {{ responseAccountList.companyGstAddress.taxType }}:
+                                    {{ responseAccountList.companyGstAddress.taxNumber }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.mobileNo">
+                                    {{ responseAccountList.companyGstAddress.mobileNo }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.pinCode">
+                                    {{ responseAccountList.companyGstAddress.pinCode }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.stateName">
+                                    {{ responseAccountList.companyGstAddress.stateName }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.countryName">
+                                    {{ responseAccountList.companyGstAddress.countryName }}
+                                </p>
+                            </ng-container>
+                        </address>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="65%"></td>
+                    <td width="35%"></td>
+                </tr>
+                <tr>
+                    <td width="65%"></td>
+                    <td width="35%">
+                        <div class="d-flex justify-content-end">
+                            <div>
+                                <h2 class="font-30 text-right">Statement of Accounts</h2>
+                                <hr class="bordered m-0" />
+                                <p class="text-right text-gray font-18 line-height-22">
+                                    {{ responseAccountList.fromDate }} <span> - </span> {{ responseAccountList.toDate }}
+                                </p>
+                                <hr class="bordered m-0" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="65%"></td>
+                    <td width="35%">
+                        <table
+                            class="w-100"
+                            *ngIf="responseAccountList.accountSummary && responseAccountList.accountAddress"
                         >
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                        <span class="entity-icon">
-                                            <i
-                                                [ngClass]="
-                                                    option?.consolidatedBranch
-                                                        ? 'icon-company-profile'
-                                                        : 'icon-branch-icon'
-                                                "
-                                                *ngIf="!option.isCompany"
-                                                matTooltip="{{ commonLocaleData?.app_branch }}"
-                                                matTooltipPosition="above"
-                                            ></i>
-                                            <i
-                                                class="icon-company-profile"
-                                                *ngIf="option.isCompany"
-                                                matTooltip="{{ commonLocaleData?.app_company }}"
-                                                matTooltipPosition="above"
-                                            ></i>
-                                        </span>
-                                        <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">
-                                                {{ option?.label || "-" }}
-                                            </div>
-                                            <div class="item-unique giddh-limit single-line-clamp">
-                                                {{ option?.name || "-" }}
-                                            </div>
-                                        </span>
-                                    </a>
-                                </ng-container>
-                            </ng-template>
-                        </sh-select>
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="bg-grey font-16 text-gray account-Summary">
+                                        Account Summary
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-16 light-grey">Opening Balance</td>
+                                    <td class="text-right pr-0">
+                                        {{ responseAccountList.accountAddress.currency?.symbol ?? "" }}
+                                        {{ responseAccountList.accountSummary.openingBalance?.amount }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-16 light-grey">Invoiced Amount</td>
+                                    <td class="text-right pr-0">
+                                        {{ responseAccountList.accountAddress.currency?.symbol ?? "" }}
+                                        {{ responseAccountList.accountSummary.debitTotal }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-16 light-grey">Amount Paid</td>
+                                    <td class="text-right pr-0">
+                                        {{ responseAccountList.accountAddress.currency?.symbol ?? "" }}
+                                        {{ responseAccountList.accountSummary.creditTotal }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="p-0"><hr class="bordered" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-16 text-gray">Balance Due</td>
+                                    <td class="p-0 text-right">
+                                        {{
+                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
+                                                ? (responseAccountList.accountSummary.closingBalance?.type === "CREDIT"
+                                                      ? "-"
+                                                      : "") +
+                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
+                                                  responseAccountList.accountSummary.closingBalance.amount
+                                                : ""
+                                        }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <div class="inner-content">
+                <div class="w-100 d-flex">
+                    <div class="custom-datepicker-wrapper">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div
-                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
-                *ngIf="showClearFilter"
-            >
-                <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
-                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-                </button>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <watch-video class="mr-r1" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
-                <div class="pull-left d-flex wrap-searching-aging">
-                    <div
-                        class="form-group search-field max-width-250"
-                        [ngClass]="{ 'default-width': isAdvanceSearchApplied }"
+                    <button
+                        mat-stroked-button
+                        (click)="setInitialAdvanceFilter()"
+                        class="mx-auto"
+                        *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                     >
-                        <text-field
-                            type="text"
-                            [placeholder]="localeData?.name_amount"
-                            [cssClass]="'form-control name-width'"
-                            [(ngModel)]="searchStr"
-                            (ngModelChange)="searchStr$.next($event)"
-                        ></text-field>
-                        <span class="input-addon">
-                            <i class="icon-search"></i>
+                        <span class="d-inline-flex align-items-center column-gap5">
+                            <span class="icon-cross font-12"></span>
+                            <span>{{ commonLocaleData?.app_clear_filter }}</span>
                         </span>
-                    </div>
-                </div>
-                <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        class="advance-icon"
-                        (click)="showAdvanceSearchPopup()"
-                        matTooltip="{{ commonLocaleData?.app_advance_search }}"
-                        matTooltipPosition="right"
-                        aria-label="filter button"
-                    >
-                        <div class="d-flex align-items-center">
-                            {{ commonLocaleData?.app_filter }}
-                            <span class="icon-advance-filter ml-2"></span>
-                        </div>
                     </button>
                     <button
-                        *ngIf="voucherApiVersion === 2"
+                        aria-label="filter"
+                        id="advance-filter"
                         mat-stroked-button
-                        color="primary"
-                        (click)="exportReport()"
-                        aria-label="export"
+                        (click)="onOpenAdvanceSearch()"
+                        class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
+                        [matTooltip]="commonLocaleData?.app_advance_search"
+                        [matTooltipPosition]="'above'"
+                        matTooltipClass="tooltip-black"
                     >
-                        {{ commonLocaleData?.app_export }}
+                        <span class="icon-advance-filter"></span>
                     </button>
-                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                        <button mat-icon-button (click)="resetAdvanceSearch()" aria-label="refresh-btn">
-                            <i
-                                aria-hidden="true"
-                                class="icon-refresh"
-                                matTooltip="{{ commonLocaleData?.app_reset_filter }}"
-                                matTooltipPosition="below"
-                            ></i>
-                        </button>
-                    </span>
                 </div>
-            </div>
-            <div class="btn-group mr-t15 pull-left mobile-view">
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    class="w-100"
-                    (click)="createNewCustomerEvent.emit(true)"
-                    aria-label="new customer"
-                >
-                    {{ localeData?.new_customer }}
-                </button>
-            </div>
-        </div>
-        <div class="top-content" [hidden]="!(dueAmountReportData$ | async)?.results?.length">
-            <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                <div class="total-due-sale total-details-box opening-box border-none mr-r05">
-                    <h5>
-                        {{ commonLocaleData?.app_upcoming }}
-                        <div>
-                            <span class="d-inline-flex number-total">
-                                <amount-field
-                                    [amount]="totalFutureDueAmounts"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
+                <div class="invoice-table mr-t15">
+                    <div class="table-responsive position-relative">
+                        <table
+                            mat-table
+                            [dataSource]="accountListData"
+                            matSort
+                            (matSortChange)="sortData($event)"
+                            [matSortDirection]="accountListRequest.sort"
+                            [matSortActive]="accountListRequest.sortBy"
+                            [ngClass]="{ 'account-table': isLoading }"
+                        >
+                            <ng-container matColumnDef="Date">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                    class="bg-black text-white black-and-white-table font-16 fw-900"
                                 >
-                                </amount-field
-                                >/-
-                            </span>
-                        </div>
-                    </h5>
-                </div>
-                <div class="total-due-sale total-details-box due-box border-none">
-                    <h5>
-                        {{ commonLocaleData?.app_due }}
-                        <div>
-                            <span class="d-inline-flex number-total">
-                                <amount-field
-                                    [amount]="totalDueAmounts"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
+                                    Date
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
                                 >
-                                </amount-field
-                                >/-
-                            </span>
+                                    {{ element.date ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Transactions">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="bg-black text-white font-16 fw-900"
+                                    #transactions
+                                    (clickOutside)="handleClickOutside($event, transactions, 'transactions')"
+                                >
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showTransactionInput,
+                                                    fieldName: 'transactionsField',
+                                                    formControl: transactionInput,
+                                                    title: 'Transactions'
+                                                }
+                                            "
+                                        ></ng-container>
+                                    </div>
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                >
+                                    {{ element?.voucherType ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Details">
+                                <th mat-header-cell *matHeaderCellDef class="bg-black text-white font-16 fw-900">
+                                    Details
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="details-column word-break"
+                                >
+                                    {{ element?.voucherNumber ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Amount">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="bg-black text-white sort-header-right text-right font-16 fw-900"
+                                >
+                                    Amount
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="sort-header-right text-right"
+                                >
+                                    <span
+                                        >{{
+                                            element?.voucherAmount.type === "DEBIT"
+                                                ? element?.voucherAmount?.amount
+                                                : "-"
+                                        }}
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Payments">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="bg-black text-white sort-header-right text-right font-16 fw-900"
+                                >
+                                    Payments
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="sort-header-right text-right"
+                                >
+                                    {{ element?.voucherAmount.type != "DEBIT" ? element?.voucherAmount?.amount : "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Balance">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="bg-black text-white sort-header-right text-right font-16 fw-900"
+                                >
+                                    Balance
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="sort-header-right text-right"
+                                >
+                                    {{
+                                        element.closingBalance?.amount >= 0
+                                            ? (element.closingBalance?.type === "CREDIT" ? "-" : "") +
+                                              element.closingBalance.amount
+                                            : ""
+                                    }}
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        </table>
+                        <hr class="border-grey" />
+                        <table class="d-flex justify-content-end">
+                            <tr>
+                                <td class="font-16 fw-900">Balance Due</td>
+                                <td>
+                                    {{
+                                        responseAccountList.accountSummary.closingBalance?.amount >= 0
+                                            ? (responseAccountList.accountSummary.closingBalance?.type === "CREDIT"
+                                                  ? "-"
+                                                  : "") +
+                                              (responseAccountList.accountAddress.currency?.symbol ?? "") +
+                                              responseAccountList.accountSummary.closingBalance.amount
+                                            : ""
+                                    }}
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="text-center pd-t1 pd-b1">
+                            <mat-spinner
+                                *ngIf="isLoading"
+                                class="spinner-container position-absolute"
+                                [diameter]="60"
+                            ></mat-spinner>
+                            <p class="no-data font-16" *ngIf="!isLoading && !accountListData?.length">
+                                No account statements found for the given criteria.
+                            </p>
                         </div>
-                    </h5>
+                        <mat-paginator
+                            *ngIf="!isLoading && totalRecords > pageSizeOptions[0]"
+                            (page)="handlePageChange($event)"
+                            [length]="totalRecords"
+                            [pageSize]="accountListRequest.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="pageIndex"
+                        >
+                        </mat-paginator>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading">
-        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper overflow-visible">
-            <div *ngIf="!isMobileScreen" class="table-responsive overflow-visible">
-                <ng-container *ngTemplateOutlet="mainTable"></ng-container>
-            </div>
-            <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">
-                <div class="text-center top-aging-table-top pd-1">
-                    <p (click)="openAgingDropDown()">
-                        <strong>{{ localeData?.due_in_last_days }} </strong>
-                    </p>
-                    <aging-dropdown
-                        *ngIf="setDueRangeOpen$ | async"
-                        [options]="agingDropDownoptions"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
-                </div>
-                <ng-container *ngTemplateOutlet="mainTable"></ng-container>
-            </div>
-            <div
-                class="no-data"
-                *ngIf="
-                    !(dueAmountReportData$ | async)?.results?.length &&
-                    !(getAgingReportRequestInProcess$ | async) &&
-                    !showClearFilter &&
-                    !isAdvanceSearchApplied
-                "
-            >
-                <div class="align-item-center">
-                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        (click)="createNewCustomerEvent.emit(true)"
-                        aria-label="new customer"
-                    >
-                        {{ localeData?.new_customer }}
-                    </button>
-                </div>
-            </div>
-            <div
-                class="no-data"
-                *ngIf="
-                    !(dueAmountReportData$ | async)?.results?.length &&
-                    !(getAgingReportRequestInProcess$ | async) &&
-                    (showClearFilter || isAdvanceSearchApplied)
-                "
-            >
-                <no-data [secondaryMessageClass]="'p-0'"></no-data>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="isLoading">
-        <giddh-page-loader></giddh-page-loader>
-    </div>
-</div>
-<!--region advance_search Modal-->
-<ng-template #advanceSearch tabindex="-1">
-    <div>
-        <app-contact-advance-search-component
-            *ngIf="advanceSearch"
-            #agingReportAdvanceSearch
-            [request]="commonRequest"
-            [advanceSearch4]="'agingReport'"
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
-            (closeModelEvent)="hideAdvanceSearchPopup()"
-        >
-        </app-contact-advance-search-component>
-    </div>
-</ng-template>
-<!-- endregion -->
-<!-- region sorting template -->
-<ng-template #sortingTemplate let-col>
-    <div class="icon-pointer cp">
-        <div
-            class="icon-sort-asc one text-light-2 d-block font-xxs"
-            (click)="sort(col, 'asc')"
-            *ngIf="key !== col"
-            [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
-        ></div>
-        <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
-            (click)="sort(col, 'desc')"
-            *ngIf="key === col && order === 'asc'"
-            [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
-        ></div>
-        <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
-            *ngIf="key === col && order === 'desc'"
-            (click)="sort(col, 'asc')"
-            [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"
-        ></div>
-    </div>
-</ng-template>
-<!-- endregion -->
-<ng-template #mainTable>
-    <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
-        <div class="d-flex justify-content-end">
-            <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
-                <ng-template matMenuContent>
-                    <aging-dropdown
-                        (close)="onCloseMenu()"
-                        [options]="agingDropDownoptions"
-                        *ngIf="setDueRangeOpen$ | async"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
-                </ng-template>
-            </mat-menu>
-        </div>
-        <table
-            *ngIf="!(getAgingReportRequestInProcess$ | async)"
-            mat-table
-            [dataSource]="agingReportDataSource"
-            class="w-100 main-table"
-        >
-            <ng-container matColumnDef="customerName">
-                <th
-                    class="mat-customer-name mat-column-name"
-                    mat-header-cell
-                    *matHeaderCellDef
-                    #searchCustomerContainer
-                    (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
-                >
-                    <div class="d-flex align-items-center">
-                        <ng-container
-                            *ngTemplateOutlet="
-                                searchTemplate;
-                                context: {
-                                    $implicit: showNameSearch,
-                                    fieldName: 'name',
-                                    formControl: searchedName,
-                                    title: commonLocaleData?.app_customer_name
-                                }
-                            "
-                        ></ng-container>
-                        <ng-container
-                            *ngTemplateOutlet="!showNameSearch ? sortingTemplate : ''; context: { $implicit: 'name' }"
-                        ></ng-container>
-                    </div>
-                </th>
-                <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_name">
-                    <span class="pd-l15 text-ellipsis">{{ element.name }}</span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="parentGroup">
-                <th class="mat-parent-group mat-column-group" mat-header-cell *matHeaderCellDef>
-                    <div class="d-flex align-items-center">
-                        {{ commonLocaleData?.app_parent_group }}
-                        <ng-container
-                            *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }"
-                        ></ng-container>
-                    </div>
-                </th>
-                <td mat-cell *matCellDef="let element" [attr.data-title]="localeData?.group_name">
-                    {{ element.groupName }}
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="app_upcoming_due">
-                <th mat-header-cell *matHeaderCellDef class="mat-column-upcoming">
-                    <div class="d-flex align-items-center justify-content-end">
-                        {{ commonLocaleData?.app_upcoming_due }}
-                        <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'futureDueAmount' }">
-                        </ng-container>
-                    </div>
-                </th>
-                <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_due_amount">
-                    <span
-                        class="d-flex justify-content-end"
-                        [ngClass]="{ 'cursor-pointer': element.futureDueAmount > 0 }"
-                        (click)="
-                            element.futureDueAmount > 0
-                                ? showUnpaidInvoiceList(element?.uniqueName, 'upcoming-due')
-                                : ''
-                        "
-                    >
-                        <amount-field
-                            [amount]="element.futureDueAmount"
-                            [currencySymbol]="false"
-                            [currencyCode]="false"
-                        >
-                        </amount-field>
-                    </span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="app_days_1">
-                <th class="mat-app-days-1 mat-column-group" mat-header-cell *matHeaderCellDef>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button
-                            mat-button
-                            (click)="openAgingDropDown()"
-                            [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic"
-                            aria-label="days"
-                        >
-                            0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
-                        </button>
-
-                        <ng-container
-                            *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range0' }"
-                        ></ng-container>
-                    </div>
-                </th>
-                <td
-                    mat-cell
-                    *matCellDef="let element"
-                    [attr.data-title]="
-                        '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
-                    "
-                >
-                    <span
-                        class="d-flex justify-content-end"
-                        [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[0].dueAmount > 0 }"
-                        (click)="
-                            element.currentAndPastDueAmount[0].dueAmount > 0
-                                ? showUnpaidInvoiceList(element?.uniqueName, 'range0')
-                                : ''
-                        "
-                    >
-                        <amount-field
-                            [amount]="element.currentAndPastDueAmount[0].dueAmount"
-                            [currencySymbol]="false"
-                            [currencyCode]="false"
-                        >
-                        </amount-field>
-                    </span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="app_days_2">
-                <th class="mat-app-days-2 mat-column-group" mat-header-cell *matHeaderCellDef>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button
-                            [matMenuTriggerFor]="agingDropdown"
-                            mat-button
-                            (click)="openAgingDropDown()"
-                            class="font-italic m-0"
-                            aria-label="aging-dropdown"
-                        >
-                            {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
-                                (agingDropDownoptions$ | async)?.fifth
-                            }}
-                            {{ commonLocaleData?.app_days }}
-                        </button>
-                        <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range1' }">
-                        </ng-container>
-                    </div>
-                </th>
-                <td
-                    mat-cell
-                    *matCellDef="let element"
-                    [attr.data-title]="
-                        (agingDropDownoptions$ | async)?.fourth +
-                        1 +
-                        ' - ' +
-                        (agingDropDownoptions$ | async)?.fifth +
-                        ' ' +
-                        commonLocaleData?.app_days
-                    "
-                >
-                    <span (click)="openAgingDropDown()">
-                        <span
-                            class="d-flex justify-content-end"
-                            [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[1].dueAmount > 0 }"
-                            (click)="
-                                element.currentAndPastDueAmount[1].dueAmount > 0
-                                    ? showUnpaidInvoiceList(element?.uniqueName, 'range1')
-                                    : ''
-                            "
-                        >
-                            <amount-field
-                                [amount]="element.currentAndPastDueAmount[1].dueAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="app_days_3">
-                <th class="mat-app-days-3 mat-column-group" mat-header-cell *matHeaderCellDef>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button
-                            mat-button
-                            (click)="openAgingDropDown()"
-                            [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic m-0"
-                            aria-label="aging-dropdown"
-                        >
-                            {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
-                                (agingDropDownoptions$ | async)?.sixth
-                            }}
-                            {{ commonLocaleData?.app_days }}
-                        </button>
-                        <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range2' }">
-                        </ng-container>
-                    </div>
-                </th>
-                <td
-                    mat-cell
-                    *matCellDef="let element"
-                    [attr.data-title]="
-                        (agingDropDownoptions$ | async)?.fifth +
-                        1 +
-                        ' - ' +
-                        (agingDropDownoptions$ | async)?.sixth +
-                        ' ' +
-                        commonLocaleData?.app_days
-                    "
-                >
-                    <span
-                        class="d-flex justify-content-end"
-                        [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[2].dueAmount > 0 }"
-                        (click)="
-                            element.currentAndPastDueAmount[2].dueAmount > 0
-                                ? showUnpaidInvoiceList(element?.uniqueName, 'range2')
-                                : ''
-                        "
-                    >
-                        <amount-field
-                            [amount]="element.currentAndPastDueAmount[2].dueAmount"
-                            [currencySymbol]="false"
-                            [currencyCode]="false"
-                        >
-                        </amount-field>
-                    </span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="app_days_4">
-                <th class="mat-app-days-4 mat-column-group" mat-header-cell *matHeaderCellDef>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button
-                            mat-button
-                            (click)="openAgingDropDown()"
-                            [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic m-0"
-                            aria-label="aging-dropdown"
-                        >
-                            {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
-                        </button>
-                        <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range3' }">
-                        </ng-container>
-                    </div>
-                </th>
-                <td
-                    mat-cell
-                    *matCellDef="let element"
-                    [attr.data-title]="(agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days"
-                >
-                    <span
-                        class="d-flex justify-content-end"
-                        [ngClass]="{ 'cursor-pointer': element.currentAndPastDueAmount[3].dueAmount > 0 }"
-                        (click)="
-                            element.currentAndPastDueAmount[3].dueAmount > 0
-                                ? showUnpaidInvoiceList(element?.uniqueName, 'range3')
-                                : ''
-                        "
-                    >
-                        <amount-field
-                            [amount]="element.currentAndPastDueAmount[3].dueAmount"
-                            [currencySymbol]="false"
-                            [currencyCode]="false"
-                        >
-                        </amount-field>
-                    </span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="app_total_due">
-                <th mat-header-cell *matHeaderCellDef class="mat-column-group">
-                    <div class="d-flex align-items-center justify-content-end">
-                        {{ commonLocaleData?.app_total_due }}
-                        <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'totalDueAmount' }">
-                        </ng-container>
-                    </div>
-                </th>
-                <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_total_amount">
-                    <span
-                        class="d-flex justify-content-end"
-                        [ngClass]="{ 'cursor-pointer': element.totalDueAmount > 0 }"
-                        (click)="
-                            element.totalDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'total-due') : ''
-                        "
-                    >
-                        <amount-field [amount]="element.totalDueAmount" [currencySymbol]="false" [currencyCode]="false">
-                        </amount-field>
-                    </span>
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="agingReportDisplayedColumns; sticky: true"></tr>
-
-            <tr mat-row *matRowDef="let row; columns: agingReportDisplayedColumns"></tr>
-        </table>
-    </div>
-
-    <div *ngIf="getAgingReportRequestInProcess$ | async">
-        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-    </div>
-
-    <div
-        *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
-        class="pagination-wrapper mt-4"
-        [hidden]="getAgingReportRequestInProcess$ | async"
-    >
-        <div class="xs-pl-0">
-            <div class="text-center unbold pagination-sm">
-                <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
-            </div>
+</ng-container>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
+<!-- table-search -->
 <ng-template
     #searchTemplate
     let-show
     let-title="title"
-    let-placeholder="placeholder"
     let-fieldName="fieldName"
+    let-voucherType="voucherType"
     let-formControl="formControl"
 >
     <div class="search-table">
-        <div class="align-items-center d-flex" [hidden]="show">
-            <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="search icon">
-                <span class="icon-search"></span>
-            </button>
+        <div class="d-flex align-items-center column-gap1" [hidden]="show">
+            <span class="cursor-pointer" (click)="toggleSearch($event, fieldName)">
+                <i class="icon-search icon-font-16"></i>
+            </span>
             <span>{{ title }}</span>
         </div>
         <div [hidden]="!show">
             <text-field
+                (click)="activeSearchField = 'search' + fieldName; $event.stopPropagation()"
+                [id]="'search' + fieldName"
                 [type]="'text'"
-                [placeholder]="getSearchFieldText(fieldName)"
+                [placeholder]="commonLocaleData?.app_search"
                 [cssClass]="'form-control mat-field-border'"
-                [formControl]="formControl"
                 [autoFocus]="show"
+                [formControl]="formControl"
             ></text-field>
         </div>
     </div>
 </ng-template>
-
-<ng-template #unpaidInvoice>
-    <div class="unpaid-invoice-aside-pane">
-        <div class="header d-flex justify-content-space-between align-items-center">
-            <h3>{{ localeData?.unpaid_invoices }}</h3>
-            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
-                <i class="icon-cross"></i>
-            </button>
-        </div>
-        <div class="list-wrapper pd-15">
-            <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
-                <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
-                    <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
-                        <a
-                            [href]="getInvoicePreviewUrl(item)"
-                            [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
-                            [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
-                        >
-                            <div class="d-flex justify-content-space-between align-items-center">
-                                <div>
-                                    <p class="font-14">
-                                        <span class="color-primary">{{ item?.voucherNumber }}</span> |
-                                        <span class="light-gray">{{ item?.voucherDate }}</span>
-                                    </p>
-                                    <p class="customer-name font-16">
-                                        {{ item?.account?.customerName || item?.account?.name }}
-                                    </p>
-                                </div>
-                                <div>
-                                    <amount-field
-                                        [amount]="item.totalBalance?.amountForAccount"
-                                        [currencySymbol]="item.accountCurrencySymbol"
-                                        [currencyCode]="item?.account?.currency?.code"
-                                    >
-                                    </amount-field>
-                                </div>
-                            </div>
-                        </a>
-                    </mat-list-item>
-                </cdk-virtual-scroll-viewport>
-            </mat-list>
-            <div *ngIf="unpaidInvoiceIsLoading">
-                <giddh-page-loader></giddh-page-loader>
-            </div>
-        </div>
-    </div>
+<!-- update ledger entry popup -->
+<ng-template #advanceSearchModal>
+    <advance-search-model
+        [advanceSearchRequest]="advanceSearchRequest"
+        (closeModelEvent)="closeAdvanceSearchPopup($event)"
+    ></advance-search-model>
 </ng-template>
+<!-- endregion -->

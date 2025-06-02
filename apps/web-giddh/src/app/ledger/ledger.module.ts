@@ -79,7 +79,8 @@ import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-
     ],
     exports: [
         LedgerComponent,
-        LedgerAsidePaneComponent
+        LedgerAsidePaneComponent,
+        AdvanceSearchModelComponent
     ],
     providers: [],
     imports: [
