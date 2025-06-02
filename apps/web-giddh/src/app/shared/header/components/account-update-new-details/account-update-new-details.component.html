@@ -812,19 +812,6 @@
                                 </div>
                             </div>
                         </div>
-
-                         <!-- Archived Account Toggle -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="archive" class="mr-r15">{{ localeData?.archive }}</label>
-                                <mat-slide-toggle 
-                                    color="primary" 
-                                    id="archive"
-                                    name="archive"
-                                    formControlName="archive" 
-                                ></mat-slide-toggle>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row">
@@ -948,16 +935,7 @@
         </tabset>
         <div class="row" *ngIf="!isOtherSelectedTab">
             <div class="col-sm-12 mr-t3">
-                <div class="button-group">
-                    <button
-                        type="button"
-                        *ngIf="showDeleteButton"
-                        class="btn btn-danger"
-                        (click)="deleteClicked.emit(true)"
-                        aria-label="delete"
-                    >
-                        {{ commonLocaleData?.app_delete }}
-                    </button>
+                <div class="button-group d-flex column-gap1">
                     <button
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
@@ -966,6 +944,23 @@
                         aria-label="update"
                     >
                         {{ commonLocaleData?.app_update }}
+                    </button>
+                    <button
+                        class="ml-auto"
+                        mat-stroked-button
+                        color="primary"
+                        (click)="accountArchiveUnarchive()"
+                    >
+                        {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
+                    </button>
+                    <button
+                        type="button"
+                        *ngIf="showDeleteButton"
+                        class="btn btn-danger mr-0"
+                        (click)="deleteClicked.emit(true)"
+                        aria-label="delete"
+                    >
+                        {{ commonLocaleData?.app_delete }}
                     </button>
                 </div>
             </div>

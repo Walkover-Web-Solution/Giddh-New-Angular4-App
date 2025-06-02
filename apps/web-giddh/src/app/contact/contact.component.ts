@@ -50,7 +50,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -60,7 +60,6 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
-import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Component({
     selector: "contact-detail",
@@ -256,14 +255,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     private currentUrl: string = "";
     /** Returns only the columns marked as checked */
     public ContactsColumn = ContactsColumn;
-    /** This will use for account filter options */
-    public archivedOptions: IOption[] = [];
-    /** This will use for account filter form */
-    public filterForm: FormGroup = new FormGroup({
-        accountArchiveStatus: new FormControl<string | null>(null),
-    });
-    /** Holds account archived status enum  */
-    public accountArchivedStatusEnum = AccountArchivedStatusEnum;
     /** Observable for custom header columns */
     private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     /** Observable for custom header columns */
@@ -348,13 +339,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                         : 'aging-report';
 
                 const previousTab = this.activeTab;
-
-                this.filterForm.controls.accountArchiveStatus.setValue(null);
-                setTimeout(() => {
-                    this.filterForm.setValue({
-                        accountArchiveStatus: AccountArchivedStatusEnum.UNARCHIVED
-                    });
-                }, 0);
 
                 if (newTab !== previousTab) {
                     this.displayedColumns = [];
@@ -1209,18 +1193,8 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} [branchUniqueName] Current branch selected
      * @memberof ContactComponent
      */
-    private getAccounts(
-        fromDate: string,
-        toDate: string,
-        pageNumber?: number,
-        refresh?: string,
-        count: number = PAGINATION_LIMIT,
-        query?: string,
-        sortBy: string = "",
-        order: string = "asc",
-        branchUniqueName?: string,
-        accountArchiveStatus: string = AccountArchivedStatusEnum.UNARCHIVED
-    ): void {
+    private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
+        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
@@ -1233,7 +1207,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const contacts$ = this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName, accountArchiveStatus).pipe(takeUntil(this.destroyed$));
+        const contacts$ = this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$));
         combineLatest([contacts$, this.customHeaderColumns$]).pipe(takeUntil(this.destroyed$)).subscribe(([res, headerColumns]) => {
             if (res && res.body && res.status === "success") {
                 this.openingBalance = res.body.openingBalance;
@@ -1559,8 +1533,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-
-            this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }
     }
 
@@ -1770,26 +1742,5 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchedName?.reset();
             this.translationComplete(true);
         }
-    }
-
-    /**
-     * Handles selection of archived filter option
-     * 
-     * @param {any} event Event containing selected filter value
-     * @memberof ContactComponent
-     */
-    public onArchivedFilterSelected(event: any): void {
-        this.getAccounts(
-            this.fromDate, 
-            this.toDate,
-            null,
-            "false",
-            PAGINATION_LIMIT,
-            this.searchStr,
-            this.key,
-            this.order,
-            (this.currentBranch ? this.currentBranch.uniqueName : ""),
-            event.value
-        );
     }
 }

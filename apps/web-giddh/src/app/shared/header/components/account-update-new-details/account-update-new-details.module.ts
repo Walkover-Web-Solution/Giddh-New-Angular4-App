@@ -14,6 +14,7 @@ import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -37,7 +38,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
             spinnerSize: 30
         }),
         PopoverModule.forRoot(),
-        TooltipModule.forRoot()
+        TooltipModule.forRoot(),
+        MatButtonModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,
