@@ -212,7 +212,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     variants: this.stockVariants[index]
                 };
 
-                item.rate = this.giddhCurrencyPipe.transform(((data.body?.stock?.rate ?? data.body?.stock.variant?.unitRates[0].rate ?? 0) / (this.inputData.exchangeRate ?? 1)));
+                item.rate = this.giddhCurrencyPipe.transform(((data.body?.stock?.rate ?? data.body?.stock?.variant?.unitRates?.[0].rate ?? 0) / (this.inputData.exchangeRate ?? 1)));
                 item.quantity = 1;
 
                 let itemFormGroup = this.getStockFormGroup(item);
