@@ -370,5 +370,6 @@
     "generate_auto_purchase_number":"बिल आणि डेबिट नोटसाठी सिस्टम जनरेट केलेल्या नंबरला अनुमती द्या",
     "new_receipt": "+ नवीन पावती",
     "new_payment": "+ नवीन भरणा",
-    "cancel_voucher_confirmation_message": "तुम्हाला खात्री आहे की तुम्ही हा व्हाउचर रद्द करू इच्छिता?"
+    "cancel_voucher_confirmation_message": "तुम्हाला खात्री आहे की तुम्ही हा व्हाउचर रद्द करू इच्छिता?",
+    "delete_email_confirmation_message": "तुम्हाला खात्री आहे की तुम्ही हा ईमेल रद्द करू इच्छिता?"
 }
