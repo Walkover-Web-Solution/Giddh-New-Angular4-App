@@ -13,7 +13,12 @@ import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+<<<<<<< HEAD
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
+=======
+import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
+>>>>>>> efd65ceeaa (Fix: Hide LUT if country is not india and fix UI Exception)
 
 @Component({
     selector: 'content-selector',
@@ -51,6 +56,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     @ViewChild(NgForm) contentForm: NgForm;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds the value if company is Indian */
+    public isIndianCompany: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -90,6 +97,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this.showGstComposition = false;
             }
             this.activeCompanyName = activeCompany?.name;
+            this.isIndianCompany = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
