@@ -13,13 +13,8 @@ import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
-<<<<<<< HEAD
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
-=======
-import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
->>>>>>> efd65ceeaa (Fix: Hide LUT if country is not india and fix UI Exception)
-
 @Component({
     selector: 'content-selector',
     templateUrl: 'content.filters.component.html',
