@@ -76,7 +76,7 @@
                     <td width="35%">
                         <div class="d-flex justify-content-end">
                             <div>
-                                <h2 class="font-30 text-right">Statement of Accounts</h2>
+                                <h2 class="font-30 text-right">{{ localeData?.statement_of_accounts }}</h2>
                                 <hr class="bordered m-0" />
                                 <p class="text-right text-gray font-18 line-height-22">
                                     {{ responseAccountList.fromDate }} <span> - </span> {{ responseAccountList.toDate }}
@@ -96,27 +96,27 @@
                             <thead>
                                 <tr>
                                     <th colspan="2" class="bg-grey font-16 text-gray account-Summary">
-                                        Account Summary
+                                        {{ localeData?.account_summary }}
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="font-16 light-grey">Opening Balance</td>
+                                    <td class="font-16 light-grey">{{ localeData?.opening_balance }}</td>
                                     <td class="text-right pr-0">
                                         {{ responseAccountList.accountAddress.currency?.symbol ?? "" }}
                                         {{ responseAccountList.accountSummary.openingBalance?.amount }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="font-16 light-grey">Invoiced Amount</td>
+                                    <td class="font-16 light-grey">{{ localeData?.invoiced_amount }}</td>
                                     <td class="text-right pr-0">
                                         {{ responseAccountList.accountAddress.currency?.symbol ?? "" }}
                                         {{ responseAccountList.accountSummary.debitTotal }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="font-16 light-grey">Amount Paid</td>
+                                    <td class="font-16 light-grey">{{ localeData?.amount_paid }}</td>
                                     <td class="text-right pr-0">
                                         {{ responseAccountList.accountAddress.currency?.symbol ?? "" }}
                                         {{ responseAccountList.accountSummary.creditTotal }}
@@ -128,7 +128,7 @@
                                     <td colspan="2" class="p-0"><hr class="bordered" /></td>
                                 </tr>
                                 <tr>
-                                    <td class="font-16 text-gray">Balance Due</td>
+                                    <td class="font-16 text-gray">{{ localeData?.balance_due }}</td>
                                     <td class="p-0 text-right">
                                         {{
                                             responseAccountList.accountSummary.closingBalance?.amount >= 0
@@ -147,7 +147,7 @@
                 </tr>
             </table>
             <div class="inner-content">
-                <div class="w-100 d-flex">
+                <div class="w-100 d-flex align-items-baseline">
                     <div class="custom-datepicker-wrapper">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <input
@@ -162,7 +162,7 @@
                         mat-stroked-button
                         (click)="setInitialAdvanceFilter()"
                         class="mx-auto"
-                        *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
+                        *ngIf="advanceFiltersApplied && !isLoading"
                     >
                         <span class="d-inline-flex align-items-center column-gap5">
                             <span class="icon-cross font-12"></span>
@@ -174,7 +174,7 @@
                         id="advance-filter"
                         mat-stroked-button
                         (click)="onOpenAdvanceSearch()"
-                        class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
+                        class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
                         [matTooltip]="commonLocaleData?.app_advance_search"
                         [matTooltipPosition]="'above'"
                         matTooltipClass="tooltip-black"
@@ -226,7 +226,7 @@
                                                     $implicit: showTransactionInput,
                                                     fieldName: 'transactionsField',
                                                     formControl: transactionInput,
-                                                    title: 'Transactions'
+                                                    title: localeData?.transactions
                                                 }
                                             "
                                         ></ng-container>
@@ -242,7 +242,7 @@
                             </ng-container>
                             <ng-container matColumnDef="Details">
                                 <th mat-header-cell *matHeaderCellDef class="bg-black text-white font-16 fw-900">
-                                    Details
+                                    {{ localeData?.details }}
                                 </th>
                                 <td
                                     mat-cell
@@ -282,7 +282,7 @@
                                     *matHeaderCellDef
                                     class="bg-black text-white sort-header-right text-right font-16 fw-900"
                                 >
-                                    Payments
+                                    {{ localeData?.payments }}
                                 </th>
                                 <td
                                     mat-cell
@@ -321,7 +321,7 @@
                         <hr class="border-grey" />
                         <table class="d-flex justify-content-end">
                             <tr>
-                                <td class="font-16 fw-900">Balance Due</td>
+                                <td class="font-16 fw-900">{{ localeData?.balance_due }}</td>
                                 <td>
                                     {{
                                         responseAccountList.accountSummary.closingBalance?.amount >= 0
@@ -336,13 +336,12 @@
                             </tr>
                         </table>
                         <div class="text-center pd-t1 pd-b1">
-                            <mat-spinner
+                            <giddh-page-loader
                                 *ngIf="isLoading"
                                 class="spinner-container position-absolute"
-                                [diameter]="60"
-                            ></mat-spinner>
+                            ></giddh-page-loader>
                             <p class="no-data font-16" *ngIf="!isLoading && !accountListData?.length">
-                                No account statements found for the given criteria.
+                                {{ localeData?.no_account_statements_found }}
                             </p>
                         </div>
                         <mat-paginator

@@ -138,25 +138,21 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
 
     ) {
         console.log("constr")
-        if (this.activeAccountUniqueName) {
-            this.lc.accountUnq = this.activeAccountUniqueName;
-            this.getTransactionData();
-            this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        // if (this.activeAccountUniqueName) {
+        //     this.lc.accountUnq = this.activeAccountUniqueName;
+        //     this.getTransactionData();
+        //     this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
 
-        }
-        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
-        this.isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress), takeUntil(this.destroyed$));
-        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
+        // }
+        // this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        // this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        // this.isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress), takeUntil(this.destroyed$));
+        // this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
         console.log("ngOnInt")
         document.querySelector('body').classList.add('ledger-body');
-        this.lc = new LedgerVM();
-        console.log(this.lc);
-
-        this.trxRequest = new TransactionsRequest();
         this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
         this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
         /** If this is true, it means we are in branch consolidated mode.  */
@@ -190,10 +186,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.store.pipe(select(appState => appState.ledger.hasLedgerPermission), takeUntil(this.destroyed$)).subscribe(response => {
-            this.hasLedgerPermission = response;
-            this.changeDetectorRef.detectChanges();
-        });
+
         this.store.pipe(
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
@@ -236,14 +229,6 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                     }
                     this.trxRequest.branchUniqueName = this.currentBranch?.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch?.uniqueName;
-                    if (this.currentOrganizationType === OrganizationType.Branch ||
-                        (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
-                        // Add the blank transaction only if it is branch mode or company with single branch
-                        this.lc.blankLedger.transactions = [
-                            this.lc?.addNewTransaction('DEBIT'),
-                            this.lc?.addNewTransaction('CREDIT')
-                        ]
-                    }
                 } else {
                     if (this.generalService.companyUniqueName) {
                         // Avoid API call if new user is onboarded
@@ -253,88 +238,62 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.isTransactionRequestInProcess$.subscribe((s: boolean) => {
-            if (this.needToShowLoader) {
-                this.showLoader = _.clone(s);
-            } else {
-                this.showLoader = false;
-            }
-        });
+        // this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
+        //     this.isLoading = false;
+        //     console.log(lt);
+        //     if (lt) {
+        //         this.ledgerTransactions = lt;
+        //         if (lt.periodClosingBalance) {
+        //             this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
+        //             this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
+        //         }
+        //         if (lt.closingBalanceForBank) {
+        //             this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
+        //             this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
+        //         }
+        //         let checkedEntriesName: any[];
+        //         console.log('ledgerView', this.ledgerView);
+                
+        //         if (this.ledgerView === LedgerViewEnum.TView) {
+        //             const debitTransactions = lt.debitTransactions ?? [];
+        //             const creditTransactions = lt.creditTransactions ?? [];
+        //             checkedEntriesName = uniq([
+        //                 ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
+        //                 ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
+        //             ]);
+        //         } 
+        //         this.lc.currentPage = lt.page;
+        //     }
+        // });
 
-        this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
-            this.isLoading = false;
-            console.log(lt);
-            if (lt) {
-                this.ledgerTransactions = lt;
-                if (this.isMobileScreen) {
-                    this.arrangeLedgerTransactionsForMobile();
-                }
-                if (lt.periodClosingBalance) {
-                    this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
-                }
-                if (lt.closingBalanceForBank) {
-                    this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
-                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
-                }
-                let checkedEntriesName: any[];
-                if (this.ledgerView === LedgerViewEnum.TView) {
-                    const debitTransactions = lt.debitTransactions ?? [];
-                    const creditTransactions = lt.creditTransactions ?? [];
-                    checkedEntriesName = uniq([
-                        ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
-                        ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
-                    ]);
-                } else {
-                    checkedEntriesName = uniq([
-                        ...lt?.debitCreditTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: dt.type }))
-                    ]);
-                }
-                this.lc.currentPage = lt.page;
-                setTimeout(() => {
-                    this.paginationObject = {
-                        totalItems: lt.totalPages * lt.count,
-                        itemsPerPage: lt.count,
-                        page: lt.page,
-                        totalPages: lt.totalPages,
-                        showPagination: (lt.totalPages > 1) ? true : false,
-                        prevToken: lt.prevToken,
-                        nextToken: lt.nextToken
-                    };
+        // this.store.pipe(
+        //     select(p => p.ledger.ledgerTransactionsBalance),
+        //     takeUntil(this.destroyed$)
+        // ).subscribe((txnBalance: any) => {
+        //     if (txnBalance && !this.isAdvanceSearchImplemented) {
+        //         console.log('ledgerTransactionsBalance', txnBalance);
+        //         this.ledgerTxnBalance = txnBalance;
+        //         this.lc.calculateReckonging(txnBalance);
+        //         this.changeDetectorRef.detectChanges();
+        //     }
+        // });
 
-                    if (!this.changeDetectorRef['destroyed']) {
-                        this.changeDetectorRef.detectChanges();
-                    }
-                }, 400);
-            }
-        });
+        // this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        //     console.log('ledgerBalanceSuccess', response);
+            
+        //     if (response) {
+        //         Object.assign(this.ledgerTxnBalance, response);
+        //     }
+        // });
 
-        this.store.pipe(
-            select(p => p.ledger.ledgerTransactionsBalance),
-            takeUntil(this.destroyed$)
-        ).subscribe((txnBalance: any) => {
-            console.log(txnBalance);
-            if (txnBalance && !this.isAdvanceSearchImplemented) {
-                this.ledgerTxnBalance = txnBalance;
-                this.lc.calculateReckonging(txnBalance);
-                this.changeDetectorRef.detectChanges();
-            }
-        });
-
-        this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response) {
-                Object.assign(this.ledgerTxnBalance, response);
-            }
-        });
-
-        this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
-            if (yesOrNo) {
-                console.log('addAndManageClosed', yesOrNo);
-                this.getTransactionData();
-            } else if (this.trxRequest?.accountUniqueName) {
-                this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-            }
-        })), debounceTime(300), takeUntil(this.destroyed$)).subscribe();
+        // this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
+        //     if (yesOrNo) {
+        //         console.log('addAndManageClosed', yesOrNo);
+        //         this.getTransactionData();
+        //     } else if (this.trxRequest?.accountUniqueName) {
+        //         this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+        //     }
+        // })), debounceTime(300), takeUntil(this.destroyed$)).subscribe();
     }
 
     public resetBlankTransaction() {
@@ -350,11 +309,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     }
 
     public initTrxRequest(accountUnq: string) {
-        this.advanceSearchRequest.accountUniqueName = accountUnq;
-        this.trxRequest.accountUniqueName = accountUnq;
-        // always send accountCurrency true when requesting for first time
-        this.trxRequest.accountCurrency = true;
-        this.getTransactionData();
+
     }
 
     /**
@@ -400,74 +355,74 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.arrangeLedgerTransactionsForMobile();
     }
 
-    public getTransactionData() {
-        console.log('getTransactionData');
+    // public getTransactionData() {
+    //     console.log('getTransactionData');
 
-        this.trxRequest.from = this.from;
-        this.trxRequest.accountUniqueName = this.activeAccountUniqueName;
-        this.trxRequest.to = this.to;
-        this.trxRequest.page = 0;
-        this.trxRequest.paginationToken = '';
-        if (this.trxRequest?.accountUniqueName) {
-            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+    //     this.trxRequest.from = this.from;
+    //     this.trxRequest.accountUniqueName = this.activeAccountUniqueName;
+    //     this.trxRequest.to = this.to;
+    //     this.trxRequest.page = 0;
+    //     this.trxRequest.paginationToken = '';
+    //     if (this.trxRequest?.accountUniqueName) {
+    //         this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
 
-            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: this.from, to: this.to }));
+    //         this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: this.from, to: this.to }));
 
-            observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                console.log(data);
-                if (data[0] && data[1]) {
-                    let profile = cloneDeep(data[1]);
-                    this.lc.activeAccount = data[0];
-                    if (data[0]?.ledgerView) {
-                        this.ledgerView = data[0].ledgerView;
-                    }
-                    this.profileObj = profile;
-                    this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
-                    this.needToShowLoader = true;
-                    this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                    let accountDetails: AccountResponse | AccountResponseV2 = data[0];
-                    let parentOfAccount = (accountDetails?.parentGroups?.length) ? accountDetails?.parentGroups[0] : null;
+    //         observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+    //             console.log(data);
+    //             if (data[0] && data[1]) {
+    //                 let profile = cloneDeep(data[1]);
+    //                 this.lc.activeAccount = data[0];
+    //                 if (data[0]?.ledgerView) {
+    //                     this.ledgerView = data[0].ledgerView;
+    //                 }
+    //                 this.profileObj = profile;
+    //                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+    //                 this.needToShowLoader = true;
+    //                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+    //                 let accountDetails: AccountResponse | AccountResponseV2 = data[0];
+    //                 let parentOfAccount = (accountDetails?.parentGroups?.length) ? accountDetails?.parentGroups[0] : null;
 
-                    this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
-                    this.accountUniqueName = accountDetails?.uniqueName;
+    //                 this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
+    //                 this.accountUniqueName = accountDetails?.uniqueName;
 
-                    // this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
-                    if (accountDetails?.currency && profile?.baseCurrency) {
-                        this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
-                    } else {
-                        this.isLedgerAccountAllowsMultiCurrency = false;
-                    }
-                    this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
-                    if (this.isLedgerAccountAllowsMultiCurrency) {
-                        this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
-                        this.getCurrencyRate();
-                    } else {
-                        this.baseCurrencyDetails = this.foreignCurrencyDetails;
-                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
-                    }
-                    this.selectedCurrency = 0;
-                    this.assignPrefixAndSuffixForCurrency();
+    //                 // this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
+    //                 if (accountDetails?.currency && profile?.baseCurrency) {
+    //                     this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
+    //                 } else {
+    //                     this.isLedgerAccountAllowsMultiCurrency = false;
+    //                 }
+    //                 this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
+    //                 if (this.isLedgerAccountAllowsMultiCurrency) {
+    //                     this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
+    //                     this.getCurrencyRate();
+    //                 } else {
+    //                     this.baseCurrencyDetails = this.foreignCurrencyDetails;
+    //                     this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
+    //                 }
+    //                 this.selectedCurrency = 0;
+    //                 this.assignPrefixAndSuffixForCurrency();
 
-                    // assign multi currency details to new ledger component
-                    this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
-                    this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
-                    this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+    //                 // assign multi currency details to new ledger component
+    //                 this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+    //                 this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+    //                 this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
 
-                    // tcs tds identification
-                    if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount?.uniqueName)) {
-                        this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount?.uniqueName) ? 'tds' : 'tcs';
+    //                 // tcs tds identification
+    //                 if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount?.uniqueName)) {
+    //                     this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount?.uniqueName) ? 'tds' : 'tcs';
 
-                        // for tcs and tds identification
-                        if (this.tcsOrTds === 'tcs') {
-                            this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
-                        } else {
-                            this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
-                        }
-                    }
-                }
-            });
-        }
-    }
+    //                     // for tcs and tds identification
+    //                     if (this.tcsOrTds === 'tcs') {
+    //                         this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
+    //                     } else {
+    //                         this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
 
     /**
  * Create ledger balance
@@ -548,12 +503,27 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol;
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-        this.isLoading = true;
-        if ('accountUniqueName' in changes && changes.accountUniqueName.currentValue && changes.accountUniqueName.currentValue !== changes.accountUniqueName.previousValue) {
-            this.accountUniqueName = changes.accountUniqueName.currentValue;
-        
+    public ngOnChanges(changes: SimpleChanges): void {
+        // this.isLoading = true;
+        this.lc = new LedgerVM();
+        this.trxRequest = new TransactionsRequest();
+        this.lc.blankLedger = this.lc.getBlankLedger();
+        if (changes.activeAccountUniqueName && changes.activeAccountUniqueName.currentValue && changes.activeAccountUniqueName.currentValue !== changes.activeAccountUniqueName.previousValue) {
+            this.trxRequest.accountUniqueName = changes.activeAccountUniqueName.currentValue;
+            this.trxRequest.from = changes.from.currentValue;
+            this.trxRequest.to = changes.to.currentValue;
+            this.trxRequest.accountCurrency = true;
+            this.getTransactionData();
+        }
+    }
+
+    public getTransactionData() {
+        this.closingBalanceBeforeReconcile = null;
+        if (this.trxRequest?.accountUniqueName) {
+            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
+            const fromDate = this.trxRequest.from;
+            const toDate = this.trxRequest.to;
+            this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate }));
         }
     }
 
@@ -581,6 +551,5 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     }
 
     translationComplete(event: any) {
-        console.log(event)
     }
 }

@@ -1,12 +1,6 @@
 .account-statement {
     max-width: 1200px;
 
-    .custom-datepicker-wrapper {
-        display: flex;
-        text-align: center;
-        justify-content: center;
-    }
-
     .bordered {
         border: 1px solid var(--color-common-primary-text);
     }
@@ -31,27 +25,9 @@
         }
     }
 
-    .account-Summary {
-        font-weight: bolder;
-    }
-
     .spinner-container {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
-
-    .account-table {
-        min-height: 180px;
-    }
-
-    .details-column {
-        width: 352px;
-        max-width: 352px;
-    }
-
-
-    .mat-mdc-header-row {
-        height: auto;
-    }
-}
+}       

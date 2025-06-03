@@ -88,27 +88,36 @@
                         [disableRipple]="true"
                         class="table-header-sticky"
                     >
-                        <mat-tab [label]="'Transaction'">
-                            ledger
-                            <!-- <ledger-statement
-                                *ngIf="selectedContact?.uniqueName"
+                        <mat-tab [label]="localeData?.transaction">
+                            <ledger-statement
+                                *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                 [activeAccountUniqueName]="selectedContact?.uniqueName"
                                 [from]="queryParams.from"
                                 [to]="queryParams.to"
-                            ></ledger-statement> -->
+                            ></ledger-statement>
+                            <div class="account-details-wrapper">
+                                <div class="no-data" *ngIf="isContactNotFound">
+                                    <h1>{{ localeData?.user_not_found_message }}</h1>
+                                </div>
+                            </div>
                         </mat-tab>
-                        <mat-tab [label]="'Statement'">
+                        <mat-tab [label]="localeData?.statement">
                             <account-statement
-                                *ngIf="selectedContact?.uniqueName"
+                                *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                 [activeAccountUniqueName]="selectedContact?.uniqueName"
                                 [from]="queryParams.from"
                                 [to]="queryParams.to"
                             ></account-statement>
+                            <div class="account-details-wrapper">
+                                <div class="no-data" *ngIf="isContactNotFound">
+                                    <h1>{{ localeData?.user_not_found_message }}</h1>
+                                </div>
+                            </div>
                         </mat-tab>
-                        <mat-tab [label]="'Account Details'">
+                        <mat-tab [label]="localeData?.account_details">
                             <div class="account-details-wrapper">
                                 <account-update-new-details
-                                    *ngIf="activeAccount$ | async"
+                                    *ngIf="(activeAccount$ | async) && !isContactNotFound"
                                     [activeAccount$]="activeAccount$"
                                     [activeGroupUniqueName]="parentGroupUniqueName"
                                     [isGstEnabledAcc]="isGstEnabledAcc"
@@ -124,6 +133,9 @@
                                     [isDebtorCreditor]="isDebtorCreditor"
                                 >
                                 </account-update-new-details>
+                                <div class="no-data" *ngIf="isContactNotFound">
+                                    <h1>{{ localeData?.user_not_found_message }}</h1>
+                                </div>
                             </div>
                         </mat-tab>
                     </mat-tab-group>

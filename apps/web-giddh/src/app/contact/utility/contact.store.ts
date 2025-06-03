@@ -44,9 +44,9 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public activeAccount$: Observable<any> = this.select(this.store.select(state => state.groupwithaccounts.activeAccount), (response) => response);
     public activeGroupUniqueName$: Observable<string> = this.select(this.store.select(state => state.groupwithaccounts.activeGroupUniqueName), (response) => response);
     public activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), (response) => response);
-    public virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), (response) => response);    
-    public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);    
-    public showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), (response) => response);    
+    public virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), (response) => response);
+    public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);
+    public showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), (response) => response);
 
     /**
      * Send email template
@@ -157,13 +157,14 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
             })
         );
     });
+    
 
     readonly getAccountStatementList = this.effect((data$: Observable<any>) => {
         return data$.pipe(
-            switchMap(params => {
+            switchMap(req => {
                 // Optionally patch state to indicate loading if needed
                 this.patchState({ getAccountStatementInProgress: true });
-                return this.contactService.getAccountStatementList(params).pipe(
+                return this.contactService.getAccountStatementList(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

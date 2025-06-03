@@ -1,15 +1,14 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { async, debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
+import { debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
-import { SafeUrl } from "@angular/platform-browser";
 import { ContactComponentStore } from "../utility/contact.store";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { Store } from "@ngrx/store";
@@ -27,19 +26,19 @@ import { AccountRequestV2 } from "../../models/api-models/Account";
     providers: [ContactComponentStore]
 })
 export class ContactPreviewComponent implements OnInit, OnDestroy {
-    /** Instance of cdk scrollbar */
+    /** Reference to the virtual scroll viewport used for scrolling contact lists */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold local JSON data */
+    /** Holds localized text for this component */
     public localeData: any = {};
-    /** This will hold common JSON data */
+    /** Holds common localized text used across the app */
     public commonLocaleData: any = {};
-    /** Hold day js reference */
+    /** Reference to the dayjs library for date manipulation */
     public dayjs: any = dayjs;
-    /** Index of selected tab */
+    /** Index of the currently selected tab */
     public selectedTabIndex: number = 0;
-    /** Holds advance Filters keys */
+    /** Holds advanced filter keys for contact search */
     public advanceFilters: any = {
         page: 1,
         count: PAGINATION_LIMIT,
@@ -47,82 +46,106 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         sort: '',
         sortBy: ''
     };
-    /** Holds search voucher form control */
+    /** Form control for the contact search input */
     public search: FormControl = new FormControl('');
-    /** Holds contact list */
+    /** List of all contacts fetched for preview */
     public contactList: any[] = [];
-    /** Holds Current selected contact */
+    /** Currently selected contact object */
     public selectedContact: any;
-    /** Hold contact  type */
+    /** Type of contact (e.g., customer, vendor) */
     public contactType: any = '';
-    /** Holds Total Results Count */
+    /** Total number of result pages for contacts */
     public totalPages: number = 0;
-    /** Holds params value */
+    /** Stores route or query parameters relevant to the view */
     public params: any = {};
-    /** Holds true show Payment Details enable */
+    /** Flag to show/hide payment details */
     public showPaymentDetails: boolean;
-    /** Holds true if company mode */
+    /** Flag indicating if the current mode is company mode */
     public isCompany: boolean;
-    /** True if consolidated branch */
+    /** Flag indicating if the current branch is a consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Holds create new voucher text and url */
+    /** Stores text and link for the 'Create New Voucher' action */
     public createNewVoucher: any = {
         text: '',
         link: ''
     };
-    /** Holds true if update mode */
+    /** Flag indicating if the component is in update mode */
     public isUpdateMode: boolean;
-    /** Holds array of page numbers who date is present in list */
+    /** Array of page numbers that have data present in the list */
     private pageNumberHistory: any[] = [];
-    /** Hold true if searching */
+    /** Flag indicating if a search operation is in progress */
     public isSearching: boolean;
-    /** Holds Get all api call count */
+    /** Counter for the number of 'get all contacts' API calls made */
     private getAllApiCallCount: number = 0;
-    /** Holds current route query parameters */
+    /** Stores the current route's query parameters */
     public queryParams: any = {};
-    /** Holds Image dynamic path for electron and web application */
+    /** Stores the image path for use in web and electron apps */
     public imgPath: string = '';
-    /** Holds true when need to refresh page */
+    /** Flag indicating if the page needs to be refreshed */
     private isRefresh: boolean = null;
-    /** Last vouchers get in progress Observable */
+    /** Observable indicating if account data is being loaded */
     public getAccountsInProgress$: Observable<any> = this.componentStore.getLastAccountsInProgress$;
-    public isUpdateAccount: boolean = false;
-    public isGstEnabledAcc: boolean = false;
-    public isHsnSacEnabledAcc: boolean = false;
-    public updateAccountInProcess$: Observable<boolean> = this.componentStore.updateAccountInProcess$;
-    public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
-    public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
-    public activeGroupUniqueName$: Observable<string> = this.componentStore.activeGroupUniqueName$;
-    public virtualAccountEnable$: Observable<any> = this.componentStore.virtualAccountEnable$;
-    public showBankDetail: boolean = false;
-    public showVirtualAccount: boolean = false;
-    public isDebtorCreditor: boolean = false;
-    public flatGroupsOptions: any[] = [];
-    public accountDetails: any = {};
-    public activeAccountUniqueName: string;
-    public contactActiveTab: string;
-    public parentGroupUniqueName: string;
-    /** sorting */
-    public key: string = "name"; // set default
-    public order: string = "asc";
-    /** Observable to store the branches of current company */
+    /** Observable for the list of branches in the current company */
     public currentCompanyBranches$: Observable<any>;
-    /** Stores the branch list of a company */
+    /** List of branches for the current company */
     public currentCompanyBranches: Array<any>;
-    /** Stores the current branch */
+    /** Object representing the currently selected branch */
     public currentBranch: any = { name: "", uniqueName: "" };
-    /** Stores the current company */
+    /** Object representing the currently active company */
     public activeCompany: any;
-    /** Stores the current branch data */
+    /** Object representing data for the currently selected branch */
     public currentBranchData: any;
-    /** Stores the current organization type */
+    /** Holds the organization type of the current company */
     public currentOrganizationType: OrganizationType;
-    public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
-    public getContactsList$: Observable<any> = this.componentStore.getContactsList$;
-    /** Holds true if invoice load more data is trigger */
+    /** Sorting key for contact list (default: name) */
+    public key: string = "name";
+    /** Sorting order for contact list (default: asc) */
+    public order: string = "asc";
+    /** Flag indicating if more contact data is being loaded */
     public isLoadMore: boolean;
+    /** Flag indicating if the selected contact was not found */
+    public isContactNotFound: boolean = false;
+    /** Flag indicating if an account update operation is in progress */
+    public isUpdateAccount: boolean = false;
+    /** Flag indicating if GST is enabled for the account */
+    public isGstEnabledAcc: boolean = false;
+    /** Flag indicating if HSN/SAC is enabled for the account */
+    public isHsnSacEnabledAcc: boolean = false;
+    /** Observable indicating if an account update is in progress */
+    public updateAccountInProcess$: Observable<boolean> = this.componentStore.updateAccountInProcess$;
+    /** Observable indicating if an account update was successful */
+    public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
+    /** Observable for the currently active account */
+    public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
+    /** Observable for the unique name of the currently active group */
+    public activeGroupUniqueName$: Observable<string> = this.componentStore.activeGroupUniqueName$;
+    /** Observable indicating if virtual account is enabled */
+    public virtualAccountEnable$: Observable<any> = this.componentStore.virtualAccountEnable$;
+    /** Flag to show/hide bank details section */
+    public showBankDetail: boolean = false;
+    /** Flag to show/hide virtual account section */
+    public showVirtualAccount: boolean = false;
+    /** Flag indicating if the current group is a debtor/creditor */
+    public isDebtorCreditor: boolean = false;
+    /** List of options for flat group selection */
+    public flatGroupsOptions: any[] = [];
+    /** Stores details of the currently selected account */
+    public accountDetails: any = {};
+    /** Unique name of the currently active account */
+    public activeAccountUniqueName: string;
+    /** Name of the currently active contact tab */
+    public contactActiveTab: string;
+    /** Unique name of the parent group of the selected account */
+    public parentGroupUniqueName: string;
+    /** Model for advanced search request in contacts */
+    public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
+    /** Observable for the list of contacts fetched from the store */
+    public getContactsList$: Observable<any> = this.componentStore.getContactsList$;
+    /** Reference to the delete account modal dialog */
     @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
+    /** Observable indicating if the edit account modal should be shown */
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
+
     constructor(
         private router: Router,
         public dialog: MatDialog,
@@ -135,7 +158,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private accountsAction: AccountsAction
     ) { }
 
-
     /**
     * Initializes the component
     *
@@ -144,6 +166,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.componentStore.currentCompanyBranches$;
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map((branch: any) => ({
@@ -184,11 +208,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        
+
         merge(this.activatedRoute.params, this.activatedRoute.queryParams).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
-                console.log(params);
-                
                 let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
                 this.activeGroupUniqueName$ = of(groupUniqueName);
                 this.parentGroupUniqueName = groupUniqueName;
@@ -238,8 +260,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -258,8 +279,23 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
+
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response, this.selectedContact);
+            if (response) {
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
+
     }
 
+    /**
+ * Handles the selection of a group and updates the active group unique name.
+ * Sets the isDebtorCreditor flag if the group is sundrycreditors or sundrydebtors.
+ *
+ * @param {any} event The group selection event containing the group value.
+ * @memberof ContactPreviewComponent
+ */
     public isGroupSelected(event: any) {
         if (event) {
             this.activeGroupUniqueName$ = of(event.value);
@@ -270,42 +306,65 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Shows the delete account modal dialog.
+     *
+     * @memberof ContactPreviewComponent
+     */
     public showDeleteAccountModal() {
         this.deleteAccountModal?.show();
     }
 
+    /**
+     * Hides the delete account modal dialog.
+     *
+     * @memberof ContactPreviewComponent
+     */
     public hideDeleteAccountModal() {
         this.deleteAccountModal?.hide();
     }
 
+    /**
+     * Dispatches an action to update the currently selected account.
+     *
+     * @param {{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }} accRequestObject
+     *        The object containing account update values and request details.
+     * @memberof ContactPreviewComponent
+     */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
         console.log(accRequestObject);
-        
+        accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
     }
 
+    /**
+     * Dispatches an action to delete the currently active account and hides the modal.
+     *
+     * @memberof ContactPreviewComponent
+     */
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
         let activeGrpName = this.contactActiveTab;
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
-
         this.hideDeleteAccountModal();
     }
 
     /**
-    * Callback for translation response complete
-    *
-    * @param {*} event
-    * @memberof ContactPreviewComponent
-    */
+     * Callback for translation response completion.
+     *
+     * @param {*} event The translation completion event.
+     * @memberof ContactPreviewComponent
+     */
     public translationComplete(event: any): void {
         if (event) {
+            // Handle translation complete event if needed
         }
     }
 
     /**
-     * Subscribe all required store observable
+     * Subscribes to all required store observables for the component.
+     * Handles universal date changes and resets filters and contact list as needed.
      *
      * @private
      * @memberof ContactPreviewComponent
@@ -331,15 +390,15 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
             }
         });
-
     }
 
     /**
-     * Handle Get All Voucher Response
+     * Handles the response from the get all contacts API.
+     * Updates the contact list, handles pagination, and manages selected contact.
      *
      * @private
-     * @param {*} response
-     * @memberof VouchersPreviewComponent
+     * @param {*} response The API response containing contacts data.
+     * @memberof ContactPreviewComponent
      */
     private handleGetAllContactResponse(response: any): void {
         if (response) {
@@ -359,7 +418,17 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             // Handle page number is more than total pages in query params
             if (this.totalPages < this.advanceFilters.page) {
                 this.advanceFilters.page = 1;
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getContactsList(
+                    this.advanceFilters.from,
+                    this.advanceFilters.to,
+                    null,
+                    "true",
+                    PAGINATION_LIMIT,
+                    this.advanceFilters.q ?? '',
+                    this.key,
+                    this.order,
+                    (this.currentBranch ? this.currentBranch.uniqueName : "")
+                );
                 return;
             }
             response.results?.forEach((item: any, index: number) => {
@@ -370,7 +439,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.contactList = currentContactList;
             } else {
-                this.contactList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.contactList, ...currentContactList] : [...currentContactList, ...this.contactList];
+                this.contactList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1]
+                    ? [...this.contactList, ...currentContactList]
+                    : [...currentContactList, ...this.contactList];
             }
             this.isLoadMore = false;
             this.getAllApiCallCount++;
@@ -384,22 +455,30 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Set selected contact and download PDF Preview
- *
- * @param {string} accountUniqueName
- * @memberof ContactPreviewComponent
- */
+     * Sets the selected contact by unique name and triggers account detail fetch.
+     * If not found, sets the not found flag and clears the selection.
+     *
+     * @param {string} accountUniqueName The unique name of the contact to select.
+     * @param {boolean} [isNewContactSelected=false] Whether a new contact is being selected.
+     * @memberof ContactPreviewComponent
+     */
     public setSelectedContact(accountUniqueName: string, isNewContactSelected: boolean = false): void {
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
         }
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
-        this.store.dispatch(this.accountsAction.resetActiveAccount());
-        this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+        if (this.selectedContact?.uniqueName) {
+            this.isContactNotFound = false;
+            this.store.dispatch(this.accountsAction.resetActiveAccount());
+            this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+        } else {
+            this.selectedContact = null;
+            this.isContactNotFound = true;
+        }
     }
 
     /**
-     * Back to last page
+     * Navigates back to the previous contact list page based on the active tab.
      *
      * @memberof ContactPreviewComponent
      */
@@ -408,9 +487,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Tab Change event
+     * Handles the tab change event and updates the selected tab index.
      *
-     * @param {MatTabChangeEvent} event
+     * @param {MatTabChangeEvent} event The tab change event.
      * @memberof ContactPreviewComponent
      */
     public tabChanged(event: MatTabChangeEvent) {
@@ -418,24 +497,32 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-  * Method to fetch account details from service
-  *
-  * @private
-  * @param {string} fromDate From date
-  * @param {string} toDate To date
-  * @param {string} groupUniqueName Group unique name ('sundrycreditors' or 'sundrydebtors')
-  * @param {number} [pageNumber] Page number of the data to be fetched
-  * @param {string} [refresh] If true, then fetch the most refreshed data instead of cached data
-  * @param {number} [count=20] Page size
-  * @param {string} [query] Query string to be searched such as customer name
-  * @param {string} [sortBy=''] Sorting entity by which we need to sort such as debitTotal, creditTotal or name
-  * @param {string} [order='asc'] Order of sorting (asc or desc)
-  * @param {string} [branchUniqueName] Current branch selected
-  * @memberof ContactComponent
-  */
-    private getContactsList(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
-        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
-        pageNumber = pageNumber ? pageNumber : 1;    
+     * Fetches the contact list from the service with the provided filters and parameters.
+     *
+     * @private
+     * @param {string} fromDate The start date for filtering contacts.
+     * @param {string} toDate The end date for filtering contacts.
+     * @param {number} [pageNumber] The page number to fetch.
+     * @param {string} [refresh] Whether to fetch fresh data ('true'/'false').
+     * @param {number} [count=20] The number of contacts per page.
+     * @param {string} [query] The search query string.
+     * @param {string} [sortBy=''] The field to sort by (e.g., name, debitTotal).
+     * @param {string} [order='asc'] The sort order ('asc' or 'desc').
+     * @param {string} [branchUniqueName] The unique name of the branch to filter by.
+     * @memberof ContactPreviewComponent
+     */
+    private getContactsList(
+        fromDate: string,
+        toDate: string,
+        pageNumber?: number,
+        refresh?: string,
+        count: number = PAGINATION_LIMIT,
+        query?: string,
+        sortBy: string = "",
+        order: string = "asc",
+        branchUniqueName?: string
+    ): void {
+        pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
         fromDate = (fromDate) ? fromDate : "";
         toDate = (toDate) ? toDate : "";
@@ -453,7 +540,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             order,
             postData: this.advanceSearchRequestModal,
             branchUniqueName
-        })
+        });
 
         this.componentStore.getContactsList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -463,7 +550,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle hook for destroy
+     * Lifecycle hook for destroy.
+     * Cleans up all subscriptions and resources used by the component.
      *
      * @memberof ContactPreviewComponent
      */

@@ -9,10 +9,9 @@
         [cssClass]="'no-data'"
     ></giddh-page-loader>
     <div>
-        <ng-container *ngIf="localeData?.page_heading && commonLocaleData?.app_ac && !isLoading">
+        <ng-container *ngIf="!isLoading">
             <section class="container-fluid ledger-section pd-t15">
                 <!-- region ledger table-->
-                 {{ (lc.transactionData$ | async)?.debitTransactions?.length}}
                 <div class="ledg-head transactions-page position-relative">
                     <!-- region bank ledgers-->
                     <div class="clearfix"></div>
@@ -33,7 +32,6 @@
                             "
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
-                      {{ lc.ledgerUnderStandingObj | json }}
                             <b class="blue-heading font-15">Understanding text {{ lc.ledgerUnderStandingObj.text.dr }}</b>
                             <span class="dr-cr-category font-15 pull-right">{{ localeData?.dr }}</span>
                         </mat-grid-tile>

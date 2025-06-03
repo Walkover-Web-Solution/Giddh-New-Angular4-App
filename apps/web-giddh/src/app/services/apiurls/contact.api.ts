@@ -5,5 +5,11 @@ export const CONTACT_API = {
 };
 
 export const ACCOUNT_STATEMENT_API = {
-    GET: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/view-statement?count=:count&lang=en&from=:from&to=:to&sort=asc&page=:page&q=:q'
+    GET: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/view-statement?count=:count&lang=en&from=:from&to=:to&sort=:sort&page=:page&q=:q'
 }
+
+
+
+
+
+

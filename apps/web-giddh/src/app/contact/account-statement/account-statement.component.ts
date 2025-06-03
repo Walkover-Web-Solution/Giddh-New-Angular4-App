@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, TemplateRef, ChangeDetectionStrategy,ChangeDetectorRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, TemplateRef } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { MatSort, Sort } from "@angular/material/sort";
+import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from "../../services/general.service";
@@ -21,31 +21,31 @@ import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-req
     providers: [ContactComponentStore]
 })
 export class AccountStatementComponent implements OnInit, OnDestroy {
-    /** Directive to get reference of element */
+    /** Template reference for the datepicker modal */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /** Instance of advance search modal */
+    /** Template reference for the advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
-    /** Instance of mat paginator */
+    /** Reference to the Material paginator component */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
-    /** Instance of mat sort */
+    /** Reference to the Material sort component */
     @ViewChild(MatSort) sort!: MatSort;
-    /** This will hold local JSON data */
+    /** Holds localized JSON data specific to this module */
     public localeData: any = {};
-    /** This will hold common JSON data */
+    /** Holds common localized JSON data shared across modules */
     public commonLocaleData: any = {};
-    /** True if api call in progress */
+    /** True if API call is in progress */
     public isLoading: boolean = false;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Hold table displayed columns */
+    /** Array of column names displayed in the account statement table */
     public displayedColumns: string[] = ['Date', 'Transactions', 'Details', 'Amount', 'Payments', 'Balance'];
-    /** Hold panel open state*/
+    /** Whether the panel is open (for expansion panels, etc.) */
     public panelOpenState: boolean = true;
-    /** Hold account response table data */
+    /** Data array for the account statement table rows */
     public accountListData: any[] = [];
-    /** Hold account response */
+    /** Stores the full account response object from the API */
     public responseAccountList: any = {};
-    /** Hold account url request */
+    /** Request object for fetching account statement data */
     public accountListRequest: any = {
         accountUniqueName: '',
         page: 1,
@@ -53,43 +53,48 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         sortBy: 'Date',
         sort: 'asc',
         q: '',
-    }
-    /** Hold table page index number */
+    };
+    /** Current page index for the paginator */
     public pageIndex: number = 0;
-    /** Holds page size options */
+    /** Options for the number of rows shown per page */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Count of total records for pagination */
+    /** Total number of records available for pagination */
     public totalRecords: number | null = null;
-    /** Hold store data */
+    /** Observable for the list of account statements from the store */
     public accountStatementList$: Observable<any> = this.contactComponentStore.getAccountStatementList$;
-    /** This will store selected date range to use in api */
+    /** Stores the selected date range for API queries */
     public selectedDateRange: any;
-    /** This will store selected date range to show on UI */
+    /** Stores the selected date range formatted for UI display */
     public selectedDateRangeUi: any;
-    /** This will store modal reference */
+    /** Reference to the currently open modal */
     public modalRef: BsModalRef;
-    /** This will store the x/y position of the field to show datepicker under it */
+    /** Stores the x/y position for displaying the datepicker under its field */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /** This will store available date ranges */
+    /** Available date range options for the datepicker */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected range label */
+    /** Label for the currently selected date range */
     public selectedRangeLabel: any = "";
-    /** Holds transaction form control */
+    /** Form control for the transaction search input */
     public transactionInput: FormControl = new FormControl(null);
-    /** Holds show transaction input visibility status */
+    /** Whether the transaction search input is visible */
     public showTransactionInput: boolean = false;
-    /** True if searching is in progress */
+    /** True if a search is currently in progress */
     public isSearching: boolean = false;
-    /** Holds advance Filters keys */
+    /** Stores the current set of applied advance filter keys */
     public advanceFilters: any = {};
-    /** Holds Advance Filters Applied Status */
+    /** True if any advance filters are currently applied */
     public advanceFiltersApplied: boolean = false;
-    /** Instance of advance search modal dialog */
+    /** Reference to the currently open advance search dialog */
     public advanceSearchDialogRef: any;
+    /** Unique name of the active account (input from parent) */
     @Input() activeAccountUniqueName: string;
+    /** Start date for the statement (input from parent) */
     @Input() from: string;
+    /** End date for the statement (input from parent) */
     @Input() to: string;
+    /** Request object for advance search filters */
     public advanceSearchRequest: AdvanceSearchRequest;
+    /** True if the advance search feature is implemented and enabled */
     public isAdvanceSearchImplemented: boolean = false;
 
 
@@ -97,14 +102,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private contactComponentStore: ContactComponentStore,
         private generalService: GeneralService,
-        private modalService: BsModalService,
-        private changeDetection: ChangeDetectorRef    
+        private modalService: BsModalService
     ) {
         this.advanceSearchRequest = new AdvanceSearchRequest();
     }
 
     /**
-     * This will be use for component initialization
+     * Lifecycle hook that is called after data-bound properties are initialized.
+     * Subscribes to account statement and transaction input changes.
      *
      * @memberof AccountStatementComponent
      */
@@ -129,12 +134,12 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Toggle between table header title and search input field
-    *
-    * @param {*} event
-    * @param {string} fieldName
-    * @memberof AccountStatementComponent
-    */
+     * Shows the search input for a given table field (e.g., transactions).
+     *
+     * @param {*} event DOM event
+     * @param {string} fieldName Name of the field to activate search for
+     * @memberof AccountStatementComponent
+     */
     public toggleSearch(event: any, fieldName: string): void {
         if (fieldName === "transactionsField") {
             this.showTransactionInput = true;
@@ -145,12 +150,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
 
 
     /**
-  * Reset Advance Filter
-  *
-  * @memberof AccountStatementComponent
-  */
+     * Resets all applied advance filters and optionally fetches the account statement list.
+     *
+     * @param {boolean} [onlyResetValue=false] If true, only resets values without fetching data
+     * @memberof AccountStatementComponent
+     */
     public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
         this.accountListRequest = {
+            accountUniqueName: this.activeAccountUniqueName,
             sortBy: '',
             sort: 'asc',
             from: this.from ?? '',
@@ -163,15 +170,16 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.showTransactionInput = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
+        
         if (!onlyResetValue) {
             this.getAccountStatementList();
         }
     }
 
     /**
-     * This will be use for hanldle page changes
+     * Handles page change events from the paginator and fetches new data.
      *
-     * @param {PageEvent} event
+     * @param {PageEvent} event Page event from paginator
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
@@ -182,7 +190,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for get count page
+     * Sets default parameters for account statement request and initializes date range values.
      *
      * @memberof AccountStatementComponent
      */
@@ -193,6 +201,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.accountListRequest.sort = 'asc';
             this.accountListRequest.from = this.from;
             this.accountListRequest.to = this.to;
+            let dateRange = { fromDate: '', toDate: '' };
+            dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
+            this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
             if (!this.isLoading) {
                 this.getAccountStatementList();
@@ -201,26 +212,30 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * closeAdvanceSearchPopup
-   */
+     * Closes the advance search popup and applies filters if provided.
+     *
+     * @param {*} event Event containing advance search data and close status
+     * @memberof AccountStatementComponent
+     */
     public closeAdvanceSearchPopup(event: any) {
-        console.log(event);
         this.advanceSearchDialogRef?.close();
         if (!event.isClose) {
-            this.getAccountStatementList();
             if (event.advanceSearchData) {
+                this.advanceFiltersApplied = true;
                 if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
                     this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                     this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
+                this.advanceSearchRequest = event.advanceSearchData.dataToSend;
+                this.getAccountStatementList();
             }
         }
     }
 
     /**
-     * To open advance search modal
+     * Opens the advance search modal dialog.
      *
-     * @memberof LedgerComponent
+     * @memberof AccountStatementComponent
      */
     public onOpenAdvanceSearch(): void {
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
@@ -240,22 +255,29 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for get payment list
+     * Fetches the account statement list, applying filters if needed.
      *
      * @memberof AccountStatementComponent
      */
     public getAccountStatementList(): void {
         this.isLoading = true;
         this.accountListData = [];
-        console.log(this.accountListRequest);
-        
-        this.contactComponentStore.getAccountStatementList(this.accountListRequest);
+        if (this.advanceFiltersApplied) {
+            const requestObj = {
+                body: this.advanceSearchRequest,
+                method: 'POST',
+                model: this.accountListRequest
+            };
+            this.contactComponentStore.getAccountStatementList(requestObj);
+        } else {
+            this.contactComponentStore.getAccountStatementList(this.accountListRequest);
+        }
     }
 
     /**
-     * This will be use for sort table  data
+     * Handles sort events for the account statement table and fetches sorted data.
      *
-     * @param {any} event
+     * @param {any} event Sort event from Material table
      * @memberof AccountStatementComponent
      */
     public sortData(event: any): void {
@@ -264,26 +286,32 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.getAccountStatementList();
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.activeAccountUniqueName?.currentValue && changes?.from?.currentValue && changes?.to?.currentValue) {
+    /**
+     * Lifecycle hook that is called when the component is destroyed.
+     * Cleans up subscriptions to prevent memory leaks.
+     *
+     * @memberof AccountStatementComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.activeAccountUniqueName?.currentValue && changes?.activeAccountUniqueName?.currentValue !== changes?.activeAccountUniqueName?.previousValue ) {
             this.setDefaultParam();
         }
     }
 
     /**
-* This will hide the datepicker
-*
-* @memberof ActivityLogsComponent
-*/
+     * Hides the datepicker modal.
+     *
+     * @memberof AccountStatementComponent
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef?.hide();
     }
 
     /**
-     *To show the datepicker
+     * Shows the datepicker modal at the position of the provided element.
      *
-     * @param {*} element
-     * @memberof ActivityLogsComponent
+     * @param {*} element DOM element triggering the datepicker
+     * @memberof AccountStatementComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -296,13 +324,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Call back function for date/range selection in datepicker
+     * Callback for date/range selection in the datepicker.
+     * Updates date range and fetches account statement list.
      *
-     * @param {*} value
-     * @memberof ActivityLogsComponent
+     * @param {*} value Selected date range value
+     * @memberof AccountStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
-        
+
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
@@ -323,17 +352,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for click outsie for search field hidden
+     * Handles click outside events to hide search fields if needed.
      *
-     * @param {*} event
-     * @param {*} element
-     * @param {string} searchedFieldName
-     * @return {*}  {void}
+     * @param {*} event DOM event
+     * @param {*} element Reference element for comparison
+     * @param {string} searchedFieldName Name of the search field
      * @memberof AccountStatementComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        console.log(event, element, searchedFieldName);
-        
         if (searchedFieldName === 'transactions') {
             if (this.transactionInput.value !== null && this.transactionInput.value !== '') {
                 return;
@@ -345,12 +371,13 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         } else {
             if (searchedFieldName === 'transactions') {
                 this.showTransactionInput = false;
-            } 
+            }
         }
     }
 
     /**
-     * This will be use for component destroy
+     * Lifecycle hook that is called when the component is destroyed.
+     * Cleans up subscriptions to prevent memory leaks.
      *
      * @memberof AccountStatementComponent
      */
