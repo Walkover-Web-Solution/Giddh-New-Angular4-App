@@ -26,12 +26,15 @@ import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { cloneDeep } from '../../../lodash-optimized';
+import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
+import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'app-ewaybill-component',
     templateUrl: './eWayBill.component.html',
-    styleUrls: [`./eWayBill.component.scss`]
+    styleUrls: [`./eWayBill.component.scss`],
+    providers: [VoucherComponentStore],
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
@@ -163,7 +166,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
         private gstReconcileService: GstReconcileService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private componentStore: VoucherComponentStore,
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -775,12 +780,35 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public onGenerateEwayBill(item): void {
-        if (!item?.pincode) {
-                this._toaster.showSnackBar("error", this.localeData?.pincode_required);
-            } else {
-                console.log("run");
-                this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
-            }
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            this._invoiceService.selectedInvoicesLists = [];
+            this._invoiceService.VoucherType = "sales";
+        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4("qmpsx1747987156897", {
+            invoiceNumber: "250521-4",
+            voucherType: "sales",
+            uniqueName: "qmpsx1747987156897"
+        }));
+        this._invoiceService.setSelectedInvoicesList([item]);
+        setTimeout(() => {
+            
+            this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+                console.log("Response from create eway bill", response);
+                
+                if (!response?.account?.billingDetails?.pincode) {
+                    this._toaster.showSnackBar("error", this.localeData?.pincode_required);
+                } else if(response?.account?.billingDetails?.pincode) {      
+                    console.log("Navigate to create eway bill page");
+                      
+                    this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+                }
+            });
+        }, 4000);
+                        // this.invoiceService.setSelectedInvoicesList([voucher]);
+        // if (!item?.pincode) {
+        //         this._toaster.showSnackBar("error", this.localeData?.pincode_required);
+        //     } else {
+        //         this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+        //     }
     }
 
 }
