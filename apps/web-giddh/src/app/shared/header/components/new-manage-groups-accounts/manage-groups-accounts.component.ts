@@ -333,4 +333,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             this.onArchivedFilterSelected(this.archivedOptions[0], false);
         }
     }
+
+    /**
+     * Handles update of account
+     *
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public handleUpdateAccount(): void {
+        this.searchGroups(this.searchString);
+    }
 }

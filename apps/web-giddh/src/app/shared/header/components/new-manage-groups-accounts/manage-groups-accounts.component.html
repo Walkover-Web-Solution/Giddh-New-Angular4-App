@@ -30,7 +30,7 @@
                     [options]="archivedOptions"
                     (selectedOption)="onArchivedFilterSelected($event)"
                     [allowValueReset]="true"
-                    [defaultValue]="selectedArchivedOption"
+                    [defaultValue]="selectedArchivedLabel"
                     (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"
                     [openDropdown]="true"
                     [showDropdownIcon]="true"
@@ -135,6 +135,7 @@
                         [commonLocaleData]="commonLocaleData"
                         [isMasterOpen]="true"
                         [activeGroupUniqueName]="activeGroupUniqueName"
+                        (accountUpdated)="handleUpdateAccount()"
                         #form
                         *ngIf="localeData?.page_heading"
                     >
