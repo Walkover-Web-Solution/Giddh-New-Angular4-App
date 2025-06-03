@@ -45,10 +45,10 @@
                                     aria-label="{{ option.label }}" 
                                     mat-menu-item 
                                     class="w150" 
-                                    [ngClass]="{ 'active': selectedArchivedOption === option?.value }" 
+                                    [ngClass]="{ 'active': selectedArchivedOption?.[items?.groupUniqueName] === option?.value }" 
                                     (click)="onArchiveStatusFilter(items?.groupUniqueName, i, option?.value)"
                                 >
-                                     {{ option.label }}
+                                    {{ option.label }}
                                  </button>
                              </ng-container>
                          </mat-menu>
