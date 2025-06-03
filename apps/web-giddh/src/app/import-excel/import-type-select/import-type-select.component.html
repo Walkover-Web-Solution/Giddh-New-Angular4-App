@@ -21,32 +21,32 @@
                 <ul class="import-type mr-b2 mr-t4 pd-t3">
                     <li *ngIf="!isBranch">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
-                            <img src="assets/images/new/group-import.svg" alt="group import" />
+                            <img src="{{ imgPath }}new/group-import.svg" alt="group import" />
                             <h2>{{ commonLocaleData?.app_import_type?.master }}</h2>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
-                            <img src="assets/images/new/entries-import.svg" alt="entries import" />
+                            <img src="{{ imgPath }}new/entries-import.svg" alt="entries import" />
                             <h2>{{ commonLocaleData?.app_import_type?.entries }}</h2>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
-                            <img src="assets/images/new/Inventory-13.svg" alt="inventory" />
+                            <img src="{{ imgPath }}new/Inventory-13.svg" alt="inventory" />
                             <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
                         </a>
                     </li>
                     <ng-container *ngIf="isBranch || branches?.length === 1">
                         <li>
-                            <a class="text-link-2 cursor-pointer d-flex justify-content-center flex-column align-item-center h-100" [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
-                                <i class="icon-import icon-font-48 opacity-5 text-center black-color bdr-radius-circle"></i>
+                            <a [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
+                                <img src="{{ imgPath }}new/account.svg" alt="account wise" />
                                 <h2>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.account_wise }}</h2>
                             </a> 
                         </li>
                         <li>
-                            <a class="text-link-2 cursor-pointer d-flex justify-content-center flex-column align-item-center h-100" [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
-                                <i class="icon-invoice-new icon-font-48 opacity-5 text-center black-color bdr-radius-circle"></i>
+                            <a [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
+                                <img src="{{ imgPath }}new/voucher.svg" alt="voucher wise" />
                                 <h2>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.voucher_wise }}</h2>
                             </a> 
                         </li>
