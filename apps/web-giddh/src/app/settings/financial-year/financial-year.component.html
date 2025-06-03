@@ -99,15 +99,17 @@
                                             {{ localeData?.lock_status }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
-                                            <mat-slide-toggle
-                                                color="primary"
-                                                name="lockedUnlockedFinancial"
-                                                [checked]="element.isLocked"
-                                                (change)="lockUnlockFinancialYear(element)"
-                                            >
-                                                {{ element.isLocked ? localeData?.locked : localeData?.unlocked }}
-                                            </mat-slide-toggle>
-                                        </td>
+                                            <span class="d-inline-block w125">
+                                                <mat-slide-toggle
+                                                    color="primary"
+                                                    name="lockedUnlockedFinancial"
+                                                    [checked]="element.isLocked"
+                                                    (change)="lockUnlockFinancialYear(element)"
+                                                >
+                                                    <span class="d-inline-block">{{ element.isLocked ? localeData?.locked : localeData?.unlocked }}</span>
+                                                </mat-slide-toggle>
+                                            </span>
+                                    </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
