@@ -987,7 +987,7 @@ export class GeneralService {
      */
     public getAccountArchivedOptions(commonLocaleData: any): IOption[] {
         return [
-            { label: commonLocaleData?.app_unarchive, value: AccountArchivedStatusEnum.UNARCHIVED },
+            { label: commonLocaleData?.app_unarchived, value: AccountArchivedStatusEnum.UNARCHIVED },
             { label: commonLocaleData?.app_archived, value: AccountArchivedStatusEnum.ARCHIVED },
             { label: commonLocaleData?.app_both, value: AccountArchivedStatusEnum.BOTH }
         ];
