@@ -2521,12 +2521,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * This will be use for toggling the archive status
-     *
+     * Handles toggling the archive status of an account
+     * 
      * @memberof AccountUpdateNewDetailsComponent
      */
     public accountArchiveUnarchive(): void {
-        this.addAccountForm.get('archive')?.patchValue(!this.addAccountForm.get('archive')?.value);
-        this.submit();
+        let accountRequest: AccountRequestV2 = new AccountRequestV2();
+        if (this.accountDetails) {
+            accountRequest['uniqueName'] = this.accountDetails.uniqueName;
+        } else {
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
+        }
+        accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
+        this.submitClicked.emit({
+        value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
+            accountRequest
+        });
     }
 }
