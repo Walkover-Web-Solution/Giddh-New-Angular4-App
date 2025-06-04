@@ -114,12 +114,18 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
                     if (term) {
                         this.searchMasters(term);
+                        this.breadcrumbPath = [];
+                        this.breadcrumbUniquePath = [];
                     } else {
                         this.searchedMasterData = [];
+                        this.breadcrumbPath = [];
+                        this.breadcrumbUniquePath = [];
                     }
                 } else {
                     if (term) {
                         this.searchMasters(term);
+                        this.breadcrumbPath = [];
+                        this.breadcrumbUniquePath = [];
                     }
                 }
                 this.initialLoad = false;
@@ -256,6 +262,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     private searchMasters(term: any): void {
         this.searchedMasterData = [];
+        this.breadcrumbPath = [];
+        this.breadcrumbUniquePath = [];
         this.groupService.getGroupsWithAccounts(term, null, this.selectedArchivedOption).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.searchedMasterData = response?.body;
