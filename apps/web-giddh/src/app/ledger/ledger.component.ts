@@ -979,7 +979,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
                 this.needToReCalculate.next(false);
-                this.getTransactionData();
+                if (this.isAdvanceSearchImplemented) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
                 this.transactionCountConvertToEntries = null;
