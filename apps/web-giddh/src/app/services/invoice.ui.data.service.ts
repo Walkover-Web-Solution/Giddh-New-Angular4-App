@@ -35,6 +35,10 @@ export class InvoiceUiDataService {
      * to avoid unused uploading of images on the server
     */
     public unusedImageSignature: string;
+    /** Stores the image uniquename, if bank qr code image got uploaded to the server but not updated with invoice, used
+     * to avoid unused uploading of images on the server
+    */
+    public unusedBankQrCode: string;
     /** True, if logo update is successful */
     public isLogoUpdateInProgress: boolean;
 

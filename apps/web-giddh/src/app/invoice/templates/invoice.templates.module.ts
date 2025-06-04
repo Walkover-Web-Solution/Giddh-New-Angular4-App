@@ -21,6 +21,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { TallyTemplateComponent } from './edit-template/out-tempate/templates/tally-template/tally-template.component';
 import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
         ClickOutsideModule,
         DecimalDigitsModule,
         ValidateSectionPermissionDirectiveModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        MatButtonModule
     ],
     declarations: [
         InvoiceTemplatePreviewModelComponent,

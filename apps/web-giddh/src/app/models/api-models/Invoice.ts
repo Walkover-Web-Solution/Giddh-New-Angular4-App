@@ -474,6 +474,8 @@ export class CustomTemplateResponse {
     public logoUniqueName?: string;
     public templateType?: string;
     public type?: string;
+    public qrCodeUniqueName?: string;
+    public showBankQrCode?: boolean;
 }
 
 export class Esignature {

@@ -31,7 +31,11 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public voucherType = '';
     public formData: FormData;
     public signatureSrc: string = '';
+    /** Hold Bank Qr Code Url*/
+    public bankQrCodeSrc: string = '';
     public signatureImgAttached: boolean = false;
+    /** True, if bank QR code is attached */
+    public bankQrCodeAttached: boolean = false;
     public isSignatureUploadInProgress: boolean = false;
     public files: any[] = [];
     public dragOver: boolean;
@@ -120,6 +124,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 }
             }
             this.assignImageSignature();
+            this.assignBankQrCode();
         });
 
         this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -142,6 +147,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.signatureImgAttached = false;
             this.signatureSrc = '';
             this.assignImageSignature();
+            this.assignBankQrCode();
             this.invoiceUiDataService.setContentForm(this.contentForm);
         }
     }
@@ -252,9 +258,50 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         }
     }
 
+    /**
+     * Uploads bank QR code
+     *
+     * @memberof ContentFilterComponent
+     */
+    public uploadBankQrCode(): void {
+        const selectedFile: any = document.getElementById("bankQRCode");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+            this.generalService.getSelectedFileBase64(file, (base64) => {
+                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        if (this.invoiceUiDataService.unusedBankQrCode) {
+                            this.invoiceService.removeSignature(this.invoiceUiDataService.unusedBankQrCode).subscribe(() => { });
+                        }
+                        this.bankQrCodeSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
+                        this.customTemplate.qrCodeUniqueName = response.body?.uniqueName;
+                        this.invoiceUiDataService.unusedBankQrCode = response.body?.uniqueName;
+                        this.onChangeFieldVisibility(null, null, null);
+                        this.toaster.showSnackBar("success", 'File uploaded successfully.');
+                    } else {
+                        this.bankQrCodeAttached = false;
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
+        }
+    }
+
     public removeFile(): void {
         this.signatureImgAttached = false;
         this.customTemplate.sections.footer.data.imageSignature.label = '';
+        this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
+    }
+
+    /**
+     * Removes the bank QR code file from the template
+     * and resets the QR code unique name in the custom template
+     * @memberof ContentFilterComponent
+     * @returns {void}
+     */
+    public removeFileBankQrCode(): void {
+        this.bankQrCodeAttached = false;
+        this.customTemplate.qrCodeUniqueName = '';
         this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
     }
 
@@ -350,6 +397,20 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         } else {
             this.signatureSrc = '';
             this.signatureImgAttached = false;
+        }
+    }
+    /**
+     * Assigns Bank Qr Code Url
+     *
+     * @memberof ContentFilterComponent
+     */
+    public assignBankQrCode(): void {
+        if (this.customTemplate.qrCodeUniqueName) {
+            this.bankQrCodeSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.qrCodeUniqueName;
+            this.bankQrCodeAttached = true;
+        } else {
+            this.bankQrCodeSrc = '';
+            this.bankQrCodeAttached = false;
         }
     }
 

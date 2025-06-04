@@ -426,13 +426,17 @@ export const initialState: CustomTemplateState = {
 };
 
 export function InvoiceTemplateReducer(state = initialState, action: CustomActions): CustomTemplateState {
+    console.log('InvoiceTemplateReducer action', action.type);
     switch (action.type) {
+        
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
         }
         case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
             let nextState = _.cloneDeep(state);
             let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
+            console.log('InvoiceTemplateReducer action', res);
+            
             if (res && res.status === 'success') {
                 nextState.sampleTemplates = res.body;
             }
