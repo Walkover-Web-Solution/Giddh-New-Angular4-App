@@ -12,6 +12,7 @@ import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.compo
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-fields.module';
+import { NewConfirmModalModule } from 'apps/web-giddh/src/app/theme/new-confirm-modal';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -27,7 +28,8 @@ import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-
         FormsModule,
         MatRadioModule,
         MatTabsModule,
-        FormFieldsModule
+        FormFieldsModule,
+        NewConfirmModalModule
     ]
 })
 export class AccountAddNewDetailsModule { }
