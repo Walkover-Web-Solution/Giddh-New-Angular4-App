@@ -188,7 +188,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
     /** Hold active index of form group */
-    public activeIndex: number;
+    public activeIndex: number = 0;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
@@ -1138,7 +1138,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 isValid = true;
             }
-
+console.log('call');
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
                 ele?.classList?.add('error-box');
@@ -1146,6 +1146,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 ele?.classList?.remove('error-box');
                 this.isGstValid = true;
+                console.log('GST Number is valid');
+                
                 if (this.selectedCountryCode === 'IN') {
                     this.getGstConfirmationPopup();
                 }
@@ -1768,10 +1770,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
       * @memberof AccountAddNewDetailsComponent
       */
     public getGstConfirmationPopup(): void {
+        console.log('aao');
         let addresses = (this.addAccountForm.get('addresses') as FormArray).at(this.activeIndex);
         if (addresses?.get('gstNumber')?.value) {
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (result?.body) {
+                if (!result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                         width: '40%',
                         data: {
