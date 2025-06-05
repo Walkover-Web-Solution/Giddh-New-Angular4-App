@@ -29,6 +29,8 @@ import { ValidateSectionPermissionDirectiveModule } from '../validate-section-pe
 import { ParticularPipeModule } from '../../ledger/pipes/particular/particular.module';
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
+import { LedgerModule } from '../../ledger/ledger.module';
+import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledger-paginator.module';
 
 @NgModule({
     declarations: [LedgerStatementComponent],
@@ -41,7 +43,6 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         MatFormFieldModule,
         MatButtonModule,
         MatIconModule,
-        MatMenuModule,
         MatTableModule,
         MatSelectModule,
         MatDialogModule,
@@ -56,7 +57,6 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         MatSlideToggleModule,
         MatRadioModule,
         MatTooltipModule,
-        MatMenuModule,
         MatDatepickerModule,
         WatchVideoModule,
         TranslateDirectiveModule,
@@ -64,6 +64,8 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         ValidateSectionPermissionDirectiveModule,
         ParticularPipeModule,
         AmountFieldComponentModule,
+        LedgerModule,
+        GiddhLedgerPaginatorModule
     ],
     exports: [LedgerStatementComponent]
 })

@@ -1,11 +1,12 @@
-.wrap-transaction-map {
-    border: 1px solid var(--color-common-primary-border);
-    border-bottom: none !important;
-
     .content-wrapper-statement {
         position: relative;
         z-index: 1;
     }
+.wrap-transaction-map {
+    border: 1px solid var(--color-common-primary-border);
+    border-bottom: none !important;
+
+
 
     .ledger-book {
         box-shadow: none;

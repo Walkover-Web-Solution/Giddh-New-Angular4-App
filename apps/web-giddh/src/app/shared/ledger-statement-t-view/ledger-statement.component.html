@@ -435,6 +435,25 @@
                             </div>
                             <!--endregion-->
                         </ng-container>
+                        <!-- region pagination -->
+                        <div class="text-center mr-t2 page-count position-absolute">
+                            <span class="grey"
+                                >{{ (lc.transactionData$ | async)?.totalItems }} {{ localeData?.transactions }},
+                            </span>
+                            <span class="black"
+                                >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
+                            >
+                            <giddh-ledger-paginator
+                                *ngIf="paginationObject.showPagination"
+                                [currentPage]="paginationObject.page"
+                                [commonLocaleData]="commonLocaleData"
+                                (pageChange)="pageChanged($event)"
+                                [nextPageToken]="paginationObject.nextToken"
+                                [previousPageToken]="paginationObject.prevToken"
+                            >
+                            </giddh-ledger-paginator>
+                        </div>
+                        <!-- endregion -->
 
                         <!-- region footer-->
                         <div class="w-100">

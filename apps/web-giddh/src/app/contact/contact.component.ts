@@ -265,7 +265,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         count: PAGINATION_LIMIT,
         q: '',
         from: '',
-        to: ''
+        to: '',
+        sort: '',
+        sortBy: ''
     };
     
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
@@ -1656,10 +1658,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public sort(key, ord = "asc") {
+    public sort(key: string, ord = "asc") {
         this.showClearFilter = true;
         this.key = key;
         this.order = ord;
+        this.advanceFilters.sort = ord;
+        this.advanceFilters.sortBy = key;
         this.getAccounts(this.fromDate, this.toDate, null, "false", PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
@@ -1771,6 +1775,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             count: this.advanceFilters.count,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
+            sort: this.advanceFilters.sort,
+            sortBy: this.advanceFilters.sortBy,
+            refresh: false
         };
 
         const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;

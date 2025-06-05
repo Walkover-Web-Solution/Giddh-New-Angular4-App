@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef } from "@angular/core";
-import { Store, createSelector, select } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { shareReplay, take, takeUntil, debounceTime } from 'rxjs/operators';
+import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../services/general.service';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, } from "rxjs";
 import { LedgerStatementComponentStore } from "./utility/ledger-statement.store";
@@ -13,7 +13,7 @@ import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-req
 import { BranchHierarchyType, RESTRICTED_VOUCHERS_FOR_DOWNLOAD } from "../../app.constant";
 import { LedgerVM } from "../../ledger/ledger.vm";
 import { ChangeDetectorRef } from "@angular/core";
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT } from "../helpers/defaultDateFormat";
 import * as dayjs from 'dayjs';
 import { cloneDeep, uniq } from "../../lodash-optimized";
 import { LedgerComponentStore } from "../../ledger/ledger.store";
@@ -32,45 +32,47 @@ import { LedgerService } from "../../services/ledger.service";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LedgerStatementComponent implements OnInit, OnDestroy {
-    /** True if columnar report show*/
+    /** True if the columnar report table is shown */
     public isShowLedgerColumnarReportTable: boolean = false;
-    /** Holds ledger view */
+    /** Stores the current ledger view type */
     public ledgerView: TLedgerView = LedgerViewEnum.TView;
-    /** Holds ledger view enum */
+    /** Stores the LedgerViewEnum reference */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
-    /** Boolean for mobile screen or not  */
+    /** True if the device is a mobile screen */
     public isMobileScreen: boolean = true;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** Hold ledger grid total columns static value */
+    /** Stores the static total columns count for the ledger grid */
     public ledgerGridTotalColumns: number = 4;
-    /** Hold ledger grid total columns value */
+    /** Stores the column values for the ledger grid */
     public ledgerGridColumnsValue: number[] = [1, 2, 1];
-    /** Transactions dates array */
+    /** Stores the list of all transactions */
     public allTransactionsList: any[] = [];
+    /** Stores the list of all transaction dates */
     public allTransactionDates: any[] = [];
-    /** Observable to store the branches of current company */
+    /** Observable of the current company's branches */
     public currentCompanyBranches$: Observable<any>;
-    /** Stores the branch list of a company */
+    /** Stores the branch list of the current company */
     public currentCompanyBranches: Array<any>;
-    /** Stores the current branch */
+    /** Stores the currently selected branch */
     public currentBranch: any = { name: '', uniqueName: '' };
-    /** Stores the current company */
+    /** Stores the currently active company */
     public activeCompany: any;
-    /** True if consolidated branch */
+    /** True if the branch is consolidated */
     public isConsolidatedBranch: boolean;
-    /** True if user has ledger permission */
+    /** True if the user has permission to view the ledger */
     public hasLedgerPermission: boolean = true;
-    /** Flag to indicate if data is loading */
-    public isLoading: boolean = false;    /* This will hold local JSON data */
+    /** True if data is loading */
+    public isLoading: boolean = false;
+    /** Stores the localized JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** Stores common localized JSON data */
     public commonLocaleData: any = {};
-    /* This will store selected date range to use in api */
+    /** Stores the selected date range for API requests */
     public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
+    /** Stores the selected date range for UI display */
     public selectedDateRangeUi: any;
-    /** Pagination Object */
+    /** Stores pagination information for the ledger */
     public paginationObject: any = {
         totalItems: 0,
         itemsPerPage: 0,
@@ -82,67 +84,109 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     };
     /** Observable for post balance success response */
     public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
-    /** Selected entry details */
+    /** Stores the currently selected transaction/item */
     public selectedItem: any;
-    /** This will hold if it's default load */
+    /** True if this is the default load of the ledger */
     public isDefaultLoad: boolean = true;
-    /** True if active account is bank account */
+    /** True if the active account is a bank account */
     public get isBankAccount(): boolean {
         return this.lc.activeAccount?.parentGroups?.some(group => group.uniqueName === 'bankaccounts');
     }
-    /** True if active account is bank account */
+    /** True if the active bank account is connected */
     public isBankAccountConnected: boolean = null;
-    /** Holds accountUniquename of get all bank-Account  */
+    /** Stores the unique name of the selected bank account */
     public selectedAccountUniquename: any;
-    /** Stores the voucher API version of current company */
+    /** Stores the voucher API version used by the current company */
     public voucherApiVersion: 1 | 2;
-    /** Holds restricted voucher types for download */
+    /** Stores restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
+    /** Stores the ledger transaction balance */
     public ledgerTxnBalance: any = {};
+    /** True if advanced search is implemented */
     public isAdvanceSearchImplemented: boolean = false;
+    /** Stores the closing balance before bank reconciliation */
     public closingBalanceBeforeReconcile: { amount: number, type: string };
+    /** Stores the closing balance for bank reconciliation */
     public reconcileClosingBalanceForBank: { amount: number, type: string };
+    /** Stores the active account's unique name (input) */
     @Input() public activeAccountUniqueName: string;
+    /** Stores the 'from' date for the ledger (input) */
     @Input() public from: string;
+    /** Stores the 'to' date for the ledger (input) */
     @Input() public to: string;
+    /** Stores the image path for attachments or icons */
     public imgPath: string = '';
+    /** Stores the visible transaction type on mobile */
     public visibleTransactionTypeMobile: string = "all";
+    /** Stores the ledger transactions data */
     public ledgerTransactions: any;
+    /** ReplaySubject to manage component destruction and unsubscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the transactions request object */
     public trxRequest: TransactionsRequest;
+    /** Stores the advanced search request object */
     public advanceSearchRequest: AdvanceSearchRequest;
+    /** Stores the ledger view model */
     public lc: LedgerVM;
+    /** True if 'Today' is selected in the date filter */
     public todaySelected: boolean = false;
+    /** Observable for 'Today' selection state */
     public todaySelected$: Observable<boolean> = observableOf(false);
+    /** Observable for universal date selection */
     public universalDate$: Observable<any>;
+    /** Observable for transaction request processing state */
     public isTransactionRequestInProcess$: Observable<boolean>;
+    /** Stores the search text for filtering transactions */
     public searchText: string = '';
+    /** True if the loader should be shown */
     public needToShowLoader: boolean = true;
+    /** True if the loader is currently visible */
     public showLoader: boolean = false;
+    /** Observable for company creation state */
     public isCompanyCreated$: Observable<boolean>;
+    /** True if prefix is applied for currency display */
     public isPrefixAppliedForCurrency: boolean = true;
+    /** Stores the selected currency prefix */
     public selectedPrefixForCurrency: string;
+    /** Stores the selected currency suffix */
     public selectedSuffixForCurrency: string;
+    /** Stores the input mask format for currency fields */
     public inputMaskFormat: string;
+    /** Stores the number of decimal places for balance display */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Stores the selected currency (0: base, 1: foreign) */
     public selectedCurrency: 0 | 1 = 0;
+    /** Stores the details of the base currency */
     public baseCurrencyDetails: ICurrencyResponse;
+    /** Stores the details of the foreign currency */
     public foreignCurrencyDetails: ICurrencyResponse;
+    /** Stores the user profile object */
     public profileObj: any;
     /** Stores account unique name */
     public accountUniqueName: string;
+    /** True if the ledger account supports multi-currency */
     public isLedgerAccountAllowsMultiCurrency: boolean = false;
-    public tcsOrTds: 'tcs' | 'tds' = 'tcs';
-    public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
-    constructor(private generalService: GeneralService, private breakpointObserver: BreakpointObserver
-        , private store: Store<AppState>, private settingsBranchAction: SettingsBranchActions
-        , private changeDetectorRef: ChangeDetectorRef, private ledgerComponentStore: LedgerComponentStore,
-        private ledgerActions: LedgerActions, private dialog: MatDialog, private route: ActivatedRoute,
-        private settingIntegrationComponentStore: SettingIntegrationComponentStore, private ledgerService: LedgerService,
+
+    constructor(private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver
+        , private store: Store<AppState>,
+        private settingsBranchAction: SettingsBranchActions
+        , private changeDetectorRef: ChangeDetectorRef,
+        private ledgerComponentStore: LedgerComponentStore,
+        private ledgerActions: LedgerActions,
+        private dialog: MatDialog,
+        private route: ActivatedRoute,
+        private settingIntegrationComponentStore: SettingIntegrationComponentStore,
+        private ledgerService: LedgerService,
 
     ) {
     }
 
+    /**
+    * Angular lifecycle hook: Called once after component initialization
+    *
+    * @memberof LedgerStatementComponent
+    */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('ledger-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -243,14 +287,10 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                // this.getBankTransactions();
                 let accountDetails: AccountResponse | AccountResponseV2 = data[0];
-                let parentOfAccount = (accountDetails?.parentGroups?.length) ? accountDetails?.parentGroups[0] : null;
-
                 this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
                 this.accountUniqueName = accountDetails?.uniqueName;
 
-                // this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
                 if (accountDetails?.currency && profile?.baseCurrency) {
                     this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
                 } else {
@@ -270,29 +310,8 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                 this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
                 this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
                 this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
-
-                // tcs tds identification
-                if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount?.uniqueName)) {
-                    this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount?.uniqueName) ? 'tds' : 'tcs';
-
-                    // for tcs and tds identification
-                    if (this.tcsOrTds === 'tcs') {
-                        this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
-                    } else {
-                        this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
-                    }
-                }
-                // profile.userEntityRoles?.forEach(role => {
-                //     const scopes = role.role.scopes;
-                //     if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
-                //         this.hasIntegrationScope = true;
-                //     }
-                // });
-                // if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                //     this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
-                // }
-                this.changeDetectorRef.detectChanges();
             }
+            this.changeDetectorRef.detectChanges();
         });
 
         observableCombineLatest([
@@ -312,7 +331,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                     this.reconcileClosingBalanceForBank = { ...lt.closingBalanceForBank }; // Clone for OnPush
                     this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
                 }
-                
+
                 if (this.ledgerView === LedgerViewEnum.TView) {
                     const debitTransactions = lt.debitTransactions ?? [];
                     const creditTransactions = lt.creditTransactions ?? [];
@@ -322,8 +341,23 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                         ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
                         ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
                     ]);
-                } 
+                }
                 this.lc.currentPage = lt.page;
+                setTimeout(() => {
+                    this.paginationObject = {
+                        totalItems: lt.totalPages * lt.count,
+                        itemsPerPage: lt.count,
+                        page: lt.page,
+                        totalPages: lt.totalPages,
+                        showPagination: (lt.totalPages > 1) ? true : false,
+                        prevToken: lt.prevToken,
+                        nextToken: lt.nextToken
+                    };
+
+                    if (!this.changeDetectorRef['destroyed']) {
+                        this.changeDetectorRef.detectChanges();
+                    }
+                }, 400);
             }
 
             // Logic from the second observable (store.select(p => p.ledger.ledgerTransactionsBalance))
@@ -352,17 +386,22 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Track by function for normal transactions
- *
- * @param {number} index Current normal transaction index
- * @param {*} transaction Normal transaction data
- * @return {*}  {string} Unique name
- * @memberof LedgerComponent
- */
+    * Track by function for normal transactions
+    *
+    * @param {number} index Current normal transaction index
+    * @param {*} transaction Normal transaction data
+    * @return {*}  {string} Unique name
+    * @memberof LedgerStatementComponent
+    */
     public trackByTransactionUniqueName(index: number, transaction: any): string {
         return transaction?.entryUniqueName;
     }
 
+    /**
+    * Resets the blank ledger transaction object based on organization type and branches
+    *
+    * @memberof LedgerStatementComponent
+    */
     public resetBlankTransaction() {
         this.lc.blankLedger = this.lc.getBlankLedger();
         this.lc.blankLedger.transactions =
@@ -375,21 +414,25 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
     }
 
+    /**
+    * Initializes the transaction request object
+    *
+    * @param {string} accountUnq Account unique name
+    * @memberof LedgerStatementComponent
+    */
     public initTrxRequest(accountUnq: string) {
 
     }
 
     /**
- * Shows the attachments popup
- *
- * @param {TemplateRef<any>} templateRef
- * @param {*} transaction
- * @memberof LedgerComponent
- */
+    * Shows the attachments popup dialog for a transaction
+    *
+    * @param {TemplateRef<any>} templateRef Reference to the template
+    * @param {*} transaction Transaction data for which attachments are shown
+    * @memberof LedgerStatementComponent
+    */
     public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
         this.selectedItem = transaction;
-        console.log(this.selectedItem);
-        
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '790px',
@@ -403,10 +446,11 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This will get all connected bank accounts
-*
-* @memberof LedgerComponent
-*/
+    * Fetches all connected bank accounts
+    *
+    * @param {string} [accountUniqueName] Optional account unique name
+    * @memberof LedgerStatementComponent
+    */
     public getAllBankAccounts(accountUniqueName?: string): void {
         this.isBankAccountConnected = null;
         this.selectedAccountUniquename = accountUniqueName;
@@ -415,15 +459,27 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
 
 
 
+    /**
+    * Angular lifecycle hook: Called once just before the component is destroyed
+    *
+    * @memberof LedgerStatementComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
 
+    /**
+    * Angular lifecycle hook: Called when any data-bound property changes
+    *
+    * @param {SimpleChanges} changes Changes object
+    * @memberof LedgerStatementComponent
+    */
     public ngOnChanges(changes: SimpleChanges): void {
         this.lc = new LedgerVM();
         this.trxRequest = new TransactionsRequest();
+        this.trxRequest.paginationToken = '';
         this.lc.blankLedger = this.lc.getBlankLedger();
         if (changes.activeAccountUniqueName && changes.activeAccountUniqueName.currentValue !== changes.activeAccountUniqueName.previousValue) {
             this.trxRequest.accountUniqueName = changes.activeAccountUniqueName.currentValue;
@@ -435,6 +491,11 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
     }
 
+    /**
+    * Fetches transaction data and updates ledger state
+    *
+    * @memberof LedgerStatementComponent
+    */
     public getTransactionData() {
         this.isLoading = true; // Set loading true when data fetching starts
         this.closingBalanceBeforeReconcile = null;
@@ -454,6 +515,12 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+    * Fetches and sets the currency exchange rate for the ledger
+    *
+    * @param {string} [mode] Mode for currency calculation (optional)
+    * @memberof LedgerStatementComponent
+    */
     public getCurrencyRate(mode: string = null) {
         let from: string;
         let to: string;
@@ -477,6 +544,16 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         }
     }
 
-    translationComplete(event: any) {
+    /**
+     * To change pagination page number
+     *
+     * @param {*} event Pagination change event
+     * @memberof LedgerStatementComponent
+     */
+    public pageChanged(event: any): void {
+        if (typeof event === 'string') {
+            this.trxRequest.paginationToken = event;
+            this.getTransactionData();
+        }
     }
 }

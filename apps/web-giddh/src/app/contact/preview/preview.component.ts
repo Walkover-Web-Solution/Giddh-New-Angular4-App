@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
+import { combineLatest, debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
@@ -209,39 +209,49 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        merge(this.activatedRoute.params, this.activatedRoute.queryParams).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
-            if (params) {
-                let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
-                this.activeGroupUniqueName$ = of(groupUniqueName);
-                this.parentGroupUniqueName = groupUniqueName;
+        combineLatest([
+            this.activatedRoute.params,
+            this.activatedRoute.queryParams
+        ])
+            .pipe(delay(0), takeUntil(this.destroyed$))
+            .subscribe(([params, queryParams]) => {
+                if (params) {
+                    let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
+                    this.activeGroupUniqueName$ = of(groupUniqueName);
+                    this.parentGroupUniqueName = groupUniqueName;
+                    this.params = params;
                 if (params?.accountUniqueName) {
                     this.activeAccountUniqueName = params?.accountUniqueName;
                     this.contactActiveTab = params?.type;
-                    this.params = params;
                     this.isSearching = false;
-                    this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
-                    this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
-                    this.subscribeStoreObservable();
+
                 }
-                if (params?.page) {
-                    this.queryParams = params;
-                    this.advanceFilters.page = Number(params.page);
-                    this.advanceFilters.count = params.count ? Number(params.count) : PAGINATION_LIMIT;
-                    this.advanceFilters.from = params.from ?? '';
-                    this.advanceFilters.to = params.to ?? '';
-                    const searchString = params.search;
+                if (queryParams?.page) {
+                    this.queryParams = queryParams;
+                    this.advanceFilters.page = Number(queryParams.page);
+                    this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
+                    this.advanceFilters.from = queryParams.from ?? '';
+                    this.advanceFilters.to = queryParams.to ?? '';
+                    this.advanceFilters.q = queryParams.q ?? '';
+                    this.advanceFilters.refresh = queryParams.refresh ?? true;
+                    if(queryParams.sort && queryParams.sortBy) {
+                        this.key = queryParams.sortBy;
+                        this.order = queryParams.sort;
+                    } else {
+                        this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
+                        this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
+                    }
+                    const searchString = queryParams.q;
                     if (searchString) {
                         this.search.setValue(searchString);
                     } else {
-                        this.getContactsList(this.params.from, this.params.to, null, "true", PAGINATION_LIMIT, this.params.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                        this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     }
                 }
             }
         });
 
         this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-            
             if (response && response.parentGroups[0]?.uniqueName) {
                 let col = response.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
@@ -278,14 +288,13 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 };
                 this.isSearching = true;
                 this.advanceFilters.q = search;
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.params.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
         this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response, this.selectedContact);
             if (response) {
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, null, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.params.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
@@ -334,7 +343,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
-        console.log(accRequestObject);
         accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
     }
@@ -380,9 +388,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.isLoadMore = false;
                 this.pageNumberHistory = [1];
                 this.advanceFilters = {
-                    page: 1,
-                    from: dayjs(response[0]).format(GIDDH_DATE_FORMAT),
-                    to: dayjs(response[1]).format(GIDDH_DATE_FORMAT),
+                    page: this.params.page,
+                    from: this.params.from,
+                    to: this.params.to,
                     count: PAGINATION_LIMIT,
                     q: '',
                     sort: '',
@@ -423,7 +431,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(
                     this.advanceFilters.from,
                     this.advanceFilters.to,
-                    null,
+                    this.params.page,
                     "true",
                     PAGINATION_LIMIT,
                     this.advanceFilters.q ?? '',
@@ -464,7 +472,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public setSelectedContact(accountUniqueName: string, isNewContactSelected: boolean = false): void {
-        console.log(accountUniqueName, isNewContactSelected, this.selectedContact);
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
         }
