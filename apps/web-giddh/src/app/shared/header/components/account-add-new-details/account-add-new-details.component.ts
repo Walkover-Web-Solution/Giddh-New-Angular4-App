@@ -1138,7 +1138,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 isValid = true;
             }
-console.log('call');
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
                 ele?.classList?.add('error-box');
@@ -1146,8 +1145,6 @@ console.log('call');
             } else {
                 ele?.classList?.remove('error-box');
                 this.isGstValid = true;
-                console.log('GST Number is valid');
-                
                 if (this.selectedCountryCode === 'IN') {
                     this.getGstConfirmationPopup();
                 }
@@ -1770,7 +1767,6 @@ console.log('call');
       * @memberof AccountAddNewDetailsComponent
       */
     public getGstConfirmationPopup(): void {
-        console.log('aao');
         let addresses = (this.addAccountForm.get('addresses') as FormArray).at(this.activeIndex);
         if (addresses?.get('gstNumber')?.value) {
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
