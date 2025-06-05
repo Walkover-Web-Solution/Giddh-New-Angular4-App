@@ -1888,26 +1888,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="form-group"
-                            *ngIf="
-                                customTemplate?.templateType === 'tally_template' ||
-                                (voucherType === 'sales' &&
-                                customTemplate.sections['footer'].data['taxBifurcation'])
-                            "
-                        >
-                            <div class="form-group">
-                                <input
-                                    type="checkbox"
-                                    name="taxBifurcationCheckbox"
-                                    [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
-                                    (ngModelChange)="
-                                        onChangeFieldVisibility(null, null, null);
-                                    "
-                                />
-                                Tax Bifurcation
-                            </div>
-                        </div>
                     </tbody>
                 </table>
             </div>
