@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: '[grid-row]',
@@ -62,7 +63,8 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         private renderer: Renderer2,
         @Inject(DOCUMENT) private document: Document,
         private router: Router,
-        private financialReportsComponentStore: FinancialReportsComponentStore
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private tlPlService: TlPlService
     ) {
         this.currentUrl = this.router.url;
     }
@@ -161,9 +163,14 @@ export class GridRowComponent implements OnChanges, OnDestroy {
      */
      public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
         const model = {
-            reportType: ReportType.TrialBalance,
+            request: {
+                reportType: ReportType.TrialBalance,
+                from: this.from,
+                to: this.to
+            },
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };
         this.financialReportsComponentStore.tailedReportAccountGroup(model);
+        this.tlPlService.isReportTailed$.next(true);
     }
 }

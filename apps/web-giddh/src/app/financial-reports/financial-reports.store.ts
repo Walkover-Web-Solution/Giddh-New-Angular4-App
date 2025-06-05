@@ -7,10 +7,12 @@ import { TlPlService } from "../services/tl-pl.service";
 
 export interface FinancialReportsState {
     tailedReportIsSuccess: boolean;
+    reconcileDateRange: { mode: boolean, fromDate: string, toDate: string } | null;
 }
 
 export const DEFAULT_LEDGER_STATE: FinancialReportsState = {
-    tailedReportIsSuccess: null
+    tailedReportIsSuccess: null,
+    reconcileDateRange: null
 };
 
 @Injectable()
@@ -23,6 +25,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
         super(DEFAULT_LEDGER_STATE);
     }
     public tailedReportIsSuccess$ = this.select((state) => state.tailedReportIsSuccess);
+    public reconcileDateRange$ = this.select((state) => state.reconcileDateRange);
 
     /**
      * Tailed report account group
@@ -35,7 +38,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ tailedReportIsSuccess: null });
-                return this.tlPlService.tailedReportAccountGroup(req.reportType, req.payload).pipe(
+                return this.tlPlService.tailedReportAccountGroup(req.request, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
@@ -56,6 +59,45 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
 
                             return this.patchState({
                                 tailedReportIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Get reconcile option
+     * 
+     * @memberof FinancialReportsComponentStore
+     */
+    readonly getReconcileDateRange = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ reconcileDateRange: undefined });
+                return this.tlPlService.getReconcileDateRange(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    reconcileDateRange: res?.body
+                                });
+                            } else {
+                                if (res?.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    reconcileDateRange: null,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+
+                            return this.patchState({
+                                reconcileDateRange: null
                             });
                         }
                     ),

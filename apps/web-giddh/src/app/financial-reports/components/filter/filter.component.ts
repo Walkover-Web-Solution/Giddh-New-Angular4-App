@@ -1,5 +1,5 @@
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -20,12 +20,17 @@ import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { ServiceConfig } from '../../../services/service.config';
+import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
+import { FinancialReportsComponentStore } from '../../financial-reports.store';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'financial-filter',
     templateUrl: './filter.component.html',
     styleUrls: [`./filter.component.scss`],
+    providers: [FinancialReportsComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
@@ -109,9 +114,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** True if show Tally Report options */
-    public showReportTallyOption: boolean = false;
+    public isReconciled: boolean | null = null;
+    /** Holds reconcile date range */
+    public isReconcileModeDateRange: string = null;
+    /** True if show reconcile options */
+    public showReconcileOptions: boolean = false;
+    /** True if show confirmation on date change */
+    public showConfirmationOnDateChange: boolean = false;
 
-    constructor(private fb: UntypedFormBuilder,
+    constructor(
+        private fb: UntypedFormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
@@ -120,7 +132,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private toaster: ToasterService,
-        @Inject(ServiceConfig) private serviceConfig
+        private componentStore: FinancialReportsComponentStore,
+        private dialog: MatDialog,
+        private tlPlService: TlPlService
     ) {
         this.filterForm = this.fb.group({
             from: [''],
@@ -179,6 +193,28 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.getTags();
+        this.componentStore.reconcileDateRange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.showConfirmationOnDateChange = true;
+                const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
+                const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
+                this.isReconcileModeDateRange = fromDate + ' - ' + toDate;
+                this.showReconcileOptions = this.filterForm.get('from')?.value === fromDate && this.filterForm.get('to')?.value === toDate;
+                this.cd.detectChanges();
+            } else if (response === null) {
+                this.showConfirmationOnDateChange = false;
+                this.isReconcileModeDateRange = null;
+                this.showReconcileOptions = true;
+                this.cd.detectChanges();
+            }
+        });
+        this.tlPlService.isReportTailed$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response !== null && response !== undefined) {
+                setTimeout(() => {
+                    this.getReconcileDateRange();
+                }, 200);
+            }
+        });
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -279,6 +315,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 }
             }
         });
+        this.isReconciled = false;
     }
 
     public setCurrentFY() {
@@ -310,16 +347,47 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
             let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
-            let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
-            if (financialYear) {
-                this.filterForm?.patchValue({
-                    to: financialYear.financialYearEnds,
-                    from: financialYear.financialYearStarts,
-                    fy: index === 0 ? 0 : index * -1
+            if (this.showConfirmationOnDateChange && !this.checkIsSameDateRange(financialYear?.financialYearStarts, financialYear?.financialYearEnds)) {
+                //show confirmation dialog
+                const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                    panelClass: ['mat-dialog-sm'],
+                    data: {
+                        configuration: this.generalService.deleteConfiguration(this.localeData?.reconcile_mode_turned_off_message, this.commonLocaleData)
+                    }
                 });
-                this.toDate = financialYear.financialYearEnds;
-                this.fromDate = financialYear.financialYearStarts;
-                this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
+                dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+                    if (response === this.commonLocaleData?.app_yes) {
+                        let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
+                        if (financialYear) {
+                            this.filterForm?.patchValue({
+                                to: financialYear.financialYearEnds,
+                                from: financialYear.financialYearStarts,
+                                fy: index === 0 ? 0 : index * -1
+                            });
+                            
+                            this.toDate = financialYear.financialYearEnds;
+                            this.fromDate = financialYear.financialYearStarts;
+                            this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
+                            this.showTallyReportOptions();
+                            this.filterData();
+                        }
+                    } else {
+                        this.filterForm?.get('selectedDateOption').patchValue('1');
+                        this.cd.detectChanges();
+                    }
+                });
+            } else {
+                let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
+                if (financialYear) {
+                    this.filterForm?.patchValue({
+                        to: financialYear.financialYearEnds,
+                        from: financialYear.financialYearStarts,
+                        fy: index === 0 ? 0 : index * -1
+                    });
+                    this.toDate = financialYear.financialYearEnds;
+                    this.fromDate = financialYear.financialYearStarts;
+                    this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
+                }
             }
         } else {
             this.filterForm?.patchValue({
@@ -332,12 +400,28 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Checks if the date range is the same
+     *
+     * @param {string} from
+     * @param {string} to
+     * @returns {boolean}
+     * @memberof FinancialReportsFilterComponent
+     */
+    private checkIsSameDateRange(from: string, to: string): boolean {
+        if (!from || !to) {
+            return false;
+        }
+        return this.filterForm.get('from')?.value === from && this.filterForm.get('to')?.value === to;
+    }
+
     public filterData() {
         this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
         this.onPropertyChanged.emit(this.filterForm?.value);
         // this will clear the search and reset it after we click apply --G0-2745
         let a = this.search = '';
         this.seachChange.emit(a);
+        this.getReconcileDateRange();
     }
 
     public refreshData() {
@@ -402,12 +486,36 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             } else {
                 const fromDate = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
-                this.filterForm?.patchValue({
-                    from: fromDate,
-                    to: toDate
-                });
-                this.fromDate = fromDate;
-                this.toDate = toDate;
+                if (this.showConfirmationOnDateChange && !this.checkIsSameDateRange(fromDate, toDate)) {
+                    const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                        panelClass: ['mat-dialog-sm'],
+                        data: {
+                            configuration: this.generalService.deleteConfiguration(this.localeData?.reconcile_mode_turned_off_message, this.commonLocaleData)
+                        }
+                    });
+                    dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+                        if (response === this.commonLocaleData?.app_yes) {
+                            this.filterForm?.patchValue({
+                                from: fromDate,
+                                to: toDate
+                            });
+                            this.fromDate = fromDate;
+                            this.toDate = toDate;
+                            this.showTallyReportOptions();
+                            this.filterData();
+                        } else {
+                            this.filterForm?.get('selectedDateOption').patchValue('0');
+                            this.cd.detectChanges();
+                        }
+                    });
+                } else {
+                    this.filterForm?.patchValue({
+                        from: fromDate,
+                        to: toDate
+                    });
+                    this.fromDate = fromDate;
+                    this.toDate = toDate;
+                }
             }
         }
     }
@@ -456,7 +564,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof FinancialReportsFilterComponent
      */
-    public dateSelectedCallback(value?: any): void {
+    public dateSelectedCallback(value?: any): void {        
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
@@ -468,12 +576,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            const isDifferentDate = !this.checkIsSameDateRange(value.startDate, value.endDate);
+
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
+            if (isDifferentDate) {
+                this.showTallyReportOptions();
+                this.filterData();
+            }
         }
     }
 
@@ -525,7 +639,41 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public showTallyReportOptions(): void {
-        this.showReportTallyOption = !this.showReportTallyOption;
-        this.showReportTally.emit(this.showReportTallyOption);
+        this.isReconciled = !this.isReconciled;
+        this.showReportTally.emit(this.isReconciled);
+    }
+
+    /**
+     * Get reconcile mode date range
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public getReconcileDateRange(): void {
+        let reportType = ReportType.TrialBalance;
+        if (this.BsExportXLS) {
+            reportType = ReportType.BalanceSheet;
+        } else if (this.plBsExportXLS) {
+            reportType = ReportType.ProfitLoss;
+        }
+        this.componentStore.getReconcileDateRange(reportType);
+    }
+
+    /**
+     * Go to reconcile mode date range
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public goToReconcileDateRange(): void {
+        this.componentStore.reconcileDateRange$.pipe(take(1)).subscribe(response => {
+            if (response) {
+                const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
+                const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
+                this.filterForm.get('from').setValue(fromDate);
+                this.filterForm.get('to').setValue(toDate);
+                this.filterForm?.get('selectedDateOption').patchValue('1');
+                this.filterData();
+                this.cd.detectChanges();
+            }
+        });
     }
 }

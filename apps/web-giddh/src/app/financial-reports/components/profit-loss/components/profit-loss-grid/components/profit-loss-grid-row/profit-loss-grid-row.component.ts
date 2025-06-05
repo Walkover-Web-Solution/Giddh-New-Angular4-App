@@ -7,6 +7,7 @@ import {
 import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
+import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 
 @Component({
     selector: '[profit-loss-grid-row]',
@@ -33,7 +34,7 @@ export class ProfitLossGridRowComponent implements OnChanges {
     /** Hold current url */
     private currentUrl: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService) {
         this.currentUrl = this.router.url;
     }
 
@@ -108,9 +109,14 @@ export class ProfitLossGridRowComponent implements OnChanges {
      */
     public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
         const model = {
-            reportType: ReportType.ProfitLoss,
+            request: {
+                reportType: ReportType.ProfitLoss,
+                from: this.from,
+                to: this.to
+            },
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };
         this.financialReportsComponentStore.tailedReportAccountGroup(model);
+        this.tlPlService.isReportTailed$.next(true);
     }
 }
