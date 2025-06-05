@@ -370,5 +370,6 @@
     "generate_auto_purchase_number":"Allow system generated number for Bill and Debit note",
     "new_receipt": "+ New Receipt",
     "new_payment": "+ New Payment",
-    "cancel_voucher_confirmation_message": "Are you sure you want to cancel this voucher?"
+    "cancel_voucher_confirmation_message": "Are you sure you want to cancel this voucher?",
+    "delete_email_confirmation_message": "Are you sure you want to delete this email?"
 }

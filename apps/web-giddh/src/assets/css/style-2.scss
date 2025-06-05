@@ -4192,6 +4192,12 @@ a.btn.btn-xs.btn-link.pull-right {
 .w125 {
     width: 125px !important;
 }
+.w150 {
+    width: 150px !important;
+}
+.w200 {
+    width: 200px !important;
+}
 
 .multi-select {
     position: relative;
@@ -4778,7 +4784,7 @@ label {
     color: var(--dark-blue01) !important;
 }
 
-.calc-width {
+.adjusted-content-width {
     width: calc(100% - 112px) !important;
 }
 
@@ -7884,7 +7890,7 @@ app-header {
 
 #middleBody .horizontal-form,
 .view-forms .horizontal-form {
-    max-width: 660px;
+    max-width: var(--aside-pane-width) !important;
     width: 100%;
 }
 
@@ -13978,4 +13984,8 @@ mat-list {
 
 .w150 {
     width: 150px !important;
+}
+
+.bg-white {
+    background: var(--color-white) !important;
 }
