@@ -1748,7 +1748,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let addresses = (this.addAccountForm.get('addresses') as FormArray).at(this.activeIndex);
         if (addresses?.get('gstNumber')?.value) {
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (!result?.body) {
+                if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                         width: '40%',
                         data: {
