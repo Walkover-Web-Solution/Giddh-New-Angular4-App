@@ -1,0 +1,58 @@
+.wrapper-background {
+    padding: 5px 0;
+    background-color: var(--color-common-quinary-background-for-all-components);
+}
+.search-field {
+    i {
+        top: 10px;
+        left: 10px;
+    }
+
+    .form-control {
+        padding-left: 15px !important;
+    }
+}
+
+.invoice-preview-wrapper {
+    display: flex;
+    height: calc(100vh - (var(--header-height) + 30px));
+
+    .preview-list {
+        width: 25%;
+
+        .contact-list {
+            height: calc(100vh - 185px);
+        }
+
+        .single-invoice-detail {
+
+            &:hover,
+            &.active {
+                background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
+            }
+        }
+    }
+
+    .preview-content {
+        width: 100%;
+        overflow-y: auto;
+
+        .preview-header {
+            background-color: var(--color-primary-invoice-preview-details-background);
+        }
+
+        .account-details-wrapper {
+            margin: 0 auto;
+            width: 768px;
+        }
+        .account-statement-wrapper {
+            margin: 0 auto;
+            width: 1280px;
+        }
+    }
+}
+@media screen and (max-width: 1199px) {
+    .list-responsive {
+        flex-wrap: wrap;
+    }
+}

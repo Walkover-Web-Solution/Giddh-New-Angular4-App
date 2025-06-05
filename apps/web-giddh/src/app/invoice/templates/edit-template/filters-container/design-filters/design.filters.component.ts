@@ -40,9 +40,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public selectedTemplateUniqueName: string = 'gst_template_a';
     public _presetFonts = [
         { label: 'Open Sans', value: 'Open Sans' },
-        { label: 'Roboto', value: 'Roboto' },
-        { label: 'Lato', value: 'Lato' },
-        { label: 'Inter', value: 'Inter' }
+        { label: 'Sans-Serif', value: 'Sans-Serif' },
+        { label: 'opensans-regular', value: 'opensans-regular' }
     ];
     public _presetFontsSize = [
         { label: '16px', value: 16 },
@@ -426,7 +425,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     /**
      * * This is used when the user changes the template.
      */
-    public showMessage(): void {
+    public showMessage(): void{
         this._toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
     }
 }

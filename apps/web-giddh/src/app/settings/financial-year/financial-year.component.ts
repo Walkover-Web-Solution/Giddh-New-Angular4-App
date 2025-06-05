@@ -3,7 +3,7 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
-import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';

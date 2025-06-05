@@ -84,11 +84,16 @@
         </account-add-new-details>
 
         <!--account update component-->
-
+                                {{(activeGroupUniqueName$ | async)}}
+                                {{isGstEnabledAcc}}
+                                {{isHsnSacEnabledAcc}}
+                                showBankDetail: {{showBankDetail}}
+                                showVirtualAccount: {{showVirtualAccount}}
+                                isDebtorCreditor: {{isDebtorCreditor}}
         <account-update-new-details
             *ngIf="(activeAccount$ | async) && (showEditAccount$ | async)"
             [activeAccount$]="activeAccount$"
-            [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+            [activeGroupUniqueName]="(activeGroupUniqueName$ | async)"
             [isGstEnabledAcc]="isGstEnabledAcc"
             [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
             [updateAccountInProcess$]="updateAccountInProcess$"

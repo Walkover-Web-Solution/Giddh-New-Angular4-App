@@ -407,7 +407,7 @@ export const initialState: CustomTemplateState = {
                 }
             }
         },
-        font: 'Inter',
+        font: 'open sans',
         topMargin: 10,
         leftMargin: 10,
         rightMargin: 10,

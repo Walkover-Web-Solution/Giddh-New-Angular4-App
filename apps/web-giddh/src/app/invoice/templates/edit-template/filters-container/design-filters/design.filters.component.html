@@ -116,18 +116,19 @@
                 <i class="icon-template_edit tab-expanded"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
                     <div class="logo-tool">
-                        <span class="logo-preview">
+                        <span class="logo-preview" [class.cursor-disable]="isFileUploaded">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
                                 <input
                                     type="file"
                                     #fileInput
                                     accept="image/png, image/jpeg"
                                     id="logo-edit"
+                                    [disabled]="isFileUploaded"
                                     (change)="uploadLogo()"
                                 />
                                 <small>Upload Your Logo</small>
                             </label>
-                            <label for="logo-edit">
+                            <label for="logo-edit" [class.cursor-disable]="isFileUploaded">
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
                             </label>
                         </span>
@@ -142,7 +143,7 @@
                             Delete
                         </button>
                         <div class="pull-left mr-l1 mr-t1 choose-size">
-                            <div class="d-block">
+                            <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
                                 <input
                                     [(ngModel)]="defaultImageSize"
@@ -150,6 +151,7 @@
                                     type="radio"
                                     id="fontS"
                                     value="S"
+                                    [disabled]="isFileUploaded"
                                     (click)="onValueChange('logoSize', '60')"
                                     checked
                                 />
@@ -160,6 +162,7 @@
                                     type="radio"
                                     id="fontM"
                                     value="M"
+                                    [disabled]="isFileUploaded"
                                     (click)="onValueChange('logoSize', '80')"
                                 />
                                 <label for="fontM">M</label>
@@ -169,6 +172,7 @@
                                     type="radio"
                                     id="fontL"
                                     value="L"
+                                    [disabled]="isFileUploaded"
                                     (click)="onValueChange('logoSize', '100')"
                                 />
                                 <label for="fontL">L</label>
@@ -176,6 +180,8 @@
                             <div class="d-block">
                                 <a
                                     class="primary-color"
+                                    [attr.disabled]="isFileUploaded"
+                                    [class.cursor-disable]="isFileUploaded"
                                     [hidden]="!logoAttached"
                                     (click)="toogleLogoVisibility()"
                                     ><span [hidden]="showLogo">Show</span><span [hidden]="!showLogo">Hide</span> logo</a

@@ -632,7 +632,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
-
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 this.ledgerAccountResponse = ledgerAccount;

@@ -4,3 +4,13 @@ export const CONTACT_API = {
     BANKACCOUNTS_REFRESH: 'company/:companyUniqueName/gocardless/refresh?accountUniqueName=:accountUniqueName',
     GOCARDLESS_BANK_TRANSACTIONS_REFRESH: 'company/:companyUniqueName/gocardless/refresh?accountUniqueName=:accountUniqueName'
 };
+
+export const ACCOUNT_STATEMENT_API = {
+    GET: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/view-statement?count=:count&lang=en&from=:from&to=:to&sort=:sort&page=:page&q=:q'
+}
+
+
+
+
+
+

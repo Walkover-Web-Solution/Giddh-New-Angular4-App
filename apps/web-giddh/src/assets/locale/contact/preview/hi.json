@@ -1,0 +1,19 @@
+{
+  "statement_of_accounts": "खातों का विवरण",
+  "account_summary": "खाता सारांश",
+  "opening_balance": "प्रारंभिक शेष",
+  "invoiced_amount": "चालान राशि",
+  "amount_paid": "भुगतान की गई राशि",
+  "balance_due": "बाकी शेष",
+  "date": "तारीख",
+  "transactions": "लेन-देन",
+  "details": "विवरण",
+  "amount": "राशि",
+  "payments": "भुगतान",
+  "balance": "शेष",
+  "no_account_statements_found": "दिए गए मानदंडों के लिए कोई खाता विवरण नहीं मिला।",
+  "transaction": "लेन-देन",
+  "statement": "विवरण",
+  "account_details": "खाता विवरण",
+  "user_not_found_message": "उपयोगकर्ता नहीं मिला। जानकारी देखने के लिए कृपया ग्राहक बदलें।"
+}
