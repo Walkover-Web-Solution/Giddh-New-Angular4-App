@@ -2822,7 +2822,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Deletes an email by email ID
+     * Deletes email ID
      *
      * @param {string} emailId
      * @return {*}
@@ -2831,16 +2831,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public deleteEmail(emailId: string) {
         if (!emailId) {
             return false;
-        } else {
-            if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                this.updateSettingsEmail(null);
-                return true;
-            } else {
-                let emailTodelete = cloneDeep(emailId);
-                emailTodelete = null;
-                this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+        } 
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.delete_email_confirmation_message, this.commonLocaleData)
             }
-        }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    this.updateSettingsEmail(null);
+                    return true;
+                } else {
+                    this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(null)); // send null to delete email
+                }
+            }
+        });
     }
 
     /**
@@ -3197,7 +3206,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
    * @memberof VoucherListComponent
    */
     public shouldDeleteEmail(voucherType?: string): boolean {
-        const email = voucherType === 'invoice ' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
+        const email = voucherType === 'invoice' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
         return email && email.length >= 4;
     }
 }
