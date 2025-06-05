@@ -52,6 +52,8 @@ import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { LedgerModule } from '../ledger/ledger.module';
+import { MatCardModule } from '@angular/material/card';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -114,7 +116,8 @@ import { LedgerModule } from '../ledger/ledger.module';
         LedgerStatementModule,
         MatSortModule,
         MatPaginatorModule,
-        LedgerModule
+        LedgerModule,   
+        MatCardModule
     ],
     providers: [
         GiddhCurrencyPipe

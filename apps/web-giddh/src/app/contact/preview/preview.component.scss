@@ -1,3 +1,7 @@
+.wrapper-background {
+    padding: 5px 0;
+    background-color: var(--color-common-quinary-background-for-all-components);
+}
 .search-field {
     i {
         top: 10px;
@@ -14,7 +18,7 @@
     height: calc(100vh - (var(--header-height) + 30px));
 
     .preview-list {
-        width: 35%;
+        width: 25%;
 
         .contact-list {
             height: calc(100vh - 185px);
@@ -30,7 +34,7 @@
     }
 
     .preview-content {
-        width: 65%;
+        width: 100%;
         overflow-y: auto;
 
         .preview-header {
@@ -40,6 +44,10 @@
         .account-details-wrapper {
             margin: 0 auto;
             width: 768px;
+        }
+        .account-statement-wrapper {
+            margin: 0 auto;
+            width: 1280px;
         }
     }
 }

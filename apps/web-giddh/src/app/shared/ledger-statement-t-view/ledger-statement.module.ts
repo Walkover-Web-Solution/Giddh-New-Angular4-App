@@ -26,6 +26,9 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 import { LedgerStatementComponent } from "./ledger-statement.component";
 import { ValidateSectionPermissionDirectiveModule } from '../validate-section-permission/validate-section-permission.module';
+import { ParticularPipeModule } from '../../ledger/pipes/particular/particular.module';
+import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
 
 @NgModule({
     declarations: [LedgerStatementComponent],
@@ -58,7 +61,9 @@ import { ValidateSectionPermissionDirectiveModule } from '../validate-section-pe
         WatchVideoModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        ParticularPipeModule,
+        AmountFieldComponentModule,
     ],
     exports: [LedgerStatementComponent]
 })

@@ -80,7 +80,8 @@ import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-
     exports: [
         LedgerComponent,
         LedgerAsidePaneComponent,
-        AdvanceSearchModelComponent
+        AdvanceSearchModelComponent,
+        AttachmentsModule
     ],
     providers: [],
     imports: [

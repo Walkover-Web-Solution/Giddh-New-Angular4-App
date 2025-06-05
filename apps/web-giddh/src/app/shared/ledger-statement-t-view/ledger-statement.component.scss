@@ -2,6 +2,11 @@
     border: 1px solid var(--color-common-primary-border);
     border-bottom: none !important;
 
+    .content-wrapper-statement {
+        position: relative;
+        z-index: 1;
+    }
+
     .ledger-book {
         box-shadow: none;
 

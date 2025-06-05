@@ -88,53 +88,67 @@
                         [disableRipple]="true"
                         class="table-header-sticky"
                     >
-                        <mat-tab [label]="localeData?.transaction">
-                            <ledger-statement
-                                *ngIf="selectedContact?.uniqueName && !isContactNotFound"
-                                [activeAccountUniqueName]="selectedContact?.uniqueName"
-                                [from]="queryParams.from"
-                                [to]="queryParams.to"
-                            ></ledger-statement>
-                            <div class="account-details-wrapper">
-                                <div class="no-data" *ngIf="isContactNotFound">
-                                    <h1>{{ localeData?.user_not_found_message }}</h1>
+                        <mat-tab [label]="localeData?.statement">
+                            <div class="wrapper-background">
+                                <div class="account-statement-wrapper pd-t15 pd-b15">
+                                    <mat-card class="pd-15">
+                                        <account-statement
+                                            *ngIf="selectedContact?.uniqueName && !isContactNotFound"
+                                            [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [from]="queryParams.from"
+                                            [to]="queryParams.to"
+                                        ></account-statement>
+                                        <div class="no-data" *ngIf="isContactNotFound">
+                                            <h1>{{ localeData?.user_not_found_message }}</h1>
+                                        </div>
+                                    </mat-card>
                                 </div>
                             </div>
                         </mat-tab>
-                        <mat-tab [label]="localeData?.statement">
-                            <account-statement
-                                *ngIf="selectedContact?.uniqueName && !isContactNotFound"
-                                [activeAccountUniqueName]="selectedContact?.uniqueName"
-                                [from]="queryParams.from"
-                                [to]="queryParams.to"
-                            ></account-statement>
-                            <div class="account-details-wrapper">
-                                <div class="no-data" *ngIf="isContactNotFound">
-                                    <h1>{{ localeData?.user_not_found_message }}</h1>
+                        <mat-tab [label]="localeData?.transaction">
+                            <div class="wrapper-background">
+                                <div class="account-statement-wrapper pd-t15 pd-b15">
+                                    <mat-card>
+                                        <ledger-statement
+                                            *ngIf="selectedContact?.uniqueName && !isContactNotFound"
+                                            [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [from]="queryParams.from"
+                                            [to]="queryParams.to"
+                                        ></ledger-statement>
+                                        <div class="account-details-wrapper">
+                                            <div class="no-data" *ngIf="isContactNotFound">
+                                                <h1>{{ localeData?.user_not_found_message }}</h1>
+                                            </div>
+                                        </div>
+                                    </mat-card>
                                 </div>
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.account_details">
-                            <div class="account-details-wrapper">
-                                <account-update-new-details
-                                    *ngIf="(activeAccount$ | async) && !isContactNotFound"
-                                    [activeAccount$]="activeAccount$"
-                                    [activeGroupUniqueName]="parentGroupUniqueName"
-                                    [isGstEnabledAcc]="isGstEnabledAcc"
-                                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                                    [updateAccountInProcess$]="updateAccountInProcess$"
-                                    (isGroupSelected)="isGroupSelected($event)"
-                                    [accountDetails]="accountDetails"
-                                    [updateAccountIsSuccess$]="updateAccountIsSuccess$"
-                                    (deleteClicked)="showDeleteAccountModal()"
-                                    (submitClicked)="updateAccount($event)"
-                                    [showBankDetail]="showBankDetail"
-                                    [showVirtualAccount]="showVirtualAccount"
-                                    [isDebtorCreditor]="isDebtorCreditor"
-                                >
-                                </account-update-new-details>
-                                <div class="no-data" *ngIf="isContactNotFound">
-                                    <h1>{{ localeData?.user_not_found_message }}</h1>
+                            <div class="wrapper-background">
+                                <div class="account-details-wrapper pd-t15 pd-b15 pd-l05 pd-r05">
+                                    <mat-card class="pd-15">
+                                        <account-update-new-details
+                                            *ngIf="(activeAccount$ | async) && !isContactNotFound"
+                                            [activeAccount$]="activeAccount$"
+                                            [activeGroupUniqueName]="parentGroupUniqueName"
+                                            [isGstEnabledAcc]="isGstEnabledAcc"
+                                            [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                                            [updateAccountInProcess$]="updateAccountInProcess$"
+                                            (isGroupSelected)="isGroupSelected($event)"
+                                            [accountDetails]="accountDetails"
+                                            [updateAccountIsSuccess$]="updateAccountIsSuccess$"
+                                            (deleteClicked)="showDeleteAccountModal()"
+                                            (submitClicked)="updateAccount($event)"
+                                            [showBankDetail]="showBankDetail"
+                                            [showVirtualAccount]="showVirtualAccount"
+                                            [isDebtorCreditor]="isDebtorCreditor"
+                                        >
+                                        </account-update-new-details>
+                                        <div class="no-data" *ngIf="isContactNotFound">
+                                            <h1>{{ localeData?.user_not_found_message }}</h1>
+                                        </div>
+                                    </mat-card>
                                 </div>
                             </div>
                         </mat-tab>

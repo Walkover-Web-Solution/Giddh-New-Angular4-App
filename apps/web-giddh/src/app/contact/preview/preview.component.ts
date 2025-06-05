@@ -240,6 +240,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            
             if (response && response.parentGroups[0]?.uniqueName) {
                 let col = response.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
@@ -443,7 +445,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     ? [...this.contactList, ...currentContactList]
                     : [...currentContactList, ...this.contactList];
             }
-            this.isLoadMore = false;
             this.getAllApiCallCount++;
             this.changeDetection.detectChanges();
 
@@ -463,6 +464,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public setSelectedContact(accountUniqueName: string, isNewContactSelected: boolean = false): void {
+        console.log(accountUniqueName, isNewContactSelected, this.selectedContact);
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
         }
