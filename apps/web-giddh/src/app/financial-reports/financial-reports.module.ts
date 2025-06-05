@@ -49,7 +49,6 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
-import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
