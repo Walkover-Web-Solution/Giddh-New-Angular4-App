@@ -8,5 +8,6 @@
     "tag_name": "टॅग नाव",
     "tag_description": "टॅग वर्णन (पर्यायी)",
     "reconcile_mode": "रिकन्साईल मोड",
-    "switch_back_to_reconcile_mode": "रिकन्साईल मोडवर परत जा"
+    "switch_back_to_reconcile_mode": "रिकन्साईल मोडवर परत जा",
+    "reconcile_mode_turned_off_message": "तारीख बदलल्यास रिकन्साईल मोड बंद होईल. तुम्हाला पुढे चालू ठेवायचे आहे का?"
 }

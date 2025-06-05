@@ -9,6 +9,7 @@
         [style.padding-left]="padding + 'px !important'"
     >
         <mat-checkbox
+            *ngIf="!groupDetail.customGroup"
             color="primary"
             (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
             [(ngModel)]="groupDetail.checked"

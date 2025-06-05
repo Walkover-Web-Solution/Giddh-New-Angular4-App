@@ -41,6 +41,10 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public locale: any;
     @Input() public selectedRangeLabel: any;
     @Input() public dateFieldPosition: any;
+    /** True, when show confirmation on change is enabled */
+    @Input() public showConfirmationOnChange: boolean = false;
+    /** Confirmation message to be shown when show confirmation on change is enabled */
+    @Input() public confirmationMessage: string = '';
     /* This will take input if datepicker position needs to be updated on window scroll or not */
     @Input() public updatePosition: boolean = true;
 
