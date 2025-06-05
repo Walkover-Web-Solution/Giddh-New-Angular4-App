@@ -86,7 +86,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ProfitLossExportXlsComponent,
         FinancialReportsFilterComponent
     ],
-    providers: [ProjectAccountingService],
+
     imports: [
         CommonModule,
         ModalModule.forRoot(),

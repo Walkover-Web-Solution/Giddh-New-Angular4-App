@@ -28,6 +28,7 @@ import { SettingsFinancialYearActions } from '../../actions/settings/financial-y
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
+import { ServiceConfig } from '../../services/service.config';
 
 export enum DateType {
     start = 'start',
@@ -272,7 +273,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         private store: Store<AppState>, 
         private settingsFinancialYearActions: SettingsFinancialYearActions, 
         private dialog: MatDialog, 
-        private generalService: GeneralService 
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();

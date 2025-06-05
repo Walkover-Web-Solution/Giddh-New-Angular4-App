@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -25,6 +25,7 @@ import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'financial-filter',
@@ -134,7 +135,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private componentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private tlPlService: TlPlService
+        private tlPlService: TlPlService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.filterForm = this.fb.group({
             from: [''],
