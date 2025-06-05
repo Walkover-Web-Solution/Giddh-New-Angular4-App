@@ -597,7 +597,49 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
 
+        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.router.url.includes('ledger') && this.lc.accountUnq) {
+                this.getAllBankAccounts(this.lc.accountUnq);
+                this.isDirectlyIntegrated = true;
+                this.componentStore.setState(state => ({
+                    ...state,
+                    requisitionList: null
+                }));
+            }
+        });
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const referNo = localStorage.getItem('refNo');
+                if (referNo !== null && referNo !== undefined) {
+                    setTimeout(() => {
+                        this.componentStore.getRequisition(referNo);
+                    }, 100);
+                }
+            }
+        };
+
+        if (this.generalService.voucherApiVersion === 2) {
+            this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+                if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
+                    this.enableAutopaid = true;
+                    this.isSundryDebtorCreditor = true;
+                } else {
+                    this.enableAutopaid = false;
+                    this.isSundryDebtorCreditor = false;
+                }
+            });
+        } else {
+            this.enableAutopaid = false;
+        }
 
         if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
             this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
@@ -954,8 +996,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.trxRequest.page = 0;
                 this.needToShowLoader = false;
                 if (term || this.trxRequest.q || searchCleared) {
-                    console.log("called");
-                    
                     this.trxRequest.paginationToken = "";
                     this.getTransactionData();
                     // this.getLedgerStatementViewGridColumnsValue(); // New Code
@@ -963,8 +1003,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             });
 
         this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
-            console.log(yesOrNo);
-            
             if (yesOrNo) {
                 this.getTransactionData();
             } else if (this.trxRequest?.accountUniqueName) {
@@ -1092,8 +1130,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
 
         this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-            
             if (response) {
                 if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
                     this.getAdvanceSearchTxn();
