@@ -188,7 +188,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
     /** Hold active index of form group */
-    public activeIndex: number;
+    public activeIndex: number = 0;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current currency is not company currency */
@@ -1138,7 +1138,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 isValid = true;
             }
-
             if (!isValid) {
                 this._toaster.errorToast('Invalid ' + this.formFields['taxName']?.label);
                 ele?.classList?.add('error-box');
