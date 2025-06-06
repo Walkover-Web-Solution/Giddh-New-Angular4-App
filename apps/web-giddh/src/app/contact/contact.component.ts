@@ -1780,7 +1780,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             refresh: false
         };
 
-        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        const searchString = this.advanceFilters.q;
         if (searchString?.length) {
             queryParams['search'] = searchString;
         };

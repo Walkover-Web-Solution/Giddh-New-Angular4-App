@@ -124,8 +124,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         });
 
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search || search === '') {
-                this.accountListRequest.q = search;
+            const searchValue = search?.trim();
+            if (searchValue || searchValue === '') {
+                this.accountListRequest.q = searchValue;
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
                 this.getAccountStatementList();
@@ -144,7 +145,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         if (fieldName === "transactionsField") {
             this.showTransactionInput = true;
         }
-
         event.stopPropagation();
     }
 
@@ -170,7 +170,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.showTransactionInput = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
-        
+
         if (!onlyResetValue) {
             this.getAccountStatementList();
         }
@@ -196,8 +196,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public setDefaultParam(): void {
         if (this.activeAccountUniqueName) {
+            this.transactionInput.patchValue(null, { emitEvent: false });
+            this.showTransactionInput = false;
+            this.advanceFiltersApplied = false;
+            this.isSearching = false;
             this.accountListRequest.accountUniqueName = this.activeAccountUniqueName;
             this.accountListRequest.count = this.pageSizeOptions[1];
+            this.accountListRequest.page = 1;
+            this.accountListRequest.q = '';
             this.accountListRequest.sort = 'asc';
             this.accountListRequest.from = this.from;
             this.accountListRequest.to = this.to;
@@ -219,16 +225,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public closeAdvanceSearchPopup(event: any) {
         this.advanceSearchDialogRef?.close();
-        if (!event.isClose) {
-            if (event.advanceSearchData) {
-                this.advanceFiltersApplied = true;
-                if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
-                    this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
-                    this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                }
-                this.advanceSearchRequest = event.advanceSearchData.dataToSend;
-                this.getAccountStatementList();
+        if (!event.isClose && event.advanceSearchData) {
+            this.advanceFiltersApplied = true;
+            if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
+                this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
+                this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
+            this.advanceSearchRequest = event.advanceSearchData.dataToSend;
+            this.getAccountStatementList();
         }
     }
 
@@ -281,19 +285,19 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public sortData(event: any): void {
-        this.accountListRequest.sort = event?.direction ? event?.direction : 'asc';
+        this.accountListRequest.sort = event?.direction ?? 'asc';
         this.accountListRequest.sortBy = event?.active;
         this.getAccountStatementList();
     }
 
     /**
-     * Lifecycle hook that is called when the component is destroyed.
-     * Cleans up subscriptions to prevent memory leaks.
+     * Lifecycle hook that is called when any data-bound property changes.
+     * Updates the component when activeAccountUniqueName input changes.
      *
      * @memberof AccountStatementComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.activeAccountUniqueName?.currentValue && changes?.activeAccountUniqueName?.currentValue !== changes?.activeAccountUniqueName?.previousValue ) {
+        if (changes?.activeAccountUniqueName?.currentValue && changes?.activeAccountUniqueName?.currentValue !== changes?.activeAccountUniqueName?.previousValue) {
             this.setDefaultParam();
         }
     }

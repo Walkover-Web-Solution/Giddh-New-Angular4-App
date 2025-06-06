@@ -3,7 +3,6 @@
     [file]="'contact/preview'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader
@@ -98,9 +97,9 @@
                                             [from]="queryParams.from"
                                             [to]="queryParams.to"
                                         ></account-statement>
-                                        <div class="no-data" *ngIf="isContactNotFound">
-                                            <h1>{{ localeData?.user_not_found_message }}</h1>
-                                        </div>
+                                        <ng-container *ngIf="isContactNotFound">
+                                            <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
+                                        </ng-container>
                                     </mat-card>
                                 </div>
                             </div>
@@ -115,11 +114,9 @@
                                             [from]="queryParams.from"
                                             [to]="queryParams.to"
                                         ></ledger-statement>
-                                        <div class="account-details-wrapper">
-                                            <div class="no-data" *ngIf="isContactNotFound">
-                                                <h1>{{ localeData?.user_not_found_message }}</h1>
-                                            </div>
-                                        </div>
+                                        <ng-container *ngIf="isContactNotFound">
+                                            <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
+                                        </ng-container>
                                     </mat-card>
                                 </div>
                             </div>
@@ -145,9 +142,9 @@
                                             [isDebtorCreditor]="isDebtorCreditor"
                                         >
                                         </account-update-new-details>
-                                        <div class="no-data" *ngIf="isContactNotFound">
-                                            <h1>{{ localeData?.user_not_found_message }}</h1>
-                                        </div>
+                                        <ng-container *ngIf="isContactNotFound">
+                                            <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
+                                        </ng-container>
                                     </mat-card>
                                 </div>
                             </div>
@@ -173,3 +170,10 @@
         </div>
     </div>
 </div>
+
+<!-- Single template for user not found -->
+<ng-template #noContactFound>
+    <div class="no-data">
+        <h1>{{ localeData?.user_not_found_message }}</h1>
+    </div>
+</ng-template>

@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../services/general.service';
-import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, } from "rxjs";
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, combineLatest, } from "rxjs";
 import { LedgerStatementComponentStore } from "./utility/ledger-statement.store";
 import { LedgerViewEnum, TLedgerView, TransactionsRequest } from "../../models/api-models/Ledger";
 import { OrganizationType } from "../../models/user-login-state";
@@ -178,7 +178,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private ledgerService: LedgerService,
-
+        private ledgerStatementStore: LedgerStatementComponentStore
     ) {
     }
 
@@ -190,7 +190,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('ledger-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
@@ -215,21 +215,18 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         });
 
         /** If this is true, it means we are in branch consolidated mode.  */
-        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+        this.ledgerStatementStore.isBranchConsolidated$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
-        this.store.pipe(
-            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
+        this.ledgerStatementStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
 
         if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
-            // this.showBranchSwitcher = true;
-            this.currentCompanyBranches$.subscribe(response => {
+            this.ledgerStatementStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.length) {
                     this.currentCompanyBranches = response.map(branch => ({
                         label: branch?.name,
@@ -272,117 +269,105 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             });
         }
 
-        observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data[0] && data[1]) {
-                let profile = cloneDeep(data[1]);
-                this.lc.activeAccount = data[0];
-                if (data[0]?.ledgerView) {
-                    this.ledgerView = data[0].ledgerView;
-                }
-
-                if (this.isBankAccount) {
-                    this.getAllBankAccounts();
-                }
-                this.profileObj = profile;
-                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
-                this.needToShowLoader = true;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                let accountDetails: AccountResponse | AccountResponseV2 = data[0];
-                this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
-                this.accountUniqueName = accountDetails?.uniqueName;
-
-                if (accountDetails?.currency && profile?.baseCurrency) {
-                    this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
-                } else {
-                    this.isLedgerAccountAllowsMultiCurrency = false;
-                }
-                this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
-                if (this.isLedgerAccountAllowsMultiCurrency) {
-                    this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
-                    this.getCurrencyRate();
-                } else {
-                    this.baseCurrencyDetails = this.foreignCurrencyDetails;
-                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
-                }
-                this.selectedCurrency = 0;
-
-                // assign multi currency details to new ledger component
-                this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
-                this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
-                this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
-            }
-            this.changeDetectorRef.detectChanges();
-        });
-
-        observableCombineLatest([
-            this.lc.transactionData$.pipe(takeUntil(this.destroyed$)),
-            this.store.pipe(select(p => p.ledger.ledgerTransactionsBalance), takeUntil(this.destroyed$)),
+        // Combine all observables in one stream
+        combineLatest([
+            this.ledgerStatementStore.activeAccount$.pipe(takeUntil(this.destroyed$)),
+            this.ledgerStatementStore.companyProfile$.pipe(takeUntil(this.destroyed$)),
+            this.ledgerStatementStore.transactionData$.pipe(takeUntil(this.destroyed$)),
+            this.ledgerStatementStore.ledgerTransactionsBalance$.pipe(takeUntil(this.destroyed$)),
             this.ledgerBalanceSuccess$.pipe(takeUntil(this.destroyed$))
-        ]).pipe(
-            takeUntil(this.destroyed$) // Ensures the combined subscription is also cleaned up
-        ).subscribe(([lt, txnBalance, ledgerBalanceResponse]: [any, any, any]) => {
-            if (lt) {
-                this.ledgerTransactions = lt;
-                if (lt.periodClosingBalance) {
-                    this.closingBalanceBeforeReconcile = { ...lt.periodClosingBalance }; // Clone for OnPush
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
-                }
-                if (lt.closingBalanceForBank) {
-                    this.reconcileClosingBalanceForBank = { ...lt.closingBalanceForBank }; // Clone for OnPush
-                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
-                }
-
-                if (this.ledgerView === LedgerViewEnum.TView) {
-                    const debitTransactions = lt.debitTransactions ?? [];
-                    const creditTransactions = lt.creditTransactions ?? [];
-                    // The 'checkedEntriesName' variable was declared but not used in the original snippet.
-                    // If you need this data, assign it to a class property: this.checkedEntriesName = uniq(...)
-                    /* const calculatedCheckedEntries = */ uniq([
-                        ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
-                        ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
-                    ]);
-                }
-                this.lc.currentPage = lt.page;
-                setTimeout(() => {
-                    this.paginationObject = {
-                        totalItems: lt.totalPages * lt.count,
-                        itemsPerPage: lt.count,
-                        page: lt.page,
-                        totalPages: lt.totalPages,
-                        showPagination: (lt.totalPages > 1) ? true : false,
-                        prevToken: lt.prevToken,
-                        nextToken: lt.nextToken
-                    };
-
-                    if (!this.changeDetectorRef['destroyed']) {
-                        this.changeDetectorRef.detectChanges();
+        ])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(([activeAccount, companyProfile, lt, txnBalance, ledgerBalanceResponse]) => {
+                // --- Logic from first observable ---
+                if (activeAccount && companyProfile) {
+                    let profile = cloneDeep(companyProfile);
+                    this.lc.activeAccount = activeAccount;
+                    if (activeAccount?.ledgerView) {
+                        this.ledgerView = activeAccount.ledgerView;
                     }
-                }, 400);
-            }
 
-            // Logic from the second observable (store.select(p => p.ledger.ledgerTransactionsBalance))
-            if (!this.isAdvanceSearchImplemented) {
-                if (txnBalance) {
-                    this.ledgerTxnBalance = txnBalance;
-                    this.lc.calculateReckonging(txnBalance);
+                    if (this.isBankAccount) {
+                        this.getAllBankAccounts();
+                    }
+                    this.profileObj = profile;
+                    this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+                    this.needToShowLoader = true;
+                    this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+                    let accountDetails: AccountResponse | AccountResponseV2 = activeAccount;
+                    this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
+                    this.accountUniqueName = accountDetails?.uniqueName;
+
+                    if (accountDetails?.currency && profile?.baseCurrency) {
+                        this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
+                    } else {
+                        this.isLedgerAccountAllowsMultiCurrency = false;
+                    }
+                    this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
+                    if (this.isLedgerAccountAllowsMultiCurrency) {
+                        this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
+                        this.getCurrencyRate();
+                    } else {
+                        this.baseCurrencyDetails = this.foreignCurrencyDetails;
+                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
+                    }
+                    this.selectedCurrency = 0;
+
+                    // assign multi currency details to new ledger component
+                    this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+                    this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                    this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
                 }
-                // If txnBalance is falsy, original code did nothing here.
-            }
 
-            // Logic from the third observable (this.ledgerBalanceSuccess$)
-            if (ledgerBalanceResponse) {
-                // Ensure this.ledgerTxnBalance is an object before assigning to it,
-                // especially if it could be uninitialized or set to null/undefined by the store logic.
-                if (typeof this.ledgerTxnBalance !== 'object' || this.ledgerTxnBalance === null) {
-                    this.ledgerTxnBalance = {};
+                // --- Logic from transactionData$ ---
+                if (lt) {
+                    this.ledgerTransactions = lt;
+                    if (this.ledgerView === LedgerViewEnum.TView) {
+                        const debitTransactions = lt.debitTransactions ?? [];
+                        const creditTransactions = lt.creditTransactions ?? [];
+                        uniq([
+                            ...debitTransactions.filter(debitTransaction => debitTransaction.isChecked).map(debitTransaction => ({ uniqueName: debitTransaction.entryUniqueName, type: 'debit' })),
+                            ...creditTransactions.filter(creditTransaction => creditTransaction.isChecked).map(creditTransaction => ({ uniqueName: creditTransaction.entryUniqueName, type: 'credit' })),
+                        ]);
+                    }
+                    this.lc.currentPage = lt.page;
+                    setTimeout(() => {
+                        this.paginationObject = {
+                            totalItems: lt.totalPages * lt.count,
+                            itemsPerPage: lt.count,
+                            page: lt.page,
+                            totalPages: lt.totalPages,
+                            showPagination: (lt.totalPages > 1) ? true : false,
+                            prevToken: lt.prevToken,
+                            nextToken: lt.nextToken
+                        };
+
+                        if (!this.changeDetectorRef['destroyed']) {
+                            this.changeDetectorRef.detectChanges();
+                        }
+                    }, 400);
                 }
-                Object.assign(this.ledgerTxnBalance, ledgerBalanceResponse);
-            }
 
-            this.isLoading = false; // Set loading false after all combined observables have emitted
-            // Call change detection once after all updates
-            this.changeDetectorRef.detectChanges();
-        });
+                // --- Logic from ledgerTransactionsBalance ---
+                if (!this.isAdvanceSearchImplemented) {
+                    if (txnBalance) {
+                        this.ledgerTxnBalance = txnBalance;
+                        this.lc.calculateReckonging(txnBalance);
+                    }
+                }
+
+                // --- Logic from ledgerBalanceSuccess$ ---
+                if (ledgerBalanceResponse) {
+                    if (typeof this.ledgerTxnBalance !== 'object' || this.ledgerTxnBalance === null) {
+                        this.ledgerTxnBalance = {};
+                    }
+                    Object.assign(this.ledgerTxnBalance, ledgerBalanceResponse);
+                }
+
+                // --- Finalize ---
+                this.isLoading = false;
+                this.changeDetectorRef.detectChanges();
+            });
     }
 
     /**
@@ -395,33 +380,6 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     */
     public trackByTransactionUniqueName(index: number, transaction: any): string {
         return transaction?.entryUniqueName;
-    }
-
-    /**
-    * Resets the blank ledger transaction object based on organization type and branches
-    *
-    * @memberof LedgerStatementComponent
-    */
-    public resetBlankTransaction() {
-        this.lc.blankLedger = this.lc.getBlankLedger();
-        this.lc.blankLedger.transactions =
-            (this.currentOrganizationType === OrganizationType.Branch ||
-                (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
-                this.lc?.addNewTransaction('DEBIT'),
-                this.lc?.addNewTransaction('CREDIT')
-            ] : [];
-        this.lc.blankLedger.voucherType = null;
-        this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
-    }
-
-    /**
-    * Initializes the transaction request object
-    *
-    * @param {string} accountUnq Account unique name
-    * @memberof LedgerStatementComponent
-    */
-    public initTrxRequest(accountUnq: string) {
-
     }
 
     /**
@@ -458,18 +416,6 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     }
 
 
-
-    /**
-    * Angular lifecycle hook: Called once just before the component is destroyed
-    *
-    * @memberof LedgerStatementComponent
-    */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-
     /**
     * Angular lifecycle hook: Called when any data-bound property changes
     *
@@ -500,17 +446,17 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.isLoading = true; // Set loading true when data fetching starts
         this.closingBalanceBeforeReconcile = null;
         if (this.trxRequest?.accountUniqueName) {
-            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
-            this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.trxRequest.accountUniqueName));
-
             const fromDate = this.from;
             const toDate = this.to;
             this.trxRequest.from = fromDate;
             this.trxRequest.to = toDate;
+            this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.trxRequest.accountUniqueName));
+            this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate }));
             this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
             this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
             this.lc.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
+
             this.isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress), takeUntil(this.destroyed$));
         }
     }
@@ -556,4 +502,15 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             this.getTransactionData();
         }
     }
+
+    /**
+    * Angular lifecycle hook: Called once just before the component is destroyed
+    *
+    * @memberof LedgerStatementComponent
+    */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
 }

@@ -42,17 +42,14 @@ import { IForceClear } from '../../../../models/api-models/Sales';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
-import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
@@ -742,7 +739,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * Initializes the GST details form with default values and validators.
      * 
      * @returns FormGroup
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
@@ -1183,7 +1180,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public selectedState(gstForm: FormGroup, event: IOption): void {
         if (gstForm && event?.label) {
@@ -1199,7 +1196,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public selectedCounty(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
@@ -2101,7 +2098,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public checkParentGroup(parentGroups: any[], uniqueName: string): boolean {
         return parentGroups.some(parent => parent.uniqueName === uniqueName);
@@ -2419,7 +2416,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
     * Get company branches
     *
-    * @memberof AccountAddNewDetailsComponent
+    * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyBranches(): void {
         this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));

@@ -5,7 +5,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -28,7 +27,6 @@ import { LedgerStatementComponent } from "./ledger-statement.component";
 import { ValidateSectionPermissionDirectiveModule } from '../validate-section-permission/validate-section-permission.module';
 import { ParticularPipeModule } from '../../ledger/pipes/particular/particular.module';
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
-import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { LedgerModule } from '../../ledger/ledger.module';
 import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledger-paginator.module';
 
@@ -54,7 +52,6 @@ import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledg
         MatCheckboxModule,
         MatChipsModule,
         MatAutocompleteModule,
-        MatSlideToggleModule,
         MatRadioModule,
         MatTooltipModule,
         MatDatepickerModule,

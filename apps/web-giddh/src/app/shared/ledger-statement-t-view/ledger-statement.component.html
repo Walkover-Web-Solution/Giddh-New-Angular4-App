@@ -371,11 +371,6 @@
                                                             : localeData?.to_particular
                                                 }}
                                             </div>
-                                            {{ voucherApiVersion }}
-                                            {{ txn.attachedFileUniqueName }}
-                                            {{ txn.voucherGenerated }}
-                                            {{ restrictedVouchersForDownload }}
-                                            {{ txn.voucherGeneratedType }}
                                             <span
                                                 class="download-invoice-ledger d-flex cursor-pointer"
                                                 *ngIf="
@@ -427,10 +422,6 @@
                                         </p>
                                     </mat-grid-tile>
                                 </mat-grid-list>
-                                <!-- endregion -->
-
-                                <!-- region blank ledger-->
-
                                 <!-- endregion -->
                             </div>
                             <!--endregion-->
