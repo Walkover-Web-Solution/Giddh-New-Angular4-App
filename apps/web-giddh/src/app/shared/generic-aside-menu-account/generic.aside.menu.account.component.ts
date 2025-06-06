@@ -7,6 +7,7 @@ import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -144,7 +145,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnChanges(s: SimpleChanges) {
-
+        
         if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
             this.isCustomerCreation = true;
             this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;
@@ -157,7 +158,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             this.isServiceCreation = true;
             this.flatAccountWGroupsList$ = of(null);
             this.flatAccountWGroupsList = undefined;
-            if (this.selectedGroupUniqueName === 'purchase') {
+            if (this.selectedGroupUniqueName === VoucherTypeEnum.purchaseOrder || this.selectedGroupUniqueName === VoucherTypeEnum.debitNote || this.selectedGroupUniqueName === VoucherTypeEnum.purchase) {
                 this.activeGroupUniqueName = 'operatingcost';
             } else if (this.selectedGroupUniqueName === 'receipt' || this.selectedGroupUniqueName === 'payment') {
                 this.activeGroupUniqueName = 'bankaccounts,cash,loanandoverdraft';

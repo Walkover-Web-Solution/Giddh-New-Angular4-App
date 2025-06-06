@@ -132,7 +132,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                     if (this.financialYearComp) {
                         this.financialYearComp.getInitialFinancialYearData();
                     }
-                }, 0);
+                }, 100);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
                     if (this.permissionComp) {
