@@ -310,6 +310,35 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && Object.keys(response)?.length) {
+                this.calculationResponse = response;
+                if (response?.promoCode) {
+                    this.toasterService.showSnackBar('success', this.localeData?.promocode_message);
+                    this.promoCodeResponse[0] = response;
+                    this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
+                } else if (this.firstStepForm?.get('promoCode')?.value) {
+                    this.toasterService.showSnackBar('success', this.localeData?.promocode_discount_message);
+                    this.promoCodeResponse[0] = [];
+                    this.firstStepForm?.get('promoCode')?.patchValue(null);
+                }
+                this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...response };
+                    }
+                });
+            } else {
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
+                    }
+                });
+            }
+        });
+
         this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.countrySource = [];
@@ -528,6 +557,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.promoCodeResponse = [];
                 this.firstStepForm?.get('promoCode').setValue("");
                 this.setFinalAmount();
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -797,12 +827,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public toggleDuration(event: any): void {
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
-            if (!this.subscriptionId) {
-                this.setPlans();
-            } else {
+            if (this.subscriptionId) {
                 this.inputData = [];
                 const filteredPlans = (this.firstStepForm.get('duration')?.value === 'DAILY' || this.firstStepForm.get('duration')?.value === 'MONTHLY') ? this.monthlyPlans : this.yearlyPlans;
                 this.inputData.push(...filteredPlans);
+            } else {
+                this.setPlans();
             }
         }
     }
@@ -938,6 +968,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.firstStepForm.get('promoCode')?.setValue("");
             }
             this.setFinalAmount();
+            this.changeDetection.detectChanges();
         }
     }
 
@@ -1185,6 +1216,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                 this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
                 this.setFinalAmount();
+                this.changeDetection.detectChanges();
             }
         });
     }
@@ -1236,6 +1268,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.initIntl();
         }
         this.setFinalAmount();
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1305,6 +1338,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
         this.setFinalAmount();
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1365,35 +1399,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         } else {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
         }
-
-        this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && Object.keys(response)?.length) {
-                this.calculationResponse = response;
-                if (response?.promoCode) {
-                    this.toasterService.showSnackBar('success', this.localeData?.promocode_message);
-                    this.promoCodeResponse[0] = response;
-                    this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
-                } else if (this.firstStepForm?.get('promoCode')?.value) {
-                    this.toasterService.showSnackBar('success', this.localeData?.promocode_discount_message);
-                    this.promoCodeResponse[0] = [];
-                    this.firstStepForm?.get('promoCode')?.patchValue(null);
-                }
-                this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
-                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                    if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...response };
-                    }
-                });
-            } else {
-                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                    if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
-                    }
-                });
-            }
-        });
         this.changeDetection.detectChanges();
     }
 
@@ -1443,7 +1448,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             let statesRequest = new StatesRequest();
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
-            this.setFinalAmount();
             this.changeDetection.detectChanges();
         }
     }
@@ -1630,7 +1634,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         try {
-            this.razorpay = new window['Razorpay'](((request?.duration === 'MONTHLY' || request?.duration === 'DAILY') && request?.region?.code !== 'GBR')
+            const isChangePlan = this.isChangePlan ? (this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') : (request?.duration === 'MONTHLY' || request?.duration === 'DAILY');
+            this.razorpay = new window['Razorpay']((isChangePlan && request?.region?.code !== 'GBR')
                 ? razorpayRecurringSubscriptionConfig : options);
             setTimeout(() => { this.razorpay?.open(); }, 100);
         } catch { }
