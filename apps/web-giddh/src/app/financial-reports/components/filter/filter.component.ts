@@ -1,4 +1,4 @@
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -210,12 +210,13 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.cd.detectChanges();
             }
         });
-        this.tlPlService.isReportTailed$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response !== null && response !== undefined) {
-                setTimeout(() => {
-                    this.getReconcileDateRange();
-                }, 200);
-            }
+
+        this.tlPlService.isReportTailed$.pipe(
+            filter(response => response !== null && response !== undefined),
+            debounceTime(200),
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            this.getReconcileDateRange();
         });
 
         this.breakPointObservar.observe([
@@ -359,7 +360,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
                 dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
                     if (response === this.commonLocaleData?.app_yes) {
-                        let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
+                        const index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
                         if (financialYear) {
                             this.filterForm?.patchValue({
                                 to: financialYear.financialYearEnds,
@@ -379,7 +380,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
-                let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
+                const index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
                 if (financialYear) {
                     this.filterForm?.patchValue({
                         to: financialYear.financialYearEnds,
@@ -670,8 +671,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             if (response) {
                 const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
-                this.filterForm.get('from').setValue(fromDate);
-                this.filterForm.get('to').setValue(toDate);
+                this.filterForm.get('from').patchValue(fromDate);
+                this.filterForm.get('to').patchValue(toDate);
                 this.filterForm?.get('selectedDateOption').patchValue('1');
                 this.filterData();
                 this.cd.detectChanges();

@@ -53,6 +53,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 
 @NgModule({
     declarations: [
@@ -74,6 +75,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         FinancialAccordionDirective,
         AccountsFilterPipe
     ],
+    providers: [ProjectAccountingService],
     exports: [
         FinancialReportsComponent, 
         CurrencyModule,
