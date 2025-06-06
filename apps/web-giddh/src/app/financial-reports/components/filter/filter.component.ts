@@ -197,11 +197,12 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         this.getTags();
         this.componentStore.reconcileDateRange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.showConfirmationOnDateChange = true;
                 const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
                 this.isReconcileModeDateRange = fromDate + ' - ' + toDate;
                 this.showReconcileOptions = this.filterForm.get('from')?.value === fromDate && this.filterForm.get('to')?.value === toDate;
+                this.showConfirmationOnDateChange = this.showReconcileOptions;
+                this.showTallyReportOptions(this.showReconcileOptions);
                 this.cd.detectChanges();
             } else if (response === null) {
                 this.showConfirmationOnDateChange = false;
@@ -371,7 +372,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                             this.toDate = financialYear.financialYearEnds;
                             this.fromDate = financialYear.financialYearStarts;
                             this.filterForm.get('selectedFinancialYearOption').patchValue(v.value);
-                            this.showTallyReportOptions();
+                            this.showTallyReportOptions(false);
                             this.filterData();
                         }
                     } else {
@@ -504,7 +505,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                             });
                             this.fromDate = fromDate;
                             this.toDate = toDate;
-                            this.showTallyReportOptions();
+                            this.showTallyReportOptions(false);
                             this.filterData();
                         } else {
                             this.filterForm?.get('selectedDateOption').patchValue('0');
@@ -588,7 +589,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
             if (isDifferentDate) {
-                this.showTallyReportOptions();
+                this.showTallyReportOptions(false);
                 this.filterData();
             }
         }
@@ -639,10 +640,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /**
      * Show Tally Report options
      *
+     * @param {boolean} showReconcileOptions
      * @memberof FinancialReportsFilterComponent
      */
-    public showTallyReportOptions(): void {
-        this.isReconciled = !this.isReconciled;
+    public showTallyReportOptions(showReconcileOptions: boolean = null): void {
+        if (showReconcileOptions !== null) {
+            this.isReconciled = showReconcileOptions;
+        } else {
+            this.isReconciled = !this.isReconciled;
+        }
         this.showReportTally.emit(this.isReconciled);
     }
 
