@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 
 @Injectable()
 export class GeneralService {
@@ -1246,6 +1247,9 @@ export class GeneralService {
                 //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
                 taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             }
+        } else if (mainTaxPercentage) {
+            // This is for advance receipt without other taxes
+            taxableValue = giddhRoundOff(totalAmount / (1 + (mainTaxPercentage / 100)));
         }
         return taxableValue;
     }
