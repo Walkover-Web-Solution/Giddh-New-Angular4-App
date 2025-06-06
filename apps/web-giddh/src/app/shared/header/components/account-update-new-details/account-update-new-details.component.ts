@@ -469,10 +469,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                     this.changeDetectorRef.detectChanges();
                 }
-                if (this.formValueAssigned && response) {
-                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-                }
             });
+        
+        this.addAccountForm.valueChanges.pipe(debounceTime(700),takeUntil(this.destroyed$)).subscribe((response) => {
+            if (this.formValueAssigned && response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            }
+        });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
