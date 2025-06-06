@@ -35,7 +35,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
-import { AdjustedVoucherType, BranchHierarchyType, ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher, ZIP_CODE_SUPPORTED_COUNTRIES } from "../../app.constant";
+import { AdjustedVoucherType, BranchHierarchyType, ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, HtmlElementEnum, KeyCodesEnum, RATE_FIELD_PRECISION, SubVoucher, ZIP_CODE_SUPPORTED_COUNTRIES } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -5084,6 +5084,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardDownEvent(event: KeyboardEvent) {
         this.startTime = event.timeStamp;
+        this.handleEnterPress(event);
     }
 
     // detecting keyup event for barcode scan
@@ -5111,6 +5112,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBarcodeMachineTyping = false;
             this.barcodeValue = "";
         }, 1000);
+    }
+
+    /**
+     * Prevents the default action when the Enter key is pressed and no input field is focused
+     *
+     * @param {KeyboardEvent} event
+     * @memberof VoucherCreateComponent
+     */
+    private handleEnterPress(event: KeyboardEvent): void {
+        const activeElement = document.activeElement;
+        const isInputFocused = activeElement && activeElement.tagName === HtmlElementEnum.Button;
+        if (!isInputFocused && event.key === KeyCodesEnum.ENTER) { // Only navigate if no input field is focused
+            event.preventDefault();
+        }
     }
 
     /**
