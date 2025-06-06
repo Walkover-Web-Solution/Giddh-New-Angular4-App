@@ -1,197 +1,40 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
-import { BaseResponse } from "../../../models/api-models/BaseResponse";
+import { ComponentStore } from "@ngrx/component-store";
 import { ToasterService } from "../../../services/toaster.service";
-import { SettingsIntegrationService } from "../../../services/settings.integration.service";
+import { select, Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import { AppState } from "../../../store";
 
 export interface LedgerStatementState {
-    institutionList: any;
-    requisitionList: any;
-    institutionsListInProgress: boolean;
-    requistionListInProgress: boolean;
-    createEndUserAgreementSuccess: any;
-    deleteAccountSuccess: any;
 }
 
 export const DEFAULT_LEDGER_STATEMENT_STATE: LedgerStatementState = {
-    institutionList: null,
-    requisitionList: null,
-    institutionsListInProgress: null,
-    requistionListInProgress: null,
-    createEndUserAgreementSuccess: null,
-    deleteAccountSuccess: null
 };
 
 @Injectable()
 export class LedgerStatementComponentStore extends ComponentStore<LedgerStatementState> implements OnDestroy {
 
     constructor(
-        private toasterService: ToasterService,
-        private settingsIntegrationService: SettingsIntegrationService
+        private store: Store<AppState>
     ) {
         super(DEFAULT_LEDGER_STATEMENT_STATE);
     }
-
-    /**
-     * Get All Institutions
-     *
-     * @memberof SettingIntegrationComponentStore
-     */
-    readonly getAllInstitutions = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ institutionsListInProgress: true });
-                return this.settingsIntegrationService.getAllInstitutions(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res.status === "success") {
-                                return this.patchState({
-                                    institutionList: res?.body ?? [],
-                                    institutionsListInProgress: false
-                                });
-                            } else {
-                                res.message && this.toasterService.showSnackBar("error", res.message);
-                                return this.patchState({
-                                    institutionList: [],
-                                    institutionsListInProgress: false
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                institutionList: [],
-                                institutionsListInProgress: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
-    /**
-     * Get Requisition by ID
-     *
-     * @memberof SettingIntegrationComponentStore
-     */
-    readonly getRequisition = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ requistionListInProgress: true });
-                return this.settingsIntegrationService.getRequisition(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res.status === "success") {
-                                return this.patchState({
-                                    requisitionList: res?.body ?? [],
-                                    requistionListInProgress: false
-                                });
-                            } else {
-                                res.message && this.toasterService.showSnackBar("error", res.message);
-                                return this.patchState({
-                                    requisitionList: [],
-                                    requistionListInProgress: false
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                requisitionList: [],
-                                requistionListInProgress: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
-    /**
-   * Create end user agreement by institutions id
-   *
-   * @memberof SettingIntegrationComponentStore
-   */
-    readonly createEndUserAgreementByInstitutionId = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                return this.settingsIntegrationService.createEndUserAgreementByInstitutionId(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
-                                return this.patchState({
-                                    createEndUserAgreementSuccess: res?.body ?? [],
-                                });
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    createEndUserAgreementSuccess: []
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                createEndUserAgreementSuccess: []
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
-    /**
-     * Delete end user agreement details by agreement id
-     *
-     * @memberof SettingIntegrationComponentStore
-     */
-    readonly deleteEndUserAgreementByInstitutionId = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ deleteAccountSuccess: false });
-                return this.settingsIntegrationService.deleteEndUserAgreementDetails(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
-                                return this.patchState({
-                                    deleteAccountSuccess: true
-                                });
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    deleteAccountSuccess: false
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                deleteAccountSuccess: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
+    
+    public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);
+    public isBranchConsolidated$ = this.store.pipe(select(select => select.branchConsolidated), (response) => response);
+    public activeCompany$ = this.store.pipe(select(appState => appState.session.activeCompany), (response) => response);
+    public ledgerTransactionsBalance$ = this.store.pipe(select(p => p.ledger.ledgerTransactionsBalance));
+    public transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse));
+    public activeAccount$ = this.store.pipe(select(p => p.ledger.account));
+    public companyProfile$ = this.store.pipe(select(p => p.settings.profile));
+    public isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress));
+    
 
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof SettingIntegrationComponentStore
+     * @memberof LedgerStatementComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

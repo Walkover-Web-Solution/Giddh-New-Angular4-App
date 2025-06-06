@@ -181,7 +181,7 @@ export class ContactService {
 *
 * @param {*} model
 * @return {*}  {Observable<BaseResponse<any, any>>}
-* @memberof AccountStatementService
+* @memberof ContactService
 */
     /**
      * Optimized: Get Account Statement List API

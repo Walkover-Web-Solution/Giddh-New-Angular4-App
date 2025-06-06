@@ -2,9 +2,8 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { combineLatest, debounceTime, delay, distinctUntilChanged, merge, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
+import { combineLatest, debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
-import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -18,6 +17,8 @@ import { ContactAdvanceSearchModal } from "../../models/api-models/Contact";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
+import { cloneDeep } from "../../lodash-optimized";
+import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
 
 @Component({
     selector: "preview",
@@ -145,6 +146,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
     /** Observable indicating if the edit account modal should be shown */
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
+    /** Enum representing standard accounting group unique names */
+    public AccountingGroupEnum = AccountingGroupEnum;
 
     constructor(
         private router: Router,
@@ -190,7 +193,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
@@ -199,7 +202,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
-                    this.currentBranchData = _.cloneDeep(this.currentBranch);
+                    this.currentBranchData = cloneDeep(this.currentBranch);
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -216,55 +219,55 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             .pipe(delay(0), takeUntil(this.destroyed$))
             .subscribe(([params, queryParams]) => {
                 if (params) {
-                    let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
+                    let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
                     this.activeGroupUniqueName$ = of(groupUniqueName);
                     this.parentGroupUniqueName = groupUniqueName;
                     this.params = params;
-                if (params?.accountUniqueName) {
-                    this.activeAccountUniqueName = params?.accountUniqueName;
-                    this.contactActiveTab = params?.type;
-                    this.isSearching = false;
+                    if (params?.accountUniqueName) {
+                        this.activeAccountUniqueName = params?.accountUniqueName;
+                        this.contactActiveTab = params?.type;
+                        this.isSearching = false;
 
-                }
-                if (queryParams?.page) {
-                    this.queryParams = queryParams;
-                    this.advanceFilters.page = Number(queryParams.page);
-                    this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
-                    this.advanceFilters.from = queryParams.from ?? '';
-                    this.advanceFilters.to = queryParams.to ?? '';
-                    this.advanceFilters.q = queryParams.q ?? '';
-                    this.advanceFilters.refresh = queryParams.refresh ?? true;
-                    if(queryParams.sort && queryParams.sortBy) {
-                        this.key = queryParams.sortBy;
-                        this.order = queryParams.sort;
-                    } else {
-                        this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
-                        this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
                     }
-                    const searchString = queryParams.q;
-                    if (searchString) {
-                        this.search.setValue(searchString);
-                    } else {
-                        this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    if (queryParams?.page) {
+                        this.queryParams = queryParams;
+                        this.advanceFilters.page = Number(queryParams.page);
+                        this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
+                        this.advanceFilters.from = queryParams.from ?? '';
+                        this.advanceFilters.to = queryParams.to ?? '';
+                        this.advanceFilters.q = queryParams.q ?? '';
+                        this.advanceFilters.refresh = queryParams.refresh ?? true;
+                        if (queryParams.sort && queryParams.sortBy) {
+                            this.key = queryParams.sortBy;
+                            this.order = queryParams.sort;
+                        } else {
+                            this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
+                            this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
+                        }
+                        const searchString = queryParams.q;
+                        if (searchString) {
+                            this.search.setValue(searchString);
+                        } else {
+                            this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                        }
                     }
                 }
-            }
-        });
+            });
 
         this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.parentGroups[0]?.uniqueName) {
                 let col = response.parentGroups[0]?.uniqueName;
-                this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+                this.isHsnSacEnabledAcc = col === this.AccountingGroupEnum.RevenueFromOperations || col === this.AccountingGroupEnum.OtherIncome || col === this.AccountingGroupEnum.OperatingCost || col === this.AccountingGroupEnum.IndirectExpenses;
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
             }
         });
         this.componentStore.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (response.uniqueName === 'sundrycreditors' || response.uniqueName === 'sundrydebtors') {
+                if (response.uniqueName === this.AccountingGroupEnum.SundryCreditors || response.uniqueName === this.AccountingGroupEnum.SundryDebtors) {
                     this.isDebtorCreditor = true;
                 }
                 this.virtualAccountEnable$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response && response.companyCashFreeSettings && response.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && (this.parentGroupUniqueName === 'sundrydebtors')) {
+                    if (response && response.companyCashFreeSettings && response.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && (this.parentGroupUniqueName === this.AccountingGroupEnum.SundryDebtors)) {
                         this.showVirtualAccount = true;
                     } else {
                         this.showVirtualAccount = false;
@@ -288,13 +291,13 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 };
                 this.isSearching = true;
                 this.advanceFilters.q = search;
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.params.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
         this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.params.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
@@ -311,7 +314,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         if (event) {
             this.activeGroupUniqueName$ = of(event.value);
             // in case of sundrycreditors or sundrydebtors no need to show address tab
-            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+            if (event.value === this.AccountingGroupEnum.SundryCreditors || event.value === this.AccountingGroupEnum.SundryDebtors) {
                 this.isDebtorCreditor = true;
             }
         }
@@ -355,51 +358,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
-        let activeGrpName = this.contactActiveTab;
-        this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
+        this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, this.contactActiveTab));
         this.hideDeleteAccountModal();
-    }
-
-    /**
-     * Callback for translation response completion.
-     *
-     * @param {*} event The translation completion event.
-     * @memberof ContactPreviewComponent
-     */
-    public translationComplete(event: any): void {
-        if (event) {
-            // Handle translation complete event if needed
-        }
-    }
-
-    /**
-     * Subscribes to all required store observables for the component.
-     * Handles universal date changes and resets filters and contact list as needed.
-     *
-     * @private
-     * @memberof ContactPreviewComponent
-     */
-    private subscribeStoreObservable(): void {
-        /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.getAllApiCallCount > 0) {
-                // Reset
-                this.isSearching = false;
-                this.isLoadMore = false;
-                this.pageNumberHistory = [1];
-                this.advanceFilters = {
-                    page: this.params.page,
-                    from: this.params.from,
-                    to: this.params.to,
-                    count: PAGINATION_LIMIT,
-                    q: '',
-                    sort: '',
-                    sortBy: ''
-                };
-                this.contactList = [];
-                this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
-            }
-        });
     }
 
     /**
@@ -535,7 +495,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         refresh = refresh ? refresh : "false";
         fromDate = (fromDate) ? fromDate : "";
         toDate = (toDate) ? toDate : "";
-        let groupUniqueName = (this.contactActiveTab === "customer") ? "sundrydebtors" : "sundrycreditors";
+        let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
 
         this.componentStore.getContactsList({
             fromDate,
