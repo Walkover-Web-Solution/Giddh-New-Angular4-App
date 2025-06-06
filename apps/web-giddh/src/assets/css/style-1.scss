@@ -460,6 +460,13 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px !important;
 }
+.column-gap3 {
+    column-gap: 30px !important;
+}
+.column-gap4 {
+    column-gap: 40px !important;
+}
+
 .row-gap5 {
     row-gap: 5px !important;
 }
@@ -479,6 +486,9 @@ aside-menu-account .container-fluid {
 }
 .border-none {
     border: none;
+}
+.border-color-transparent {
+    border-color: var(--color-transparent-background) !important;
 }
 .border-top-none {
     border-top: none !important;
@@ -1076,6 +1086,9 @@ aside-menu-account .container-fluid {
     padding: 0;
     line-height: 40px;
     overflow: hidden;
+    &.account {
+        line-height: unset;
+    }
 }
 .table-container div.row {
     border-bottom: 1px solid var(--color-dark-fog);
@@ -1170,6 +1183,11 @@ table:focus {
 .min-height-100 {
     min-height: 100px;
 }
+
+.padding-bottom-100 {
+    padding-bottom: 100px;
+}
+
 .account-card {
     max-width: 300px;
     min-height: 240px;

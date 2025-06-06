@@ -318,6 +318,9 @@
                                                 >
                                                     {{ localeData?.expired }}
                                                 </button>
+                                                <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
                                             </mat-menu>
                                         </ng-container>
                                     </div>
@@ -641,6 +644,9 @@
                                             </button>
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
                                                 {{ localeData?.expired }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1050,11 +1056,14 @@
                                             <button mat-menu-item (click)="actionVoucher(element, 'hold')">
                                                 {{ commonLocaleData?.app_payment_status?.hold }}
                                             </button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
                                             </button>
                                             <button mat-menu-item (click)="showEwayBillDialog(element)">
                                                 {{ localeData?.generate_eway_bill }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1149,7 +1158,7 @@
                                 <button mat-menu-item *ngIf="isEInvoiceEnabled" (click)="generateEInvoice()">
                                     {{ localeData?.create_e_invoice }}
                                 </button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                <button mat-menu-item (click)="deleteVoucherDialog(element)">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
@@ -1160,7 +1169,6 @@
                                 </span>
                             </button>
                             <button
-                                *ngIf="dataSource?.length"
                                 mat-stroked-button
                                 color="primary"
                                 (click)="showBulkExportDialog()"
@@ -1397,8 +1405,11 @@
                                             <button mat-menu-item (click)="showPaymentDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                             </button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1734,8 +1745,11 @@
                                             <button mat-menu-item (click)="showPaymentDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                             </button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">
+                                            <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                                 {{ commonLocaleData?.app_payment_status?.cancel }}
+                                            </button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
                                     </div>
@@ -1832,9 +1846,6 @@
                                     <span class="icon-cross font-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
-                            </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
-                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
@@ -2801,7 +2812,7 @@
                                     [matTooltip]="element.voucherNumber"
                                     matTooltipPosition="above"
                                 >
-                                    {{ element.voucherNumber }}
+                                    {{ element?.voucherNumber }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -2968,6 +2979,7 @@
                 </div>
             </mat-tab>
             <!-- receipt-content-end -->
+
             <!-- payment-content-start -->
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
                 <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
@@ -3108,7 +3120,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-ellipsis">
-                                    {{ element.voucherNumber }}
+                                    {{ element?.voucherNumber }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -3245,6 +3257,7 @@
                 </div>
             </mat-tab>
             <!-- payment-content-end -->
+
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 3 || activeTabGroup === 4">
                 <div *ngIf="activeModule === 'pending'">
@@ -3291,9 +3304,6 @@
                                     <span class="icon-cross font-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
-                            </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
-                                {{ commonLocaleData?.app_export }}
                             </button>
                         </div>
                         <div class="table-responsive overflow-visible pending-table">
@@ -3469,6 +3479,7 @@
                 </div>
             </mat-tab>
             <!-- pending-content-end -->
+
             <!-- setting-content-start -->
             <!-- ===== HIDE THIS TAB FOR NOW ===== -->
             <mat-tab
@@ -4902,6 +4913,7 @@
             <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
         </div>
     </div>
+    
     <!-- table-search -->
     <ng-template
         #searchTemplate
@@ -4934,6 +4946,7 @@
             </div>
         </div>
     </ng-template>
+
     <!-- Universal Datepicker  -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

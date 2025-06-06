@@ -18,6 +18,8 @@ export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public incomeStatement: any;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** Profit loss headers array */
+    @Input() public plHeaders: any[];
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
@@ -75,5 +77,20 @@ export class ProfitLossGridRowComponent implements OnChanges {
      */
     public trackByFn(index, item: Account): string {
         return item?.uniqueName;
+    }
+
+    /**
+     * Retrieves the keys of an object.
+     *
+     * @param obj The object whose keys are to be retrieved.
+     * @returns An array of strings representing the keys of the object, or an empty array if the input is null or undefined.
+     * @memberof ProfitLossGridRowComponent
+     */
+    public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
+        if (obj) {
+            return Object.keys(obj);
+        } else {
+            return [];
+        }
     }
 }

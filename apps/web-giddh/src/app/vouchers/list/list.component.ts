@@ -1693,19 +1693,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.poBulkAction('delete');
                     }
                 } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    const voucher = this.selectedVouchers[0];
+                    const selectedVoucher = voucher ?? this.selectedVouchers[0];
                     const payload = {
-                        accountUniqueName: voucher.customerUniqueName
+                        accountUniqueName: selectedVoucher.customerUniqueName
                     }
                     if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-                        payload['estimateNumber'] = voucher?.estimateNumber;
+                        payload['estimateNumber'] = selectedVoucher?.estimateNumber;
                     } else {
-                        payload['proformaNumber'] = voucher?.proformaNumber;
+                        payload['proformaNumber'] = selectedVoucher?.proformaNumber;
                     }
                     this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
                     const payload = {
-                        voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                        voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
                         voucherType: this.voucherType
                     };
                     this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
@@ -1995,6 +1995,27 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handle Cancel Voucher Dialog
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public openCancelVoucherDialog(voucher: any): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.cancel_voucher_confirmation_message, this.commonLocaleData)
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                this.actionVoucher(voucher, 'cancel');
+            }
+        });
+    }
+
+    /**
      * Handle Voucher Actions API Call
      *
      * @param {*} voucher
@@ -2002,7 +2023,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public actionVoucher(voucher: any, action: string): void {
-        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
+        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType }});
     }
 
     /**
@@ -2801,7 +2822,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Deletes an email by email ID
+     * Deletes email ID
      *
      * @param {string} emailId
      * @return {*}
@@ -2810,16 +2831,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public deleteEmail(emailId: string) {
         if (!emailId) {
             return false;
-        } else {
-            if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                this.updateSettingsEmail(null);
-                return true;
-            } else {
-                let emailTodelete = cloneDeep(emailId);
-                emailTodelete = null;
-                this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+        } 
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.delete_email_confirmation_message, this.commonLocaleData)
             }
-        }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    this.updateSettingsEmail(null);
+                    return true;
+                } else {
+                    this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(null)); // send null to delete email
+                }
+            }
+        });
     }
 
     /**
@@ -3176,7 +3206,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
    * @memberof VoucherListComponent
    */
     public shouldDeleteEmail(voucherType?: string): boolean {
-        const email = voucherType === 'invoice ' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
+        const email = voucherType === 'invoice' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
         return email && email.length >= 4;
     }
 }
