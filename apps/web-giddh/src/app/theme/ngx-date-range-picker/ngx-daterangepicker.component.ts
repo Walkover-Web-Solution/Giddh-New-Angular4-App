@@ -1385,7 +1385,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         this.rangeClicked.emit({ name: range.name, startDate: dates?.value[0], endDate: dates?.value[1], event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
-            this.handleDateChange('apply', undefined, undefined);
+            this.handleDateChange('apply');
         } else {
             this.initCalendar();
         }
@@ -1856,7 +1856,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         this.rangeClicked.emit({ name: financialYear.label, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
-            this.handleDateChange('apply', undefined, undefined);
+            this.handleDateChange('apply');
         } else {
             this.initCalendar();
         }
@@ -2004,7 +2004,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.startDate = this.inlineStartDate;
                 this.endDate = this.inlineEndDate;
                 this.modalRef.hide();
-                this.handleDateChange('apply', undefined, undefined);
+                this.handleDateChange('apply');
             }
         } else {
             this.invalidInlineDate = this.commonLocaleData?.app_datepicker?.date_error;
