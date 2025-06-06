@@ -821,8 +821,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.inputData = [];
                 const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
                 this.inputData.push(...filteredPlans);
+            } else {
+                this.setPlans();
             }
-            this.setPlans();
         }
     }
 
