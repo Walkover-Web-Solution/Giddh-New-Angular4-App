@@ -198,9 +198,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
                 this.isReconcileModeDateRange = fromDate + ' - ' + toDate;
-                this.showReconcileOptions = this.filterForm.get('from')?.value === fromDate && this.filterForm.get('to')?.value === toDate;
-                this.showConfirmationOnDateChange = this.showReconcileOptions;
-                this.showTallyReportOptions(this.showReconcileOptions);
+                const isSameDateRange = this.isSameDateRange(fromDate, toDate);
+                this.showReconcileOptions = isSameDateRange;
+                this.showConfirmationOnDateChange = isSameDateRange;
+                this.showTallyReportOptions(isSameDateRange);
                 this.cd.detectChanges();
             } else if (response === null) {
                 this.showConfirmationOnDateChange = false;
@@ -349,7 +350,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
             let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
-            if (this.showConfirmationOnDateChange && !this.checkIsSameDateRange(financialYear?.financialYearStarts, financialYear?.financialYearEnds)) {
+            if (this.showConfirmationOnDateChange && !this.isSameDateRange(financialYear?.financialYearStarts, financialYear?.financialYearEnds)) {
                 //show confirmation dialog
                 const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     panelClass: ['mat-dialog-sm'],
@@ -410,7 +411,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @returns {boolean}
      * @memberof FinancialReportsFilterComponent
      */
-    private checkIsSameDateRange(from: string, to: string): boolean {
+    private isSameDateRange(from: string, to: string): boolean {
         if (!from || !to) {
             return false;
         }
@@ -488,7 +489,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             } else {
                 const fromDate = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
-                if (this.showConfirmationOnDateChange && !this.checkIsSameDateRange(fromDate, toDate)) {
+                if (this.showConfirmationOnDateChange && !this.isSameDateRange(fromDate, toDate)) {
                     const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                         panelClass: ['mat-dialog-sm'],
                         data: {
@@ -578,7 +579,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            const isDifferentDate = !this.checkIsSameDateRange(value.startDate, value.endDate);
+            const isDifferentDate = !this.isSameDateRange(value.startDate, value.endDate);
 
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -641,8 +642,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @param {boolean} showReconcileOptions
      * @memberof FinancialReportsFilterComponent
      */
-    public showTallyReportOptions(showReconcileOptions: boolean = null): void {
-        if (showReconcileOptions !== null) {
+    public showTallyReportOptions(showReconcileOptions?: boolean): void {
+        if (showReconcileOptions !== undefined) {
             this.isReconciled = showReconcileOptions;
         } else {
             this.isReconciled = !this.isReconciled;
