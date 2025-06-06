@@ -318,30 +318,27 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public validateGstNumber(): void {
-        let isValid: boolean = false;
+        this.isGstinValid = false;
         if (this.changeBillingForm.get('taxNumber')?.value) {
             if (this.formFields['taxName']?.label) {
                 if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                     for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                         let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                         if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
-                            isValid = true;
+                            this.isGstinValid = true;
                         }
                     }
                 } else {
-                    isValid = true;
+                    this.isGstinValid = true;
                 }
 
-                if (!isValid) {
+                if (!this.isGstinValid) {
                     let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                     this.toasterService.showSnackBar("error", text);
                     this.selectedState = '';
                     this.selectedStateCode = '';
-                    this.isGstinValid = false;
-                } else {
-                    this.isGstinValid = true;
-                }
+                } 
             }
         }
 
@@ -517,7 +514,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.changeBillingForm.invalid) {
+        if (this.changeBillingForm.invalid || !this.isGstinValid) {
             this.isFormSubmitted = true;
             return;
         }
