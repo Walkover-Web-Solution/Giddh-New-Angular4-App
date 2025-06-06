@@ -1,0 +1,19 @@
+{
+  "statement_of_accounts": "Statement of Accounts",
+  "account_summary": "Account Summary",
+  "opening_balance": "Opening Balance",
+  "invoiced_amount": "Invoiced Amount",
+  "amount_paid": "Amount Paid",
+  "balance_due": "Balance Due",
+  "date": "Date",
+  "transactions": "Transactions",
+  "details": "Details",
+  "amount": "Amount",
+  "payments": "Payments",
+  "balance": "Balance",
+  "no_account_statements_found": "No account statements found for the given criteria.",
+  "transaction": "Transaction",
+  "statement": "Statement",
+  "account_details": "Account Details",
+  "user_not_found_message": "User not found. Please change the customer to view the information."
+}

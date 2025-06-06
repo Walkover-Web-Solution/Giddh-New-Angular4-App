@@ -246,8 +246,8 @@
                             let gst of addAccountForm.get('addresses')['controls']
                                 | slice : 0 : gstDetailsLength;
                             let i = index;
-                            let f = first;
-                            let l = last
+                            let firstItem = first;
+                            let lastItem = last
                         "
                         [formGroupName]="i"
                     >
@@ -256,7 +256,7 @@
                                 <div class="add-address-default">
                                     <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                     <div class="remove-radio-btn">
-                                        <span class="pd-r1" *ngIf="!f">
+                                        <span class="pd-r1" *ngIf="!firstItem">
                                             <button
                                                 mat-stroked-button
                                                 color="warn"
@@ -392,7 +392,7 @@
                         <div
                             class="d-flex justify-content-between column-gap15 pd-b2"
                             *ngIf="
-                                l &&
+                                lastItem &&
                                 addAccountForm.get('addresses')['controls']?.length > 3 &&
                                 !moreGstDetailsVisible
                             "
@@ -414,7 +414,7 @@
                             > {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
-                        <div *ngIf="l">
+                        <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -583,8 +583,8 @@
                             *ngFor="
                                 let bank of addAccountForm.get('accountBankDetails')['controls'];
                                 let i = index;
-                                let f = first;
-                                let l = last
+                                let firstItem = first;
+                                let lastItem = last
                             "
                             [formGroupName]="i"
                         >

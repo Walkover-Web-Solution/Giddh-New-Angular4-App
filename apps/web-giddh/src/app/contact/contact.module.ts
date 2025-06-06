@@ -46,14 +46,23 @@ import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
-
+import { ContactPreviewComponent } from './preview/preview.component';
+import { AccountStatementComponent } from './account-statement/account-statement.component';
+import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-statement.module';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { LedgerModule } from '../ledger/ledger.module';
+import { MatCardModule } from '@angular/material/card';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
 @NgModule({
     declarations: [
         ContactComponent,
         ContactAdvanceSearchComponent,
         AgingReportComponent,
         AgingDropdownComponent,
-        PaymentAsideComponent
+        PaymentAsideComponent,
+        ContactPreviewComponent,
+        AccountStatementComponent
     ],
     exports: [
         CurrencyModule
@@ -103,7 +112,12 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatListModule,
         ScrollingModule,
         WatchVideoModule,
-        FroalaTemplateEditorModule
+        FroalaTemplateEditorModule,
+        LedgerStatementModule,
+        MatSortModule,
+        MatPaginatorModule,
+        LedgerModule,   
+        MatCardModule
     ],
     providers: [
         GiddhCurrencyPipe

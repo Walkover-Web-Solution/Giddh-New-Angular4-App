@@ -104,7 +104,7 @@ export class AccountsAction {
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 if (response.request.portalDomain) {
-                    this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                    this._accountService.createPortalUser(response.request.portalDomain, response.body?.uniqueName).pipe(take(1)).subscribe(data => {
                         if (data?.status === 'error') {
                             this._toasty.errorToast(data.message, data.code);
                         }

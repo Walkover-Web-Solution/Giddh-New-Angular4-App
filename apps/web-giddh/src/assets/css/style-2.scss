@@ -3677,12 +3677,20 @@ input[type="checkbox"]:checked:after {
     font-size: 22px !important;
 }
 
+.font-18 {
+    font-size: var(--font-size-18) !important;
+}
+
 .font-20 {
     font-size: var(--font-size-20) !important;
 }
 
 .font-24 {
     font-size: var(--font-size-24) !important;
+}
+
+.font-30 {
+    font-size: var(--font-size-30) !important;
 }
 
 .icon-font-48 {
@@ -14003,4 +14011,12 @@ mat-list {
 
 .w150 {
     width: 150px !important;
+}
+
+.w150 {
+    width: 150px !important;
+}
+
+.bg-white {
+    background: var(--color-white) !important;
 }

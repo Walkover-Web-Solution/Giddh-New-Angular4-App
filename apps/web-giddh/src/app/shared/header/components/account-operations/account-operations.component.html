@@ -84,11 +84,10 @@
         </account-add-new-details>
 
         <!--account update component-->
-
         <account-update-new-details
             *ngIf="(activeAccount$ | async) && (showEditAccount$ | async)"
             [activeAccount$]="activeAccount$"
-            [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+            [activeGroupUniqueName]="(activeGroupUniqueName$ | async)"
             [isGstEnabledAcc]="isGstEnabledAcc"
             [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
             [updateAccountInProcess$]="updateAccountInProcess$"
