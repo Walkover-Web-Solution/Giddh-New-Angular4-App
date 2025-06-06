@@ -648,5 +648,18 @@ export const BREAKPOINT_SCREEN_SIZE = {
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',
-    Textarea = 'TEXTAREA'
+    Textarea = 'TEXTAREA',
+    Button = 'BUTTON'
 }
+
+/** List of all the keyboard keys */
+export const KeyCodesEnum = {
+    ENTER: 'Enter',
+    SPACE: 'Space',
+    BACKSPACE: 'Backspace',
+    ESC: 'Escape',
+    ARROW_DOWN: 'ArrowDown',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_LEFT: 'ArrowLeft' 
+};

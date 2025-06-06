@@ -75,6 +75,8 @@ export class TaxDropdownComponent implements OnChanges {
                 if (this.taxesList?.length) {
                     this.addTaxesInFormAndEnableDisableTaxes();
                 }
+            } else if (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue) && changes?.taxesList?.currentValue?.length > 0) {
+                this.addTaxesInForm();
             }
         } else {
             if ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
