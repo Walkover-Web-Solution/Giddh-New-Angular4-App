@@ -411,10 +411,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     this.changeDetectorRef.detectChanges();
                 }
-                if (this.formValueAssigned && response) {
-                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-                }
             });
+
+        this.addAccountForm.valueChanges.pipe(debounceTime(700),takeUntil(this.destroyed$)).subscribe((response) => {
+            if (this.formValueAssigned && response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            }
+        });
 
 
         // get country code value change
