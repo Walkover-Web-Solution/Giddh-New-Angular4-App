@@ -165,14 +165,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private _toaster: ToasterService,
         private modalService: BsModalService,
         private _location: LocationService,
-        private changeDetectorRef: ChangeDetectorRef,
+        private _cd: ChangeDetectorRef,
         private generalService: GeneralService,
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
         private gstReconcileService: GstReconcileService,
         public dialog: MatDialog,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private componentStore: VoucherComponentStore,
+        private voucherComponentStore: VoucherComponentStore
     ) {
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
         this.EwayBillfilterRequest.page = 1;
@@ -550,48 +550,49 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     }
     detectChange() {
-        this.changeDetectorRef.detectChanges();
-
+       if (!this._cd['destroyed']) {
+            this._cd.detectChanges();
+        }
     }
 
     public preparemodelForFilterEway(): IEwayBillfilter {
         let model: any = {
 
         };
-        let o = _.cloneDeep(this.EwayBillfilterRequest);
-        if (o.fromDate) {
-            model.fromDate = o.fromDate;
+        let request = cloneDeep(this.EwayBillfilterRequest);
+        if (request.fromDate) {
+            model.fromDate = request.fromDate;
         }
-        if (o.toDate) {
-            model.toDate = o.toDate;
+        if (request.toDate) {
+            model.toDate = request.toDate;
         }
-        if (o.sort) {
-            model.sort = o.sort;
+        if (request.sort) {
+            model.sort = request.sort;
         }
-        if (o.sortBy) {
-            model.sortBy = o.sortBy;
+        if (request.sortBy) {
+            model.sortBy = request.sortBy;
         }
 
-        if (o.searchOn) {
-            model.searchOn = o.searchOn;
+        if (request.searchOn) {
+            model.searchOn = request.searchOn;
         }
-        if (o.searchTerm) {
-            model.searchTerm = o.searchTerm;
+        if (request.searchTerm) {
+            model.searchTerm = request.searchTerm;
         }
-        if (o.count) {
-            model.count = o.count;
+        if (request.count) {
+            model.count = request.count;
         }
-        if (o.page) {
-            model.page = o.page;
+        if (request.page) {
+            model.page = request.page;
         }
-        if (o.branchUniqueName) {
-            model.branchUniqueName = o.branchUniqueName;
+        if (request.branchUniqueName) {
+            model.branchUniqueName = request.branchUniqueName;
         }
-        if (o.gstin) {
-            model.gstin = o.gstin;
+        if (request.gstin) {
+            model.gstin = request.gstin;
         }
-        if (o.failedRequestLog) {
-            model.failedRequestLog = o.failedRequestLog;
+        if (request.failedRequestLog) {
+            model.failedRequestLog = request.failedRequestLog;
         }
 
         return model;
@@ -713,8 +714,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         } else {
             this.isDropUp = true;
         }
-
-        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -799,7 +798,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         voucher['voucherDate'] = voucher?.invoiceDate;
         this._invoiceService.setSelectedInvoicesList([voucher]);
         setTimeout(() => {
-            this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+            this.voucherComponentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
                 if (!response?.account?.billingDetails?.pincode) {
                     this._toaster.showSnackBar("error", this.localeData?.pincode_required);
                 } else {
