@@ -678,9 +678,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             if (response) {
                 const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
                 const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
+                // Update selected date range to universal date picker
+                this.selectedDateRange = { startDate: dayjs(response.fromDate), endDate: dayjs(response.toDate) };
+                this.selectedDateRangeUi = dayjs(response.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                
+                // Update form values
                 this.filterForm.get('from').patchValue(fromDate);
                 this.filterForm.get('to').patchValue(toDate);
                 this.filterForm?.get('selectedDateOption').patchValue('1');
+                
+                // Trigger filter
                 this.filterData();
                 this.cd.detectChanges();
             }
