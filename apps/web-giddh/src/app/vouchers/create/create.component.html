@@ -33,11 +33,11 @@
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPaymentInvoice ? localeData?.select_vendor : localeData?.select_customer"
-                                                formControlName="uniqueName" 
+                                                formControlName="uniqueName"
                                                 [name]="'account'"
-                                                [options]="voucherAccountResults$ | async" 
+                                                [options]="voucherAccountResults$ | async"
                                                 [showCreateNew]="true"
-                                                [enableDynamicSearch]="true" 
+                                                [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isPaymentInvoice ? localeData?.add_customer : localeData?.add_vendor"
@@ -251,7 +251,7 @@
                                                     <div class="w-50 border-bottom zip-field-width">
                                                         <text-field [type]="'text'" [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
                                                             formControlName="pincode"></text-field>
                                                     </div>
                                                 </div>
@@ -337,7 +337,7 @@
                                                     </div>
                                                     <div class="w-50 border-bottom zip-field-width">
                                                         <text-field [type]="'text'" [name]="'shippingPinCode'"
-                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                            [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
                                                             formControlName="pincode"></text-field>
                                                     </div>
                                                 </div>
@@ -480,7 +480,7 @@
                                                 <div class="w-50 border-bottom zip-field-width">
                                                     <text-field [type]="'text'" [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
                                             </div>
@@ -556,7 +556,7 @@
                                                 </div>
                                                 <div class="w-50 border-bottom zip-field-width">
                                                     <text-field [type]="'text'" [name]="'companyShippingPinCode'"
-                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
                                             </div>
@@ -814,6 +814,7 @@
                                                                     <reactive-dropdown-field
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
+                                                                        (keydown.enter)="$event.preventDefault()"
                                                                         [label]="commonLocaleData?.app_account"
                                                                         [placeholder]="localeData?.select_acc"
                                                                         formControlName="uniqueName"
@@ -836,7 +837,7 @@
                                                                         (createOption)="toggleStockAsidePane()"
                                                                         [openDropdown]="entryIndex === activeEntryIndex && !transaction.get('account.uniqueName')?.value"
                                                                         [showOptionDivider]="true"
-                                                                        [showMatLabelWithLabledField]="false"
+                                                                        [showMatLabel]="false"
                                                                         [showCaretIcon]="false" [appearance]="'fill'">
                                                                         <ng-template #optionTemplate
                                                                             let-option="option">
@@ -904,7 +905,7 @@
                                                                                 [options]="stockVariants[entryIndex] | async"
                                                                                 (selectedOption)="selectVariant($event, entryIndex)"
                                                                                 (onClear)="selectVariant($event, entryIndex, true)"
-                                                                                [showMatLabelWithLabledField]="false"
+                                                                                [showMatLabel]="false"
                                                                                 [showCaretIcon]="false"
                                                                                 [appearance]="'fill'">
                                                                             </reactive-dropdown-field>
@@ -1211,6 +1212,7 @@
                                                                             [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
+                                                                            (keydown.enter)="$event.preventDefault()"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
                                                                     <span
@@ -1828,6 +1830,8 @@
                                         <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && invoiceType.isDebitNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_dn_update_account }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isDebitNote" (click)="generateVoucher()">{{ localeData?.generate_dn }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder)" (click)="generateVoucher()">{{ commonLocaleData?.app_save }}</button>
+                                        <!--  <button mat-stroked-button color="primary" *ngIf="invoiceType.isReceiptInvoice" (click)="generateVoucher()">{{ localeData?.create_receipt }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isPaymentInvoice" (click)="generateVoucher()">{{ localeData?.create_payment }}</button> -->
                                         <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice"><i class="caret"></i></button>
                                         <mat-menu #moreOptions="matMenu">
                                             <button mat-menu-item (click)="createSendVoucher()">{{ localeData?.create_send

@@ -49,7 +49,8 @@
         "paypal_update_successfully": "पेपाल खात्याची माहिती सफलतेचे अद्यतित केली गेली आहे.",
         "unlinked_account_successfully": "पेपाल खात्याची माहिती सफलतापूर्वक अनलिंक केली गेली आहे.",
         "paypal_tab_heading": "पेपाल",
-        "razorpay_tab_heading": "रेजरपे"
+        "razorpay_tab_heading": "रेजरपे",
+        "delete_credentials_message": "तुम्हाला खात्री आहे की तुम्हाला क्रेडेन्शियल्स हटवायची आहेत?"
 	},
 	"ecommerce": {
 		"tab_heading": "ई-कॉम",
@@ -134,7 +135,10 @@
         "institutions": "संस्था",
         "bank_list": "बँक यादी",
 		"banks": "बँका",
-        "permission_message":"तुम्हाला या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही."
+        "permission_message":"तुम्हाला या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही.",
+		"link_bank": "लिंक बँक",
+		"link": "दुवा",
+		"all_bank_are_linked" : "सर्व बँका जोडलेल्या आहेत"
 	},
     "communication": {
         "tab_heading": "संवाद"
@@ -144,5 +148,10 @@
         "copied":"कॉपी केले...",
         "api_url":"API URL :",
         "heading":"टेली"
-    }
+    },
+    "account_deleted_successfully": "खाते यशस्वीरित्या हटवले",
+    "portal_information":"पोर्टल माहिती",
+    "portal_domain": "पोर्टल डोमेन",
+    "portal_url": "पोर्टल यूआरएल",
+	"payment_gateway": "प्रदानाची द्वारमार्गिका"
 }

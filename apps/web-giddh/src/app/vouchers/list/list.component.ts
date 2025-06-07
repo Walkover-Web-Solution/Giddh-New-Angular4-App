@@ -39,6 +39,7 @@ import { TemplateFroalaComponent } from '../../shared/template-froala/template-f
 import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -333,6 +334,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public formToSave: any;
     /** Hold route params */
     public isRouteApplied: boolean = false;
+    /** Holds true if update setting mode */
+    public isSettingUpdateMode: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -394,6 +399,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.currentUrl = this.router.url;
         this.settingForm.get('invoiceSettings.autoPaid')?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -452,10 +458,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                if (this.activeModule === 'templates') {
+                    document.querySelector('body').classList.add('template-wrapper');
+                } else {
+                    document.querySelector('body').classList.remove('template-wrapper');
+                }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter(true);
-                if (params?.voucherType === VoucherTypeEnum.purchase && this.settingResponse && this.settingResponse.invoiceSettings) {
+                if (this.settingResponse?.invoiceSettings) {
                     this.settingForm.patchValue({
                         purchaseBillSettings: this.settingResponse.purchaseBillSettings || {},
                         invoiceSettings: this.settingResponse.invoiceSettings || {},
@@ -465,7 +476,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         companyInventorySettings: this.settingResponse.companyInventorySettings || {}
                     });
                 }
-                if (this.isEInvoiceEnabled === null) {
+                if (this.isEInvoiceEnabled === null || params?.voucherType) {
                     this.initSettingObj();
                 }
                 if (this.queryParams.page) {
@@ -617,16 +628,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.handleGetAllVoucherResponse(response);
             });
-
-        this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                const blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`;
-                this.selectedVouchers = [];
-                this.allVouchersSelected = false;
-                return saveAs(blob, fileName);
-            }
-        });
 
         this.componentStore.eInvoiceGenerated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -840,6 +841,50 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        const broadcast = new BroadcastChannel("settings");
+        broadcast.onmessage = (event) => {
+            if (event?.data?.form !== undefined && event?.data?.form !== null) {
+                let formValues = event?.data?.form;
+                this.settingForm.patchValue({
+                    purchaseBillSettings: formValues.purchaseBillSettings || {},
+                    invoiceSettings: formValues.invoiceSettings || {},
+                    proformaSettings: formValues.proformaSettings || {},
+                    estimateSettings: formValues.estimateSettings || {},
+                    companyEmailSettings: formValues.companyEmailSettings || {},
+                    companyInventorySettings: formValues.companyInventorySettings || {}
+                });
+                this.isEInvoiceEnabled = formValues.invoiceSettings?.gstEInvoiceEnable;
+                this.settingResponse = formValues;
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    if (!this.settingForm.get('purchaseBillSettings.enableVoucherDownload').value) {
+                        this.settingForm.get('purchaseBillSettings.enableVoucherDownload').patchValue(false);
+                    }
+                    if (!this.settingForm.get('invoiceSettings.purchaseRoundOff').value) {
+                        this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
+                    }
+
+                    if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
+                        this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
+                    }
+                    this.originalEmail = cloneDeep(formValues.purchaseBillSettings.email);
+                } else {
+                    this.originalEmail = cloneDeep(formValues.invoiceSettings.email);
+
+                    this.settingForm.get('invoiceSettings.autoPaid')?.setValue(
+                        this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
+                    );
+
+                    if (formValues.companyEmailSettings) {
+                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
+                            cloneDeep(formValues.companyEmailSettings.sendThroughGmail)
+                        );
+                    } else {
+                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
+                    }
+                }
+            }
+        };
     }
 
     /**
@@ -1234,9 +1279,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} selectedTabIndex
      * @memberof VoucherListComponent
      */
-    public tabChanged(selectedTabIndex: any): void {
-        this.selectedTabIndex = selectedTabIndex;
-        this.redirectToSelectedTab(selectedTabIndex);
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
+        this.redirectToSelectedTab(event.index);
     }
 
     /**
@@ -1376,24 +1421,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
     /**
-     * Export CSV File and Download
-     *
-     * @return {*}  {*}
-     * @memberof VoucherListComponent
-     */
-    public exportCsvDownload(): any {
-        let exportCsvRequest = { from: '', to: '', dataToSend: null };
-        exportCsvRequest.from = this.advanceFilters.from;
-        exportCsvRequest.to = this.advanceFilters.to;
-        let dataTosend = { uniqueNames: [], type: this.voucherType };
-        if (this.selectedVouchers?.length) {
-            dataTosend.uniqueNames = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
-            exportCsvRequest.dataToSend = dataTosend;
-            this.componentStore.exportVouchers(exportCsvRequest);
-        }
-    }
-
-    /**
      * Generate E-Invoice API Call
      *
      * @memberof VoucherListComponent
@@ -1491,6 +1518,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             localStorage.removeItem('universalSelectedDate');
             localStorage.removeItem('invoiceSelectedDate');
         }
+        document.querySelector('body').classList.remove('template-wrapper');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1514,15 +1542,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(BulkExportComponent, {
-            width: '600px',
+        let voucherType = this.voucherType;
+        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+            voucherType = this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate : VoucherTypeEnum.proforma;
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            voucherType = "purchase order";
+        }
+        const dialogRef = this.dialog.open(BulkExportComponent, {
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                voucherType: this.voucherType,
+                voucherType: voucherType,
                 advanceFilters: this.advanceFilters,
-                totalItems: this.selectedVouchers?.length || this.totalResults
+                totalItems: this.selectedVouchers?.length || this.totalResults,
+                allVouchersSelected: this.allVouchersSelected,
+                localeData: this.localeData
             },
+            maxHeight: '80vh',
             disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+            }
         });
     }
 
@@ -1651,19 +1694,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.poBulkAction('delete');
                     }
                 } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    const voucher = this.selectedVouchers[0];
+                    const selectedVoucher = voucher ?? this.selectedVouchers[0];
                     const payload = {
-                        accountUniqueName: voucher.customerUniqueName
+                        accountUniqueName: selectedVoucher.customerUniqueName
                     }
                     if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-                        payload['estimateNumber'] = voucher?.estimateNumber;
+                        payload['estimateNumber'] = selectedVoucher?.estimateNumber;
                     } else {
-                        payload['proformaNumber'] = voucher?.proformaNumber;
+                        payload['proformaNumber'] = selectedVoucher?.proformaNumber;
                     }
                     this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
                     const payload = {
-                        voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                        voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
                         voucherType: this.voucherType
                     };
                     this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
@@ -1953,6 +1996,27 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handle Cancel Voucher Dialog
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public openCancelVoucherDialog(voucher: any): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.cancel_voucher_confirmation_message, this.commonLocaleData)
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                this.actionVoucher(voucher, 'cancel');
+            }
+        });
+    }
+
+    /**
      * Handle Voucher Actions API Call
      *
      * @param {*} voucher
@@ -1960,7 +2024,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public actionVoucher(voucher: any, action: string): void {
-        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
+        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType }});
     }
 
     /**
@@ -2087,7 +2151,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const accountUniqueName = voucher?.account?.uniqueName;
 
         if (accountUniqueName && fromDate && toDate) {
-            const url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            let url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            url = url + `?redirectUrl=${this.currentUrl}`;
             this.openUrl(url);
         }
     }
@@ -2478,10 +2543,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const voucher = this.selectedPendingVouchers[0];
         const uniqueNames = this.selectedPendingVouchers.map(voucher => voucher.uniqueName).join(',');
         if (voucher) {
-            this.router.navigate(
-                [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
-                { queryParams: { entryUniqueNames: uniqueNames, voucherType: this.voucherType } }
-            );
+            let url = `/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create?entryUniqueNames=${uniqueNames}&voucherType=${this.voucherType}`;
+            this.openUrl(url);
         }
     }
 
@@ -2760,7 +2823,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Deletes an email by email ID
+     * Deletes email ID
      *
      * @param {string} emailId
      * @return {*}
@@ -2769,16 +2832,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public deleteEmail(emailId: string) {
         if (!emailId) {
             return false;
-        } else {
-            if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                this.updateSettingsEmail(null);
-                return true;
-            } else {
-                let emailTodelete = cloneDeep(emailId);
-                emailTodelete = null;
-                this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+        } 
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.delete_email_confirmation_message, this.commonLocaleData)
             }
-        }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    this.updateSettingsEmail(null);
+                    return true;
+                } else {
+                    this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(null)); // send null to delete email
+                }
+            }
+        });
     }
 
     /**
@@ -3000,73 +3072,75 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public initSettingObj(): void {
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(setting => {
-            if (setting && setting.invoiceSettings) {
-                this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
-                if (!this.isEInvoiceEnabled) {
-                    this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                    this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
-                } else {
-                    if (!this.displayedColumns?.includes("einvoicestatus")) {
-                        this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
-                    }
-                    if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
-                        this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
-                    }
-                }
-                this.settingResponse = setting;
-                this.settingForm.patchValue({
-                    purchaseBillSettings: setting.purchaseBillSettings || {},
-                    invoiceSettings: setting.invoiceSettings || {},
-                    proformaSettings: setting.proformaSettings || {},
-                    estimateSettings: setting.estimateSettings || {},
-                    companyEmailSettings: setting.companyEmailSettings || {},
-                    companyInventorySettings: setting.companyInventorySettings || {}
-                });
-                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                    if (!this.settingForm.get('purchaseBillSettings.enableVoucherDownload').value) {
-                        this.settingForm.get('purchaseBillSettings.enableVoucherDownload').patchValue(false);
-                    }
-                    if (!this.settingForm.get('invoiceSettings.purchaseRoundOff').value) {
-                        this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
-                    }
-
-                    if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
-                        this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
-                    }
-                    this.originalEmail = cloneDeep(setting.purchaseBillSettings.email);
-                } else {
-                    this.originalEmail = cloneDeep(setting.invoiceSettings.email);
-
-                    this.settingForm.get('invoiceSettings.autoPaid')?.setValue(
-                        this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
-                    );
-
-                    if (setting.companyEmailSettings) {
-                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
-                            cloneDeep(setting.companyEmailSettings.sendThroughGmail)
-                        );
+        if (!this.isSettingUpdateMode) {
+            this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(setting => {
+                if (setting && setting.invoiceSettings) {
+                    this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
+                    if (!this.isEInvoiceEnabled) {
+                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                        this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
                     } else {
-                        this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
+                        if (!this.displayedColumns?.includes("einvoicestatus")) {
+                            this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
+                        }
+                        if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
+                            this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
+                        }
                     }
+                    this.settingResponse = setting;
+                    this.settingForm.patchValue({
+                        purchaseBillSettings: setting.purchaseBillSettings || {},
+                        invoiceSettings: setting.invoiceSettings || {},
+                        proformaSettings: setting.proformaSettings || {},
+                        estimateSettings: setting.estimateSettings || {},
+                        companyEmailSettings: setting.companyEmailSettings || {},
+                        companyInventorySettings: setting.companyInventorySettings || {}
+                    });
+                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                        if (!this.settingForm.get('purchaseBillSettings.enableVoucherDownload').value) {
+                            this.settingForm.get('purchaseBillSettings.enableVoucherDownload').patchValue(false);
+                        }
+                        if (!this.settingForm.get('invoiceSettings.purchaseRoundOff').value) {
+                            this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
+                        }
+
+                        if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
+                            this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
+                        }
+                        this.originalEmail = cloneDeep(setting.purchaseBillSettings.email);
+                    } else {
+                        this.originalEmail = cloneDeep(setting.invoiceSettings.email);
+
+                        this.settingForm.get('invoiceSettings.autoPaid')?.setValue(
+                            this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
+                        );
+
+                        if (setting.companyEmailSettings) {
+                            this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
+                                cloneDeep(setting.companyEmailSettings.sendThroughGmail)
+                            );
+                        } else {
+                            this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
+                        }
+                    }
+                    if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                        this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                        this.applyRoundOff = setting.invoiceSettings.purchaseRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.debitNote) {
+                        this.applyRoundOff = setting.invoiceSettings.debitNoteRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.creditNote) {
+                        this.applyRoundOff = setting.invoiceSettings.creditNoteRoundOff;
+                    } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = true;
+                    } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                        this.applyRoundOff = true;
+                    }
+                } else if (!setting) {
+                    this.store.dispatch(this.invoiceActions.getInvoiceSetting());
                 }
-                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.applyRoundOff = setting.invoiceSettings.purchaseRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
-                    this.applyRoundOff = setting.invoiceSettings.debitNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
-                    this.applyRoundOff = setting.invoiceSettings.creditNoteRoundOff;
-                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    this.applyRoundOff = true;
-                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.applyRoundOff = true;
-                }
-            } else if (!setting) {
-                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -3076,6 +3150,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public onSubmit(): void {
+        this.isSettingUpdateMode = true;
         if (this.settingForm.get('invoiceSettings.autoPaid').value) {
             this.settingForm.get('invoiceSettings.autoPaid').patchValue('runtime');
         } else {
@@ -3132,7 +3207,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
    * @memberof VoucherListComponent
    */
     public shouldDeleteEmail(voucherType?: string): boolean {
-        const email = voucherType === 'invoice ' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
+        const email = voucherType === 'invoice' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
         return email && email.length >= 4;
     }
 }

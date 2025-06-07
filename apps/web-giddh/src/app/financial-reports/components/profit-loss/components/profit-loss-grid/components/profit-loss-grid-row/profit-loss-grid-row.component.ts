@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
@@ -17,14 +18,19 @@ export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public incomeStatement: any;
     @Input() public from: string = '';
     @Input() public to: string = '';
+    /** Profit loss headers array */
+    @Input() public plHeaders: any[];
     /** True, if all items are expanded  */
     @Input() public expandAll: boolean;
     /** Minimum limit on which Trial balance viewport enables */
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
+    /** Hold current url */
+    private currentUrl: string = "";
 
-    constructor(private cd: ChangeDetectorRef) {
+    constructor(private cd: ChangeDetectorRef, private router: Router) {
+        this.currentUrl = this.router.url;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -36,14 +42,28 @@ export class ProfitLossGridRowComponent implements OnChanges {
         }
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+    /**
+     *  This will be redirect to ledger
+     *
+     * @param {*} acc
+     * @return {*}  {void}
+     * @memberof ProfitLossGridRowComponent
+     */
+    public entryClicked(acc: any): void {
+        if (!acc?.uniqueName) return;
+
+        // Base return URL
+        const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
+
+        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-            console.log(ipcRenderer.send('open-url', url));
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+            ipcRenderer.send('open-url', electronUrl);
         } else {
-            (window as any).open(url);
+            (window as any).open(url, '_blank');
         }
     }
 
@@ -57,5 +77,20 @@ export class ProfitLossGridRowComponent implements OnChanges {
      */
     public trackByFn(index, item: Account): string {
         return item?.uniqueName;
+    }
+
+    /**
+     * Retrieves the keys of an object.
+     *
+     * @param obj The object whose keys are to be retrieved.
+     * @returns An array of strings representing the keys of the object, or an empty array if the input is null or undefined.
+     * @memberof ProfitLossGridRowComponent
+     */
+    public getKeys(obj: Record<string, any> | null | undefined): string[] | [] {
+        if (obj) {
+            return Object.keys(obj);
+        } else {
+            return [];
+        }
     }
 }

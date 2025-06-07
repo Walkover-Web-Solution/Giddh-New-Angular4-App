@@ -73,6 +73,8 @@
     "bill_no": "बिल संख्या",
     "bill_date": "बिल की तिथि",
     "po_number": "क्रय आदेश #",
+    "linked_order": "संबंधित ऑर्डर",
+    "order_no": "क्रम संख्या.",
     "balance_due": "शेष राशि",
     "due_date": "नियत तारीख",
     "cr_note_no": "क्रेडिट नोट संख्या.",
@@ -365,5 +367,9 @@
     "show_narration_ledger": "बही खाता के लिए कथन दिखाएँ",
     "enable_voucher_download": "वाउचर डाउनलोड सक्षम करें",
     "apply_purchase_round_off": "खरीद वाउचर पर राउंड ऑफ लागू करें",
-    "generate_auto_purchase_number":"बिल और डेबिट नोट के लिए सिस्टम जनरेटेड नंबर की अनुमति दें"
+    "generate_auto_purchase_number":"बिल और डेबिट नोट के लिए सिस्टम जनरेटेड नंबर की अनुमति दें",
+    "new_receipt": "+ नया रिसीप्ट",
+    "new_payment": "+ नया भुगतान",
+    "cancel_voucher_confirmation_message": "क्या आप वाकई इस वाउचर को रद्द करना चाहते हैं?",
+    "delete_email_confirmation_message": "क्या आप वाकई इस ईमेल को हटाना चाहते हैं?"
 }

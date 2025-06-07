@@ -1,35 +1,33 @@
 <div class="modal-header d-flex align-items-center">
     <h3>{{ localeData?.payment?.bank_list }}</h3>
-    <button class="close" mat-dialog-close>×</button>
+    <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
 </div>
 <giddh-page-loader *ngIf="institutionsListInProgress$ | async"></giddh-page-loader>
 <mat-dialog-content class="institutions-dialog-body" *ngIf="!(institutionsListInProgress$ | async)">
     <div class="w-100 container pd-t15 pd-b15">
         <div class="row">
             <div class="col-12 institution-list">
-                <form [formGroup]="searchForm">
-                    <input-field
-                        [autocomplete]="'off'"
-                        [name]="'institutions'"
-                        [placeholder]="localeData?.payment?.search_bank"
-                        [type]="'text'"
-                        formControlName="search"
-                        [label]="localeData?.payment?.banks"
-                        (keydown.enter)="$event.preventDefault()"
-                        [matPrefixIcon]="'icon-search'"
-                    >
-                    </input-field>
-                </form>
+                <input-field
+                    [autocomplete]="'off'"
+                    [name]="'institutions'"
+                    [placeholder]="localeData?.payment?.search_bank"
+                    [type]="'text'"
+                    [formControl]="searchFormControl"
+                    [label]="localeData?.payment?.banks"
+                    (keydown.enter)="$event.preventDefault()"
+                    [matPrefixIcon]="'icon-search'"
+                >
+                </input-field>
                 <div class="list-wrapper mt-2">
                     <mat-list class="p-0" *ngIf="filteredBanks?.length">
                         <ng-container *ngFor="let item of filteredBanks">
                             <div class="list-item px-2">
-                                <mat-list-item
-                                    class="p-0 border-bottom"
+                                <mat-list-item class="p-0 border-bottom">
+                                    <span
+                                        class="list-item-underline-hover cursor-pointer"
+                                        (click)="openGocardlessDialog(item)"
+                                        >{{ item.name }}</span
                                     >
-                                    <span 
-                                        class="list-item-underline-hover cursor-pointer" 
-                                        (click)="openGocardlessDialog(item)">{{ item.name }}</span>
                                 </mat-list-item>
                             </div>
                         </ng-container>

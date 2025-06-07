@@ -73,6 +73,8 @@
     "bill_no": "Bill No.",
     "bill_date": "Bill Date",
     "po_number": "Purchase Order",
+    "linked_order": "Linked Orders",
+    "order_no": "Order No.",
     "balance_due": "Balance Due",
     "due_date": "Due Date",
     "cr_note_no": "Cr Note No.",
@@ -365,5 +367,9 @@
     "show_narration_ledger": "Show narration to ledger",
     "enable_voucher_download": "Enable Voucher Download",
     "apply_purchase_round_off": "Apply round off on purchase voucher",
-    "generate_auto_purchase_number":"Allow system generated number for Bill and Debit note"
+    "generate_auto_purchase_number":"Allow system generated number for Bill and Debit note",
+    "new_receipt": "+ New Receipt",
+    "new_payment": "+ New Payment",
+    "cancel_voucher_confirmation_message": "Are you sure you want to cancel this voucher?",
+    "delete_email_confirmation_message": "Are you sure you want to delete this email?"
 }

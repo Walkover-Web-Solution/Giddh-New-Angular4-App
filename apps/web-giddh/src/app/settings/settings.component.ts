@@ -132,14 +132,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
                     if (this.financialYearComp) {
                         this.financialYearComp.getInitialFinancialYearData();
                     }
-                }, 0);
+                }, 100);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
                     if (this.permissionComp) {
                         this.permissionComp.getInitialData();
                     }
                 }, 0);
-            }            
+            }
             if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');

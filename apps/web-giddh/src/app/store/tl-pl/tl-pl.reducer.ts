@@ -1,5 +1,5 @@
 import { TBPlBsActions } from '../../actions/tl-pl.actions';
-import { AccountDetails, BalanceSheetData, GetCogsResponse, ProfitLossData } from '../../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetData, GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse } from '../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../models/api-models/Search';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
@@ -19,7 +19,7 @@ interface PlState {
     exportData: any;
     showLoader: boolean;
     noData: boolean;
-    cogs: GetCogsResponse;
+    cogs: ProfitLossDateRangeResponse<GetCogsResponse>;
 }
 
 interface BsState {
@@ -49,7 +49,7 @@ export const initialState: TBPlBsState = {
         noData: true,
         showLoader: false,
         exportData: [],
-        cogs: new GetCogsResponse()
+        cogs: new ProfitLossDateRangeResponse<GetCogsResponse>()
     },
     bs: {
         data: null,
@@ -210,11 +210,11 @@ const filterProfitLossData = (data, statement) => {
     filterPlData.incArr = [];
     filterPlData.expArr = [];
     filterPlData.othArr = [];
-    let revenueGroup: any = revenueParentGrp(new ParentGrp(), incomeStatement.revenue);
-    let operatingGrp: any = operatingExpParentGrp(new ParentGrp(), incomeStatement.operatingExpenses);
-    let otherExpGrp: any = otherExpParentGrp(new ParentGrp(), incomeStatement.otherExpenses);
-
-    each(data, (grp: any, idx) => {
+    let revenueGroup: any = revenueParentGrp(new ParentGrp(), incomeStatement.revenue[Object.keys(incomeStatement.revenue)[0]]);
+    let operatingGrp: any = operatingExpParentGrp(new ParentGrp(), incomeStatement.operatingExpenses[Object.keys(incomeStatement.operatingExpenses)[0]]);
+    let otherExpGrp: any = otherExpParentGrp(new ParentGrp(), incomeStatement.otherExpenses[Object.keys(incomeStatement.otherExpenses)[0]]);
+    
+   each(data, (grp: any, idx) => {
         grp.isVisible = false;
         switch (grp.category) {
             case 'income':
@@ -247,18 +247,19 @@ export const prepareProfitLossData = (data) => {
         plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
         plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
         plData.incomeStatement = data.incomeStatement;
+        plData.headers = data.headers;
         if (plData.incomeTotal >= plData.expenseTotal) {
             plData.inProfit = true;
         }
         if (plData.incomeTotal < plData.expenseTotal) {
             plData.inProfit = false;
         }
-        if (data.closingBalance.type === 'CREDIT') {
+        if (data.groupInfo.closingBalance[Object.keys(data.groupInfo.closingBalance)[0]].type === 'CREDIT') {
             plData.closingBalanceClass = true;
         } else {
             plData.closingBalanceClass = false;
         }
-        if (data.forwardedBalance.type === 'CREDIT') {
+        if (data.groupInfo.forwardedBalance[Object.keys(data.groupInfo.closingBalance)[0]].type === 'CREDIT') {
             plData.frowardBalanceClass = true;
         } else {
             plData.frowardBalanceClass = false;
@@ -341,7 +342,7 @@ const filterBalanceSheetData = data => {
     return filterPlData;
 };
 
-const prepareBalanceSheetData = (data) => {
+export const prepareBalanceSheetData = (data) => {
     let bsData: BalanceSheetData = filterBalanceSheetData(data.groupDetails);
     bsData.assetTotal = calCulateTotalAssets(bsData.assets);
     bsData.assetTotalEnd = calCulateTotalAssetsEnd(bsData.assets);

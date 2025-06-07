@@ -158,7 +158,7 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (input)="selectRow(true, i); updateTotalCreditDebit()"
+                                                (input)="selectRow(true, i); updateTotalCreditDebit(); updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
@@ -190,7 +190,7 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (input)="selectRow(true, i); updateTotalCreditDebit()"
+                                                (input)="selectRow(true, i); updateTotalCreditDebit(); updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);

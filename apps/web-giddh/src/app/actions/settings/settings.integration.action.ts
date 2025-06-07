@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
-import { SettingsIntegrationService } from '../../services/settings.integraion.service';
+import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass, PayPalClass, PaypalDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/custom-actions';
 import { CompanyActions } from "../company.actions";

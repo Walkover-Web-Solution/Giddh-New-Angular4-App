@@ -19,12 +19,14 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
+import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class ReportsComponent implements OnInit {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
@@ -64,8 +66,6 @@ export class ReportsComponent implements OnInit {
     public dataSource = [];
     /** This will use for stock report displayed columns */
     public displayedColumns: any[] = [];
-    /** This will use for  table report header columns */
-    public tableHeaderColumns: any[] = [];
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [];
     /** Hold From Date*/
@@ -108,34 +108,20 @@ export class ReportsComponent implements OnInit {
     public showContent: boolean = true;
     /** False if pull unitversal date  */
     public pullUniversalDate: boolean = true;
-    /** This will use for  table report header displayed all columns */
-    public headerColumns = {
-        entity_group_name: {
-            search: 'name',
-            colSpan: 0
-        },
-        opening_stock: {
-            search: 'opening',
-            colSpan: 0
-        },
-        inwards: {
-            search: 'inward',
-            colSpan: 0
-        },
-        outwards: {
-            search: 'outward',
-            colSpan: 0
-        },
-        closing_stock: {
-            search: 'closing',
-            colSpan: 0
-        },
-    }
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    /** This will use for stock report column check values */
+    public newCustomFieldsColumns: any[] = [];
+    /** Custom fields request */
+    public customFieldsVariantRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'variant'
+    };
+    /** Custom Fields list Observable */
+    public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -144,7 +130,8 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private commonAction: CommonActions
+        private commonAction: CommonActions,
+        private inventoryStore: InventoryComponentStore
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
@@ -199,6 +186,22 @@ export class ReportsComponent implements OnInit {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
+            if (this.reportType === InventoryReportType.stock || this.reportType === InventoryReportType.variant) {
+                this.getCustomFields();
+                this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response) {
+                        const results = response.map(result => {
+                            return {
+                                label: result.fieldName,
+                                value: result.uniqueName,
+                                checked: false,
+                                type: result.fieldType
+                            }
+                        });
+                        this.newCustomFieldsColumns = results;
+                    }
+                });
+            }
             if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
                 this.moduleType = 'FIXED_ASSETS';
             } else {
@@ -312,6 +315,15 @@ export class ReportsComponent implements OnInit {
                 this.translationComplete(true);
             }
         });
+    }
+
+    /**
+     * This will be use for get custom fields
+     *
+     * @memberof ReportsComponent
+     */
+    public getCustomFields(): void {
+        this.inventoryStore.getCustomFields(this.customFieldsVariantRequest);
     }
 
     /**
@@ -524,6 +536,19 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
+     * This will be use get custom fields value according to columns
+     *
+     * @param {*} element
+     * @param {string} uniqueName
+     * @return {*}  {string}
+     * @memberof ReportsComponent
+     */
+    public getCustomFieldValue(element: any, uniqueName: string): string {
+        const field = element?.customFields?.find((customField: any) => customField?.uniqueName === uniqueName);
+        return field?.value ?? null;
+    }
+
+    /**
     * This function will change the page of activity logs
     *
     * @param {*} event
@@ -593,27 +618,22 @@ export class ReportsComponent implements OnInit {
      */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
-        this.tableHeaderColumns = [];
-        Object.keys(this.headerColumns).forEach(key => {
-            const colSpan = this.calculateColSpan(this.headerColumns[key].search);
-            if (colSpan !== 0) {
-                this.tableHeaderColumns.push(key);
-                this.headerColumns[key].colSpan = colSpan;
-            }
-        });
     }
 
     /**
-     *This will use for calculating the col span
+     * This will use for show hide main table headers from dynamic columns with new columns
      *
-     * @param {string} column
-     * @return {*}  {number}
+     * @param {*} event
      * @memberof ReportsComponent
      */
-    public calculateColSpan(column: string): number {
-        return this.displayedColumns?.filter(value => value?.includes(column))?.length;
+    public getCustomiseDynamicHeaderColumns(event: any): void {
+        if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item?.value);
+            this.getReport(false);
+        }
     }
-
 
     /**
      * This will use for get reports by unqiue name

@@ -51,6 +51,7 @@ import { FinancialReportsRoutingModule } from './financial-reports.routing.modul
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { MatButtonModule } from '@angular/material/button';
+import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 
 @NgModule({
     declarations: [
@@ -70,7 +71,6 @@ import { MatButtonModule } from '@angular/material/button';
         BalanceSheetGridComponent,
         BalanceSheetGridRowComponent,
         FinancialAccordionDirective,
-        FinancialSearchPipe,
         AccountsFilterPipe
     ],
     exports: [
@@ -113,7 +113,9 @@ import { MatButtonModule } from '@angular/material/button';
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
         AsideMenuAccountModule,
-        MatButtonModule
+        FinancialSearchPipe,
+        MatButtonModule,
+        CompareWithDateRangePickerComponent
     ],
 })
 export class FinancialReportsModule {

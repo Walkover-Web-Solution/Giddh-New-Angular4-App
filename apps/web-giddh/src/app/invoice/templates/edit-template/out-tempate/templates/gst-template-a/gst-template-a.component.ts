@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
+import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 
 @Component({
     selector: 'gst-template-a',
@@ -31,7 +32,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
     @Input() public voucherType: string;
-
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
     public companySetting$: Observable<any> = observableOf(null);
     public companyAddress: string = '';
@@ -44,7 +44,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public activeCompany: any;
     /** Holds images folder path */
     public imgPath: string = "";
-
+    /** Holds the value if company is Indian */
+    public isIndianCompany: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -53,6 +54,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
+        this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(a => {
             if (a && a.address) {

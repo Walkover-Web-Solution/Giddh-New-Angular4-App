@@ -49,7 +49,8 @@
         "paypal_update_successfully":"Paypal account details have been updated successfully.",
         "unlinked_account_successfully":"Paypal account details have been unlink successfully.",
         "paypal_tab_heading": "Paypal",
-        "razorpay_tab_heading": "Razorpay"
+        "razorpay_tab_heading": "Razorpay",
+        "delete_credentials_message": "Are you sure you want to delete the credentials?"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",
@@ -134,7 +135,10 @@
         "institutions":"Institutions",
         "bank_list":"Bank List",
         "banks": "Banks",
-        "permission_message":"You do not have permission to access this module."
+        "permission_message":"You do not have permission to access this module.",
+        "link_bank": "Link Bank",
+        "link": "Link",
+        "all_bank_are_linked" : "All bank are Linked"  
     },
     "communication": {
         "tab_heading": "Communication"
@@ -144,5 +148,10 @@
         "copied":"Copied...",
         "api_url":"API URL : ",
         "heading":"Tally"
-    }
+    },
+    "account_deleted_successfully": "Account deleted successfully",
+    "portal_information":"Portal Information",
+    "portal_domain": "Portal Domain",
+    "portal_url": "Portal URL",
+    "payment_gateway": "Payment Gateway"
 }

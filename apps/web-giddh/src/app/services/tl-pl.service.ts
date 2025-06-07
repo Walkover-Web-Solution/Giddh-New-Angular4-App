@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
-import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -79,6 +79,32 @@ export class TlPlService {
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
+                    data.request = request;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<AccountDetails, ProfitLossRequest>(e, request)));
+    }
+
+    /**
+     * Get Compared Profit/Loss
+     *
+     * @param {ProfitLossRequest} request
+     * @return {*}  {Observable<BaseResponse<AccountDetails, ProfitLossRequest>>}
+     * @memberof TlPlService
+     */
+    public getComparedProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
+        let filteredRequest = (Object.keys(request)
+            ?.filter(key => request[key] != null)
+            .reduce((params, item) => ({ ...params, [item]: request[item] }), {}));
+
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COMPARED_PROFIT_LOSS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
@@ -178,5 +204,47 @@ export class TlPlService {
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Fetches the multi-currency report for the given report type.
+     * 
+     * @param {string} reportType - The type of report to fetch (e.g., "TrialBalance", "ProfitLoss").
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the report data.
+     * @memberof TlPlService
+     */
+    public getMultiCurrencyReport(reportType: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', reportType)).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+
+    /**
+      * Creates the multi-currency report for the given report type and payload.
+      * 
+      * @param {string} reportType - The type of report to create (e.g., "TrialBalance", "ProfitLoss").
+      * @param {any} payload - The payload data to send in the request.
+      * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report creation.
+      * @memberof TlPlService
+      */
+    public creatMultiCurrencyReport(reportType: string, payload: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', reportType), payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 }
