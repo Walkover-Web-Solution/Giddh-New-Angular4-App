@@ -141,7 +141,9 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 this.listOfCheckGroupsAccounts = [];
-                this.refresh.emit();
+                setTimeout(() => {
+                    this.refresh.emit();
+                }, 200);
             }
         });
     }
