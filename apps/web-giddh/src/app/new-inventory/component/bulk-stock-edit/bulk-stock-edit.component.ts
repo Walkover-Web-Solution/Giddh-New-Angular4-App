@@ -192,8 +192,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             select(select => select.inventory.bulkStock),
             takeUntil(this.destroyed$)
         ).subscribe((res: any) => {
-            if (res) {
-                this.isLoading = false;
+            this.isLoading = false;
+            if (res && res?.results) {
                 this.isApiCalled = false;
                 const bulkStockForm = this.bulkStockData;
                 bulkStockForm.clear();
@@ -201,13 +201,16 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.noDataFound = res.totalItems === 0;
 
                 this.totalInventoryCount = res?.totalItems;
-                res.results.forEach((row, index) => {
+                res.results.forEach((row: any, index: number) => {
                     this.dropdownValues[index] = [];
                     this.dropdownValues[index].salesUnits = row.salesUnits;
                     this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
                     this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
                     this.addRow(row);
                 });
+            } else if(res.status === 'error') {
+                this.isApiCalled = false;
+                this.noDataFound = true;
             }
         });
 
