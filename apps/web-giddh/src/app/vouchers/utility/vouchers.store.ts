@@ -447,6 +447,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getExchangeRate = this.effect((data: Observable<{ fromCurrency: string, toCurrency: string, date: string }>) => {
         return data.pipe(
             switchMap((req) => {
+                this.patchState({ exchangeRate: null });
                 return this.ledgerService.GetCurrencyRateNewApi(req.fromCurrency, req.toCurrency, req.date).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -946,9 +947,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.exportVouchers(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                exportVouchersFile: res.body
-                            });
+                            if (res?.status === "success") {
+                                return this.patchState({
+                                    exportVouchersFile: res.body
+                                });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    exportVouchersFile: null
+                                });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);

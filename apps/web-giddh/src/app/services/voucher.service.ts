@@ -20,6 +20,7 @@ import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 import { COMMON_API } from "./apiurls/common.api";
 import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
+import { LEDGER_API } from "./apiurls/ledger.api";
 
 
 @Injectable()
@@ -478,7 +479,11 @@ export class VoucherService {
      */
     public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
+        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV
+        ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        ?.replace(':from', encodeURIComponent(model.from))
+        ?.replace(':to', encodeURIComponent(model.to))
+        ?.replace(':fileType', model?.exportType ?? 'base64');
 
         delete model.dataToSend.from;
         delete model.dataToSend.to;
@@ -490,7 +495,7 @@ export class VoucherService {
                 data.request = model;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
     }
 
     /**
@@ -733,13 +738,14 @@ export class VoucherService {
      */
     public bulkExport(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + BULK_VOUCHER_EXPORT_API.BULK_EXPORT;
+        let url = this.config.apiUrl + (getRequest.accountUniqueName ? LEDGER_API.BULK_EXPORT_LEDGER : BULK_VOUCHER_EXPORT_API.BULK_EXPORT);
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', getRequest.from);
         url = url?.replace(':to', getRequest.to);
         url = url?.replace(':type', getRequest.type);
         url = url?.replace(':mail', getRequest.mail);
         url = url?.replace(':q', getRequest.q);
+        url = url?.replace(':accountUniqueName', getRequest.accountUniqueName);
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         delete postRequest.from;
         delete postRequest.to;

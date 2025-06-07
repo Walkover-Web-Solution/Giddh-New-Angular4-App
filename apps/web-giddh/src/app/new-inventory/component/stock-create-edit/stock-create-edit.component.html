@@ -40,7 +40,7 @@
                     >
                         <div class="stock-width">
                             <div class="row flex-column-reverse flex-md-row">
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
+                                <div class="col-12 upper-common-form-label-field">
                                     <div class="row row-gap">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
@@ -65,6 +65,7 @@
                                                 [name]="'uniqueName'"
                                                 [placeholder]="commonLocaleData?.app_unique_name"
                                                 [type]="'text'"
+                                                [disabled]="queryParams?.stockUniqueName"
                                                 [(ngModel)]="stockForm.uniqueName"
                                                 [autocomplete]="'off'"
                                             >
@@ -483,7 +484,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3 which-tab">
+                                                                        <div class="col-12 pt-3 which-tab">
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
@@ -503,7 +504,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-6 which-tab-3"
+                                                                            class="col-12 which-tab-3"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -688,7 +689,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3">
+                                                                        <div class="col-12 pt-3">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -708,7 +709,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-6"
+                                                                            class="col-12"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -899,7 +900,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">
-                                                                            <div class="delete-btn-wrapper">
+                                                                            <div class="delete-btn-wrapper pd-t1">
                                                                                 <button
                                                                                     aria-label="delete icon"
                                                                                     mat-icon-button
@@ -1668,7 +1669,7 @@
                                     <div class="tab-container-new px-3">
                                         <div class="other-width">
                                             <div class="row row-gap align-items-center">
-                                                <div class="col-sm-6 col-lg-12 mb-3">
+                                                <div class="col-12 mb-3">
                                                     <mat-radio-group
                                                         color="primary"
                                                         name="hsn_sac"

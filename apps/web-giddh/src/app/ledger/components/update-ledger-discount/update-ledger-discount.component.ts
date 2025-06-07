@@ -46,7 +46,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
-    private discountsList: any[] = [];
+    @Input() public discountsList: any[] = [];
     /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
     /** Emitter for create new discount */
@@ -88,6 +88,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                 }
             }
             this.change();
+        }
+
+        if ('discountsList' in changes && changes.discountsList.currentValue !== changes.discountsList.previousValue) {
+            this.prepareDiscountList();
         }
     }
 
@@ -140,11 +144,12 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.amount = parseFloat(val);
-        this.defaultDiscount.discountValue = parseFloat(val);
+        this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
+
         if (type === 'PERCENTAGE') {
             this.discountFromPer = true;
             this.discountFromVal = false;
@@ -152,11 +157,12 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             this.discountFromPer = false;
             this.discountFromVal = true;
         }
-        if (!Number(val)) {
+        if (!val) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;
         }
+
     }
 
     /**

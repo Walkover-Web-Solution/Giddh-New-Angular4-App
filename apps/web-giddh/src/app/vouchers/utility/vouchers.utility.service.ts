@@ -597,7 +597,7 @@ export class VouchersUtilityService {
                 return item.errorMessage ?? localeData?.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
                 // When invoice is B2C or B2B cancelled invoice
-                return item.errorMessage ?? localeData?.e_invoice_statuses.na;
+                return item.errorMessage ?? localeData?.e_invoice_statuses?.na;
             default: return '';
         }
     }

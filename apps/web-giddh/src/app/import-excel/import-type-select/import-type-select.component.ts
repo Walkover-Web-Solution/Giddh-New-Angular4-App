@@ -1,5 +1,5 @@
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
@@ -7,6 +7,8 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
 import { MatDialog } from '@angular/material/dialog';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'import-type-select',
@@ -25,16 +27,22 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds a reference to the `VoucherType` enum */
+    public voucherType: typeof VoucherType = VoucherType;
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private store: Store<AppState>,
         private generalService: GeneralService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];

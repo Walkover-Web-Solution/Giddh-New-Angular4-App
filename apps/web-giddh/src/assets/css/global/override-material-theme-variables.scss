@@ -1,0 +1,13 @@
+.mat-mdc-standard-chip {
+    --mdc-chip-label-text-color: var(--color-common-primary-text) !important;
+}
+
+.mat-mdc-outlined-button {
+    &.mat-unthemed {
+        --mdc-outlined-button-label-text-color: var(--color-common-primary-text) !important;
+    }
+
+    &.mat-primary {
+        --mdc-outlined-button-label-text-color: var(--color-giddh-blue) !important;
+    }
+}

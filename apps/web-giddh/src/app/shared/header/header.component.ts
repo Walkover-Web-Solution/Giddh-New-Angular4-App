@@ -606,6 +606,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (response) {
                 this.expandSidebar(true);
+
             } else {
                 this.collapseSidebar(true);
             }
@@ -1339,8 +1340,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
      * Navigates to obligation
-     * 
-     * @returns {*} 
+     *
+     * @returns {*}
      * @memberof HeaderComponent
      */
     public goToObligation(): void {
@@ -1362,7 +1363,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * Placeholders are denoted as `[placeholder]` and replaced sequentially.
      *
      * @param {string} text
-     * @param {string[]} args 
+     * @param {string[]} args
      * @returns {string} A string where placeholders are replaced with corresponding arguments.
      * @memberof HeaderComponent
      */

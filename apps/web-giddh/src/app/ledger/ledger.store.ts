@@ -5,6 +5,8 @@ import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { LedgerService } from "../services/ledger.service";
 import { SearchService } from "../services/search.service";
+import { AccountService } from "../services/account.service";
+import { AccountRequestV2 } from "../models/api-models/Account";
 
 export interface LedgerState {
     ledgerBalance: any;
@@ -12,6 +14,7 @@ export interface LedgerState {
     uploadVoucherSuccess: boolean;
     importVoucherSuccess: any;
     accountSearch: any;
+    isLedgerViewChange: boolean;
 }
 
 export const DEFAULT_LEDGER_STATE: LedgerState = {
@@ -19,7 +22,8 @@ export const DEFAULT_LEDGER_STATE: LedgerState = {
     signedUrlSuccess: null,
     uploadVoucherSuccess: false,
     importVoucherSuccess: null,
-    accountSearch: null
+    accountSearch: null,
+    isLedgerViewChange: null
 };
 
 @Injectable()
@@ -27,7 +31,8 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
 
     constructor(private toasterService: ToasterService,
         private ledgerService: LedgerService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private accountService: AccountService
     ) {
         super(DEFAULT_LEDGER_STATE);
     }
@@ -35,6 +40,8 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
     public uploadVoucherSuccess$ = this.select((state) => state.uploadVoucherSuccess);
     public importVoucherSuccess$ = this.select((state) => state.importVoucherSuccess);
     public accountSearch$ = this.select((state) => state.accountSearch);
+    public isLedgerViewChange$ = this.select((state) => state.isLedgerViewChange);
+
     /**
      * Get Ledger Balance
      *
@@ -204,6 +211,37 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
                         (error: any) => {
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({ accountSearch: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Update account details patch API call
+     *
+     * @memberof LedgerComponentStore
+     */
+    readonly updateAccount = this.effect((data: Observable<{ model: AccountRequestV2, accountUniqueName: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isLedgerViewChange: null });
+                return this.accountService.UpdateAccountWithoutGroupUniqueName(req.model, req.accountUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                res.body?.message && this.toasterService.showSnackBar('success', res.body.message);
+                                return this.patchState({ isLedgerViewChange: true });
+                            } else {
+                                res?.message && this.toasterService.showSnackBar('error', res.message);
+                                return this.patchState({ isLedgerViewChange: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({ isLedgerViewChange: false });
                         }
                     ),
                     catchError((err) => EMPTY)
