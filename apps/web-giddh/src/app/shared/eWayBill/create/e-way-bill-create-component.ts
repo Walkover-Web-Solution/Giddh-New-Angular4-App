@@ -80,8 +80,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     * @memberof EWayBillCreateComponent
     */
     public ngOnInit(): void {
-        console.log("Current Voucher", this.currentVoucher);
-        
         this.initGenerateEwayBillForm();
         this.initGenerateNewTransporterForm();
         this.transporterFilterRequest.page = 1;
