@@ -28,6 +28,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
+import { VoucherTypeEnum } from '../../../vouchers/utility/vouchers.const';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -465,7 +466,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             panelClass: "mat-dialog-md",
             disableClose: true
         };
-    
+
         if (dialogType === 'vehicle') {
             this.dialog.open(this.vehicleDialog, dialogConfig);
         } else if (dialogType === 'cancel') {
@@ -546,8 +547,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     }
     detectChange() {
-            this.changeDetectorRef.detectChanges();
-        
+        this.changeDetectorRef.detectChanges();
+
     }
 
     public preparemodelForFilterEway(): IEwayBillfilter {
@@ -586,10 +587,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (o.gstin) {
             model.gstin = o.gstin;
         }
-        if(o.failedRequestLog) {
-            model.failedRequestLog = o.failedRequestLog;    
+        if (o.failedRequestLog) {
+            model.failedRequestLog = o.failedRequestLog;
         }
-        
+
         return model;
     }
 
@@ -761,54 +762,48 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public onTabChange(event: MatTabChangeEvent): void {
-        if (event) {
-            const extraCols = ['ewbNo', 'ewayBillDate'];
-            if( event.index === 0 && this.activeTabIndex !== event.index) {
-                this.displayedColumns = this.displayedColumns.filter(column => !['status', 'reason'].includes(column));
-                this.displayedColumns.splice(-2, 0, ...extraCols);
-                this.EwayBillfilterRequest.failedRequestLog = false;
-            }else if(event.index === 1) {
-                this.displayedColumns = this.displayedColumns.filter(column => !extraCols.includes(column));
-                this.displayedColumns.splice(-2, 0, ...['status', 'reason']);
-                this.EwayBillfilterRequest.failedRequestLog = true;
-            }
-            
-            this.activeTabIndex = event.index;
-            this.selectedTab = event.tab.textLabel;
-            this.getAllFilteredInvoice();
+        if (!event || event.index === this.activeTabIndex) return;
+
+        const colsToRemove = ['status', 'reason', 'ewbNo', 'ewayBillDate'];
+        this.displayedColumns = this.displayedColumns.filter(col => !colsToRemove.includes(col));
+        if (event.index === 0) {
+            this.displayedColumns.splice(-2, 0, 'ewbNo', 'ewayBillDate');
+            this.EwayBillfilterRequest.failedRequestLog = false;
+        } else if (event.index === 1) {
+            this.displayedColumns.splice(-2, 0, 'status', 'reason');
+            this.EwayBillfilterRequest.failedRequestLog = true;
         }
+        this.activeTabIndex = event.index;
+        this.selectedTab = event.tab.textLabel;
+        this.getAllFilteredInvoice();
     }
 
-    public onGenerateEwayBill(item): void {
+    /**
+     * This will generate eway bill for selected voucher
+     *
+     * @param {any} voucher
+     * @memberof EWayBillComponent
+     */
+    public onGenerateEwayBill(voucher: any): void {
         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-            this._invoiceService.selectedInvoicesLists = [];
-            this._invoiceService.VoucherType = "sales";
-        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4("qmpsx1747987156897", {
-            invoiceNumber: "250521-4",
-            voucherType: "sales",
-            uniqueName: "qmpsx1747987156897"
+        this._invoiceService.selectedInvoicesLists = [];
+        this._invoiceService.VoucherType = "";
+        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(voucher.uniqueName, {
+            invoiceNumber: voucher.voucherNumber,
+            voucherType: VoucherTypeEnum.sales,
+            uniqueName: voucher.uniqueName
         }));
-        this._invoiceService.setSelectedInvoicesList([item]);
+        voucher['voucherDate'] = voucher?.invoiceDate;
+        this._invoiceService.setSelectedInvoicesList([voucher]);
         setTimeout(() => {
-            
             this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
-                console.log("Response from create eway bill", response);
-                
                 if (!response?.account?.billingDetails?.pincode) {
                     this._toaster.showSnackBar("error", this.localeData?.pincode_required);
-                } else if(response?.account?.billingDetails?.pincode) {      
-                    console.log("Navigate to create eway bill page");
-                      
+                } else {
                     this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
                 }
             });
-        }, 4000);
-                        // this.invoiceService.setSelectedInvoicesList([voucher]);
-        // if (!item?.pincode) {
-        //         this._toaster.showSnackBar("error", this.localeData?.pincode_required);
-        //     } else {
-        //         this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
-        //     }
+        }, 500);
     }
 
 }

@@ -66,12 +66,6 @@
                 <ng-container *ngTemplateOutlet="ewayBillTable"></ng-container>
             </mat-tab>
         </mat-tab-group>
-        <div
-            class="no-data"
-            *ngIf="!isLoading && ewaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
-        >
-            <no-data></no-data>
-        </div>
     </div>
 
     <!-- Not In Use -->
@@ -430,7 +424,7 @@
             mat-table
             class="table table-bordered giddh-table"
             [dataSource]="ewaybillLists?.results"
-            *ngIf="!(isGetAllEwaybillRequestInProcess$ | async)"
+            *ngIf="!(isGetAllEwaybillRequestInProcess$ | async) && ewaybillLists?.results?.length > 0"
         >
             <ng-container matColumnDef="index">
                 <th mat-header-cell *matHeaderCellDef>#</th>
@@ -446,7 +440,7 @@
                 <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_invoice_no }}</th>
                 <td mat-cell *matCellDef="let item" class="download-arrow">
                     <span class="d-flex flex-nowrap align-items-center column-gap1">
-                        <a href="javascript:;" class="d-inline-block color-link">{{ activeTabIndex === 0 ? item?.docNumber : item?.invoiceNumber}}</a>
+                        <a href="javascript:;" class="d-inline-block color-link">{{ activeTabIndex === 0 ? item?.docNumber : item?.voucherNumber}}</a>
                         <a
                             *ngIf="activeTabIndex === 0"
                             (click)="onSelectEwayDownload(item)"
@@ -545,7 +539,12 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-
+        <div
+            class="no-data"
+            *ngIf="!isLoading && ewaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)"
+        >
+            <no-data></no-data>
+        </div>
         <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
 </ng-template>
