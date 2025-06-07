@@ -827,13 +827,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public toggleDuration(event: any): void {
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
-            if (this.subscriptionId) {
-                this.inputData = [];
-                const filteredPlans = (this.firstStepForm.get('duration')?.value === 'DAILY' || this.firstStepForm.get('duration')?.value === 'MONTHLY') ? this.monthlyPlans : this.yearlyPlans;
-                this.inputData.push(...filteredPlans);
-            } else {
-                this.setPlans();
-            }
+            this.setPlans(true);
         }
     }
 
@@ -1320,7 +1314,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @private
      * @memberof BuyPlanComponent
      */
-    private setPlans(): void {
+    private setPlans(isToggle: boolean = false): void {
         this.inputData = [];
         if (!this.subscriptionId) {
             const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
@@ -1328,6 +1322,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             filteredPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
+        } else if (isToggle) {
+            const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            this.inputData.push(...filteredPlans);
         } else {
             let subscriptionPlan = this.allPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
             this.selectedPlan = subscriptionPlan[0];
