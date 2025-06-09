@@ -49,3 +49,20 @@ export enum AccountType {
 export const OtherTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
 export const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment];
+
+/**
+ * Enum for Other tax types
+ */
+export enum OtherTaxTypeEnum {
+    'TDS' = 'tds',
+    'TCS' = 'tcs'
+};
+
+/** Enum for Tax Collection Deduction Types */
+export enum TaxCollectionDeductionType {
+    TCS_RECEIVABLE = 'tcsrc',
+    TDS_RECEIVABLE = 'tdsrc',
+    TCS_PAYABLE = 'tcspay',
+    TDS_PAYABLE = 'tdspay',
+    GST_CESS = 'gstcess'
+}
