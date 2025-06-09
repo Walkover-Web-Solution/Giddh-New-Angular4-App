@@ -98,10 +98,8 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     private addTaxesInFormAndEnableDisableTaxes(): void {
-        if (this.taxesList?.length) {
-            this.addTaxesInForm();
-            this.enableDisableTaxes();
-        }
+        this.addTaxesInForm();
+        this.enableDisableTaxes();
     }
 
     /**
