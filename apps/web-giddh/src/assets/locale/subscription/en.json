@@ -144,5 +144,10 @@
         "submit": "Submit",
         "cancel": "Cancel",
         "razorpay": "RAZORPAY",
-        "paypal": "PAYPAL"
+        "paypal": "PAYPAL",
+        "status_active": "Active",
+        "status_trial": "Trial",
+        "status_cancelled": "Cancelled",
+        "status_expired": "Expired",
+        "select_status": "Select status"
     }
