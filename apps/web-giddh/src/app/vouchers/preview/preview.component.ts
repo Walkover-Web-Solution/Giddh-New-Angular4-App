@@ -670,7 +670,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public downloadVoucherPdf(fileType: string = ''): void {
-        if (this.selectedInvoice && this.generalService.voucherApiVersion === 2) {
+        if (this.selectedInvoice) {
             this.isVoucherDownloading = true;
             this.isVoucherDownloadError = false;
             this.shouldShowUploadAttachment = false;
@@ -702,14 +702,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            // if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
-            //     getRequest = {
-            //         accountUniqueName: this.selectedInvoice.account?.uniqueName,
-            //         voucherNumber: [this.selectedInvoice.voucherNumber],
-            //         voucherType: this.voucherType,
-            //         fileType: fileType
-            //     };
-            // }
+            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+                getRequest = {
+                    accountUniqueName: this.selectedInvoice.account?.uniqueName,
+                    voucherNumber: [this.selectedInvoice.voucherNumber],
+                    voucherType: this.voucherType,
+                    fileType: fileType
+                };
+            }
             this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });
         }
     }
