@@ -72,23 +72,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public displayedColumns: any[] = [];
     /** Holds Table Display columns for Sales Voucher */
     public displayedColumnsOld: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'e_invoice_status', 'status'];
-    /** Holds Table Display columns for Estimate Voucher */
-    public displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
-    /** Holds Table Display columns for Proforma Voucher */
-    public displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     /** Holds Table Display columns for Credit Voucher */
     public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'e_invoice_status', 'status'];
-    /** Holds Table Display columns for Purchase Order Voucher */
-    public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
-    /** Holds Table Display columns for Purchase Bill Voucher */
-    public displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
-    /** Holds Table Display columns for Receipt Voucher */
-    public displayedColumnReceipt: string[] = ['index', 'receipt', 'voucherDate', 'type', 'customer', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
-    /** Holds Table Display columns for Payment Voucher */
-    public displayedColumnPayment: string[] = ['index', 'payment', 'voucherDate', 'vendor', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
-
     /** This will use for dynamic customise column check values */
     public dynamicCustomColumns = [];
      /** Returns only the columns marked as checked */
@@ -3265,8 +3252,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (!this.displayedColumns.includes('index')) {
                 this.displayedColumns.unshift('index'); 
             }
-            if (!this.displayedColumns.includes('more_options')) {
+            
+            if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                 this.displayedColumns.push('more_options');
+            } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
+                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
             }
             this.getVouchers(false);
         }

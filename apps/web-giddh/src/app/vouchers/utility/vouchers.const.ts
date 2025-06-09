@@ -163,7 +163,6 @@ export enum ReceiptTableColumnsEnum {
 export enum PaymentTableColumnsEnum {
     Payment = 'payment',
     Date = 'date',
-    Type = 'type',
     VendorName = 'vendor_name',
     PaymentMode = 'payment_mode',
     Invoice = 'invoice',
