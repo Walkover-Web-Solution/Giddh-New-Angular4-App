@@ -20,6 +20,8 @@ import { CompanyListDialogComponent } from '../company-list-dialog/company-list-
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
