@@ -83,7 +83,8 @@
                                                     [type]="'text'"
                                                     formControlName="taxNumber"
                                                     [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"
-                                                    (input)="checkGstNumValidation()"
+                                                    #gstNumberField
+                                                    (input)="checkGstNumValidation(gstNumberField)"
                                                 ></input-field>
                                             </div>
                                             <div class="col-sm-4 form-group" *ngIf="addressConfiguration.stateList?.length || addressConfiguration.countyList?.length" >
@@ -548,7 +549,6 @@
                                                 mat-stroked-button
                                                 color="primary"
                                                 [ladda]="showLoader"
-                                                [disabled]="addressForm?.invalid"
                                                 type="submit"
                                                 class="btn custom-btn"
                                                 aria-label="save"

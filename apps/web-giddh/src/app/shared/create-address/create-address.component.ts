@@ -116,9 +116,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateAddressComponent
      */
-    public checkGstNumValidation(): void {
-        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid && this.addressConfiguration.tax.name === 'GSTIN') {
-            this.getGstConfirmationPopup();
+    public checkGstNumValidation(element: HTMLInputElement): void {
+        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
+            this.toasterService.clearAllToaster();
+            if (this.addressConfiguration.tax.name === 'GSTIN') {
+                this.getGstConfirmationPopup();
+            }
+        } else if (!this.addressForm.get('taxNumber').valid) {
+            element?.classList?.add('error-box');
+            let message = this.commonLocaleData?.app_invalid_tax_name;
+            message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
+            this.toasterService.errorToast(message);
         }
     }
 
@@ -325,6 +333,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
+        console.log("Form Submitted", this.addressForm.getRawValue());
+        console.log(this.addressForm);
+
         let tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
         if (!this.hideLinkEntity || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
             if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
