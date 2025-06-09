@@ -19,7 +19,7 @@ import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/re
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, FormArray, FormGroup, Validators, FormControl, AbstractControl } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { AccountType, BriedAccountsGroup, OtherTaxTypeEnum, OtherTaxTypes, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
+import { AccountType, BriedAccountsGroup, OtherTaxTypeEnum, OtherTaxTypes, SearchType, TaxCollectionDeductionType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
@@ -3289,7 +3289,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let cessPercentage: number = 0;
 
         taxes?.forEach(tax => {
-            if (tax.taxType === 'gstcess') {
+            if (tax.taxType === TaxCollectionDeductionType.GST_CESS) {
                 cessPercentage += tax?.taxDetail?.taxValue;
             } else {
                 totalTaxWithoutCess += tax?.taxDetail?.taxValue;
@@ -3333,7 +3333,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
                 const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
 
-                if (taxFormGroup.get('taxType')?.value === 'gstcess') {
+                if (taxFormGroup.get('taxType')?.value === TaxCollectionDeductionType.GST_CESS) {
                     cessPercentage += taxFormGroup.get('taxDetail')?.value?.taxValue;
                 } else {
                     taxPercentage += taxFormGroup.get('taxDetail')?.value?.taxValue;
