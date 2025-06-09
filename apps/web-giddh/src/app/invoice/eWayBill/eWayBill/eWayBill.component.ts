@@ -714,6 +714,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         } else {
             this.isDropUp = true;
         }
+        
+        this._cd.detectChanges();
     }
 
     /**
