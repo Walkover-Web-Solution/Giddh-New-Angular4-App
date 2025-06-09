@@ -145,9 +145,9 @@
         "cancel": "रद्द करा",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
-        "status_active": "सक्रिय",
-        "status_trial": "चाचणी",
-        "status_cancelled": "रद्द",
-        "status_expired": "कालबाह्य",
+        "active": "सक्रिय",
+        "trial": "चाचणी",
+        "cancelled": "रद्द",
+        "expired": "कालबाह्य",
         "select_status": "स्थिती निवडा"
 	}

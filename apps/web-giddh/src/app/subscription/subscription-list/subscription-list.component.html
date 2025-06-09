@@ -26,18 +26,18 @@
             </button>
             <div class="min160 mr-l1" *ngIf="!showClearFilter"></div>
             <div class="d-flex align-items-baseline">
-            <dropdown-field
-                [name]="'status'"
-                [autocomplete]="'disabled'"
-                [label]="commonLocaleData?.app_status"
-                [options]="statusOptions"
-                (selectedOption)="selectStatus($event)"
-                [defaultValue]="selectedStatus"
-            >
-            </dropdown-field>
-            <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
-                + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
-            </button>
+                <dropdown-field
+                    [name]="'status'"
+                    [autocomplete]="'disabled'"
+                    [label]="commonLocaleData?.app_status"
+                    [options]="statusOptions"
+                    (selectedOption)="selectStatus($event)"
+                    [defaultValue]="selectedStatus"
+                >
+                </dropdown-field>
+                <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
+                    + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
+                </button>
             </div>
         </div>
         <giddh-page-loader *ngIf="subscriptionListInProgress$ | async"></giddh-page-loader>

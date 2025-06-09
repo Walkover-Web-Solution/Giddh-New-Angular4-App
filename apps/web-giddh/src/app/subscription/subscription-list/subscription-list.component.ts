@@ -111,7 +111,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
     /** This will use for status */
-    public statusOptions: any = [];
+    public statusOptions: IOption = [];
     /** This will use for selected status */
     public selectedStatus: string = '';
 
@@ -511,8 +511,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.showMonthlyYearly = false;
         this.subscriptionListForm.reset();
         this.inlineSearch = '';
-        this.selectedStatus = 'Active';
-        this.subscriptionListForm.get('status')?.setValue('active');
+        this.selectedStatus = this.localeData?.active;
+        this.subscriptionListForm.get('status')?.setValue(this.selectedStatus);
         this.getAllSubscriptions(false);
         this.changeDetection.detectChanges();
     }
