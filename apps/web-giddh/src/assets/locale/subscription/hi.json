@@ -145,5 +145,10 @@
         "cancel": "रद्द करें",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
-        "razorpay_error_message": "रेज़रपे में कोई त्रुटि है। कृपया सहायता से संपर्क करें।"
+        "razorpay_error_message": "रेज़रपे में कोई त्रुटि है। कृपया सहायता से संपर्क करें।",
+        "active": "सक्रिय",
+        "trial": "परीक्षण",
+        "cancelled": "रद्द",
+        "expired": "समाप्त",
+        "select_status": "स्थिति का चयन करें"
 	}
