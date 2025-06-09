@@ -101,5 +101,6 @@
     "select_gstin": "Select GSTIN",
     "create_e_way_bill": "Create E-Way Bill",
     "eway_bill_logs": "E-Way Bill Logs",
-    "generate_eway_bill": "Generate E-Way Bill"
+    "generate_eway_bill": "Generate E-Way Bill",
+    "reason": "Reason"
 }
