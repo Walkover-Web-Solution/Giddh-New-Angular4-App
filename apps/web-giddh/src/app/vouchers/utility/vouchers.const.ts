@@ -57,3 +57,12 @@ export enum OtherTaxTypeEnum {
     'TDS' = 'tds',
     'TCS' = 'tcs'
 };
+
+/** Enum for Tax Collection Deduction Types */
+export enum TaxCollectionDeductionType {
+    TCS_RECEIVABLE = 'tcsrc',
+    TDS_RECEIVABLE = 'tdsrc',
+    TCS_PAYABLE = 'tcspay',
+    TDS_PAYABLE = 'tdspay',
+    GST_CESS = 'gstcess'
+}
