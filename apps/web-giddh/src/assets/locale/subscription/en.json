@@ -145,5 +145,10 @@
         "cancel": "Cancel",
         "razorpay": "RAZORPAY",
         "paypal": "PAYPAL",
-        "razorpay_error_message": "There is an error with Razorpay. Please contact support."
+        "razorpay_error_message": "There is an error with Razorpay. Please contact support.",
+        "status_active": "Active",
+        "status_trial": "Trial",
+        "status_cancelled": "Cancelled",
+        "status_expired": "Expired",
+        "select_status": "Select status"
     }
