@@ -111,7 +111,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
     /** This will use for status */
-    public statusOptions: IOption = [];
+    public statusOptions: IOption[] = [];
     /** This will use for selected status */
     public selectedStatus: string = '';
 
