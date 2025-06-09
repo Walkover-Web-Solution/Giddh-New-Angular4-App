@@ -104,7 +104,7 @@ export class GroupWithAccountsAction {
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
-                this._groupService.GetGroupsWithAccounts(action.payload)
+                this._groupService.getGroupsWithAccounts(action.payload)
             ),
             map((response) => {
                 if (response.request?.length > 0) {
