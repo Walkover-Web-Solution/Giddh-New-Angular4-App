@@ -333,9 +333,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
-        console.log("Form Submitted", this.addressForm.getRawValue());
-        console.log(this.addressForm);
-
         let tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
         if (!this.hideLinkEntity || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
             if (Array.isArray(this.addressForm.get('linkedEntity')?.value)) {
