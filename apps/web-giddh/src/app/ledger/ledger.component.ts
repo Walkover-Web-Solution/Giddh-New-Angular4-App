@@ -1596,6 +1596,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+
     public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let activeAccount = null;
