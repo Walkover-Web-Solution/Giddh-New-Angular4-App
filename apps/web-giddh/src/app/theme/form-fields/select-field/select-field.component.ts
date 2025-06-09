@@ -59,6 +59,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @Input() public hasMoreValue: boolean = false;
     /** True if we need to scroll element by id */
     @Input() public scrollableElementId = '';
+    /** True if we need to show dropdown icon */
+    @Input() public showDropdownIcon: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */

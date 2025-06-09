@@ -775,5 +775,7 @@
         "t_view": "T View",
         "statement_view": "Statement View"
     },
-    "app_closing_balance": "Closing Balance"
+    "app_closing_balance": "Closing Balance",
+    "app_account_status": "Account Status",
+    "app_both": "Both"
 }
