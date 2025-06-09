@@ -199,7 +199,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 bulkStockForm.clear();
                 this.setPaginationData(res);
                 this.noDataFound = res.totalItems === 0;
-
                 this.totalInventoryCount = res?.totalItems;
                 res.results.forEach((row: any, index: number) => {
                     this.dropdownValues[index] = [];
@@ -208,10 +207,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
                     this.addRow(row);
                 });
-            } else if(res.status === 'error') {
-                this.isApiCalled = false;
-                this.noDataFound = true;
-            }
+            } 
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -644,7 +640,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.sortOrderStatus = null;
         this.advanceSearchData = null;
         this.hideTableHeadInput();
-        this.isLoading = true;
+        this.isLoading = false;
+        
         if (this.isApiCalled) {
             this.store.dispatch(this.inventoryAction.getBulkStockList({
                 inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
