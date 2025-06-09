@@ -122,8 +122,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.addressConfiguration.tax.name === 'GSTIN') {
                 this.getGstConfirmationPopup();
             }
-        } else if (!this.addressForm.get('taxNumber').valid) {
-            element?.classList?.add('error-box');
+        } else if (this.addressForm.get('taxNumber').invalid) {
             let message = this.commonLocaleData?.app_invalid_tax_name;
             message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
             this.toasterService.errorToast(message);
