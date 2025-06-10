@@ -541,7 +541,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.prepareTaxDropdown();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 4000);
+        }, 1500);
     }
 
     public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {

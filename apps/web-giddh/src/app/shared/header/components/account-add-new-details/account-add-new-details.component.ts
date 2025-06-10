@@ -519,7 +519,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addNewPortalUser();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 4000);
+        }, 1500);
     }
 
     public isShowBankDetails(accountType: string) {
