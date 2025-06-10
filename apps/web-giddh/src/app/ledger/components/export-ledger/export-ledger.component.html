@@ -18,10 +18,12 @@
                     <div class="pd-b3 clearfix">
                         <div class="form-inline">
                             <div class="form-group">
-                                <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
+                                <label class="w100 justify-content-start"
+                                    >{{ commonLocaleData?.app_date_range }}:
+                                </label>
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <input
-                                        type="text"   
+                                        type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                         class="giddh-datepicker date-range-picker"
@@ -29,6 +31,20 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="pd-b2 clearfix export-type" *ngIf="emailTypeSelected === emailTypeDetail">
+                        <label class="w125">{{ localeData?.ledger_view }}:</label>
+                        <mat-slide-toggle
+                            color="primary"
+                            name="ledgerView"
+                            [attr.aria-label]="localeData?.ledger_view"
+                            [(ngModel)]="exportRequest.ledgerView"
+                            (ngModelChange)="fileType = exportRequest.ledgerView ? 'XLSX' : 'CSV'"
+                        >
+                            <span>{{
+                                exportRequest.ledgerView ? localeData?.t_view : localeData?.statement_view
+                            }}</span>
+                        </mat-slide-toggle>
                     </div>
                     <div class="pd-b2 clearfix export-type">
                         <label class="w100">{{ commonLocaleData?.app_type }}:</label>
@@ -46,6 +62,7 @@
                                     >{{ localeData?.ledger }}</mat-radio-button
                                 >
                                 <mat-radio-button
+                                    *ngIf="!exportRequest.ledgerView"
                                     id="columnar"
                                     (change)="handleReportTypeChange($event)"
                                     [value]="emailTypeColumnar"
@@ -53,12 +70,13 @@
                                 >
                                 <mat-radio-button
                                     id="bill"
-                                    *ngIf="voucherApiVersion === 2 && enableBillToBill"
+                                    *ngIf="voucherApiVersion === 2 && enableBillToBill && !exportRequest.ledgerView"
                                     (change)="handleReportTypeChange($event)"
                                     [value]="emailTypeBillToBill"
                                     >{{ localeData?.bill_to_bill }}</mat-radio-button
                                 >
                                 <mat-radio-button
+                                    *ngIf="!exportRequest.ledgerView"
                                     id="voucher"
                                     (change)="handleReportTypeChange($event)"
                                     [value]="'voucher'"
@@ -67,62 +85,55 @@
                             </mat-radio-group>
                         </div>
                     </div>
-                    <!-- <div class="pd-b2 clearfix export-type" *ngIf="emailTypeSelected === emailTypeDetail">
-                        <label class="w125">{{ localeData?.ledger_view }}:</label>
+                    <ng-container *ngIf="emailTypeSelected === 'voucher'">
+                        <div class="pd-b2 clearfix export-type">
+                            <label class="w150">{{ localeData?.export_attachment }}:</label>
                             <mat-slide-toggle
                                 color="primary"
-                                name="ledgerView"
-                                [(ngModel)]="exportRequest.ledgerView"
+                                name="attachmentExport"
+                                [(ngModel)]="exportRequest.attachmentExport"
                             >
                                 <span>{{
-                                    exportRequest.ledgerView ? localeData?.statement_view : localeData?.t_view
+                                    exportRequest.attachmentExport
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
                                 }}</span>
                             </mat-slide-toggle>
-                    </div> -->
-                    <ng-container *ngIf="emailTypeSelected === 'voucher'">
-                        <div
-                            class="pd-b2 clearfix export-type"
-                        >
-                            <label class="w150">{{ localeData?.export_attachment }}:</label>
-                                <mat-slide-toggle
-                                    color="primary"
-                                    name="attachmentExport"
-                                    [(ngModel)]="exportRequest.attachmentExport"
-                                >
-                                    <span>{{
-                                        exportRequest.attachmentExport ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                                    }}</span>
-                                </mat-slide-toggle>
                         </div>
                         <div
-                            class="pd-b2 d-flex column-gap15 align-items-center" *ngIf="exportRequest.attachmentExport"
+                            class="pd-b2 d-flex column-gap15 align-items-center"
+                            *ngIf="exportRequest.attachmentExport"
                         >
-                        <div>
-                             {{ commonLocaleData?.app_file_format }}
-                        </div>
-                        <div class="w-50">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
-                                <mat-select
-                                    name="fileFormat"
-                                    [(ngModel)]="selectedFormatList"
-                                    multiple
-                                    placeholder="{{ commonLocaleData?.app_select }}"
-                                >
-                                    <mat-option *ngFor="let fileFormat of getSortedFormatList()" [value]="{ uniqueName: fileFormat?.uniqueName, showValue: fileFormat?.showValue }">
-                                        {{ fileFormat?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <div class="font-12" *ngIf="selectedFormatList.length">
-                                {{ getFileFormat() }}
+                            <div>
+                                {{ commonLocaleData?.app_file_format }}
+                            </div>
+                            <div class="w-50">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
+                                    <mat-select
+                                        name="fileFormat"
+                                        [(ngModel)]="selectedFormatList"
+                                        multiple
+                                        placeholder="{{ commonLocaleData?.app_select }}"
+                                    >
+                                        <mat-option
+                                            *ngFor="let fileFormat of getSortedFormatList()"
+                                            [value]="{
+                                                uniqueName: fileFormat?.uniqueName,
+                                                showValue: fileFormat?.showValue
+                                            }"
+                                        >
+                                            {{ fileFormat?.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <div class="font-12" *ngIf="selectedFormatList.length">
+                                    {{ getFileFormat() }}
+                                </div>
                             </div>
                         </div>
-                        </div>
-                        <div
-                            class="pd-b2 clearfix export-type"
-                        >
-                            <label class="w125">{{ localeData?.export_voucher}}:</label>
+                        <div class="pd-b2 clearfix export-type">
+                            <label class="w125">{{ localeData?.export_voucher }}:</label>
                             <mat-slide-toggle
                                 color="primary"
                                 name="voucherExport"
@@ -143,19 +154,24 @@
                                     >
                                         {{ localeData?.multiple_pdf }}
                                     </mat-radio-button>
-                                    <mat-radio-button
-                                        color="primary"
-                                        [value]="true"
-                                        aria-label="Export as single PDF"
-                                    >
+                                    <mat-radio-button color="primary" [value]="true" aria-label="Export as single PDF">
                                         {{ localeData?.single_pdf }}
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </div>
-                            <div [ngClass]="{'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm }">
+                            <div
+                                [ngClass]="{
+                                    'mat-form-field-invalid': !exportRequest.copyTypes?.length && !isValidForm
+                                }"
+                            >
                                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                                     <mat-label>{{ localeData?.select_copy }}</mat-label>
-                                    <mat-select name="copyTypesSelection" multiple [placeholder]="localeData?.select_copy" [(ngModel)]="exportRequest.copyTypes">
+                                    <mat-select
+                                        name="copyTypesSelection"
+                                        multiple
+                                        [placeholder]="localeData?.select_copy"
+                                        [(ngModel)]="exportRequest.copyTypes"
+                                    >
                                         <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
                                             {{ copyType.label }}
                                         </mat-option>
@@ -169,27 +185,58 @@
                         [hidden]="['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)"
                     >
                         <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
-                        <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
-                            <mat-radio-button id="csv" [value]="'CSV'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
+                        <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType" (ngModelChange)="onLedgerView($event)">
+                            <mat-radio-button id="csv" [value]="'CSV'" *ngIf="!exportRequest.ledgerView">{{
+                                commonLocaleData?.app_csv
+                            }}</mat-radio-button>
                             <mat-radio-button id="excel" [value]="'XLSX'">{{
                                 commonLocaleData?.app_excel
                             }}</mat-radio-button>
                         </mat-radio-group>
                     </div>
-                    <div class="pd-b2 clearfix" [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
+                    <div
+                        class="pd-b2 clearfix export-type"
+                        [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)"
+                    >
                         <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
                                 <span class="pull-left">{{
-                                    exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending
+                                    exportRequest.sort
+                                        ? commonLocaleData?.app_ascending
+                                        : commonLocaleData?.app_descending
                                 }}</span>
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <ng-container *ngIf="exportRequest.ledgerView && !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">
+                    <ng-container *ngIf="!['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">
                         <div
-                            class="pd-b2 clearfix"
+                            class="pd-b2 clearfix export-type"
+                            [hidden]="!inputData?.isLedgerAccountAllowsMultiCurrency"
                         >
+                            <label class="w125">{{ commonLocaleData?.app_currency }}:</label>
+                            <label class="radio-inline p-0">
+                                <mat-slide-toggle
+                                    color="primary"
+                                    name="showInAccountCurrency"
+                                    [(ngModel)]="exportRequest.showInAccountCurrency"
+                                >
+                                    <span class="pull-left">{{
+                                        exportRequest.showInAccountCurrency
+                                            ? commonLocaleData?.app_company + " " + commonLocaleData?.app_currency
+                                            : commonLocaleData?.app_account + " " + commonLocaleData?.app_currency
+                                    }}</span>
+                                </mat-slide-toggle>
+                            </label>
+                        </div>
+                    </ng-container>
+                    <ng-container
+                        *ngIf="
+                            !exportRequest.ledgerView &&
+                            !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
+                        "
+                    >
+                        <div class="pd-b2 clearfix">
                             <label class="w125">{{ localeData?.entry_no }} :</label>
                             <label class="radio-inline p-0">
                                 <mat-slide-toggle
@@ -198,15 +245,14 @@
                                     [(ngModel)]="exportRequest.showEntryVoucherNo"
                                 >
                                     <span class="pull-left">{{
-                                        exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportRequest.showEntryVoucherNo
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </label>
                         </div>
-        
-                        <div
-                            class="pd-b2 clearfix"
-                        >
+                        <div class="pd-b2 clearfix">
                             <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                             <label class="radio-inline p-0">
                                 <mat-slide-toggle
@@ -215,14 +261,14 @@
                                     [(ngModel)]="exportRequest.showVoucherNumber"
                                 >
                                     <span class="pull-left">{{
-                                        exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportRequest.showVoucherNumber
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </label>
                         </div>
-                        <div
-                            class="pd-b2 clearfix"
-                        >
+                        <div class="pd-b2 clearfix">
                             <label class="w125">{{ localeData?.voucher_total }}:</label>
                             <label class="radio-inline p-0">
                                 <mat-slide-toggle
@@ -231,14 +277,14 @@
                                     [(ngModel)]="exportRequest.showVoucherTotal"
                                 >
                                     <span class="pull-left">{{
-                                        exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportRequest.showVoucherTotal
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </label>
                         </div>
-                        <div
-                            class="pd-b2 clearfix"
-                        >
+                        <div class="pd-b2 clearfix">
                             <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                             <label class="radio-inline p-0">
                                 <mat-slide-toggle
@@ -247,14 +293,14 @@
                                     [(ngModel)]="exportRequest.showEntryVoucher"
                                 >
                                     <span class="pull-left">{{
-                                        exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportRequest.showEntryVoucher
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </label>
                         </div>
-                        <div
-                            class="pd-b2 clearfix"
-                        >
+                        <div class="pd-b2 clearfix">
                             <label class="w125">{{ localeData?.description }}:</label>
                             <label class="radio-inline p-0">
                                 <mat-slide-toggle
@@ -263,7 +309,9 @@
                                     [(ngModel)]="exportRequest.showDescription"
                                 >
                                     <span class="pull-left">{{
-                                        exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                        exportRequest.showDescription
+                                            ? commonLocaleData?.app_yes
+                                            : commonLocaleData?.app_no
                                     }}</span>
                                 </mat-slide-toggle>
                             </label>
@@ -273,8 +321,12 @@
                         <label class="w125">{{ localeData?.cr_dr }}</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
-                                <span class="pull-left" *ngIf="balanceTypeAsSign">{{ localeData?.plus_minus_toggle }}</span>
-                                <span class="pull-right" *ngIf="!balanceTypeAsSign">{{ localeData?.cr_dr_toggle }}</span>
+                                <span class="pull-left" *ngIf="balanceTypeAsSign">{{
+                                    localeData?.plus_minus_toggle
+                                }}</span>
+                                <span class="pull-right" *ngIf="!balanceTypeAsSign">{{
+                                    localeData?.cr_dr_toggle
+                                }}</span>
                             </mat-slide-toggle>
                         </label>
                     </div>
@@ -283,7 +335,12 @@
                         color="primary"
                         class="unbold pull-right"
                         (click)="exportLedger()"
-                        [disabled]="isLoading || (emailTypeSelected === 'voucher' && !exportRequest.attachmentExport && !exportRequest.voucherExport)"
+                        [disabled]="
+                            isLoading ||
+                            (emailTypeSelected === 'voucher' &&
+                                !exportRequest.attachmentExport &&
+                                !exportRequest.voucherExport)
+                        "
                     >
                         {{ commonLocaleData?.app_download }}
                     </button>
