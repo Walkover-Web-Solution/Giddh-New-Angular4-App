@@ -318,29 +318,33 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public validateGstNumber(): void {
-        this.isGstinValid = false;
+        let isValid: boolean = false;
         if (this.changeBillingForm.get('taxNumber')?.value) {
             if (this.formFields['taxName']?.label) {
                 if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                     for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                         let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                         if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
-                            this.isGstinValid = true;
+                            isValid = true;
                         }
                     }
                 } else {
-                    this.isGstinValid = true;
+                    isValid = true;
                 }
 
-                if (!this.isGstinValid) {
+                if (!isValid) {
                     let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                     this.toasterService.showSnackBar("error", text);
                     this.selectedState = '';
                     this.selectedStateCode = '';
                     this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
-                } 
+                    this.isGstinValid = false;
+                } else {
+                    this.isGstinValid = true;
+                }
             }
+            this.changeDetection.detectChanges();
         }
 
         if (this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
@@ -358,7 +362,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             });
         } else {
             this.disabledState = false;
-            this.isGstinValid = true;
+            this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
             this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
@@ -516,7 +520,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.changeBillingForm.invalid || !this.isGstinValid) {
+        if (this.changeBillingForm.invalid || (this.changeBillingForm.get('taxNumber')?.value?.length >= 2 && !this.isGstinValid)) {
             this.isFormSubmitted = true;
             return;
         }
