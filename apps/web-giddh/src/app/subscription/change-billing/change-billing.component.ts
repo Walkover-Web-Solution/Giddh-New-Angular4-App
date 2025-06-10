@@ -338,6 +338,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                     this.toasterService.showSnackBar("error", text);
                     this.selectedState = '';
                     this.selectedStateCode = '';
+                    this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
                 } 
             }
         }
@@ -357,9 +358,10 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             });
         } else {
             this.disabledState = false;
-            this.isGstinValid = false;
+            this.isGstinValid = true;
             this.selectedState = '';
             this.selectedStateCode = '';
+            this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
         }
         this.changeDetection.detectChanges();
     }
