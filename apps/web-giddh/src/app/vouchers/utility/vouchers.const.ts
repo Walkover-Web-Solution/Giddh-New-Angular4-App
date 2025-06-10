@@ -63,8 +63,6 @@ export const VoucherReportFilterModuleEnum = {
     PurchaseOrder: 'PURCHASE_ORDER'
 }
 
-//  EInvoiceStatus: 'e_invoice_status' for voucher type credit note and sales
-
 /** Enum for Estimate Table Columns */
 export enum EstimateTableColumnsEnum {
     EstimateNo = 'estimate_no',
