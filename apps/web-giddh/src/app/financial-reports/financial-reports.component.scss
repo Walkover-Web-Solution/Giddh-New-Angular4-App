@@ -16,11 +16,23 @@
             .pl-sticky-group,
             .account {
                 background-color: var(--color-success-enable-bg-light);
+                color: var(--color-black);
+
+                .mat-mdc-checkbox {
+                    .mdc-form-field {
+                        .mdc-checkbox {
+                            .mdc-checkbox__background {
+                                border-color: inherit !important;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     .uncheck-all-icon {
+        filter: var(--color-image-filter-tertiary);
         width: 20px;
         height: 20px;
     }
