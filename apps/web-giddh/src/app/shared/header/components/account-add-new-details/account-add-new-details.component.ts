@@ -419,7 +419,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
