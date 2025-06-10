@@ -471,10 +471,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (event) {
             this.translationLoaded = true;
             this.statusOptions = [
-                { value: 'active', label: this.localeData?.status_active },
-                { value: 'trial', label: this.localeData?.status_trial },
-                { value: 'cancelled', label: this.localeData?.status_cancelled },
-                { value: 'expired', label: this.localeData?.status_expired }
+                { value: 'active', label: this.localeData?.active },
+                { value: 'trial', label: this.localeData?.trial },
+                { value: 'cancelled', label: this.localeData?.cancelled },
+                { value: 'expired', label: this.localeData?.expired }
             ];
             this.selectedStatus = this.statusOptions[0].label;
             this.changeDetection.detectChanges();
