@@ -3314,6 +3314,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private setEInvoiceColumns(): void {
+        if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.sales].includes(this.voucherType)) {
+            return;
+        }
         if (!this.isEInvoiceEnabled) {
             this.displayedColumns = this.displayedColumns?.filter(column => column !== "e_invoice_status");
         } else {
