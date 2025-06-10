@@ -1820,7 +1820,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
-                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName }))
+                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName })),
+                currencyTogglerModel: this.currencyTogglerModel,
+                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
             },
             role: 'alertdialog',
             ariaLabel: 'export'
