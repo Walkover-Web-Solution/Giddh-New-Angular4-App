@@ -828,7 +828,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
                 transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
             }
-            const amount = this.generalService.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
+            const amount = this.generalService.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value, this.companyDecimalPlaces);
             transaction.get('amount')?.patchValue(amount);
             transaction.get('actualAmount')?.patchValue(amount);
             transaction.get('total')?.patchValue(amount);

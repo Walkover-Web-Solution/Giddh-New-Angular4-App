@@ -1078,24 +1078,33 @@
             </div>
         </ng-container>
         <div class="d-flex column-gap15" *ngIf="isOtherSelectedTab">
-            <button
-                type="button"
-                *ngIf="showDeleteButton"
-                mat-stroked-button
-                color="primary"
-                (click)="deleteClicked.emit(true)"
-                aria-label="delete"
-            >
-                {{ commonLocaleData?.app_delete }}
-            </button>
-            <button
-                (click)="submit()"
-                mat-stroked-button
-                color="primary"
-                aria-label="update"
-            >
-                {{ commonLocaleData?.app_update }}
-            </button>
+        <button
+            (click)="submit()"
+            mat-stroked-button
+            color="primary"
+            aria-label="update"
+        >
+            {{ commonLocaleData?.app_update }}
+        </button>
+
+        <button
+            class="ml-auto"
+            mat-stroked-button
+            color="primary"
+            (click)="accountArchiveUnarchive()"
+        >
+            {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
+        </button>
+        <button
+            type="button"
+            *ngIf="showDeleteButton"
+            mat-stroked-button
+            color="primary"
+            (click)="deleteClicked.emit(true)"
+            aria-label="delete"
+        >
+            {{ commonLocaleData?.app_delete }}
+        </button>
         </div>
         <!--moveMergedAccount account modal  not used in present time-->
         <!-- <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
@@ -1116,22 +1125,30 @@
 <ng-template #templateForDeleteAndUpdate>
     <div class="d-flex column-gap15 pd-t2">
         <button
-            *ngIf="showDeleteButton"
-            type="button"
-            mat-stroked-button
-            color="primary"
-            (click)="deleteClicked.emit(true)"
-            aria-label="delete"
+        (click)="submit()"
+        mat-stroked-button
+        color="primary"
+        aria-label="update"
         >
-            {{ commonLocaleData?.app_delete }}
-        </button>
-        <button
-            (click)="submit()"
-            mat-stroked-button
-            color="primary"
-            aria-label="update"
-        >
-            {{ commonLocaleData?.app_update }}
-        </button>
+        {{ commonLocaleData?.app_update }}
+    </button>
+    <button
+        class="ml-auto"
+        mat-stroked-button
+        color="primary"
+        (click)="accountArchiveUnarchive()"
+    >
+        {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
+    </button>
+    <button
+        *ngIf="showDeleteButton"
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="deleteClicked.emit(true)"
+        aria-label="delete"
+    >
+        {{ commonLocaleData?.app_delete }}
+    </button>
     </div>
 </ng-template>

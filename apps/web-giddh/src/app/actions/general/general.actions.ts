@@ -22,7 +22,7 @@ export class GeneralActions {
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
-                this._groupService.GetGroupsWithAccounts(action.payload)
+                this._groupService.getGroupsWithAccounts(action.payload)
             ),
             map(response => {
                 return this.getGroupWithAccountsResponse(response);

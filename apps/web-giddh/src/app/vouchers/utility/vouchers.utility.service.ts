@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
+import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -268,9 +268,9 @@ export class VouchersUtilityService {
                 voucherTotals.grandTotal += Number(entry.total?.amountForAccount);
             }
 
-            if (entry.otherTax?.type === 'tcs') {
+            if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
                 voucherTotals.tcsTotal += entry.otherTax?.amount;
-            } else if (entry.otherTax?.type === 'tds') {
+            } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
                 voucherTotals.tdsTotal += entry.otherTax?.amount;
             }
         });
@@ -597,7 +597,7 @@ export class VouchersUtilityService {
                 return item.errorMessage ?? localeData?.e_invoice_statuses.failed;
             case EInvoiceStatus.NA:
                 // When invoice is B2C or B2B cancelled invoice
-                return item.errorMessage ?? localeData?.e_invoice_statuses.na;
+                return item.errorMessage ?? localeData?.e_invoice_statuses?.na;
             default: return '';
         }
     }

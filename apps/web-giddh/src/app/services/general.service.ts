@@ -19,6 +19,8 @@ import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Injectable()
 export class GeneralService {
@@ -978,6 +980,21 @@ export class GeneralService {
     }
 
     /**
+     * This will return the account archived options
+     *
+     * @param {any} commonLocaleData
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getAccountArchivedOptions(commonLocaleData: any): IOption[] {
+        return [
+            { label: commonLocaleData?.app_unarchived, value: AccountArchivedStatusEnum.UNARCHIVED },
+            { label: commonLocaleData?.app_archived, value: AccountArchivedStatusEnum.ARCHIVED },
+            { label: commonLocaleData?.app_both, value: AccountArchivedStatusEnum.BOTH }
+        ];
+    }
+
+    /**
      * Determines if an element is child element to another element
      *
      * @param {*} child Element received as child
@@ -1246,6 +1263,9 @@ export class GeneralService {
                 //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
                 taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             }
+        } else if (mainTaxPercentage) {
+            // This is for advance receipt without other taxes
+            taxableValue = giddhRoundOff(totalAmount / (1 + (mainTaxPercentage / 100)));
         }
         return taxableValue;
     }
