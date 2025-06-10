@@ -48,6 +48,13 @@ export interface VoucherBalances {
     normalReceiptTotal?: Number;
 }
 
+/** Interface for report filter table column */
+interface IReportFilterTableColumn {
+    value: string;
+    label?: string;
+    checked: boolean;
+}
+
 @Component({
     selector: "list",
     templateUrl: "./list.component.html",
@@ -70,19 +77,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
     public dataSource: any[] = [];
     /** This will use for displayed table columns */
-    public displayedColumns: any[] = [];
-    /** Holds Table Display columns for Sales Voucher */
-    public displayedColumnsOld: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'e_invoice_status', 'status'];
+    public displayedColumns: string[] = [];
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
-    /** Holds Table Display columns for Credit Voucher */
-    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'e_invoice_status', 'status'];
     /** This will use for dynamic customise column check values */
-    public dynamicCustomColumns = [];
-     /** Returns only the columns marked as checked */
-     public get visibleDynamicCustomColumns(): any[] {
-        return this.dynamicCustomColumns?.filter(col => col.checked) || [];
-    }
+    public dynamicCustomColumns: IReportFilterTableColumn[] = [];
     /** Enum for voucher report filter module */
     public voucherReportFilterModuleEnum: typeof VoucherReportFilterModuleEnum = VoucherReportFilterModuleEnum;
     /** Holds module type for voucher report filter  */
@@ -521,7 +520,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
                 let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
                 if (this.universalDate && !tab.includes(this.activeModule)) {
-                    // this.getVouchers(true);
                     this.getVoucherBalances();
                 }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
@@ -951,7 +949,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     item = this.generalService.addToolTipText(this.voucherType, this.company.baseCurrency, item, this.localeData, this.commonLocaleData, this.company.giddhBalanceDecimalPlaces);
 
                     if (this.isEInvoiceEnabled) {
-                        item.e_invoice_statusTooltip = this.vouchersUtilityService.getEInvoiceTooltipText(item, this.localeData);
+                        item.eInvoiceStatusTooltip = this.vouchersUtilityService.getEInvoiceTooltipText(item, this.localeData);
                     }
                 }
 
@@ -3245,27 +3243,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     * @memberof VoucherListComponent
     */
     public getCustomiseDynamicHeaderColumns(event: any): void {
+        if (!event || !Array.isArray(event)) {
+            return;
+        }
         this.dynamicCustomColumns = [];
         this.displayedColumns = [];
         this.dataSource = [];
-
-        if (event) {
-            this.dynamicCustomColumns = event;
-            this.displayedColumns = event
-                .filter(item => item?.checked)
-                .map(item => item.value);
-            if (!this.displayedColumns.includes('index')) {
-                this.displayedColumns.unshift('index'); 
-            }
-            
-            if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
-                this.displayedColumns.push('more_options');
-            } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
-                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
-            }
-            this.setEInvoiceColumns();
-            this.getVouchers(false);
+        this.dynamicCustomColumns = event as IReportFilterTableColumn[];
+        this.displayedColumns = event
+            .filter(item => item?.checked)
+            .map(item => item.value);
+        if (!this.displayedColumns.includes('index')) {
+            this.displayedColumns.unshift('index'); 
         }
+        if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
+            this.displayedColumns.push('more_options');
+        } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
+            this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
+        }
+        this.setEInvoiceColumns();
+        this.getVouchers(false);
         this.isColumnsLoading = false;
     }
 
