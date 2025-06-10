@@ -86,6 +86,7 @@
                     </div>
                     <div
                         *ngIf="
+                            isIndianCompany &&
                             fieldsAndVisibility.header.displayLutNumber &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&

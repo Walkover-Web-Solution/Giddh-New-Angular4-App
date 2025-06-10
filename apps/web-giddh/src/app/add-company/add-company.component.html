@@ -80,7 +80,7 @@
                                     (keydown.enter)="$event.preventDefault()"
                                     [label]="commonLocaleData?.app_mobile_number + '*'"
                                     [placeholder]="localeData?.enter_mobile_number"
-                                    [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
+                                    [floatLabel]="'always'"
                                     (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
                                     [showError]="
                                         (isFormSubmitted && !firstStepForm.get('mobile')?.value) ||

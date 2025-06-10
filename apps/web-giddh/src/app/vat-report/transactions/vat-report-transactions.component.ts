@@ -144,7 +144,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     this.vatReportTransactions = res.body;
                     this.cdRef.detectChanges();
                 } else {
-                    this.toasty.showSnackBar('error',res?.message);
+                    this.toasty.showSnackBar('error', res?.message);
                 }
                 this.isLoading = false;
             });
@@ -258,7 +258,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: any): void {
+        public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
@@ -305,7 +305,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     }
                     return saveAs(res, `${this.selectedInvoice?.voucherNumber}.` + 'pdf');
                 } else {
-                    this.toasty.showSnackBar('error',this.commonLocaleData?.app_something_went_wrong);
+                    this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
             });
         } else {
@@ -323,7 +323,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     } else {
-                        this.toasty.showSnackBar('error',this.commonLocaleData?.app_something_went_wrong);
+                        this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
         }
