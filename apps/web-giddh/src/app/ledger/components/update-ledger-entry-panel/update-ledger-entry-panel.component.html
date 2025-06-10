@@ -2467,8 +2467,8 @@
                                                         id="update-ledger-sale"
                                                         name="advanceReceipt"
                                                         [(ngModel)]="isAdjustVoucherSelected"
-                                                        (click)="checkForGeneratedVoucher($event)"
-                                                        (change)="handleVoucherAdjustment()"
+                                                        (click)="voucherApiVersion === 2 && checkForGeneratedVoucher($event)"
+                                                        (change)="voucherApiVersion === 2 && handleVoucherAdjustment()"
                                                         >{{
                                                             localeData?.adjust_voucher
                                                                 | replace : "[VOUCHER_TYPE]" : currentVoucherLabel
@@ -2493,8 +2493,8 @@
                                                         id="update-ledger-advance-receipt"
                                                         name="advanceReceipt"
                                                         [(ngModel)]="isAdjustAdvanceReceiptSelected"
-                                                        (click)="checkForGeneratedVoucher($event)"
-                                                        (change)="handleVoucherAdjustment()"
+                                                        (click)="voucherApiVersion === 2 && checkForGeneratedVoucher($event)"
+                                                        (change)="voucherApiVersion === 2 && handleVoucherAdjustment()"
                                                         >{{ localeData?.adjust_advance_receipt }}
                                                     </mat-checkbox>
                                                 </td>
@@ -2516,8 +2516,8 @@
                                                         id="update-ledger-adjust-receipt"
                                                         name="advanceReceipt"
                                                         [(ngModel)]="isAdjustReceiptSelected"
-                                                        (click)="checkForGeneratedVoucher($event)"
-                                                        (change)="handleVoucherAdjustment()"
+                                                        (click)="voucherApiVersion === 2 && checkForGeneratedVoucher($event)"
+                                                        (change)="voucherApiVersion === 2 && handleVoucherAdjustment()"
                                                         >{{ localeData?.adjust_receipt }}
                                                     </mat-checkbox>
                                                 </td>
@@ -2721,7 +2721,7 @@
                                             </ul>
                                         </div>
 
-                                        <div class="d-flex justify-content-end w-100 pd-r15" *ngIf="!isPettyCash">
+                                        <div class="d-flex justify-content-end w-100 pd-r15" *ngIf="!isPettyCash && voucherApiVersion === 2">
                                             <div
                                                 class="file_attached pull-right text-right"
                                                 *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
@@ -2765,7 +2765,7 @@
 
                                     <div
                                         class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
-                                        *ngIf="!isPettyCash"
+                                       *ngIf="!isPettyCash && voucherApiVersion === 2"
                                     >
                                         <div
                                             *ngIf="

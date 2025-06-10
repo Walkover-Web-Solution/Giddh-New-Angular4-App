@@ -774,5 +774,7 @@
         "statement_view": "वक्तव्य दृश्य"
     },
     "app_closing_balance": "जमा शेष",
-    "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?"
+    "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?",
+    "app_account_status": "खाता स्थिति",
+    "app_both": "दोनों"
 }
