@@ -3098,17 +3098,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(setting => {
                 if (setting && setting.invoiceSettings) {
                     this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumnsOld = this.displayedColumnsOld?.filter(column => column !== "e_invoice_status");
-                        this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "e_invoice_status");
-                    } else {
-                        if (!this.displayedColumnsOld?.includes("e_invoice_status")) {
-                            this.displayedColumnsOld.splice(this.displayedColumnsOld.length - 1, 0, "e_invoice_status");
-                        }
-                        if (!this.displayedColumnsCredit?.includes("e_invoice_status")) {
-                            this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "e_invoice_status");
-                        }
-                    }
+                    this.setEInvoiceColumns();
                     this.settingResponse = setting;
                     this.settingForm.patchValue({
                         purchaseBillSettings: setting.purchaseBillSettings || {},
@@ -3222,8 +3212,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     }
 
-    /**
-   *This will be use for validation for delete email
+   /**
+   * This will be use for validation for delete email
    *
    * @return {*}  {boolean}
    * @memberof VoucherListComponent
@@ -3258,6 +3248,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
                 this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
             }
+            this.setEInvoiceColumns();
             this.getVouchers(false);
         }
         this.isColumnsLoading = false;
@@ -3301,6 +3292,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             default:
                 this.moduleType = '';
                 break;
+        }
+    }
+
+    /**
+     * This will use for show hide e-invoice status column
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private setEInvoiceColumns(): void {
+        if (!this.isEInvoiceEnabled) {
+            this.displayedColumns = this.displayedColumns?.filter(column => column !== "e_invoice_status");
+        } else {
+            if (!this.displayedColumns?.includes("e_invoice_status")) {
+                this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "e_invoice_status");
+            }
         }
     }
 }
