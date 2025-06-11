@@ -580,12 +580,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 /** Open account dropdown on create */
                 this.getVoucherType();
 
-                if (params?.accountUniqueName && !params?.uniqueName) {
-                    this.searchAccount(params?.accountUniqueName, 1, true);
-                } else {
-                    this.searchAccount();
-                }
-
                 if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
                     this.isPendingEntries = true;
                     this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
@@ -624,6 +618,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 if (params?.accountUniqueName === "cash") {
                     this.invoiceType.isCashInvoice = true;
+                }
+
+                if (params?.accountUniqueName && !params?.uniqueName) {
+                    this.searchAccount(params?.accountUniqueName, 1, true);
+                } else {
+                    this.searchAccount();
                 }
             }
         });
