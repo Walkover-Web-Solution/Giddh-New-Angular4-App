@@ -1,6 +1,8 @@
 .wrapper-background {
     padding: 5px 0;
     background-color: var(--color-common-quinary-background-for-all-components);
+    height: calc(100vh - 280px);
+    overflow: auto;
 }
 .search-field {
     i {
@@ -15,14 +17,11 @@
 
 .invoice-preview-wrapper {
     display: flex;
-    height: calc(100vh - (var(--header-height) + 30px));
+    height: calc(100vh - 150px);
 
     .preview-list {
         width: 25%;
-
-        .contact-list {
-            height: calc(100vh - 185px);
-        }
+        overflow-y: auto;
 
         .single-invoice-detail {
 
@@ -43,11 +42,11 @@
 
         .account-details-wrapper {
             margin: 0 auto;
-            width: 768px;
+            max-width: 768px;
         }
         .account-statement-wrapper {
             margin: 0 auto;
-            width: 1280px;
+            max-width: 1024px;
         }
     }
 }
