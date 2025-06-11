@@ -56,8 +56,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);

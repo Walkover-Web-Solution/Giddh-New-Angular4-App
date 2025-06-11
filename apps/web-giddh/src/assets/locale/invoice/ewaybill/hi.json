@@ -99,5 +99,8 @@
 	"mode_of_transportation": "परिवहन के साधन",
     "pincode_required": "ईवे बिल बनाने से पहले कृपया वाउचर में पिनकोड अपडेट करें।",
     "select_gstin": "जीएसटीआईएन चुनें",
-	"create_e_way_bill": "ई-वे बिल बनायें"
+	"create_e_way_bill": "ई-वे बिल बनायें",
+	"eway_bill_logs": "ई-वे बिल लॉग्स",
+    "generate_eway_bill": "ई-वे बिल जनरेट करें",
+	"reason": "कारण"
 }
