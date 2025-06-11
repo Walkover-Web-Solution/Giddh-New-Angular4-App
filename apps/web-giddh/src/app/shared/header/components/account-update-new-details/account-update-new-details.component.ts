@@ -102,6 +102,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
+    /** Emitted when the account archive status is changed. */
+    @Output() public accountArchiveStatusChanged: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, isAccountArchived?: boolean }>
+        = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
@@ -2557,9 +2560,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
         }
         accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
-        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
-        this.submitClicked.emit({
-        value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));        
+        this.accountArchiveStatusChanged.emit({
+            value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
             accountRequest
         });
     }
