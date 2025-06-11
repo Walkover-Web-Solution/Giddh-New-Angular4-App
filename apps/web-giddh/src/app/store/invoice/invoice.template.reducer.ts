@@ -28,6 +28,8 @@ export const initialState: CustomTemplateState = {
         createdAt: '',
         updatedAt: '',
         updatedBy: null,
+        showBankQrCode: false,
+        qrCodeId: "",
         sections: {
             footer: {
                 data: {
