@@ -739,10 +739,11 @@
                                                                     !intlClass?.isRequiredValidNumber)
                                                         }"
                                                         (blur)="
-                                                            secondStepForm.controls['mobileNumber']?.markAsTouched();
+                                                            secondStepForm?.controls['mobileNumber']?.markAsTouched();
                                                             secondStepForm
-                                                                .get('mobileNumber')
-                                                                ?.setValue(intlClass?.phoneNumber?.replace('+', ''))
+                                                                ?.get('mobileNumber')
+                                                                ?.setValue(intlClass?.phoneNumber?.replace('+', ''));
+                                                            validateMobileField()
                                                         "
                                                         [autocomplete]="'subscriptionMobileNumber' + currentTimeStamp"
                                                     />
@@ -903,7 +904,7 @@
                                                     [required]="
                                                         !thirdStepForm.get('paymentProvider')?.value ? true : false
                                                     "
-                                                       [showError]="
+                                                    [showError]="
                                                         isFormSubmitted && !thirdStepForm.get('paymentProvider')?.value
                                                     "
                                                 >

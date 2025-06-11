@@ -20,13 +20,20 @@ import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 
 @Component({
     selector: 'balance-sheet-grid',
     templateUrl: './balance-sheet-grid.component.html',
     styleUrls: [`./balance-sheet-grid.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
 export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
@@ -40,6 +47,8 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public from: string = '';
     @Input() public to: string = '';
     @Output() public searchChange = new EventEmitter<string>();
+    /** Refresh event emitter */
+    @Output() public refresh = new EventEmitter<string>();
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
     public bsSearchControl: UntypedFormControl = new UntypedFormControl();
     /** This holds giddh date format */
@@ -54,8 +63,19 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     public hideData: boolean;
     /** True, when expand all button is toggled while search is enabled */
     public isExpandToggledDuringSearch: boolean;
+    /** List of check groups accounts */
+    private listOfCheckGroupsAccounts: any[] = [];
+    /** Holds images folder path */
+    public imgPath: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
+    constructor(
+        private cd: ChangeDetectorRef,
+        private zone: NgZone,
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private dialog: MatDialog,
+        private generalService: GeneralService,
+        private tlPlService: TlPlService
+    ) {
 
     }
 
@@ -101,6 +121,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -116,6 +137,15 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                     this.cd.detectChanges();
                 }, 10);
             });
+
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.listOfCheckGroupsAccounts = [];
+                setTimeout(() => {
+                    this.refresh.emit();
+                }, 200);
+            }
+        });
     }
 
     public toggleSearch() {
@@ -163,6 +193,78 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
     }
+
+    
+    /**
+     * Unchecks all the accounts/groups in the balance sheet grid.
+     *
+     * @param {'group' | 'account'} [entityType='group'] - Type of entity to uncheck.
+     * @private
+     * @memberof BalanceSheetGridComponent
+     */
+    private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups([...this.bsData.liabilities, ...this.bsData.assets], entityType);
+        setTimeout(() => {
+            if (this.listOfCheckGroupsAccounts?.length) {
+                const model = {
+                    request: {
+                        reportType: ReportType.BalanceSheet,
+                        from: this.from,
+                        to: this.to
+                    },
+                    payload: this.listOfCheckGroupsAccounts
+                };
+                this.financialReportsComponentStore.tailedReportAccountGroup(model);
+                this.tlPlService.isReportTailed$.next(true);
+            }
+        }, 400);
+    }
+
+    /**
+     * Recursive function to extract checked accounts/groups and store it in listOfCheckGroupsAccounts.
+     * It loops through the groupAccountDetails array and checks if the account/group is checked.
+     * If checked, it adds the account/group to listOfCheckGroupsAccounts with checked set to false.
+     * Then it recursively calls itself on the childGroups and accounts of the group.
+     * @param groupAccountDetails array of account/group objects
+     * @param entityType type of entity, either 'group' or 'account'
+     * @memberof BalanceSheetGridComponent
+     */
+    private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
+        groupAccountDetails.forEach(group => {
+            if (group.checked) {
+                this.listOfCheckGroupsAccounts.push({
+                    uniqueName: group.uniqueName,
+                    entityType,
+                    checked: false
+                });
+            }
+            if (group.childGroups?.length) {
+                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            }
+            if (group.accounts?.length) {
+                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            }
+        });
+    }
+
+    /**
+     * Opens a confirmation dialog to confirm the uncheck all action.
+     *
+     * @memberof BalanceSheetGridComponent
+     */
+    public openConfirmDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.commonLocaleData?.app_uncheck_all_item_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.uncheckAll();
+            }
+        });
+    } 
 
     /**
      * This will destroy all the memory used by this component

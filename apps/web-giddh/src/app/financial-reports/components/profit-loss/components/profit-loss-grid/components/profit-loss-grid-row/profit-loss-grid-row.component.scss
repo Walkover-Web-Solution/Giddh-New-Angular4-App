@@ -13,5 +13,9 @@
     min-width: 275px;
 }
 .row-height {
-    min-height: 38px;
+    height: 38px;
+}
+.pl-grid-row {
+    border-bottom: 1px solid var(--color-dark-fog) !important;
+    height: 38px;
 }

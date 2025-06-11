@@ -64,6 +64,8 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReconcileOption: boolean;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
@@ -77,6 +79,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([storeResponse, profitAndLossResponse]) => {
                 if (storeResponse || profitAndLossResponse) {
+                    this.expandAll = false;
                     this.modifyResponse(storeResponse || profitAndLossResponse);
                 } else {
                     this.data = null;
@@ -110,7 +113,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             cogsGrp.isVisible = true;
             cogsGrp.isIncludedInSearch = true;
             cogsGrp.isOpen = false;
-            cogsGrp.level1 = false;
+            cogsGrp.level1 = true;
             cogsGrp.uniqueName = 'cogs';
             cogsGrp.groupName = 'Less: Cost of Goods Sold';
             cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
@@ -128,6 +131,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                     Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
                         let childGroup = new ChildGroup();
                         childGroup.isCreated = false;
+                        childGroup.isSelfCreatedGroup = true;
                         childGroup.isVisible = false;
                         childGroup.isIncludedInSearch = true;
                         childGroup.isOpen = false;
@@ -143,7 +147,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                         }, {});
                         childGroup.accounts = [];
                         childGroup.childGroups = [];
-                        
+
                         if (['purchasesStockAmount', 'manufacturingExpenses'].includes(item)) {
                             childGroup.groupName = `+ ${childGroup.groupName}`;
                         } else if (['closingInventory', 'debitNoteStockAmount'].includes(item)) {
@@ -230,7 +234,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: ProfitLossRequest) {
+    /**
+     * This function is used to filter the profit and loss report data based on the given request object.
+     * 
+     * @param request The request object to filter the data with.
+     * @memberof ProfitLossComponent
+     */
+    public filterData(request: ProfitLossRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -284,5 +295,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof ProfitLossComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

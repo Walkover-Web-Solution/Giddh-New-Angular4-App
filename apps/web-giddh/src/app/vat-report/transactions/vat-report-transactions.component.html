@@ -46,7 +46,7 @@
                             <a
                                 href="javascript:;"
                                 [ngClass]="!element.voucherNumber && element.voucherType !== 'purchase' ? 'noclick' : 'btn-link'"
-                                (click)="onSelectInvoice(element)"
+                                (click)="voucherApiVersion === 2 && onSelectInvoice(element)"
                                 >{{ element.voucherNumber ? element.voucherNumber : "-" }}
                             </a>
                         </td>

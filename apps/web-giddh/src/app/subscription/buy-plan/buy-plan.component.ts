@@ -1038,13 +1038,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public validateMobileField(): void {
-        setTimeout(() => {
-            if (!this.intlClass?.isRequiredValidNumber) {
-                this.secondStepForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
-            } else {
-                this.secondStepForm.get("mobileNumber")?.setErrors(null);
-            }
-        }, 100);
+        if (!this.intlClass?.isRequiredValidNumber) {
+            this.secondStepForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
+        } else {
+            this.secondStepForm.get("mobileNumber")?.setErrors(null);
+        }
     }
 
     /**

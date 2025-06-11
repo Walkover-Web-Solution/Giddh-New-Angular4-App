@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div  class="tb-wrapper mr-t2 clearfix">
+    <div class="tb-wrapper mr-t2 clearfix">
         <div class="table-container" *ngIf="!hideData">
             <div class="income mr-b1">
                 <div class="clearfix profit-loss">
@@ -12,10 +12,7 @@
                         <thead>
                             <tr>
                                 <th class="p-0 font-16" width="33.33%">
-                                    <div
-                                        #searchContainer
-                                        (clickOutside)="clickedOutside($event, searchContainer)"
-                                    >
+                                    <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
                                         <div
                                             [ngClass]="{ 'd-none': showClearSearch }"
                                             class="d-flex align-items-center"
@@ -38,9 +35,7 @@
                                 </th>
                                 <th class="text-right font-16" width="33.33%">
                                     {{ commonLocaleData?.app_as_of }}
-                                    <span
-                                        *ngIf="lastSyncDate && dayjs(lastSyncDate)?.isValid()"
-                                    >  
+                                    <span *ngIf="lastSyncDate && dayjs(lastSyncDate)?.isValid()">
                                         {{ lastSyncDate }}</span
                                     >
                                 </th>
@@ -75,7 +70,7 @@
                     <ng-container
                         *ngTemplateOutlet="
                             groupDetails;
-                            context: { $implicit: bsData?.liabilities | financialSearch: search, padding: 10 }
+                            context: { $implicit: bsData?.liabilities | financialSearch : search, padding: 10 }
                         "
                     >
                     </ng-container>
@@ -139,7 +134,7 @@
                     <ng-container
                         *ngTemplateOutlet="
                             groupDetails;
-                            context: { $implicit: bsData?.assets | financialSearch: search, padding: 10 }
+                            context: { $implicit: bsData?.assets | financialSearch : search, padding: 10 }
                         "
                     >
                     </ng-container>
@@ -153,11 +148,7 @@
                 <div class="col-4 group text-right">
                     <strong class="font-15">
                         <span class="d-inline-flex">
-                            <amount-field
-                                [amount]="bsData?.assetTotal"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="bsData?.assetTotal" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </strong>
