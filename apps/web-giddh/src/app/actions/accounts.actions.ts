@@ -263,8 +263,6 @@ export class AccountsAction {
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
                     if (!action.payload?.queryString?.isMasterOpen) {
-                        console.log('isMasterOpen', action.payload?.queryString?.isMasterOpen);
-                        
                         this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
                     }
 
