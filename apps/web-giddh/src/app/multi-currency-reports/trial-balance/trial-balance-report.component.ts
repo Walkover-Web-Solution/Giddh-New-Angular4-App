@@ -123,7 +123,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.TrialBalance, payload: event });
+        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.TrialBalance, payload: event });
     }
 
     /**
