@@ -258,6 +258,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                             };
                         }
                     }
+                    this.advanceSearchRequest = new AdvanceSearchRequest;
                     this.trxRequest.branchUniqueName = this.currentBranch?.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch?.uniqueName;
                 } else {

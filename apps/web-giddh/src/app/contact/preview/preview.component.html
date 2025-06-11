@@ -10,7 +10,7 @@
         [cssClass]="'no-data'"
     ></giddh-page-loader>
     <div class="invoice-preview-wrapper" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
-        <div class="preview-list h-100 pd-b15">
+        <div class="preview-list pd-b15">
             <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
                 <div class="position-relative search-field flex-grow-1">
                     <text-field
@@ -78,7 +78,7 @@
                 </div>
             </section>
             <div class="relative overflow-visible">
-                <div class="clearfix petty-cash overflow-visible">
+                <div class="clearfix overflow-visible">
                     <mat-tab-group
                         mat-stretch-tabs="false"
                         animationDuration="0ms"
@@ -88,8 +88,8 @@
                         class="table-header-sticky"
                     >
                         <mat-tab [label]="localeData?.statement">
-                            <div class="wrapper-background">
-                                <div class="account-statement-wrapper pd-t15 pd-b15">
+                            <div class="wrapper-background pd-1">
+                                <div class="account-statement-wrapper">
                                     <mat-card class="pd-15">
                                         <account-statement
                                             *ngIf="selectedContact?.uniqueName && !isContactNotFound"
@@ -105,8 +105,8 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.transaction">
-                            <div class="wrapper-background">
-                                <div class="account-statement-wrapper pd-t15 pd-b15">
+                            <div class="wrapper-background pd-1">
+                                <div class="account-statement-wrapper">
                                     <mat-card>
                                         <ledger-statement
                                             *ngIf="selectedContact?.uniqueName && !isContactNotFound"
@@ -122,9 +122,9 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.account_details">
-                            <div class="wrapper-background">
-                                <div class="account-details-wrapper pd-t15 pd-b15 pd-l05 pd-r05">
-                                    <mat-card class="pd-15">
+                            <div class="wrapper-background d-flex flex-column">
+                                <div class="account-details-wrapper pd-t15 pd-b15 pd-l05 pd-r05 flex-grow-1 d-flex flex-column">
+                                    <mat-card class="pd-15 flex-grow-1">
                                         <account-update-new-details
                                             *ngIf="(activeAccount$ | async) && !isContactNotFound"
                                             [activeAccount$]="activeAccount$"

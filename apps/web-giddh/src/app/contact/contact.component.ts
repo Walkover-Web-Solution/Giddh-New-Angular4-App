@@ -1304,6 +1304,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                         endDate: dayjs(res.body.toDate, GIDDH_DATE_FORMAT),
                     };
                     this.selectedDateRangeUi = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.advanceFilters.from = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.advanceFilters.to = dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
