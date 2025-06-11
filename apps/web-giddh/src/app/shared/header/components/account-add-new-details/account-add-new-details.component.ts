@@ -413,7 +413,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
 
-        this.addAccountForm.valueChanges.pipe(debounceTime(700),takeUntil(this.destroyed$)).subscribe((response) => {
+        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
             if (this.formValueAssigned && response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
             }
@@ -518,7 +518,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addNewPortalUser();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 1500);
+        }, 2500);
     }
 
     public isShowBankDetails(accountType: string) {
@@ -946,6 +946,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors || this.isParentSundrydebtors)) {
             delete accountRequest['portalDomain'];
         }
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest

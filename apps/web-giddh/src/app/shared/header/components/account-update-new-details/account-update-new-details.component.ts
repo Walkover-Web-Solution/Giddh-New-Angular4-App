@@ -471,7 +471,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         
-        this.addAccountForm.valueChanges.pipe(debounceTime(700),takeUntil(this.destroyed$)).subscribe((response) => {
+        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
             if (this.formValueAssigned && response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
             }
@@ -541,7 +541,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.prepareTaxDropdown();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 1500);
+        }, 2500);
     }
 
     public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
@@ -568,7 +568,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                            this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                         }
 
                         if (activeAccountTaxHierarchy) {
@@ -1109,6 +1108,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
 
         delete accountRequest['portalDomain'];
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -2560,6 +2560,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
         }
         accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));        
         this.accountArchiveStatusChanged.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
             accountRequest
