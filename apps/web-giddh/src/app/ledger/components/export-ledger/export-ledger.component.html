@@ -222,7 +222,7 @@
                                     [(ngModel)]="exportRequest.showInAccountCurrency"
                                 >
                                     <span class="pull-left">{{
-                                        exportRequest.showInAccountCurrency
+                                        !exportRequest.showInAccountCurrency
                                             ? commonLocaleData?.app_company + " " + commonLocaleData?.app_currency
                                             : commonLocaleData?.app_account + " " + commonLocaleData?.app_currency
                                     }}</span>
