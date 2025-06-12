@@ -149,7 +149,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Enum representing standard accounting group unique names */
     public AccountingGroupEnum = AccountingGroupEnum;
     /** Property to track if the user has updated before */
-    private hasUpdatedBefore: boolean = false;  
+    private hasUpdatedBefore: boolean = false;
 
     constructor(
         private router: Router,
@@ -161,7 +161,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction
-    ) { 
+    ) {
         this.detectRouteChanges();
     }
 
@@ -302,7 +302,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        if(this.isUpdateAccount) {      
+        if (this.isUpdateAccount) {
             this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
                     this.hasUpdatedBefore = true;
@@ -469,7 +469,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
         }
-        if(isNewContactSelected){
+        if (isNewContactSelected) {
             this.isUpdateAccount = true;
         }
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
