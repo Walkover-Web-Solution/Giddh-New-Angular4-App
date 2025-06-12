@@ -124,7 +124,10 @@
                         <mat-tab [label]="localeData?.account_details">
                             <div class="wrapper-background d-flex flex-column">
                                 <div class="account-details-wrapper pd-t15 pd-b15 pd-l05 pd-r05 flex-grow-1 d-flex flex-column">
-                                    <mat-card class="pd-15 flex-grow-1">
+                                    <div class="no-data" *ngIf="(updateAccountInProcess$ | async)">
+                                        <giddh-page-loader></giddh-page-loader>
+                                    </div>
+                                    <mat-card class="pd-15 flex-grow-1" *ngIf="!(updateAccountInProcess$ | async)">
                                         <account-update-new-details
                                             *ngIf="(activeAccount$ | async) && !isContactNotFound"
                                             [activeAccount$]="activeAccount$"
