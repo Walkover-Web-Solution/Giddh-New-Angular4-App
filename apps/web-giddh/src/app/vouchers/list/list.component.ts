@@ -2300,10 +2300,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * Callback for update account
      *
      * @param {UpdateAccountRequest} item
+     * @param {boolean} [usePatchApi=false]
      * @memberof VoucherCreateComponent
      */
-    public updateAccount(item: UpdateAccountRequest): void {
-        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    public updateAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
     }
 
     /**

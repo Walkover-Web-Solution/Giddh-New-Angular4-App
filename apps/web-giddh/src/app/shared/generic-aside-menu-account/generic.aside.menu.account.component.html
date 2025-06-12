@@ -46,6 +46,7 @@
                     [showDeleteButton]="false"
                     [showBankDetail]="showBankDetail"
                     (submitClicked)="updateAccount($event)"
+                    (updateViaPatchApi)="updateAccount($event, true)"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-update-new-details>

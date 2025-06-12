@@ -1930,7 +1930,9 @@
         [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
         [selectedAccountUniqueName]="accountParentGroup !== 'bankaccounts' && !createNewAccount ? invoiceForm.controls['account'].get('uniqueName')?.value : ''"
         (onShortcutPress)="accountAsideMenuRef.close()" (addEvent)="addNewAccount($event)"
-        (updateEvent)="updateAccount($event)">
+        (updateEvent)="updateAccount($event)"
+        (updateViaPatchApi)="updateAccount($event, true)"
+    >
     </generic-aside-menu-account>
 </ng-template>
 
