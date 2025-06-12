@@ -235,7 +235,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                         this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
                         this.advanceFilters.from = queryParams.from ?? '';
                         this.advanceFilters.to = queryParams.to ?? '';
-                        this.advanceFilters.q = queryParams.q ?? '';
+                        this.advanceFilters.q = queryParams.search ?? '';
                         this.advanceFilters.refresh = queryParams.refresh ?? true;
                         if (queryParams.sort && queryParams.sortBy) {
                             this.key = queryParams.sortBy;
@@ -244,7 +244,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                             this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
                             this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
                         }
-                        const searchString = queryParams.q;
+                        const searchString = queryParams.search;
                         if (searchString) {
                             this.search.setValue(searchString);
                         } else {
@@ -346,6 +346,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+        this.isUpdateAccount = true;
         accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
     }
@@ -415,9 +416,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
             this.getAllApiCallCount++;
             this.changeDetection.detectChanges();
-
             if (this.contactList?.length) {
-                this.setSelectedContact(!this.selectedContact ? this.params.accountUniqueName : this.contactList[0].uniqueName);
+                this.setSelectedContact(!this.selectedContact ? this.params.accountUniqueName : this.isUpdateAccount ? this.selectedContact?.uniqueName : this.contactList[0].uniqueName);
             }
             this.isRefresh = false;
         }
