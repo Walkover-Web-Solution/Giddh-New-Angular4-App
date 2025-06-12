@@ -112,7 +112,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this.invoiceUiDataService.setContentForm(this.contentForm);
             }
             this.customTemplate = cloneDeep(template);
-            console.log('customTemplate', this.customTemplate);
             if (this.customTemplate.templateType === 'tally_template') {
                 this.customTemplate.sections.footer.data.imageSignature.display = true;
                 this.customTemplate.sections.footer.data.slogan.display = false;
