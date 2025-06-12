@@ -145,7 +145,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Last vouchers get in progress Observable */
-    public getVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
+    public getVouchersInProgress$: Observable<boolean> = this.componentStore.getLastVouchersInProgress$;
     /** Holds invoice Selected Date range  */
     public invoiceSelectedDate: any = {
         fromDates: '',
@@ -520,6 +520,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 // 'pending', 'settings', 'templates' These tabs are not voucher list
                 let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
                 if (this.universalDate && !tab.includes(this.activeModule)) {
+                    this.getVouchers(true);
                     this.getVoucherBalances();
                 }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
@@ -3246,24 +3247,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (!event || !Array.isArray(event)) {
             return;
         }
-        this.dynamicCustomColumns = [];
-        this.displayedColumns = [];
-        this.dataSource = [];
-        this.dynamicCustomColumns = event as IReportFilterTableColumn[];
-        this.displayedColumns = event
-            .filter(item => item?.checked)
-            .map(item => item.value);
-        if (!this.displayedColumns.includes('index')) {
-            this.displayedColumns.unshift('index'); 
-        }
-        if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
-            this.displayedColumns.push('more_options');
-        } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
-            this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
-        }
-        this.setEInvoiceColumns();
-        this.getVouchers(false);
-        this.isColumnsLoading = false;
+
+        this.getVouchersInProgress$.pipe(take(1)).subscribe((inProgress: boolean) => {
+            if (inProgress) {
+                return;
+            }
+            this.dynamicCustomColumns = [];
+            this.displayedColumns = [];
+            this.dataSource = [];
+            this.dynamicCustomColumns = event as IReportFilterTableColumn[];
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item.value);
+            if (!this.displayedColumns.includes('index')) {
+                this.displayedColumns.unshift('index'); 
+            }
+            if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
+                this.displayedColumns.push('more_options');
+            } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
+                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
+            }
+            this.setEInvoiceColumns();
+            this.getVouchers(false);
+            this.isColumnsLoading = false;
+        });
     }
 
     /**
