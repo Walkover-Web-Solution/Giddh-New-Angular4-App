@@ -140,8 +140,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.body?.classList?.add("subscription-page");
         this.initForm();
-        this.selectedStatus = 'Active';
-        this.subscriptionListForm.get('status')?.setValue(this.selectedStatus);
         this.getAllSubscriptions(false);
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -470,6 +468,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (event) {
             this.translationLoaded = true;
             this.statusOptions = [
+                { value: '', label: this.localeData?.select_status },
                 { value: 'active', label: this.localeData?.active },
                 { value: 'trial', label: this.localeData?.trial },
                 { value: 'cancelled', label: this.localeData?.cancelled },
@@ -512,8 +511,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.showMonthlyYearly = false;
         this.subscriptionListForm.reset();
         this.inlineSearch = '';
-        this.selectedStatus = this.localeData?.active;
-        this.subscriptionListForm.get('status')?.setValue(this.selectedStatus);
+        this.selectedStatus = this.localeData?.select_status;
+        this.subscriptionListForm.get('status')?.setValue(null);
         this.getAllSubscriptions(false);
         this.changeDetection.detectChanges();
     }
@@ -709,7 +708,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      */
     public selectStatus(data: any): void {
         this.selectedStatus = data?.label;
-        this.subscriptionListForm.get('status')?.setValue(this.selectedStatus);
+        this.subscriptionListForm.get('status')?.setValue(data?.value);
         this.getAllSubscriptions(false);
         this.changeDetection.detectChanges();
     }
