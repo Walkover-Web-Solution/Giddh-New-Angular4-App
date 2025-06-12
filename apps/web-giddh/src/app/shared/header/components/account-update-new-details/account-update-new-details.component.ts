@@ -1151,7 +1151,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * ngOnChanges
      */
     public ngOnChanges(s) {
-        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
