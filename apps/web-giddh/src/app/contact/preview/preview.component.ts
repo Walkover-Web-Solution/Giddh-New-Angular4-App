@@ -1,7 +1,7 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { combineLatest, debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
@@ -148,6 +148,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
     /** Enum representing standard accounting group unique names */
     public AccountingGroupEnum = AccountingGroupEnum;
+    /** Property to track if the user has updated before */
+    private hasUpdatedBefore: boolean = false;  
 
     constructor(
         private router: Router,
@@ -159,7 +161,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction
-    ) { }
+    ) { 
+        this.detectRouteChanges();
+    }
 
     /**
     * Initializes the component
@@ -219,7 +223,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             .pipe(delay(0), takeUntil(this.destroyed$))
             .subscribe(([params, queryParams]) => {
                 if (params) {
+                    this.selectedContact = null;
                     this.isUpdateAccount = false;
+                    this.hasUpdatedBefore = false;
                     let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
                     this.activeGroupUniqueName$ = of(groupUniqueName);
                     this.parentGroupUniqueName = groupUniqueName;
@@ -296,12 +302,15 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            }
-        });
-
+        if(this.isUpdateAccount) {      
+            this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.hasUpdatedBefore = true;
+                    this.isUpdateAccount = true;
+                    this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+            });
+        }
     }
 
     /**
@@ -365,6 +374,23 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Detects route changes and resets the update flag.
+     * 
+     * @private
+     * @memberof ContactPreviewComponent
+     */
+    private detectRouteChanges(): void {
+        // Use Angular's Router to listen to route changes
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                // Reset the update flag on route change
+                this.hasUpdatedBefore = false;
+                this.isUpdateAccount = false;
+            }
+        });
+    }
+
+    /**
      * Handles the response from the get all contacts API.
      * Updates the contact list, handles pagination, and manages selected contact.
      *
@@ -416,11 +442,18 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     : [...currentContactList, ...this.contactList];
             }
             this.getAllApiCallCount++;
-            this.changeDetection.detectChanges();
             if (this.contactList?.length) {
-                this.setSelectedContact(!this.selectedContact ? this.params.accountUniqueName : this.isUpdateAccount ? this.selectedContact?.uniqueName : this.contactList[0].uniqueName);
+                if (!this.hasUpdatedBefore && !this.isUpdateAccount) {
+                    this.setSelectedContact(this.activeAccountUniqueName);
+                    this.hasUpdatedBefore = true;
+                } else if (this.isUpdateAccount) {
+                    this.setSelectedContact(this.selectedContact?.uniqueName);
+                } else {
+                    this.setSelectedContact(this.contactList[0].uniqueName);
+                }
             }
             this.isRefresh = false;
+            this.changeDetection.detectChanges();
         }
     }
 
@@ -435,6 +468,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public setSelectedContact(accountUniqueName: string, isNewContactSelected: boolean = false): void {
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
+        }
+        if(isNewContactSelected){
+            this.isUpdateAccount = true;
         }
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
         if (this.selectedContact?.uniqueName) {
