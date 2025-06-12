@@ -16,3 +16,12 @@
         }
     }
 }
+
+::ng-deep .option-extra-content {
+    vertical-align: top;
+    line-height: 16px;
+
+    &:first-child {
+        width: 75px;
+    }
+}
