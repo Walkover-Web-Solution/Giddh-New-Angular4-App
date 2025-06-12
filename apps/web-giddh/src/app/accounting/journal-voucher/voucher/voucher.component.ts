@@ -2262,11 +2262,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * Update account event handler
      *
-     * @param {AddAccountRequest} item Account details
+     * @param {UpdateAccountRequest} item Account details
+     * @param {boolean} [usePatchApi=false]
      * @memberof AccountAsVoucherComponent
      */
-    public updateSidebarAccount(item: UpdateAccountRequest): void {
-        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    public updateSidebarAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
     }
 
     /**
