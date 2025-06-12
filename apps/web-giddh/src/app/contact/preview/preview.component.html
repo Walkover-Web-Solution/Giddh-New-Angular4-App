@@ -127,9 +127,8 @@
                                     <div class="no-data" *ngIf="(updateAccountInProcess$ | async)">
                                         <giddh-page-loader></giddh-page-loader>
                                     </div>
-                                    <mat-card class="pd-15 flex-grow-1" *ngIf="!(updateAccountInProcess$ | async)">
+                                    <mat-card class="pd-15 flex-grow-1" *ngIf="!(updateAccountInProcess$ | async) && (activeAccount$ | async) && !isContactNotFound">
                                         <account-update-new-details
-                                            *ngIf="(activeAccount$ | async) && !isContactNotFound"
                                             [activeAccount$]="activeAccount$"
                                             [activeGroupUniqueName]="parentGroupUniqueName"
                                             [isGstEnabledAcc]="isGstEnabledAcc"
