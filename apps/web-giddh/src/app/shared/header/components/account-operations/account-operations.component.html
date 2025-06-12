@@ -97,7 +97,7 @@
             [updateAccountIsSuccess$]="updateAccountIsSuccess$"
             (deleteClicked)="showDeleteAccountModal()"
             (submitClicked)="updateAccount($event)"
-            (accountArchiveStatusChanged)="updateAccount($event, true)"
+            (updateViaPatchApi)="updateAccount($event, true)"
             [showBankDetail]="showBankDetail"
             [showVirtualAccount]="showVirtualAccount"
             [isDebtorCreditor]="isDebtorCreditor"
