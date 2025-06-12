@@ -1657,6 +1657,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             addresses.push(this.initialGstDetailsForm());
         }
+        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
     }
 
     /**
