@@ -33,6 +33,8 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() public isDateSelected: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReconcileOption: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -63,6 +65,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
             let d = cloneDeep(p) as AccountDetails;
             if (d) {
+                this.expandAll = false;
                 if (d.message) {
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
@@ -102,7 +105,14 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: TrialBalanceRequest) {
+    /**
+     * Filters the trial balance report based on the given request.
+     *
+     * @param request The request that contains the filter data.
+     * @memberof TrialBalanceComponent
+     */
+    public filterData(request: TrialBalanceRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -130,5 +140,14 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof TrialBalanceComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }
