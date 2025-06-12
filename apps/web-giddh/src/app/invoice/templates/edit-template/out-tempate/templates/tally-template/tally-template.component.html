@@ -973,6 +973,11 @@
                                         <td class="border-none padding-0">
                                             <table style="margin-top: auto">
                                                 <tr>
+                                                    <td *ngIf="allDataTemplateFields.showBankQrCode" class="v-align-middle border-none">
+                                                        <img src="{{ imgPath }}/bankQrCode.png" alt="image" width="150px"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <td class="border-none border-right" width="50%" rowspan="2" [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px' }">
                                                         <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display">
                                                             <u><strong class="strong">Declaration: </strong></u>
