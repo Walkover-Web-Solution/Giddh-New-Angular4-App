@@ -95,6 +95,39 @@
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('entryUniqueName')?.value"
                                 [required]="true"
                             >
+                                <ng-template #optionTemplate let-option="option">
+                                    <div aria-label="label" class="my-2">
+                                        <span class="text-primary">{{ option?.label | titlecase }}</span>
+                                        <div class="text-gray font-12">
+                                            <table class="w-100">
+                                                <tr>
+                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
+                                                    <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_voucher_no }}</td>
+                                                    <td class="option-extra-content">: {{ option?.additional?.voucherNumber }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_amount }}</td>
+                                                    <td class="option-extra-content">
+                                                        : <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="
+                                                                        option?.additional?.amount
+                                                                    "
+                                                                    [currencySymbol]="option?.additional?.currency?.symbol"
+                                                                    [currencyCode]="option?.additional?.currency?.code"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        {{ option?.additional?.type | titlecase }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </ng-template>
                             </reactive-dropdown-field>
                         </td>
 
