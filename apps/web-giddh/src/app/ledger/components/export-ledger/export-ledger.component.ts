@@ -142,7 +142,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         });
 
         if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
-            this.exportRequest.showInAccountCurrency = this.inputData?.currencyTogglerModel;
+            this.exportRequest.showInAccountCurrency = !this.inputData?.currencyTogglerModel;
         }
 
         this.fileType = this.exportRequest.ledgerView ? 'XLSX' : 'CSV';
