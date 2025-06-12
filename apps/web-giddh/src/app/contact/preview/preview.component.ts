@@ -219,6 +219,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             .pipe(delay(0), takeUntil(this.destroyed$))
             .subscribe(([params, queryParams]) => {
                 if (params) {
+                    this.isUpdateAccount = false;
                     let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
                     this.activeGroupUniqueName$ = of(groupUniqueName);
                     this.parentGroupUniqueName = groupUniqueName;
