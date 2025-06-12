@@ -7,7 +7,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -3247,11 +3247,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (!event || !Array.isArray(event)) {
             return;
         }
-
-        this.getVouchersInProgress$.pipe(take(1)).subscribe((inProgress: boolean) => {
-            if (inProgress) {
-                return;
-            }
+        this.getVouchersInProgress$.pipe(filter(inProgress => !inProgress), take(1)).subscribe(() => {
             this.dynamicCustomColumns = [];
             this.displayedColumns = [];
             this.dataSource = [];
@@ -3269,8 +3265,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
             this.setEInvoiceColumns();
             this.getVouchers(false);
-            this.isColumnsLoading = false;
         });
+        this.isColumnsLoading = false;
     }
 
     /**
