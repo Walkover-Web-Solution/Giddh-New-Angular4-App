@@ -20,6 +20,8 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 export class TallyTemplateComponent implements OnInit, OnDestroy {
     /** Holds fields and visibility object */
     @Input() public fieldsAndVisibility: any = null;
+    /** Holds all template global table data */
+    @Input() public allDataTemplateFields: any = null;
     /** Holds true if preview mode */
     @Input() public isPreviewMode: boolean = false;
     /** Holds true to show company logo */

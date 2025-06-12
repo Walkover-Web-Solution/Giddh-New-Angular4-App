@@ -26,6 +26,8 @@ export class InvoiceUiDataService {
     public companyGSTIN: BehaviorSubject<string> = new BehaviorSubject(null);
     public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
     public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Holds the all template table data */
+    public allDataTemplateFields: BehaviorSubject<any> = new BehaviorSubject(null);
     public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
     /** Stores the content form instance  */
     public contentForm: NgForm;
@@ -159,6 +161,13 @@ export class InvoiceUiDataService {
      */
     public setFieldsAndVisibility(statusObj: any) {
         this.fieldsAndVisibility.next(statusObj);
+    }
+
+    /**
+     * Set all template fields
+     */
+    public setAllTemplateFields(statusObj: any) {
+        this.allDataTemplateFields.next(statusObj);
     }
 
     /**

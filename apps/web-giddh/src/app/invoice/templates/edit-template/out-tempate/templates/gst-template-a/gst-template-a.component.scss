@@ -545,3 +545,9 @@ table.tax-table.item {
     justify-content: flex-end;
     align-items: flex-end;
 }
+
+.square-image {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+}

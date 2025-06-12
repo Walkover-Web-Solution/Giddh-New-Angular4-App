@@ -8,6 +8,7 @@
     <gst-template-a
         *ngSwitchDefault
         [fieldsAndVisibility]="fieldsAndVisibility"
+        [allDataTemplateFields]="allDataTemplateFields"
         [isPreviewMode]="isPreviewMode"
         [showLogo]="showLogo"
         [imageSignatureSrc]="imageSignatureSrc"
@@ -27,6 +28,7 @@
     <tally-template
         *ngSwitchCase="'tally_template'"
         [fieldsAndVisibility]="fieldsAndVisibility"
+        [allDataTemplateFields]="allDataTemplateFields"
         [isPreviewMode]="isPreviewMode"
         [showLogo]="showLogo"
         [imageSignatureSrc]="imageSignatureSrc"

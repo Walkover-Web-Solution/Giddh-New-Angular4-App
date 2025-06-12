@@ -1912,40 +1912,27 @@
             <div class="clearfix">
                 <h2>Footer</h2>
                 <div class="clearfix bd-rb scroll-auto">
-                <ng-container *ngIf="
-                            customTemplate?.templateType === 'gst_template_a' ||
-                            customTemplate?.templateType === 'tally_template'"
-                        >
+                <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'tally_template'">
                     <input
                         type="checkbox"
-                        name="tcsCheckbox"
-                        checked
+                        name="bankQrCodeCheckbox"
                         [(ngModel)]="customTemplate.showBankQrCode"
                         (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                        checked="true"
                     />
                     Show Bank QR Code
                     <div class="ml-3">
                         <input
                             type="text"
-                            value="TCS"
-                            name="tcs"
-                            [class.error-box]="contentForm?.controls['tcs']?.errors?.maxlength"
-                            hasFocus
-                            #tcs="hasFocus"
-                            placeholder="UPI ID or QR Code ID"
+                            name="bankQrCode"
+                            placeholder="Enter UPI ID"
                             class="form-control"
                             [(ngModel)]="customTemplate.qrCodeId"
+                            #bankQrCode="ngModel"
                             (ngModelChange)="onFieldChange(null, null, null)"
                             [disabled]="!customTemplate.showBankQrCode"
-                            pattern="^[a-zA-Z0-9.-]{2, 256}@[a-zA-Z][a-zA-Z]{2, 64}$"
+                            pattern="^[a-zA-Z0-9._%+-]{2,256}@[a-zA-Z0-9.-]{2,64}$"
+                            [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
                         />
-                        <!-- <ng-container *ngIf="tcs?.isFocused || contentForm?.controls['tcs']?.errors?.maxlength">
-                            <span class="max-character-label">Characters left:&nbsp;</span
-                            ><span class="max-character-value">{{
-                                10 - customTemplate.sections["footer"].data["tcs"].label?.length
-                            }}</span>
-                        </ng-container> -->
                     </div>
                 </ng-container>
                     <ng-container
