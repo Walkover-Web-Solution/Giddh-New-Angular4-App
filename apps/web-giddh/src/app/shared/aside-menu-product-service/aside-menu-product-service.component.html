@@ -21,15 +21,15 @@
                             {{ commonLocaleData?.app_add_account }}
                         </button>
                     </ng-container>
-                    <button
+                    <!-- <button
                         mat-stroked-button
                         color="primary"
                         class="mb-2"
-                        *ngIf="voucherApiVersion !== 2"
+                        *ngIf="voucherApiVersion !== 2
                         (click)="toggleStockPane()"
                     >
                         {{ commonLocaleData?.app_add_product }}
-                    </button>
+                    </button> -->
                     <button
                         *ngIf="voucherApiVersion === 2"
                         mat-stroked-button
@@ -61,12 +61,12 @@
             </div>
         </div>
 
-        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
+        <!-- <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
             <sales-create-stock
                 [autoFocusInChild]="autoFocusInChild"
                 (closeAsideEvent)="closeAsidePane($event)"
             ></sales-create-stock>
-        </div>
+        </div> -->
 
         <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion === 2">
             <div class="child-wrapper">

@@ -198,7 +198,7 @@
                             mat-stroked-button
                             color="primary"
                             [matMenuTriggerFor]="changeStatus"
-                            *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && (!isCompany && !isConsolidatedBranch)"
+                            *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && (!isCompany && !isConsolidatedBranch && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice)"
                         >
                             <span>Change Status</span>
                             <i class="icon-arrow-down icon-font-11 ml-2"></i>
