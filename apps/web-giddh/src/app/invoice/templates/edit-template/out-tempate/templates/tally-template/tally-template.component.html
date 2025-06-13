@@ -840,9 +840,9 @@
                         </td>
                     </tr>
                 </table>
-                <table>
+                <table *ngIf="inputTemplate.showBankQrCode || fieldsAndVisibility.footer.taxBifurcation?.display">
                     <tbody>
-                        <tr >
+                        <tr>
                             <td width="20%" class="v-align-middle" *ngIf="inputTemplate.showBankQrCode" [ngClass]="{ 'border-top-none': !fieldsAndVisibility.footer.taxBifurcation?.display }">
                                 <img src="{{ imgPath }}/bank-qr-code.png" alt="image" width="150px"/>
                             </td>
