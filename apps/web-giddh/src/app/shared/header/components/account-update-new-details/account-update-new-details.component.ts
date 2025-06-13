@@ -470,12 +470,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.changeDetectorRef.detectChanges();
                 }
             });
-        
-        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
-            if (this.formValueAssigned && response) {
-                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-            }
-        });
+
+        // this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+        //     if (response) {
+        //         console.log("1",this.addAccountForm.dirty);
+        //         console.log("2",this.addAccountForm.touched);
+        //         console.log("3",this.addAccountForm.status);
+        //         console.log("4",this.addAccountForm);
+        //         this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+        //     }
+        // });
+        // this.addAccountForm.statusChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+        //     if (response) {
+        //         console.log("5",this.addAccountForm.dirty);
+        //         console.log("6",this.addAccountForm.touched);
+        //         console.log("7",this.addAccountForm.status);
+        //         console.log("8",this.addAccountForm);
+
+        //         this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+        //     }
+        // });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -678,6 +692,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+    /**
+     * Open confirm leave dialog
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public openConfirmLeaveDialog(): void {
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+    }
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
             activeGroupUniqueName: [''],
@@ -2241,7 +2263,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (!accountDetails.customFields) {
                     accountDetails.customFields = [];
                 }
-                
+
                 this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;
