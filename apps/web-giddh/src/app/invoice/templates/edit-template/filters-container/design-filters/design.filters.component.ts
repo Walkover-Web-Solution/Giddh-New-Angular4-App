@@ -125,7 +125,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 op.footer = this.customTemplate.sections.footer.data;
 
                 this._invoiceUiDataService.setFieldsAndVisibility(op);
-                this._invoiceUiDataService.setAllTemplateFields(template);
                 if (this.customTemplate.logoSize) {
                     this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L' :
                         this.customTemplate.logoSize === '80' ? 'M' : 'S';

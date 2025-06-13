@@ -19,8 +19,6 @@ import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() public fieldsAndVisibility: any = null;
-    /** Holds all template global table data */
-    @Input() public allDataTemplateFields: any = null;
     @Input() public isPreviewMode: boolean = false;
     @Input() public showLogo: boolean = true;
     @Input() public showCompanyName: boolean;

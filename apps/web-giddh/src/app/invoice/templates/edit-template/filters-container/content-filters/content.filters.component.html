@@ -1888,6 +1888,33 @@
                                 </div>
                             </div>
                         </div>
+                        <tr>
+                            <ng-container *ngIf="customTemplate?.templateType === 'tally_template'">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="bankQrCodeCheckbox"
+                                        [(ngModel)]="customTemplate.showBankQrCode"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    />
+                                    Show Bank QR Code
+                                </label>
+                                <div class="ml-3">
+                                    <input
+                                        type="text"
+                                        name="bankQrCode"
+                                        placeholder="Enter UPI ID"
+                                        class="form-control"
+                                        [(ngModel)]="customTemplate.qrCodeId"
+                                        #bankQrCode="ngModel"
+                                        (ngModelChange)="onFieldChange(null, null, null)"
+                                        [disabled]="!customTemplate.showBankQrCode"
+                                        pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                        [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
+                                    />
+                                </div>
+                            </ng-container>
+                        </tr>
                         <div
                             class="form-group"
                             *ngIf="
@@ -1897,15 +1924,17 @@
                             "
                         >
                             <div class="form-group">
-                                <input
-                                    type="checkbox"
-                                    name="taxBifurcationCheckbox"
-                                    [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
-                                    (ngModelChange)="
-                                        onChangeFieldVisibility(null, null, null);
-                                    "
-                                />
-                                Tax Bifurcation
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="taxBifurcationCheckbox"
+                                        [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
+                                        (ngModelChange)="
+                                            onChangeFieldVisibility(null, null, null);
+                                        "
+                                    />
+                                    Tax Bifurcation
+                                </label>
                             </div>
                         </div>
                     </tbody>
@@ -1916,7 +1945,7 @@
             <div class="clearfix">
                 <h2>Footer</h2>
                 <div class="clearfix bd-rb scroll-auto">
-                <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'tally_template'">
+                <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
                     <input
                         type="checkbox"
                         name="bankQrCodeCheckbox"
@@ -1934,7 +1963,7 @@
                             #bankQrCode="ngModel"
                             (ngModelChange)="onFieldChange(null, null, null)"
                             [disabled]="!customTemplate.showBankQrCode"
-                            pattern="^[a-zA-Z0-9._%+-]{2,256}@[a-zA-Z0-9.-]{2,64}$"
+                            pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
                             [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
                         />
                     </div>

@@ -27,8 +27,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
     public companyGSTIN: string;
     public companyPAN: string;
     public fieldsAndVisibility: any;
-    /** Holds all template table data */
-    public allDataTemplateFields: any = null;
     public companyUniqueName: string;
     public voucherType = 'default';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -90,10 +88,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
         this._invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
             this.showLogo = cloneDeep(yesOrNo);
-        });
-
-        this._invoiceUiDataService.allDataTemplateFields.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
-            this.allDataTemplateFields = cloneDeep(data);
         });
 
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
