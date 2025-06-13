@@ -143,6 +143,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.listOfCheckGroupsAccounts = [];
                 setTimeout(() => {
                     this.refresh.emit();
+                    this.tlPlService.isReportTailed$.next(true);
                 }, 200);
             }
         });
@@ -215,7 +216,6 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                     payload: this.listOfCheckGroupsAccounts
                 };
                 this.financialReportsComponentStore.tailedReportAccountGroup(model);
-                this.tlPlService.isReportTailed$.next(true);
             }
         }, 400);
     }
@@ -230,19 +230,19 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof BalanceSheetGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(group => {
-            if (group.checked) {
+        groupAccountDetails.forEach(groupAccount => {
+            if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
-                    uniqueName: group.uniqueName,
+                    uniqueName: groupAccount.uniqueName,
                     entityType,
                     checked: false
                 });
             }
-            if (group.childGroups?.length) {
-                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            if (groupAccount.childGroups?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
-            if (group.accounts?.length) {
-                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            if (groupAccount.accounts?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
         });
     }
