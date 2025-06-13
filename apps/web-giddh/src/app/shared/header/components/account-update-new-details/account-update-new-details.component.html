@@ -18,7 +18,7 @@
                             formControlName="activeGroupUniqueName"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('activeGroupUniqueName')?.value"
-                            (selectedOption)="selectGroup($event)"
+                            (selectedOption)="selectGroup($event); confirmPageLeave()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -32,6 +32,7 @@
                             [autoFocus]="true"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('name')?.value"
+                            (change)="confirmPageLeave()"
                         >
                         </input-field>
                     </div>
@@ -46,7 +47,7 @@
                             formControlName="countryCode"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('country').get('countryCode')?.value"
-                            (selectedOption)="selectCountry($event)"
+                            (selectedOption)="selectCountry($event); confirmPageLeave()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -57,6 +58,7 @@
                             [labelValue]="selectedCurrency ?? ''"
                             [options]="currencySource$ | async"
                             formControlName="currency"
+                            (selectedOption)="confirmPageLeave()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -78,6 +80,7 @@
                                     [allowDigitsOnly]="true"
                                     [readonly]="company?.isActive"
                                     [min]="0"
+                                    (change)="confirmPageLeave()"
                                 >
                                 </input-field>
                                 <div class="d-flex">
@@ -143,6 +146,7 @@
                                 [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
+                                (change)="confirmPageLeave()"
                             >
                             </input-field>
                             <div class="d-flex">
@@ -191,12 +195,14 @@
                                 <mat-radio-button
                                     color="primary"
                                     value="hsn"
+                                    (change)="confirmPageLeave()"
                                 >
                                     {{ commonLocaleData?.app_hsn }}
                                 </mat-radio-button>
                                 <mat-radio-button
                                     color="primary"
                                     value="sac"
+                                    (change)="confirmPageLeave()"
                                 >
                                     {{ commonLocaleData?.app_sac }}
                                 </mat-radio-button>
@@ -208,6 +214,7 @@
                             [placeholder]="commonLocaleData?.app_hsn"
                             [type]="'text'"
                             formControlName="hsnNumber"
+                            (change)="confirmPageLeave()"
                             [allowDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
                         >
@@ -218,6 +225,7 @@
                             [placeholder]="commonLocaleData?.app_sac"
                             [type]="'text'"
                             formControlName="sacNumber"
+                            (change)="confirmPageLeave()"
                             [allowDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
                         >
@@ -281,6 +289,7 @@
                                         rows="4"
                                         cols="5"
                                         class="form-control"
+                                        (change)="confirmPageLeave()"
                                     ></textarea>
                                 </div>
                             </div>
@@ -296,7 +305,7 @@
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
-                                    (selectedOption)="selectedState(gst, $event)"
+                                    (selectedOption)="selectedState(gst, $event); confirmPageLeave()"
                                 >
                                 </reactive-dropdown-field>
                                 
@@ -308,7 +317,7 @@
                                     formControlName="countyCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
-                                    (selectedOption)="selectedCounty(gst, $event)"
+                                    (selectedOption)="selectedCounty(gst, $event); confirmPageLeave()"
                                 >
                                 </reactive-dropdown-field>
                             </div>
@@ -322,6 +331,7 @@
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                     [maxlength]="15"
+                                    (change)="confirmPageLeave()"
                                 >
                                 </input-field>
                             </div>
@@ -342,6 +352,7 @@
                                     [type]="'number'"
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
                                     [allowDigitsOnly]="true"
+                                    (change)="confirmPageLeave()"
                                 >
                                 </input-field>
                             </div>
@@ -354,6 +365,7 @@
                                         [options]="partyTypeSource"
                                         [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
                                         [labelValue]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType?.value"
+                                        (selectedOption)="confirmPageLeave()"
                                     >
                                     </reactive-dropdown-field>
                                 </div>
@@ -413,7 +425,7 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
+                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value); confirmPageLeave()"
                             > + {{ localeData?.add_address }}
                             </button>
                         </div>
@@ -433,6 +445,7 @@
                                 [placeholder]="localeData?.attention_to"
                                 [type]="'text'"
                                 formControlName="attentionTo"
+                                (change)="confirmPageLeave()"
                             >
                             </input-field>
                         </div>
@@ -447,6 +460,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                 formControlName="mobileNo"
+                                (change)="confirmPageLeave()"
                             >
                             </input-field>
                             <span id="init-contact-update-valid-msg" class="d-none"></span>
@@ -462,6 +476,7 @@
                                 [placeholder]="commonLocaleData?.app_email_id"
                                 [type]="'email'"
                                 formControlName="email"
+                                (change)="confirmPageLeave()"
                             >
                             </input-field>
                             <span
