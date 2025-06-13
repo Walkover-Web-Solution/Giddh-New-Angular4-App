@@ -8,6 +8,7 @@ import {
     Input,
     OnChanges,
     OnDestroy,
+    OnInit,
     Output,
     Renderer2,
     SimpleChanges,
@@ -31,7 +32,7 @@ import { TlPlService } from '../../../services/tl-pl.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [FinancialReportsComponentStore]
 })
-export class GridRowComponent implements OnChanges, OnDestroy {
+export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public from: string;
@@ -67,6 +68,19 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         private tlPlService: TlPlService
     ) {
         this.currentUrl = this.router.url;
+    }
+
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof GridRowComponent
+     */
+    public ngOnInit(): void {
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.tlPlService.isReportTailed$.next(true);
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -171,6 +185,5 @@ export class GridRowComponent implements OnChanges, OnDestroy {
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };
         this.financialReportsComponentStore.tailedReportAccountGroup(model);
-        this.tlPlService.isReportTailed$.next(true);
     }
 }
