@@ -87,11 +87,6 @@ export class InvoiceUiDataService {
      * setCustomTemplate
      */
     public setCustomTemplate(template: CustomTemplateResponse) {
-        template.sections['header'].data['companyName'].label = this.companyName;
-        if (template.sections && template.sections.footer.data.companyName) {
-            template.sections['footer'].data['companyName'].label = this.companyName;
-        }
-
         this.BRToNewLine(template);
         this.customTemplate.next(template);
     }
@@ -174,10 +169,6 @@ export class InvoiceUiDataService {
                 if (selectedTemplate.sections['header'].data['companyName'].display) {
                     this.isCompanyNameVisible.next(true);
                 }
-                if (this.companyName && mode === 'create') {
-                    selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
-                }
-                selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
                 if (!selectedTemplate.logoUniqueName) {
                     this.isLogoVisible.next(false);
                 } else {
