@@ -261,9 +261,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
     /** Indicates whether the "Portal" tab is currently selected */
-    public isPortalSelectedTab: boolean = false;
-    /** Indicates whether the "Contact" tab is currently selected */
-    public isContactSelectedTab: boolean = false;
+    public isCustomSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
     /** Holds active selected Tab Index */
@@ -471,25 +469,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
 
-        // this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
-        //     if (response) {
-        //         console.log("1",this.addAccountForm.dirty);
-        //         console.log("2",this.addAccountForm.touched);
-        //         console.log("3",this.addAccountForm.status);
-        //         console.log("4",this.addAccountForm);
-        //         this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-        //     }
-        // });
-        // this.addAccountForm.statusChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
-        //     if (response) {
-        //         console.log("5",this.addAccountForm.dirty);
-        //         console.log("6",this.addAccountForm.touched);
-        //         console.log("7",this.addAccountForm.status);
-        //         console.log("8",this.addAccountForm);
-
-        //         this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-        //     }
-        // });
+        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+            if (this.formValueAssigned && response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            }
+        });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -681,8 +665,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.selectedTab = event.tab.textLabel;
             this.selectedTabIndex = event.index;
-            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
-            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
+            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
@@ -700,6 +683,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public openConfirmLeaveDialog(): void {
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
     }
+
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
             activeGroupUniqueName: [''],
@@ -2147,7 +2131,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('addresses').reset();
         }
         this.selectedTabIndex = null;
-        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
         this.changeDetectorRef.detectChanges();
         setTimeout(() => {
             this.selectedTabIndex = 0;
