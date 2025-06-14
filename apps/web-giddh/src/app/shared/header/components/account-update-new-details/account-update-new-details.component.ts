@@ -260,7 +260,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isValidForm: boolean = true;
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
-    /** Indicates whether the "Portal" tab is currently selected */
+    /** Indicates whether the "Custom" tab is currently selected */
     public isCustomSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
