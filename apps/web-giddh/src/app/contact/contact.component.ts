@@ -261,18 +261,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     /** Observable for custom header columns */
     public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
-        /** Holds advance Filters keys */
-    public advanceFilters: any = {
-        page: 1,
-        count: PAGINATION_LIMIT,
-        q: '',
-        from: '',
-        to: '',
-        sort: '',
-        sortBy: ''
-    };
+>>>>>>>>> Temporary merge branch 2
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
+    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
@@ -1768,28 +1759,23 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Set all account to service variable and redirect to view page
-     *
+     * Handles selection of archived filter option
+     * 
+     * @param {any} event Event containing selected filter value
      * @memberof ContactComponent
      */
-    public showAccountPreview(accountUniqueName: string): void {
-        const queryParams = {
-            page: this.advanceFilters.page,
-            count: this.advanceFilters.count,
-            from: this.advanceFilters.from,
-            to: this.advanceFilters.to,
-            sort: this.advanceFilters.sort,
-            sortBy: this.advanceFilters.sortBy,
-            refresh: false
-        };
-
-        const searchString = this.advanceFilters.q;
-        if (searchString?.length) {
-            queryParams['search'] = searchString;
-        };
-
-        this.router.navigate([`/pages/contact/${this.activeTab}/${accountUniqueName}`], {
-            queryParams: queryParams
-        });
+    public onArchivedFilterSelected(event: any): void {
+        this.getAccounts(
+            this.fromDate, 
+            this.toDate,
+            null,
+            "false",
+            PAGINATION_LIMIT,
+            this.searchStr,
+            this.key,
+            this.order,
+            (this.currentBranch ? this.currentBranch.uniqueName : ""),
+            event.value
+        );
     }
 }

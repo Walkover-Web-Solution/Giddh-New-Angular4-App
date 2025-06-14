@@ -258,6 +258,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                     payload: this.listOfCheckGroupsAccounts
                 };
                 this.financialReportsComponentStore.tailedReportAccountGroup(model);
+                this.tlPlService.isReportTailed$.next(true);
             }
         }, 400);
     }

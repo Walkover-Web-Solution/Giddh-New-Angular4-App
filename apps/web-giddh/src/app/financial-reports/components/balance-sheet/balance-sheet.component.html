@@ -14,7 +14,7 @@
         (expandAllChange)="expandAllEvent()"
         [(expandAll)]="expandAll"
         [BsExportXLS]="true"
-        (showReportTally)="showReportTallyOption = $event"
+        (showReportTally)="showReconcileOption = $event"
     >
     </financial-filter>
     <div *ngIf="showLoader | async">
@@ -22,7 +22,7 @@
     </div>
     <div *ngIf="!(showLoader | async) && data">
         <balance-sheet-grid
-            [ngClass]="{ 'show-tailed-checkbox': showReportTallyOption }"
+            [ngClass]="{ 'show-tailed-checkbox': showReconcileOption }"
             #bsGrid
             [search]="search"
             [from]="from"

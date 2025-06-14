@@ -1579,7 +1579,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getCompanyTaxes(): void {
         this.store.dispatch(this.companyActions.getTax());
-
         this.componentStore.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.allCompanyTaxes = response;
