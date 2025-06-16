@@ -429,9 +429,9 @@
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             > + {{ localeData?.add_address }}
                             </button>
+                            <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                         </div>
                     </ng-container>
-                    <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                 </div>
             </mat-tab>
 
