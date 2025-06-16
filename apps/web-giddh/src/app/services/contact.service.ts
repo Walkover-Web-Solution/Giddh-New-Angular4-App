@@ -9,6 +9,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ACCOUNT_STATEMENT_API, CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 interface IBankRefreshResponse {
     success: boolean;
@@ -38,12 +39,24 @@ export class ContactService {
      * @param {string} [sortBy=''] Sort by item name
      * @param {string} [order='asc'] Sort type
      * @param {string} [branchUniqueName] Current branch selected
+     * @param {string} [accountArchiveStatus]
      * @param {ContactAdvanceSearchModal} [postData] Request model object
      * @returns {Observable<BaseResponse<any, string>>}
      * @memberof ContactService
      */
-    public GetContacts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number, query?: string, sortBy: string = '',
-        order: string = 'asc', postData?: ContactAdvanceSearchModal, branchUniqueName?: string): Observable<BaseResponse<any, string>> {
+    public GetContacts(
+        fromDate: string, 
+        toDate: string, 
+        groupUniqueName: string, 
+        pageNumber: number, 
+        refresh: string, 
+        count: number, 
+        query?: string, 
+        sortBy: string = '',
+        order: string = 'asc', 
+        postData?: ContactAdvanceSearchModal, 
+        branchUniqueName?: string
+    ): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
@@ -62,6 +75,7 @@ export class ContactService {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat('&branchUniqueName=', branchUniqueName);
         }
+        
         if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;

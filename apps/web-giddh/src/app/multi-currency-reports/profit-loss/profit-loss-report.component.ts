@@ -62,10 +62,10 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                 if (cogs) {
                     let cogsGrp: ChildGroup = new ChildGroup();
                     cogsGrp.isCreated = true;
+                    cogsGrp.level1 = true;
                     cogsGrp.isVisible = true;
                     cogsGrp.isIncludedInSearch = true;
                     cogsGrp.isOpen = false;
-                    cogsGrp.level1 = false;
                     cogsGrp.uniqueName = 'cogs';
                     cogsGrp.groupName = 'Less: Cost of Goods Sold';
                     cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
@@ -83,6 +83,7 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
                             Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
                                 let childGroup = new ChildGroup();
                                 childGroup.isCreated = false;
+                                childGroup.isSelfCreatedGroup = true;
                                 childGroup.isVisible = false;
                                 childGroup.isIncludedInSearch = true;
                                 childGroup.isOpen = false;
@@ -224,7 +225,7 @@ export class ProfitLossReportComponent implements OnInit, AfterViewInit, OnDestr
      * @memberof ProfitLossReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.creatMultiCurrencyReport({ reportType: ReportType.ProfitLoss, payload: event });
+        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.ProfitLoss, payload: event });
     }
 
     /**

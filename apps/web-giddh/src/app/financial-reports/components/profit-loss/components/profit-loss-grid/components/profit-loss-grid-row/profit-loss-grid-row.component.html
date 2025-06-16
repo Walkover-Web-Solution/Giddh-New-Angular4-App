@@ -2,13 +2,23 @@
     class="pl-grid-row row"
     [financial-accordion]="groupDetail"
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
-    [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
+    [ngClass]="{ 'isHidden': !groupDetail.isVisible, 'tailed-row': groupDetail.checked }"
 >
     <div
-        class="col-4 group pl-sticky-group"
-        [innerHTML]="groupDetail.groupName | highlight : search"
-        [ngStyle]="{ 'padding-left': padding + 'px' }"
-    ></div>
+        class="col-4 group pl-sticky-group d-flex align-items-center row-height"
+        [style.padding-left]="padding + 'px !important'"
+    >
+        <mat-checkbox
+            *ngIf="!groupDetail.level1 && !groupDetail?.isSelfCreatedGroup"
+            color="primary"
+            (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
+            [(ngModel)]="groupDetail.checked"
+            [checked]="groupDetail?.checked"
+            (click)="$event.stopPropagation()"
+            class="tailed-checkbox"
+        ></mat-checkbox>
+        <span [innerHTML]="groupDetail?.groupName | highlight : search"></span>
+    </div>
     <div class="col group p-0">
         <span class="row">
             <ng-container *ngIf="!groupDetail.level1; else elseBlock">
@@ -78,8 +88,20 @@
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
     <section class="row-2 account" [ngClass]="{ 'isHidden': !account.isVisible }" (dblclick)="entryClicked(account)">
-        <div class="pl-grid-row row">
-            <div class="col-4 pl-sticky-group" [ngStyle]="{ 'padding-left': padding + 20 + 'px' }">
+        <div class="pl-grid-row row" [ngClass]="{ 'tailed-row': account.checked }">
+            <div
+                class="col-4 pl-sticky-group d-flex align-items-center row-height"
+                [style.padding-left]="padding + 20 + 'px !important'"
+            >
+                <mat-checkbox
+                    class="mr-l05"
+                    color="primary"
+                    (change)="onItemChecked($event, account?.uniqueName, 'account')"
+                    [(ngModel)]="account.checked"
+                    [checked]="account?.checked"
+                    (click)="$event.stopPropagation()"
+                    class="tailed-checkbox"
+                ></mat-checkbox>
                 <p class="account-name" [innerHTML]="account.name | lowercase | highlight : search"></p>
             </div>
             <ng-container *ngFor="let key of getKeys(account.closingBalance)">

@@ -972,7 +972,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
                 this.needToReCalculate.next(false);
-                this.getTransactionData();
+                if (this.isAdvanceSearchImplemented) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
                 this.transactionCountConvertToEntries = null;
@@ -1013,7 +1017,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerBulkActionSuccess$.subscribe((yes: boolean) => {
             if (yes) {
                 this.entryUniqueNamesForBulkAction = [];
-                this.getTransactionData();
+                if (this.isAdvanceSearchImplemented) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
             }
         });
 
@@ -1136,7 +1144,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     this.getTransactionData();
                 }
-                this.getTransactionData();
                 this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
@@ -1594,6 +1601,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
     }
+
 
     public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();

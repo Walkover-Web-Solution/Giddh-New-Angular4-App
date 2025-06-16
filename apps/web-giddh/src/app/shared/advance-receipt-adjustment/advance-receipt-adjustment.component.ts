@@ -741,7 +741,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (entry && entry.taxRate && entry.adjustmentAmount?.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
-        } else if(this.adjustVoucherForm.adjustments[index]) {
+        } else if (this.adjustVoucherForm.adjustments[index]) {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();

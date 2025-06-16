@@ -299,7 +299,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.currentUrl = this.router.url;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
