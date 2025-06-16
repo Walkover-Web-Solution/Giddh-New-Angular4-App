@@ -434,10 +434,10 @@
                             >
                                 + {{ localeData?.add_address }}
                             </button>
+                            <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
                         </div>
                     </ng-container>
                 </div>
-                <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.contact" class="contact-form-wrap">
