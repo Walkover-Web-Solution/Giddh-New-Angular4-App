@@ -3,14 +3,17 @@
         <div class="column list-column expanded-list-column transactions-list">
             <div class="scroll-y noscroll-x body fill">
                 <div class="reconciliation-type-band">
-                    <tabset class="sub-filter-nav-band">
-                        <!-- region Missing in GSTN -->
-                        <tab (selectTab)="reconcileTabChanged('notfoundonportal')">
-                            <ng-template tabHeading>
+                    <mat-tab-group
+                        mat-stretch-tabs="false"
+                        [selectedIndex]="activeTabIndex"
+                        (selectedTabChange)="reconcileTabChanged($event)"
+                    >
+                        <!-- Missing in GSTN -->
+                        <mat-tab [label]="localeData?.filing?.missing_in_gstn">
+                            <ng-template mat-tab-label>
                                 {{ localeData?.filing?.missing_in_gstn }}
                                 <span class="count">{{ "(" + (gstNotFoundOnPortalData$ | async)?.count + ")" }}</span>
                             </ng-template>
-
                             <ng-container
                                 *ngTemplateOutlet="
                                     commonTableTemplate;
@@ -18,7 +21,6 @@
                                 "
                             >
                             </ng-container>
-
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
@@ -30,9 +32,7 @@
                                 "
                             >
                             </ng-container>
-
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
-
                             <div
                                 class="filings-empty-state mb-5"
                                 *ngIf="
@@ -41,27 +41,25 @@
                                         (gstNotFoundOnPortalData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
-                                    [totalItems]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
-                                    [itemsPerPage]="(gstNotFoundOnPortalData$ | async)?.data?.count"
-                                    [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'notfoundonportal')"
-                                    [firstText]="commonLocaleData?.app_first"
-                                    [previousText]="commonLocaleData?.app_previous"
-                                    [nextText]="commonLocaleData?.app_next"
-                                    [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                <mat-paginator
+                                    class="mt-3"
+                                    [showFirstLastButtons]="true"
+                                    [pageSizeOptions]="pageSizeOptions"
+                                    [pageIndex]="pageIndex"
+                                    (page)="reconcilePageChanged($event, 'notfoundonportal')"
+                                    [length]="(gstNotFoundOnPortalData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstNotFoundOnPortalData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
-                        </tab>
-                        <!-- endregion -->
-
-                        <!-- region Missing in Giddh -->
-                        <tab (selectTab)="reconcileTabChanged('notfoundongiddh')">
-                            <ng-template tabHeading>
+                        </mat-tab>
+                        <!-- Missing in Giddh -->
+                        <mat-tab [label]="localeData?.filing?.missing_in_giddh">
+                            <ng-template mat-tab-label>
                                 {{ localeData?.filing?.missing_in_giddh }}
                                 <span class="count">{{ "(" + (gstNotFoundOnGiddhData$ | async)?.count + ")" }}</span>
                             </ng-template>
-
                             <ng-container
                                 *ngTemplateOutlet="
                                     commonTableTemplate;
@@ -69,7 +67,6 @@
                                 "
                             >
                             </ng-container>
-
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
@@ -81,9 +78,7 @@
                                 "
                             >
                             </ng-container>
-
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
-
                             <div
                                 class="filings-empty-state mb-5"
                                 *ngIf="
@@ -92,23 +87,22 @@
                                         (gstNotFoundOnGiddhData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
-                                    [totalItems]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
-                                    [itemsPerPage]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
-                                    [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'notfoundongiddh')"
-                                    [firstText]="commonLocaleData?.app_first"
-                                    [previousText]="commonLocaleData?.app_previous"
-                                    [nextText]="commonLocaleData?.app_next"
-                                    [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                <mat-paginator
+                                    class="mt-3"
+                                    [showFirstLastButtons]="true"
+                                    [pageSizeOptions]="pageSizeOptions"
+                                    [pageIndex]="pageIndex"
+                                    (page)="reconcilePageChanged($event, 'notfoundongiddh')"
+                                    [length]="(gstNotFoundOnGiddhData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstNotFoundOnGiddhData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
-                        </tab>
-                        <!-- endregion -->
-
-                        <!-- region Partially Matched -->
-                        <tab (selectTab)="reconcileTabChanged('partiallymatched')">
-                            <ng-template tabHeading>
+                        </mat-tab>
+                        <!-- Partially Matched -->
+                        <mat-tab [label]="localeData?.filing?.partially_matched">
+                            <ng-template mat-tab-label>
                                 {{ localeData?.filing?.partially_matched }}
                                 <span class="count">{{ "(" + (gstPartiallyMatchedData$ | async)?.count + ")" }}</span>
                             </ng-template>
@@ -120,7 +114,6 @@
                                 "
                             >
                             </ng-container>
-
                             <ng-container
                                 *ngTemplateOutlet="
                                     notFoundTmpl;
@@ -132,9 +125,7 @@
                                 "
                             >
                             </ng-container>
-
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
-
                             <div
                                 class="filings-empty-state mb-5"
                                 *ngIf="
@@ -143,23 +134,22 @@
                                         (gstPartiallyMatchedData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
-                                    [totalItems]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
-                                    [itemsPerPage]="(gstPartiallyMatchedData$ | async)?.data?.count"
-                                    [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'partiallymatched')"
-                                    [firstText]="commonLocaleData?.app_first"
-                                    [previousText]="commonLocaleData?.app_previous"
-                                    [nextText]="commonLocaleData?.app_next"
-                                    [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                                <mat-paginator
+                                    class="mt-3"
+                                    [showFirstLastButtons]="true"
+                                    [pageSizeOptions]="pageSizeOptions"
+                                    [pageIndex]="pageIndex"
+                                    (page)="reconcilePageChanged($event, 'partiallymatched')"
+                                    [length]="(gstPartiallyMatchedData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstPartiallyMatchedData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
-                        </tab>
-                        <!-- endregion -->
-
-                        <!-- region Matched -->
-                        <tab (selectTab)="reconcileTabChanged('matched')">
-                            <ng-template tabHeading>
+                        </mat-tab>
+                        <!-- Matched -->
+                        <mat-tab [label]="localeData?.filing?.matched">
+                            <ng-template mat-tab-label>
                                 {{ localeData?.filing?.matched }}
                                 <span class="count matched">{{ "(" + (gstMatchedData$ | async)?.count + ")" }}</span>
                             </ng-template>
@@ -193,20 +183,20 @@
                                     (gstMatchedData$ | async)?.data?.totalItems > (gstMatchedData$ | async)?.data?.count
                                 "
                             >
-                                <pagination
-                                    [totalItems]="(gstMatchedData$ | async)?.data?.totalItems"
-                                    [itemsPerPage]="(gstMatchedData$ | async)?.data?.count"
-                                    [boundaryLinks]="true"
-                                    (pageChanged)="reconcilePageChanged($event, 'matched')"
-                                    [firstText]="commonLocaleData?.app_first"
-                                    [previousText]="commonLocaleData?.app_previous"
-                                    [nextText]="commonLocaleData?.app_next"
-                                    [lastText]="commonLocaleData?.app_last"
-                                ></pagination>
+                            <mat-paginator
+                                    class="mt-3"
+                                    [showFirstLastButtons]="true"
+                                    [pageSizeOptions]="pageSizeOptions"
+                                    [pageIndex]="pageIndex"
+                                    (page)="reconcilePageChanged($event, 'matched')"
+                                    [length]="(gstMatchedData$ | async)?.data?.totalItems"
+                                    [pageSize]="(gstMatchedData$ | async)?.data?.count"
+                                    [showFirstLastButtons]="true"
+                                    [hidePageSize]="false"
+                                ></mat-paginator>
                             </div>
-                        </tab>
-                        <!-- endregion -->
-                    </tabset>
+                        </mat-tab>
+                    </mat-tab-group>
                 </div>
             </div>
         </div>
@@ -217,7 +207,7 @@
 <ng-template #commonTableTemplate let-list let-type="type">
     <ng-container *ngIf="list?.count">
         <table
-            class="table zi-table table-fixed reconciliations-table table-hover table-responsive"
+            class="table table-fixed reconciliations-table table-hover table-responsive"
             *ngIf="list?.count"
         >
             <thead>

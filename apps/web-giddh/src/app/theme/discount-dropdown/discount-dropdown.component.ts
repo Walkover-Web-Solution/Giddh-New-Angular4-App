@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
+import { GeneralService } from "../../services/general.service";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "discount-dropdown",
@@ -9,16 +11,24 @@ import { isEqual } from "../../lodash-optimized";
     styleUrls: ["./discount-dropdown.component.scss"]
 })
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
+    /** Element ref for mat menu */
+    @ViewChild('menuTrigger') public menuTrigger: MatMenuTrigger;
     /** List of discounsts */
     @Input() public discountsList: any[] = [];
     /** List of selected discounts */
     @Input() public selectedDiscountsList: any[] = [];
     /** Amount for discount */
     @Input() public amount: any;
+    /** Holds active company decimal place 2 or 4 */
+    @Input() public companyDecimalPlaces: number = 2;
     /** Account currency */
     @Input() public currency: any;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /* Holds true to show Create new discount option */
+    @Input() public showCreateNew: boolean = true;
+    /* Holds true to show mat menu with backdrop */
+    @Input() public hasBackdrop: boolean = true;
     /** Emitter for create new discount */
     @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emitter for selected discounts */
@@ -33,9 +43,12 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     private allowDiscountValueChanges: boolean = false;
     /** Total discount amount */
     public totalDiscountAmount: number = 0;
+    /** True if field is readonly */
+    @Input() public readonly: boolean = false;
 
     constructor(
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private generalService: GeneralService
     ) {
         this.discountForm = this.formBuilder.group({
             percentage: [''],
@@ -160,6 +173,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
+        this.totalDiscountAmount = this.generalService.roundOffValueByCompanyDecimalPlace(this.totalDiscountAmount, this.companyDecimalPlaces);
 
         this.emitSelectedDiscounts();
     }
@@ -209,5 +223,14 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public createNew(): void {
         this.createNewDiscount.emit();
+    }
+
+    /**
+     * Close discount menu
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    public closeDiscountMenu(): void {
+        this.menuTrigger?.closeMenu();
     }
 }

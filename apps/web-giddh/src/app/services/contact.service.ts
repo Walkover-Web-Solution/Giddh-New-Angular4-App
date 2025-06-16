@@ -7,19 +7,27 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CONTACT_API } from './apiurls/contact.api';
-import { ContactAdvanceSearchModal } from "../models/api-models/Contact";
+import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
+
+interface IBankRefreshResponse {
+    success: boolean;
+    message: string;
+}
 
 @Injectable()
 export class ContactService {
     private companyUniqueName: string;
 
-    constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
-        private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler,
+        public http: HttpWrapperService,
+        private generalService: GeneralService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     /**
-     *To get contact details
+     * To get contact details
      *
      * @param {string} fromDate From date
      * @param {string} toDate To date
@@ -31,12 +39,24 @@ export class ContactService {
      * @param {string} [sortBy=''] Sort by item name
      * @param {string} [order='asc'] Sort type
      * @param {string} [branchUniqueName] Current branch selected
+     * @param {string} [accountArchiveStatus]
      * @param {ContactAdvanceSearchModal} [postData] Request model object
      * @returns {Observable<BaseResponse<any, string>>}
      * @memberof ContactService
      */
-    public GetContacts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number, query?: string, sortBy: string = '',
-        order: string = 'asc', postData?: ContactAdvanceSearchModal, branchUniqueName?: string): Observable<BaseResponse<any, string>> {
+    public GetContacts(
+        fromDate: string, 
+        toDate: string, 
+        groupUniqueName: string, 
+        pageNumber: number, 
+        refresh: string, 
+        count: number, 
+        query?: string, 
+        sortBy: string = '',
+        order: string = 'asc', 
+        postData?: ContactAdvanceSearchModal, 
+        branchUniqueName?: string
+    ): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
@@ -56,6 +76,7 @@ export class ContactService {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat('&branchUniqueName=', branchUniqueName);
         }
+        
         if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
@@ -120,5 +141,39 @@ export class ContactService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', '')));
         }
+    }
+
+    /**
+     * Refresh go-cardless bank transactions
+     * 
+     * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
+     * @memberof ContactService
+     */
+    public refreshGoCardlessBankTransactions(accountUniqueName: string): Observable<BaseResponse<IBankRefreshResponse, string>> {
+        let url = this.config.apiUrl + CONTACT_API.GOCARDLESS_BANK_TRANSACTIONS_REFRESH;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url.replace(':accountUniqueName', encodeURIComponent(accountUniqueName ?? ''));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<IBankRefreshResponse, string>(e, '', '')));
+    }
+
+    /**
+    * Send bulk email template to specified customers or vendors
+    * @param model Request payload containing customer/vendor unique names and template type
+    * @returns Observable<BaseResponse<any, string>> API response
+    */
+    public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
+        return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.request = '';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
     }
 }

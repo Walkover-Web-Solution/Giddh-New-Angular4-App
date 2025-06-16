@@ -7,111 +7,126 @@
 >
     <div class="clearfix" *ngIf="!isMobileScreen">
         <div class="row">
-            <div class="col-xl-9 col-lg-12 col-md-12">
+            <div class="col-12 d-flex justify-content-between align-items-start column-gap15">
                 <form
                     [formGroup]="filterForm"
                     (submit)="filterData()"
-                    class="form-inline financial-select-year"
+                    class="form-inline financial-select-year column-gap15 row-gap15"
                     name="fromToDateForm"
                     novalidate
                 >
-                    <div class="d-flex">
-                        <div
-                            class="form-group mr-r15 linked-entities"
-                            *ngIf="
-                                showLabels &&
-                                currentCompanyBranches?.length > 2 &&
-                                currentOrganizationType === 'COMPANY'
-                            "
-                        >
-                            <div class="form-group">
-                                <sh-select
-                                    [options]="currentCompanyBranches"
-                                    formControlName="branchUniqueName"
-                                    class="company-branch-dropdown"
-                                    [showClear]="false"
-                                    [ItemHeight]="33"
-                                    width="100%"
-                                    (selected)="handleBranchChange($event)"
-                                    [isFilterEnabled]="true"
-                                    [placeholder]="commonLocaleData?.app_select_entity"
-                                    [fixedValue]="currentBranch?.name"
-                                    [forceClearReactive]="forceClear$ | async"
-                                >
-                                    <ng-template #optionTemplate let-option="option">
-                                        <ng-container>
-                                            <a href="javascript:void(0)" class="list-item d-flex">
-                                                <span class="entity-icon">
-                                                    <i
-                                                        class="icon-branch-icon pull-right"
-                                                        *ngIf="!option.isCompany"
-                                                        [tooltip]="commonLocaleData?.app_branch"
-                                                    ></i>
-                                                    <i
-                                                        class="icon-company-profile pull-right"
-                                                        *ngIf="option.isCompany"
-                                                        [tooltip]="commonLocaleData?.app_company"
-                                                    ></i>
-                                                </span>
-                                                <span class="entity-details">
-                                                    <div class="item giddh-limit single-line-clamp">
-                                                        {{ option.label || "-" }}
-                                                    </div>
-                                                    <div class="item-unique giddh-limit single-line-clamp">
-                                                        {{ option.name || "-" }}
-                                                    </div>
-                                                </span>
-                                            </a>
-                                        </ng-container>
-                                    </ng-template>
-                                </sh-select>
-                            </div>
-                        </div>
-                        <div class="form-group mr-r15" *ngIf="showLabels">
-                            <div class="form-group">
-                                <sh-select
-                                    [options]="dateOptions"
-                                    (selected)="dateOptionIsSelected($event)"
-                                    class="company-branch-dropdown"
-                                    formControlName="selectedDateOption"
-                                    [isFilterEnabled]="true"
-                                    [placeholder]="commonLocaleData?.app_select_option"
-                                    [showClear]="false"
-                                    [ItemHeight]="33"
-                                    width="100%"
-                                >
-                                </sh-select>
-                            </div>
-                        </div>
-                        <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
-                            <div class="form-group">
-                                <sh-select
-                                    [options]="financialOptions"
-                                    formControlName="selectedFinancialYearOption"
-                                    [isFilterEnabled]="true"
-                                    [placeholder]="commonLocaleData?.app_select_option"
-                                    [showClear]="false"
-                                    (selected)="selectFinancialYearOption($event)"
-                                    [ItemHeight]="33"
-                                ></sh-select>
-                            </div>
-                        </div>
-                        <div
-                            class="form-group relative mr-r15 datepicker-field"
-                            *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
-                        >
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
-                                />
-                            </div>
+                    <div
+                        class="form-group linked-entities"
+                        *ngIf="
+                            showLabels &&
+                            !isProjectWiseAccounting &&
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                        "
+                    >
+                        <div class="form-group">
+                            <sh-select
+                                [options]="currentCompanyBranches"
+                                formControlName="branchUniqueName"
+                                class="company-branch-dropdown"
+                                [showClear]="false"
+                                [ItemHeight]="33"
+                                width="100%"
+                                (selected)="handleBranchChange($event)"
+                                [isFilterEnabled]="true"
+                                [placeholder]="commonLocaleData?.app_select_entity"
+                                [fixedValue]="currentBranch?.name"
+                                [forceClearReactive]="forceClear$ | async"
+                            >
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span class="entity-icon">
+                                                <i
+                                                    [ngClass]="{
+                                                        'icon-company-profile': option.consolidatedBranch,
+                                                        'icon-branch-icon': !option.consolidatedBranch
+                                                    }"
+                                                    class="pull-right"
+                                                    *ngIf="!option.isCompany"
+                                                    [tooltip]="commonLocaleData?.app_branch"
+                                                ></i>
+                                                <i
+                                                    class="icon-company-profile pull-right"
+                                                    *ngIf="option.isCompany"
+                                                    [tooltip]="commonLocaleData?.app_company"
+                                                ></i>
+                                            </span>
+                                            <span class="entity-details">
+                                                <div class="item giddh-limit single-line-clamp">
+                                                    {{ option.label || "-" }}
+                                                </div>
+                                                <div class="item-unique giddh-limit single-line-clamp">
+                                                    {{ option.name || "-" }}
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
                         </div>
                     </div>
+                    <div class="form-group" *ngIf="showLabels">
+                        <div class="form-group">
+                            <sh-select
+                                [options]="dateOptions"
+                                (selected)="dateOptionIsSelected($event)"
+                                class="company-branch-dropdown"
+                                formControlName="selectedDateOption"
+                                [isFilterEnabled]="true"
+                                [placeholder]="commonLocaleData?.app_select_option"
+                                [showClear]="false"
+                                [ItemHeight]="33"
+                                width="100%"
+                            >
+                            </sh-select>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
+                        <div class="form-group">
+                            <sh-select
+                                [options]="financialOptions"
+                                formControlName="selectedFinancialYearOption"
+                                [isFilterEnabled]="true"
+                                [placeholder]="commonLocaleData?.app_select_option"
+                                [showClear]="false"
+                                (selected)="selectFinancialYearOption($event)"
+                                [ItemHeight]="33"
+                            ></sh-select>
+                        </div>
+                    </div>
+                    <div
+                        class="form-group relative datepicker-field"
+                        *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
+                    >
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="plBsExportXLS">
+                        <giddh-compare-with-date-range-picker
+                            [endDate]="toDate"
+                            [startDate]="fromDate"
+                            [universalDateRangeLabel]="selectedRangeLabel"
+                            (onChange)="handleCompareWithEvent($event)"
+                        >
+                        </giddh-compare-with-date-range-picker>
+                    </div>
                     <div class="form-group" *ngIf="!showLoader">
-                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
+                        <div
+                            class="form-group pull-left mr-r15 d-inline-flex relative"
+                            *ngIf="!isProjectWiseAccounting && tags?.length"
+                        >
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select
                                 [options]="tags"
@@ -150,39 +165,85 @@
                             </a>
                         </div>
                     </div>
+                    <button mat-stroked-button color="primary" type="submit">
+                        {{ commonLocaleData?.app_search }}
+                    </button>
                 </form>
-            </div>
-            <div class="col-xl-3 col-lg-12 col-md-12 download-data-icon">
-                <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
-                    <span class="icon-refresh"></span>
-                </a>
-                <div class="ml-1">
-                    <trial-balance-export-csv
-                        *ngIf="tbExportCsv"
-                        [trialBalanceRequest]="filterForm?.value"
-                        [selectedCompany]="selectedCompany"
-                        (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
-                        class="pull-right"
+                <div class="d-flex align-items-center column-gap1 download-data-icon">
+                    <ng-container *ngIf="isReconciled !== null">
+                        <p *ngIf="isReconcileModeDateRange" class="text-gray nowrap">{{ isReconcileModeDateRange }}</p>
+                        <ng-container *ngIf="showReconcileOptions">
+                            <button
+                                *ngIf="!isReconciled"
+                                aria-label="show reconcile options"
+                                mat-stroked-button
+                                type="button"
+                                (click)="showTallyReportOptions()"
+                            >
+                                <span class="d-inline-block nowrap">{{ localeData?.reconcile_mode }}</span>
+                            </button>
+                            <button
+                                *ngIf="isReconciled"
+                                aria-label="show reconcile options"
+                                mat-raised-button
+                                color="primary"
+                                type="button"
+                                (click)="showTallyReportOptions()"
+                            >
+                                <span class="d-inline-block nowrap">{{ localeData?.reconcile_mode }}</span>
+                            </button>
+                        </ng-container>
+
+                        <button
+                            *ngIf="isReconcileModeDateRange && !showReconcileOptions"
+                            aria-label="show reconcile options"
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            (click)="goToReconcileDateRange()"
+                        >
+                            <span class="d-inline-block nowrap">{{ localeData?.switch_back_to_reconcile_mode }}</span>
+                        </button>
+                    </ng-container>
+                    <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
+                        <span class="icon-refresh"></span>
+                    </a>
+                    <button
+                        class="ml-1"
+                        *ngIf="isProjectWiseAccounting"
+                        [routerLink]="'/pages/project-wise-accounting/list'"
+                        mat-stroked-button
                     >
-                    </trial-balance-export-csv>
-                    <trial-balance-export-xls
-                        *ngIf="tbExportXLS"
-                        [trialBalanceRequest]="filterForm?.value"
-                        class="pull-right mr-r05"
-                    >
-                    </trial-balance-export-xls>
-                    <profit-loss-export-xls
-                        *ngIf="plBsExportXLS"
-                        [fy]="filterForm.controls['fy']?.value"
-                        [filters]="filterForm?.value"
-                        class="pull-right"
-                    ></profit-loss-export-xls>
-                    <balance-sheet-export-xls
-                        *ngIf="BsExportXLS"
-                        [fy]="filterForm.controls['fy']?.value"
-                        [filters]="filterForm?.value"
-                        class="pull-right"
-                    ></balance-sheet-export-xls>
+                        {{ commonLocaleData?.app_back }}
+                    </button>
+                    <div class="d-flex column-gap1">
+                        <trial-balance-export-csv
+                            *ngIf="tbExportCsv"
+                            [trialBalanceRequest]="filterForm?.value"
+                            [selectedCompany]="selectedCompany"
+                            (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
+                            class="pull-right"
+                        >
+                        </trial-balance-export-csv>
+                        <trial-balance-export-xls
+                            *ngIf="tbExportXLS"
+                            [trialBalanceRequest]="filterForm?.value"
+                            class="pull-right mr-r05"
+                        >
+                        </trial-balance-export-xls>
+                        <profit-loss-export-xls
+                            *ngIf="plBsExportXLS"
+                            [fy]="filterForm.controls['fy']?.value"
+                            [filters]="filterForm?.value"
+                            class="pull-right"
+                        ></profit-loss-export-xls>
+                        <balance-sheet-export-xls
+                            *ngIf="BsExportXLS"
+                            [fy]="filterForm.controls['fy']?.value"
+                            [filters]="filterForm?.value"
+                            class="pull-right"
+                        ></balance-sheet-export-xls>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,7 +260,11 @@
             <div class="d-flex flex-column">
                 <div
                     class="form-group mr-r15 linked-entities"
-                    *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    *ngIf="
+                        showLabels &&
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
                 >
                     <div class="form-group mb-0">
                         <sh-select
@@ -219,7 +284,12 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-icon">
                                             <i
-                                                class="icon-branch-icon pull-right"
+                                                [ngClass]="
+                                                    option?.consolidatedBranch
+                                                        ? 'icon-company-profile'
+                                                        : 'icon-branch-icon'
+                                                "
+                                                class="pull-right"
                                                 *ngIf="!option.isCompany"
                                                 [tooltip]="commonLocaleData?.app_branch"
                                             ></i>
@@ -430,6 +500,8 @@
                     [keepCalendarOpeningWithRange]="false"
                     [showRangeLabelOnInput]="false"
                     [dateFieldPosition]="dateFieldPosition"
+                    [showConfirmationOnChange]="showConfirmationOnDateChange"
+                    [confirmationMessage]="localeData?.reconcile_mode_turned_off_message"
                 ></app-datepicker-wrapper>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
@@ -13,9 +13,14 @@ import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAIN
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LedgerViewEnum } from '../models/api-models/Ledger';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Injectable()
 export class GeneralService {
@@ -88,7 +93,9 @@ export class GeneralService {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private http: HttpClient
+        private http: HttpClient,
+        @Optional() @Inject(ServiceConfig)
+        private config: IServiceConfigArgs
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -722,7 +729,6 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
-        const actionBtnWrapperCssClass = 'justify-content-end';
         return {
             headerText,
             headerCssClass,
@@ -730,8 +736,7 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
-            buttons,
-            actionBtnWrapperCssClass
+            buttons
         };
     }
 
@@ -975,6 +980,21 @@ export class GeneralService {
     }
 
     /**
+     * This will return the account archived options
+     *
+     * @param {any} commonLocaleData
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getAccountArchivedOptions(commonLocaleData: any): IOption[] {
+        return [
+            { label: commonLocaleData?.app_unarchived, value: AccountArchivedStatusEnum.UNARCHIVED },
+            { label: commonLocaleData?.app_archived, value: AccountArchivedStatusEnum.ARCHIVED },
+            { label: commonLocaleData?.app_both, value: AccountArchivedStatusEnum.BOTH }
+        ];
+    }
+
+    /**
      * Determines if an element is child element to another element
      *
      * @param {*} child Element received as child
@@ -1079,6 +1099,19 @@ export class GeneralService {
         return [
             { label: 'Default', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
+        ];
+    }
+
+    /**
+     * This will return available ledger view
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableLedgerView(): IOption[] {
+        return [
+            { label: 'T View', value: LedgerViewEnum.TView },
+            { label: 'Statement View', value: LedgerViewEnum.StatementView }
         ];
     }
 
@@ -1230,6 +1263,9 @@ export class GeneralService {
                 //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
                 taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             }
+        } else if (mainTaxPercentage) {
+            // This is for advance receipt without other taxes
+            taxableValue = giddhRoundOff(totalAmount / (1 + (mainTaxPercentage / 100)));
         }
         return taxableValue;
     }
@@ -2004,6 +2040,16 @@ export class GeneralService {
     }
 
     /**
+     * Converts a date string from the GIDDH_DATE_FORMAT (YYYY-MM-DD) to the desired format (DD-MM-YYYY).
+     *
+     * @param {string} value - The date string to be formatted.
+     * @returns {string} - The formatted date string.
+     */
+    public convertDateStringFormat(value: string): string {
+        return dayjs(value, GIDDH_DATE_FORMAT_YYYY_MM_DD).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
     * This will be use for open window in center
     *
     * @param {string} url
@@ -2152,17 +2198,102 @@ export class GeneralService {
      *
      * @param {Params} queryParams
      * @param {QueryParamsHandling} [queryParamsHandling='merge']
+     * @param {boolean} [replaceUrl=true]
      * @memberof GeneralService
      */
-    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge'): void {
+    public updateActivatedRouteQueryParams(queryParams: Params, queryParamsHandling: QueryParamsHandling = 'merge', replaceUrl: boolean = true): void {
         this.router.navigate(
             [],
             {
                 relativeTo: this.activatedRoute,
                 queryParams,
-                queryParamsHandling: queryParamsHandling
+                queryParamsHandling,  // Merge new parameters with existing ones
+                replaceUrl  // Replace current history entry with new URL
             }
         );
+    }
+
+    /**
+     * Round a Number to Company Decimal Places
+     *
+     * @param {number} value
+     * @param {number} [companyDecimalPlaces=2]
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
+        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
+    }
+
+    /**
+     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     *
+     * @param {string} text - The string containing placeholders.
+     * @param {string[]} args - The list of values to replace the placeholders.
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof GeneralService
+     */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+    
+    /**
+     * Replaces placeholders in a URL with corresponding values from a model object.
+     * @param url - The URL containing placeholders like `:key`.
+     * @param model - An object containing key-value pairs to replace in the URL.
+     * @returns The formatted URL with placeholders replaced.
+     * @memberof GeneralService
+     */
+    public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
+        if (!url) return url;
+        const updatedModel = {
+            ...model,
+            companyUniqueName: model?.companyUniqueName ?? this.companyUniqueName
+        };
+        url = this.config.apiUrl + url;
+        return Object.keys(updatedModel).reduce((updatedUrl, key) => {
+            const placeholder = `:${key}`;
+            return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
+        }, url);
+    }
+
+    /**
+     * Retrieves a list of available voucher types with localized labels.
+     *
+     * @param commonLocaleData 
+     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
+     * @memberof GeneralService
+     */
+    public getVoucherTypeList(commonLocaleData: any): IOption[] {
+        return [{
+            label: commonLocaleData?.app_voucher_types.sales,
+            value: 'sales'
+        }, {
+            label: commonLocaleData?.app_voucher_types.purchase,
+            value: 'purchase'
+        }, {
+            label: commonLocaleData?.app_voucher_types.receipt,
+            value: 'receipt'
+        }, {
+            label: commonLocaleData?.app_voucher_types.payment,
+            value: 'payment'
+        }, {
+            label: commonLocaleData?.app_voucher_types.journal,
+            value: 'journal'
+        }, {
+            label: commonLocaleData?.app_voucher_types.contra,
+            value: 'contra'
+        }, {
+            label: commonLocaleData?.app_voucher_types.debit_note,
+            value: 'debit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.credit_note,
+            value: 'credit note'
+        }, {
+            label: commonLocaleData?.app_voucher_types.advance_receipt,
+            value: 'advance-receipt'
+        }];
     }
 }
 

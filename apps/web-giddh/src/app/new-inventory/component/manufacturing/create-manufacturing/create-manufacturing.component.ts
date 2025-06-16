@@ -79,6 +79,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public initialByProductLinkedStocks: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** True if get manufacturing in progress */
     public isLoadingManufacturing: boolean = false;
     // /** Stores the default search results pagination details */
@@ -180,6 +182,11 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.getWarehouses();
         this.getStocks(this.manufacturingObject.manufacturingDetails[0], 1, "");
 
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length >= 2;

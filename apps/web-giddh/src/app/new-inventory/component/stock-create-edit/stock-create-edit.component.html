@@ -40,7 +40,7 @@
                     >
                         <div class="stock-width">
                             <div class="row flex-column-reverse flex-md-row">
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
+                                <div class="col-12 upper-common-form-label-field">
                                     <div class="row row-gap">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
@@ -65,6 +65,7 @@
                                                 [name]="'uniqueName'"
                                                 [placeholder]="commonLocaleData?.app_unique_name"
                                                 [type]="'text'"
+                                                [disabled]="queryParams?.stockUniqueName"
                                                 [(ngModel)]="stockForm.uniqueName"
                                                 [autocomplete]="'off'"
                                             >
@@ -192,6 +193,41 @@
                                                 [defaultValue]="stockForm.discountLabel ?? ''"
                                             >
                                             </dropdown-field>
+                                        </div>
+                                        <div class="col-6" *ngIf="!isVariantAvailable">
+                                            <div class="variant-image">
+                                                <div *ngIf="!stockForm.variants[0].attachmentUniqueName">
+                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 position-relative"
+                                                        [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
+                                                        <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
+                                                            [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
+                                                            name="variantImage" id="Variant Image" (change)="uploadFile($event,0)" />
+                                                        <ng-container *ngIf="uploadAttachmentInProgress$ | async">
+                                                            <mat-spinner [diameter]="30"></mat-spinner>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!(uploadAttachmentInProgress$ | async)">
+                                                            <div class="attachment-add-icon font-12 text-center rounded-circle">
+                                                                <i class="icon-add"></i>
+                                                            </div>
+                                                            <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="stockForm.variants[0].attachmentUniqueName">
+                                                    <div
+                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success position-relative">
+                                                        <div class="attachment-add-icon font-12 text-center rounded-circle">
+                                                            <i class="icon-tick"></i>
+                                                        </div>
+                                                        <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
+                                                            height="30" width="30" [src]="stockForm.variants[0].attachmentName"
+                                                            (click)="previewVariantImage(stockForm.variants[0].attachmentUniqueName)" alt="Variant Image" />
+                                                        <button mat-icon-button (click)="deleteAttachment(0)" class="ml-auto remove-attachment">
+                                                            <i class="icon-cross font-16"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -448,7 +484,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3 which-tab">
+                                                                        <div class="col-12 pt-3 which-tab">
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
@@ -468,7 +504,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-6 which-tab-3"
+                                                                            class="col-12 which-tab-3"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -653,7 +689,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-12 pt-3">
+                                                                        <div class="col-12 pt-3">
                                                                             <dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
@@ -673,7 +709,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                         <div
-                                                                            class="col-xl-12 col-lg-12 col-sm-6"
+                                                                            class="col-12"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
@@ -864,7 +900,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">
-                                                                            <div class="delete-btn-wrapper">
+                                                                            <div class="delete-btn-wrapper pd-t1">
                                                                                 <button
                                                                                     aria-label="delete icon"
                                                                                     mat-icon-button
@@ -1031,6 +1067,9 @@
                                                     >
                                                         <table class="stock-table font-15">
                                                             <tr>
+                                                                <th class="variant-image table-heading-color">
+                                                                    Variant Image
+                                                                </th>
                                                                 <th class="variant-name-column table-heading-color">
                                                                     {{ localeData?.variant_name
                                                                     }}<span class="red-text">*</span>
@@ -1109,559 +1148,479 @@
                                                                 "
                                                             >
                                                                 <tr class="variant-row" *ngIf="variant.name">
+                                                                    <td class="text-center variant-image">
+                                                                        <div *ngIf="!variant.attachmentUniqueName">
+                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 position-relative"
+                                                                                [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
+                                                                                <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
+                                                                                    [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
+                                                                                    name="variantFile{{ i }}" id="variantFile{{ i }}" (change)="uploadFile($event, i)" />
+                                                                                <mat-spinner *ngIf="variant.isUploading"  [diameter]="30"></mat-spinner>
+                                                                                <ng-container *ngIf="!variant.isUploading">
+                                                                                    <div class="attachment-add-icon text-center font-12 rounded-circle">
+                                                                                        <i class="icon-add"></i>
+                                                                                    </div>
+                                                                                    <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
+                                                                                </ng-container>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div *ngIf="variant.attachmentUniqueName">
+                                                                            <div
+                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success position-relative">
+                                                                                <div class="attachment-add-icon text-center font-12 rounded-circle">
+                                                                                    <i class="icon-tick"></i>
+                                                                                </div>
+                                                                                <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
+                                                                                    height="30" width="30" (click)="previewVariantImage(variant.attachmentUniqueName)"
+                                                                                    [src]="variant.attachmentName" alt="Variant Image{{index}}" />
+                                                                                <button mat-icon-button (click)="deleteAttachment(i)" class="ml-auto remove-attachment">
+                                                                                    <i class="icon-cross font-16"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
                                                                     <td class="variant-name-column">
                                                                         {{ variant.name }}
                                                                     </td>
                                                                     <td class="unit-name">
-                                                                        <select-field
-                                                                            [name]="'variantUnit' + i"
-                                                                            [placeholder]="commonLocaleData?.app_unit"
-                                                                            [options]="stockUnits"
+                                                                        <select-field [name]="'variantUnit' + i" [placeholder]="commonLocaleData?.app_unit" [options]="stockUnits"
                                                                             (selectedOption)="
-                                                                                selectVariantUnit(variant, $event)
-                                                                            "
-                                                                            [defaultValue]="
-                                                                                variant.warehouseBalance[0]?.stockUnit
-                                                                                    ?.name
-                                                                            "
-                                                                            [cssClass]="'form-control'"
-                                                                        >
+                                                                                                                                                selectVariantUnit(variant, $event)
+                                                                                                                                            " [defaultValue]="
+                                                                                                                                                variant.warehouseBalance[0]?.stockUnit
+                                                                                                                                                    ?.name
+                                                                                                                                            " [cssClass]="'form-control'">
                                                                         </select-field>
                                                                     </td>
                                                                     <td class="opening-qty">
-                                                                        <text-field
-                                                                            [cssClass]="'text-right form-control'"
-                                                                            [placeholder]="'0.00'"
-                                                                            [name]="'variantOpeningQuantity' + i"
+                                                                        <text-field [cssClass]="'text-right form-control'" [placeholder]="'0.00'" [name]="'variantOpeningQuantity' + i"
                                                                             [(ngModel)]="
-                                                                                variant.warehouseBalance[0]
-                                                                                    .openingQuantity
-                                                                            "
-                                                                            [type]="'number'"
-                                                                        >
+                                                                                                                                                variant.warehouseBalance[0]
+                                                                                                                                                    .openingQuantity
+                                                                                                                                            " [type]="'number'">
                                                                         </text-field>
                                                                     </td>
                                                                     <td class="opening-amount">
-                                                                        <text-field
-                                                                            [cssClass]="'text-right form-control'"
-                                                                            [placeholder]="'0.00'"
-                                                                            [name]="'variantOpeningAmount' + i"
+                                                                        <text-field [cssClass]="'text-right form-control'" [placeholder]="'0.00'" [name]="'variantOpeningAmount' + i"
                                                                             [(ngModel)]="
-                                                                                variant.warehouseBalance[0]
-                                                                                    .openingAmount
-                                                                            "
-                                                                            [type]="'text'"
-                                                                            [prefix]="companyCurrencySymbol"
-                                                                            [mask]="inputMaskFormat"
-                                                                            [useMask]="true"
-                                                                        >
+                                                                                                                                                variant.warehouseBalance[0]
+                                                                                                                                                    .openingAmount
+                                                                                                                                            " [type]="'text'"
+                                                                            [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
                                                                         </text-field>
                                                                     </td>
                                                                     <td class="sku-code">
-                                                                        <text-field
-                                                                            [cssClass]="'text-right form-control'"
-                                                                            [placeholder]="'-'"
-                                                                            [name]="'variantSkuCode' + i"
-                                                                            [(ngModel)]="variant.skuCode"
-                                                                            [type]="'text'"
-                                                                        >
+                                                                        <text-field [cssClass]="'text-right form-control'" [placeholder]="'-'" [name]="'variantSkuCode' + i"
+                                                                            [(ngModel)]="variant.skuCode" [type]="'text'">
                                                                         </text-field>
                                                                     </td>
-                                                                    <td
-                                                                        class="sales-purchase-info inventory-tab purchase-information-enable"
-                                                                        *ngIf="
-                                                                            stockForm?.purchaseAccountDetails
-                                                                                .accountUniqueName
-                                                                        "
-                                                                    >
-                                                                        <ng-container
-                                                                            *ngFor="
-                                                                                let variantPurchaseUnitRate of variant?.purchaseInformation;
-                                                                                let j = index
-                                                                            "
-                                                                        >
+                                                                    <td class="sales-purchase-info inventory-tab purchase-information-enable" *ngIf="
+                                                                                                                                            stockForm?.purchaseAccountDetails
+                                                                                                                                                .accountUniqueName
+                                                                                                                                        ">
+                                                                        <ng-container *ngFor="
+                                                                                                                                                let variantPurchaseUnitRate of variant?.purchaseInformation;
+                                                                                                                                                let j = index
+                                                                                                                                            ">
                                                                             <div class="sales-purchase-wrapper d-flex">
-                                                                                <text-field
-                                                                                    [cssClass]="
-                                                                                        'text-right unit-amount form-control'
-                                                                                    "
-                                                                                    [placeholder]="'0.00'"
-                                                                                    [name]="
-                                                                                        'variantPurchaseUnitRate' +
-                                                                                        i +
-                                                                                        '_' +
-                                                                                        j
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        variantPurchaseUnitRate.rate
-                                                                                    "
-                                                                                    [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol"
-                                                                                    [mask]="inputMaskFormat"
-                                                                                    [useMask]="true"
-                                                                                >
+                                                                                <text-field [cssClass]="
+                                                                                                                                                        'text-right unit-amount form-control'
+                                                                                                                                                    " [placeholder]="'0.00'" [name]="
+                                                                                                                                                        'variantPurchaseUnitRate' +
+                                                                                                                                                        i +
+                                                                                                                                                        '_' +
+                                                                                                                                                        j
+                                                                                                                                                    " [(ngModel)]="
+                                                                                                                                                        variantPurchaseUnitRate.rate
+                                                                                                                                                    " [type]="'text'"
+                                                                                    [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
                                                                                 </text-field>
-                                                                                <select-field
-                                                                                    [name]="
-                                                                                        'variantPurchaseUnit' +
-                                                                                        i +
-                                                                                        '_' +
-                                                                                        j
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_unit
-                                                                                    "
-                                                                                    [options]="stockUnits"
+                                                                                <select-field [name]="
+                                                                                                                                                        'variantPurchaseUnit' +
+                                                                                                                                                        i +
+                                                                                                                                                        '_' +
+                                                                                                                                                        j
+                                                                                                                                                    " [placeholder]="
+                                                                                                                                                        commonLocaleData?.app_unit
+                                                                                                                                                    " [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                        selectVariantSalesPurchaseUnit(
-                                                                                            variantPurchaseUnitRate,
-                                                                                            $event
-                                                                                        )
-                                                                                    "
-                                                                                    [defaultValue]="
-                                                                                        variantPurchaseUnitRate?.stockUnitName
-                                                                                    "
-                                                                                    [cssClass]="
-                                                                                        (!variantPurchaseUnitRate?.stockUnitName &&
-                                                                                        checkUnitRateValidation[i]
-                                                                                            ?.purchase
-                                                                                            ? 'error-box'
-                                                                                            : '') +
-                                                                                        ' unit-rates form-control'
-                                                                                    "
-                                                                                >
+                                                                                                                                                        selectVariantSalesPurchaseUnit(
+                                                                                                                                                            variantPurchaseUnitRate,
+                                                                                                                                                            $event
+                                                                                                                                                        )
+                                                                                                                                                    " [defaultValue]="
+                                                                                                                                                        variantPurchaseUnitRate?.stockUnitName
+                                                                                                                                                    " [cssClass]="
+                                                                                                                                                        (!variantPurchaseUnitRate?.stockUnitName &&
+                                                                                                                                                        checkUnitRateValidation[i]
+                                                                                                                                                            ?.purchase
+                                                                                                                                                            ? 'error-box'
+                                                                                                                                                            : '') +
+                                                                                                                                                        ' unit-rates form-control'
+                                                                                                                                                    ">
                                                                                 </select-field>
                                                                                 <!-- <button
-                                                                                    mat-icon-button
-                                                                                    role="button"
-                                                                                    class="icon-remove-sales"
-                                                                                    type="button"
-                                                                                    (click)="
-                                                                                        deleteVariantPurchaseUnitPrice(
-                                                                                            variant,
-                                                                                            j
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        variant.purchaseInformation
-                                                                                            ?.length > 1
-                                                                                    "
-                                                                                >
-                                                                                    <i class="icon-trash"></i>
-                                                                                </button>
+                                                                                                                                                    mat-icon-button
+                                                                                                                                                    role="button"
+                                                                                                                                                    class="icon-remove-sales"
+                                                                                                                                                    type="button"
+                                                                                                                                                    (click)="
+                                                                                                                                                        deleteVariantPurchaseUnitPrice(
+                                                                                                                                                            variant,
+                                                                                                                                                            j
+                                                                                                                                                        )
+                                                                                                                                                    "
+                                                                                                                                                    *ngIf="
+                                                                                                                                                        variant.purchaseInformation
+                                                                                                                                                            ?.length > 1
+                                                                                                                                                    "
+                                                                                                                                                >
+                                                                                                                                                    <i class="icon-trash"></i>
+                                                                                                                                                </button>
 
-                                                                                <button
-                                                                                    mat-icon-button
-                                                                                    class="icon-button-add-sales"
-                                                                                    role="button"
-                                                                                    type="button"
-                                                                                    disableRipple
-                                                                                    (click)="
-                                                                                        addNewVariantPurchaseUnitPrice(
-                                                                                            variant,
-                                                                                            i
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        j ===
-                                                                                        variant.purchaseInformation
-                                                                                            ?.length -
-                                                                                            1
-                                                                                    "
-                                                                                >
-                                                                                    <span class="add-new-text-container">
-                                                                                        <i class="icon-plus"></i>
-                                                                                    </span>
-                                                                                </button> -->
+                                                                                                                                                <button
+                                                                                                                                                    mat-icon-button
+                                                                                                                                                    class="icon-button-add-sales"
+                                                                                                                                                    role="button"
+                                                                                                                                                    type="button"
+                                                                                                                                                    disableRipple
+                                                                                                                                                    (click)="
+                                                                                                                                                        addNewVariantPurchaseUnitPrice(
+                                                                                                                                                            variant,
+                                                                                                                                                            i
+                                                                                                                                                        )
+                                                                                                                                                    "
+                                                                                                                                                    *ngIf="
+                                                                                                                                                        j ===
+                                                                                                                                                        variant.purchaseInformation
+                                                                                                                                                            ?.length -
+                                                                                                                                                            1
+                                                                                                                                                    "
+                                                                                                                                                >
+                                                                                                                                                    <span class="add-new-text-container">
+                                                                                                                                                        <i class="icon-plus"></i>
+                                                                                                                                                    </span>
+                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
-                                                                    <td
-                                                                        class="sales-purchase-info inventory-tab sales-information-enable"
-                                                                        *ngIf="
-                                                                            stockForm?.salesAccountDetails
-                                                                                .accountUniqueName
-                                                                        "
-                                                                    >
-                                                                        <ng-container
-                                                                            *ngFor="
-                                                                                let variantSalesUnitRate of variant?.salesInformation;
-                                                                                let j = index
-                                                                            "
-                                                                        >
+                                                                    <td class="sales-purchase-info inventory-tab sales-information-enable" *ngIf="
+                                                                                                                                            stockForm?.salesAccountDetails
+                                                                                                                                                .accountUniqueName
+                                                                                                                                        ">
+                                                                        <ng-container *ngFor="
+                                                                                                                                                let variantSalesUnitRate of variant?.salesInformation;
+                                                                                                                                                let j = index
+                                                                                                                                            ">
                                                                             <div class="sales-purchase-wrapper d-flex">
-                                                                                <text-field
-                                                                                    [cssClass]="
-                                                                                        'text-right unit-amount form-control'
-                                                                                    "
-                                                                                    [placeholder]="'0.00'"
-                                                                                    [name]="
-                                                                                        'variantSalesUnitRate' +
-                                                                                        i +
-                                                                                        '_' +
-                                                                                        j
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        variantSalesUnitRate.rate
-                                                                                    "
-                                                                                    [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol"
-                                                                                    [mask]="inputMaskFormat"
-                                                                                    [useMask]="true"
-                                                                                >
+                                                                                <text-field [cssClass]="
+                                                                                                                                                        'text-right unit-amount form-control'
+                                                                                                                                                    " [placeholder]="'0.00'" [name]="
+                                                                                                                                                        'variantSalesUnitRate' +
+                                                                                                                                                        i +
+                                                                                                                                                        '_' +
+                                                                                                                                                        j
+                                                                                                                                                    " [(ngModel)]="
+                                                                                                                                                        variantSalesUnitRate.rate
+                                                                                                                                                    " [type]="'text'"
+                                                                                    [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
                                                                                 </text-field>
-                                                                                <select-field
-                                                                                    [name]="
-                                                                                        'variantSalesUnit' + i + '_' + j
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_unit
-                                                                                    "
-                                                                                    [options]="stockUnits"
+                                                                                <select-field [name]="
+                                                                                                                                                        'variantSalesUnit' + i + '_' + j
+                                                                                                                                                    " [placeholder]="
+                                                                                                                                                        commonLocaleData?.app_unit
+                                                                                                                                                    " [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                        selectVariantSalesPurchaseUnit(
-                                                                                            variantSalesUnitRate,
-                                                                                            $event
-                                                                                        )
-                                                                                    "
-                                                                                    [defaultValue]="
-                                                                                        variantSalesUnitRate?.stockUnitName
-                                                                                    "
-                                                                                    [cssClass]="
-                                                                                        (!variantSalesUnitRate?.stockUnitName &&
-                                                                                        checkUnitRateValidation[i]
-                                                                                            ?.sales
-                                                                                            ? 'error-box'
-                                                                                            : '') +
-                                                                                        'unit-rates form-control'
-                                                                                    "
-                                                                                ></select-field>
+                                                                                                                                                        selectVariantSalesPurchaseUnit(
+                                                                                                                                                            variantSalesUnitRate,
+                                                                                                                                                            $event
+                                                                                                                                                        )
+                                                                                                                                                    " [defaultValue]="
+                                                                                                                                                        variantSalesUnitRate?.stockUnitName
+                                                                                                                                                    " [cssClass]="
+                                                                                                                                                        (!variantSalesUnitRate?.stockUnitName &&
+                                                                                                                                                        checkUnitRateValidation[i]
+                                                                                                                                                            ?.sales
+                                                                                                                                                            ? 'error-box'
+                                                                                                                                                            : '') +
+                                                                                                                                                        'unit-rates form-control'
+                                                                                                                                                    "></select-field>
                                                                                 <!-- <button
-                                                                                    mat-icon-button
-                                                                                    role="button"
-                                                                                    class="icon-remove-sales"
-                                                                                    type="button"
-                                                                                    (click)="
-                                                                                        deleteVariantSalesUnitPrice(
-                                                                                            variant,
-                                                                                            j
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        variant.salesInformation?.length > 1
-                                                                                    "
-                                                                                >
-                                                                                    <i class="icon-trash"></i>
-                                                                                </button>
+                                                                                                                                                    mat-icon-button
+                                                                                                                                                    role="button"
+                                                                                                                                                    class="icon-remove-sales"
+                                                                                                                                                    type="button"
+                                                                                                                                                    (click)="
+                                                                                                                                                        deleteVariantSalesUnitPrice(
+                                                                                                                                                            variant,
+                                                                                                                                                            j
+                                                                                                                                                        )
+                                                                                                                                                    "
+                                                                                                                                                    *ngIf="
+                                                                                                                                                        variant.salesInformation?.length > 1
+                                                                                                                                                    "
+                                                                                                                                                >
+                                                                                                                                                    <i class="icon-trash"></i>
+                                                                                                                                                </button>
 
-                                                                                <button
-                                                                                    mat-icon-button
-                                                                                    class="icon-button-add-sales"
-                                                                                    role="button"
-                                                                                    type="button"
-                                                                                    disableRipple
-                                                                                    (click)="
-                                                                                        addNewVariantSalesUnitPrice(
-                                                                                            variant,
-                                                                                            i
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        j ===
-                                                                                        variant.salesInformation?.length - 1
-                                                                                    "
-                                                                                >
-                                                                                    <span class="add-new-text-container">
-                                                                                        <i class="icon-plus"></i>
-                                                                                    </span>
-                                                                                </button> -->
+                                                                                                                                                <button
+                                                                                                                                                    mat-icon-button
+                                                                                                                                                    class="icon-button-add-sales"
+                                                                                                                                                    role="button"
+                                                                                                                                                    type="button"
+                                                                                                                                                    disableRipple
+                                                                                                                                                    (click)="
+                                                                                                                                                        addNewVariantSalesUnitPrice(
+                                                                                                                                                            variant,
+                                                                                                                                                            i
+                                                                                                                                                        )
+                                                                                                                                                    "
+                                                                                                                                                    *ngIf="
+                                                                                                                                                        j ===
+                                                                                                                                                        variant.salesInformation?.length - 1
+                                                                                                                                                    "
+                                                                                                                                                >
+                                                                                                                                                    <span class="add-new-text-container">
+                                                                                                                                                        <i class="icon-plus"></i>
+                                                                                                                                                    </span>
+                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
-                                                                    <td
-                                                                        class="sales-purchase-info fixed-assets-unit-rates inventory-tab"
-                                                                        *ngIf="
-                                                                            stockForm?.fixedAssetAccountDetails
-                                                                                .accountUniqueName
-                                                                        "
-                                                                    >
-                                                                        <ng-container
-                                                                            *ngFor="
-                                                                                let variantFixedAssetsUnitRate of variant?.fixedAssetsInformation;
-                                                                                let j = index
-                                                                            "
-                                                                        >
+                                                                    <td class="sales-purchase-info fixed-assets-unit-rates inventory-tab" *ngIf="
+                                                                                                                                            stockForm?.fixedAssetAccountDetails
+                                                                                                                                                .accountUniqueName
+                                                                                                                                        ">
+                                                                        <ng-container *ngFor="
+                                                                                                                                                let variantFixedAssetsUnitRate of variant?.fixedAssetsInformation;
+                                                                                                                                                let j = index
+                                                                                                                                            ">
                                                                             <div class="sales-purchase-wrapper d-flex">
-                                                                                <text-field
-                                                                                    [cssClass]="
-                                                                                        'text-right unit-amount form-control'
-                                                                                    "
-                                                                                    [placeholder]="'0.00'"
-                                                                                    [name]="
-                                                                                        'variantFixedAssetsUnitRate' +
-                                                                                        j +
-                                                                                        '_' +
-                                                                                        i
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        variantFixedAssetsUnitRate.rate
-                                                                                    "
-                                                                                    [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol"
-                                                                                    [mask]="inputMaskFormat"
-                                                                                    [useMask]="true"
-                                                                                >
+                                                                                <text-field [cssClass]="
+                                                                                                                                                        'text-right unit-amount form-control'
+                                                                                                                                                    " [placeholder]="'0.00'" [name]="
+                                                                                                                                                        'variantFixedAssetsUnitRate' +
+                                                                                                                                                        j +
+                                                                                                                                                        '_' +
+                                                                                                                                                        i
+                                                                                                                                                    " [(ngModel)]="
+                                                                                                                                                        variantFixedAssetsUnitRate.rate
+                                                                                                                                                    " [type]="'text'"
+                                                                                    [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
                                                                                 </text-field>
-                                                                                <select-field
-                                                                                    [name]="
-                                                                                        'variantFixedAssetsUnit' +
-                                                                                        j +
-                                                                                        '_' +
-                                                                                        i
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_unit
-                                                                                    "
-                                                                                    [options]="stockUnits"
+                                                                                <select-field [name]="
+                                                                                                                                                        'variantFixedAssetsUnit' +
+                                                                                                                                                        j +
+                                                                                                                                                        '_' +
+                                                                                                                                                        i
+                                                                                                                                                    " [placeholder]="
+                                                                                                                                                        commonLocaleData?.app_unit
+                                                                                                                                                    " [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                        selectVariantFixedAssetsUnit(
-                                                                                            variantFixedAssetsUnitRate,
-                                                                                            $event
-                                                                                        )
-                                                                                    "
-                                                                                    [defaultValue]="
-                                                                                        variantFixedAssetsUnitRate?.stockUnitName
-                                                                                    "
-                                                                                    [cssClass]="
-                                                                                        (!variantFixedAssetsUnitRate?.stockUnitName &&
-                                                                                        checkUnitRateValidation[i]
-                                                                                            ?.fixedAssets
-                                                                                            ? 'error-box'
-                                                                                            : '') +
-                                                                                        ' unit-rates form-control'
-                                                                                    "
-                                                                                ></select-field>
+                                                                                                                                                        selectVariantFixedAssetsUnit(
+                                                                                                                                                            variantFixedAssetsUnitRate,
+                                                                                                                                                            $event
+                                                                                                                                                        )
+                                                                                                                                                    " [defaultValue]="
+                                                                                                                                                        variantFixedAssetsUnitRate?.stockUnitName
+                                                                                                                                                    " [cssClass]="
+                                                                                                                                                        (!variantFixedAssetsUnitRate?.stockUnitName &&
+                                                                                                                                                        checkUnitRateValidation[i]
+                                                                                                                                                            ?.fixedAssets
+                                                                                                                                                            ? 'error-box'
+                                                                                                                                                            : '') +
+                                                                                                                                                        ' unit-rates form-control'
+                                                                                                                                                    "></select-field>
                                                                                 <!-- <button
-                                                                                    mat-icon-button
-                                                                                    role="button"
-                                                                                    class="icon-remove-sales"
-                                                                                    type="button"
-                                                                                    (click)="
-                                                                                        deleteVariantFixedAssetsUnitPrice(
-                                                                                            variant,
-                                                                                            j
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        variant.fixedAssetsInformation
-                                                                                            ?.length > 1
-                                                                                    "
-                                                                                >
-                                                                                    <i class="icon-trash"></i>
-                                                                                </button>
+                                                                                                                                                    mat-icon-button
+                                                                                                                                                    role="button"
+                                                                                                                                                    class="icon-remove-sales"
+                                                                                                                                                    type="button"
+                                                                                                                                                    (click)="
+                                                                                                                                                        deleteVariantFixedAssetsUnitPrice(
+                                                                                                                                                            variant,
+                                                                                                                                                            j
+                                                                                                                                                        )
+                                                                                                                                                    "
+                                                                                                                                                    *ngIf="
+                                                                                                                                                        variant.fixedAssetsInformation
+                                                                                                                                                            ?.length > 1
+                                                                                                                                                    "
+                                                                                                                                                >
+                                                                                                                                                    <i class="icon-trash"></i>
+                                                                                                                                                </button>
 
-                                                                                <button
-                                                                                    mat-icon-button
-                                                                                    class="icon-button-add-sales"
-                                                                                    role="button"
-                                                                                    type="button"
-                                                                                    disableRipple
-                                                                                    (click)="
-                                                                                        addNewVariantFixedAssetsUnitPrice(
-                                                                                            variant,
-                                                                                            i
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        j ===
-                                                                                        variant.fixedAssetsInformation
-                                                                                            ?.length -
-                                                                                            1
-                                                                                    "
-                                                                                >
-                                                                                    <span class="add-new-text-container">
-                                                                                        <i class="icon-plus"></i>
-                                                                                    </span>
-                                                                                </button> -->
+                                                                                                                                                <button
+                                                                                                                                                    mat-icon-button
+                                                                                                                                                    class="icon-button-add-sales"
+                                                                                                                                                    role="button"
+                                                                                                                                                    type="button"
+                                                                                                                                                    disableRipple
+                                                                                                                                                    (click)="
+                                                                                                                                                        addNewVariantFixedAssetsUnitPrice(
+                                                                                                                                                            variant,
+                                                                                                                                                            i
+                                                                                                                                                        )
+                                                                                                                                                    "
+                                                                                                                                                    *ngIf="
+                                                                                                                                                        j ===
+                                                                                                                                                        variant.fixedAssetsInformation
+                                                                                                                                                            ?.length -
+                                                                                                                                                            1
+                                                                                                                                                    "
+                                                                                                                                                >
+                                                                                                                                                    <span class="add-new-text-container">
+                                                                                                                                                        <i class="icon-plus"></i>
+                                                                                                                                                    </span>
+                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
                                                                     <!-- <td
-                                                                        class="text-center is-rate-inclusive"
-                                                                        *ngIf="
-                                                                            stockForm?.salesAccountDetails
-                                                                                .accountUniqueName ||
-                                                                            stockForm?.purchaseAccountDetails
-                                                                                .accountUniqueName ||
-                                                                            stockForm?.fixedAssetAccountDetails
-                                                                                .accountUniqueName
-                                                                        "
-                                                                    >
-                                                                        <mat-checkbox
-                                                                            *ngIf="
-                                                                                stockForm?.salesAccountDetails
-                                                                                    .accountUniqueName
-                                                                            "
-                                                                            color="primary"
-                                                                            name="variantSalesTaxInclusive{{ i }}"
-                                                                            [(ngModel)]="variant.salesTaxInclusive"
-                                                                            [matTooltip]="localeData?.is_sales_inclusive"
-                                                                            matTooltipPosition="above"
-                                                                        ></mat-checkbox>
-                                                                        <mat-checkbox
-                                                                            *ngIf="
-                                                                                stockForm?.purchaseAccountDetails
-                                                                                    .accountUniqueName
-                                                                            "
-                                                                            class="mr-l2"
-                                                                            color="primary"
-                                                                            name="variantPurchaseTaxInclusive{{ i }}"
-                                                                            [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                            [matTooltip]="localeData?.is_purchase_inclusive"
-                                                                            matTooltipPosition="above"
-                                                                        ></mat-checkbox>
-                                                                        <ng-container
-                                                                            *ngIf="
-                                                                                stockForm.type === 'FIXED_ASSETS' &&
-                                                                                stockForm?.fixedAssetAccountDetails
-                                                                                    .accountUniqueName
-                                                                            "
-                                                                        >
-                                                                            <mat-checkbox
-                                                                                *ngIf="
-                                                                                    stockForm?.salesAccountDetails
-                                                                                        .accountUniqueName
-                                                                                "
-                                                                                color="primary"
-                                                                                name="variantSalesTaxInclusive{{ i }}"
-                                                                                [(ngModel)]="variant.salesTaxInclusive"
-                                                                                [matTooltip]="
-                                                                                    localeData?.is_sales_inclusive
-                                                                                "
-                                                                                matTooltipPosition="above"
-                                                                            ></mat-checkbox>
-                                                                            <mat-checkbox
-                                                                                *ngIf="
-                                                                                    stockForm?.purchaseAccountDetails
-                                                                                        .accountUniqueName
-                                                                                "
-                                                                                class="mr-l2"
-                                                                                color="primary"
-                                                                                name="variantPurchaseTaxInclusive{{ i }}"
-                                                                                [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                                [matTooltip]="
-                                                                                    localeData?.is_purchase_inclusive
-                                                                                "
-                                                                                matTooltipPosition="above"
-                                                                            ></mat-checkbox>
-                                                                        </ng-container>
-                                                                        <ng-container
-                                                                            *ngIf="
-                                                                                stockForm.type === 'FIXED_ASSETS' &&
-                                                                                stockForm?.fixedAssetAccountDetails
-                                                                                    .accountUniqueName
-                                                                            "
-                                                                        >
-                                                                            <mat-checkbox
-                                                                                color="primary"
-                                                                                name="variantFixedAssetsTaxInclusive{{ i }}"
-                                                                                [(ngModel)]="variant.fixedAssetTaxInclusive"
-                                                                                [checked]="variant.fixedAssetTaxInclusive"
-                                                                                [matTooltip]="
-                                                                                    localeData?.is_fixed_assets_inclusive
-                                                                                "
-                                                                                matTooltipPosition="above"
-                                                                            ></mat-checkbox>
-                                                                        </ng-container>
-                                                                    </td> -->
-                                                                    <ng-container
-                                                                        *ngFor="
-                                                                            let customField of variant?.customFields;
-                                                                            let k = index
-                                                                        "
-                                                                    >
-                                                                        <td
-                                                                            *ngIf="variant?.customFields?.length"
-                                                                            class="sales-purchase-info inventory-tab purchase-information-enable"
-                                                                        >
+                                                                                                                                        class="text-center is-rate-inclusive"
+                                                                                                                                        *ngIf="
+                                                                                                                                            stockForm?.salesAccountDetails
+                                                                                                                                                .accountUniqueName ||
+                                                                                                                                            stockForm?.purchaseAccountDetails
+                                                                                                                                                .accountUniqueName ||
+                                                                                                                                            stockForm?.fixedAssetAccountDetails
+                                                                                                                                                .accountUniqueName
+                                                                                                                                        "
+                                                                                                                                    >
+                                                                                                                                        <mat-checkbox
+                                                                                                                                            *ngIf="
+                                                                                                                                                stockForm?.salesAccountDetails
+                                                                                                                                                    .accountUniqueName
+                                                                                                                                            "
+                                                                                                                                            color="primary"
+                                                                                                                                            name="variantSalesTaxInclusive{{ i }}"
+                                                                                                                                            [(ngModel)]="variant.salesTaxInclusive"
+                                                                                                                                            [matTooltip]="localeData?.is_sales_inclusive"
+                                                                                                                                            matTooltipPosition="above"
+                                                                                                                                        ></mat-checkbox>
+                                                                                                                                        <mat-checkbox
+                                                                                                                                            *ngIf="
+                                                                                                                                                stockForm?.purchaseAccountDetails
+                                                                                                                                                    .accountUniqueName
+                                                                                                                                            "
+                                                                                                                                            class="mr-l2"
+                                                                                                                                            color="primary"
+                                                                                                                                            name="variantPurchaseTaxInclusive{{ i }}"
+                                                                                                                                            [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                                                                                            [matTooltip]="localeData?.is_purchase_inclusive"
+                                                                                                                                            matTooltipPosition="above"
+                                                                                                                                        ></mat-checkbox>
+                                                                                                                                        <ng-container
+                                                                                                                                            *ngIf="
+                                                                                                                                                stockForm.type === 'FIXED_ASSETS' &&
+                                                                                                                                                stockForm?.fixedAssetAccountDetails
+                                                                                                                                                    .accountUniqueName
+                                                                                                                                            "
+                                                                                                                                        >
+                                                                                                                                            <mat-checkbox
+                                                                                                                                                *ngIf="
+                                                                                                                                                    stockForm?.salesAccountDetails
+                                                                                                                                                        .accountUniqueName
+                                                                                                                                                "
+                                                                                                                                                color="primary"
+                                                                                                                                                name="variantSalesTaxInclusive{{ i }}"
+                                                                                                                                                [(ngModel)]="variant.salesTaxInclusive"
+                                                                                                                                                [matTooltip]="
+                                                                                                                                                    localeData?.is_sales_inclusive
+                                                                                                                                                "
+                                                                                                                                                matTooltipPosition="above"
+                                                                                                                                            ></mat-checkbox>
+                                                                                                                                            <mat-checkbox
+                                                                                                                                                *ngIf="
+                                                                                                                                                    stockForm?.purchaseAccountDetails
+                                                                                                                                                        .accountUniqueName
+                                                                                                                                                "
+                                                                                                                                                class="mr-l2"
+                                                                                                                                                color="primary"
+                                                                                                                                                name="variantPurchaseTaxInclusive{{ i }}"
+                                                                                                                                                [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                                                                                                [matTooltip]="
+                                                                                                                                                    localeData?.is_purchase_inclusive
+                                                                                                                                                "
+                                                                                                                                                matTooltipPosition="above"
+                                                                                                                                            ></mat-checkbox>
+                                                                                                                                        </ng-container>
+                                                                                                                                        <ng-container
+                                                                                                                                            *ngIf="
+                                                                                                                                                stockForm.type === 'FIXED_ASSETS' &&
+                                                                                                                                                stockForm?.fixedAssetAccountDetails
+                                                                                                                                                    .accountUniqueName
+                                                                                                                                            "
+                                                                                                                                        >
+                                                                                                                                            <mat-checkbox
+                                                                                                                                                color="primary"
+                                                                                                                                                name="variantFixedAssetsTaxInclusive{{ i }}"
+                                                                                                                                                [(ngModel)]="variant.fixedAssetTaxInclusive"
+                                                                                                                                                [checked]="variant.fixedAssetTaxInclusive"
+                                                                                                                                                [matTooltip]="
+                                                                                                                                                    localeData?.is_fixed_assets_inclusive
+                                                                                                                                                "
+                                                                                                                                                matTooltipPosition="above"
+                                                                                                                                            ></mat-checkbox>
+                                                                                                                                        </ng-container>
+                                                                                                                                    </td> -->
+                                                                    <ng-container *ngFor="
+                                                                                                                                            let customField of variant?.customFields;
+                                                                                                                                            let k = index
+                                                                                                                                        ">
+                                                                        <td *ngIf="variant?.customFields?.length" class="sales-purchase-info inventory-tab purchase-information-enable">
                                                                             <div class="sales-purchase-wrapper">
-                                                                                <text-field
-                                                                                    class="d-block w-100 text-left"
-                                                                                    *ngIf="
-                                                                                        customField.fieldType?.type ===
-                                                                                            availableFieldTypes.String ||
-                                                                                        customField.fieldType?.type ===
-                                                                                            availableFieldTypes.Barcode
-                                                                                    "
-                                                                                    [cssClass]="
-                                                                                        'custom-field form-control'
-                                                                                    "
-                                                                                    [name]="
-                                                                                        'customField-' + i + '-' + k
-                                                                                    "
-                                                                                    [type]="'text'"
-                                                                                    [placeholder]="
-                                                                                        customField?.fieldInfo
-                                                                                    "
-                                                                                    [(ngModel)]="customField.value"
+                                                                                <text-field class="d-block w-100 text-left" *ngIf="
+                                                                                                                                                        customField.fieldType?.type ===
+                                                                                                                                                            availableFieldTypes.String ||
+                                                                                                                                                        customField.fieldType?.type ===
+                                                                                                                                                            availableFieldTypes.Barcode
+                                                                                                                                                    " [cssClass]="
+                                                                                                                                                        'custom-field form-control'
+                                                                                                                                                    " [name]="
+                                                                                                                                                        'customField-' + i + '-' + k
+                                                                                                                                                    " [type]="'text'" [placeholder]="
+                                                                                                                                                        customField?.fieldInfo
+                                                                                                                                                    " [(ngModel)]="customField.value"
                                                                                     [maxlength]="
-                                                                                        customField.dataRange?.max
-                                                                                    "
-                                                                                    [pattern]="customField.regex"
-                                                                                    [required]="customField.isMandatory"
-                                                                                    [showError]="
-                                                                                        isFormSubmitted &&
-                                                                                        customField.isMandatory &&
-                                                                                        !customField.value
-                                                                                    "
-                                                                                >
+                                                                                                                                                        customField.dataRange?.max
+                                                                                                                                                    " [pattern]="customField.regex"
+                                                                                    [required]="customField.isMandatory" [showError]="
+                                                                                                                                                        isFormSubmitted &&
+                                                                                                                                                        customField.isMandatory &&
+                                                                                                                                                        !customField.value
+                                                                                                                                                    ">
                                                                                 </text-field>
-                                                                                <text-field
-                                                                                    *ngIf="
-                                                                                        customField.fieldType?.type ===
-                                                                                        availableFieldTypes.Number
-                                                                                    "
-                                                                                    class="d-block w-100 text-left"
+                                                                                <text-field *ngIf="
+                                                                                                                                                        customField.fieldType?.type ===
+                                                                                                                                                        availableFieldTypes.Number
+                                                                                                                                                    " class="d-block w-100 text-left"
                                                                                     [cssClass]="
-                                                                                        'custom-field form-control'
-                                                                                    "
-                                                                                    [name]="
-                                                                                        'customField-' + i + '-' + k
-                                                                                    "
-                                                                                    [type]="'number'"
-                                                                                    [placeholder]="
-                                                                                        customField?.fieldInfo
-                                                                                    "
-                                                                                    [(ngModel)]="customField.value"
-                                                                                    [min]="customField.dataRange?.min"
-                                                                                    [max]="customField.dataRange?.max"
-                                                                                    [pattern]="customField.regex"
-                                                                                    [required]="customField.isMandatory"
-                                                                                    [allowDecimalDigitsOnly]="true"
-                                                                                    [showError]="
-                                                                                        isFormSubmitted &&
-                                                                                        customField.isMandatory &&
-                                                                                        !customField.value
-                                                                                    "
-                                                                                ></text-field>
-                                                                                <mat-radio-group
-                                                                                    color="primary"
-                                                                                    [name]="
-                                                                                        'customField-' + i + '-' + k
-                                                                                    "
-                                                                                    [(ngModel)]="customField.value"
-                                                                                    [required]="customField.isMandatory"
-                                                                                    *ngIf="
-                                                                                        customField.fieldType?.type ===
-                                                                                        availableFieldTypes.Boolean
-                                                                                    "
-                                                                                >
+                                                                                                                                                        'custom-field form-control'
+                                                                                                                                                    " [name]="
+                                                                                                                                                        'customField-' + i + '-' + k
+                                                                                                                                                    " [type]="'number'" [placeholder]="
+                                                                                                                                                        customField?.fieldInfo
+                                                                                                                                                    " [(ngModel)]="customField.value"
+                                                                                    [min]="customField.dataRange?.min" [max]="customField.dataRange?.max" [pattern]="customField.regex"
+                                                                                    [required]="customField.isMandatory" [allowDecimalDigitsOnly]="true" [showError]="
+                                                                                                                                                        isFormSubmitted &&
+                                                                                                                                                        customField.isMandatory &&
+                                                                                                                                                        !customField.value
+                                                                                                                                                    "></text-field>
+                                                                                <mat-radio-group color="primary" [name]="
+                                                                                                                                                        'customField-' + i + '-' + k
+                                                                                                                                                    " [(ngModel)]="customField.value"
+                                                                                    [required]="customField.isMandatory" *ngIf="
+                                                                                                                                                        customField.fieldType?.type ===
+                                                                                                                                                        availableFieldTypes.Boolean
+                                                                                                                                                    ">
                                                                                     <mat-radio-button value="true">
                                                                                         {{ commonLocaleData?.app_true }}
                                                                                     </mat-radio-button>
                                                                                     <mat-radio-button value="false">
                                                                                         {{
-                                                                                            commonLocaleData?.app_false
+                                                                                        commonLocaleData?.app_false
                                                                                         }}
                                                                                     </mat-radio-button>
                                                                                 </mat-radio-group>
@@ -1669,13 +1628,8 @@
                                                                         </td>
                                                                     </ng-container>
                                                                     <td class="text-center archive">
-                                                                        <mat-slide-toggle
-                                                                            class="mt-1"
-                                                                            color="primary"
-                                                                            name="variantArchive{{ i }}"
-                                                                            [(ngModel)]="variant.archive"
-                                                                            aria-label="archive toggle"
-                                                                        >
+                                                                        <mat-slide-toggle class="mt-1" color="primary" name="variantArchive{{ i }}" [(ngModel)]="variant.archive"
+                                                                            aria-label="archive toggle">
                                                                         </mat-slide-toggle>
                                                                     </td>
                                                                 </tr>
@@ -1688,10 +1642,21 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <div class="pd-l15 pt-3 mr-b5" *ngIf="!queryParams?.stockUniqueName">
+                                    <div class="pd-l15 pt-3" *ngIf="!queryParams?.stockUniqueName">
                                         <button aria-label="recipe btn" mat-stroked-button color="primary" (click)="createStock(true)">
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
+                                    </div>
+                                    <div class="d-flex align-items-center column-gap1 pd-l15 mt-3" [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'">
+                                        <mat-slide-toggle
+                                            class="mr-b05"
+                                            color="primary"
+                                            name="runtimeManufacturing"
+                                            [(ngModel)]="stockForm.runtimeManufacturing"
+                                            aria-label="runtime manufacturing"
+                                        >
+                                        </mat-slide-toggle>
+                                        <span>{{ commonLocaleData?.app_allow_manufacturing_sales_transactions }}</span>
                                     </div>
                                     <create-recipe
                                         #createRecipe
@@ -1704,7 +1669,7 @@
                                     <div class="tab-container-new px-3">
                                         <div class="other-width">
                                             <div class="row row-gap align-items-center">
-                                                <div class="col-sm-6 col-lg-12 mb-3">
+                                                <div class="col-12 mb-3">
                                                     <mat-radio-group
                                                         color="primary"
                                                         name="hsn_sac"
@@ -4882,7 +4847,7 @@
                     color="primary"
                     class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"
-                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError"
+                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError || (uploadAttachmentInProgress$ | async)"
                 >
                     {{ commonLocaleData?.app_update }}
                 </button>
@@ -4902,6 +4867,7 @@
                     color="warn"
                     class="min-width-100"
                     (click)="deleteStock()"
+                    [disabled]="uploadAttachmentInProgress$ | async"
                 >
                     {{ commonLocaleData?.app_delete }}
                 </button>

@@ -35,6 +35,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public name: any = "";
     /** True if field is readonly */
     @Input() public readonly: boolean;
+    /** True if field is disabled */
+    @Input() public disabled: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: string = 'off';
     /** True if field is required */
@@ -68,9 +70,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Show divider line below options */
     @Input() public showOptionDivider: boolean = false;
     /** Show Mat Label In with appearance outline Icon */
-    @Input() public showMatLabelWithLabledField: boolean = true;
+    @Input() public showMatLabel: boolean = true;
     /** Show Caret Icon */
     @Input() public showCaretIcon: boolean = true;
+    /** Show Cross Icon to clear selection */
+    @Input() public showClearIcon: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -100,9 +104,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
     constructor(
         private changeDetection: ChangeDetectorRef
-    ) {
-
-    }
+    ) { }
 
     /**
      * Lifecycle hook for component initialization
@@ -114,13 +116,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
                 this.dynamicSearchedQuery.emit(search);
                 if (!search) {
-                    this.onClear.emit({ label: "", value: "" });
+                    this.clearDropdownValue();
+                    this.writeValue("");
                 }
             });
         } else {
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
                 if (!search) {
-                    this.onClear.emit({ label: "", value: "" });
+                    this.clearDropdownValue();
+                    this.writeValue("");
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
                 this.changeDetection.detectChanges();
@@ -156,6 +160,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
+        if (filteredOptions.length === 0) {
+            this.writeValue("");
+        }
         return of(filteredOptions);
     }
 
@@ -168,6 +175,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions$ = of(this.options);
+            if (changes?.options?.currentValue?.length > 0 && !changes?.options?.previousValue) {
+                this.setLabelValue();
+            }
         }
 
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
@@ -177,6 +187,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes?.labelValue) {
             this.labelValue = changes.labelValue.currentValue;
         }
+    }
+
+    /**
+     * This will use for close dropdown panel
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public closeDropdownPanel(): void {
+        this.trigger?.closePanel();
     }
 
     /**
@@ -263,7 +282,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public createNewRecord(): void {
-        this.trigger?.closePanel();
+        this.closeDropdownPanel();
         this.createOption.emit(true);
     }
 
@@ -273,9 +292,45 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public openDropdownPanel(): void {
-        this.trigger?.openPanel();
+        this.selectField?.nativeElement?.focus();
         setTimeout(() => {
-            this.selectField?.nativeElement?.focus();
+            this.trigger?.openPanel();
         }, 10);
+    }
+
+    /**
+     * Set value of Label from options using control value
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private setLabelValue(): void {
+        if (this.value !== undefined && this.value !== null) {
+            let val = this.options.find(search => search?.value === this.value);
+            if (val) {
+                this.labelValue = val.label;
+            }
+        }
+    }
+
+    /**
+     * Handle mat autocomplete panel opened
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public panelOpened(): void {
+        if (!this.enableDynamicSearch) {
+            this.fieldFilteredOptions$ = this.filterOptions("");
+        }
+    }
+
+    /**
+     * Emits on clear event
+     *
+     * @param {*} [value={ label: "", value: "" }]
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public clearDropdownValue(value: any = { label: "", value: "" }): void {
+        this.onClear.emit(value);
     }
 }

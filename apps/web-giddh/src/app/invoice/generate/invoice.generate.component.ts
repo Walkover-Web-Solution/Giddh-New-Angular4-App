@@ -77,7 +77,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public showEditMode: boolean = false;
     /** get voucher details response object*/
     public voucherDetails: any;
-    /** selected pending voucher */
+    /** Selected pending voucher */
     public selectedItem: InvoicePreviewDetailsVm;
     /** is get voucher API call in progress */
     public voucherDetailsInProcess$: Observable<boolean> = of(false);
@@ -105,6 +105,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
     /** This will hold if updated is account in master to refresh the list of vouchers */
@@ -173,6 +175,12 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+            }
+        });
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
 
@@ -338,7 +346,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                     return;
                 }
                 this.store.dispatch(this.invoiceActions.setBulkGenerateConfirm(null));
-                
+
                 this.modalDialogRef = this.dialog.open(ConfirmModalComponent, {
                     data: {
                         title: this.commonLocaleData?.app_confirm,
@@ -425,7 +433,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.router.navigate(['/pages/vouchers/' + this.selectedVoucher + '/' + this.selectedCountOfAccounts[0] + '/create'], { queryParams: { entryUniqueNames: uniq(this.selectedLedgerItems)?.join(",") } });
         } else {
             this.generateVoucherInProcess = false;
-            
+
             let model = {
                 uniqueNames: uniq(this.selectedLedgerItems)
             };

@@ -1,14 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Router } from '@angular/router';
 import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
+import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
+import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 
 @Component({
     selector: '[balance-sheet-grid-row]',
     templateUrl: './balance-sheet-grid-row.component.html',
     styleUrls: [`./balance-sheet-grid-row.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
 export class BalanceSheetGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
@@ -22,8 +28,11 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
+    /** Hold current url */
+    private currentUrl: string = "";
 
-    constructor(private cd: ChangeDetectorRef) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService) {
+        this.currentUrl = this.router.url;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -35,16 +44,29 @@ export class BalanceSheetGridRowComponent implements OnChanges {
         }
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-        if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-            console.log(ipcRenderer.send('open-url', url));
-        } else {
-            (window as any).open(url);
-        }
+    /**
+     *  This will be redirect to ledger
+     *
+     * @param {*} acc
+     * @return {*}  {void}
+     * @memberof BalanceSheetGridRowComponent
+     */
+    public entryClicked(acc: any): void {
+        if (!acc?.uniqueName) return;
 
+        // Base return URL
+        const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
+
+        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+
+        if (isElectron) {
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+            ipcRenderer.send('open-url', electronUrl);
+        } else {
+            (window as any).open(url, '_blank');
+        }
     }
 
     /**
@@ -57,5 +79,26 @@ export class BalanceSheetGridRowComponent implements OnChanges {
      */
     public trackByFn(index, item: Account): string {
         return item?.uniqueName;
+    }
+
+    /**
+     * Call tailed report api with given account/group unique name
+     * 
+     * @param event MatCheckboxChange event
+     * @param accountGroupUniqueName Unique name of account/group
+     * @param entityType Type of the entity, either 'account' or 'group'
+     * @memberof BalanceSheetGridRowComponent
+     */
+    public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
+        const model = {
+            request: {
+                reportType: ReportType.BalanceSheet,
+                from: this.from,
+                to: this.to
+            },
+            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
+        };
+        this.financialReportsComponentStore.tailedReportAccountGroup(model);
+        this.tlPlService.isReportTailed$.next(true);
     }
 }

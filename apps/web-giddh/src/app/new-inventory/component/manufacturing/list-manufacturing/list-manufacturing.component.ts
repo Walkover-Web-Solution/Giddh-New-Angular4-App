@@ -74,6 +74,8 @@ export class ListManufacturingComponent implements OnInit {
     public activeCompany: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /* Stores warehouses for a company */
     public warehouses: Array<any> = [];
     /** Stores the current organization type */
@@ -117,9 +119,9 @@ export class ListManufacturingComponent implements OnInit {
     /** True if initial load of store filters */
     private initialLoad: boolean = false;
     /** Holds Total Pages Count*/
-    public totalPages:number = 1;
+    public totalPages: number = 1;
     /** Holds Current Page Number */
-    public currentPage:number = 1;
+    public currentPage: number = 1;
 
     constructor(
         private dialog: MatDialog,
@@ -144,6 +146,13 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public ngOnInit(): void {
+
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+
         this.currentUrl = this.router.url;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getWarehouses();
@@ -151,7 +160,7 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.count = this.paginationLimit;
         this.manufacturingSearchRequest.page = this.currentPage;
 
-        if (this.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
             this.getAllWarehouses();
         }
 
@@ -467,7 +476,7 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.branchUniqueName = selectedEntity?.value;
         this.manufacturingSearchRequest.warehouseUniqueName = "";
         this.selectedWarehouseName = "";
-        if (this.currentOrganizationType === OrganizationType.Company && this.allWarehouses?.length) {
+        if ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.allWarehouses?.length) {
             this.warehouses = this.allWarehouses[selectedEntity?.value];
         }
     }
@@ -538,7 +547,7 @@ export class ListManufacturingComponent implements OnInit {
     public showHideClearFilterButton(): void {
         this.showClearButton = false;
 
-        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || (this.currentOrganizationType === OrganizationType.Company && this.manufacturingSearchRequest.branchUniqueName && this.manufacturingSearchRequest.branchUniqueName !== this.currentBranch.uniqueName) || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
+        if ((this.universalDate && (this.manufacturingSearchRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.manufacturingSearchRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) || this.manufacturingSearchRequest.product || this.manufacturingSearchRequest.productVariant || ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.manufacturingSearchRequest.branchUniqueName && this.manufacturingSearchRequest.branchUniqueName !== this.currentBranch.uniqueName) || this.manufacturingSearchRequest.warehouseUniqueName || this.manufacturingSearchRequest.inventoryType || this.manufacturingSearchRequest.searchBy || this.manufacturingSearchRequest.searchOperation || this.manufacturingSearchRequest.searchValue) {
             this.showClearButton = true;
         }
 

@@ -358,17 +358,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (response?.user?.contactNo) {
                 this.showMobileField = false;
                 this.mobileNo = response.user.contactNo;
-                this.firstStepForm.get('mobileNo')?.removeValidators(Validators.required);
+                this.firstStepForm.get('mobile')?.removeValidators(Validators.required);
             } else {
                 this.showMobileField = true;
-                this.firstStepForm.get('mobileNo')?.addValidators(Validators.required);
+                this.firstStepForm.get('mobile')?.addValidators(Validators.required);
                 this.initMobileNumberField();
             }
         });
 
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.moduleRestrictionStatus) {
-                let module = response.moduleRestrictionStatus.find(
+                const module = response.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === RestrictedModules.Users
                 );
                 this.remainingUsers = module.remainingUsers;
@@ -644,7 +644,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.thirdStepForm = this.formBuilder.group({
-            creatorSuperAdmin: [''],
+            creatorSuperAdmin: [true],
             permissionRoles: this.formBuilder.array([
                 this.formBuilder.group({
                     emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)],
@@ -674,7 +674,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public addNewUser(): void {
-        const isSuperAdmin = this.thirdStepForm.get('creatorSuperAdmin').value === 'false';
+        const isSuperAdmin = this.thirdStepForm.get('creatorSuperAdmin').value;
 
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         let mappingForm = this.formBuilder.group({
@@ -1294,7 +1294,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.isLoading = false;
                 this.toaster.showSnackBar("error", response?.message);
-
+                this.selectedStep = 0;
                 if (this.showMobileField) {
                     let mobileNo = this.intl?.getNumber();
 
@@ -1476,7 +1476,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public setOwnerPermission(event: any): void {
-        const isSuperAdmin = event?.value === "true";
+        const isSuperAdmin = event?.value;
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
 
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
@@ -1583,7 +1583,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public canAddNewUser(): boolean {
-        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value === 'true' ? 1 : 0;
+        const superAdminCount = this.thirdStepForm.get('creatorSuperAdmin').value ? 1 : 0;
         const selectedRolesCount = this.thirdStepForm.get('permissionRoles').value?.length;
         return this.remainingUsers > (superAdminCount + selectedRolesCount);
     }

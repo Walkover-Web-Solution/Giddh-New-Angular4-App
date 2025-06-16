@@ -88,3 +88,12 @@
         font-size: var(--font-size-24);
     }
 }
+
+.import-type {
+    .icon-import, .icon-invoice-new {
+        background: var(--color-primary-header-icons);
+        width: 90px;
+        height: 90px;
+        line-height: 90px;
+    }
+}

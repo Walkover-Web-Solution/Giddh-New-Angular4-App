@@ -159,6 +159,7 @@
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i); updateTotalCreditDebit()"
+                                                (change)="updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
@@ -191,6 +192,7 @@
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i); updateTotalCreditDebit()"
+                                                (change)="updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
@@ -261,7 +263,7 @@
                                     <button
                                         mat-stroked-button
                                         color="primary"
-                                        [hidden]="isCompany"
+                                        [hidden]="(isCompany || isConsolidatedBranch)"
                                         #submitButton
                                         (keyup)="keyUpOnSubmitButton($event)"
                                         (click)="saveEntry()"
@@ -462,6 +464,7 @@
     (onShortcutPress)="toggleAccountAsidePane()"
     (addEvent)="addNewSidebarAccount($event)"
     (updateEvent)="updateSidebarAccount($event)"
+    (updateViaPatchApi)="updateSidebarAccount($event, true)"
 ></generic-aside-menu-account>
 
 <!--Modal for All Items -->

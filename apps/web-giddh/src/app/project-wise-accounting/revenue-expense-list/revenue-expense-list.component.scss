@@ -1,0 +1,18 @@
+.table-responsive {
+    table {
+        tbody {
+            tr {
+                td {
+                    border: none;
+                    &:last-child {
+                        padding-right: 25px;
+                    }
+                    .icon-trash {
+                        right: 0px;
+                        top: 22px;
+                    }                    
+                }
+            }
+        }
+    }
+}

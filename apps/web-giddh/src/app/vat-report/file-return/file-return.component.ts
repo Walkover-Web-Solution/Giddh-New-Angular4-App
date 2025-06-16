@@ -106,7 +106,8 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             width: '630px',
             data: {
                 configuration: this.fileReturnConfirmationConfiguration
-            }
+            },
+            disableClose: true
         });
 
         confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {

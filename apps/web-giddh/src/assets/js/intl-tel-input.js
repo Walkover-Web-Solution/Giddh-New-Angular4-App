@@ -6,7 +6,7 @@
 
 // wrap in UMD
 (function(factory) {
-    if (typeof module === "object" && module.exports) module.exports = factory(); else window.intlTelInput = factory();
+    if (typeof module === "object" && module.exports) module.exports = factory(); else if (window) window.intlTelInput = factory();
 })(function(undefined) {
     "use strict";
     return function() {
@@ -238,14 +238,14 @@
                 value: function _processAllCountries() {
                     if (this.options.onlyCountries.length) {
                         var lowerCaseOnlyCountries = this.options.onlyCountries.map(function(country) {
-                            return country.toLowerCase();
+                            return country?.toLowerCase();
                         });
                         this.countries = allCountries.filter(function(country) {
                             return lowerCaseOnlyCountries.indexOf(country.iso2) > -1;
                         });
                     } else if (this.options.excludeCountries.length) {
                         var lowerCaseExcludeCountries = this.options.excludeCountries.map(function(country) {
-                            return country.toLowerCase();
+                            return country?.toLowerCase();
                         });
                         this.countries = allCountries.filter(function(country) {
                             return lowerCaseExcludeCountries.indexOf(country.iso2) === -1;
@@ -258,7 +258,7 @@
                 key: "_translateCountriesByLocale",
                 value: function _translateCountriesByLocale() {
                     for (var i = 0; i < this.countries.length; i++) {
-                        var iso = this.countries[i].iso2.toLowerCase();
+                        var iso = this.countries[i].iso2?.toLowerCase();
                         if (this.options.localizedCountries.hasOwnProperty(iso)) {
                             this.countries[i].name = this.options.localizedCountries[iso];
                         }
@@ -313,7 +313,7 @@
                 value: function _processPreferredCountries() {
                     this.preferredCountries = [];
                     for (var i = 0; i < this.options.preferredCountries.length; i++) {
-                        var countryCode = this.options.preferredCountries[i].toLowerCase();
+                        var countryCode = this.options.preferredCountries[i]?.toLowerCase();
                         var countryData = this._getCountryData(countryCode, false, true);
                         if (countryData) this.preferredCountries.push(countryData);
                     }
@@ -460,7 +460,7 @@
                     } else if (initialCountry !== "auto") {
                         // see if we should select a flag
                         if (initialCountry) {
-                            this._setFlag(initialCountry.toLowerCase());
+                            this._setFlag(initialCountry?.toLowerCase());
                         } else {
                             if (dialCode && isRegionlessNanp) {
                                 // has intl dial code, is regionless nanp, and no initialCountry, so default to US
@@ -578,7 +578,7 @@
                         window.intlTelInputGlobals.startedLoadingAutoCountry = true;
                         if (typeof this.options.geoIpLookup === "function") {
                             this.options.geoIpLookup(function(countryCode) {
-                                window.intlTelInputGlobals.autoCountry = countryCode.toLowerCase();
+                                window.intlTelInputGlobals.autoCountry = countryCode?.toLowerCase();
                                 // tell all instances the auto country is ready
                                 // TODO: this should just be the current instances
                                 // UPDATE: use setTimeout in case their geoIpLookup function calls this callback straight
@@ -763,7 +763,7 @@
                         if (e.key === "ArrowUp" || e.key === "Up" || e.key === "ArrowDown" || e.key === "Down") _this9._handleUpDownKey(e.key); else if (e.key === "Enter") _this9._handleEnterKey(); else if (e.key === "Escape") _this9._closeDropdown(); else if (/^[a-zA-ZÀ-ÿа-яА-Я ]$/.test(e.key)) {
                             // jump to countries that start with the query string
                             if (queryTimer) clearTimeout(queryTimer);
-                            query += e.key.toLowerCase();
+                            query += e.key?.toLowerCase();
                             _this9._searchForCountry(query);
                             // if the timer hits 1 second, reset the query
                             queryTimer = setTimeout(function() {
@@ -806,7 +806,7 @@
             }, {
                 key: "_startsWith",
                 value: function _startsWith(a, b) {
-                    return a.substr(0, b.length).toLowerCase() === b;
+                    return a.substr(0, b.length)?.toLowerCase() === b;
                 }
             }, {
                 key: "_updateValFromNumber",
@@ -1266,7 +1266,7 @@
             }, {
                 key: "setCountry",
                 value: function setCountry(originalCountryCode) {
-                    var countryCode = originalCountryCode.toLowerCase();
+                    var countryCode = originalCountryCode?.toLowerCase();
                     // check if already selected
                     if (!this.selectedFlagInner.classList.contains("iti__".concat(countryCode))) {
                         this._setFlag(countryCode);

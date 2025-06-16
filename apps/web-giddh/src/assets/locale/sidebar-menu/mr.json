@@ -118,6 +118,21 @@
                     "icon": "icon-reciept-new",
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/receipt/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "पावती सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/receipt/setting",
+                    "icon": "icon-reciept-new",
+                    "description": "पावती सेटिंग्ज",
+                    "additional": {
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -245,6 +260,21 @@
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/payment/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "पेमेंट सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/payment/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "पेमेंट सेटिंग्ज",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -615,6 +645,11 @@
                     "label": "आयात करतो",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "प्रकल्पनिहाय लेखांकन",
+                    "link": "/pages/project-wise-accounting/list",
+                    "icon": "icon-balance-sheet-new"
                 }
             ]
         }

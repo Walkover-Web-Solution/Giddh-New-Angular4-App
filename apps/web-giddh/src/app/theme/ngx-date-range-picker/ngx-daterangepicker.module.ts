@@ -11,6 +11,8 @@ import { TranslateDirectiveModule } from '../translate/translate.directive.modul
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { CdkScrollModule } from '../form-fields/cdk-scroll/cdk-scroll.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NewConfirmationModalModule } from '../new-confirmation-modal/confirmation-modal.module';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { CdkScrollModule } from '../form-fields/cdk-scroll/cdk-scroll.module';
         TranslateDirectiveModule,
         MatButtonModule,
         MatInputModule,
-        CdkScrollModule
+        CdkScrollModule,
+        MatDialogModule,
+        NewConfirmationModalModule
     ]
 })
 

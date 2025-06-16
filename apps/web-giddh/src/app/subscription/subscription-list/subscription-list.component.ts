@@ -57,7 +57,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         totalItems: 0,
         count: API_COUNT_LIMIT,
     }
-    /** Hold table page index number*/
+    /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -114,8 +114,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
-    /** Holds Store Archive company API success state as observable*/
-    public archiveCompanySuccess$ = this.componentStoreCompanyListDialog.select(state => state.archiveCompanySuccess);
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -285,17 +283,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 this.getAllSubscriptions(null);
             }
         });
-
-        this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                let text = this.localeData?.company_message;
-                text = text?.replace("[TYPE]", response?.archiveStatus === 'USER_ARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
-                this.toasterService.showSnackBar('success', text);
-                this.getAllSubscriptions(null);
-            }
-        });
-
     }
+
     /**
      * This will be use for check null or undefined values
      *
@@ -718,47 +707,5 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (event) {
             this.getAllSubscriptions(false);
         }
-    }
-
-    /**
-     * Archives or unarchives a company in the SubscriptionListComponent.
-     *
-     * @param data - The data of the company to be archived or unarchived.
-     * @param type - The type of action, whether to archive or unarchive.
-     * @memberof SubscriptionListComponent
-     */
-    public archiveCompany(data: any, type: string): void {
-        let request = {
-            companyUniqueName: data?.companies[0]?.uniqueName,
-            status: { archiveStatus: type }
-        };
-        this.openConfirmationDialog(request);
-    }
-
-    /**
-     * Open confirmation dialog for archive company
-     *
-     * @private
-     * @param {*} request
-     * @memberof SubscriptionListComponent
-     */
-    private openConfirmationDialog(request: any): void {
-        let text = this.localeData?.confirm_archive_message;
-        text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
-        let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
-                title: this.commonLocaleData?.app_confirmation,
-                body: text,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.componentStoreCompanyListDialog.archiveCompany(request);
-            }
-        });
     }
 }

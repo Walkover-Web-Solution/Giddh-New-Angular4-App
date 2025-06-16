@@ -10,6 +10,7 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SalesAddBulkStockItems } from "../../models/api-models/Sales";
 import { ToasterService } from "../../services/toaster.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { GiddhCurrencyPipe } from "../../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 
 @Component({
     selector: "add-bulk-items",
@@ -42,7 +43,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private componentStore: AddBulkItemsComponentStore,
         @Inject(MAT_DIALOG_DATA) public inputData,
-        public dialogRef: MatDialogRef<any>
+        public dialogRef: MatDialogRef<any>,
+        private giddhCurrencyPipe: GiddhCurrencyPipe
     ) { }
 
     /**
@@ -141,7 +143,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                         name: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                         additional: result
                     };
-                }) || [];;
+                }) || [];
                 this.stockResults$ = of(stockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
@@ -210,8 +212,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     variants: this.stockVariants[index]
                 };
 
-                const unitRates = data.body?.stock?.variant?.unitRates ?? [];
-                item.rate = unitRates?.length ? unitRates[0]?.rate : 0;
+                item.rate = this.giddhCurrencyPipe.transform(((data.body?.stock?.rate ?? data.body?.stock?.variant?.unitRates?.[0].rate ?? 0) / (this.inputData.exchangeRate ?? 1)));
                 item.quantity = 1;
 
                 let itemFormGroup = this.getStockFormGroup(item);

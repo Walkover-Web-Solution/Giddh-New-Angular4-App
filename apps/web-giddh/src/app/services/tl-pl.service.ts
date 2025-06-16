@@ -1,18 +1,20 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
-import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossDateRangeResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { ReportType } from '../multi-currency-reports/multi-currency.const';
 
 @Injectable()
 export class TlPlService {
     private companyUniqueName: string;
+    public isReportTailed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
@@ -79,6 +81,32 @@ export class TlPlService {
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
+                    data.request = request;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<AccountDetails, ProfitLossRequest>(e, request)));
+    }
+
+    /**
+     * Get Compared Profit/Loss
+     *
+     * @param {ProfitLossRequest} request
+     * @return {*}  {Observable<BaseResponse<AccountDetails, ProfitLossRequest>>}
+     * @memberof TlPlService
+     */
+    public getComparedProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
+        let filteredRequest = (Object.keys(request)
+            ?.filter(key => request[key] != null)
+            .reduce((params, item) => ({ ...params, [item]: request[item] }), {}));
+
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COMPARED_PROFIT_LOSS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
@@ -178,5 +206,92 @@ export class TlPlService {
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Fetches the multi-currency report for the given report type.
+     * 
+     * @param {string} reportType - The type of report to fetch (e.g., "TrialBalance", "ProfitLoss").
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the report data.
+     * @memberof TlPlService
+     */
+    public getMultiCurrencyReport(reportType: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', reportType)).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+
+    /**
+      * Creates the multi-currency report for the given report type and payload.
+      * 
+      * @param {string} reportType - The type of report to create (e.g., "TrialBalance", "ProfitLoss").
+      * @param {any} payload - The payload data to send in the request.
+      * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report creation.
+      * @memberof TlPlService
+      */
+    public createMultiCurrencyReport(reportType: string, payload: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + TB_PL_BS_API.GET_MULTI_CURRENCY_REPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':reportType', reportType), payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Updates the tailed report for the given report type with the given account or group, either adding or removing it based on the value of the checked flag.
+     * 
+     * @param {any} request - The request data to send in the request, including the reportType, from, and to.
+     * @param {any} payload - The payload data to send in the request, including the uniqueName of the account or group to add or remove, the entityType of the payload (either "account" or "group"), and the checked flag indicating whether to add or remove the account or group.
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report update.
+     * @memberof TlPlService
+     */
+    public tailedReportAccountGroup(request: {reportType: typeof ReportType, from: string, to: string}, payload: {uniqueName: string, entityType: 'account' | 'group', checked: boolean}[]): Observable<BaseResponse<any, any>> {
+        return this.http.post(
+            this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_ACCOUNT_GROUP
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':reportType', request?.reportType?.toString())
+            ?.replace(':from', request?.from)
+            ?.replace(':to', request?.to)
+            , payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = payload;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Gets the reconcile date range for the given report type.
+     * 
+     * @param {typeof ReportType} reportType - The type of report to get the date range for (e.g., "TrialBalance", "ProfitLoss").
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the date range.
+     * @memberof TlPlService
+     */
+    public getReconcileDateRange(reportType: typeof ReportType): Observable<BaseResponse<any, any>> {
+        return this.http.post(
+            this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_DATE_RANGE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':reportType', reportType?.toString())
+            , {}).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = { reportType };
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 }

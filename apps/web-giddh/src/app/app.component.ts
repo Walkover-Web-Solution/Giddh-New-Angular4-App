@@ -17,6 +17,7 @@ import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { PageLeaveUtilityService } from './services/page-leave-utility.service';
 
 /**
  * App Component
@@ -40,6 +41,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -52,7 +55,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -105,6 +109,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 'AppUrl': AppUrl,
                 'APP_FOLDER': APP_FOLDER
             });
+            ipcRenderer.on('app-close-requested', () => {
+                this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                    if (confirmed) {
+                        ipcRenderer.send('force-close');
+                    }
+                });
+            });
         }
 
         /** This will be use for dialog close on route event */
@@ -149,18 +160,24 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, []);
+        reassignNavigationalArray(isMobile, (this._generalService.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
     public ngOnInit() {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+            this._cdr.detectChanges();
+        });
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
         this.breakpointObserver.observe([
-            '(max-width: 480px)'
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result.matches) {
                 this.router.navigate(['/mobile-restricted']);

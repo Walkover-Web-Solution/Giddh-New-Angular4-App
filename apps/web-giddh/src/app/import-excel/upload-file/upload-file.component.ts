@@ -5,16 +5,21 @@ import { saveAs } from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
+import { LedgerComponentStore } from '../../ledger/ledger.store';
+import { cloneDeep } from '../../lodash-optimized';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
     selector: 'upload-file',
     styleUrls: ['./upload-file.component.scss'],
     templateUrl: './upload-file.component.html',
+    providers: [LedgerComponentStore]
 })
 
 export class UploadFileComponent implements OnInit, OnDestroy {
@@ -47,6 +52,27 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isHeaderProvided: boolean = true;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Default result count for account searches */
+    public defaultCount: number = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    /** Stores account unique name */
+    public accountUniqueName: string;
+    /** Stores the search results for accounts */
+    public accountSearchResponse: any[] = [];
+    /** Stores account name */
+    public accountLabel: string = "";
+    /** Request parameters for account searches */
+    public accountSearchRequest: any = {
+        count: this.defaultCount,
+        withStocks: false
+    };
+    /** Stores select voucher name */
+    public selectVoucher: string = "";
+    /** Stores the voucher response */
+    public voucherListResponse: IOption[] = [];
+    /** Holds a reference to the `VoucherType` enum */
+    public voucherType: typeof VoucherType = VoucherType;
 
     constructor(
         private toasterService: ToasterService,
@@ -54,7 +80,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private router: Router
+        private router: Router,
+        private ledgerComponentStore: LedgerComponentStore
     ) {
 
     }
@@ -101,13 +128,22 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
+        this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData);
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.entity = data.type;
                 this.setTitle();
-
-                if(this.entity === "banktransactions") {
+                if (this.entity === this.voucherType.AccountWise && !this.accountSearchRequest.isLoading) {
+                    this.searchAccount();
+                }
+                if (this.entity === "banktransactions") {
                     this.router.navigate(['/pages/import/select-type']);
                 }
             }
@@ -125,7 +161,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
@@ -142,6 +179,21 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+            if (accountSearchResponse) {
+                this.accountSearchRequest.count = accountSearchResponse.count;
+                accountSearchResponse.results?.forEach(result => {
+                    if (result?.uniqueName) {
+                        this.accountSearchResponse.push({
+                            value: result.uniqueName,
+                            label: result.name
+                        });
+                    }
+                });
+                this.accountSearchRequest.isLoading = false;
+            }
+        });
     }
 
     /**
@@ -152,7 +204,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public setTitle(): void {
         if (this.entity === 'group') {
             this.title = this.localeData?.groups;
-        } else if(this.entity === 'account') {
+        } else if (this.entity === 'account') {
             this.title = this.localeData?.accounts;
         } else if (this.entity === 'stock') {
             this.title = this.localeData?.inventories;
@@ -192,7 +244,54 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         this.onFileUpload.emit({
             file,
             branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : '',
-            isHeaderProvided: this.isHeaderProvided
+            isHeaderProvided: this.isHeaderProvided,
+            accountUniqueName: this.accountUniqueName,
+            selectVoucher: this.selectVoucher
         });
+    }
+
+    /**
+    * Searches for accounts based on the query and updates the account search results.
+    *
+    * @param {string} [query=''] The search query.
+    * @param {number} [page=1] The page number for paginated results.
+    * @memberof UploadFileComponent
+    */
+    public searchAccount(query: string = '', page: number = 1): void {
+        if (page === 1) {
+            this.accountSearchResponse = [];
+        }
+        this.accountSearchRequest.q = query;
+        this.accountSearchRequest.page = page;
+        this.accountSearchRequest.isLoading = true;
+
+        let requestObject = cloneDeep(this.accountSearchRequest);
+        requestObject.isLoading = undefined;
+        this.getProjectAccount(requestObject);
+    }
+
+    /**
+    * Fetches the list of accounts associated with a project.
+    *
+    * @param {*} requestObject The request parameters for fetching accounts.
+    * @memberof UploadFileComponent
+    */
+    public getProjectAccount(requestObject: any): void {
+        requestObject.count = this.defaultCount;
+        this.ledgerComponentStore.getProjectAccount(requestObject);
+    }
+
+    /**
+     * Handles infinite scroll for account search by fetching the next page of results.
+     *
+     * @memberof UploadFileComponent
+     */
+    public handleSearchAccountScrollEnd(): void {
+        if (this.accountSearchRequest.isLoading) {
+            return;
+        }
+        if (this.defaultCount === this.accountSearchRequest.count) {
+            this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
+        }
     }
 }

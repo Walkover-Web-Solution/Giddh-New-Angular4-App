@@ -21,7 +21,7 @@
                     </text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
-                <ng-container *ngIf="!isCompany">
+                <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                     <ng-container *ngIf="voucherType === voucherTypeEnum.sales; else other">
                         <button
                             mat-stroked-button
@@ -129,7 +129,7 @@
                         </button>
                         <div class="d-flex action-btn">
                             <button
-                                *ngIf="!isCompany"
+                                *ngIf="(!isCompany && !isConsolidatedBranch)"
                                 mat-stroked-button
                                 color="primary"
                                 class="mat-icon-sm-btn"
@@ -183,7 +183,7 @@
                                 <i class="icon-download-circle"></i>
                             </button>
                             <button
-                                *ngIf="!isCompany"
+                                *ngIf="(!isCompany && !isConsolidatedBranch)"
                                 mat-stroked-button
                                 color="primary"
                                 class="mat-icon-sm-btn"
@@ -198,7 +198,7 @@
                             mat-stroked-button
                             color="primary"
                             [matMenuTriggerFor]="changeStatus"
-                            *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && !isCompany"
+                            *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && (!isCompany && !isConsolidatedBranch && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice)"
                         >
                             <span>Change Status</span>
                             <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -272,7 +272,7 @@
                 <div class="preview-box d-flex" *ngIf="showPaymentDetails">
                     <div
                         *ngIf="
-                            !isCompany &&
+                            (!isCompany && !isConsolidatedBranch) &&
                             voucherType === voucherTypeEnum.sales &&
                             selectedInvoice?.balanceStatus !== 'PAID' &&
                             selectedInvoice?.balanceStatus !== 'CANCEL'
@@ -326,7 +326,7 @@
                 </div>
                 <no-data
                        *ngIf="shouldShowUploadAttachment &&
-                       isCompany &&
+                       (isCompany || isConsolidatedBranch) &&
                        !isPdfAvailable &&
                        !attachedPdfFileUrl &&
                        !imagePreviewSource"
@@ -339,7 +339,7 @@
             <giddh-page-loader
                 *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
             ></giddh-page-loader>
-            
+
             <ng-container *ngIf="(isVoucherDownloading$ | async) === false">
                 <div class="pdf-preview" *ngIf="voucherType === voucherTypeEnum.purchase">
                     <div class="position-relative">
@@ -367,13 +367,6 @@
                         >
                             <img class="image-preview w-100" [src]="imagePreviewSource" />
                         </div>
-
-                        <div
-                            *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
-                            class="error danger text-center"
-                        >
-                            <span>{{ localeData?.invoice_preview_unavailable }}</span>
-                        </div>
                         <div
                             *ngIf="attachedDocumentType?.type === 'unsupported'"
                         >
@@ -383,7 +376,7 @@
 
                         <div
                             *ngIf="
-                                shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)
+                                shouldShowUploadAttachment && (!isCompany && !isConsolidatedBranch) && !(attachedPdfFileUrl || imagePreviewSource)
                             "
                             class="upload-excel position-relative d-flex align-items-center justify-content-center max-width-500 dashed-border"
                         >
@@ -417,6 +410,12 @@
                     <h5 class="pd-l15 pd-t1 pd-b1">
                         <strong class="text-blue">{{ localeData?.auto_generated_purchase_bill }}</strong>
                     </h5>
+                    <div
+                        *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
+                        class="error danger text-center mt-5"
+                    >
+                        <span>{{ localeData?.invoice_preview_unavailable }}</span>
+                    </div>
                     <iframe
                         *ngIf="!(isVoucherDownloading$ | async) && sanitizedPdfFileUrl"
                         #pdfContainer

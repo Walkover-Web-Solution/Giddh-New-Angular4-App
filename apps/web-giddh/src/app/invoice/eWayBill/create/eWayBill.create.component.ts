@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 
@@ -201,7 +201,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
-            this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format('DD/MM/YYYY') : null;
+            this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
             this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
 
             if (generateBillform.valid) {

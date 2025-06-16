@@ -1,20 +1,23 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
-import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
+import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
+import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
+import { prepareProfitLossData } from '../../../store/tl-pl/tl-pl.reducer';
 
 @Component({
     selector: 'profit-loss',
-    templateUrl: './profit-loss.component.html'
+    templateUrl: './profit-loss.component.html',
+    providers: [ProjectWiseAccountingComponentStore]
 })
 export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -27,7 +30,10 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;
     }
-
+    /** This will hold project unique name */
+    @Input() projectUniqueName: string = null;
+    /** Observable to track the profit loss loading */
+    public isFetchingProfitAndLoss$: Observable<boolean> = this.componentStore.isFetchingProfitAndLoss$;
     /**
      * set company and fetch data
      *
@@ -58,134 +64,168 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReconcileOption: boolean;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService) {
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
-            if (p) {
-                let data = cloneDeep(p) as ProfitLossData;
-                let cogs;
-                if (data && data.incomeStatment && data.incomeStatment.costOfGoodsSold) {
-                    cogs = cloneDeep(data.incomeStatment.costOfGoodsSold) as GetCogsResponse;
+        combineLatest([
+            this.store.pipe(select(state => state.tlPl.pl.data)),
+            this.componentStore.profitAndLossData$
+        ])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(([storeResponse, profitAndLossResponse]) => {
+                if (storeResponse || profitAndLossResponse) {
+                    this.expandAll = false;
+                    this.modifyResponse(storeResponse || profitAndLossResponse);
                 } else {
-                    cogs = null;
+                    this.data = null;
                 }
-
-                if (data && data.message) {
-                    setTimeout(() => {
-                        this.toaster.clearAllToaster();
-                        this.toaster.infoToast(data.message);
-                    }, 100);
-                }
-
-                if (cogs) {
-                    let cogsGrp: ChildGroup = new ChildGroup();
-                    cogsGrp.isCreated = true;
-                    cogsGrp.isVisible = true;
-                    cogsGrp.isIncludedInSearch = true;
-                    cogsGrp.isOpen = false;
-                    cogsGrp.level1 = false;
-                    cogsGrp.uniqueName = 'cogs';
-                    cogsGrp.groupName = 'Less: Cost of Goods Sold';
-                    cogsGrp.closingBalance = {
-                        amount: cogs.cogs,
-                        type: 'DEBIT'
-                    };
-                    cogsGrp.accounts = [];
-                    cogsGrp.childGroups = [];
-
-                    Object.keys(cogs)?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
-                        let cg = new ChildGroup();
-                        cg.isCreated = false;
-                        cg.isVisible = false;
-                        cg.isIncludedInSearch = true;
-                        cg.isOpen = false;
-                        cg.uniqueName = f;
-                        cg.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
-                        cg.category = f === 'income';
-                        cg.closingBalance = {
-                            amount: cogs[f],
-                            type: 'CREDIT'
-                        };
-                        cg.accounts = [];
-                        cg.childGroups = [];
-                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
-                            cg.groupName = `+ ${cg.groupName}`;
-                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
-                            cg.groupName = `- ${cg.groupName}`;
-                        }
-                        cogsGrp.childGroups.push(cg);
-                    });
-
-                    this.cogsData = cogsGrp;
-                }
-
-                if (data && data.expArr) {
-                    this.InitData(data.expArr, "expenses");
-                    data.expArr.forEach(g => {
-                        g.category = "expenses";
-                        g.isVisible = true;
-                        g.isCreated = true;
-                        g.isIncludedInSearch = true;
-                        g.isOpen = true;
-                        g.childGroups.forEach(c => {
-                            c.category = "expenses";
-                            c.isVisible = true;
-                            c.isCreated = true;
-                            c.isIncludedInSearch = true;
-                        });
-                    });
-                }
-                if (data && data.incArr) {
-                    this.InitData(data.incArr, "income");
-                    data.incArr.forEach(g => {
-                        g.category = "income";
-                        g.isVisible = true;
-                        g.isCreated = true;
-                        g.isIncludedInSearch = true;
-                        g.isOpen = true;
-                        g.childGroups.forEach(c => {
-                            c.category = "income";
-                            c.isVisible = true;
-                            c.isCreated = true;
-                            c.isIncludedInSearch = true;
-                        });
-                    });
-                }
-
-                if (data?.incomeStatment?.grossProfit?.type === "DEBIT" && data.incomeStatment.grossProfit.amount) {
-                    data.incomeStatment.grossProfit.amount = "-" + data.incomeStatment.grossProfit.amount;
-                }
-
-                if (data?.incomeStatment?.operatingProfit?.type === "DEBIT" && data.incomeStatment.operatingProfit.amount) {
-                    data.incomeStatment.operatingProfit.amount = "-" + data.incomeStatment.operatingProfit.amount;
-                }
-
-                this.data = data;
-            } else {
-                this.data = null;
-            }
-            this.cd.detectChanges();
-        });
+                this.cd.detectChanges();
+            });
     }
 
-    public InitData(d: ChildGroup[], category: string) {
-        each(d, (grp: ChildGroup) => {
-            grp.category = category;
-            grp.isVisible = false;
-            grp.isCreated = false;
-            grp.isIncludedInSearch = true;
-            each(grp.accounts, (acc: Account) => {
-                acc.isIncludedInSearch = true;
-                acc.isCreated = false;
-                acc.isVisible = false;
-                acc.category = category;
+    /**
+     * Profit Loss Data Modify
+     *
+     * @memberof ProfitLossComponent
+     */
+    public modifyResponse(response: ProfitLossData): void {
+        let data = this.projectUniqueName ? prepareProfitLossData(cloneDeep(response)) as ProfitLossData : cloneDeep(response) as ProfitLossData;
+        let cogs;
+        if (data?.incomeStatement?.costOfGoodsSold) {
+            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;;
+        } else {
+            cogs = null;
+        }
+        if (data?.message) {
+            setTimeout(() => {
+                this.toaster.clearAllToaster();
+                this.toaster.infoToast(data.message);
+            }, 100);
+        }
+        if (cogs) {
+            let cogsGrp: ChildGroup = new ChildGroup();
+            cogsGrp.isCreated = true;
+            cogsGrp.isVisible = true;
+            cogsGrp.isIncludedInSearch = true;
+            cogsGrp.isOpen = false;
+            cogsGrp.level1 = true;
+            cogsGrp.uniqueName = 'cogs';
+            cogsGrp.groupName = 'Less: Cost of Goods Sold';
+            cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                acc[key] = {
+                    amount: cogs[key].cogs,
+                    type: 'DEBIT'
+                };
+                return acc;
+            }, {});
+            cogsGrp.accounts = [];
+            cogsGrp.childGroups = [];
+
+            Object.keys(cogs).forEach((cogsKey, i) => {
+                if (i === 0) {
+                    Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
+                        let childGroup = new ChildGroup();
+                        childGroup.isCreated = false;
+                        childGroup.isSelfCreatedGroup = true;
+                        childGroup.isVisible = false;
+                        childGroup.isIncludedInSearch = true;
+                        childGroup.isOpen = false;
+                        childGroup.uniqueName = item;
+                        childGroup.groupName = (item) ? item?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
+                        childGroup.category = item === 'income';
+                        childGroup.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                            acc[key] = {
+                                amount: cogs[key][item],
+                                type: 'CREDIT'
+                            };
+                            return acc;
+                        }, {});
+                        childGroup.accounts = [];
+                        childGroup.childGroups = [];
+
+                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(item)) {
+                            childGroup.groupName = `+ ${childGroup.groupName}`;
+                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(item)) {
+                            childGroup.groupName = `- ${childGroup.groupName}`;
+                        }
+                        cogsGrp.childGroups.push(childGroup);
+                    });
+                }
             });
-            if (grp.childGroups) {
-                this.InitData(grp.childGroups, category);
+
+            this.cogsData = cogsGrp;
+        }
+
+        if (data && data.expArr) {
+            this.initData(data.expArr, "expenses");
+            data.expArr.forEach(group => {
+                group.category = "expenses";
+                group.isVisible = true;
+                group.isCreated = true;
+                group.isIncludedInSearch = true;
+                group.isOpen = true;
+                group.childGroups.forEach(childGroups => {
+                    childGroups.category = "expenses";
+                    childGroups.isVisible = true;
+                    childGroups.isCreated = true;
+                    childGroups.isIncludedInSearch = true;
+                });
+            });
+        }
+        if (data && data.incArr) {
+            this.initData(data.incArr, "income");
+            data.incArr.forEach(group => {
+                group.category = "income";
+                group.isVisible = true;
+                group.isCreated = true;
+                group.isIncludedInSearch = true;
+                group.isOpen = true;
+                group.childGroups.forEach(childGroups => {
+                    childGroups.category = "income";
+                    childGroups.isVisible = true;
+                    childGroups.isCreated = true;
+                    childGroups.isIncludedInSearch = true;
+                });
+            });
+        }
+
+        if (data?.incomeStatement?.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]]?.type === "DEBIT" && data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount) {
+            data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount = "-" + data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount;
+        }
+
+        if (data?.incomeStatement?.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]]?.type === "DEBIT" && data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount) {
+            data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount = "-" + data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount;
+        }
+
+        this.data = data;
+    }
+
+    /**
+     * Initializes the data for the report, setting visibility and inclusion flags for each group and account.
+     * 
+     * @param {ChildGroup[]} groupList - The group details to initialize
+     * @returns {void}
+     * @memberof ProfitLossComponent
+     */
+    public initData(groupList: ChildGroup[], category: string): void {
+        groupList.forEach((childGroup: ChildGroup) => {
+            childGroup.category = category;
+            childGroup.isVisible = false;
+            childGroup.isCreated = false;
+            childGroup.isIncludedInSearch = true;
+            childGroup.accounts.forEach((account: Account) => {
+                account.isIncludedInSearch = true;
+                account.isCreated = false;
+                account.isVisible = false;
+                account.category = category;
+            });
+            if (childGroup.childGroups) {
+                this.initData(childGroup.childGroups, category);
             }
         });
     }
@@ -194,7 +234,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: ProfitLossRequest) {
+    /**
+     * This function is used to filter the profit and loss report data based on the given request object.
+     * 
+     * @param request The request object to filter the data with.
+     * @memberof ProfitLossComponent
+     */
+    public filterData(request: ProfitLossRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -204,7 +251,17 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!request.tagName) {
             delete request.tagName;
         }
-        this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(request)));
+        if (this.projectUniqueName) {
+            const requestObject = {
+                companyUniqueName: this.selectedCompany.uniqueName,
+                projectUniqueName: this.projectUniqueName,
+                from: this.from,
+                to: this.to
+            }
+            this.componentStore.getProjectProfitAndLoss(requestObject);
+        } else {
+            this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(request)));
+        }
     }
 
     public ngOnDestroy(): void {
@@ -238,5 +295,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof ProfitLossComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

@@ -44,6 +44,8 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public commonLocaleData: any = {};
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /* This will hold the filtered orders */
     public filteredData: any[] = [];
     /* This will hold if pdf preview loaded */
@@ -105,6 +107,11 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * @memberof PreviewComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         if (this.voucherType === this.receiptVoucherType) {
             this.translationFile = "advance-receipt";
         } else if (this.voucherType === this.paymentVoucherType) {

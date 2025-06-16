@@ -1,63 +1,65 @@
 <div class="bd-rr row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
-    <!--breadcrumbs-->
-    <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
-        <div class="col-lg-6">
-            <ol class="breadcrumb row">
-                <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
-                    <a href="javascript:void(0)"> {{ value }}</a>
-                </li>
-            </ol>
-        </div>
-        <!--share group/account-->
-        <div class="col-lg-6 pr-0 pl-0" *ngIf="showEditGroup$ | async">
-            <!--group-->
-            <div class="pull-right text-right">
-                <button aria-label="export" class="btn btn-share mr-r1" (click)="exportGroupLedger()">
-                    {{ commonLocaleData?.app_export }}
-                </button>
-                <button aria-label="share" class="btn btn-share pull-right" (click)="showShareGroupModal()">
+    <ng-container *ngIf="breadcrumbPath?.length > 0">
+        <!--breadcrumbs-->
+        <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100 d-flex justify-content-space-between">
+            <div class="col-lg-8">
+                <ol class="breadcrumb row">
+                    <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
+                        <a href="javascript:void(0)"> {{ value }}</a>
+                    </li>
+                </ol>
+            </div>
+            <!--share group/account-->
+            <div class="col-lg-4 pr-0 pl-0" *ngIf="showEditGroup$ | async">
+                <!--group-->
+                <div class="pull-right text-right">
+                    <button aria-label="export" class="btn btn-share mr-r1" (click)="exportGroupLedger()">
+                        {{ commonLocaleData?.app_export }}
+                    </button>
+                    <button aria-label="share" class="btn btn-share pull-right" (click)="showShareGroupModal()">
+                        {{ commonLocaleData?.app_share }}
+                    </button>
+                    <div
+                        class="primary-color text-right pull-right mr-t1 clearfix"
+                        *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
+                    >
+                        {{ groupSharedWith }}
+                    </div>
+                </div>
+            </div>
+            <!--account-->
+            <div class="col-lg-4 pull-right pr-0 pl-0" *ngIf="showEditAccount$ | async">
+                <button aria-label="share" class="btn btn-share pull-right" (click)="showShareAccountModal()">
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
                     class="primary-color text-right pull-right mr-t1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
+                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
                 >
-                    {{ groupSharedWith }}
+                    {{ accountSharedWith }}
                 </div>
             </div>
+            <!--share group/account-->
         </div>
-        <!--account-->
-        <div class="pull-right col-lg-6 pr-0 pl-0" *ngIf="showEditAccount$ | async">
-            <button aria-label="share" class="btn btn-share pull-right" (click)="showShareAccountModal()">
-                {{ commonLocaleData?.app_share }}
-            </button>
-            <div
-                class="primary-color text-right pull-right mr-t1 clearfix"
-                *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
-            >
-                {{ accountSharedWith }}
-            </div>
-        </div>
-        <!--share group/account-->
-    </div>
 
-    <!--add/edit group form-->
-    <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100 dropdown-wrapper">
-        <group-add
-            class="form-box"
-            *ngIf="showAddNewGroup$ | async"
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-        ></group-add>
-        <group-update
-            *ngIf="showEditGroup$ | async"
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            [discountList]="discounts"
-        >
-        </group-update>
-    </div>
-    <!--add/edit group form-->
+        <!--add/edit group form-->
+        <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100 dropdown-wrapper">
+            <group-add
+                class="form-box"
+                *ngIf="showAddNewGroup$ | async"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+            ></group-add>
+            <group-update
+                *ngIf="showEditGroup$ | async"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [discountList]="discounts"
+            >
+            </group-update>
+        </div>
+        <!--add/edit group form-->
+    </ng-container>
 
     <!--account operation  -->
     <div
@@ -95,6 +97,7 @@
             [updateAccountIsSuccess$]="updateAccountIsSuccess$"
             (deleteClicked)="showDeleteAccountModal()"
             (submitClicked)="updateAccount($event)"
+            (updateViaPatchApi)="updateAccount($event, true)"
             [showBankDetail]="showBankDetail"
             [showVirtualAccount]="showVirtualAccount"
             [isDebtorCreditor]="isDebtorCreditor"
@@ -145,7 +148,12 @@
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clearfix"></span>
-        <button aria-label="create account" class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">
+        <button
+            aria-label="create account"
+            class="btn isActive"
+            *ngIf="!isRootLevelGroup"
+            (click)="showAddAccountForm()"
+        >
             {{ commonLocaleData?.app_create_ac }}
         </button>
     </div>
@@ -211,8 +219,21 @@
 </div>
 <!-- ./ export ladger popup -->
 <!-- modals -->
-<div class="text-center master-export-btn overflow-hidden d-flex justify-content-center align-items-center" *ngIf="!((showEditGroup$ | async) || (activeGroupInProgress$ | async) || (showNewForm$ | async) || (activeAccount$ | async) || (showEditAccount$ | async) || (showAddNewAccount$ | async) || (showAddNewGroup$ | async))">
-    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">{{ commonLocaleData?.app_export }}</button>
+<div
+    class="text-center master-export-btn overflow-hidden d-flex justify-content-center align-items-center"
+    *ngIf="
+        !(
+            (showEditGroup$ | async) ||
+            (activeGroupInProgress$ | async) ||
+            (showNewForm$ | async) ||
+            (activeAccount$ | async) ||
+            (showEditAccount$ | async) ||
+            (showAddNewAccount$ | async) ||
+            (showAddNewGroup$ | async)
+        )
+    "
+>
+    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">
+        {{ commonLocaleData?.app_export }}
+    </button>
 </div>
-
-

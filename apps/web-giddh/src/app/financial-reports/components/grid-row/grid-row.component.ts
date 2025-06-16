@@ -18,12 +18,18 @@ import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { SearchService } from '../../../services/search.service';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../constants/trial-balance-profit.constant';
+import { Router } from '@angular/router';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
+import { FinancialReportsComponentStore } from '../../financial-reports.store';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: '[grid-row]',
     styleUrls: ['./grid-row.component.scss'],
     templateUrl: './grid-row.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
 export class GridRowComponent implements OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
@@ -48,13 +54,19 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold current url */
+    private currentUrl: string = "";
 
     constructor(
         private cd: ChangeDetectorRef,
         private searchService: SearchService,
         private renderer: Renderer2,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private router: Router,
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private tlPlService: TlPlService
     ) {
+        this.currentUrl = this.router.url;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -66,14 +78,28 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         }
     }
 
-    public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
+    /**
+      *  This will be redirect to ledger
+      *
+      * @param {*} acc
+      * @return {*}  {void}
+      * @memberof GridRowComponent
+      */
+    public entryClicked(acc: any): void {
+        if (!acc?.uniqueName) return;
+
+        // Base return URL
+        const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
+
+        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
-            ipcRenderer.send('open-url', url);
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+            ipcRenderer.send('open-url', electronUrl);
         } else {
-            (window as any).open(url);
+            (window as any).open(url, '_blank');
         }
     }
 
@@ -125,5 +151,26 @@ export class GridRowComponent implements OnChanges, OnDestroy {
          modal within a popover which can't display the modal within it */
         this.renderer.addClass(modalInstance._element.nativeElement, 'm-0')
         this.renderer.removeChild(parentNode, modalInstance._element.nativeElement);
+    }
+
+    /**
+     * Call tailed report api with given account/group unique name
+     * 
+     * @param event MatCheckboxChange event
+     * @param accountGroupUniqueName Unique name of account/group
+     * @param entityType Type of the entity, either 'account' or 'group'
+     * @memberof GridRowComponent
+     */
+     public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
+        const model = {
+            request: {
+                reportType: ReportType.TrialBalance,
+                from: this.from,
+                to: this.to
+            },
+            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
+        };
+        this.financialReportsComponentStore.tailedReportAccountGroup(model);
+        this.tlPlService.isReportTailed$.next(true);
     }
 }

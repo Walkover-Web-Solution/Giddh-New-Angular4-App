@@ -11,41 +11,41 @@
                 </div>
                 <div class="col-sm-6 col-xs-12">
                     <div class="select-tax-dropdown d-flex flex-column">
-                        <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
-                        <div class="mr-b2">
-                            <sh-select
-                                name="selectTax"
-                                [placeholder]="commonLocaleData?.app_select_tax"
-                                [options]="taxesOptions"
-                                [(ngModel)]="selectedTaxUniqueName"
-                                (selected)="applyTax($event)"
-                                (onClear)="onClear()"
-                                [showClear]="true"
-                            ></sh-select>
+                        <reactive-dropdown-field
+                            class="w-100"
+                            [name]="'selectTax'"
+                            [placeholder]="commonLocaleData?.app_select_tax"
+                            [(ngModel)]="selectedTaxUniqueName"
+                            [options]="taxesOptions"
+                            [required]="true"
+                            [labelValue]="defaultOtherTaxesModal?.appliedOtherTax?.name"
+                            [showClearIcon]="true"
+                            (onClear)="selectedTaxUniqueName = null; defaultOtherTaxesModal.appliedOtherTax = null"
+                            (selectedOption)="applyTax($event)">
+                        </reactive-dropdown-field>
 
-                            <label class="label-select-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
-                                {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
-                            </label>
-                        </div>
+                        <label class="label-select-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
+                            {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
+                        </label>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xs-12">
-                    <div>
-                        <label>{{commonLocaleData?.app_calculation_method}}<span class="text-danger">*</span></label>
-                    </div>
-                    <div class="mr-b2">
-                        <sh-select
-                            [options]="calculationMethodOptions"
-                            name="tcsCalculationMethod"
-                            [placeholder]="commonLocaleData?.app_select_method"
-                            [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
-                        ></sh-select>
-                    </div>
+                    <reactive-dropdown-field
+                        class="w-100"
+                        [name]="'tcsCalculationMethod'"
+                        [label]="commonLocaleData?.app_calculation_method"
+                        [placeholder]="commonLocaleData?.app_select_method"
+                        [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
+                        [options]="calculationMethodOptions"
+                        [labelValue]="calculationMethodLabel"
+                        [required]="true">
+                    </reactive-dropdown-field>
                 </div>
             </div>
-            <div>
+            <div class="mr-t1">
                 <button
-                    class="btn btn-success"
+                    mat-stroked-button
+                    color="primary"
                     type="button"
                     [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
                     (click)="saveTaxes()"

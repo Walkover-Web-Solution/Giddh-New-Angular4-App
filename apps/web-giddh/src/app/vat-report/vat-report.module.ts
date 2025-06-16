@@ -15,7 +15,6 @@ import { VatReportComponent } from './vat-report.component';
 import { VatReportTransactionsComponent } from './transactions/vat-report-transactions.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { InvoiceModule } from '../invoice/invoice.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -36,6 +35,8 @@ import { LiabilityReportComponent } from './liability-report/liability-report.co
 import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
 import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
 import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -65,7 +66,6 @@ import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabiliti
         ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,
-        ShSelectModule,
         SharedModule,
         TaxSidebarModule,
         FormFieldsModule,
@@ -77,7 +77,9 @@ import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabiliti
         GiddhDateRangepickerModule,
         DatepickerWrapperModule,
         GiddhPageLoaderModule,
-        NewConfirmationModalModule
+        NewConfirmationModalModule,
+        MatInputModule,
+        MatPaginatorModule
     ],
     exports: [
         VatReportRoutingModule,

@@ -1,3 +1,4 @@
+import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
@@ -20,7 +21,7 @@ import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
+import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
 import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
 import { CommonActions } from "../actions/common.actions";
@@ -49,14 +50,16 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { ContactsTab, CONTACTS_COMMON_COLUMNS } from "./contacts.enum";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { ContactComponentStore } from "./utility/contact.store";
+import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
+import { ContactsTab, ContactsColumn } from './contacts.enum';
 
 @Component({
     selector: "contact-detail",
@@ -74,6 +77,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
             transition("out => in", animate("400ms ease-in-out")),
         ]),
     ],
+    providers: [ContactComponentStore]
 })
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
@@ -206,7 +210,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** This will store screen size */
     public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** True if today selected */
@@ -231,19 +235,35 @@ export class ContactComponent implements OnInit, OnDestroy {
     public defaultLoad: boolean = true;
     /** This will use for displayed table columns */
     public displayedColumns: any[] = [];
-    /** This will use for customise column check values */
-    public customiseColumns = [];
+    /** This will use for dynamic customise column check values */
+    public dynamicCustomColumns = [];
     /** Holds inventory type module  */
     public moduleType: string = '';
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Stores the send email bulk request  */
+    public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
+    /** Observable for bulk email success response */
+    public bulkEmailSuccess$: Observable<boolean> = this.componentStore.select(state => state.sendBulkEmailIsSuccess);
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** True for only once when get route response */
+    public hasNavigated: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Returns only the columns marked as checked */
+    public ContactsColumn = ContactsColumn;
+    /** Observable for custom header columns */
+    private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+    /** Observable for custom header columns */
+    public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -269,6 +289,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.currentUrl = this.router.url;
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -284,118 +310,94 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.isMobileView = result?.breakpoints["(max-width: 767px)"];
         });
 
-        combineLatest([this.route.params, this.route.queryParams]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            let params = result[0];
-            let queryParams = result[1];
-            let lastTabType = this.moduleType;
-            this.moduleType = (params.type)?.toUpperCase();
+        this.bulkEmailSuccess$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe(success => {
+            if (success) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
 
-            if (params) {
-                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
-                    const activeTab = this.activeTab;
-                    if (activeTab !== "customer") {
-                        this.setActiveTab("customer");
-                    }
-                    if (activeTab === "vendor" && this.localeData?.page_heading) {
-                        this.showNameSearch = false;
-                        this.searchedName?.reset();
-                        this.translationComplete(true);
-                    }
-                } else if ((params["type"] && params["type"].indexOf("vendor") > -1) || (queryParams && queryParams.tab && queryParams.tab === "vendor")) {
-                    const activeTab = this.activeTab;
-                    if (activeTab !== "vendor") {
-                        this.setActiveTab("vendor");
-                    }
-                    if (activeTab === "customer" && this.localeData?.page_heading) {
-                        this.showNameSearch = false;
-                        this.searchedName?.reset();
-                        this.translationComplete(true);
-                    }
-                } else {
-                    this.setActiveTab("aging-report");
-                }
-                this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+        combineLatest([this.route.params, this.route.queryParams])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(([params, queryParams]) => {
+                const lastTabType = this.moduleType;
+                const typeParam = params?.type?.toLowerCase();
+                const tabQueryParam = queryParams?.tab?.toLowerCase();
+                this.moduleType = params.type?.toUpperCase();
 
-                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                    if (res) {
-                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                    }
-                });
+                const isCustomer = typeParam?.includes('customer') || tabQueryParam === 'customer';
+                const isVendor = typeParam?.includes('vendor') || tabQueryParam === 'vendor';
 
+                const newTab = isCustomer ? 'customer'
+                    : isVendor ? 'vendor'
+                        : 'aging-report';
 
-                if (this.activeTab === ContactsTab.customer.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "customer_name",
-                            "label": "Customer Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "sales",
-                            "label": "Sales",
-                            "checked": true
-                        },
-                        {
-                            "value": "receipt",
-                            "label": "Receipt",
-                            "checked": true
-                        }
-                    );
-                    this.moduleType = ContactsTab.customer;
+                const previousTab = this.activeTab;
+
+                if (newTab !== previousTab) {
                     this.displayedColumns = [];
+                    this.dynamicCustomColumns = [];
+                    this.setActiveTab(newTab);
+                    this.resetSearchIfSwitched(previousTab);
                 }
-                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "vendor_name",
-                            "label": "Vendor Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "parent_group",
-                            "label": "Parent Group",
-                            "checked": true
-                        },
-                        {
-                            "value": "opening",
-                            "label": "Opening",
-                            "checked": true
-                        },
-                        {
-                            "value": "purchase",
-                            "label": "Purchase",
-                            "checked": true
-                        },
-                        {
-                            "value": "payment",
-                            "label": "Payment",
-                            "checked": true
-                        }
-                    );
-                    this.customiseColumns.push(
-                        {
-                            value: "action",
-                            label: "Action",
-                            checked: true
-                        })
-                    this.moduleType = ContactsTab.vendor;
-                    this.displayedColumns = [];
-                }
+
                 if (lastTabType) {
                     this.translationComplete(true);
                 }
+            });
+
+
+
+        this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isIciciAccountPendingForApproval = false;
+            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
+            if (response?.integratedBankList?.length > 0) {
+                const approvalPendingAccounts = response?.integratedBankList.filter(account => !account.errorMessage);
+                if (!approvalPendingAccounts?.length) {
+                    this.isIciciAccountPendingForApproval = true;
+                }
+                this.isICICIIntegrated = true;
+            } else {
+                this.isICICIIntegrated = false;
             }
 
+            setTimeout(() => {
+                if (this.activeTab === ContactsTab.vendor.toLowerCase()) {
+                    let dynamicCustomColumns = this.dynamicCustomColumns.filter(col => col.value !== 'action');
+                    let displayedColumns = this.displayedColumns.filter(col => col !== 'action');
+
+                    const shouldAddAction = !this.isGetAllIntegratedBankInProgress && (this.isICICIIntegrated || this.isPlaidSupportedCountry);
+
+                    if (shouldAddAction) {
+                        const actionColumn = {
+                            checked: true,
+                            dataType: "STRING",
+                            label: "Action",
+                            value: "action"
+                        };
+
+                        dynamicCustomColumns.push(actionColumn);
+                        displayedColumns.push("action");
+                    }
+
+                    this.dynamicCustomColumns = dynamicCustomColumns;
+                    this.displayedColumns = displayedColumns;
+                }
+            }, 3000);
+
+            this.cdRef.detectChanges();
         });
 
 
@@ -421,7 +423,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
@@ -477,7 +478,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                     label: branch?.name,
                     value: branch?.uniqueName,
                     name: branch?.name,
-                    parentBranch: branch?.parentBranch
+                    parentBranch: branch?.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -525,22 +527,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
-        });
-
-        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isIciciAccountPendingForApproval = false;
-            this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
-            if (response?.integratedBankList?.length > 0) {
-                let approvalPendingAccounts = response?.integratedBankList?.filter(account => !account.errorMessage);
-                if (!approvalPendingAccounts?.length) {
-                    this.isIciciAccountPendingForApproval = true;
-                }
-
-                this.isICICIIntegrated = true;
-            } else {
-                this.isICICIIntegrated = false;
-            }
-            this.cdRef.detectChanges();
         });
     }
 
@@ -599,8 +585,13 @@ export class ContactComponent implements OnInit, OnDestroy {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) {
-            this.router.navigate([`/pages/${part}/${accUniqueName}`]);
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            url = `${location.origin}${location.pathname}#./pages/${part}`;
+            ipcRenderer.send('open-url', url);
         } else {
+            if (part === 'ledger') {
+                url = url + `?redirectUrl=${this.currentUrl}`;
+            }
             (window as any).open(url);
         }
     }
@@ -627,7 +618,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : '';
             }
         }
-
+        if (tabName === this.activeTab) {
+            this.activeTab = '';
+        }
         if (tabName !== this.activeTab) {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
@@ -653,8 +646,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
-            this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-            this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+            if (!this.hasNavigated) {
+                this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
+                this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
+                this.hasNavigated = true;
+            }
         }
     }
 
@@ -1213,7 +1209,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        const contacts$ = this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$));
+        combineLatest([contacts$, this.customHeaderColumns$]).pipe(takeUntil(this.destroyed$)).subscribe(([res, headerColumns]) => {
             if (res && res.body && res.status === "success") {
                 this.openingBalance = res.body.openingBalance;
 
@@ -1254,14 +1251,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
-                        // let customFields = [];
-                        // element.customFields?.forEach(field => {
-                        //     customFields[field?.uniqueName] = [];
-                        //     customFields[field?.uniqueName] = field;
-                        // });
-
-                        // element.customFields = customFields;
-
                         let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1282,14 +1271,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
-                        // let customFields = [];
-                        // element.customFields?.forEach(field => {
-                        //     customFields[field?.uniqueName] = [];
-                        //     customFields[field?.uniqueName] = field;
-                        // });
-
-                        // element.customFields = customFields;
-
                         let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1309,9 +1290,11 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
+            }
+            if (headerColumns && res) {
+                this.isGetAccountsInProcess = false;
                 this.detectChanges();
             }
-            this.isGetAccountsInProcess = false;
         });
     }
 
@@ -1461,18 +1444,23 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for show hide main table headers from customise columns
-     *
-     * @param {*} event
-     * @memberof PurchaseRegisterExpandComponent
-     */
-    public showSelectedHeaderColumns(columns: string[]): void {
-        if (columns) {
-            this.displayedColumns = columns;
+    * This will use for show hide main table headers from dynamic columns with new columns
+    *
+    * @param {*} event
+    * @memberof ContactComponent
+    */
+    public getCustomiseDynamicHeaderColumns(event: any): void {
+        this.dynamicCustomColumns = [];
+        this.displayedColumns = [];
+        if (event) {
+            this.customHeaderColumnsSubject.next(event);
+            this.dynamicCustomColumns = event;
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item.value);
+            this.cdRef.detectChanges();
         }
-        this.cdRef.detectChanges();
     }
-
 
     /**
      * Branch change handler
@@ -1547,10 +1535,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-            this.customiseColumns = this.customiseColumns?.map(column => {
-                column.label = this.localeData[column.value];
-                return column;
-            });
         }
     }
 
@@ -1700,5 +1684,65 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     private resetColumns(): void {
         this.translationComplete(true);
+    }
+
+    /**
+    * This function will use for send email for template
+    *
+    * @memberof ContactComponent
+    */
+    public sendBulkEmail(type: string): void {
+        const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
+        this.sendBulkEmailRequest = {
+            customerVendorUniqueNames: accountUniqueNames,
+            templateOf: type
+        };
+        this.componentStore.sendBulkEmailTemplate(this.sendBulkEmailRequest);
+    }
+
+    /**
+   * Open custom email dialog
+   *
+   * @param {any} account
+   * @memberof ContactComponent
+   */
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.selectedCheckedContacts = [];
+                this.selectedAccountsList = [];
+                this.allSelectionModel = false;
+                this.checkboxInfo = {
+                    selectedPage: 1
+                };
+            }
+        });
+    }
+
+    /**
+     * Helper to reset name search if tab switched
+     *
+     * @private
+     * @param {string} previousTab
+     * @memberof ContactComponent
+     */
+    private resetSearchIfSwitched(previousTab: string): void {
+        if (this.activeTab === previousTab && this.localeData?.page_heading) {
+            this.showNameSearch = false;
+            this.searchedName?.reset();
+            this.translationComplete(true);
+        }
     }
 }

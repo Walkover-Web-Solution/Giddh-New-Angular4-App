@@ -7,11 +7,14 @@ export const COMMON_API = {
     PARTY_TYPE: 'ui/party-types',
     COMMAND_K: 'company/:companyUniqueName/cmdk?page=:page&q=:q&group=:group&refresh=false&isMobile=:isMobile',
     DOWNLOAD_FILE: 'company/:companyUniqueName/download-file?voucherVersion=2&fileType=:fileType&downloadOption=:downloadOption',
+    DOWNLOAD_FILE_V1: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=:fileType',
     STOCK_UNITS: 'stock-units',
     GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping',
-    MODULE_WISE_COLUMNS: 'report-filters?module=:module&companyUniqueName=:companyUniqueName',
+    MODULE_WISE_COLUMNS: 'report-filters?module=:module&companyUniqueName=:companyUniqueName&customColumns=:customColumns',
+    SAVE_MODULE_WISE_COLUMNS: 'report-filters?module=:module&companyUniqueName=:companyUniqueName&',
     UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
     UPLOAD_IMAGE: 'company/:companyUniqueName/images',
     BARCODE_SCAN: 'v4/company/:companyUniqueName/particular?customerUniqueName=:customerUniqueName&invoiceType=:invoiceType&barcode=:barcode',
-    GST_INFORMATION: 'gst-info?gstin=:gstin'
+    GST_INFORMATION: 'gst-info?gstin=:gstin',
+    SUBSCRIPTION_PAYPAL_CALL_BACK: 'v2/subscription/paypal-subscription-callback'
 };

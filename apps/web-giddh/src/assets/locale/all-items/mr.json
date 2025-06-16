@@ -234,6 +234,28 @@
                     }
                 },
                 {
+                    "label": "पावती सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/receipt/setting",
+                    "icon": "icon-reciept-new",
+                    "description": "पावती सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन पावती",
+                    "link": "/pages/vouchers/receipt/create",
+                    "icon": "icon-reciept-new",
+                    "description": "पावती तयार करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "विक्री नोंदणी",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -455,6 +477,28 @@
                     "link": "/pages/vouchers/preview/payment/list",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "पेमेंट सेटिंग्ज",
+                    "link": "/pages/vouchers/preview/payment/settings",
+                    "icon": "icon-reciept-new",
+                    "description": "पेमेंट सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन पेमेंट",
+                    "link": "/pages/vouchers/payment/create",
+                    "icon": "icon-reciept-new",
+                    "description": "पेमेंट व्युत्पन्न करा",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -894,6 +938,12 @@
                     "label": "गटाचे नाव",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "प्रकल्पनिहाय लेखांकन",
+                    "link": "/pages/project-wise-accounting/list",
+                    "icon": "icon-balance-sheet-new",
+                    "description": "प्रत्येक प्रकल्पासाठी कार्यक्षमतेने मागोवा घ्या, व्यवस्थापित करा आणि आर्थिक विश्लेषण करा."
                 }
             ]
         },

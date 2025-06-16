@@ -15,7 +15,7 @@ import { Dayjs } from 'dayjs';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { takeUntil, debounceTime, take } from 'rxjs/operators';
 import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
@@ -25,6 +25,9 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { MatDialog } from '@angular/material/dialog';
+import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
+import { GeneralService } from '../../services/general.service';
 
 export enum DateType {
     start = 'start',
@@ -186,6 +189,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @Input()
     showRangeLabelOnInput = false;
     @Input() public selectedRangeLabel: any;
+    /** True, when show confirmation on change is enabled */
+    @Input() public showConfirmationOnChange: boolean = false;
+    /** Confirmation message to be shown when show confirmation on change is enabled */
+    @Input() public confirmationMessage: string = '';
     chosenRange: string;
     // some state information
     isShown: boolean = false;
@@ -256,7 +263,17 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
+    constructor(
+        private _ref: ChangeDetectorRef, 
+        private modalService: BsModalService, 
+        private _localeService: NgxDaterangepickerLocaleService, 
+        private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, 
+        private router: Router, 
+        private store: Store<AppState>, 
+        private settingsFinancialYearActions: SettingsFinancialYearActions, 
+        private dialog: MatDialog, 
+        private generalService: GeneralService 
+    ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
@@ -946,8 +963,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (this.chosenLabel) {
             this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
-
-        this.emitSelectedDates(false);
+        
+        this.emitSelectedDates(false, true);
         this.hide();
     }
 
@@ -1316,7 +1333,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
             if (this.autoApply) {
                 this.calculateChosenLabel();
-                this.clickApply();
+                this.handleDateChange('range', date);
             }
         }
 
@@ -1368,7 +1385,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         this.rangeClicked.emit({ name: range.name, startDate: dates?.value[0], endDate: dates?.value[1], event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
-            this.clickApply();
+            this.handleDateChange('apply');
         } else {
             this.initCalendar();
         }
@@ -1839,7 +1856,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         this.rangeClicked.emit({ name: financialYear.label, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
-            this.clickApply();
+            this.handleDateChange('apply');
         } else {
             this.initCalendar();
         }
@@ -1987,7 +2004,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.startDate = this.inlineStartDate;
                 this.endDate = this.inlineEndDate;
                 this.modalRef.hide();
-                this.clickApply();
+                this.handleDateChange('apply');
             }
         } else {
             this.invalidInlineDate = this.commonLocaleData?.app_datepicker?.date_error;
@@ -2009,13 +2026,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * This is used to emit the selected dates
      *
      * @param {boolean} sendBlankDates
+     * @param {boolean} [resetRangeLabel=false]
      * @memberof NgxDaterangepickerComponent
      */
-    public emitSelectedDates(sendBlankDates: boolean): void {
+    public emitSelectedDates(sendBlankDates: boolean, resetRangeLabel: boolean = false): void {
         if (sendBlankDates === true) {
             this.datesUpdated.emit({ name: '', startDate: null, endDate: null, event: 'save' });
         } else {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
+            this.datesUpdated.emit({ name: resetRangeLabel ? '' : this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
     }
 
@@ -2354,6 +2372,69 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     iterator--;
                 }
             }
+        }
+    }
+
+    /**
+     * This will handle the date change
+     *
+     * @param {string} type
+     * @param {any} event
+     * @param {any} range
+     * @memberof NgxDaterangepickerComponent
+     */
+    public handleDateChange(type: string, event?: any, range?: any): void {
+        if (this.showConfirmationOnChange) {
+            this.showConfirmDialog(type, event, range);
+        } else {
+            this.switch(type, event, range);
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {string} type
+     * @param {any} event
+     * @param {any} range
+     * @returns {void}
+     * @memberof NgxDaterangepickerComponent
+     */
+    private showConfirmDialog(type: string, event?: any, range?: any): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.confirmationMessage, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.switch(type, event, range);
+            } else {
+                this.clickCancel();
+            }
+        });
+    }
+
+    /**
+     * This will handle the date change
+     *
+     * @param {string} type
+     * @param {any} event
+     * @param {any} range
+     * @memberof NgxDaterangepickerComponent
+     */
+    private switch(type: string, event?: any, range?: any) {
+        switch(type) {
+            case 'range':
+                this.clickRange(event, range);
+                break;
+            case 'financialYear':
+                this.clickFinancialYear(event);
+            break;
+        default:
+            this.clickApply(event);
+            break;
         }
     }
 }

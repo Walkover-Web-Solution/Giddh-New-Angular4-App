@@ -1,4 +1,3 @@
-
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
@@ -112,11 +111,11 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
      *
      * @memberof CustomEmailComponentStore
      */
-    readonly getEmailContentSuggestions = this.effect((data: Observable<any>) => {
+    readonly getEmailContentSuggestions = this.effect((data: Observable<string>) => {
         return data.pipe(
-            mergeMap(() => {
+            mergeMap((searchTerm) => {
                 this.patchState({ emailContentSuggestions: null });
-                return this.invoiceService.getEmailContent().pipe(
+                return this.invoiceService.getEmailContentSuggestions(searchTerm).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

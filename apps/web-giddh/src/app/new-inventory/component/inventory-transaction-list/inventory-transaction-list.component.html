@@ -331,7 +331,10 @@
                 "
             >
                 <div class="col-12 horizontal-padding">
-                    <div class="table-responsive inventory-report-table table-header-sticky overflow-visible" *ngIf="displayedColumns?.length">
+                    <div
+                        class="table-responsive inventory-report-table table-header-sticky overflow-visible"
+                        *ngIf="displayedColumns?.length"
+                    >
                         <table
                             mat-table
                             [dataSource]="dataSource"
@@ -608,20 +611,22 @@
             let-fieldName="fieldName"
             let-formControl="formControl"
         >
-            <div class="align-items-center d-flex" [hidden]="show">
-                <span>{{ title }}</span>
-                <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="icon button">
-                    <span class="icon-search"></span>
-                </button>
-            </div>
-            <div [hidden]="!show">
-                <text-field
-                    [type]="'text'"
-                    [placeholder]="getSearchFieldText(fieldName)"
-                    [cssClass]="'form-control search-table mat-field-border'"
-                    [formControl]="formControl"
-                    [autoFocus]="show"
-                ></text-field>
+            <div class="search-table">
+                <div class="align-items-center d-flex" [hidden]="show">
+                    <span>{{ title }}</span>
+                    <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="icon button">
+                        <span class="icon-search"></span>
+                    </button>
+                </div>
+                <div [hidden]="!show">
+                    <text-field
+                        [type]="'text'"
+                        [placeholder]="getSearchFieldText(fieldName)"
+                        [cssClass]="'form-control mat-field-border'"
+                        [formControl]="formControl"
+                        [autoFocus]="show"
+                    ></text-field>
+                </div>
             </div>
         </ng-template>
     </div>

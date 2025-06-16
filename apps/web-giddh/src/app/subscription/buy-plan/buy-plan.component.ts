@@ -24,7 +24,6 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -197,16 +196,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isUserManualChangePlan: boolean = false;
     /** True if user renew  plan */
     public isRenewPlan: boolean = false;
-    /** True if user trial  plan */
-    public isTrialPlan: boolean = false;
     /** Razorpay API success state as observable  */
     public razorpaySuccess$ = this.componentStore.select((state) => state.razorpaySuccess);
+    /** True if user trial  plan */
+    public isTrialPlan: boolean = false;
     /** Hold calculation amount response*/
     public calculationResponse: any;
     /** Hold new user selected country value */
     public newUserSelectedCountryValue: string = '';
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold paypal capture order id */
+    public paypalCaptureOrderId: any = '';
+    /** Holds Store Paypal Order Id Success observable*/
+    public paypalCaptureOrderIdSuccess$: Observable<boolean> = this.componentStore.select(state => state.paypalCaptureOrderIdSuccess);
+    /** Hold filtered payment providers */
+    public filteredPaymentProviders: any[] = [];
+    /** Hold all payment providers */
+    public allPaymentProviders: any[] = [];
+    /** Hold callback broadcast event */
+    public callBackBroadcast: any;
+    /** Hold callback event */
+    public callBackEvent: boolean = false;
+    /** Hold create subscription success event */
+    public createSubscriptionSuccess: any;
 
     constructor(
         public dialog: MatDialog,
@@ -264,67 +277,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.redirectLink) {
-                this.openWindow(response.redirectLink);
-            } else if (response?.subscriptionId) {
-                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
-            }
-        });
-
         this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-            }
-        });
-
-        this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.setBroadcastEvent();
-                this.responseSubscriptionId = response.subscriptionId;
-                // if (response.duration === "YEARLY") {
-                //     this.isLoading = true;
-                //     this.subscriptionResponse = response;
-                //     this.initializePayment(response);
-                // } else {
-                //     this.openCashfreeDialog(response?.redirectLink);
-                // }
-                this.subscriptionId = response.subscriptionId;
-                if (response?.duration === 'MONTHLY' && response?.region?.code !== 'GBR') {
-                    if (response.razorpayCustomerId && this.payType === 'buy') {
-                        this.initializePayment(response);
-                    } else {
-                        this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
-                    }
-                    return;
-                }
                 if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
-                    if (this.payType === 'trial') {
-                        this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
-                    } else {
-                        if (response?.region?.code === 'GBR') {
-                            let model = {
-                                planUniqueName: response?.planDetails?.uniqueName,
-                                paymentProvider: "GOCARDLESS",
-                                subscriptionId: response.subscriptionId,
-                                duration: response?.duration,
-                                promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
-                            };
-                            if (response?.status?.toLowerCase() === 'active') {
-                                this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
-                            } else {
-                                this.subscriptionComponentStore.buyPlanByGoCardless(model);
-                            }
-                        } else {
-                            const reqObj = {
-                                subscriptionId: response?.subscriptionId,
-                                promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
-                            }
-                            this.componentStore.generateOrderBySubscriptionId(reqObj);
-                        }
-                    }
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
             }
         });
@@ -344,35 +302,32 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.setBroadcastEvent();
-                this.responseSubscriptionId = response.subscriptionId;
-                // if (response.duration === "YEARLY") {
-                //     this.isLoading = true;
-                //     this.subscriptionResponse = response;
-                //     this.initializePayment(response);
-                // } else {
-                //     this.openCashfreeDialog(response?.redirectLink);
-                // }
-                if (this.subscriptionId && this.isChangePlan) {
-                    this.router.navigate(['/pages/user-details/subscription']);
-                } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
-                };
-            }
-        });
-
-
-        this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.setBroadcastEvent();
-                this.isLoading = false;
-                if (this.subscriptionId && this.isChangePlan) {
-                    this.router.navigate(['/pages/user-details/subscription']);
-                } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                };
+        this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && Object.keys(response)?.length) {
+                this.calculationResponse = response;
+                if (response?.promoCode) {
+                    this.toasterService.showSnackBar('success', this.localeData?.promocode_message);
+                    this.promoCodeResponse[0] = response;
+                    this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
+                } else if (this.firstStepForm?.get('promoCode')?.value) {
+                    this.toasterService.showSnackBar('success', this.localeData?.promocode_discount_message);
+                    this.promoCodeResponse[0] = [];
+                    this.firstStepForm?.get('promoCode')?.patchValue(null);
+                }
+                this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...response };
+                    }
+                });
+            } else {
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
+                    }
+                });
             }
         });
 
@@ -416,7 +371,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (!this.isNewUserLoggedIn) {
@@ -431,9 +385,138 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
+        this.callBackBroadcast.onmessage = (event) => {
+            if (event?.data?.success) {
+                const model = {
+                    orderId: this.paypalCaptureOrderId,
+                    subscriptionId: this.subscriptionId
+                }
+                this.componentStore.paypalCaptureOrderId(model);
+            }
+        };
+
+        this.paypalCaptureOrderIdSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.callBackEvent = true;
+                this.paypalCallBackEvent(this.createSubscriptionSuccess);
+            }
+        });
+
+        this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.setBroadcastEvent();
+                this.responseSubscriptionId = response.subscriptionId;
+                this.paypalCaptureOrderId = response.paypalOrderId;
+                this.createSubscriptionSuccess = response;
+                // if (response.duration === "YEARLY") {
+                //     this.isLoading = true;
+                //     this.subscriptionResponse = response;
+                //     this.initializePayment(response);
+                // } else {
+                //     this.openCashfreeDialog(response?.redirectLink);
+                // }
+                this.subscriptionId = response.subscriptionId;
+                if (response?.paypalOrderId) {
+                    if ((response?.duration === 'MONTHLY')) {
+                        if (response?.paypalOrderId && this.payType === 'buy') {
+                            this.openWindow(response.paypalApprovalLink);
+                        } else {
+                            this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                        }
+                        return;
+                    }
+                } else {
+                    if (response?.paypalOrderId && this.payType === 'buy') {
+                        this.openWindow(response.paypalApprovalLink);
+                    } else {
+                        if ((response?.duration === 'MONTHLY') && response?.region?.code !== 'GBR') {
+                            if (response.razorpayCustomerId && this.payType === 'buy') {
+                                this.initializePayment(response);
+                            } else {
+                                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                            }
+                            return;
+                        }
+                        if (this.subscriptionId && this.isChangePlan) {
+                            this.router.navigate(['/pages/user-details/subscription']);
+                        } else {
+                            if (this.payType === 'trial') {
+                                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                            } else {
+                                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
+                                    const model = {
+                                        planUniqueName: response?.planDetails?.uniqueName,
+                                        paymentProvider: this.thirdStepForm.value.paymentProvider,
+                                        subscriptionId: response.subscriptionId,
+                                        duration: this.firstStepForm.get('duration')?.value,
+                                        promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
+                                    };
+                                    if (response?.status?.toLowerCase() === 'active') {
+                                        this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
+                                    } else {
+                                        this.subscriptionComponentStore.buyPlan(model);
+                                    }
+                                } else {
+                                    const reqObj = {
+                                        subscriptionId: response?.subscriptionId,
+                                        promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
+                                    }
+                                    this.componentStore.generateOrderBySubscriptionId(reqObj);
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+        });
+
+        this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.paypalApprovalLink) {
+                this.paypalCaptureOrderId = response.paypalOrderId;
+                this.openWindow(response.paypalApprovalLink);
+            } else if (response?.redirectLink) {
+                this.openWindow(response.redirectLink);
+            } else if (response?.subscriptionId) {
+                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+            }
+        });
+
+        this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.setBroadcastEvent();
+                this.responseSubscriptionId = response.subscriptionId;
+                // if (response.duration === "YEARLY") {
+                //     this.isLoading = true;
+                //     this.subscriptionResponse = response;
+                //     this.initializePayment(response);
+                // } else {
+                //     this.openCashfreeDialog(response?.redirectLink);
+                // }
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                };
+            }
+        });
+
+        this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.setBroadcastEvent();
+                this.isLoading = false;
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                };
+            }
+        });
+
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
-                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+                if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -465,6 +548,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.promoCodeResponse = [];
                 this.firstStepForm?.get('promoCode').setValue("");
                 this.setFinalAmount();
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -475,27 +559,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
             }
             if (response && response.dueAmount > 0) {
-                if (response?.region?.code === 'GBR') {
+                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
-                        paymentProvider: "GOCARDLESS",
+                        paymentProvider: this.thirdStepForm.value.paymentProvider,
                         subscriptionId: response.subscriptionId,
-                        duration: response?.duration,
+                        duration: this.firstStepForm.get('duration')?.value,
                         promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                     };
-                    this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                    this.subscriptionComponentStore.buyPlan(model);
                 } else {
                     this.initializePayment(response);
                 }
             } else {
-                if (response?.region?.code === 'GBR') {
-                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                    this.router.navigate(['/pages/user-details/subscription']);
-                } else {
-                    this.updateSubscriptionPayment(response, true);
+                if (response) {
+                    if (response.region?.code !== 'IND') {
+                        this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                        this.router.navigate(['/pages/user-details/subscription']);
+                    } else {
+                        this.updateSubscriptionPayment(response, true);
+                    }
                 }
             }
         });
+
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
             if (this.subscriptionId && response?.region) {
@@ -569,6 +656,54 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.broadcast = new BroadcastChannel("subscription");
         this.broadcast.postMessage({ activeCompany: 'activeCompany' });
+    }
+    /**
+     * This will be use for paypal callback event
+     *
+     * @param {*} response
+     * @memberof BuyPlanComponent
+     */
+    public paypalCallBackEvent(response: any): void {
+        if (this.subscriptionId && this.isChangePlan) {
+            this.router.navigate(['/pages/user-details/subscription']);
+        } else {
+            if (this.payType === 'trial') {
+                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+            } else {
+                if (response?.region?.code === 'GBR') {
+                    let model = {
+                        planUniqueName: response?.planDetails?.uniqueName,
+                        paymentProvider: this.thirdStepForm.value.paymentProvider,
+                        subscriptionId: response.subscriptionId,
+                        duration: response?.duration,
+                        promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
+                    };
+                    if (this.callBackEvent) {
+                        this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
+                    } else {
+                        this.subscriptionComponentStore.buyPlan(model);
+                    }
+                }
+            }
+        }
+        if (this.upgradePlan && this.upgradeRegion === 'GBR') {
+            this.componentStore.activatePlan(this.upgradeSubscriptionId);
+            this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    if (this.subscriptionId && this.isChangePlan) {
+                        this.router.navigate(['/pages/user-details/subscription']);
+                    } else {
+                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                    };
+                }
+            });
+        } else {
+            if (this.subscriptionId && this.isChangePlan) {
+                this.router.navigate(['/pages/user-details/subscription']);
+            } else {
+                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+            }
+        }
     }
 
     /**
@@ -682,13 +817,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public toggleDuration(event: any): void {
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
-            if (!this.subscriptionId) {
-                this.setPlans();
-            } else {
-                this.inputData = [];
-                const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
-                this.inputData.push(...filteredPlans);
-            }
+            this.setPlans(true);
         }
     }
 
@@ -699,7 +828,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
    * @memberof BuyPlanComponent
    */
     public openWindow(url: string): void {
-        const width = 700;
+        const width = 800;
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
@@ -754,7 +883,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.thirdStepForm = this.formBuilder.group({
             userUniqueName: [''],
             paymentProvider: [''],
-            razorpayAuthType: ['CARD']
+            razorpayAuthType: ['']
         });
 
         this.subscriptionForm = this.formBuilder.group({
@@ -823,6 +952,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.firstStepForm.get('promoCode')?.setValue("");
             }
             this.setFinalAmount();
+            this.changeDetection.detectChanges();
         }
     }
 
@@ -933,13 +1063,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public validateMobileField(): void {
-        setTimeout(() => {
-            if (!this.intlClass?.isRequiredValidNumber) {
-                this.secondStepForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
-            } else {
-                this.secondStepForm.get("mobileNumber")?.setErrors(null);
-            }
-        }, 100);
+        if (!this.intlClass?.isRequiredValidNumber) {
+            this.secondStepForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
+        } else {
+            this.secondStepForm.get("mobileNumber")?.setErrors(null);
+        }
     }
 
     /**
@@ -1070,6 +1198,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                 this.isUserManualChangePlan = this.selectedPlan?.uniqueName !== this.viewSubscriptionData?.planUniqueName;
                 this.setFinalAmount();
+                this.changeDetection.detectChanges();
             }
         });
     }
@@ -1120,6 +1249,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (!this.intlClass) {
             this.initIntl();
         }
+        this.setFinalAmount();
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1142,12 +1273,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (!this.subscriptionId) {
                     if (this.yearlyPlans?.length) {
-                        this.firstStepForm.get('duration').setValue('YEARLY');
+                        this.firstStepForm.get('duration').patchValue('YEARLY');
                     } else {
-                        this.firstStepForm.get('duration').setValue('MONTHLY');
+                        this.firstStepForm.get('duration').patchValue('MONTHLY');
                     }
+                } else if (this.viewSubscriptionData?.period) {
+                    this.firstStepForm.get('duration').patchValue(this.viewSubscriptionData?.period);
                 } else {
-                    this.firstStepForm.get('duration').setValue(this.viewSubscriptionData?.period);
+                    if (this.yearlyPlans?.length) {
+                        this.firstStepForm.get('duration').patchValue('YEARLY');
+                    } else {
+                        this.firstStepForm.get('duration').patchValue('MONTHLY');
+                    }
                 }
                 this.setPlans();
             } else {
@@ -1165,7 +1302,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @private
      * @memberof BuyPlanComponent
      */
-    private setPlans(): void {
+    private setPlans(isToggle: boolean = false): void {
         this.inputData = [];
         if (!this.subscriptionId) {
             const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
@@ -1173,6 +1310,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             filteredPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
+        } else if (isToggle) {
+            const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            this.inputData.push(...filteredPlans);
         } else {
             let subscriptionPlan = this.allPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
             this.selectedPlan = subscriptionPlan[0];
@@ -1183,6 +1324,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
         this.setFinalAmount();
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1200,34 +1342,44 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
-        this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && Object.keys(response)?.length) {
-                this.calculationResponse = response;
-                if (response?.promoCode) {
-                    this.toasterService.showSnackBar('success', this.localeData?.promocode_message);
-                    this.promoCodeResponse[0] = response;
-                    this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
-                } else if (this.firstStepForm?.get('promoCode')?.value) {
-                    this.toasterService.showSnackBar('success', this.localeData?.promocode_discount_message);
-                    this.promoCodeResponse[0] = [];
-                    this.firstStepForm?.get('promoCode')?.patchValue(null);
-                }
-                this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
-                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                    if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...response };
-                    }
-                });
-            } else {
-                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                    if (result) {
-                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
-                    }
-                });
+        // Clear the payment provider initially
+        this.thirdStepForm.get('paymentProvider')?.patchValue(null);
+
+        // Get the selected plan entity code and duration once
+        const entityCode = this.selectedPlan?.entityCode;
+        const duration = this.firstStepForm.get('duration')?.value;
+
+        const filterProviders = (provider: string) => {
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value === provider);
+            this.thirdStepForm.get('paymentProvider')?.patchValue(provider);
+        };
+
+        if (entityCode === 'GBR') {
+            if (duration === 'MONTHLY') {
+                // Exclude Razorpay for monthly GBR
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
+            } else if (duration === 'YEARLY') {
+                // Only Razorpay for yearly GBR
+                filterProviders('RAZORPAY');
             }
-        });
+        } else if (entityCode !== 'IND') {
+            if (duration === 'MONTHLY') {
+                // Only PayPal for non-IND countries with monthly duration
+                filterProviders('PAYPAL');
+            } else if (duration === 'YEARLY') {
+                // Only Razorpay for non-IND countries with yearly duration
+                filterProviders('RAZORPAY');
+            }
+        } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'YEARLY')) {
+            // Only Razorpay for IND with any duration
+            filterProviders('RAZORPAY');
+        }
+
+        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && duration === 'MONTHLY') {
+            this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
+        } else {
+            this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
+        }
         this.changeDetection.detectChanges();
     }
 
@@ -1242,7 +1394,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
             this.newUserSelectedCountryValue = event.value;
+
             setTimeout(() => {
+                this.getAllPlans();
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
                 }
@@ -1275,7 +1429,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             let statesRequest = new StatesRequest();
             statesRequest.country = event.value;
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
-            this.setFinalAmount();
             this.changeDetection.detectChanges();
         }
     }
@@ -1312,7 +1465,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 address: this.subscriptionForm.value.secondStepForm.address
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: this.selectedPlan?.entityCode === 'GBR' ? 'GOCARDLESS' : 'RAZORPAY',
+            paymentProvider: this.thirdStepForm.value.paymentProvider,
             subscriptionId: null
         }
 
@@ -1400,6 +1553,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         document.body?.classList?.remove("plan-page");
         this.broadcast?.close();
+        this.callBackBroadcast?.close();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1445,7 +1599,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         };
 
         try {
-            this.razorpay = new window['Razorpay']((request?.duration === 'MONTHLY' && request?.region?.code !== 'GBR') ? razorpayRecurringSubscriptionConfig : options);
+            const isChangePlan = this.isChangePlan ? this.firstStepForm.get('duration')?.value === 'MONTHLY' : request?.duration === 'MONTHLY';
+            this.razorpay = new window['Razorpay']((isChangePlan && request?.region?.code !== 'GBR') ? razorpayRecurringSubscriptionConfig : options);
             setTimeout(() => {
                 this.razorpay?.open();
             }, 100);
@@ -1475,7 +1630,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = request.subscriptionId;
             }
             let data = { ...request, ...this.subscriptionRequest };
-            if (subscription?.duration === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
+            if (request.paymentId && this.firstStepForm.get('duration')?.value === 'MONTHLY' && payResponse?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });
             } else {
                 this.componentStore.changePlan(data);
@@ -1525,5 +1680,31 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getFlagUrl(countryRegionCode: string): string {
         return this.generalService.getCountryFlagUrl(countryRegionCode);
+    }
+
+    /**
+   * Callback for translation response complete
+   *
+   * @param {*} event
+   * @memberof BuyPlanComponent
+   */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.allPaymentProviders = [
+                {
+                    label: this.localeData?.razorpay,
+                    value: "RAZORPAY",
+                },
+                {
+                    label: this.localeData?.gocardless,
+                    value: "GOCARDLESS"
+                },
+                {
+                    label: this.localeData?.paypal,
+                    value: "PAYPAL"
+                }
+            ];
+            this.changeDetection.detectChanges();
+        }
     }
 }

@@ -7,7 +7,7 @@
 >
     <div class="relative">
         <div class="clearfix">
-            <div class="col-sm-12 mt-2  text-right">
+            <div class="col-sm-12 mt-2 text-right">
                 <button mat-stroked-button color="primary" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
@@ -20,8 +20,8 @@
             >
                 <mat-tab [label]="localeData?.flat_view">
                     <ng-container *ngIf="selectedTabIndex === 0">
-                        <div class="clearfix">
-                            <div class="date-advance-search row mt-4">
+                        <div class="clearfix pt-4">
+                            <div class="date-advance-search row">
                                 <div class="col-sm-12 mr-b15 d-flex justify-content-between">
                                     <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
                                         <div class="mr-1 branch-header-content w-100">
@@ -78,7 +78,14 @@
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                         ></i>
                                                         <div>
-                                                            <h2>{{ branch.name }}</h2>
+                                                            <h2>
+                                                                {{ branch.name }}
+                                                                {{
+                                                                    branch.consolidatedBranch
+                                                                        ? "(" + localeData?.consolidated + ")"
+                                                                        : ""
+                                                                }}
+                                                            </h2>
                                                         </div>
                                                     </div>
                                                     <div class="pull-right right-card-section">
@@ -157,7 +164,7 @@
                                                                         class="cursor-pointer icon-favorite-selected mr-r05"
                                                                     ></i>
                                                                     <label
-                                                                        class="position-static cursor-pointer border-none"
+                                                                        class="position-static cursor-pointer border-none bg-transparent"
                                                                         [popover]="popTemplate"
                                                                         popoverTitle="{{ address?.name }}"
                                                                         placement="right"
@@ -226,12 +233,7 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <br />
-                            <br />
-                            <br />
-                            <br />
-                            <div class="branch-vector">
+                            <div class="text-right pb-2 pr-5">
                                 <img [src]="imgPath" [alt]="localeData?.branch_image" />
                             </div>
 
@@ -287,7 +289,7 @@
                     </ng-container>
                 </mat-tab>
                 <mat-tab [label]="localeData?.hierarchy_view">
-                    <div id="chartContainer">
+                    <div class="pd-t2 pd-b2 h-100">
                         <d3-tree-chart [data]="data" [localeData]="localeData"> </d3-tree-chart>
                     </div>
                 </mat-tab>

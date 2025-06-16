@@ -2022,7 +2022,6 @@
                                         [discountFixedValueModal]="entry.discountFixedValueModal"
                                         [discountSum]="entry.discountSum"
                                         [showHeaderText]="false"
-                                        (hideOtherPopups)="closeTaxControlPopup()"
                                         (discountTotalUpdated)="
                                             calculateWhenTrxAltered(entry, transaction, false, $event)
                                         "
@@ -3129,7 +3128,6 @@
                                                 [discountFixedValueModal]="entry.discountFixedValueModal"
                                                 [discountSum]="entry.discountSum"
                                                 [showHeaderText]="false"
-                                                (hideOtherPopups)="closeTaxControlPopup()"
                                                 (discountTotalUpdated)="
                                                     calculateWhenTrxAltered(entry, transaction, false, $event)
                                                 "

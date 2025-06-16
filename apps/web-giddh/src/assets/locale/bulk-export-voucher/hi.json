@@ -10,5 +10,26 @@
         "attachment": "संलग्नक"
     },
     "invalid_email": "अमान्य ईमेल आईडी [EMAIL]",
-    "email_required": "कृपया कम से कम 1 प्राप्तकर्ता ईमेल आईडी दर्ज करें"
+    "email_required": "कृपया कम से कम 1 प्राप्तकर्ता ईमेल आईडी दर्ज करें",
+    "single_pdf": "एकल पीडीएफ",
+    "multiple_pdf": "कई पीडीएफ",
+    "export_attachment": "संलग्नक निर्यात करें",
+    "export_voucher": "वाउचर निर्यात करें",
+    "export_type": "निर्यात प्रकार",
+    "excel_file_type": "एक्सेल फ़ाइल प्रकार",
+    "csv": "CSV",
+    "account_custom_fields": "खाता कस्टम फील्ड्स",
+    "voucher_custom_fields": "वाउचर कस्टम फील्ड्स",
+    "billing_address": "बिलिंग पता",
+    "shipping_address": "शिपिंग पता",
+    "shipping_details": "शिपिंग विवरण",
+    "taxable_value_before_discount": "छूट से पहले करयोग्य मूल्य",
+    "discount_value": "छूट का मूल्य",
+    "tax_value": "कर मूल्य",
+    "voucher_note": "वाउचर नोट",
+    "e_invoice_details": "ई-इनवॉइस विवरण",
+    "mobile_number": "मोबाइल नंबर",
+    "attention_to": "ध्यान दें",
+    "other_tax_value": "अन्य कर मूल्य",
+    "export_note": "डिफ़ॉल्ट कॉलम 'वाउचर तिथि, वाउचर नंबर, ग्राहक नाम, वाउचर राशि, देय राशि, देय तिथि, स्थिति' निर्यात किए जाएंगे, आपके पास वांछित कॉलम जोड़ने का विकल्प भी है।"
 }

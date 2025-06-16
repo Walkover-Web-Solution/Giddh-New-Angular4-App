@@ -65,7 +65,6 @@ table {
         th, td {
             max-width: 240px;
             word-break: break-all;
-            white-space: normal;
         }
     }
     .checkbox-show {
@@ -74,7 +73,7 @@ table {
         }
 
         .invoice-number {
-            width: 25px;
+            min-width: 25px;
         }
 
         &:hover {
@@ -156,5 +155,8 @@ table {
 @media screen and (max-width: 1024px) {
     .video-link {
         display: none;
+    }
+    .new-cr-width {
+        width: 190px !important;
     }
 }

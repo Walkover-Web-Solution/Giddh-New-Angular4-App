@@ -21,13 +21,15 @@
                     [matTooltipPosition]="'above'"
                     matTooltipClass="tooltip-black"
                 >
-                    <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
+                    <i class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
-                <span aria-hidden="true" class="close" (click)="onCancel()">×</span>
+                <span class="close" (click)="onCancel()">
+                    <i class="icon-cross font-15"></i>
+                </span>
             </div>
         </div>
         <mat-dialog-content>
-            <div class="modal-body clearfix ledger-advance-search-field" id="export-body">
+            <div class="modal-body clearfix ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
                 <form [formGroup]="advanceSearchForm">
                     <div class="clearfix">
                         <div class="row mb-2 ml-0 mr-0">
@@ -58,20 +60,21 @@
                             </div>
                             <div class="col-sm-7">
                                 <div class="form-group">
-                                    <sh-select
-                                        [options]="accounts$ | async"
-                                        name="particulars"
-                                        (onClear)="onDDClear('accountUniqueNames')"
-                                        formControlName="accountUniqueNames"
-                                        [isFilterEnabled]="true"
-                                        [multiple]="true"
+                                    <select-multiple-fields
+                                        [name]="'particulars'"
+                                        [appearance]="'outline'"
+                                        [formControl]="advanceSearchForm?.controls['accountUniqueNames']"
+                                        [selectedValues]="advanceSearchForm?.controls['accountUniqueNames']?.value"
+                                        [commonLocaleData]="commonLocaleData"
+                                        [showMatLabel]="true"
+                                        [label]="localeData?.merge_accounts"
                                         [placeholder]="commonLocaleData?.app_select_accounts"
-                                        [doNotResetSelectedValues]="true"
-                                        [enableDynamicSearch]="true"
-                                        [isPaginationEnabled]="true"
+                                        [options]="accounts$ | async"
                                         (scrollEnd)="handleScrollEnd()"
+                                        [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                    ></sh-select>
+                                        (onClear)="onDDClear('accountUniqueNames')"
+                                    ></select-multiple-fields>
                                 </div>
                             </div>
                         </div>
@@ -85,20 +88,21 @@
                             </div>
                             <div class="col-sm-7">
                                 <div class="form-group">
-                                    <sh-select
-                                        [options]="groups$ | async"
-                                        name="groups"
-                                        (onClear)="onDDClear('groupUniqueNames')"
-                                        formControlName="groupUniqueNames"
-                                        [isFilterEnabled]="true"
-                                        [multiple]="true"
+                                    <select-multiple-fields
+                                        [appearance]="'outline'"
+                                        [showMatLabel]="true"
+                                        [commonLocaleData]="commonLocaleData"
+                                        [formControl]="advanceSearchForm?.controls['groupUniqueNames']"
+                                        [selectedValues]="advanceSearchForm?.controls['groupUniqueNames']?.value"
+                                        [name]="'groups'"
+                                        [label]="localeData?.merge_group"
                                         [placeholder]="localeData?.select_groups"
-                                        [doNotResetSelectedValues]="true"
-                                        [enableDynamicSearch]="true"
-                                        [isPaginationEnabled]="true"
+                                        [options]="groups$ | async"
                                         (scrollEnd)="handleGroupScrollEnd()"
+                                        [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                                    ></sh-select>
+                                        (onClear)="onDDClear('groupUniqueNames')"
+                                    ></select-multiple-fields>
                                 </div>
                             </div>
                         </div>
@@ -114,12 +118,12 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="row">
-                                    <div class="pr-0 col-sm-3 col-12 switch-wrapper">
+                                    <div class="pr-0 col-sm-3 col-12 d-flex align-items-center">
                                         <div class="checkbox mat-switch">
                                             <mat-slide-toggle
                                                 color="primary"
                                                 id="includeParticulars"
-                                                formControlName="includeParticulars"
+                                                [formControl]="advanceSearchForm?.controls['includeParticulars']"
                                             >
                                                 <span
                                                     class="pull-left"
@@ -136,20 +140,21 @@
                                     </div>
                                     <div class="col-sm-9 col-8 col-12">
                                         <div class="form-group">
-                                            <sh-select
-                                                [options]="accounts$ | async"
-                                                name="particulars"
-                                                (onClear)="onDDClear('particulars')"
-                                                formControlName="particulars"
-                                                [isFilterEnabled]="true"
-                                                [multiple]="true"
+                                            <select-multiple-fields
+                                                [name]="'particulars'"
+                                                [appearance]="'outline'"
+                                                [formControl]="advanceSearchForm?.controls['particulars']"
+                                                [selectedValues]="advanceSearchForm?.controls['particulars']?.value"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [showMatLabel]="true"
+                                                [label]="commonLocaleData?.app_particulars"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
-                                                [doNotResetSelectedValues]="true"
-                                                [enableDynamicSearch]="true"
-                                                [isPaginationEnabled]="true"
+                                                [options]="accounts$ | async"
                                                 (scrollEnd)="handleScrollEnd()"
+                                                [enableDynamicSearch]="true"
                                                 (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            ></sh-select>
+                                                (onClear)="onDDClear('particulars')"
+                                            ></select-multiple-fields>
                                         </div>
                                     </div>
                                 </div>
@@ -166,12 +171,12 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="row">
-                                    <div class="pr-0 col-sm-3 col-12 switch-wrapper">
+                                    <div class="pr-0 col-sm-3 col-12 d-flex align-items-center">
                                         <div class="checkbox mat-switch">
                                             <mat-slide-toggle
                                                 color="primary"
                                                 id="includeVouchers"
-                                                formControlName="includeVouchers"
+                                                [formControl]="advanceSearchForm?.controls['includeVouchers']"
                                             >
                                                 <span
                                                     class="pull-left"
@@ -188,15 +193,18 @@
                                     </div>
                                     <div class="col-sm-9 col-8 col-12">
                                         <div class="form-group">
-                                            <sh-select
-                                                [options]="voucherTypeList | async"
-                                                name="particulars"
-                                                (onClear)="onDDClear('vouchers')"
-                                                formControlName="vouchers"
-                                                [isFilterEnabled]="true"
-                                                [multiple]="true"
+                                            <select-multiple-fields
+                                                [name]="'particulars'"
+                                                [appearance]="'outline'"
+                                                [formControl]="advanceSearchForm?.controls['vouchers']"
+                                                [selectedValues]="advanceSearchForm?.controls['vouchers']?.value"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [showMatLabel]="true"
+                                                [label]="commonLocaleData?.app_voucher_type"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
-                                            ></sh-select>
+                                                [options]="voucherTypeList | async"
+                                                (onClear)="onDDClear('vouchers')"
+                                            ></select-multiple-fields>
                                         </div>
                                     </div>
                                 </div>
@@ -212,29 +220,27 @@
                                 <div class="row">
                                     <div class="col-6 col-md-6">
                                         <div class="form-group custom-input-field">
-                                            <sh-select
-                                                [showClear]="false"
-                                                [width]="'100%'"
-                                                formControlName="amountOption"
-                                                (selected)="onRangeSelect('amount', $event)"
-                                                [options]="comparisonFilterDropDown$ | async"
-                                                name="particulars"
+                                            <reactive-dropdown-field
+                                                class="w-100"
+                                                [name]="'particulars'"
                                                 [placeholder]="commonLocaleData?.app_select_range"
-                                            ></sh-select>
+                                                [formControl]="advanceSearchForm?.controls['amountOption']"
+                                                [options]="comparisonFilterDropDown$ | async"
+                                                (selectedOption)="onRangeSelect('amount', $event)">
+                                            </reactive-dropdown-field>
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-6">
                                         <div class="form-group custom-input-field">
-                                            <mat-form-field appearance="fill" class="w-100">
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    decimalDigitsDirective
-                                                    [DecimalPlaces]="2"
-                                                    formControlName="amount"
-                                                    class="form-control mat-field-border"
-                                                />
-                                            </mat-form-field>
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'amount'"
+                                                [formControl]="advanceSearchForm?.controls['amount']"
+                                                [customDecimalPlaces]="2"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [label]="commonLocaleData?.app_amount"
+                                            >
+                                            </input-field>
                                         </div>
                                     </div>
                                 </div>
@@ -250,7 +256,7 @@
                                 <div class="row">
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
-                                            <mat-slide-toggle color="primary" formControlName="cancelledEntries">
+                                            <mat-slide-toggle color="primary" [formControl]="advanceSearchForm?.controls['cancelledEntries']">
                                                 <span
                                                     class="pull-left"
                                                     *ngIf="advanceSearchForm.get('cancelledEntries')?.value"
@@ -283,14 +289,14 @@
                                         <div class="col-sm-5">
                                             <label>{{ commonLocaleData?.app_inventory }}</label>
                                         </div>
-                                        <div class="col-sm-7" formGroupName="inventory">
+                                        <div class="col-sm-7" [formGroupName]="'inventory'">
                                             <div class="row">
-                                                <div class="pr-0 col-sm-3 col-12 switch-wrapper">
+                                                <div class="pr-0 col-sm-3 col-12 d-flex align-items-center">
                                                     <div class="checkbox mat-switch">
                                                         <mat-slide-toggle
                                                             color="primary"
                                                             id="includeInventory"
-                                                            formControlName="includeInventory"
+                                                            [formControl]="advanceSearchForm.get('inventory.includeInventory')"
                                                         >
                                                             <span
                                                                 class="pull-left"
@@ -313,81 +319,75 @@
                                                 </div>
                                                 <div class="col-sm-9 col-12">
                                                     <div class="form-group">
-                                                        <sh-select
-                                                            [options]="stockListDropDown$ | async"
-                                                            name="inventory"
-                                                            (onClear)="onDDClear('inventory')"
-                                                            formControlName="inventories"
-                                                            [isFilterEnabled]="true"
-                                                            [multiple]="true"
+                                                        <select-multiple-fields
+                                                            [appearance]="'outline'"
+                                                            [showMatLabel]="true"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                            [formControl]="advanceSearchForm.get('inventory.inventories')"
+                                                            [selectedValues]="advanceSearchForm.get('inventory.inventories')?.value"
+                                                            [name]="'inventories'"
+                                                            [label]="commonLocaleData?.app_inventory"
                                                             [placeholder]="commonLocaleData?.app_select_accounts"
-                                                            [doNotResetSelectedValues]="true"
-                                                            [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
+                                                            [options]="stockListDropDown$ | async"
                                                             (scrollEnd)="handleStockScrollEnd()"
+                                                            [enableDynamicSearch]="true"
                                                             (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                                                            (onClear)="onDDClear('inventory')"
+                                                        ></select-multiple-fields>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 col-md-6">
+                                                    <div class="form-group custom-input-field">
+                                                        <reactive-dropdown-field
+                                                            class="w-100"
+                                                            [name]="'particulars'"
+                                                            [placeholder]="commonLocaleData?.app_select_range"
+                                                            [formControl]="advanceSearchForm.get('inventory.inventoryQty')"
+                                                            [options]="comparisonFilterDropDown$ | async"
+                                                            (selectedOption)="onRangeSelect('inventoryQty', $event)">
+                                                        </reactive-dropdown-field>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 col-md-6">
+                                                    <div class="form-group custom-input-field">
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [name]="'amount'"
+                                                            [formControl]="advanceSearchForm.get('inventory.quantity')"
+                                                            [customDecimalPlaces]="4"
+                                                            [allowDecimalDigitsOnly]="true"
+                                                            [placeholder]="commonLocaleData?.app_quantity"
                                                         >
-                                                        </sh-select>
+                                                        </input-field>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-6 col-md-6">
                                                     <div class="form-group custom-input-field">
-                                                        <sh-select
-                                                            [showClear]="false"
-                                                            [width]="'100%'"
-                                                            formControlName="inventoryQty"
-                                                            (selected)="onRangeSelect('inventoryQty', $event)"
-                                                            [options]="comparisonFilterDropDown$ | async"
-                                                            name="particulars"
+                                                        <reactive-dropdown-field
+                                                            class="w-100"
+                                                            [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                        ></sh-select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6 col-md-6">
-                                                    <div class="form-group custom-input-field">
-                                                        <mat-form-field appearance="fill" class="w-100">
-                                                            <input
-                                                                matInput
-                                                                type="text"
-                                                                class="form-control mat-field-border"
-                                                                decimalDigitsDirective
-                                                                [DecimalPlaces]="4"
-                                                                formControlName="quantity"
-                                                                [placeholder]="commonLocaleData?.app_quantity"
-                                                            />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-6 col-md-6">
-                                                    <div class="form-group custom-input-field">
-                                                        <sh-select
-                                                            [showClear]="false"
-                                                            [width]="'100%'"
-                                                            formControlName="inventoryVal"
-                                                            (selected)="onRangeSelect('inventoryVal', $event)"
+                                                            [formControl]="advanceSearchForm.get('inventory.inventoryVal')"
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            name="particulars"
-                                                            [placeholder]="commonLocaleData?.app_select_range"
-                                                        ></sh-select>
+                                                            (selectedOption)="onRangeSelect('inventoryVal', $event)">
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                                 <div class="col-6 col-md-6">
                                                     <div class="form-group custom-input-field">
-                                                        <mat-form-field appearance="fill" class="w-100">
-                                                            <input
-                                                                matInput
-                                                                type="text"
-                                                                decimalDigitsDirective
-                                                                [DecimalPlaces]="3"
-                                                                class="form-control mat-field-border"
-                                                                formControlName="itemValue"
-                                                                [placeholder]="commonLocaleData?.app_value"
-                                                            />
-                                                        </mat-form-field>
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [name]="'itemValue'"
+                                                            [formControl]="advanceSearchForm.get('inventory.itemValue')"
+                                                            [customDecimalPlaces]="3"
+                                                            [allowDecimalDigitsOnly]="true"
+                                                            [placeholder]="commonLocaleData?.app_value"
+                                                        >
+                                                        </input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -402,25 +402,25 @@
                                         <div class="row">
                                             <div class="col-6 col-md-6">
                                                 <div class="form-group custom-input-field">
-                                                    <mat-form-field appearance="fill" class="w-100">
-                                                        <input
-                                                            matInput
-                                                            type="text"
-                                                            [placeholder]="commonLocaleData?.app_cheque_number"
-                                                            formControlName="chequeNumber"
-                                                            class="form-control mat-field-border"
-                                                        />
-                                                    </mat-form-field>
+                                                    <input-field
+                                                        class="w-100"
+                                                        [type]="'text'"
+                                                        [name]="'chequeNumber'"
+                                                        [formControl]="advanceSearchForm?.controls['chequeNumber']"
+                                                        [placeholder]="commonLocaleData?.app_cheque_number"
+                                                    >
+                                                    </input-field>
                                                 </div>
                                             </div>
                                             <div class="col-6 col-md-6 clearance-date">
                                                 <div class="form-group custom-input-field">
                                                     <giddh-datepicker
+                                                        [appearance]="'outline'"
                                                         class="w-100"
                                                         [cssClass]="'mat-field-border bdr form-control'"
                                                         [placeholder]="commonLocaleData?.app_clearance_date"
                                                         name="from"
-                                                        formControlName="dateOnCheque"
+                                                        [formControl]="advanceSearchForm?.controls['dateOnCheque']"
                                                         [showToggleIcon]="false"
                                                     ></giddh-datepicker>
                                                 </div>
@@ -434,29 +434,30 @@
                                     </div>
                                     <div class="col-sm-7">
                                         <div class="form-group custom-input-field">
-                                            <mat-form-field appearance="fill" class="w-100">
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    formControlName="description"
-                                                    [placeholder]="commonLocaleData?.app_description"
-                                                    class="form-control mat-field-border description-field"
-                                                />
-                                            </mat-form-field>
+                                            <input-field
+                                                class="w-100"
+                                                [type]="'text'"
+                                                [name]="'description'"
+                                                [formControl]="advanceSearchForm?.controls['description']"
+                                                [placeholder]="commonLocaleData?.app_description"
+                                            >
+                                            </input-field>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </mat-expansion-panel>
                     </mat-accordion>
-                    <div class="text-right mb-3 mt-2">
-                        <button mat-stroked-button color="primary" type="button" (click)="onSearch()">
-                            {{ commonLocaleData?.app_search }}
-                        </button>
-                    </div>
                 </form>
             </div>
         </mat-dialog-content>
+        <mat-dialog-actions>
+            <div class="text-right my-2 w-100">
+                <button mat-stroked-button color="primary" type="button" (click)="onSearch()">
+                    {{ commonLocaleData?.app_search }}
+                </button>
+            </div>
+        </mat-dialog-actions>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

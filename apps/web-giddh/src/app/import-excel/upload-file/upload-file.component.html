@@ -1,8 +1,14 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
-    <h2 class="text-center">{{ localeData?.import }} {{ title | titlecase }}</h2>
+    <h2 class="text-center">{{ localeData?.import }} 
+        {{ (entity === voucherType.AccountWise || entity === voucherType.VoucherWise) 
+            ? (commonLocaleData?.app_import_type?.voucher + ' - ' + 
+               (entity === voucherType.AccountWise 
+                  ? commonLocaleData?.app_import_type?.account_wise 
+                  : commonLocaleData?.app_import_type?.voucher_wise)) 
+            : (title | titlecase) }}</h2>
     <div
-        *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && currentOrganizationType === 'COMPANY'"
+        *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
         class="form-group max-width-500 center-block"
     >
         <!-- Currently only import entries is only visible for branch as API doesn't support permission.
@@ -27,7 +33,11 @@
                             <a href="javascript:void(0)" class="list-item d-flex">
                                 <span class="entity-icon">
                                     <i
-                                        class="icon-branch-icon pull-right"
+                                        [ngClass]="{
+                                            'icon-company-profile': option.consolidatedBranch,
+                                            'icon-branch-icon': !option.consolidatedBranch
+                                        }"
+                                        class="pull-right"
                                         *ngIf="!option.isCompany"
                                         tooltip="{{ commonLocaleData?.app_branch }}"
                                     ></i>
@@ -83,6 +93,32 @@
         <div class="checkbox mt-1">
             <input type="checkbox" name="isHeaderProvided" id="is-header-provided" [(ngModel)]="isHeaderProvided" />
             {{ localeData?.header_provided }}
+            <div class="mr-t1">
+                <reactive-dropdown-field
+                    *ngIf="entity === voucherType.AccountWise"
+                    [label]="commonLocaleData?.app_select_account"
+                    [placeholder]="commonLocaleData?.app_select"
+                    [options]="accountSearchResponse"
+                    [enableDynamicSearch]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleSearchAccountScrollEnd()"
+                    (dynamicSearchedQuery)="searchAccount($event)"
+                    (onClear)="accountUniqueName = null; accountLabel = null"
+                    (selectedOption)="accountUniqueName = $event?.value; accountLabel = $event?.label"
+                    [required]="true"
+                >
+                </reactive-dropdown-field>
+                <reactive-dropdown-field
+                    *ngIf="entity === voucherType.VoucherWise"
+                    [label]="commonLocaleData?.app_select_voucher"
+                    [placeholder]="commonLocaleData?.app_select"
+                    [options]="voucherListResponse"
+                    (onClear)="selectVoucher = null"
+                    (selectedOption)="selectVoucher = $event?.value"
+                    [required]="true"
+                >
+                </reactive-dropdown-field>
+            </div>
         </div>
         <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">
             {{ localeData?.download_sample_xls }}
@@ -92,11 +128,22 @@
         </button>
 
         <div class="pull-right mr-t2">
-            <button class="btn btn-default" [routerLink]="['/pages/import']">{{ commonLocaleData?.app_back }}</button>
+            <button 
+                mat-stroked-button
+                [matTooltip]="commonLocaleData?.app_back" 
+                matTooltipPosition="above"  
+                class="mr-r1" 
+                [routerLink]="['/pages/import']"
+            >
+                {{ commonLocaleData?.app_back }}
+            </button>
             <button
-                class="btn btn-success"
+                mat-stroked-button 
+                [matTooltip]="commonLocaleData?.app_next" 
+                matTooltipPosition="above"
+                color="primary"
                 [ladda]="isLoading"
-                [disabled]="file === null"
+                [disabled]="file === null || (entity === voucherType.AccountWise && !accountUniqueName) || (entity === voucherType.VoucherWise && !selectVoucher)"
                 (click)="handleFileUpload(file)"
             >
                 {{ commonLocaleData?.app_next }}

@@ -10,7 +10,7 @@
             <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoadingManufacturing"></giddh-page-loader>
             <form autocomplete="off" novalidate #manufacturingForm="ngForm" *ngIf="!isLoadingManufacturing">
                 <div class="row">
-                    <ng-container *ngIf="isCompany">
+                    <ng-container *ngIf="isCompany || isConsolidatedBranch">
                         <div class="font-16 branch-msg">{{ localeData?.info_message }}</div>
                     </ng-container>
                     <div class="form-fields w-100 d-flex">
@@ -27,7 +27,7 @@
                                         (dateSelected)="errorFields.date = false"
                                         [placeholder]="commonLocaleData?.app_date"
                                         [appearance]="'outline'"
-                                        [disabled]="isCompany"
+                                        [disabled]="isCompany || isConsolidatedBranch"
                                     >
                                     </giddh-datepicker>
                                 </div>
@@ -42,7 +42,7 @@
                                             selectedWarehouseName = $event.label
                                         "
                                         [defaultValue]="selectedWarehouseName"
-                                        [readonly]="isCompany"
+                                        [readonly]="isCompany || isConsolidatedBranch"
                                     >
                                     </dropdown-field>
                                 </div>
@@ -109,7 +109,7 @@
                                             (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
                                             [allowValueReset]="true"
                                             (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
-                                            [readonly]="isCompany"
+                                            [readonly]="isCompany || isConsolidatedBranch"
                                         >
                                         </dropdown-field>
                                     </div>
@@ -128,7 +128,7 @@
                                                 getVariantRecipe()
                                             "
                                             [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
-                                            [readonly]="isCompany"
+                                            [readonly]="isCompany || isConsolidatedBranch"
                                         >
                                         </dropdown-field>
                                     </div>
@@ -151,7 +151,7 @@
                                                 updateRawStocksQuantity();
                                                 calculateTotals()
                                             "
-                                            [readonly]="isCompany"
+                                            [readonly]="isCompany || isConsolidatedBranch"
                                             [matSuffix]="
                                                 ' ' +
                                                 (manufacturingObject.manufacturingDetails[0].manufacturingUnitCode ??
@@ -167,7 +167,10 @@
                                         </small> -->
                                     </div>
 
-                                    <div class="d-flex generate-clear w-100 column-gap15" *ngIf="!isCompany">
+                                    <div
+                                        class="d-flex generate-clear w-100 column-gap15"
+                                        *ngIf="!isCompany && !isConsolidatedBranch"
+                                    >
                                         <button
                                             mat-stroked-button
                                             color="primary"
@@ -316,7 +319,7 @@
                                                                                 'linkedStock'
                                                                             )
                                                                         "
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </select-field>
                                                                 </div>
@@ -345,7 +348,7 @@
                                                                             getRateForStock(linkedStock, i)
                                                                         "
                                                                         [defaultValue]="linkedStock.variant.name"
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </select-field>
                                                                 </div>
@@ -368,7 +371,7 @@
                                                                             validateQuantity(i);
                                                                             calculateRowTotal(linkedStock)
                                                                         "
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -396,7 +399,9 @@
                                                                                 getRateForStock(linkedStock, i)
                                                                             "
                                                                             [defaultValue]="linkedStock.stockUnitCode"
-                                                                            [readonly]="isCompany"
+                                                                            [readonly]="
+                                                                                isCompany || isConsolidatedBranch
+                                                                            "
                                                                         >
                                                                         </select-field>
                                                                     </div>
@@ -413,7 +418,7 @@
                                                                         [(ngModel)]="linkedStock.rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
                                                                         (change)="calculateRowTotal(linkedStock)"
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -430,12 +435,12 @@
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
                                                                     (click)="removeLinkedStock(i)"
-                                                                    *ngIf="!isCompany"
+                                                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                                                 ></i>
                                                             </td>
                                                         </tr>
                                                     </ng-container>
-                                                    <tr *ngIf="!isCompany">
+                                                    <tr *ngIf="!isCompany && !isConsolidatedBranch">
                                                         <td colspan="7">
                                                             <a
                                                                 class="mb-2"
@@ -541,7 +546,8 @@
                                                                             handleLiabilitiesAssetAccountScrollEnd()
                                                                         "
                                                                         [readonly]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             (currentCompanyBranches$ | async)?.length >
                                                                                 1
                                                                         "
@@ -576,7 +582,8 @@
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                                         [readonly]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             (currentCompanyBranches$ | async)?.length >
                                                                                 1
                                                                         "
@@ -596,7 +603,8 @@
                                                                         [(ngModel)]="expense.transactions[0].amount"
                                                                         [placeholder]="commonLocaleData?.app_amount"
                                                                         [readonly]="
-                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentOrganizationType === 'COMPANY' ||
+                                                                                isConsolidatedBranch) &&
                                                                             (currentCompanyBranches$ | async)?.length >
                                                                                 1
                                                                         "
@@ -613,12 +621,12 @@
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
                                                                     (click)="removeExpenseItem(i)"
-                                                                    *ngIf="!isCompany"
+                                                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                                                 ></i>
                                                             </td>
                                                         </tr>
                                                     </ng-container>
-                                                    <tr *ngIf="!isCompany">
+                                                    <tr *ngIf="!isCompany && !isConsolidatedBranch">
                                                         <td colspan="7">
                                                             <a class="mb-2" (click)="addExpense()" href="javascript:;">
                                                                 {{ localeData?.add_expense }}
@@ -722,7 +730,7 @@
                                                                                 'byProduct'
                                                                             )
                                                                         "
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </select-field>
                                                                 </div>
@@ -752,7 +760,7 @@
                                                                         [defaultValue]="
                                                                             byProductLinkedStock.variant.name
                                                                         "
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </select-field>
                                                                 </div>
@@ -774,7 +782,7 @@
                                                                         (change)="
                                                                             calculateRowTotal(byProductLinkedStock)
                                                                         "
-                                                                        [readonly]="isCompany"
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -803,7 +811,9 @@
                                                                             [defaultValue]="
                                                                                 byProductLinkedStock.stockUnitCode
                                                                             "
-                                                                            [readonly]="isCompany"
+                                                                            [readonly]="
+                                                                                isCompany || isConsolidatedBranch
+                                                                            "
                                                                         >
                                                                         </select-field>
                                                                     </div>
@@ -818,12 +828,12 @@
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
                                                                     (click)="removeByProductLinkedStock(i)"
-                                                                    *ngIf="!isCompany"
+                                                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                                                 ></i>
                                                             </td>
                                                         </tr>
                                                     </ng-container>
-                                                    <tr *ngIf="!isCompany">
+                                                    <tr *ngIf="!isCompany && !isConsolidatedBranch">
                                                         <td colspan="7">
                                                             <a
                                                                 class="mb-2"

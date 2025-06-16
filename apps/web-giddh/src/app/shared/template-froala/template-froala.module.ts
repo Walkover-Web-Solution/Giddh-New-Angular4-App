@@ -14,6 +14,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         FormsModule,
         NgxMatSelectSearchModule,
         MatSelectModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        ClickOutsideModule
     ],
     exports: [
         TemplateFroalaComponent

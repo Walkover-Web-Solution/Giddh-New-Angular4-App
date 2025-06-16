@@ -12,6 +12,7 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'setting-permission',
@@ -109,11 +110,21 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
     public onRevokePermission(assignRoleEntryUniqueName: string) {
         if (assignRoleEntryUniqueName) {
-            this.store.dispatch(this.accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
-            this.waitAndReloadCompany();
-            setTimeout(() => {
-                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-            }, 500);
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: ['mat-dialog-md'],
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.delete_user_permission, this.commonLocaleData)
+                }
+            });
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response === this.commonLocaleData?.app_yes) {
+                    this.store.dispatch(this.accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
+                    this.waitAndReloadCompany();
+                    setTimeout(() => {
+                        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                    }, 500);
+                }
+            });
         }
     }
 

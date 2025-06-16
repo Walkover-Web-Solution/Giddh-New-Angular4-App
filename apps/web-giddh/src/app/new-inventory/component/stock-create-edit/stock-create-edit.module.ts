@@ -27,6 +27,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.module";
 import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module"
         DragDropModule,
         MatSlideToggleModule,
         SortByModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatProgressSpinnerModule
     ],
     exports: [
         StockCreateEditComponent

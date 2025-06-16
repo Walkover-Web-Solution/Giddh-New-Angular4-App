@@ -49,6 +49,13 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             request = this.addBranchUniqueName(request);
         }
         request = this.addLanguage(request);
+        
+        // Add timestamp and timezone to the request URL
+        const updatedUrl = this.appendTimestamp(request.url);
+        request = request.clone({
+            url: updatedUrl
+        });
+
         if (this.isOnline) {
             /** Holds api call retry limit */
             let retryLimit: number = 1;
@@ -118,5 +125,28 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             });
         }
         return request;
+    }
+
+    /**
+     * Utility function to append timestamp and timezone
+     *
+     * @private
+     * @param {string} url
+     * @return {*}  {string}
+     * @memberof GiddhHttpInterceptor
+     */
+    private appendTimestamp(url: string): string {
+        const timestamp = `t=${new Date().getTime()}`;
+        
+        // Get timezone offset in minutes and convert to hours and minutes
+        const offset = -new Date().getTimezoneOffset();
+        const hours = Math.floor(Math.abs(offset) / 60);
+        const minutes = Math.abs(offset) % 60;
+        const sign = offset >= 0 ? '+' : '-';
+        
+        // Format timezone as UTC±HH:MM
+        const timezone = `z=UTC${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        
+        return url.includes("?") ? `${url}&${timestamp}&${timezone}` : `${url}?${timestamp}&${timezone}`;
     }
 }

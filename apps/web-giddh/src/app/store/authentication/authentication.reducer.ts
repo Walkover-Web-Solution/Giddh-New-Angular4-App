@@ -96,6 +96,10 @@ export interface SessionState {
     filters: any;
 }
 
+export interface IBranchConsolidatedState {
+    isBranchConsolidated: boolean;
+}
+
 /**
  * Setting the InitialState for this Reducer's Store
  */
@@ -158,6 +162,9 @@ const sessionInitialState: SessionState = {
     currentLocale: null,
     activeTheme: null,
     filters: null
+};
+const branchConsolidatedInitialState: IBranchConsolidatedState = {
+    isBranchConsolidated: false
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -465,6 +472,18 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
     }
 }
 
+export function BranchConsolidatedReducer(state: IBranchConsolidatedState = branchConsolidatedInitialState, action: CustomActions): IBranchConsolidatedState {
+    switch (action.type) {
+        case CommonActions.SET_BRANCH_CONSOLIDATED: {
+            return Object.assign({}, state, {
+                isBranchConsolidated: action.payload
+            });
+        }
+        default:
+            return state;
+    }
+}
+
 export function SessionReducer(state: SessionState = sessionInitialState, action: CustomActions): SessionState {
     switch (action.type) {
         case LoginActions.renewSessionResponse: {
@@ -724,8 +743,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response?.status === 'success') {
                 let d = _.cloneDeep(state);
-                localStorage.setItem('currencyDesimalType', response.body?.balanceDecimalPlaces);
-                localStorage.setItem('currencyNumberType', response.body?.balanceDisplayFormat);
                 let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
                 if (currentCompanyIndx !== -1) {
                     d.companies[currentCompanyIndx].country = response.body?.country;

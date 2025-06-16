@@ -35,6 +35,12 @@ export class ExportBodyRequest {
     includeTag?: boolean;
     groupUniqueNames?: any;
     inventoryType?: string;
+    attachmentExport?: boolean;
+    voucherExport?: boolean;
+    fileNameFormat?: string;
+    ledgerView?: boolean;
+    mergePdf?: boolean;
+    copyTypes?: any[];
 }
 
 export interface DayBookRequestModel {
@@ -63,7 +69,7 @@ export interface Inventory {
     quantityGreaterThan: boolean;
     includeItemValue: boolean;
     itemValue?: any;
-    includeItemLessThan: boolean;
-    includeItemEqualTo: boolean;
-    includeItemGreaterThan: boolean;
+    itemValueLessThan: boolean;
+    itemValueEqualTo: boolean;
+    itemValueGreaterThan: boolean;
 }

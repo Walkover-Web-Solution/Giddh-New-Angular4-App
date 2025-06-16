@@ -13,6 +13,8 @@ import { Observable, ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { eventsConst } from "../eventsConst";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
+import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
+import { AccountArchivedStatusEnum } from "../../../Enums/common.enum";
 
 @Component({
     selector: "master",
@@ -67,6 +69,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     private hasUnsavedChanges: boolean = false;
     /** Emits active group Unique Name path */
     @Output() public activeGroupUniqueName: EventEmitter<any> = new EventEmitter();
+    /** List of archived options */
+    public archivedOptions: IOption[] = [];
+    /** Selected archived option */
+    public selectedArchivedOption: object = {};
 
     constructor(
         private groupService: GroupService,
@@ -284,6 +290,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             this.showCreateNewButton = false;
         }
 
+        if (changes?.commonLocaleData) {
+            this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
+        }
+
         this.changeDetectorRef.detectChanges();
     }
 
@@ -303,7 +313,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             return;
         }
         const page = (isLoadMore) ? (Number(this.masterColumnsData[currentIndex]?.page) + 1) : 1;
-        this.groupService.getMasters(groupUniqueName, page).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.groupService.getMasters(groupUniqueName, page, this.selectedArchivedOption[groupUniqueName]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 if (!isLoadMore) {
                     if (!isRefresh) {
@@ -356,6 +366,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     private groupClicked(item: any, currentIndex: number, loadMaster: boolean = true): void {
+        this.selectedArchivedOption = {...this.selectedArchivedOption, [item?.uniqueName]:  AccountArchivedStatusEnum.UNARCHIVED};
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = item?.uniqueName;
         this.activeGroupUniqueName.emit(item?.uniqueName);
@@ -606,5 +617,18 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 callback();
             }
         });
+    }
+
+    /**
+     * Handles archive status filter
+     * 
+     * @param groupUniqueName 
+     * @param currentIndex 
+     * @param value 
+     * @memberof MasterComponent
+     */
+    public onArchiveStatusFilter(groupUniqueName: any, currentIndex: number, value: string): void {
+        this.selectedArchivedOption[groupUniqueName] = value;
+        this.getMasters(groupUniqueName, currentIndex, true);
     }
 }

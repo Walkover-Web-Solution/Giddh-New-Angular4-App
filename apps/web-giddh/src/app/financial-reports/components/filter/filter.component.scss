@@ -46,6 +46,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin-top: 2px;
     a {
         display: flex;
         width: 36px;
@@ -110,7 +111,6 @@
 }
 @media (max-width: 1099px) and (min-width: 1019px) {
     .financial-select-year {
-        margin-bottom: 15px;
         .company-branch-dropdown {
             width: 158px;
         }
@@ -141,10 +141,10 @@
         }
     }
     .form-inline.financial-select-year {
-        flex-flow: row nowrap !important;
+        flex-flow: wrap;
     }
     .download-data-icon {
-        margin: 10px 0 2px;
+        margin: 2px 0 2px;
     }
 }
 @media screen and (max-width: 767px) {

@@ -7,7 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
@@ -15,7 +15,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { CommonService } from '../../services/common.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { SalesTaxReport } from '../../theme/tax-authority/utility/tax-authority.const';
 import { CompanyActions } from '../../actions/company.actions';
@@ -177,6 +177,12 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         label: '',
         placeholder: ''
     }
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -190,7 +196,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         private route: ActivatedRoute,
         private settingsTaxesActions: SettingsTaxesActions,
         private companyActions: CompanyActions,
-        private componentStore: TaxAuthorityComponentStore
+        private componentStore: TaxAuthorityComponentStore,
+        private router: Router
     ) {
         this.getFinancialYears();
     }
@@ -202,6 +209,13 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+        this.isTaxRestrictedModule = this.activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
         this.isSalesTaxRateWise = SalesTaxReport.TaxWise === this.salesTaxReportType;
         this.isSalesTaxAccountWise = SalesTaxReport.AccountWise === this.salesTaxReportType;
         this.isVatReport = this.moduleType === "VAT_REPORT";
@@ -264,6 +278,16 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  ShareGroupModalComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        if (subscriptionId) {
+            this.router.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
+        }
+    }
     /**
     * On Change of input properties
     *
@@ -402,7 +426,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -428,7 +453,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
-                    if (this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company) {
+                    if (this.hasTaxNumber || (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch)) {
                         this.loadTaxDetails();
                     }
                 }

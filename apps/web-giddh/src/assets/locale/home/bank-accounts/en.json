@@ -4,5 +4,8 @@
     "cr_heading": "Cr.",
     "dr_heading": "Dr.",
     "connect_bank": "Connect Bank",
-    "no_banks_found": "Yet to add Bank Details"
+    "no_banks_found": "Yet to add Bank Details",
+    "in_bank": "In [BANK_NAME]",
+    "connected_bank": "Connected Bank",
+    "link_bank": "Link bank"
 }

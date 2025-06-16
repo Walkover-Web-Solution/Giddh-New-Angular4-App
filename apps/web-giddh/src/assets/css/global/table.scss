@@ -1,10 +1,33 @@
 .mat-mdc-table {
+    &.table-striped {
+        .mdc-data-table__content {
+            .mat-mdc-row {
+                &:hover {
+                    &:not(.no-hover) {
+                        .mat-mdc-cell {
+                            background-color: var(--color-drag-bottom-shadow) !important;
+                        }
+                    }
+                }
+
+                &:not(.no-strip) {
+                    &:nth-of-type(odd) {
+                        .mat-mdc-cell {
+                            background-color: var(--color-wild-sand) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
-            z-index: 9;
+            z-index: 9 !important;
         }
     }
+
     .mdc-data-table__content {
         .mat-mdc-row {
             .mat-mdc-cell {
@@ -12,6 +35,7 @@
             }
         }
     }
+
 }
 
 /*--- menu-button-color ---*/
@@ -24,12 +48,14 @@
 /*--- mat-option ---*/
 .mat-mdc-option .mdc-list-item__primary-text {
     color: var(--color-common-primary-text) !important;
+    width: 100%;
 }
 
 /*--- mat-card ---*/
 .mat-mdc-card {
     background-color: var(--color-body-background) !important;
 }
+
 /*--- trial-balance-expand ---*/
 trial-balance-grid,
 invoice-preview-details-component {
@@ -45,9 +71,11 @@ aging-report {
         .mat-column-name {
             width: 20%;
         }
+
         .mat-column-group {
             width: 10%;
         }
+
         .mat-column-upcoming {
             width: 12%;
         }
@@ -64,19 +92,24 @@ aging-report {
 }
 
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
-$listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors here, separated by commas (,)
+$listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
+
 .table-header-sticky {
-    &:not(:has(#{$listOfNotApplyBelowCodeSelectors})){
+    &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
         table {
             border-collapse: inherit;
         }
+
         .mat-mdc-tab-group {
             overflow: visible !important;
         }
+
         .mat-mdc-tab-body-wrapper {
             overflow: visible !important;
+
             .mat-mdc-tab-body {
                 overflow: visible !important;
+
                 .mat-mdc-tab-body-content {
                     overflow: visible !important;
                 }
@@ -86,9 +119,49 @@ $listOfNotApplyBelowCodeSelectors: 'app-invoice-generate'; // Add more selectors
 }
 
 .header-content-sticky {
-    position: sticky; 
-    inset-inline: 0; 
+    position: sticky;
+    inset-inline: 0;
+
     @media screen and (max-width: 992px) {
         width: fit-content;
+    }
+}
+
+// Add class editable-table to the table to make the form fields border invisible when the row is not active (hovered)
+table {
+    &.editable-table {
+        tbody {
+            tr {
+                &:not(.active-row) {
+                    td {
+                        mat-form-field {
+                            mat-label,
+                            .dropdown-bg,
+                            .mdc-notched-outline {
+                                visibility: hidden;
+                            }
+                        }
+                        .editable-table-hide-element {
+                            visibility: hidden;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+table {
+    &.mat-mdc-table {
+        tr {
+            th,
+            td {
+                width: fit-content !important;
+                max-width: 194px !important;
+            }
+            .table-date-width {
+                width: 125px !important;
+            }
+        }
     }
 }

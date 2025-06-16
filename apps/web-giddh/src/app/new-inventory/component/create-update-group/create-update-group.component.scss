@@ -1,5 +1,5 @@
 .create-group-page {
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 0 15px 0 0;
 
     .toggle-childgroup {
@@ -17,15 +17,15 @@
         }
     }
     .input-width {
-        width: auto;
+        width: unset;
         min-width: 530px;
         display: inline-block;
     }
     .inline-multiple-input-width {
         width: 530px;
-        min-height: 48px;
+        min-height: var(--mat-form-field-height);
         .input-min-width {
-            min-width: 50%;
+            min-width: 50%; 
         }
     }
 }
@@ -77,4 +77,15 @@
 
 .back-left {
     line-height: 32px;
+}
+@media screen and (max-width: 1024px) {
+    .create-group-page {
+        .input-width {
+            width: unset;
+            min-width: 422px;
+        }
+        .inline-multiple-input-width {
+            width: 422px;
+        }
+    }
 }

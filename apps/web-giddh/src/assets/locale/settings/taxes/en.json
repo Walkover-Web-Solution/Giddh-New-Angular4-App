@@ -1,6 +1,5 @@
 {
     "tax_delete_message": "Are you sure you want to delete [TAX_NAME]?",
-    "tax_update_message": "Are you sure you want to update [TAX_NAME]?",
     "added_taxes": "Added Taxes",
     "new_tax": "New Tax",
     "create_new_tax": "Create New Tax",

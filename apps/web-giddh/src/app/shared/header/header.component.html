@@ -128,9 +128,9 @@
                                     <div class="menu-dropdown-wrapper">
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex justify-content-between">
@@ -190,9 +190,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -253,9 +253,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="mr-t2 mr-b05 d-flex align-items-center">
@@ -336,7 +336,7 @@
                                             class="mr-t2 mr-b05 align-items-center"
                                             *ngIf="
                                                 currentCompanyBranches?.length > 1 &&
-                                                currentOrganizationType === 'COMPANY'
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                             "
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
@@ -351,9 +351,9 @@
                                         </div>
                                         <ng-container
                                             *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
+                                                (!isConsolidatedBranch && currentOrganizationType === 'BRANCH') ||
                                                 (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
+                                                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
                                             <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
@@ -397,7 +397,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new mr-r1"></i>
                                                 </span>
@@ -409,8 +409,8 @@
                                                         {{ commonLocaleData?.app_voucher_types?.receipt }}
                                                     </a>
                                                 </span>
-                                            </div> -->
-                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            </div>
+                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new mr-r1"></i>
                                                 </span>
@@ -422,7 +422,7 @@
                                                         {{ commonLocaleData?.app_voucher_types?.payment }}
                                                     </a>
                                                 </span>
-                                            </div> -->
+                                            </div>
                                             <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
@@ -564,51 +564,88 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="
-            subscribedPlan !== undefined &&
-            subscribedPlan?.status !== 'expired' &&
-            remainingSubscriptionDays !== false &&
-            remainingSubscriptionDays <= 7
-        "
+        *ngIf="showAlertMessage.isSubscriptionEnded &&
+        subscribedPlan !== undefined &&
+        subscribedPlan?.status !== 'expired' &&
+        remainingSubscriptionDays !== false &&
+        remainingSubscriptionDays <= 7 &&
+        isCurrentSubscriptionTrialOrCancelled"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue">
+        <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="go to plan" (click)="goToSelectPlan()">{{
+                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
+                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
+            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isSubscriptionEnded = false"></i>
         </div>
     </div>
 
     <div
         class="plan-wrapper"
-        *ngIf="subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
+        *ngIf="showAlertMessage.isSubscriptionRenewalExpired && 
+        subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue">
+        <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get select " (click)="goToSelectPlan()">{{
-                    localeData?.click_here
-                }}</a>
+                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
+                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToSelectPlan()">
+                    {{ localeData?.click_here }}
+                </a>
             </p>
+            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isSubscriptionRenewalExpired = false"></i>
         </div>
     </div>
 
     <div
         class="plan-wrapper"
-        *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
+        *ngIf="showAlertMessage.isTransactionLimitExceeded && 
+        subscribedPlan !== undefined && subscribedPlan.additionalCharges"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue">
+        <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get plan" (click)="goToSelectPlan()">{{
+                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
+                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
+            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isTransactionLimitExceeded = false"></i>
+        </div>
+    </div>
+
+    <div
+        class="plan-wrapper"
+        *ngIf="showAlertMessage.isObligationExpired && isUKCompany && obligation"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
+    >
+        <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+            <p>
+                <i class="icon-traingle-info font-15 mr-r1"></i>
+                <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
+                <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
+                <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
+            </p>
+            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isObligationExpired = false"></i>     
+        </div>
+    </div>
+
+    <div
+        class="plan-wrapper"
+        *ngIf="showAlertMessage.isLiabilitiesExpired && isUKCompany && liabilities"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
+    >
+        <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+            <p>
+                <i class="icon-traingle-info font-15 mr-r1"></i>
+                <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
+                <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired" [innerHTML]="localeData?.liabilities_today_expired"></span>
+                <span *ngIf="liabilities.isExpired" [innerHTML]="localeData?.liabilities_expired_passed"></span>
+            </p>
+            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isLiabilitiesExpired = false"></i>
         </div>
     </div>
     <!--add and manage group account modal -->

@@ -15,7 +15,6 @@
         >
             <tax-sidebar
                 (navigateEvent)="handleNavigation()"
-                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
                 [exclude]="'#primary-new-header'"
                 class="gst-sidebar"
             ></tax-sidebar>
@@ -72,7 +71,7 @@
                                                         <div class="date-range-wrapper">
                                                             <mat-form-field
                                                                 [matDatepickerToggleIcon]="false"
-                                                                (click)="picker.open()"
+                                                                (click)="picker?.open()"
                                                                 class="w-100 mat-form-field-border"
                                                                 [name]="'date_' + i"
                                                             >
@@ -97,7 +96,7 @@
                                                     <div class="w-100 option-value-field text-value-field">
                                                         <text-field
                                                             [type]="'text'"
-                                                            [cssClass]="'w-100 pd-15'"
+                                                            [cssClass]="'form-control w-100 pd-15'"
                                                             [placeholder]="localeData?.enter_lut_number"
                                                             formControlName="lutNumber"
                                                             [name]="'lut_' + i"

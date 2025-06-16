@@ -8,7 +8,7 @@ import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -16,7 +16,6 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -33,12 +32,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public vatReportTransactions: any = {};
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public vatReportTransactionsRequest: VatReportTransactionsRequest = {
         from: '',
         to: '',
         taxNumber: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[2],
         section: ''
     };
     public isLoading: boolean = false;
@@ -56,8 +57,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /* this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /*-- mat-table --*/
@@ -75,7 +74,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
-        private breakpointObserver: BreakpointObserver,
         private receiptService: ReceiptService,
         public dialog: MatDialog
     ) {
@@ -89,16 +87,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
-
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.vatReportTransactionsRequest.from = params['from'];
             this.vatReportTransactionsRequest.to = params['to'];
@@ -156,7 +144,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     this.vatReportTransactions = res.body;
                     this.cdRef.detectChanges();
                 } else {
-                    this.toasty.errorToast(res?.message);
+                    this.toasty.showSnackBar('error', res?.message);
                 }
                 this.isLoading = false;
             });
@@ -170,9 +158,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public pageChanged(event: any): void {
-        if (this.vatReportTransactionsRequest.page !== event.page) {
+        if (event) {
+            this.vatReportTransactionsRequest.page = event.pageIndex + 1;
+            this.vatReportTransactionsRequest.count = event.pageSize;
             this.vatReportTransactions.results = [];
-            this.vatReportTransactionsRequest.page = event.page;
             this.getVatReportTransactions(false);
         }
     }
@@ -208,8 +197,11 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 }
 
                 this.dialog.open(this.downloadOrSendMailModel, {
-                    panelClass: 'modal-dialog',
-                    width: '600px !important',
+                    height: '80vh',
+                    width: '80vw',
+                    maxWidth: '800px',
+                    disableClose: true,
+                    autoFocus: false
                 });
             }
         }
@@ -266,7 +258,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: any): void {
+        public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
@@ -313,7 +305,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                     }
                     return saveAs(res, `${this.selectedInvoice?.voucherNumber}.` + 'pdf');
                 } else {
-                    this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                    this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                 }
             });
         } else {
@@ -331,7 +323,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
                     } else {
-                        this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                        this.toasty.showSnackBar('error', this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
         }

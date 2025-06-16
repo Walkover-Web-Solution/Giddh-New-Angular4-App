@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: var(--color-white);
+    color: var(--color-toast-primary-text);
     background-color: var(--color-primary-header-background);
 
     .icon-cross{
@@ -53,5 +53,12 @@
 .aside-dialog-overflow {
     &.mat-mdc-dialog-content {
         max-height: calc(100vh - 65px) !important;
+    }
+}
+
+// Override material dialog title
+.mdc-dialog__title {
+    &::before {
+        display: none !important;
     }
 }

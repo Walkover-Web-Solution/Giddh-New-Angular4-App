@@ -225,7 +225,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     label: branch.name,
                     value: branch?.uniqueName,
                     name: branch.name,
-                    parentBranch: branch.parentBranch
+                    parentBranch: branch.parentBranch,
+                    consolidatedBranch: branch?.consolidatedBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.name : '',
@@ -690,9 +691,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public previewVoucher(payment: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
-        // }
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+        }
     }
 
     /**

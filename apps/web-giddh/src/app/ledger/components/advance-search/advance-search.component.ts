@@ -271,9 +271,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 quantityGreaterThan: false,
                 includeItemValue: false,
                 itemValue: null,
-                includeItemLessThan: false,
-                includeItemEqualTo: false,
-                includeItemGreaterThan: false
+                itemValueLessThan: false,
+                itemValueEqualTo: false,
+                itemValueGreaterThan: false
             }),
         });
 
@@ -481,45 +481,45 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 break;
             case 'inventoryVal-greaterThan':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-lessThan':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-greaterThanOrEquals':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-lessThanOrEquals':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-equals':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
             case 'inventoryVal-exclude':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
             case 'inventoryVal-null':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
                 break;
         }
     }
@@ -614,9 +614,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        if (this.accountsSearchResultsPaginationData.query === query && this.accountsSearchResultsPaginationData.page === page) {
+            return;
+        }
         this.accountsSearchResultsPaginationData.query = query;
+        this.accountsSearchResultsPaginationData.page = page;
         if (!this.preventDefaultScrollApiCall &&
-            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            ((typeof query === 'string') || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -642,6 +646,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         ];
                     }
                     this.accounts$ = observableOf(this.accounts);
+                    this.changeDetectionRef.detectChanges();
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
@@ -650,6 +655,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                         this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
+                } else {
+                    this.isDefaultAccountsLoading = false;
                 }
             });
         } else {
@@ -700,7 +707,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        if (this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
+            return;
+        }
         this.stocksSearchResultsPaginationData.query = query;
+        this.stocksSearchResultsPaginationData.page = page;
         if (!this.preventDefaultStockScrollApiCall &&
             (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
@@ -734,6 +745,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
+                } else {
+                    this.isDefaultStocksLoading = false;
                 }
             });
         } else {
@@ -757,9 +770,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        if (this.groupsSearchResultsPaginationData.query === query && this.groupsSearchResultsPaginationData.page === page) {
+            return;
+        }
         this.groupsSearchResultsPaginationData.query = query;
+        this.groupsSearchResultsPaginationData.page = page;
         if (!this.preventDefaultGroupScrollApiCall &&
-            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            ((typeof query === "string") || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -788,12 +805,15 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     this.groups$ = observableOf(this.searchedGroups);
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    this.changeDetectionRef.detectChanges();
                     if (successCallback) {
                         successCallback(data.body.results);
                     } else {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
+                } else {
+                    this.isDefaultGroupsLoading = false;
                 }
             });
         } else {

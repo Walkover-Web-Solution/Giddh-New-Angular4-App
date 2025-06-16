@@ -13,6 +13,7 @@ import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 
 @Component({
     selector: 'content-selector',
@@ -50,6 +51,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     @ViewChild(NgForm) contentForm: NgForm;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds the value if company is Indian */
+    public isIndianCompany: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -88,6 +91,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this.showGstComposition = false;
             }
             this.activeCompanyName = activeCompany?.name;
+            this.isIndianCompany = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
@@ -108,6 +112,17 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this.invoiceUiDataService.setContentForm(this.contentForm);
             }
             this.customTemplate = cloneDeep(template);
+            if (this.customTemplate.templateType === 'tally_template') {
+                this.customTemplate.sections.footer.data.imageSignature.display = true;
+                this.customTemplate.sections.footer.data.slogan.display = false;
+                if (this.voucherType !== 'sales') {
+                    this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
+                    this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+                } else {
+                        this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+                        this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+                }
+            }
             this.assignImageSignature();
         });
 
@@ -339,6 +354,22 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         } else {
             this.signatureSrc = '';
             this.signatureImgAttached = false;
+        }
+    }
+
+    /**
+     * Change voucher number or date based on Invoice number or date
+     *
+     * @param {boolean} [isDate=true] True, if date is changed
+     * @memberof ContentFilterComponent
+     */
+    public handleInvoiceDateNumberChange(isDate: boolean = true): void {
+        if (isDate) {
+            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+        } else {
+            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
         }
     }
 }

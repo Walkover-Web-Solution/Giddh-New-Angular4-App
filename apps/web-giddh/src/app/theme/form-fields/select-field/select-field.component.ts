@@ -59,6 +59,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @Input() public hasMoreValue: boolean = false;
     /** True if we need to scroll element by id */
     @Input() public scrollableElementId = '';
+    /** True if we need to show dropdown icon */
+    @Input() public showDropdownIcon: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -79,6 +81,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Keyboard shortcut command label */
+    @Input() public showKeyboardCommand: string = '';
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -109,7 +113,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                 }
             });
         } else {
-            this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
                     this.filterOptions(search);
                 } else {
@@ -144,7 +148,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             }
         }
         if (changes?.options) {
-            this.fieldFilteredOptions = changes.options.currentValue;
+            this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");;
         }
     }
 

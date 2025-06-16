@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, MOBILE_NUMBER_SELF_URL } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -9,8 +9,6 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { VatService } from '../../services/vat.service';
-import { ToasterService } from '../../services/toaster.service';
 import { FileReturnComponent } from '../file-return/file-return.component';
 import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,6 +37,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if current organization is company */
     public isCompanyMode: boolean;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Holds Company Uniquename */
     private companyUniqueName: string;
     /** Holds Branch List */
@@ -78,11 +78,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** Observable to store the Tax Number */
     public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
     /** True if current company or branch has tax number */
-    public hasTaxNumber: boolean = false;
+    public hasTaxNumber: boolean | null = null;
     /** Observable to store the HMRC portal url */
     public connectToHMRCUrl$ = this.componentStore.select(state => state.connectToHMRCUrl);
     /** Observable to store the data of obligation */
     public obligationList$ = this.componentStore.select(state => state.obligationList);
+    /** Stores the current company */
+    public activeCompany: any = {};
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
+    /** True if tax modules is restricted */
+    public isTaxRestrictedModule: boolean = true;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -98,6 +104,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
+                this.activeCompany = activeCompany;
+                this.isTaxRestrictedModule = activeCompany?.subscription?.planDetails?.restrictedModules.hasOwnProperty(this.restrictedModules.TaxFilling);
             }
         });
     }
@@ -108,11 +116,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public ngOnInit(): void {
+        /** If this is true, it means we are in branch consolidated mode.  */
+        this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
 
-        if (this.isCompanyMode) {
+        if (this.isCompanyMode || this.isConsolidatedBranch) {
             this.loadTaxDetails();
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -147,10 +161,12 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 if (this.taxesList.length === 1) {
                     this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
                 }
-                if (this.isCompanyMode) {
+                if (this.isCompanyMode || this.isConsolidatedBranch) {
                     this.hasTaxNumber = true;
                 }
-                this.getURLHMRCAuthorization();
+                if (!this.isTaxRestrictedModule) {
+                    this.getURLHMRCAuthorization();
+                }
             }
         });
 
@@ -198,6 +214,17 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Navigates to the page for buy plan.
+     * @param subscriptionId
+     * @memberof  ObligationsComponent
+     */
+    public buyPlan(subscriptionId: string): void {
+        if (subscriptionId) {
+            this.route.navigate(['pages', 'user-details', 'subscription', 'buy-plan', subscriptionId]);
+        }
     }
 
     /**
@@ -297,10 +324,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         }
 
-        let dialogRef = this.dialog.open(FileReturnComponent, {
+        const dialogRef = this.dialog.open(FileReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -329,7 +357,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.dialog.open(ViewReturnComponent, {
             data: dataToSend,
             width: '60vw',
-            height: '80vh'
+            height: '80vh',
+            disableClose: true
         });
     }
 
