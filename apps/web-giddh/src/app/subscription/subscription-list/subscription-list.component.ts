@@ -349,10 +349,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
                 return;
             }
-        } else if (searchedFieldName === 'Status') {
-            if (this.subscriptionListForm?.controls['status'].value !== null && this.subscriptionListForm?.controls['status'].value !== '') {
-                return;
-            }
         } else if (searchedFieldName === 'Monthly/Yearly') {
             if (this.subscriptionListForm?.controls['duration'].value !== null && this.subscriptionListForm?.controls['duration'].value !== '') {
                 return;
