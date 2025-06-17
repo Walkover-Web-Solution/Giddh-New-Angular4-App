@@ -1854,7 +1854,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
-            width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
@@ -1863,6 +1862,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
             },
             role: 'alertdialog',
+            panelClass: ['mat-dialog-md'],
             ariaLabel: 'export'
         });
 

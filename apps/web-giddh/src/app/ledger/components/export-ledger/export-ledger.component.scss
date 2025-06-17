@@ -11,6 +11,27 @@ textarea.receipient-email {
     width: 98%;
     height: 42px;
 }
+
+.export-border {
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 55%;
+        background-color: var(--color-gray);
+        top: 46%;
+        right: 50px;
+        transform: translateY(-50%);
+    }
+}
+
+.export-ledger-right {
+    &::after {
+        right: 25px !important;
+    }
+}
+
 #exportModal {
     #export-body {
         .clearfix {
