@@ -10,6 +10,7 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
 import { cloneDeep, isArray } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 
 @Component({
     selector: 'template-froala',
@@ -38,6 +39,7 @@ export class TemplateFroalaComponent implements OnInit {
     public emailContentSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
     /** Instance of formgroup */
     public emailForm: FormGroup;
+    public customTriggerForm: FormGroup;
     /** Instance of Froala Tribute */
     public froalaTribute: any;
     /** Instance of subject field tribute */
@@ -364,14 +366,33 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public initializeForm(template?: any): void {
-        this.emailForm = this.formBuilder.group({
-            to: [template?.to ?? ''],
-            cc: [template?.cc ?? '',],
-            bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.inputData]],
-            emailSubject: [template?.emailSubject ?? ''],
-            html: [template?.html ?? '']
-        });
+        if (this.inputData?.isTrigger) {
+            this.customTriggerForm = this.formBuilder.group({
+                title: [template?.title ?? ''],
+                entity: [template?.entity ?? ''],
+                entityUniqueNames: [template?.entityUniqueNames ?? []],
+                voucherTypes: [template?.voucherTypes ?? []],
+                emailSubject: [template?.emailSubject ?? ''],
+                triggerModule: [template?.triggerModule ?? ''],
+                to: [template?.to ?? []],
+                cc: [template?.cc ?? []],
+                bcc: [template?.bcc ?? []],
+                conditions: [template?.conditions ?? []],
+                executionTime: [template?.executionTime ?? []],
+                actions: [template?.actions ?? []],
+                html: [template?.html ?? ''],
+                disabled: [template?.disabled ?? false]
+            });
+        } else {
+            this.emailForm = this.formBuilder.group({
+                to: [template?.to ?? ''],
+                cc: [template?.cc ?? '',],
+                bcc: [template?.bcc ?? ''],
+                voucherTypes: [[this.inputData]],
+                emailSubject: [template?.emailSubject ?? ''],
+                html: [template?.html ?? '']
+            });
+        }
     }
 
     /**

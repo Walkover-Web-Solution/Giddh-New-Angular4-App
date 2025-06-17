@@ -24,6 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { SharedModule } from '../shared.module';
 import { MatCardModule } from '@angular/material/card';
+import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { MatCardModule } from '@angular/material/card';
         MatMenuModule,
         FormFieldsModule,
         SharedModule,
-        MatCardModule
+        MatCardModule,
+        FroalaTemplateEditorModule
     ],
     exports: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent],
     declarations: [TriggersComponent,BasicTriggerComponent, AdvanceTriggerComponent]

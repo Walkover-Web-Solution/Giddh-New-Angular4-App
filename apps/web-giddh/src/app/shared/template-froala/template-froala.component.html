@@ -11,9 +11,9 @@
 
     <mat-dialog-content class="dialog-body d-flex flex-column h-100 template-froala-wrapper">
         <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
-            <div class="stock-width">
+            <div class="container" *ngIf="inputData?.isTrigger">
                 <div class="row flex-column-reverse flex-md-row">
-                    <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
+                    <div class="col-md-8 col-12 upper-common-form-label-field">
                         <div class="row row-gap mr-t1">
                             <div class="col-sm-4 col-lg-4">
                                 <input-field

@@ -624,7 +624,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
             width: 'var(--aside-pane-width)',
-            height: '100vh',
+            height: '70vh',
             position: {
                 right: '0',
                 bottom: '0'

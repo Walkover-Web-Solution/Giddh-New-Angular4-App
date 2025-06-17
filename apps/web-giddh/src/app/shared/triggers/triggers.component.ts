@@ -7,6 +7,7 @@ import { GeneralService } from "../../services/general.service";
 import { AppState } from "../../store";
 import { GIDDH_NEW_DATE_FORMAT_UI } from "../helpers/defaultDateFormat";
 import { MatDialog } from "@angular/material/dialog";
+import { TemplateFroalaComponent } from "../template-froala/template-froala.component";
 
 export interface TableData {
     title: string;
@@ -62,7 +63,16 @@ export class TriggersComponent implements OnInit {
     *
     * @memberof TriggersComponent
     */
-    public openCreateTriggerDialog() {
-        // this.dialog.open
+    public openCreateTriggerDialog(): void {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: { isTrigger: true },
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            position: {
+                right: '0',
+                bottom: '0'
+            },
+            disableClose: true
+        });
     }
 }
