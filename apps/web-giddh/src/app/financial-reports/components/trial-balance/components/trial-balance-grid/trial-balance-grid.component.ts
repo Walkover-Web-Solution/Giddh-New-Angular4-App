@@ -119,8 +119,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.listOfCheckGroupsAccounts = [];
                 setTimeout(() => {
                     this.refresh.emit();
-                    this.tlPlService.isReportTailed$.next(true);
-                }, 200);
+                }, 600);
             }
         });
     }
@@ -287,7 +286,8 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                     request: {
                         reportType: ReportType.TrialBalance,
                         from: this.from,
-                        to: this.to
+                        to: this.to,
+                        branchUniqueName: this.generalService.currentBranchUniqueName
                     },
                     payload: this.listOfCheckGroupsAccounts
                 };
