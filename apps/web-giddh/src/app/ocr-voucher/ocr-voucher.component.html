@@ -1,0 +1,33 @@
+<ng-container appTranslate  [file]="'ocr-voucher'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+
+    <section class="ocr-voucher container-fluid pd-15 d-flex flex-column">
+        <ng-container *ngIf="false; else ocrVoucher">
+            <div class="initial-screen position-absolute text-center">
+                <div class="mb-5">
+                    <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px"
+                        height="auto">
+                </div>
+                <button mat-raised-button color="primary" (click)="openCreateEditDiscountAsidePane()">+ Upload </button>
+            </div>
+        </ng-container>
+        <ng-template #ocrVoucher>
+            <div>
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (change)="onToggleChange($event)">
+                    <mat-button-toggle class="w100" value="upload">Upload</mat-button-toggle>
+                    <mat-button-toggle class="w100" value="create">Create</mat-button-toggle>
+                    <mat-button-toggle class="w100" value="list">List</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <main class="flex-grow-1 overflow-auto">
+                <ng-container [ngSwitch]="selectedToggle">
+                    <ng-container *ngSwitchCase="create">
+                        Create
+                    </ng-container>
+                    <ng-container *ngSwitchCase="list">
+                        <ocr-voucher-list></ocr-voucher-list>
+                    </ng-container>
+                </ng-container>
+            </main>
+        </ng-template>
+    </section>
+</ng-container>
