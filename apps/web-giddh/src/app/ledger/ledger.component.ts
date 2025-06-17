@@ -1816,13 +1816,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
-            width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
-                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName }))
+                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName })),
+                currencyTogglerModel: this.currencyTogglerModel,
+                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
             },
             role: 'alertdialog',
+            panelClass: ['mat-dialog-md'],
             ariaLabel: 'export'
         });
 
