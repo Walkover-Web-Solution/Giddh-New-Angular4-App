@@ -32,6 +32,12 @@ textarea.receipient-email {
     }
 }
 
+.export-ledger-right-tview {
+    &::after {
+        right: 42px !important;
+    }
+}
+
 #exportModal {
     #export-body {
         .clearfix {
