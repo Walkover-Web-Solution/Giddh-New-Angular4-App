@@ -2553,7 +2553,15 @@ modal-container.modal.fade.show {
 }
 
 .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
-    z-index: 999 !important;
+    z-index: 999999 !important;
+}
+
+body {
+    &.datepicker-confirmation-open {
+        .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
+            z-index: 999 !important;
+        }
+    }
 }
 
 modal-container.modal {
@@ -12169,7 +12177,14 @@ body.prevent-body-scroll {
 
 /*media query for height resolution end*/
 .modal.fade.giddh-calendar.show {
-    z-index: 999;
+    z-index: 999999;
+}
+body {
+    &.datepicker-confirmation-open {
+        .modal.fade.giddh-calendar.show {
+            z-index: 999;
+        }
+    }
 }
 
 *::-webkit-scrollbar {
