@@ -139,7 +139,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col">
+                        <div class="col export-border position-relative" [ngClass]="{'export-ledger-right': inputData?.isLedgerAccountAllowsMultiCurrency}">
                             <div class="pd-b2 export-type"
                                 [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
                                 <label class="w125">{{ commonLocaleData?.app_order }}:</label>
@@ -203,7 +203,7 @@
                         </div>
                         <div class="col">
                             <ng-container *ngIf="
-                                !exportRequest.ledgerView &&
+                                !exportRequest.ledgerView && 
                                 !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
                             ">
                                 <div class="pd-b2">
@@ -265,21 +265,22 @@
                 </form>
             </div>
         </mat-dialog-content>
-        <mat-dialog-actions>
+        <mat-dialog-actions align="end">
             <div class="pd-b15">
-            <button mat-stroked-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()" [disabled]="
+                <button mat-stroked-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()"
+                    [disabled]="
             isLoading ||
             (emailTypeSelected === 'voucher' &&
                 !exportRequest.attachmentExport &&
                 !exportRequest.voucherExport)
         ">
-                {{ commonLocaleData?.app_download }}
-            </button>
-            <button mat-stroked-button color="primary" class="show-columnar-button unbold mr-l1"
-                [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">
-                {{ commonLocaleData?.app_show }}
-            </button>
-        </div>
+                    {{ commonLocaleData?.app_download }}
+                </button>
+                <button mat-stroked-button color="primary" class="show-columnar-button unbold mr-l1"
+                    [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">
+                    {{ commonLocaleData?.app_show }}
+                </button>
+            </div>
         </mat-dialog-actions>
     </div>
 </ng-container>
