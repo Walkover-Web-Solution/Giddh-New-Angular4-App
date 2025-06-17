@@ -1,5 +1,6 @@
-<ng-container appTranslate  [file]="'ocr-voucher'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
-
+<ng-container appTranslate [file]="'ocr-voucher'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <section class="ocr-voucher container-fluid pd-15 d-flex flex-column">
         <ng-container *ngIf="false; else ocrVoucher">
             <div class="initial-screen position-absolute text-center">

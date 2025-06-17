@@ -121,7 +121,6 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
         private router: Router,
         private toasterService: ToasterService
     ) {
-        this.store.dispatch(this.generalActions.openSideMenu(true));
     }
 
     /**
@@ -131,7 +130,6 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public ngOnInit(): void {
-        document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);
         /** Get Discount List */
