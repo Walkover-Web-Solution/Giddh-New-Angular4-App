@@ -1,14 +1,21 @@
-<ng-container appTranslate [file]="'triggers-list'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'triggers/basic'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="obligations position-relative pd-15">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
                 <div class="col flex-grow-0">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <input type="text" name="selectedDateRange"
+                        <input
+                            type="text"
+                            name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker" />
+                            class="giddh-datepicker date-range-picker"
+                        />
                     </div>
                 </div>
             </div>
@@ -58,46 +65,44 @@
                             <mat-cell *matCellDef="let element">
                                 DUE_BY: {{ element.conditions.DUE_BY.key }} = {{ element.conditions.DUE_BY.value
                                 }}<br />
-                                DUE_AMOUNT: {{ element.conditions.DUE_AMOUNT.key }} = {{
-                                element.conditions.DUE_AMOUNT.value }}
+                                DUE_AMOUNT: {{ element.conditions.DUE_AMOUNT.key }} =
+                                {{ element.conditions.DUE_AMOUNT.value }}
                             </mat-cell>
                         </ng-container>
 
                         <!-- Actions Column -->
                         <ng-container matColumnDef="actions">
                             <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{ element.actions.join(', ') }} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.actions.join(", ") }} </mat-cell>
                         </ng-container>
 
                         <!-- Disabled Column -->
                         <ng-container matColumnDef="disabled">
                             <mat-header-cell *matHeaderCellDef> Disabled </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{ element.disabled ? 'Yes' : 'No' }} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.disabled ? "Yes" : "No" }} </mat-cell>
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
                     </table>
                     <section *ngIf="!dataSource.length">
                         <div class="no-data">
                             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                         </div>
                     </section>
-                    <div
-                    class="pagination-wrapper justify-content-end"
-                >
-                    <mat-paginator
-                        (page)="handlePageChange($event)"
-                        [length]="20"
-                        [pageSize]="20"
-                        [showFirstLastButtons]="true"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [hidePageSize]="false"
-                        [pageIndex]="1"
-                        class="mt-15"
-                    >
-                    </mat-paginator>
-                </div>
+                    <div class="pagination-wrapper justify-content-end">
+                        <mat-paginator
+                            (page)="handlePageChange($event)"
+                            [length]="20"
+                            [pageSize]="20"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="1"
+                            class="mt-15"
+                        >
+                        </mat-paginator>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,13 +113,23 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            >
             </app-datepicker-wrapper>
         </div>
     </div>

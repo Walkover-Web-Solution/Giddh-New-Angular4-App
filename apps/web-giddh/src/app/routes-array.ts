@@ -69,7 +69,7 @@ export const ROUTES: Routes = [
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
-            { path: 'triggers', loadChildren: () => import('./triggers-list/triggers-list.module').then(module => module.TriggersListModule) },
+            { path: 'triggers', loadChildren: () => import('./shared/triggers/triggers.module').then(module => module.TriggersModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),

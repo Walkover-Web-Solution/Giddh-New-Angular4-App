@@ -70,7 +70,6 @@ import { MatListModule } from '@angular/material/list';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
-import { TriggersComponent } from './triggers/triggers.component';
 import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
@@ -91,7 +90,7 @@ import { MatDividerModule } from '@angular/material/divider';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
-        TriggersComponent,
+        // TriggersComponent,
         ShopifyIntegrationComponent,
         CustomerPortalComponent,
         TallyIntegrationComponent,

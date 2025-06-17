@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
 >
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
-        <h3 mat-dialog-title >{{ commonLocaleData?.app_custom_email_template }}</h3>
+        <h3 mat-dialog-title>{{ commonLocaleData?.app_custom_email_template }}</h3>
         <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
     </div>
 
@@ -16,8 +16,13 @@
                     <div class="col-md-8 col-lg-12 col-xl-12 col-12 upper-common-form-label-field">
                         <div class="row row-gap mr-t1">
                             <div class="col-sm-4 col-lg-4">
-                                <input-field [cssClass]="'form-control mat-field-border'" [type]="'text'"
-                                    [name]="'triggerName'" [placeholder]="'Enter Trigger Name'" formControlName="">
+                                <input-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [type]="'text'"
+                                    [name]="'triggerName'"
+                                    [placeholder]="'Enter Trigger Name'"
+                                    formControlName=""
+                                >
                                 </input-field>
                             </div>
                             <div class="col-sm-4 col-lg-4">
@@ -41,25 +46,39 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 col-lg-4">
-                                <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Trigger Module'"
-                                    [options]="tirggerOptions" formControlName="" class="w-100"
-                                    [labelValue]="tirggerOptions[0]?.label">
+                                <reactive-dropdown-field
+                                    [name]="'entity'"
+                                    [placeholder]="'Select Trigger Module'"
+                                    [options]="tirggerOptions"
+                                    formControlName=""
+                                    class="w-100"
+                                    [labelValue]="tirggerOptions[0]?.label"
+                                >
                                     <!-- (selectedOption)="" -->
                                 </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row row-gap mr-t2 mr-b2">
                             <div class="col-sm-4 col-lg-4">
-                                <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Entity'"
-                                    [options]="entityOptions" formControlName="" class="w-100">
+                                <reactive-dropdown-field
+                                    [name]="'entity'"
+                                    [placeholder]="'Select Entity'"
+                                    [options]="entityOptions"
+                                    formControlName=""
+                                    class="w-100"
+                                >
                                     <!-- (selectedOption)="" -->
                                 </reactive-dropdown-field>
                             </div>
                             <div class="col-sm-4 col-lg-4">
                                 <!-- [(ngModel)]="selectedBranch"
                                 (ngModelChange)="resetWarehouse(); getBranches()" -->
-                                <mat-select name="selectedBranch" [multiple]="true" class="entity-mat-salect"
-                                    [placeholder]="'Select Account / Group'">
+                                <mat-select
+                                    name="selectedBranch"
+                                    [multiple]="true"
+                                    class="entity-mat-salect"
+                                    [placeholder]="'Select Account / Group'"
+                                >
                                     <mat-option class="balance-options">
                                         <!-- [noEntriesFoundLabel]="localeData?.header?.no_result_found"
                                         [formControl]="branchesDropdown"
@@ -69,52 +88,83 @@
                                         </ngx-mat-select-search>
                                     </mat-option>
 
-                                    <mat-option class="balance-options"
+                                    <mat-option
+                                        class="balance-options"
                                         *ngFor="let branch of entityAccountGroupOptions"
-                                        [value]="branch?.uniqueName">
+                                        [value]="branch?.uniqueName"
+                                    >
                                         {{ branch?.label ?? "-" }}
                                     </mat-option>
                                 </mat-select>
                             </div>
                             <div class="col-sm-4 col-lg-4">
-                                <reactive-dropdown-field [name]="'entity'"  [labelValue]="actionOptions[0]?.label" [placeholder]="'Select Action'"
-                                    [options]="actionOptions" formControlName="" class="w-100">
+                                <reactive-dropdown-field
+                                    [name]="'entity'"
+                                    [labelValue]="actionOptions[0]?.label"
+                                    [placeholder]="'Select Action'"
+                                    [options]="actionOptions"
+                                    formControlName=""
+                                    class="w-100"
+                                >
                                     <!-- (selectedOption)="" -->
                                 </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row row-gap mr-t1">
                             <div class="col-sm-4 col-lg-4">
-                                <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Condition'"
-                                    [options]="conditionOptions" formControlName="" class="w-100">
+                                <reactive-dropdown-field
+                                    [name]="'entity'"
+                                    [placeholder]="'Select Condition'"
+                                    [options]="conditionOptions"
+                                    formControlName=""
+                                    class="w-100"
+                                >
                                     <!-- (selectedOption)="" -->
                                 </reactive-dropdown-field>
                             </div>
                             <ng-container *ngIf="false">
                                 <div class="col-sm-4 col-lg-4">
-                                    <input-field [cssClass]="'form-control mat-field-border'" [type]="'number'"
-                                        [name]="'triggerAmount'" [placeholder]="'Enter Amount'" formControlName="">
+                                    <input-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [type]="'number'"
+                                        [name]="'triggerAmount'"
+                                        [placeholder]="'Enter Amount'"
+                                        formControlName=""
+                                    >
                                     </input-field>
                                 </div>
                                 <div class="col-sm-4 col-lg-4">
-                                    <reactive-dropdown-field [name]="'trigger'"
-                                        [placeholder]="'Select Condition Type Module'" [options]="conditionOptions"
-                                        formControlName="" class="w-100">
+                                    <reactive-dropdown-field
+                                        [name]="'trigger'"
+                                        [placeholder]="'Select Condition Type Module'"
+                                        [options]="conditionOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
                                         <!-- (selectedOption)="" -->
                                     </reactive-dropdown-field>
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="true">
                                 <div class="col-sm-4 col-lg-4">
-                                    <reactive-dropdown-field [name]="'triggerDays'" [placeholder]="'Select Days'"
-                                        [options]="daysOptions" formControlName="" class="w-100">
+                                    <reactive-dropdown-field
+                                        [name]="'triggerDays'"
+                                        [placeholder]="'Select Days'"
+                                        [options]="daysOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
                                         <!-- (selectedOption)="" -->
                                     </reactive-dropdown-field>
                                 </div>
                                 <div class="col-sm-4 col-lg-4">
-                                    <reactive-dropdown-field [name]="'trigger'"
-                                        [placeholder]="'Select Condition Type'" [options]="conditionOptions"
-                                        formControlName="" class="w-100">
+                                    <reactive-dropdown-field
+                                        [name]="'trigger'"
+                                        [placeholder]="'Select Condition Type'"
+                                        [options]="conditionOptions"
+                                        formControlName=""
+                                        class="w-100"
+                                    >
                                         <!-- (selectedOption)="" -->
                                     </reactive-dropdown-field>
                                 </div>
@@ -122,19 +172,32 @@
                         </div>
                         <div class="row row-gap mr-t2 mr-b2">
                             <div class="col-sm-4 col-lg-4">
-                                <input-field [cssClass]="'form-control mat-field-border'" [type]="'text'"
-                                    [name]="'triggerTime'" [placeholder]="'Enter Time'" formControlName="">
+                                <input-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [type]="'text'"
+                                    [name]="'triggerTime'"
+                                    [placeholder]="'Enter Time'"
+                                    formControlName=""
+                                >
                                 </input-field>
                             </div>
                             <div class="col-sm-4 col-lg-4">
-                                <reactive-dropdown-field [name]="'entity'" [placeholder]="'Select Time Action'"
-                                    [options]="timeOptions" formControlName="" class="w-100">
+                                <reactive-dropdown-field
+                                    [name]="'entity'"
+                                    [placeholder]="'Select Time Action'"
+                                    [options]="timeOptions"
+                                    formControlName=""
+                                    class="w-100"
+                                >
                                     <!-- (selectedOption)="" -->
                                 </reactive-dropdown-field>
                             </div>
                             <div class="col-sm-4 col-lg-4">
-                                <mat-checkbox name="attachPdf" color="primary"
-                                    class="auto-fill-shipping-address mr-t10">
+                                <mat-checkbox
+                                    name="attachPdf"
+                                    color="primary"
+                                    class="auto-fill-shipping-address mr-t10"
+                                >
                                 </mat-checkbox>
                                 <!-- (change)="toggleOtherTaxesAsidePane(true, null)" -->
                                 <strong>

@@ -1,0 +1,32 @@
+<ng-container
+    appTranslate
+    [file]="'triggers'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <section class="trigger d-grid place-content-center">
+        <div class="trigger-content d-flex column-gap4">
+            <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" (click)="openCreateTriggerDialog()">
+                <mat-card-content>
+                    <mat-card-header class="align-items-center">
+                        <mat-card-title>Basic</mat-card-title>
+                        <mat-card-subtitle>
+                            <span class="d-inline-flex column-gap1 align-items-center"><i class="icon-mail"></i>Email</span> 
+                            &nbsp;&nbsp;
+                            <span class="d-inline-flex column-gap1 align-items-center"><i class="icon-chat2"></i> Whatsapp</span>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" routerLink="/pages/triggers/advance">
+                <mat-card-content>
+                    <mat-card-header class="align-items-center">
+                        <mat-card-title>Advance</mat-card-title>
+                    </mat-card-header>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </section>
+
+</ng-container>

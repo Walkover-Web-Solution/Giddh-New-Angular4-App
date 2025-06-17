@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/c
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Observable, ReplaySubject, takeUntil } from "rxjs";
 import * as dayjs from 'dayjs';
-import { GeneralService } from "../services/general.service";
-import { GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
+import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
+import { AppState } from "apps/web-giddh/src/app/store";
 import { select, Store } from "@ngrx/store";
-import { AppState } from "../store";
+import { GIDDH_NEW_DATE_FORMAT_UI } from "../../../helpers/defaultDateFormat";
+
 export interface TableData {
     title: string;
     entity: string;
@@ -31,12 +32,12 @@ export interface TableData {
 }
 
 @Component({
-    selector: 'triggers-list-component',
-    templateUrl: './triggers-list.component.html',
-    styleUrls: ['./triggers-list.component.scss']
+    selector: 'app-basic-trigger',
+    templateUrl: './basic-trigger.component.html',
+    styleUrls: ['./basic-trigger.component.scss']
 })
 
-export class TriggersListComponent implements OnInit, OnDestroy {
+export class BasicTriggerComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -53,6 +54,7 @@ export class TriggersListComponent implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /** Selected range label */
     public selectedRangeLabel: any = "";
+
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store selected date range to show on UI */
@@ -111,7 +113,7 @@ export class TriggersListComponent implements OnInit, OnDestroy {
     /**
     * Lifecycle hook for initialization
     *
-    * @memberof ObligationsComponent
+    * @memberof BasicTriggerComponent
     */
     public ngOnInit(): void {
         /** Universal date observer */
@@ -128,7 +130,7 @@ export class TriggersListComponent implements OnInit, OnDestroy {
     * This will be use for show datepicker
     *
     * @param {*} element
-    * @memberof ObligationsComponent
+    * @memberof BasicTriggerComponent
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -143,7 +145,7 @@ export class TriggersListComponent implements OnInit, OnDestroy {
     /**
     * This will be use for hide datepicker
     *
-    * @memberof ObligationsComponent
+    * @memberof BasicTriggerComponent
     */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -153,7 +155,7 @@ export class TriggersListComponent implements OnInit, OnDestroy {
     * Call back function for date/range selection in datepicker
     *
     * @param {*} value
-    * @memberof ObligationsComponent
+    * @memberof BasicTriggerComponent
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -189,7 +191,7 @@ export class TriggersListComponent implements OnInit, OnDestroy {
     /**
     * Lifecycle hook for destroy
     *
-    * @memberof ObligationsComponent
+    * @memberof BasicTriggerComponent
     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

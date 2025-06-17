@@ -73,7 +73,7 @@ export const ROUTES: Routes = [
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule), canActivate: [NeedsAuthorization] },
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule), canActivate: [NeedsAuthorization] },
-            { path: 'triggers', loadChildren: () => import('./triggers-list/triggers-list.module').then(module => module.TriggersListModule), canActivate: [NeedsAuthorization] },
+            { path: 'triggers', loadChildren: () => import('./shared/triggers/triggers.module').then(module => module.TriggersModule), canActivate: [NeedsAuthorization] },
             { path: 'ledger', loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule), canActivate: [NeedsAuthorization] },
             { path: 'settings', loadChildren: () => import('./settings/settings.module').then(module => module.SettingsModule), canActivate: [NeedsAuthorization] },
