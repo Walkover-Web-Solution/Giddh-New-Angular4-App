@@ -137,38 +137,84 @@
                                 }}</mat-radio-button>
                         </mat-radio-group>
                     </div>
-
-                    <div class="row">
-                        <div class="col export-border position-relative" [ngClass]="{'export-ledger-right': inputData?.isLedgerAccountAllowsMultiCurrency}">
-                            <div class="pd-b2 export-type"
-                                [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
-                                <label class="w125">{{ commonLocaleData?.app_order }}:</label>
-                                <label class="radio-inline p-0">
-                                    <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
-                                        <span class="pull-left">{{
-                                            exportRequest.sort
-                                            ? commonLocaleData?.app_ascending
-                                            : commonLocaleData?.app_descending
-                                            }}</span>
-                                    </mat-slide-toggle>
-                                </label>
-                            </div>
-                            <ng-container *ngIf="!['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">
+                    <ng-template [ngIf]="exportRequest.ledgerView">
+                        <div class="row">
+                            <div class="col position-relative"
+                                [ngClass]="{'export-ledger-right-tview': inputData?.isLedgerAccountAllowsMultiCurrency, 'export-border': inputData?.isLedgerAccountAllowsMultiCurrency}">
                                 <div class="pd-b2 export-type"
-                                    [hidden]="!inputData?.isLedgerAccountAllowsMultiCurrency">
-                                    <label class="w125">{{ commonLocaleData?.app_currency }}:</label>
+                                    [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
+                                    <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                                     <label class="radio-inline p-0">
-                                        <mat-slide-toggle color="primary" name="showInAccountCurrency"
-                                            [(ngModel)]="exportRequest.showInAccountCurrency">
+                                        <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
                                             <span class="pull-left">{{
-                                                !exportRequest.showInAccountCurrency
-                                                ? commonLocaleData?.app_company + " " + commonLocaleData?.app_currency
-                                                : commonLocaleData?.app_account + " " + commonLocaleData?.app_currency
+                                                exportRequest.sort
+                                                ? commonLocaleData?.app_ascending
+                                                : commonLocaleData?.app_descending
                                                 }}</span>
                                         </mat-slide-toggle>
                                     </label>
                                 </div>
-                            </ng-container>
+                            </div>
+                            <div class="col">
+                                <ng-container
+                                    *ngIf="!['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">
+                                    <div class="pd-b2 export-type"
+                                        [hidden]="!inputData?.isLedgerAccountAllowsMultiCurrency">
+                                        <label class="w125">{{ commonLocaleData?.app_currency }}:</label>
+                                        <label class="radio-inline p-0">
+                                            <mat-slide-toggle color="primary" name="showInAccountCurrency"
+                                                [(ngModel)]="exportRequest.showInAccountCurrency">
+                                                <span class="pull-left">{{
+                                                    !exportRequest.showInAccountCurrency
+                                                    ? commonLocaleData?.app_company + " " +
+                                                    commonLocaleData?.app_currency
+                                                    : commonLocaleData?.app_account + " " +
+                                                    commonLocaleData?.app_currency
+                                                    }}</span>
+                                            </mat-slide-toggle>
+                                        </label>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <div class="row">
+                        <div class="col export-border position-relative"
+                            [ngClass]="{'export-ledger-right': inputData?.isLedgerAccountAllowsMultiCurrency}">
+                            <ng-template [ngIf]="!exportRequest.ledgerView">
+                                <div class="pd-b2 export-type"
+                                    [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
+                                    <label class="w125">{{ commonLocaleData?.app_order }}:</label>
+                                    <label class="radio-inline p-0">
+                                        <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
+                                            <span class="pull-left">{{
+                                                exportRequest.sort
+                                                ? commonLocaleData?.app_ascending
+                                                : commonLocaleData?.app_descending
+                                                }}</span>
+                                        </mat-slide-toggle>
+                                    </label>
+                                </div>
+                                <ng-container
+                                    *ngIf="!['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)">
+                                    <div class="pd-b2 export-type"
+                                        [hidden]="!inputData?.isLedgerAccountAllowsMultiCurrency">
+                                        <label class="w125">{{ commonLocaleData?.app_currency }}:</label>
+                                        <label class="radio-inline p-0">
+                                            <mat-slide-toggle color="primary" name="showInAccountCurrency"
+                                                [(ngModel)]="exportRequest.showInAccountCurrency">
+                                                <span class="pull-left">{{
+                                                    !exportRequest.showInAccountCurrency
+                                                    ? commonLocaleData?.app_company + " " +
+                                                    commonLocaleData?.app_currency
+                                                    : commonLocaleData?.app_account + " " +
+                                                    commonLocaleData?.app_currency
+                                                    }}</span>
+                                            </mat-slide-toggle>
+                                        </label>
+                                    </div>
+                                </ng-container>
+                            </ng-template>
                             <ng-container *ngIf="
                             !exportRequest.ledgerView &&
                             !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
