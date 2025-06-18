@@ -172,6 +172,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** Holds advance Filters keys */
     public advanceFilters: any = {};
+    /** Holds Sort Key Map */
+    public sortKeyMap: object = {};
     /** Holds Advance Filters Applied Status */
     public advanceFiltersApplied: boolean = false;
     /** Holds Voucher Balances */
@@ -486,6 +488,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
+                this.sortKeyMap = {};
                 this.setInitialAdvanceFilter(true);
                 if (this.settingResponse?.invoiceSettings) {
                     this.settingForm.patchValue({
@@ -938,6 +941,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
+            this.isColumnsLoading = false;
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -1351,7 +1355,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public sortChange(event: any): void {
-        this.advanceFilters.sort = event?.direction ? event?.direction : 'asc';
+        if (this.sortKeyMap?.[event?.active]) {
+            const sortValue = this.sortKeyMap?.[event?.active] === 'asc' ? 'desc' : 'asc';
+            this.advanceFilters.sort = sortValue;
+            this.sortKeyMap[event?.active] = sortValue;
+        } else {
+            this.advanceFilters.sort = event?.direction ?? 'asc';
+            this.sortKeyMap = {
+                ...this.sortKeyMap,
+                [event?.active]: event?.direction
+            };
+        }
         this.advanceFilters.sortBy = event?.active;
         this.advanceFilters.page = 1;
         this.advanceFiltersApplied = true;
@@ -2292,6 +2306,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
         this.activeSearchField = null;
+        this.sortKeyMap = {};
         if (!onlyResetValue) {
             this.getVouchers(false);
         }
@@ -3154,7 +3169,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
+   /**
      * Submits the form
      *
      * @return {*}  {void}
@@ -3211,12 +3226,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     }
 
-   /**
-   * This will be use for validation for delete email
-   *
-   * @return {*}  {boolean}
-   * @memberof VoucherListComponent
-   */
+    /**
+     * This will be use for validation for delete email
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
     public shouldDeleteEmail(voucherType?: string): boolean {
         const email = voucherType === 'invoice' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
         return email && email.length >= 4;
