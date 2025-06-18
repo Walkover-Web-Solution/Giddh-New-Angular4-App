@@ -190,7 +190,7 @@ import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-
         SubscriptionUpgradeButtonModule
     ],
     exports: [
-
+VoucherCreateComponent
     ],
     providers: [TitleCasePipe, InvoiceUiDataService]
 })

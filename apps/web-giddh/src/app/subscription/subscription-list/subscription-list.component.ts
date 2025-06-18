@@ -329,6 +329,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        console.log(event, element, searchedFieldName)
         if (searchedFieldName === 'companyName') {
             if (this.subscriptionListForm?.controls['companyName'].value !== null && this.subscriptionListForm?.controls['companyName'].value !== '') {
                 return;

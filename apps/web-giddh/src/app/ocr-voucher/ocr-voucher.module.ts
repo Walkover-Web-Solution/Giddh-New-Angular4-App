@@ -45,6 +45,7 @@ import { OcrVoucherRoutingModule } from './ocr-voucher.routing.module';
 import { MatSelectModule } from '@angular/material/select';
 import { OcrVoucherComponent } from './ocr-voucher.component';
 import { OcrVoucherCreateComponent } from './ocr-voucher-create/ocr-voucher-create.component';
+import { VouchersModule } from '../vouchers/vouchers.module';
 
 @NgModule({
     imports: [
@@ -94,6 +95,7 @@ import { OcrVoucherCreateComponent } from './ocr-voucher-create/ocr-voucher-crea
             style: 'slide-left',
             spinnerSize: 30
         }),
+        VouchersModule
 
     ],
     exports: [OcrVoucherListComponent,
