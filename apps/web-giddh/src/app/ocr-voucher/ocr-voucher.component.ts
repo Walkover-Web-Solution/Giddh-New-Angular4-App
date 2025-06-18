@@ -35,25 +35,13 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    public selectedToggle: string = '';
+    public selectedToggle: string = 'create';
     public upload: string = 'upload';
     public create: string = 'create';
     public list: string = 'list';
 
 
-    constructor(private store: Store<AppState>,
-        private toasty: ToasterService,
-        private loginService: AuthenticationService,
-        private loginAction: LoginActions,
-        private router: Router,
-        private sessionAction: SessionActions,
-        private route: ActivatedRoute,
-        private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions,
-        private changeDetectionRef: ChangeDetectorRef,
-        private dialog: MatDialog,
-        private generalService: GeneralService,
-        private clipboardService: ClipboardService
+    constructor(
     ) {
     }
 
@@ -156,8 +144,29 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
     }
 
     public onToggleChange(event: MatButtonToggleChange) {
+        const newValue = event.value;
+        console.log(newValue);
+        if (this.shouldPreventChange(newValue)) {
+            // Revert the toggle back to previous value
+            event.source.value = this.selectedToggle;
+
+        } else {
+            this.selectedToggle = newValue; // Accept the change
+        }
+    }
+
+    public shouldPreventChange(value: string): boolean {
+        return value === 'upload';
+    }
+
+    public onFileSelected(event: Event) {
         console.log(event);
-        this.selectedToggle = event.value;
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            const file = input.files[0];
+            console.log('Selected file:', file);
+            // Handle the file upload here...
+        }
     }
 
     /**
@@ -167,6 +176,12 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
      */
     public ngAfterViewInit(): void {
 
+    }
+
+    public onUploadFile(event: any, fileInput: HTMLInputElement): void {
+        console.log(event);
+        // Open file dialog
+        fileInput.click();
     }
 
     public ngOnDestroy(): void {

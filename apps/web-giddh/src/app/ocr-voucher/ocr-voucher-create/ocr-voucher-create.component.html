@@ -1,0 +1,18 @@
+<ng-container appTranslate [file]="'ocr-voucher'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
+    <div class="container-fluid pd-15 d-flex flex-direction justify-content-between">
+        <div class="section">
+            <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
+            <div class="pdf-preview h-100">
+                <div *ngIf="!isFileUploading" class="error danger text-center">
+                    <span>{{ localeData?.invoice_preview_unavailable }}</span>
+                </div>
+                <iframe *ngIf="!isFileUploading && sanitizedPdfFileUrl" #pdfContainer width="100%" height="100%"
+                    [src]="sanitizedPdfFileUrl" title="PDF"></iframe>
+            </div>
+        </div>
+        <div class="section">
+            <create></create>
+        </div>
+    </div>
+</ng-container>

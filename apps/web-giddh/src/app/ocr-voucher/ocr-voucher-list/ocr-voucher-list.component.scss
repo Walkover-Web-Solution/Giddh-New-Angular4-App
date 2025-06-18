@@ -1,4 +1,4 @@
-.subscription-container {
+.ocr-container {
     max-width: var(--center-content-max-width);
 
     .giddh-table {
@@ -6,10 +6,7 @@
     }
 }
 
-.subscription-name {
-    color: var(--color-table-secondary-heading) !important;
+.td-search-box {
+    padding: 0 0 0 10px!important;
 }
 
-.renewal-date-column {
-    transform: translateX(14px);
-}

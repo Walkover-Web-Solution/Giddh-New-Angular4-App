@@ -13,8 +13,12 @@
         </ng-container>
         <ng-template #ocrVoucher>
             <div>
-                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (change)="onToggleChange($event)">
-                    <mat-button-toggle class="w100" value="upload">Upload</mat-button-toggle>
+                <input type="file" #fileInput accept=".png,.jpg,.jpeg,.zip,.pdf" style="display: none"
+                    (change)="onFileSelected($event)">
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                    (change)="onToggleChange($event)">
+                    <mat-button-toggle class="w100" value="upload"
+                        (click)="onUploadFile($event,fileInput)">Upload</mat-button-toggle>
                     <mat-button-toggle class="w100" value="create">Create</mat-button-toggle>
                     <mat-button-toggle class="w100" value="list">List</mat-button-toggle>
                 </mat-button-toggle-group>
@@ -22,7 +26,7 @@
             <main class="flex-grow-1 overflow-auto">
                 <ng-container [ngSwitch]="selectedToggle">
                     <ng-container *ngSwitchCase="create">
-                        Create
+                        <ocr-voucher-create></ocr-voucher-create>
                     </ng-container>
                     <ng-container *ngSwitchCase="list">
                         <ocr-voucher-list></ocr-voucher-list>
