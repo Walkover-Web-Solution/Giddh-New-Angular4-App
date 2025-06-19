@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
@@ -11,6 +11,7 @@ import { EmailType } from './utility/template-froala.const';
 import { cloneDeep, isArray } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
     selector: 'template-froala',
@@ -130,31 +131,37 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
     /** Holds field options */
-    public entityOptions: any[] = [
-        {label:'Account', value:'account'},
-        {label:'Voucher', value:'voucher'},
-        {label:'Entry', value:'entry'}
+    public entityOptions: IOption[] = [
+        {label:'Account', value:'ACCOUNT'},
+        {label:'Voucher', value:'GROUP'},
     ];
-    public entityAccountGroupOptions: any[] = [
+    public entityAccountGroupOptions: IOption[] = [
         {label:'Stock', value:'account'},
         {label:'Walkover', value:'voucher'},
         {label:'Dilpreet', value:'entry'}
     ];
-    public voucherOptions: any[] = [
+    public voucherOptions: IOption[] = [
         {label:'Purchase', value:'PURCHASE'},
         {label:'Credit Note', value:'CR'},
         {label:'Debit Note', value:'DR'},
         {label:'Sales', value:'sales'}
     ];
-    public tirggerOptions: any[] = [
+    public triggerOptions: IOption[] = [
         {label:'Voucher Due', value:'VOUCHER_DUE'}
     ];
-    public actionOptions: any[] = [
+    public actionOptions: IOption[] = [
         {label:'Attach Voucher PDF', value:'ATTACH_VOUCHER_PDF'}
     ];
-    public conditionOptions: any[] = [];
-    public daysOptions: any[] = [];
-    public timeOptions: any[] = [];
+    public conditionOptions: IOption[] = [];
+    /** Holds days options i.e Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday */
+    public daysOptions: IOption[] = []; 
+    /** Holds date of month i.e 1 to 31 */
+    public dateOptions: IOption[] = [];
+    /** Holds Time Other option like "Day of Week" or "Date of Month" */
+    public timeOptions: IOption[] = [
+        {label:'Day of Week', value:'dayOfWeek'},
+        {label:'Date of Month', value:'dateOfMonth'}
+    ];
     /** Hold if user click outside of email section */
     public clickedInsideEmailSection: boolean = false;
     /** Holds all static emails (To, Cc, Bcc) combined in a single string */
@@ -177,6 +184,12 @@ export class TemplateFroalaComponent implements OnInit {
     };
     /** Holds width of select-multiple-fields */
     public optionClass: string = '';
+    /** Holds all voucher list */
+    public voucherList: IOption[] = [];
+    /** Holds all entity account group options */
+    public entityAccountGroupOptions$: Observable<IOption[]>;
+
+    fakeloader = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -197,6 +210,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
+        setTimeout(() => {
+            this.fakeloader = true;
+        }, 2000);
         document.querySelector('body').classList.add('hide-chat-widget');
         this.initializeForm();
         this.getEmailContents();
@@ -219,6 +235,10 @@ export class TemplateFroalaComponent implements OnInit {
                 this.ccEmails = mappedEmail;
                 this.bccEmails = mappedEmail;
             }
+        });
+
+        this.customTriggerForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log("response", response);
         });
 
         this.emailTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -373,12 +393,12 @@ export class TemplateFroalaComponent implements OnInit {
                 entityUniqueNames: [template?.entityUniqueNames ?? []],
                 voucherTypes: [template?.voucherTypes ?? []],
                 emailSubject: [template?.emailSubject ?? ''],
-                triggerModule: [template?.triggerModule ?? ''],
+                triggerModule: [template?.triggerModule ?? []],
                 to: [template?.to ?? []],
                 cc: [template?.cc ?? []],
                 bcc: [template?.bcc ?? []],
-                conditions: [template?.conditions ?? []],
-                executionTime: [template?.executionTime ?? []],
+                // conditions: [template?.conditions ?? []],
+                executionTime: this.getExecutionTimeFormGroup(template?.triggerModule),
                 actions: [template?.actions ?? []],
                 html: [template?.html ?? ''],
                 disabled: [template?.disabled ?? false]
@@ -393,7 +413,41 @@ export class TemplateFroalaComponent implements OnInit {
                 html: [template?.html ?? '']
             });
         }
+
+        setTimeout(() => {
+            console.log("this.customTriggerForm.value", this.customTriggerForm.value);
+            
+        }, 1000);
     }
+
+    /**
+     * Returns execution time form group
+     *
+     * @private
+     * @return {*}  {FormGroup}
+     * @memberof TemplateFroalaComponent
+     */
+    private getExecutionTimeFormGroup(value: any): FormGroup {
+        return this.formBuilder.group({
+            time: [value?.time ?? ''],
+            dayOfWeek: [value?.dayOfWeek ?? ''],
+            dayOfMonth: [value?.dayOfMonth ?? '']
+        });
+    }
+
+    private addConditionControls(conditions: any): void {
+        let dynamicControls: FormGroup = new FormGroup({});
+        Object.entries(conditions).forEach(([conditionKey, conditionData]) => {
+          dynamicControls.addControl(
+            conditionKey,
+            new FormGroup({
+              key: new FormControl(conditionData['key']),
+              value: new FormControl(conditionData['value'])
+            })
+          );
+        });
+        this.customTriggerForm.addControl('conditions', dynamicControls as FormGroup)
+      }
 
     /**
      * Handles the submission of the email form.
@@ -556,6 +610,43 @@ export class TemplateFroalaComponent implements OnInit {
                 this.hiddenEmailList += ` ${hiddenEmailsCount} ${this.commonLocaleData.app_more}${bccInfo}`;
             }
         }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleScrollEnd(): void {
+        // if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+        //     this.onAccountSearchQueryChanged(
+        //         this.accountsSearchResultsPaginationData.query,
+        //         this.accountsSearchResultsPaginationData.page + 1,
+        //         (response) => {
+        //             if (!this.accountsSearchResultsPaginationData.query) {
+        //                 const results = response.map(result => {
+        //                     return {
+        //                         value: result?.uniqueName,
+        //                         label: `${result.name} - (${result?.uniqueName})`
+        //                     }
+        //                 }) || [];
+        //                 this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+        //                 this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+        //                 this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+        //             }
+        //         });
+        // }
+    }
+
+    public onAccountGroupSearchQueryChanged(query: string): void {  
+    }
+
+    public onAccountGroupClear(): void {
+    }
+
+    public onTimeActionChange(event: IOption): void {
+        console.log(event);
     }
 
 }
