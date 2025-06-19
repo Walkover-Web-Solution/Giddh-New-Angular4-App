@@ -82,11 +82,15 @@
                         <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
-                                    [routerLink]="['/pages/ledger/'+ acc?.uniqueName]" [queryParams]="{ redirectUrl: currentUrl}"
                                     aria-label="account"
                                     [routerLinkActive]="['active']"
+                                    class="cursor-pointer"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
-                                    (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide(); $event.stopPropagation()"
+                                    (click)="
+                                        analyzeAccounts($event, acc);
+                                        companyDetailsDropDownWeb.hide();
+                                        $event.stopPropagation()
+                                    "
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>
@@ -135,9 +139,13 @@
                                 >
                             </li>
                             <li role="menuitem">
-                                <a href="javascript:void(0);" aria-label="Show more" (click)="showNavigationModal()" class="show-more cursor-pointer">{{
-                                    localeData?.show_more
-                                }}</a>
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="Show more"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -159,7 +167,7 @@
                             </p>
                         </div>
                         <ul class="list-style-none giddh-primary-items" role="menu">
-                            <ng-container *ngFor="let menu of allItems; trackBy: trackItems;">
+                            <ng-container *ngFor="let menu of allItems; trackBy: trackItems">
                                 <ng-container *ngIf="!menu.hide">
                                     <li
                                         class="main-item btn-group"
@@ -200,8 +208,15 @@
                                             </span>
                                         </a>
                                         <ng-container *ngIf="menu?.items?.length">
-                                            <ul *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu">
-                                                <li *ngFor="let item of menu?.items; trackBy: trackItems" role="menuitem">
+                                            <ul
+                                                *dropdownMenu
+                                                class="dropdown-menu list-style-none pd-l2 sub-menu"
+                                                role="menu"
+                                            >
+                                                <li
+                                                    *ngFor="let item of menu?.items; trackBy: trackItems"
+                                                    role="menuitem"
+                                                >
                                                     <div
                                                         *ngIf="item?.link"
                                                         aria-label="menu"
@@ -215,42 +230,68 @@
                                                         #rla="routerLinkActive"
                                                         [routerLinkActiveOptions]="{ exact: true }"
                                                         [queryParams]="item?.additional?.queryParams"
+                                                    >
+                                                        <i [ngClass]="item.icon"></i>
+                                                        {{ item?.label }}
+                                                        <ng-container
+                                                            *ngIf="
+                                                                !isConsolidatedBranch &&
+                                                                (currentOrganizationType === 'BRANCH' ||
+                                                                    isCompanyWithoutBranch)
+                                                            "
                                                         >
-                                                            <i [ngClass]="item.icon"></i>
-                                                            {{ item?.label }}
-                                                            <ng-container *ngIf="!isConsolidatedBranch && (currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch)">
-                                                                <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
-                                                                    <strong
-                                                                        class="ml-auto"
-                                                                        *ngIf="item?.additional?.createNew"
-                                                                        (click)="$event.stopPropagation()"
-                                                                        [routerLink]="[item?.additional?.createNew?.link]"
-                                                                        [queryParams]="item?.additional?.createNew?.queryParams"
-                                                                    >
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    !(
+                                                                        item?.additional?.createNew?.queryParams
+                                                                            ?.addVendor ||
+                                                                        item?.additional?.createNew?.queryParams
+                                                                            ?.addCustomer
+                                                                    )
+                                                                "
+                                                            >
+                                                                <strong
+                                                                    class="ml-auto"
+                                                                    *ngIf="item?.additional?.createNew"
+                                                                    (click)="$event.stopPropagation()"
+                                                                    [routerLink]="[item?.additional?.createNew?.link]"
+                                                                    [queryParams]="
+                                                                        item?.additional?.createNew?.queryParams
+                                                                    "
+                                                                >
                                                                     {{ item?.additional?.createNew?.label }}
-                                                                    </strong>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
-                                                                    <strong
+                                                                </strong>
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    item?.additional?.createNew?.queryParams
+                                                                        ?.addVendor ||
+                                                                    item?.additional?.createNew?.queryParams
+                                                                        ?.addCustomer
+                                                                "
+                                                            >
+                                                                <strong
                                                                     class="ml-auto"
                                                                     (click)="
                                                                         $event.stopPropagation();
-                                                                        selectedGroupForCreateAccount =
-                                                                        item?.additional?.createNew?.queryParams?.addCustomer
-                                                                        ? 'sundrydebtors'
-                                                                        : 'sundrycreditors';
-                                                                        openAccountAsidePane()"
-                                                                    >
-                                                                        {{ item?.additional?.createNew?.label }}
-                                                                    </strong>
-                                                                </ng-container>
+                                                                        selectedGroupForCreateAccount = item?.additional
+                                                                            ?.createNew?.queryParams?.addCustomer
+                                                                            ? 'sundrydebtors'
+                                                                            : 'sundrycreditors';
+                                                                        openAccountAsidePane()
+                                                                    "
+                                                                >
+                                                                    {{ item?.additional?.createNew?.label }}
+                                                                </strong>
                                                             </ng-container>
-                                                </div>
+                                                        </ng-container>
+                                                    </div>
                                                     <div
                                                         *ngIf="!item?.link"
                                                         aria-label="menu"
                                                         (click)="handleItemClick(item)"
-                                                        ><i [ngClass]="item.icon"></i>
+                                                    >
+                                                        <i [ngClass]="item.icon"></i>
                                                         {{ item?.label }}
                                                     </div>
                                                 </li>

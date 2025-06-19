@@ -20,6 +20,7 @@ import { CompanyListDialogComponent } from '../company-list-dialog/company-list-
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -79,13 +80,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public showName = false;
     /* True if Plan Name show */
     public showPlanSubName = false;
-    /* True if status show */
-    public showStatus = false;
     /* True if duration show */
     public showMonthlyYearly = false;
     /* True if show header */
     public showData: boolean = true;
-
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         const shouldShow = (
@@ -94,7 +92,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             this.subscriptionListForm?.controls['subscriberName']?.value ||
             this.subscriptionListForm?.controls['countryName']?.value ||
             this.subscriptionListForm?.controls['planName']?.value ||
-            this.subscriptionListForm?.controls['status']?.value ||
             this.subscriptionListForm?.controls['duration']?.value
         );
         this.showData = shouldShow;
@@ -114,6 +111,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** This will use for status */
+    public statusOptions: IOption[] = [];
+    /** This will use for selected status */
+    public selectedStatus: string = '';
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -150,7 +151,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                     this.subscriptionListForm?.controls['subscriberName']?.value ||
                     this.subscriptionListForm?.controls['countryName']?.value ||
                     this.subscriptionListForm?.controls['planName']?.value ||
-                    this.subscriptionListForm?.controls['status']?.value ||
                     this.subscriptionListForm?.controls['duration']?.value) {
                     this.showData = true;
                 } else {
@@ -245,21 +245,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showPlanSubName = false;
-            }
-        });
-
-        this.subscriptionListForm?.controls['status'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (this.isNotNullOrUndefined(searchedText)) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (this.isNullOrEmpty(searchedText)) {
-                this.showClearFilter = false;
-                this.showStatus = false;
             }
         });
 
@@ -364,10 +349,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
                 return;
             }
-        } else if (searchedFieldName === 'Status') {
-            if (this.subscriptionListForm?.controls['status'].value !== null && this.subscriptionListForm?.controls['status'].value !== '') {
-                return;
-            }
         } else if (searchedFieldName === 'Monthly/Yearly') {
             if (this.subscriptionListForm?.controls['duration'].value !== null && this.subscriptionListForm?.controls['duration'].value !== '') {
                 return;
@@ -389,8 +370,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 this.showPlanSubName = false;
             } else if (searchedFieldName === 'Monthly/Yearly') {
                 this.showMonthlyYearly = false;
-            } else if (searchedFieldName === 'Status') {
-                this.showStatus = false;
             }
         }
     }
@@ -415,8 +394,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             this.showPlanSubName = true;
         } else if (fieldName === 'Monthly/Yearly') {
             this.showMonthlyYearly = true;
-        } else if (fieldName === 'Status') {
-            this.showStatus = true;
         }
     }
 
@@ -486,6 +463,14 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+            this.statusOptions = [
+                { value: '', label: this.localeData?.select_status },
+                { value: 'active', label: this.localeData?.active },
+                { value: 'trial', label: this.localeData?.trial },
+                { value: 'cancelled', label: this.localeData?.cancelled },
+                { value: 'expired', label: this.localeData?.expired }
+            ];
+            this.selectedStatus = this.statusOptions[0].label;
             this.changeDetection.detectChanges();
         }
     }
@@ -520,10 +505,12 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.showCountry = false;
         this.showPlanSubName = false;
         this.showMonthlyYearly = false;
-        this.showStatus = false;
         this.subscriptionListForm.reset();
         this.inlineSearch = '';
-        this.getAllSubscriptions(true);
+        this.selectedStatus = this.localeData?.select_status;
+        this.subscriptionListForm.get('status')?.setValue(null);
+        this.getAllSubscriptions(false);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -707,5 +694,18 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (event) {
             this.getAllSubscriptions(false);
         }
+    }
+
+    /**
+     * This will be use for select status
+     *
+     * @param {*} data
+     * @memberof SubscriptionListComponent
+     */
+    public selectStatus(data: any): void {
+        this.selectedStatus = data?.label;
+        this.subscriptionListForm.get('status')?.setValue(data?.value);
+        this.getAllSubscriptions(false);
+        this.changeDetection.detectChanges();
     }
 }

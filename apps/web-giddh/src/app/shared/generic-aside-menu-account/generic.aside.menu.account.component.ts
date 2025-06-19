@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
+import { AccountRequestV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
@@ -24,6 +24,9 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
     @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
+    /** Emitted when the update via patch api . */
+    @Output() public updateViaPatchApi: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, isAccountArchived?: boolean }>
+        = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
     @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter(false);
     public flatAccountWGroupsList$: Observable<IOption[]>;
@@ -120,8 +123,19 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.addEvent.emit(accRequestObject);
     }
 
-    public updateAccount(accRequestObject: UpdateAccountRequest) {
-        this.updateEvent.emit(accRequestObject);
+    /**
+     * Updates the account details.
+     * 
+     * @param accRequestObject - The account request object containing the updated details.
+     * @param usePatchApi - Optional parameter to indicate whether to use the patch API for updating the account.
+     * @memberof GenericAsideMenuAccountComponent
+     */
+    public updateAccount(accRequestObject: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        if (usePatchApi) {
+            this.updateViaPatchApi.emit(accRequestObject);
+        } else {
+            this.updateEvent.emit(accRequestObject);
+        }
     }
 
     public closeAsidePane(event) {
