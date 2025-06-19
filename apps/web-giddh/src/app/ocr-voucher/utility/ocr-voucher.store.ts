@@ -11,11 +11,23 @@ import { OcrVoucherService } from "../../services/ocr-voucher.service";
 export interface OcrVoucherState {
     ocrListInProgress: boolean;
     ocrList: any
+    ocrUploadInProgress: boolean;
+    ocrUploadSuccess: any;
+    ocrImportInProgress: boolean;
+    ocrImportSuccess: any;
+    ocrCompletedCount: any;
+    ocrCompletedCountInProgress: boolean;
 }
 
 export const DEFAULT_OCR_VOUCHER_STATE: OcrVoucherState = {
     ocrListInProgress: null,
-    ocrList: []
+    ocrList: [],
+    ocrUploadInProgress: null,
+    ocrUploadSuccess: null,
+    ocrImportInProgress: null,
+    ocrImportSuccess: null,
+    ocrCompletedCount: null,
+    ocrCompletedCountInProgress: null
 };
 
 @Injectable()
@@ -29,6 +41,12 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     }
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
+    public universalDate$: Observable<any> = this.select(this.store.select(state =>  state.session.applicationDate), (response) => response);
+    public ocrUploadSuccess$: Observable<any> = this.select((state) => state.ocrUploadSuccess);
+    public ocrImportSuccess$: Observable<any> = this.select((state) => state.ocrImportSuccess);
+    public ocrList$: Observable<any> = this.select((state) => state.ocrList);
+    public ocrCompletedCount$: Observable<any> = this.select((state) => state.ocrCompletedCount);
+    public ocrCompletedCountInProgress$: Observable<any> = this.select((state) => state.ocrCompletedCountInProgress);
 
     /**
      * Get All Subscriptions
@@ -44,13 +62,11 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    ocrList: res ?? [],
+                                    ocrList: res?.body ?? [],
                                     ocrListInProgress: false,
                                 });
                             } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
+                                this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
                                     ocrList: [],
                                     ocrListInProgress: false,
@@ -58,7 +74,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrList: [],
                                 ocrListInProgress: false
@@ -70,6 +86,109 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
             })
         );
     });
+
+    readonly uploadOcrDocument = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ ocrUploadInProgress: true, ocrUploadSuccess: null });
+                return this.ocrVoucherService.uploadOcrDocument(req?.fileName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            console.log(res);
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    ocrUploadInProgress: false,
+                                    ocrUploadSuccess: res.body
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    ocrUploadInProgress: false,
+                                    ocrUploadSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                ocrUploadInProgress: false,
+                                ocrUploadSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly importOcrDocument = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ ocrImportInProgress: true, ocrImportSuccess: null });
+                return this.ocrVoucherService.importOcrDocument(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar("success", res?.body?.message);
+                                return this.patchState({
+                                    ocrImportInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    ocrImportInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                ocrImportInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getCompletedCount = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ ocrCompletedCountInProgress: true });
+                return this.ocrVoucherService.getCompletedCount().pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    ocrCompletedCount: res?.body,
+                                    ocrCompletedCountInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    ocrCompletedCountInProgress: false,
+                                    ocrCompletedCount: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                ocrCompletedCountInProgress: false,
+                                ocrCompletedCount: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
 
 
     /**

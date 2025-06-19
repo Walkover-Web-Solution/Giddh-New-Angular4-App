@@ -22,12 +22,18 @@ import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/c
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { OcrVoucherStore } from './utility/ocr-voucher.store';
+import { LedgerComponentStore } from '../ledger/ledger.store';
+import { OcrVoucherService } from '../services/ocr-voucher.service';
+import { OcrVoucherListComponent } from './ocr-voucher-list/ocr-voucher-list.component';
+import { OcrVoucherQueryParamsReq } from '../models/api-models/OcrVoucher';
 dayjs.extend(duration)
 @Component({
     selector: 'ocr-voucher',
     templateUrl: './ocr-voucher.component.html',
     styleUrls: ['./ocr-voucher.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [OcrVoucherStore, LedgerComponentStore]
 })
 export class OcrVoucherComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -35,121 +41,88 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Store signed url response */
+    public signedUrlResponse: any = {};
     public selectedToggle: string = 'create';
     public upload: string = 'upload';
     public create: string = 'create';
     public list: string = 'list';
-
+    public ocrUploadSuccess$: Observable<any> = this.ocrVoucherStore.ocrUploadSuccess$;
+    public ocrImportSuccess$: Observable<any> = this.ocrVoucherStore.ocrImportSuccess$;
+    public importVoucherSuccess$: Observable<any> = this.ledgerComponentStore.importVoucherSuccess$;
+    public file: File;
+    public listCount: number = 0;
+    public ocrCompletedCount$: Observable<any> = this.ocrVoucherStore.ocrCompletedCount$;
+    public ocrCompletedCountInProgress$: Observable<any> = this.ocrVoucherStore.ocrCompletedCountInProgress$;
+    public countVariable: number = 0;
+    public buttonDisabled: boolean = false;
 
     constructor(
+        private ocrVoucherStore: OcrVoucherStore,
+        private ledgerComponentStore: LedgerComponentStore,
+        private ocrVoucherService: OcrVoucherService
     ) {
+
     }
 
 
     public ngOnInit() {
-        // document.querySelector('body').classList.add('setting-sidebar-open');
+
+           // Call getCompletedCount every 5 seconds
+    setInterval(() => {
+        this.ocrVoucherStore.getCompletedCount(null);
+    }, 5000);
+
+        this.ocrVoucherService.listCount$.pipe(takeUntil(this.destroyed$)).subscribe((count: number) => {
+            if (count) {
+                this.listCount = count;
+            }
+        });
+
+            // Update countVariable when the completed count is retrieved
+    this.ocrCompletedCount$.pipe(takeUntil(this.destroyed$)).subscribe((count: any) => {
+        if (count) {
+            this.countVariable = count;
+        }
+    });
 
 
-        // if (!this.isCreateAndSwitchCompanyInProcess) {
-        //     document.querySelector('body').classList.add('tabs-page');
-        // } else {
-        //     document.querySelector('body').classList.remove('tabs-page');
-        // }
+        // Disable or enable the button toggle based on the progress status
+        this.ocrCompletedCountInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
+            this.buttonDisabled = inProgress;
+        });
 
-        // this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-        //     if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
-        //         this.activeTabIndex = this.tabName.indexOf(params['type']);
-        //     } else if (!params['type'] && !this.activeTabIndex) {
-        //         this.activeTabIndex = 0;
-        //     }
-        // });
+        this.ocrUploadSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            console.log('ocrUploadSuccess', res);
+            if (res) {
+                this.signedUrlResponse = res;
+                this.ledgerComponentStore.uploadVoucher({ url: res.signedUrl, file: this.file });
+            }
+        });
 
-        // this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-        //     if (params && params.tabIndex) {
-        //         if (params && params.tabIndex == "0") {
-        //             this.activeTabIndex = 0;
-        //         } else if (params && params.tabIndex == "1") {
-        //             this.activeTabIndex = 1;
-        //         } else if (params && params.tabIndex == "2") {
-        //             this.activeTabIndex = 2;
-        //         } else if (params && params.tabIndex == "3") {
-        //             this.activeTabIndex = 3;
-        //         }
-        //         this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
-        //     }
-        // });
+        this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
+            console.log('uploadVoucherSuccess', voucherResponse);
+            if (voucherResponse) {
+                this.ocrVoucherStore.importOcrDocument(this.signedUrlResponse);
+            }
+        });
 
-        // this.contactNo$.subscribe(appState => this.phoneNumber = appState);
-        // this.countryCode$.subscribe(appState => this.countryCode = appState);
-        // this.isAddNewMobileNoSuccess$.subscribe(appState => this.showVerificationBox = appState);
-        // this.isVerifyAddNewMobileNoSuccess$.subscribe(appState => {
-        //     if (appState) {
-        //         this.oneTimePassword = '';
-        //         this.showVerificationBox = false;
-        //     }
-        // });
-        // this.authenticateTwoWay$.subscribe(response => {
-        //     this.twoWayAuth = (response) ? true : false;
-        // });
-        // this.store.dispatch(this.loginAction.FetchUserDetails());
-        // this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-        //     if (a?.status === 'success') {
-        //         this.userAuthKey = a?.body?.authKey;
-        //     } else {
-        //         this.toasty.errorToast(a?.message, a?.status);
-        //     }
-        // });
-        // this.store.pipe(select(appState => appState.subscriptions.companies), takeUntil(this.destroyed$))
-        //     .subscribe(appState => this.companies = appState);
-        // this.store.pipe(select(appState => appState.subscriptions.companyTransactions), takeUntil(this.destroyed$))
-        //     .subscribe(appState => this.companyTransactions = appState);
+        this.ocrImportSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            console.log('ocrImportSuccess', res);
+            if (res) {
+                this.ledgerComponentStore.importVoucher({ requestObject: res, signedUrlResponse: this.signedUrlResponse });
+            }
+        });
 
-        // this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
-        //     if (user) {
-        //         this.user = cloneDeep(user.user);
-        //         this.userSessionId = _.cloneDeep(user.session?.id);
-        //     }
-        // });
-
-        // this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
-        //     if (response) {
-        //         this.profileData = response;
-        //     }
-        //     this.changeDetectionRef.detectChanges();
-        // });
-
-        // this.store.dispatch(this.sessionAction.getAllSession());
-
-        // this.userSessionResponse$.subscribe(appState => {
-        //     if (appState && appState.length) {
-        //         this.userSessionList = appState.map(session => {
-        //             // Calculate sign in date
-        //             session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
-        //             // Calculate sign in time
-        //             session.signInTime = dayjs(session.createdAt).format('LTS');
-        //             // Calculate duration
-        //             const duration = dayjs.duration(dayjs().diff(session.createdAt));
-        //             session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
-        //             return session;
-        //         });
-        //         this.changeDetectionRef.detectChanges();
-        //     }
-        // });
-
-        // this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
-        //     this.isCreateAndSwitchCompanyInProcess = inProcess;
-        //     this.changeDetectionRef.detectChanges();
-        // });
-
+        this.importVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            console.log('importVoucherSuccess', res);
+        });
     }
 
     public onToggleChange(event: MatButtonToggleChange) {
         const newValue = event.value;
-        console.log(newValue);
         if (this.shouldPreventChange(newValue)) {
-            // Revert the toggle back to previous value
-            event.source.value = this.selectedToggle;
-
+            return;
         } else {
             this.selectedToggle = newValue; // Accept the change
         }
@@ -160,12 +133,11 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
     }
 
     public onFileSelected(event: Event) {
-        console.log(event);
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
-            console.log('Selected file:', file);
-            // Handle the file upload here...
+            this.file = file;
+            this.ocrVoucherStore.uploadOcrDocument({ fileName: file.name });
         }
     }
 
