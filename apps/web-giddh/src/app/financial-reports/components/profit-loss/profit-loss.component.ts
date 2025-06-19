@@ -13,6 +13,7 @@ import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
 import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
 import { prepareProfitLossData } from '../../../store/tl-pl/tl-pl.reducer';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'profit-loss',
@@ -67,7 +68,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** True if show Tally Report options */
     public showReconcileOption: boolean;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
+    constructor(
+        private store: Store<AppState>, 
+        public tlPlActions: TBPlBsActions, 
+        private cd: ChangeDetectorRef, 
+        private toaster: ToasterService, 
+        private componentStore: ProjectWiseAccountingComponentStore,
+        private tlPlService: TlPlService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -79,6 +86,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([storeResponse, profitAndLossResponse]) => {
                 if (storeResponse || profitAndLossResponse) {
+                    this.tlPlService.isReportTailed$.next(true);
                     this.expandAll = false;
                     this.modifyResponse(storeResponse || profitAndLossResponse);
                 } else {

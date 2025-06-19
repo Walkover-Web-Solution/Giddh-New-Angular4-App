@@ -338,11 +338,13 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                     this.toasterService.showSnackBar("error", text);
                     this.selectedState = '';
                     this.selectedStateCode = '';
+                    this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
                     this.isGstinValid = false;
                 } else {
                     this.isGstinValid = true;
                 }
             }
+            this.changeDetection.detectChanges();
         }
 
         if (this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
@@ -363,6 +365,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
+            this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
         }
         this.changeDetection.detectChanges();
     }
@@ -517,7 +520,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.changeBillingForm.invalid) {
+        if (this.changeBillingForm.invalid || (this.changeBillingForm.get('taxNumber')?.value?.length >= 2 && !this.isGstinValid)) {
             this.isFormSubmitted = true;
             return;
         }

@@ -192,23 +192,22 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             select(select => select.inventory.bulkStock),
             takeUntil(this.destroyed$)
         ).subscribe((res: any) => {
-            if (res) {
-                this.isLoading = false;
+            this.isLoading = false;
+            if (res && res?.results) {
                 this.isApiCalled = false;
                 const bulkStockForm = this.bulkStockData;
                 bulkStockForm.clear();
                 this.setPaginationData(res);
                 this.noDataFound = res.totalItems === 0;
-
                 this.totalInventoryCount = res?.totalItems;
-                res.results.forEach((row, index) => {
+                res.results.forEach((row: any, index: number) => {
                     this.dropdownValues[index] = [];
                     this.dropdownValues[index].salesUnits = row.salesUnits;
                     this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
                     this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
                     this.addRow(row);
                 });
-            }
+            } 
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -641,7 +640,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.sortOrderStatus = null;
         this.advanceSearchData = null;
         this.hideTableHeadInput();
-        this.isLoading = true;
+        this.isLoading = false;
+        
         if (this.isApiCalled) {
             this.store.dispatch(this.inventoryAction.getBulkStockList({
                 inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {

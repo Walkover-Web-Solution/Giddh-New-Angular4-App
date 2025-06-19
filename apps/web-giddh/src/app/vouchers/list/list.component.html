@@ -5091,6 +5091,7 @@
             [selectedAccountUniqueName]="voucherDetails?.account?.uniqueName"
             (onShortcutPress)="accountAsideMenuRef.close()"
             (updateEvent)="updateAccount($event)"
+            (updateViaPatchApi)="updateAccount($event, true)"
         >
         </generic-aside-menu-account>
     </ng-template>
