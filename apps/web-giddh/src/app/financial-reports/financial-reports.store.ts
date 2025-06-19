@@ -77,7 +77,7 @@ export class FinancialReportsComponentStore extends ComponentStore<FinancialRepo
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ reconcileDateRange: undefined });
-                return this.tlPlService.getReconcileDateRange(req).pipe(
+                return this.tlPlService.getReconcileDateRange(req.reportType, req.branchUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
