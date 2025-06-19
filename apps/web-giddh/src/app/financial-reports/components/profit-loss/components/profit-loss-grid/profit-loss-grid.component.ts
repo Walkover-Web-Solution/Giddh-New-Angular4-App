@@ -26,7 +26,6 @@ import { FinancialReportsComponentStore } from '../../../../financial-reports.st
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 
 @Component({
     selector: 'profit-loss-grid',
@@ -70,12 +69,11 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public imgPath: string = "";
 
     constructor(
-        private cd: ChangeDetectorRef, 
-        private zone: NgZone, 
+        private cd: ChangeDetectorRef,
+        private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService,
-        private tlPlService: TlPlService
+        private generalService: GeneralService
     ) {
 
     }
@@ -306,5 +304,5 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.uncheckAll();
             }
         });
-    } 
+    }
 }
