@@ -1370,7 +1370,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
             this.entryAccountUniqueName = "";
 
             if (this.voucherApiVersion === 2 || !this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
@@ -1383,7 +1382,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
             //     return;
             // }
-        }
     }
 
     public keydownPressed(e) {
@@ -1796,9 +1794,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public openAdjustInvoiceEditMode(): void {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
-            this.handleVoucherAdjustment(true);
-        }
+        this.handleVoucherAdjustment(true);
     }
 
     /**
