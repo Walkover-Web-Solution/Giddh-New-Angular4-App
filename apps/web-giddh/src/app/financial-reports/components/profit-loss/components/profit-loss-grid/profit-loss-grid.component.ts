@@ -270,19 +270,19 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ProfitLossGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(group => {
-            if (group.checked) {
+        groupAccountDetails.forEach(groupAccount => {
+            if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
-                    uniqueName: group.uniqueName,
+                    uniqueName: groupAccount.uniqueName,
                     entityType,
                     checked: false
                 });
             }
-            if (group.childGroups?.length) {
-                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            if (groupAccount.childGroups?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
-            if (group.accounts?.length) {
-                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            if (groupAccount.accounts?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
         });
     }
