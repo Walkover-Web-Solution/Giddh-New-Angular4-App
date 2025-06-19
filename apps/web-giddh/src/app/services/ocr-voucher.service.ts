@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -16,6 +16,7 @@ import { OCR_VOUCHER_API } from './apiurls/ocr-voucher.api';
 @Injectable()
 export class OcrVoucherService {
     public dayjs = dayjs;
+    public listCount$: BehaviorSubject<any> = new BehaviorSubject(null);
 
     constructor(private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
@@ -33,12 +34,69 @@ export class OcrVoucherService {
      * @memberof SubscriptionsService
      */
     public getAllOcrDocuments(pagination: any, model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + OCR_VOUCHER_API.GET_ALL_OCR_DOCUMENTS
+        const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+        return this.http.post(this.config.apiUrl + OCR_VOUCHER_API.GET_ALL_DOCUMENTS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
             ?.replace(':from', encodeURIComponent(pagination?.from ?? ''))
             ?.replace(':to', encodeURIComponent(pagination?.to ?? ''))
+            ?.replace(':sort', encodeURIComponent(pagination?.sort ?? ''))
+            ?.replace(':sortBy', encodeURIComponent(pagination?.sortBy ?? ''))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
             , model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    public uploadOcrDocument(fileName: string): Observable<BaseResponse<any, any>> {
+        const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+        return this.http.get(this.config.apiUrl + OCR_VOUCHER_API.UPLOAD_DOCUMENTS
+            ?.replace(':fileName', encodeURIComponent(fileName))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+        )
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    public importOcrDocument(payload: any): Observable<BaseResponse<any, any>> {
+        const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+        return this.http.post(this.config.apiUrl + OCR_VOUCHER_API.IMPORT
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+        , payload)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    public getCompletedCount(): Observable<BaseResponse<any, any>> {
+        const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+        return this.http.get(this.config.apiUrl + OCR_VOUCHER_API.COMPLETED_COUNT
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+        )
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
