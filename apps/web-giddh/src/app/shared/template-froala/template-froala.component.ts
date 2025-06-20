@@ -1,17 +1,23 @@
 import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { debounceTime, filter, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
-import { EmailType } from './utility/template-froala.const';
-import { cloneDeep, isArray } from '../../lodash-optimized';
+import { EmailType, EntityEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
+import { cloneDeep } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { GeneralService } from '../../services/general.service';
+import { TitleCasePipe } from '@angular/common';
+
+enum OtherTimeOptionsEnum {
+    DayOfWeek = 'dayOfWeek',
+    DayOfMonth = 'dayOfMonth'
+}
 
 @Component({
     selector: 'template-froala',
@@ -38,6 +44,10 @@ export class TemplateFroalaComponent implements OnInit {
     public emailTemplates$: Observable<any> = this.componentStore.select(state => state.emailTemplates);
     /** Holds Store get email content suggestions API success state as observable*/
     public emailContentSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
+    /** Holds Store get account group list API success state as observable*/
+    public accountGroupList$: Observable<IOption[]> = this.componentStore.select(state => state.accountGroupList);
+    /** Holds Store get email condition suggestions API success state as observable*/
+    public emailConditionSuggestions$: Observable<any> = this.componentStore.select(state => state.emailConditionSuggestions);
     /** Instance of formgroup */
     public emailForm: FormGroup;
     public customTriggerForm: FormGroup;
@@ -131,37 +141,27 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
     /** Holds field options */
-    public entityOptions: IOption[] = [
-        {label:'Account', value:'ACCOUNT'},
-        {label:'Voucher', value:'GROUP'},
-    ];
-    public entityAccountGroupOptions: IOption[] = [
-        {label:'Stock', value:'account'},
-        {label:'Walkover', value:'voucher'},
-        {label:'Dilpreet', value:'entry'}
-    ];
-    public voucherOptions: IOption[] = [
-        {label:'Purchase', value:'PURCHASE'},
-        {label:'Credit Note', value:'CR'},
-        {label:'Debit Note', value:'DR'},
-        {label:'Sales', value:'sales'}
-    ];
-    public triggerOptions: IOption[] = [
-        {label:'Voucher Due', value:'VOUCHER_DUE'}
-    ];
-    public actionOptions: IOption[] = [
-        {label:'Attach Voucher PDF', value:'ATTACH_VOUCHER_PDF'}
-    ];
+    public entityOptions: IOption[] = [];
+    /** Holds entity account group options */
+    public entityAccountGroupOptions: IOption[] = [];
+    /** Holds trigger options */    
+    public triggerOptions: IOption[] = [];
+    /** Holds action options */
+    public actionOptions: IOption[] = [];
+    /** Holds condition options */
     public conditionOptions: IOption[] = [];
     /** Holds days options i.e Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday */
-    public daysOptions: IOption[] = []; 
+    public dayOfWeekOptions: IOption[] = [];
     /** Holds date of month i.e 1 to 31 */
-    public dateOptions: IOption[] = [];
+    public dayOfMonthOptions: IOption[] = [];
     /** Holds Time Other option like "Day of Week" or "Date of Month" */
-    public timeOptions: IOption[] = [
-        {label:'Day of Week', value:'dayOfWeek'},
-        {label:'Date of Month', value:'dateOfMonth'}
-    ];
+    public timeOtherOptions: IOption[] = [];
+    /** Holds all voucher list */
+    public voucherList: IOption[] = [];
+    /** Holds filtered voucher list */
+    public filteredVoucherList: IOption[] = [];
+    /** Holds true if show day of week dropdown */
+    public showDayOfWeek: boolean = null;
     /** Hold if user click outside of email section */
     public clickedInsideEmailSection: boolean = false;
     /** Holds all static emails (To, Cc, Bcc) combined in a single string */
@@ -184,19 +184,24 @@ export class TemplateFroalaComponent implements OnInit {
     };
     /** Holds width of select-multiple-fields */
     public optionClass: string = '';
-    /** Holds all voucher list */
-    public voucherList: IOption[] = [];
-    /** Holds all entity account group options */
-    public entityAccountGroupOptions$: Observable<IOption[]>;
-
-    fakeloader = false;
+    /** Holds entity enum */
+    public entityEnum: typeof EntityEnum = EntityEnum;
+    public emailConditionSuggestionsLabelOptions: {[key: string]: { dropdownLabel: string, inputLabel: string, options: IOption[] }} = {};
+    /** This will use for instance of voucher list Dropdown */
+    public voucherListDropdown: FormControl = new FormControl();
+    /** This will use for instance of account group Dropdown */
+    public accountGroupDropdown: FormControl = new FormControl();
+    /** Holds static group for trigger */
+    public groupForTrigger: string = 'sundrydebtors';
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
-        public dialogRef: MatDialogRef<any>
+        public dialogRef: MatDialogRef<any>,
+        private generalService: GeneralService,
+        private titleCasePipe: TitleCasePipe
     ) { }
 
     /**
@@ -210,13 +215,40 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
-        setTimeout(() => {
-            this.fakeloader = true;
-        }, 2000);
         document.querySelector('body').classList.add('hide-chat-widget');
         this.initializeForm();
         this.getEmailContents();
-        this.getEmailTemplates();
+        if (this.inputData?.isTrigger) {
+            this.emailConditionSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.length) {
+                    this.addConditionControls(response);
+                }
+            });
+            this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
+
+
+            /** Search for voucher list dropdown */
+            this.voucherListDropdown.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(search => {
+                if (!search) {
+                    this.filteredVoucherList = this.voucherList;
+                } else {
+                    this.filteredVoucherList = this.voucherList.filter(voucher => voucher?.label?.toLowerCase()?.includes(search?.toLowerCase()));
+                }
+            });
+
+            /** Search for account group dropdown */
+            this.accountGroupDropdown.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$), filter(search => search !== null || search !== undefined)).subscribe(search => {
+                this.getFlattenAccountGroupList({
+                    page: 1,
+                    count: 200,
+                    group: this.groupForTrigger,
+                    entity: this.customTriggerForm?.get('entity')?.value,
+                    query: search || ''
+                });
+            });
+        } else {
+            this.getEmailTemplates();
+        }
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -237,12 +269,12 @@ export class TemplateFroalaComponent implements OnInit {
             }
         });
 
-        this.customTriggerForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customTriggerForm?.valueChanges?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             console.log("response", response);
         });
 
         this.emailTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && !this.inputData?.isTrigger) {
                 if (response?.bcc?.length) {
                     this.showBcc = true;
                     this.selectedBccEmails = response.bcc;
@@ -388,20 +420,20 @@ export class TemplateFroalaComponent implements OnInit {
     public initializeForm(template?: any): void {
         if (this.inputData?.isTrigger) {
             this.customTriggerForm = this.formBuilder.group({
-                title: [template?.title ?? ''],
-                entity: [template?.entity ?? ''],
-                entityUniqueNames: [template?.entityUniqueNames ?? []],
-                voucherTypes: [template?.voucherTypes ?? []],
-                emailSubject: [template?.emailSubject ?? ''],
-                triggerModule: [template?.triggerModule ?? []],
-                to: [template?.to ?? []],
-                cc: [template?.cc ?? []],
-                bcc: [template?.bcc ?? []],
-                // conditions: [template?.conditions ?? []],
-                executionTime: this.getExecutionTimeFormGroup(template?.triggerModule),
-                actions: [template?.actions ?? []],
-                html: [template?.html ?? ''],
-                disabled: [template?.disabled ?? false]
+                title: ['', [Validators.required]],
+                entity: [''],
+                entityUniqueNames: [''],
+                voucherTypes: [''],
+                emailSubject: ['', [Validators.required]],
+                triggerModule: [TriggerModuleEnum.VoucherDue, [Validators.required]],
+                to: [''],
+                cc: [''],
+                bcc: [''],
+                // conditions: [template?.conditions ?? []], // at least one required
+                executionTime: this.getExecutionTimeFormGroup(),
+                actions: [TriggerActionEnum.AttachVoucherPdf, [Validators.required]],
+                html: ['', [Validators.required]],
+                disabled: [false]
             });
         } else {
             this.emailForm = this.formBuilder.group({
@@ -413,11 +445,6 @@ export class TemplateFroalaComponent implements OnInit {
                 html: [template?.html ?? '']
             });
         }
-
-        setTimeout(() => {
-            console.log("this.customTriggerForm.value", this.customTriggerForm.value);
-            
-        }, 1000);
     }
 
     /**
@@ -427,9 +454,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @return {*}  {FormGroup}
      * @memberof TemplateFroalaComponent
      */
-    private getExecutionTimeFormGroup(value: any): FormGroup {
+    private getExecutionTimeFormGroup(value?: any): FormGroup {
         return this.formBuilder.group({
-            time: [value?.time ?? ''],
+            time: [value?.time ?? '', [Validators.required]],
             dayOfWeek: [value?.dayOfWeek ?? ''],
             dayOfMonth: [value?.dayOfMonth ?? '']
         });
@@ -437,17 +464,35 @@ export class TemplateFroalaComponent implements OnInit {
 
     private addConditionControls(conditions: any): void {
         let dynamicControls: FormGroup = new FormGroup({});
-        Object.entries(conditions).forEach(([conditionKey, conditionData]) => {
-          dynamicControls.addControl(
-            conditionKey,
-            new FormGroup({
-              key: new FormControl(conditionData['key']),
-              value: new FormControl(conditionData['value'])
-            })
-          );
+        conditions.forEach((condition: any) => {
+            Object.entries(condition).forEach(([conditionData, conditionKey]) => {
+                if (conditionData === 'variable') {
+                    dynamicControls.addControl(conditionKey as string, new FormGroup({
+                        key: new FormControl(''),
+                        value: new FormControl('')
+                    }));
+                }
+            });
+
+            this.emailConditionSuggestionsLabelOptions[condition.variable] = {
+                dropdownLabel: this.getLabel(condition.variable),
+                inputLabel: this.getLabel(condition.variable, 'Value'),
+                options: this.getOptionByArrayOfStrings(condition.conditions as string[])
+            };
         });
-        this.customTriggerForm.addControl('conditions', dynamicControls as FormGroup)
-      }
+        this.customTriggerForm.addControl('conditions', dynamicControls as FormGroup);
+    }
+
+    private getOptionByArrayOfStrings(condition: string[]): IOption[] {
+        return condition?.map(item => ({
+            value: item,
+            label: this.getLabel(item)
+        }));
+    }
+
+    private getLabel(label: string, concatString?: string): string {
+        return this.titleCasePipe.transform(`${label?.replace('_', ' ')}${concatString ? ` ${concatString}` : ''}`);
+    }
 
     /**
      * Handles the submission of the email form.
@@ -613,40 +658,64 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Scroll end handler
+     * Handles entity change
      *
-     * @returns null
-     * @memberof AdvanceSearchModelComponent
+     * @param {IOption} event - Selected option
+     * @memberof TemplateFroalaComponent
      */
-    public handleScrollEnd(): void {
-        // if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
-        //     this.onAccountSearchQueryChanged(
-        //         this.accountsSearchResultsPaginationData.query,
-        //         this.accountsSearchResultsPaginationData.page + 1,
-        //         (response) => {
-        //             if (!this.accountsSearchResultsPaginationData.query) {
-        //                 const results = response.map(result => {
-        //                     return {
-        //                         value: result?.uniqueName,
-        //                         label: `${result.name} - (${result?.uniqueName})`
-        //                     }
-        //                 }) || [];
-        //                 this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
-        //                 this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
-        //                 this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
-        //             }
-        //         });
-        // }
+    public onEntityChange(event: IOption): void {
+        this.customTriggerForm?.get('entityUniqueNames')?.setValue([]);
+        this.getFlattenAccountGroupList({
+            page: 1,
+            count: 200,
+            group: this.groupForTrigger,
+            entity: event.value
+        });
     }
 
-    public onAccountGroupSearchQueryChanged(query: string): void {  
+    private getFlattenAccountGroupList(model: any): void {
+        this.componentStore.getFlattenAccountGroupList(model);
     }
 
-    public onAccountGroupClear(): void {
-    }
-
+    /**
+     * Handles the change of time action
+     * 
+     * @param event - Selected option
+     * @memberof TemplateFroalaComponent
+     */
     public onTimeActionChange(event: IOption): void {
-        console.log(event);
+        this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
+        this.customTriggerForm?.get('executionTime')?.get('dayOfMonth')?.setValue('');
+        this.customTriggerForm?.get('executionTime')?.get('dayOfWeek')?.setValue('');
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof TemplateFroalaComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData);
+            this.voucherList = this.generalService.getVoucherTypeList(this.commonLocaleData);
+            this.filteredVoucherList = this.voucherList;
+            this.dayOfMonthOptions = this.generalService.getDaysOfMonth();
+            this.triggerOptions = [
+                {label: this.localeData?.voucher_due, value: TriggerModuleEnum.VoucherDue}
+            ];
+            this.actionOptions = [
+                {label: this.localeData?.attach_voucher_pdf, value: TriggerActionEnum.AttachVoucherPdf}
+            ];
+            this.entityOptions = [
+                {label: this.commonLocaleData?.app_account, value: EntityEnum.Account},
+                {label: this.commonLocaleData?.app_group, value: EntityEnum.Group}
+            ];
+            this.timeOtherOptions = [
+                {label: this.localeData?.day_of_week, value: OtherTimeOptionsEnum.DayOfWeek},
+                {label: this.localeData?.date_of_month, value: OtherTimeOptionsEnum.DayOfMonth}
+            ];
+        }
     }
 
 }

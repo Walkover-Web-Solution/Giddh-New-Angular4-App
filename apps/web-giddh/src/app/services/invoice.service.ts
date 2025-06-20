@@ -855,9 +855,10 @@ export class InvoiceService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InvoiceService
      */
-    public getEmailConditions(): Observable<BaseResponse<any, any>> {
+    public getEmailConditions(triggerModule: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONDITIONS;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        url = url?.replace(':triggerModule', triggerModule);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

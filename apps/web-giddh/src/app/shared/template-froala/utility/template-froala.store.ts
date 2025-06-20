@@ -6,19 +6,23 @@ import { AppState } from "apps/web-giddh/src/app/store";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
 import { InvoiceService } from "../../../services/invoice.service";
+import { InventoryService } from "../../../services/inventory.service";
+import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 
 export interface CustomEmailState {
     emailContentSuggestions: any;
     emailConditionSuggestions: any;
     emailTemplates: any;
     updateCustomEmailIsSuccess: any;
+    accountGroupList: IOption[];
 }
 
 export const DEFAULT_CUSTOM_EMAIL_STATE: CustomEmailState = {
     emailContentSuggestions: null,
     emailConditionSuggestions: null,
     updateCustomEmailIsSuccess: null,
-    emailTemplates: null
+    emailTemplates: null,
+    accountGroupList: null
 };
 
 @Injectable()
@@ -26,7 +30,8 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
 
     constructor(
         private toaster: ToasterService,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private inventoryService: InventoryService
     ) {
         super(DEFAULT_CUSTOM_EMAIL_STATE);
     }
@@ -36,16 +41,16 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
      *
      * @memberof CustomEmailComponentStore
      */
-    readonly getEmailConditionSuggestion = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            mergeMap(() => {
+    readonly getEmailConditionSuggestion = this.effect((triggerModule: Observable<string>) => {
+        return triggerModule.pipe(
+            switchMap((triggerModule) => {
                 this.patchState({ emailConditionSuggestions: null });
-                return this.invoiceService.getEmailConditions().pipe(
+                return this.invoiceService.getEmailConditions(triggerModule).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    emailConditionSuggestions: res.body ?? []
+                                    emailConditionSuggestions: res.body?.conditions ?? []
                                 });
                             } else {
                                 if (res.message) {
@@ -173,6 +178,44 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 emailTemplates: []
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Get email template
+     *
+     * @memberof CustomEmailComponentStore
+     */
+    readonly getFlattenAccountGroupList = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                this.patchState({ accountGroupList: null });
+                return this.inventoryService.getFlattenAccountsList(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    accountGroupList: res?.body?.results?.filter((item: any) => item?.type === req.entity) ?? []
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    accountGroupList: []
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                accountGroupList: []
                             });
                         }
                     ),

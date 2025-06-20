@@ -5,5 +5,11 @@
     "email_content_suggestions": "Type '@' to see suggestions",
     "recipients": "Recipients",
     "subject": "Subject",
-    "save_and_send":"Save and Send"
+    "save_and_send":"Save and Send",
+    "voucher_due":"Voucher Due",
+    "attach_voucher_pdf": "Attach Voucher PDF",
+    "day_of_week": "Day of Week",
+    "date_of_month": "Date of Month",
+    "other":"Other",
+    "others":"Others"
 }

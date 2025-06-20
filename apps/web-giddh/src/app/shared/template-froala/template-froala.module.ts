@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FroalaViewModule, FroalaEditorModule } from 'angular-froala-wysiwyg';
 import { TemplateFroalaComponent } from './template-froala.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -39,6 +39,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
     exports: [
         TemplateFroalaComponent
     ],
-    declarations: [TemplateFroalaComponent]
+    declarations: [TemplateFroalaComponent],
+    providers: [TitleCasePipe]
 })
 export class FroalaTemplateEditorModule { }
