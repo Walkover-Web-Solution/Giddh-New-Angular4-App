@@ -6,6 +6,7 @@ import { GeneralService } from "apps/web-giddh/src/app/services/general.service"
 import { AppState } from "apps/web-giddh/src/app/store";
 import { select, Store } from "@ngrx/store";
 import { GIDDH_NEW_DATE_FORMAT_UI } from "../../../helpers/defaultDateFormat";
+import { TriggerComponentStore } from "../../uitilty/trigger.store";
 
 export interface TableData {
     title: string;
@@ -34,7 +35,8 @@ export interface TableData {
 @Component({
     selector: 'app-basic-trigger',
     templateUrl: './basic-trigger.component.html',
-    styleUrls: ['./basic-trigger.component.scss']
+    styleUrls: ['./basic-trigger.component.scss'],
+    providers: [TriggerComponentStore]
 })
 
 export class BasicTriggerComponent implements OnInit, OnDestroy {
@@ -103,8 +105,10 @@ export class BasicTriggerComponent implements OnInit, OnDestroy {
     ];
     /** True if API Call is in progress */
     public isLoading: boolean;
+    public triggerList$: Observable<any> = this.componentStore.triggerList$;
     constructor(private modalService: BsModalService,
         private generalService: GeneralService,
+        private componentStore: TriggerComponentStore,
         private store: Store<AppState>
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -116,6 +120,10 @@ export class BasicTriggerComponent implements OnInit, OnDestroy {
     * @memberof BasicTriggerComponent
     */
     public ngOnInit(): void {
+        this.componentStore.getTriggerList();
+        // this.componentStore.triggerList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {    
+
+        // });
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {

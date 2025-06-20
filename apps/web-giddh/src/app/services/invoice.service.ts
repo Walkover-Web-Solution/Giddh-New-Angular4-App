@@ -885,4 +885,21 @@ export class InvoiceService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * Get Trigger List
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public getTriggerList(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_TEMPLATE
+        ?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }
