@@ -1,32 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { delay, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AppState } from '../store';
-import { select, Store } from '@ngrx/store';
-import { GeneralActions } from '../actions/general/general.actions';
-import { ToasterService } from '../services/toaster.service';
-import { CompanyResponse } from '../models/api-models/Company';
-import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
-import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { ClipboardService } from 'ngx-clipboard';
-import { LoginActions } from '../actions/login.action';
-import { SessionActions } from '../actions/session.action';
-import { API_COUNT_LIMIT, API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
-import { cloneDeep } from '../lodash-optimized';
-import { AuthenticationService } from '../services/authentication.service';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { API_COUNT_LIMIT } from '../app.constant';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
-import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { OcrVoucherStore } from './utility/ocr-voucher.store';
 import { LedgerComponentStore } from '../ledger/ledger.store';
 import { OcrVoucherService } from '../services/ocr-voucher.service';
-import { OcrVoucherListComponent } from './ocr-voucher-list/ocr-voucher-list.component';
-import { OcrVoucherQueryParamsReq } from '../models/api-models/OcrVoucher';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store';
+import { GeneralActions } from '../actions/general/general.actions';
 dayjs.extend(duration)
 @Component({
     selector: 'ocr-voucher',
@@ -86,8 +69,11 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         private ocrVoucherStore: OcrVoucherStore,
         private ledgerComponentStore: LedgerComponentStore,
         private ocrVoucherService: OcrVoucherService,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private store: Store<AppState>,
+        private generalActions: GeneralActions
     ) {
+        this.store.dispatch(this.generalActions.openSideMenu(false));
     }
 
 
@@ -166,7 +152,6 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         });
 
         this.ocrVoucherService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.ocrVoucherStore.getExtractDocuments(response ?? '');
             }
