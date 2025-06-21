@@ -58,7 +58,7 @@ export class VouchersUtilityService {
     }
 
     public parseVoucherType(voucherType: string): string {
-        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
+        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
     public createQueryString(url: string, model: any): string {
