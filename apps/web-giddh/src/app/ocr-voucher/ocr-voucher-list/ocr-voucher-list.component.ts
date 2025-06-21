@@ -1,15 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { GeneralService } from '../../services/general.service';
-import { AppState } from '../../store';
-import { GeneralActions } from '../../actions/general/general.actions';
-import { ToasterService } from '../../services/toaster.service';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { OcrVoucherStore } from '../utility/ocr-voucher.store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -38,15 +32,15 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
     public displayedColumns: string[] = ['date', 'fileName', 'uploadedBy', 'fileStatus', 'convertedStatus'];
-    /** Hold the data of subscriptions */
+    /** Hold the data of ocr list */
     public dataSource: any;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** Holds Store Subscription list observable*/
+    /** Holds Store ocr list observable*/
     public ocrList$: Observable<any> = this.componentStore.select(state => state.ocrList);
-    /** Holds Store Subscription list in progress API success state as observable*/
+    /** Holds Store ocr list in progress API success state as observable*/
     public ocrListInProgress$: Observable<any> = this.componentStore.select(state => state.ocrListInProgress);
-    /** This will use for subscription pagination logs object */
+    /** This will use for ocr pagination logs object */
     public ocrDocumentsRequestParams: any = {
         page: 1,
         totalPages: 0,
@@ -63,7 +57,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /* Hold list searching value */
     public inlineSearch: any = '';
-    /** Form Group for subscription form */
+    /** Form Group for ocr document list form */
     public ocrDocumentListForm: FormGroup;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
@@ -107,17 +101,13 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
 
-    constructor(public dialog: MatDialog,
+    constructor(
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private componentStore: OcrVoucherStore,
         private ocrVoucherService: OcrVoucherService,
-        private store: Store<AppState>,
         private modalService: BsModalService,
-        private formBuilder: FormBuilder,
-        private generalActions: GeneralActions,
-        private router: Router,
-        private toasterService: ToasterService
+        private formBuilder: FormBuilder
     ) {
     }
 
@@ -238,22 +228,22 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will hide the datepicker
- *
- * @memberof ActivityLogsComponent
- */
+     * This will hide the datepicker.
+     *
+     * @memberof OcrVoucherListComponent
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef?.hide();
     }
 
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} [value]
-     * @param {*} [from]
-     * @return {*}  {void}
-     * @memberof ExportsComponent
-     */
+/**
+ * Callback for date/range selection in datepicker.
+ *
+ * @param {*} [value]
+ * @param {*} [from]
+ * @return {*} {void}
+ * @memberof OcrVoucherListComponent
+ */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -275,12 +265,12 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof ActivityLogsComponent
-     */
+/**
+ * To show the datepicker.
+ *
+ * @param {*} element
+ * @memberof OcrVoucherListComponent
+ */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -292,31 +282,31 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for check null or undefined values
-     *
-     * @param {*} value
-     * @return {*}  {boolean}
-     * @memberof SubscriptionListComponent
-     */
+    * This will be used to check null or undefined values.
+    *
+    * @param {*} value
+    * @return {*} {boolean}
+    * @memberof OcrVoucherListComponent
+    */
     public isNotNullOrUndefined(value: any): boolean {
         return value !== null && value !== undefined;
     }
 
     /**
-     * This will be use for check null or space values
-     *
-     * @param {*} value
-     * @return {*}  {boolean}
-     * @memberof SubscriptionListComponent
-     */
+    * This will be used to check null or space values.
+    *
+    * @param {*} value
+    * @return {*} {boolean}
+    * @memberof OcrVoucherListComponent
+    */
     public isNullOrEmpty(value: any): boolean {
         return value === null || value === "";
     }
 
     /**
-     * This will use for init subscription form
+     * This will use for initializing the ocr document list form.
      *
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public initForm(): void {
         this.ocrDocumentListForm = this.formBuilder.group({
@@ -328,23 +318,23 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Returns the search field text
-   *
-   * @param {*} title
-   * @returns {string}
-   * @memberof SubscriptionComponent
-   */
+     * Returns the search field text.
+     *
+     * @param {*} title
+     * @returns {string}
+     * @memberof OcrVoucherListComponent
+     */
     public getSearchFieldText(title: any): string {
         return this.localeData?.search_field?.replace("[FIELD]", title);
     }
 
     /**
-     * Handles clicks outside the specified element for filtering in the SubscriptionComponent.
+     * Handles clicks outside the specified element for filtering in the OcrVoucherListComponent.
      *
      * @param event - The event triggered by the click.
      * @param element - The element outside of which the click occurred.
      * @param searchedFieldName - The name of the field being searched for.
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === 'File Status') {
@@ -381,11 +371,10 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for toggle search field
+     * This will be used to toggle search field.
      *
      * @param {string} fieldName
-     * @param {*} el
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public toggleSearch(fieldName: string): void {
         if (fieldName === 'File Status') {
@@ -400,10 +389,10 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle page change
+     * Handle page change.
      *
      * @param {*} event
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
@@ -412,24 +401,10 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
         this.getAllOcrDocuments(false);
     }
 
-
     /**
-     * Callback for translation response complete
+     * Clears the filters and resets the form in the OcrVoucherListComponent.
      *
-     * @param {*} event
-     * @memberof SubscriptionComponent
-     */
-    public translationComplete(event: any): void {
-        if (event) {
-            this.translationLoaded = true;
-            this.changeDetection.detectChanges();
-        }
-    }
-
-    /**
-     * Clears the filters and resets the form in the SubscriptionComponent.
-     *
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public clearFilter(): void {
         this.showClearFilter = false;
@@ -458,10 +433,10 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Retrieves all ocr documents in the SubscriptionComponent.
+     * Retrieves all OCR documents in the OcrVoucherListComponent.
      *
      * @param resetPage - Indicates whether to reset the pagination page.
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public getAllOcrDocuments(resetPage: boolean): void {
         if (resetPage) {
@@ -475,7 +450,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *  Handle Mat table sort event
+     * Handle Mat table sort event.
      *
      * @param {*} event
      * @memberof OcrVoucherListComponent
@@ -489,9 +464,9 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * Lifecycle hook that is called when the component is destroyed.
-     * Removes "subscription-page" class from body, and completes the subject indicating component destruction.
+     * Completes the subject indicating component destruction.
      *
-     * @memberof SubscriptionComponent
+     * @memberof OcrVoucherListComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

@@ -16,3 +16,13 @@
        height: calc(100vh - 150px) ;
     }
 }
+
+.no-data-found {
+    background: var(--color-white);
+    text-align: center;
+    font-size: var(--font-size-32);
+    height: 600px;
+    width: 100%;
+    padding: 3rem;
+    color: var(--color-gray);
+}

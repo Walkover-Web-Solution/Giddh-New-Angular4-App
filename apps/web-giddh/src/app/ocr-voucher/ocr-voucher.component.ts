@@ -3,7 +3,6 @@ import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { API_COUNT_LIMIT } from '../app.constant';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
-import { GeneralService } from '../services/general.service';
 import { OcrVoucherStore } from './utility/ocr-voucher.store';
 import { LedgerComponentStore } from '../ledger/ledger.store';
 import { OcrVoucherService } from '../services/ocr-voucher.service';
@@ -11,6 +10,14 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { GeneralActions } from '../actions/general/general.actions';
 dayjs.extend(duration)
+
+export enum OcrAction {
+    Skip = 'skip',
+    Create = 'create',
+    List = 'list',
+    Save = 'save',
+    Upload = 'upload'
+}
 @Component({
     selector: 'ocr-voucher',
     templateUrl: './ocr-voucher.component.html',
@@ -19,14 +26,15 @@ dayjs.extend(duration)
     providers: [OcrVoucherStore, LedgerComponentStore]
 })
 export class OcrVoucherComponent implements OnInit, OnDestroy {
+    /** Subject to manage the unsubscription logic for observables to prevent memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold local JSON data */
+    /** Holds local JSON data */
     public localeData: any = {};
-    /** This will hold common JSON data */
+    /** Holds common JSON data */
     public commonLocaleData: any = {};
-    /** Store signed url response */
+    /** Stores signed URL response */
     public signedUrlResponse: any = {};
-    /** This will use for subscription pagination logs object */
+    /** Parameters for OCR documents request, used for pagination and filtering */
     public ocrDocumentsRequestParams: any = {
         page: 1,
         totalPages: 0,
@@ -37,33 +45,58 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         sort: '',
         sortBy: ''
     }
-    /** Holds Store Subscription list observable*/
+    /** Observable for the OCR documents list from the store */
     public ocrList$: Observable<any> = this.ocrVoucherStore.select(state => state.ocrList);
-    /** Holds Store Subscription list in progress API success state as observable*/
+    /** Observable indicating the progress state of the OCR documents list retrieval */
     public ocrListInProgress$: Observable<any> = this.ocrVoucherStore.select(state => state.ocrListInProgress);
+    /** Currently selected toggle option */
     public selectedToggle: string = '';
-    public upload: string = 'upload';
-    public create: string = 'create';
-    public list: string = 'list';
+    /** Upload action identifier */
+    public upload: OcrAction = OcrAction.Upload;
+    /** Create action identifier */
+    public create: OcrAction = OcrAction.Create;
+    /** List action identifier */
+    public list: OcrAction = OcrAction.List;
+    /** Observable for OCR upload success state */
     public ocrUploadSuccess$: Observable<any> = this.ocrVoucherStore.ocrUploadSuccess$;
+    /** Observable for OCR import success state */
     public ocrImportSuccess$: Observable<any> = this.ocrVoucherStore.ocrImportSuccess$;
+    /** Observable for voucher import success state */
     public importVoucherSuccess$: Observable<any> = this.ledgerComponentStore.importVoucherSuccess$;
+    /** File to be processed */
     public file: File;
+    /** Count of items in the list */
     public listCount: number = 0;
+    /** Observable for OCR completed count */
     public ocrCompletedCount$: Observable<number> = this.ocrVoucherStore.ocrCompletedCount$;
+    /** Observable for OCR completed count in progress state */
     public ocrCompletedCountInProgress$: Observable<boolean> = this.ocrVoucherStore.ocrCompletedCountInProgress$;
+    /** Variable to store count */
     public countVariable: number = 0;
+    /** Flag to indicate if button is disabled */
     public buttonDisabled: boolean = true;
+    /** Observable for OCR document extraction */
     public ocrExtractDocuments$: Observable<any> = this.ocrVoucherStore.ocrExtractDocuments$;
+    /** Observable for OCR document extraction in progress state */
     public ocrExtractDocumentsInProgress$: Observable<boolean> = this.ocrVoucherStore.ocrExtractDocumentsInProgress$;
+    /** Flag to indicate loading state */
     public isLoading: boolean = false;
+    /** Local OCR list data */
     public ocrList: any;
+    /** Main OCR list data */
     public ocrMainList: any;
+    /** Observable for main OCR list in progress state */
     public ocrMainListInProgress$: Observable<boolean> = this.ocrVoucherStore.ocrMainListInProgress$;
+    /** Observable for main OCR list */
     public ocrMainList$: Observable<any> = this.ocrVoucherStore.ocrMainList$;
+    /** Observable for OCR upload in progress state */
     public ocrUploadInProgress$: Observable<boolean> = this.ocrVoucherStore.ocrUploadInProgress$;
+    /** Current token for OCR operation */
     public ocrCurrentToken: string = '';
-
+    /** Flag to indicate loading state */
+    public innerLoading: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private ocrVoucherStore: OcrVoucherStore,
@@ -76,10 +109,14 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.generalActions.openSideMenu(false));
     }
 
-
-    public ngOnInit() {
+    /**
+     * Angular lifecycle method called on component initialization.
+     * Initiates data retrieval and sets up subscriptions for store observables.
+     * @memberof OcrVoucherComponent
+     */
+    public ngOnInit(): void {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getAllOcrDocuments(false);
-
         // Call getCompletedCount every 5 seconds
         setInterval(() => {
             this.ocrVoucherStore.getCompletedCount(null);
@@ -93,11 +130,10 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
             }
         });
 
-
         this.ocrMainListInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
             this.isLoading = inProgress;
             this.ocrVoucherService.ocrList$.next(this.ocrList);
-            this.selectedToggle = 'list';
+            this.selectedToggle = OcrAction.List;
             this.changeDetection.detectChanges();
         });
 
@@ -115,8 +151,6 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
             this.buttonDisabled = inProgress;
             this.changeDetection.detectChanges();
         });
-
-
 
         this.ocrUploadSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -138,16 +172,18 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
             }
         });
 
-
         this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if(res){
-                this.selectedToggle = 'create'; // Accept the change
+            if (res) {
+                this.selectedToggle = OcrAction.Create;
                 this.ocrVoucherService.getOcrData$.next(true);
                 this.ocrVoucherService.ocrVoucherDetails$.next(res);
                 this.ocrCurrentToken = res.token;
+                this.innerLoading = false;
                 this.changeDetection.detectChanges();
             } else {
-                this.selectedToggle = 'list';
+                if (!this.innerLoading) {
+                    this.selectedToggle = OcrAction.List;
+                }
             }
         });
 
@@ -158,12 +194,11 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         });
     }
 
-/**
- * Retrieves all ocr documents in the SubscriptionComponent.
- *
- * @param resetPage - Indicates whether to reset the pagination page.
- * @memberof SubscriptionComponent
- */
+    /**
+     * Retrieves all OCR documents.
+     * @param resetPage - Indicates whether to reset the pagination page.
+     * @memberof OcrVoucherComponent
+     */
     public getAllOcrDocuments(resetPage: boolean): void {
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
@@ -184,32 +219,50 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
 
     /**
      * Handles the toggle change event.
-     *
-     * @param event - The toggle change event.
-     * @memberof SubscriptionComponent
+     * @param value - The toggle change value.
+     * @memberof OcrVoucherComponent
      */
-    public onChangeVoucher(value: string) {
-        if (value === 'save') {
+    public onChangeVoucher(value: OcrAction): void {
+        if (value === OcrAction.Save) {
             this.ocrVoucherService.saveAndNext$.next(true);
         } else {
-            this.ocrVoucherStore.getExtractDocuments({type: 'skip', token: this.ocrCurrentToken});
+            this.innerLoading = true;
+            this.ocrVoucherStore.getExtractDocuments({ type: OcrAction.Skip, token: this.ocrCurrentToken });
         }
     }
 
-    public onToggleChange(value: any) {
+    /**
+     * Handles the toggle change event.
+     * @param value - The toggle change value.
+     * @memberof OcrVoucherComponent
+     */
+    public onToggleChange(value: any): void {
         if (this.shouldPreventChange(value)) {
             return;
-        } 
-        if (value === 'create' && !this.buttonDisabled) {
+        }
+        if (value === OcrAction.Create && !this.buttonDisabled) {
             this.ocrVoucherStore.getExtractDocuments('');
+        } else if (value === OcrAction.List) {
+            this.selectedToggle = value;
         }
     }
 
-    public shouldPreventChange(value: string): boolean {
-        return value === 'upload';
+    /**
+     * Determines whether the toggle change should be prevented.
+     * @param value - The toggle change value.
+     * @returns True if the change should be prevented, otherwise false.
+     * @memberof OcrVoucherComponent
+     */
+    public shouldPreventChange(value: OcrAction): boolean {
+        return value === OcrAction.Upload;
     }
 
-    public onFileSelected(event: Event) {
+    /**
+     * Handles the file selection event.
+     * @param event - The file selection event.
+     * @memberof OcrVoucherComponent
+     */
+    public onFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
@@ -219,19 +272,29 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle method that is triggered once all the view child are rendered
-     *
-     * @memberof SubscriptionComponent
+     * Lifecycle method that is triggered once all the view children are rendered.
+     * @memberof OcrVoucherComponent
      */
-    public ngAfterViewInit(): void {
+    public ngAfterViewInit(): void { }
 
-    }
-
+    /**
+     * Initiates the file upload dialog.
+     * @param event - The event triggering the upload.
+     * @param fileInput - The file input element.
+     * @memberof OcrVoucherComponent
+     */
     public onUploadFile(event: any, fileInput: HTMLInputElement): void {
-        // Open file dialog
+        if (event) {
+            event.preventDefault();
+        }
         fileInput.click();
     }
 
+    /**
+     * Angular lifecycle method called on component destruction.
+     * Completes the destroyed$ subject to unsubscribe from observables.
+     * @memberof OcrVoucherComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
