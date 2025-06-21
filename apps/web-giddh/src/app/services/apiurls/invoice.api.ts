@@ -57,7 +57,8 @@ export const EWAYBILL_API = {
     ADD_TRANSPORTER: COMMON_URL + 'transporters',  // get all transporter
     GET_ALL_TRANSPORTER: COMMON_URL + 'transporters?page=:pageNo',
     UPDATE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId', // FOR DELETE TRANSPORTER ALSO
-    DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId'
+    DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId',
+    EWAYBILL_FROM_PLACE:  'country/cities?pinCode=:pinCode' // Get city from pincode
 };
 
 export const BULK_UPDATE_VOUCHER = {

@@ -884,4 +884,19 @@ export class InvoiceService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * Get eway bill from place by pincode
+     *
+     * @param {string} pinCode Pincode to get eway bill from place
+     * @returns {Observable<BaseResponse<any, string>>} Eway bill from place
+     * @memberof InvoiceService
+     */
+    public getEwayBillFromPlace(pinCode: string): Observable<BaseResponse<any, string>> {
+        const url = this.config.apiUrl + EWAYBILL_API.EWAYBILL_FROM_PLACE.replace(':pinCode', pinCode);
+        return this.http.get(url).pipe(
+            map((res) => res as BaseResponse<any, string>),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e))
+        );
+    }
 }
