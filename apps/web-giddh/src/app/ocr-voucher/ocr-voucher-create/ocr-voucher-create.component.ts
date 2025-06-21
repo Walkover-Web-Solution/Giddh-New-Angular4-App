@@ -35,7 +35,7 @@ export class OcrVoucherCreateComponent implements OnInit, OnDestroy {
     /**
      * Hook cycle for component initialization
      *
-     * @memberof BuyPlanComponent
+     * @memberof OcrVoucherCreateComponent
      */
     public ngOnInit(): void {
         this.ocrVoucherService.ocrVoucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -56,7 +56,7 @@ export class OcrVoucherCreateComponent implements OnInit, OnDestroy {
     /**
      * This will call on component destroy
      *
-     * @memberof BuyPlanComponent
+     * @memberof OcrVoucherCreateComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

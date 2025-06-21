@@ -43,29 +43,41 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
 
     constructor(private toasterService: ToasterService,
         private ocrVoucherService: OcrVoucherService,
-        private store: Store<AppState>
-    ) {
+        private store: Store<AppState>) {
         super(DEFAULT_OCR_VOUCHER_STATE);
     }
 
+    /** Observable for the active company details. */
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
-    public universalDate$: Observable<any> = this.select(this.store.select(state =>  state.session.applicationDate), (response) => response);
+    /** Observable for the universal application date. */
+    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    /** Observable indicating the success state of OCR upload. */
     public ocrUploadSuccess$: Observable<any> = this.select((state) => state.ocrUploadSuccess);
+    /** Observable indicating the progress state of OCR upload. */
     public ocrUploadInProgress$: Observable<any> = this.select((state) => state.ocrUploadInProgress);
+    /** Observable indicating the success state of OCR import. */
     public ocrImportSuccess$: Observable<any> = this.select((state) => state.ocrImportSuccess);
+    /** Observable for the list of OCR documents. */
     public ocrList$: Observable<any> = this.select((state) => state.ocrList);
+    /** Observable for the completed count of OCR documents. */
     public ocrCompletedCount$: Observable<any> = this.select((state) => state.ocrCompletedCount);
+    /** Observable indicating the progress state of completed count retrieval. */
     public ocrCompletedCountInProgress$: Observable<any> = this.select((state) => state.ocrCompletedCountInProgress);
+    /** Observable for extracted OCR documents. */
     public ocrExtractDocuments$: Observable<any> = this.select((state) => state.ocrExtractDocuments);
+    /** Observable indicating the progress state of document extraction. */
     public ocrExtractDocumentsInProgress$: Observable<any> = this.select((state) => state.ocrExtractDocumentsInProgress);
+    /** Observable for the main list of OCR documents. */
     public ocrMainList$: Observable<any> = this.select((state) => state.ocrMainList);
+    /** Observable indicating the progress state of the main list retrieval. */
     public ocrMainListInProgress$: Observable<any> = this.select((state) => state.ocrMainListInProgress);
+    /** Observable indicating the progress state of OCR import. */
     public ocrImportInProgress$: Observable<any> = this.select((state) => state.ocrImportInProgress);
 
     /**
-     * Get All Subscriptions
+     * Effect to get all OCR documents.
      *
-     * @memberof SubscriptionComponentStore
+     * @memberof OcrVoucherStore
      */
     readonly getAllOcrList = this.effect((data: Observable<any>) => {
         return data.pipe(
@@ -100,8 +112,12 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
             })
         );
     });
-    
 
+    /**
+     * Effect to get all main page OCR data.
+     *
+     * @memberof OcrVoucherStore
+     */
     readonly getAllMainPageOcrData = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -136,6 +152,11 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
         );
     });
 
+    /**
+     * Effect to upload OCR document.
+     *
+     * @memberof OcrVoucherStore
+     */
     readonly uploadOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -170,6 +191,11 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
         );
     });
 
+    /**
+     * Effect to import OCR document.
+     *
+     * @memberof OcrVoucherStore
+     */
     readonly importOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -205,6 +231,11 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
         );
     });
 
+    /**
+     * Effect to get completed count of OCR documents.
+     *
+     * @memberof OcrVoucherStore
+     */
     readonly getCompletedCount = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -239,6 +270,11 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
         );
     });
 
+    /**
+     * Effect to extract OCR documents.
+     *
+     * @memberof OcrVoucherStore
+     */
     readonly getExtractDocuments = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -273,13 +309,10 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
         );
     });
 
-
-
-
     /**
-     * Lifecycle hook for component destroy
+     * Lifecycle hook for component destruction.
      *
-     * @memberof SubscriptionComponentStore
+     * @memberof OcrVoucherStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();
