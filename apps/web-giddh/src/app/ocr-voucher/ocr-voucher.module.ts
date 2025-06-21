@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { SubscriptionComponent } from './subscription.component';
 import { RouterModule } from '@angular/router';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { SubscriptionRoutingModule } from './subscription.routing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
@@ -25,7 +23,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SharedModule } from '../shared/shared.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -53,7 +50,6 @@ import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/
     imports: [
         ScrollingModule,
         CommonModule,
-        MatToolbarModule,
         RouterModule,
         TranslateDirectiveModule,
         OcrVoucherRoutingModule,
@@ -66,38 +62,26 @@ import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/
         MatTooltipModule,
         NoDataModule,
         GiddhPageLoaderModule,
-        MatSliderModule,
         HamburgerMenuModule,
         MatMenuModule,
         MatSortModule,
         FormFieldsModule,
         ReactiveFormsModule,
         FormsModule,
-        ElementViewChildModule,
-        WatchVideoModule,
-        MatTooltipModule,
-        SafePipeModule,
         NewConfirmationModalModule,
-        CallBackPageComponent,
         MatCardModule,
         MatStepperModule,
         MatRadioModule,
         MatButtonToggleModule,
-        AmountFieldComponentModule,
-        MatSlideToggleModule,
         MatGridListModule,
-        MatTabsModule,
         ClickOutsideModule,
-        MatSelectModule,
-        MatExpansionModule,
-        DecimalDigitsModule,
-        MatDividerModule,
         SharedModule,
         VouchersModule,
         MatProgressSpinnerModule,
         GiddhProgressSpinnerComponent
     ],
-    exports: [OcrVoucherListComponent,
+    exports: [
+        OcrVoucherListComponent,
         OcrVoucherComponent,
         OcrVoucherCreateComponent
     ],
@@ -107,7 +91,7 @@ import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/
         OcrVoucherCreateComponent
     ],
     providers: [
-        DecimalPipe
+
     ]
 })
 export class OcrVoucherModule { }

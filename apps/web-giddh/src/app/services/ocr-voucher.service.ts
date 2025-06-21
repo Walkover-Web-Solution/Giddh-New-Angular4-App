@@ -11,12 +11,19 @@ import { OCR_VOUCHER_API } from './apiurls/ocr-voucher.api';
 
 @Injectable()
 export class OcrVoucherService {
+    /** Provides date manipulation utilities using the dayjs library. */
     public dayjs = dayjs;
+    /** Holds the details of the OCR voucher, updated with the latest data. */
     public ocrVoucherDetails$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Holds the list of OCR vouchers, updated with the latest data. */
     public ocrList$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the OCR data retrieval process is active. */
     public getOcrData$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    /** Indicates the success status of the OCR data upload process. */
     public uploadDataSuccess$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    /** Indicates whether the "Save and Next" action is active. */
     public saveAndNext$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    /** Holds the success status of the "Save and Next" action, updated with the latest data. */
     public saveAndNextSuccess$: BehaviorSubject<any> = new BehaviorSubject(null);
 
     constructor(private errorHandler: GiddhErrorHandler,
@@ -27,13 +34,13 @@ export class OcrVoucherService {
     }
 
     /**
-     * Retrieves all subscriptions with pagination and provided model from the SubscriptionsService.
-     *
-     * @param pagination - Pagination details.
-     * @param model - Data model for filtering.
-     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
-     * @memberof SubscriptionsService
-     */
+    * Retrieves all OCR documents with pagination and provided model.
+    *
+    * @param pagination - Pagination details.
+    * @param model - Data model for filtering.
+    * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+    * @memberof OcrVoucherService
+    */
     public getAllOcrDocuments(pagination: any, model: any): Observable<BaseResponse<any, any>> {
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
         return this.http.post(this.config.apiUrl + OCR_VOUCHER_API.GET_ALL_DOCUMENTS
@@ -44,8 +51,7 @@ export class OcrVoucherService {
             ?.replace(':sort', encodeURIComponent(pagination?.sort ?? ''))
             ?.replace(':sortBy', encodeURIComponent(pagination?.sortBy ?? ''))
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
-            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
-            , model)
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName)), model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -57,13 +63,19 @@ export class OcrVoucherService {
             );
     }
 
+    /**
+     * Uploads an OCR document.
+     *
+     * @param fileName - The name of the file to upload.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof OcrVoucherService
+     */
     public uploadOcrDocument(fileName: string): Observable<BaseResponse<any, any>> {
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
         return this.http.get(this.config.apiUrl + OCR_VOUCHER_API.UPLOAD_DOCUMENTS
             ?.replace(':fileName', encodeURIComponent(fileName))
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
-            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
-        )
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName)))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -75,12 +87,18 @@ export class OcrVoucherService {
             );
     }
 
+    /**
+     * Imports an OCR document.
+     *
+     * @param payload - The data payload for the import.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof OcrVoucherService
+     */
     public importOcrDocument(payload: any): Observable<BaseResponse<any, any>> {
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
         return this.http.post(this.config.apiUrl + OCR_VOUCHER_API.IMPORT
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
-            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
-        , payload)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), payload)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -92,12 +110,17 @@ export class OcrVoucherService {
             );
     }
 
+    /**
+     * Retrieves the count of completed OCR documents.
+     *
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof OcrVoucherService
+     */
     public getCompletedCount(): Observable<BaseResponse<any, any>> {
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
         return this.http.get(this.config.apiUrl + OCR_VOUCHER_API.COMPLETED_COUNT
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
-            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
-        )
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -109,6 +132,13 @@ export class OcrVoucherService {
             );
     }
 
+    /**
+     * Retrieves extracted OCR documents.
+     *
+     * @param req - The request parameters for extraction.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof OcrVoucherService
+     */
     public getExtractDocuments(req: any): Observable<BaseResponse<any, any>> {
         console.log(req);
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
@@ -116,8 +146,7 @@ export class OcrVoucherService {
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
             ?.replace(':currentToken', encodeURIComponent(req.type === 'skip' ? req.token : ''))
-            ?.replace(':nextToken', encodeURIComponent(req.type === 'save' ? req.token : ''))
-        )
+            ?.replace(':nextToken', encodeURIComponent(req.type === 'save' ? req.token : '')))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
