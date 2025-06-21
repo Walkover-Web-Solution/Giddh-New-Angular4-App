@@ -780,6 +780,7 @@
     "app_account_status": "Account Status",
     "app_both": "Both",
     "app_weekdays": {
+        "daily": "Daily",
         "sunday": "Sunday",
         "monday": "Monday",
         "tuesday": "Tuesday",

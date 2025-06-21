@@ -2300,11 +2300,13 @@ export class GeneralService {
      * This will return the day of week options
      *
      * @param {any} commonLocaleData
+     * @param {boolean} [isDaily=false]
+     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
      * @returns {IOption[]}
      * @memberof GeneralService
      */
-    public getDayOfWeekOptions(commonLocaleData: any): IOption[] {
-        return [
+    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
+        let days = [
             { label: commonLocaleData?.app_weekdays.sunday, value: 'sunday' },
             { label: commonLocaleData?.app_weekdays.monday, value: 'monday' },
             { label: commonLocaleData?.app_weekdays.tuesday, value: 'tuesday' },
@@ -2313,6 +2315,10 @@ export class GeneralService {
             { label: commonLocaleData?.app_weekdays.friday, value: 'friday' },
             { label: commonLocaleData?.app_weekdays.saturday, value: 'saturday' }
         ];
+        if (isDaily) {
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: 'daily' }, ...days];
+        }
+        return days.filter(day => !excludeDays.includes(day.value));
     }
 
     /**

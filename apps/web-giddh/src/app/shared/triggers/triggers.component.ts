@@ -1,42 +1,17 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Observable, ReplaySubject, takeUntil } from "rxjs";
-import * as dayjs from 'dayjs';
-import { select, Store } from "@ngrx/store";
-import { GeneralService } from "../../services/general.service";
-import { AppState } from "../../store";
-import { GIDDH_NEW_DATE_FORMAT_UI } from "../helpers/defaultDateFormat";
+import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { TemplateFroalaComponent } from "../template-froala/template-froala.component";
-
-export interface TableData {
-    title: string;
-    entity: string;
-    entityUniqueNames: string[];
-    voucherTypes: string[];
-    emailSubject: string;
-    triggerModule: string;
-    to: string[];
-    cc: string[];
-    bcc: string[];
-    conditions: {
-        DUE_BY: { key: string; value: number };
-        DUE_AMOUNT: { key: string; value: number };
-    };
-    executionTime: {
-        time: string;
-        dayOfWeek?: string;
-        dayOfMonth?: string;
-    };
-    actions: string[];
-    html: string;
-    disabled: boolean;
-}
+import { TriggerComponentStore } from "./uitilty/trigger.store";
+import { PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { filter, skip, take } from "rxjs";
+import { Router } from "@angular/router";
+import { CampaignIntegrationService } from "../../services/campaign.integration.service";
 
 @Component({
     selector: 'app-triggers',
     templateUrl: './triggers.component.html',
-    styleUrls: ['./triggers.component.scss']
+    styleUrls: ['./triggers.component.scss'],
+    providers: [TriggerComponentStore]
 })
 
 export class TriggersComponent implements OnInit {
@@ -44,9 +19,34 @@ export class TriggersComponent implements OnInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold the loading state */
+    public isLoading: boolean = true;
 
-    constructor(private dialog: MatDialog
-    ) {
+    constructor(
+        private dialog: MatDialog,
+        private componentStore: TriggerComponentStore,
+        private campaignIntegrationService: CampaignIntegrationService,
+        private router: Router
+    ) { 
+        this.componentStore.triggerList$.pipe(skip(1), take(1), filter(Boolean)).subscribe((res) => {
+            console.log("Redirect to basic trigger", res);
+            if (res?.results?.length) {
+                this.router.navigate(["/pages/triggers/basic"]);
+            } else {
+                this.campaignIntegrationService.getTriggersList({
+                    count: 1,
+                    page: 1
+                }).pipe(filter(Boolean)).subscribe(response => {
+                    if (response?.status === "success") {
+                        if (response?.body?.items?.length > 0) {
+                            this.router.navigate(["/pages/triggers/advance"]);
+                        } else {
+                            this.isLoading = false;
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -55,7 +55,10 @@ export class TriggersComponent implements OnInit {
     * @memberof TriggersComponent
     */
     public ngOnInit(): void {
-     
+        this.componentStore.getTriggerList({
+            page: 1,
+            count: 1,
+        });
     }
 
     /**
@@ -64,7 +67,7 @@ export class TriggersComponent implements OnInit {
     * @memberof TriggersComponent
     */
     public openCreateTriggerDialog(): void {
-        this.dialog.open(TemplateFroalaComponent, {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
             data: { isTrigger: true },
             width: 'var(--aside-pane-width)',
             height: '100vh',
@@ -73,6 +76,12 @@ export class TriggersComponent implements OnInit {
                 bottom: '0'
             },
             disableClose: true
+        });
+
+        dialogRef.afterClosed().subscribe((response) => {
+            if (response) {
+                this.router.navigate(["/pages/triggers/basic"]);
+            }
         });
     }
 }

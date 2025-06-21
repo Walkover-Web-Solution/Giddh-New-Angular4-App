@@ -6,7 +6,7 @@
 >
     <hamburger-menu></hamburger-menu>
     <section class="trigger d-grid place-content-center">
-        <div class="trigger-content d-flex column-gap4">
+        <div *ngIf="!isLoading; else showLoader" class="trigger-content d-flex column-gap4">
             <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" (click)="openCreateTriggerDialog()">
                 <mat-card-content>
                     <mat-card-header class="align-items-center">
@@ -27,6 +27,9 @@
                 </mat-card-content>
             </mat-card>
         </div>
+        <ng-template #showLoader>
+            <giddh-page-loader></giddh-page-loader>
+        </ng-template>
     </section>
 
 </ng-container>

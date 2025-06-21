@@ -1,29 +1,26 @@
 import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
-import { debounceTime, filter, Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, take, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
-import { EmailType, EntityEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
+import { EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
 import { cloneDeep } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
-
-enum OtherTimeOptionsEnum {
-    DayOfWeek = 'dayOfWeek',
-    DayOfMonth = 'dayOfMonth'
-}
+import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
+import { PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
     styleUrls: ['./template-froala.component.scss'],
-    providers: [CustomEmailComponentStore]
+    providers: [CustomEmailComponentStore, TriggerComponentStore]
 })
 export class TemplateFroalaComponent implements OnInit {
     /** Instance of select multiple fields*/
@@ -48,8 +45,9 @@ export class TemplateFroalaComponent implements OnInit {
     public accountGroupList$: Observable<IOption[]> = this.componentStore.select(state => state.accountGroupList);
     /** Holds Store get email condition suggestions API success state as observable*/
     public emailConditionSuggestions$: Observable<any> = this.componentStore.select(state => state.emailConditionSuggestions);
-    /** Instance of formgroup */
+    /** Instance of email form group */
     public emailForm: FormGroup;
+    /** Instance of custom trigger form group */
     public customTriggerForm: FormGroup;
     /** Instance of Froala Tribute */
     public froalaTribute: any;
@@ -144,7 +142,7 @@ export class TemplateFroalaComponent implements OnInit {
     public entityOptions: IOption[] = [];
     /** Holds entity account group options */
     public entityAccountGroupOptions: IOption[] = [];
-    /** Holds trigger options */    
+    /** Holds trigger options */
     public triggerOptions: IOption[] = [];
     /** Holds action options */
     public actionOptions: IOption[] = [];
@@ -160,6 +158,8 @@ export class TemplateFroalaComponent implements OnInit {
     public voucherList: IOption[] = [];
     /** Holds filtered voucher list */
     public filteredVoucherList: IOption[] = [];
+    /** Holds filtered action list */
+    public filteredActionList: IOption[] = [];
     /** Holds true if show day of week dropdown */
     public showDayOfWeek: boolean = null;
     /** Hold if user click outside of email section */
@@ -171,7 +171,7 @@ export class TemplateFroalaComponent implements OnInit {
     /** Holds the maximum number of emails to display */
     public noOfMaximumEmailsShow: number = 2;
     /** Holds email type */
-    public emailType : any = EmailType;
+    public emailType: any = EmailType;
     /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
     public emailFocusStates: any = {
         isTo: true,
@@ -186,18 +186,26 @@ export class TemplateFroalaComponent implements OnInit {
     public optionClass: string = '';
     /** Holds entity enum */
     public entityEnum: typeof EntityEnum = EntityEnum;
-    public emailConditionSuggestionsLabelOptions: {[key: string]: { dropdownLabel: string, inputLabel: string, options: IOption[] }} = {};
+    /** Holds email condition suggestions label options */
+    public emailConditionSuggestionsLabelOptions: { [key: string]: { dropdownLabel: string, inputLabel: string, options: IOption[] } } = {};
     /** This will use for instance of voucher list Dropdown */
     public voucherListDropdown: FormControl = new FormControl();
     /** This will use for instance of account group Dropdown */
     public accountGroupDropdown: FormControl = new FormControl();
+    /** This will use for instance of action Dropdown */
+    public actionListDropdown: FormControl = new FormControl();
     /** Holds static group for trigger */
     public groupForTrigger: string = 'sundrydebtors';
+    /** Holds true if form is invalid */
+    public isFormInvalid: boolean = false;
+    /** Holds true if it is trigger */
+    public isTrigger: boolean;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
+        private triggerStore: TriggerComponentStore,
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
@@ -216,19 +224,40 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('hide-chat-widget');
+        this.isTrigger = this.inputData?.isTrigger;
         this.initializeForm();
         this.getEmailContents();
-        if (this.inputData?.isTrigger) {
-            this.emailConditionSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.length) {
-                    this.addConditionControls(response);
+        if (this.isTrigger) {
+            this.triggerStore.createUpdateTriggerIsSuccess$.pipe(
+                takeUntil(this.destroyed$),
+                filter(Boolean),
+                take(1)
+            ).subscribe(() => this.dialogRef.close(true));
+
+            this.emailConditionSuggestions$.pipe(
+                takeUntil(this.destroyed$),
+                filter(suggestions => suggestions?.length > 0),
+                distinctUntilChanged()
+            ).subscribe(suggestions => this.addConditionControls(suggestions));
+
+            this.triggerStore.triggerDetails$.pipe(
+                takeUntil(this.destroyed$),
+                filter(Boolean),
+                distinctUntilChanged()
+            ).subscribe(triggerDetails => {
+                if (triggerDetails) {
+                    triggerDetails['conditions'] = triggerDetails?.conditionMap;
+                    console.log(triggerDetails);
+                    this.customTriggerForm.patchValue(triggerDetails);
+                    this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity });
+                    console.log(this.customTriggerForm.value);
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
 
 
             /** Search for voucher list dropdown */
-            this.voucherListDropdown.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe(search => {
+            this.voucherListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
                 if (!search) {
                     this.filteredVoucherList = this.voucherList;
                 } else {
@@ -237,14 +266,23 @@ export class TemplateFroalaComponent implements OnInit {
             });
 
             /** Search for account group dropdown */
-            this.accountGroupDropdown.valueChanges.pipe(debounceTime(700), takeUntil(this.destroyed$), filter(search => search !== null || search !== undefined)).subscribe(search => {
+            this.accountGroupDropdown.valueChanges.pipe(this.searchPipe, filter(search => search !== null || search !== undefined)).subscribe(search => {
                 this.getFlattenAccountGroupList({
                     page: 1,
-                    count: 200,
+                    count: PAGINATION_LIMIT,
                     group: this.groupForTrigger,
                     entity: this.customTriggerForm?.get('entity')?.value,
                     query: search || ''
                 });
+            });
+
+            /** Search for action dropdown */
+            this.actionListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
+                if (!search) {
+                    this.filteredActionList = this.actionOptions;
+                } else {
+                    this.filteredActionList = this.actionOptions.filter(action => action?.label?.toLowerCase()?.includes(search?.toLowerCase()));
+                }
             });
         } else {
             this.getEmailTemplates();
@@ -269,12 +307,8 @@ export class TemplateFroalaComponent implements OnInit {
             }
         });
 
-        this.customTriggerForm?.valueChanges?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log("response", response);
-        });
-
         this.emailTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && !this.inputData?.isTrigger) {
+            if (response && !this.isTrigger) {
                 if (response?.bcc?.length) {
                     this.showBcc = true;
                     this.selectedBccEmails = response.bcc;
@@ -298,6 +332,17 @@ export class TemplateFroalaComponent implements OnInit {
             }
         });
     }
+
+    /**
+     * This will handle the search pipe for ngx-mat-select-search
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private readonly searchPipe = pipe(
+        debounceTime(700),
+        takeUntil(this.destroyed$)
+    );
 
     /**
      * This will update the html form control with the froala html
@@ -418,33 +463,54 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public initializeForm(template?: any): void {
-        if (this.inputData?.isTrigger) {
+        console.log("Template", template);
+        if (this.isTrigger) {
             this.customTriggerForm = this.formBuilder.group({
                 title: ['', [Validators.required]],
+                triggerModule: [TriggerModuleEnum.VoucherDue, [Validators.required]],
                 entity: [''],
                 entityUniqueNames: [''],
                 voucherTypes: [''],
                 emailSubject: ['', [Validators.required]],
-                triggerModule: [TriggerModuleEnum.VoucherDue, [Validators.required]],
                 to: [''],
                 cc: [''],
                 bcc: [''],
-                // conditions: [template?.conditions ?? []], // at least one required
                 executionTime: this.getExecutionTimeFormGroup(),
-                actions: [TriggerActionEnum.AttachVoucherPdf, [Validators.required]],
+                actions: [[TriggerActionEnum.AttachVoucherPdf], [Validators.required]],
                 html: ['', [Validators.required]],
                 disabled: [false]
             });
         } else {
             this.emailForm = this.formBuilder.group({
                 to: [template?.to ?? ''],
-                cc: [template?.cc ?? '',],
+                cc: [template?.cc ?? ''],
                 bcc: [template?.bcc ?? ''],
                 voucherTypes: [[this.inputData]],
                 emailSubject: [template?.emailSubject ?? ''],
                 html: [template?.html ?? '']
             });
         }
+    }
+
+    /**
+     * Returns a validator that ensures at least one of the specified fields has a value.
+     *
+     * @param {string[]} fields - The fields to check for values.
+     * @returns {ValidatorFn} - A validator function that returns null if at least one field has a value, otherwise returns an error.
+     */
+    private atLeastOneValidator(fields: string[]): ValidatorFn {
+        return (group: AbstractControl): ValidationErrors | null => {
+            if (!(group instanceof FormGroup)) {
+                return null;
+            }
+
+            const hasValue = fields.some(field => {
+                const control = group.get(field);
+                return control && control.get('value')?.value;
+            });
+
+            return hasValue ? null : { atLeastOneRequired: true };
+        };
     }
 
     /**
@@ -462,12 +528,23 @@ export class TemplateFroalaComponent implements OnInit {
         });
     }
 
+    /**
+     * Adds condition controls to the form group.
+     *
+     * @param {any} conditions - The conditions to add.
+     * @memberof TemplateFroalaComponent
+     */
     private addConditionControls(conditions: any): void {
-        let dynamicControls: FormGroup = new FormGroup({});
+        const dynamicControls = new FormGroup({});
+        const requiredFields: string[] = [];
+
         conditions.forEach((condition: any) => {
             Object.entries(condition).forEach(([conditionData, conditionKey]) => {
                 if (conditionData === 'variable') {
-                    dynamicControls.addControl(conditionKey as string, new FormGroup({
+                    const fieldName = conditionKey as string;
+                    requiredFields.push(fieldName);
+
+                    dynamicControls.addControl(fieldName, new FormGroup({
                         key: new FormControl(''),
                         value: new FormControl('')
                     }));
@@ -480,9 +557,22 @@ export class TemplateFroalaComponent implements OnInit {
                 options: this.getOptionByArrayOfStrings(condition.conditions as string[])
             };
         });
-        this.customTriggerForm.addControl('conditions', dynamicControls as FormGroup);
+
+        dynamicControls.setValidators(this.atLeastOneValidator(requiredFields));
+        this.customTriggerForm.addControl('conditions', dynamicControls);
+        if (this.inputData?.triggerUniqueName) {
+            setTimeout(() => {
+                this.triggerStore.getTriggerDetails(this.inputData.triggerUniqueName);
+            }, 50);
+        }
     }
 
+    /**
+     * Returns an array of options based on the provided array of strings.
+     *
+     * @param {string[]} condition - The array of strings to convert into options.
+     * @returns {IOption[]} An array of options with `value` and `label` properties.
+     */
     private getOptionByArrayOfStrings(condition: string[]): IOption[] {
         return condition?.map(item => ({
             value: item,
@@ -490,6 +580,13 @@ export class TemplateFroalaComponent implements OnInit {
         }));
     }
 
+    /**
+     * Returns a formatted label based on the provided label and optional concatString.
+     *
+     * @param {string} label - The label to format.
+     * @param {string} [concatString] - Optional string to append after the label.
+     * @returns {string} The formatted label.
+     */
     private getLabel(label: string, concatString?: string): string {
         return this.titleCasePipe.transform(`${label?.replace('_', ' ')}${concatString ? ` ${concatString}` : ''}`);
     }
@@ -507,9 +604,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public onSubmit(type: string): void {
-        this.emailForm.get(EmailType.To)?.patchValue(this.selectedToEmails);
-        this.emailForm.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
-        this.emailForm.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
+        this.setToCcBcc(this.emailForm);
 
         if (this.emailForm.invalid) {
             return;
@@ -521,6 +616,74 @@ export class TemplateFroalaComponent implements OnInit {
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
         this.componentStore.updateCustomTemplate(req);
+    }
+
+    /**
+     * Handles the submission of the trigger form.
+     *
+     * @returns {void}
+     * @memberof TemplateFroalaComponent
+     */
+    public createUpdateTrigger(): void {
+        this.setToCcBcc(this.customTriggerForm);
+        this.customTriggerForm.markAllAsTouched();
+
+        if (this.customTriggerForm.invalid) {
+            this.showFormValidityError();
+            return;
+        }
+
+        const formValue = cloneDeep(this.customTriggerForm.value);
+
+        if (!formValue.executionTime.dayOfWeek) {
+            delete formValue.executionTime.dayOfWeek;
+        }
+        if (!formValue.executionTime.dayOfMonth) {
+            delete formValue.executionTime.dayOfMonth;
+        }
+
+        if (!formValue.voucherTypes?.length) {
+            delete formValue.voucherTypes;
+        }
+
+        if (formValue.conditions) {
+            Object.keys(formValue.conditions).forEach(key => {
+                if (!(formValue.conditions[key].key && formValue.conditions[key].value)) {
+                    delete formValue.conditions[key];
+                }
+            });
+        }
+
+        if (this.inputData?.triggerUniqueName) {
+            this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
+        } else {
+            this.triggerStore.createTrigger(formValue);
+        }
+    }
+
+    /**
+     * Handles the form validity error.
+     *
+     * @returns {void}
+     * @memberof TemplateFroalaComponent
+     */
+    public showFormValidityError(): void {
+        this.isFormInvalid = false;
+        setTimeout(() => {
+            this.isFormInvalid = true;
+        }, 0);
+    }
+
+    /**
+     * Sets the values of the form fields for To, Bcc, and Cc.
+     *
+     * @param {FormGroup} form - The form group to update.
+     * @memberof TemplateFroalaComponent
+     */
+    private setToCcBcc(form: FormGroup): void {
+        form.get(EmailType.To)?.patchValue(this.selectedToEmails);
+        form.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails);
+        form.get(EmailType.Cc)?.patchValue(this.selectedCcEmails);
     }
 
     /**
@@ -541,7 +704,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         const model = {
             ...formValue,
-            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName)  ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
+            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName) ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
         };
 
         // Only add sendMail flag when type is 'send'
@@ -556,11 +719,11 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-    * Show/Hide bcc/cc field
-    * @returns {void}
-    * @param {string} emailType
-    * @memberof TemplateFroalaComponent
-    */
+     * Show/Hide bcc/cc field
+     * @returns {void}
+     * @param {string} emailType
+     * @memberof TemplateFroalaComponent
+     */
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
         if (this.childComponents.length > 0) {
@@ -573,15 +736,16 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-    * Releases the memory
-    *
-    * @memberof TemplateFroalaComponent
-    */
+     * Releases the memory
+     *
+     * @memberof TemplateFroalaComponent
+     */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-chat-widget');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     /**
      * Clicked inside Email section
      *
@@ -667,12 +831,18 @@ export class TemplateFroalaComponent implements OnInit {
         this.customTriggerForm?.get('entityUniqueNames')?.setValue([]);
         this.getFlattenAccountGroupList({
             page: 1,
-            count: 200,
+            count: PAGINATION_LIMIT,
             group: this.groupForTrigger,
             entity: event.value
         });
     }
 
+    /**
+     * Retrieves the flattened account group list from the store.
+     *
+     * @param {any} model
+     * @memberof TemplateFroalaComponent
+     */
     private getFlattenAccountGroupList(model: any): void {
         this.componentStore.getFlattenAccountGroupList(model);
     }
@@ -683,10 +853,41 @@ export class TemplateFroalaComponent implements OnInit {
      * @param event - Selected option
      * @memberof TemplateFroalaComponent
      */
-    public onTimeActionChange(event: IOption): void {
-        this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
+    public onTimeActionChange(event?: IOption): void {
         this.customTriggerForm?.get('executionTime')?.get('dayOfMonth')?.setValue('');
         this.customTriggerForm?.get('executionTime')?.get('dayOfWeek')?.setValue('');
+
+        if (event?.value) {
+            this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
+            this.setTimeActionValidator();
+        }
+    }
+
+    /**
+     * Sets the validators for the day of month and day of week fields.
+     *
+     * @memberof TemplateFroalaComponent
+     */
+    public setTimeActionValidator(): void {
+        const executionTime = this.customTriggerForm?.get('executionTime');
+        if (!executionTime) return;
+
+        const dayOfMonth = executionTime.get('dayOfMonth');
+        const dayOfWeek = executionTime.get('dayOfWeek');
+
+        dayOfMonth?.clearValidators();
+        dayOfWeek?.clearValidators();
+
+        if (this.showDayOfWeek === null) {
+        } else if (this.showDayOfWeek) {
+            dayOfWeek?.setValidators([Validators.required]);
+        } else {
+            dayOfMonth?.setValidators([Validators.required]);
+        }
+
+        dayOfMonth?.updateValueAndValidity({ onlySelf: true });
+        dayOfWeek?.updateValueAndValidity({ onlySelf: true });
+        executionTime.updateValueAndValidity({ onlySelf: true });
     }
 
     /**
@@ -697,25 +898,59 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData);
+            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData, true, ['sunday']);
             this.voucherList = this.generalService.getVoucherTypeList(this.commonLocaleData);
             this.filteredVoucherList = this.voucherList;
             this.dayOfMonthOptions = this.generalService.getDaysOfMonth();
             this.triggerOptions = [
-                {label: this.localeData?.voucher_due, value: TriggerModuleEnum.VoucherDue}
+                { label: this.localeData?.voucher_due, value: TriggerModuleEnum.VoucherDue }
             ];
             this.actionOptions = [
-                {label: this.localeData?.attach_voucher_pdf, value: TriggerActionEnum.AttachVoucherPdf}
+                { label: this.localeData?.attach_voucher_pdf, value: TriggerActionEnum.AttachVoucherPdf }
             ];
+            this.filteredActionList = this.actionOptions;
             this.entityOptions = [
-                {label: this.commonLocaleData?.app_account, value: EntityEnum.Account},
-                {label: this.commonLocaleData?.app_group, value: EntityEnum.Group}
+                { label: this.commonLocaleData?.app_account, value: EntityEnum.Account },
+                { label: this.commonLocaleData?.app_group, value: EntityEnum.Group }
             ];
             this.timeOtherOptions = [
-                {label: this.localeData?.day_of_week, value: OtherTimeOptionsEnum.DayOfWeek},
-                {label: this.localeData?.date_of_month, value: OtherTimeOptionsEnum.DayOfMonth}
+                { label: this.localeData?.day_of_week, value: OtherTimeOptionsEnum.DayOfWeek },
+                { label: this.localeData?.date_of_month, value: OtherTimeOptionsEnum.DayOfMonth }
             ];
         }
     }
 
+    /**
+     * Get label value from options
+     *
+     * @param {IOption[]} options
+     * @param {string} value
+     * @returns {string}
+     * @memberof TemplateFroalaComponent
+     */
+    public getLabelValue(options: IOption[], value: string): string {
+        return options?.find(option => option?.value?.toUpperCase() === value.toUpperCase())?.label || '';
+    }
+
+    /**
+     * Get day action label value
+     *
+     * @returns {string}
+     * @memberof TemplateFroalaComponent
+     */
+    public getDayActionLabelValue(): string {  
+        const executionTime = this.customTriggerForm?.get('executionTime');
+        if (!executionTime) return;
+
+        const dayOfMonth = executionTime.get('dayOfMonth');
+        const dayOfWeek = executionTime.get('dayOfWeek');
+
+        if (dayOfWeek?.value) {
+            return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfWeek);
+        } else if (dayOfMonth?.value) {
+            return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfMonth);
+        }
+        return '';
+    }
+    
 }

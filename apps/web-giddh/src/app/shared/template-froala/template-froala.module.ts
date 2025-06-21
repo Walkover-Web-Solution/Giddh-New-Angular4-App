@@ -15,6 +15,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
   imports: [
@@ -34,7 +36,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
         NgxMatSelectSearchModule,
         MatSelectModule,
         MatCheckboxModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        ReplacePipeModule,
+        A11yModule
     ],
     exports: [
         TemplateFroalaComponent

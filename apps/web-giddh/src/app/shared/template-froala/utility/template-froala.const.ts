@@ -1,3 +1,4 @@
+/** Email type enum */
 export enum EmailType {
     To = 'to',
     Cc = 'cc',
@@ -7,14 +8,17 @@ export enum EmailType {
 export enum TriggerModuleEnum {
     VoucherDue = 'VOUCHER_DUE'
 }
-
 /** Trigger action enum */
 export enum TriggerActionEnum {
     AttachVoucherPdf = 'ATTACH_VOUCHER_PDF'
 }
-
 /** Entity enum */
 export enum EntityEnum {
     Account = 'ACCOUNT',
     Group = 'GROUP'
+}
+/** Other time options enum */
+export enum OtherTimeOptionsEnum {
+    DayOfWeek = 'dayOfWeek',
+    DayOfMonth = 'dayOfMonth'
 }
