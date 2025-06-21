@@ -437,10 +437,9 @@
             <ng-container matColumnDef="docNumber">
                 <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_invoice_no }}</th>
                 <td mat-cell *matCellDef="let item" class="download-arrow">
-                    <span class="d-flex flex-nowrap align-items-center column-gap1">
-                        <a href="javascript:;" class="d-inline-block color-link">{{ activeTabIndex === 0 ? item?.docNumber : item?.voucherNumber}}</a>
+                    <span class="d-flex flex-nowrap align-items-center column-gap1" *ngIf="activeTabIndex === 0">
+                        <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
                         <a
-                            *ngIf="activeTabIndex === 0"
                             (click)="onSelectEwayDownload(item)"
                             [matTooltip]="localeData?.download_eway_bill"
                             matTooltipPosition="above"
@@ -449,6 +448,7 @@
                             <i class="icon-download1"></i>
                         </a>
                     </span>
+                    <span *ngIf="activeTabIndex === 1">{{ item?.voucherNumber }}</span>
                 </td>
             </ng-container>
 
