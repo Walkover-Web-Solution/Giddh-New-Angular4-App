@@ -662,6 +662,12 @@
                     "label": "Project wise accounting",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new"
+                },
+                {
+                    "label": "AI",
+                    "link": "/pages/ocr-voucher",
+                    "icon": "icon-audit-log",
+                    "description": "AI model"
                 }
             ]
         }
