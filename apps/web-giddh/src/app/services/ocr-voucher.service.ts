@@ -5,18 +5,19 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { SUBSCRIPTIONS_API, SUBSCRIPTION_V2_API } from './apiurls/subscriptions.api';
 import * as dayjs from 'dayjs';
-import { SubscriptionsUser } from '../models/api-models/Subscriptions';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { GeneralService } from './general.service';
-import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
 import { OCR_VOUCHER_API } from './apiurls/ocr-voucher.api';
 
 @Injectable()
 export class OcrVoucherService {
     public dayjs = dayjs;
-    public listCount$: BehaviorSubject<any> = new BehaviorSubject(null);
+    public ocrVoucherDetails$: BehaviorSubject<any> = new BehaviorSubject(null);
+    public ocrList$: BehaviorSubject<any> = new BehaviorSubject(null);
+    public getOcrData$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public uploadDataSuccess$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public saveAndNext$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public saveAndNextSuccess$: BehaviorSubject<any> = new BehaviorSubject(null);
 
     constructor(private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
@@ -96,6 +97,26 @@ export class OcrVoucherService {
         return this.http.get(this.config.apiUrl + OCR_VOUCHER_API.COMPLETED_COUNT
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
             ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+        )
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    public getExtractDocuments(req: any): Observable<BaseResponse<any, any>> {
+        console.log(req);
+        const branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+        return this.http.get(this.config.apiUrl + OCR_VOUCHER_API.EXTRACT_DOCUMENTS
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':currentToken', encodeURIComponent(req.type === 'skip' ? req.token : ''))
+            ?.replace(':nextToken', encodeURIComponent(req.type === 'save' ? req.token : ''))
         )
             .pipe(
                 map((res) => {

@@ -46,6 +46,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { OcrVoucherComponent } from './ocr-voucher.component';
 import { OcrVoucherCreateComponent } from './ocr-voucher-create/ocr-voucher-create.component';
 import { VouchersModule } from '../vouchers/vouchers.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/giddh-progress-spinner.component';
 
 @NgModule({
     imports: [
@@ -91,12 +93,9 @@ import { VouchersModule } from '../vouchers/vouchers.module';
         DecimalDigitsModule,
         MatDividerModule,
         SharedModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
-        VouchersModule
-
+        VouchersModule,
+        MatProgressSpinnerModule,
+        GiddhProgressSpinnerComponent
     ],
     exports: [OcrVoucherListComponent,
         OcrVoucherComponent,

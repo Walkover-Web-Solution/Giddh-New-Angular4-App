@@ -10,24 +10,32 @@ import { OcrVoucherService } from "../../services/ocr-voucher.service";
 
 export interface OcrVoucherState {
     ocrListInProgress: boolean;
-    ocrList: any
+    ocrList: any;
+    ocrMainListInProgress: boolean;
+    ocrMainList: any
     ocrUploadInProgress: boolean;
     ocrUploadSuccess: any;
     ocrImportInProgress: boolean;
     ocrImportSuccess: any;
     ocrCompletedCount: any;
     ocrCompletedCountInProgress: boolean;
+    ocrExtractDocuments: any;
+    ocrExtractDocumentsInProgress: boolean;
 }
 
 export const DEFAULT_OCR_VOUCHER_STATE: OcrVoucherState = {
     ocrListInProgress: null,
     ocrList: [],
+    ocrMainListInProgress: null,
+    ocrMainList: [],
     ocrUploadInProgress: null,
     ocrUploadSuccess: null,
     ocrImportInProgress: null,
     ocrImportSuccess: null,
     ocrCompletedCount: null,
-    ocrCompletedCountInProgress: null
+    ocrCompletedCountInProgress: null,
+    ocrExtractDocuments: null,
+    ocrExtractDocumentsInProgress: null
 };
 
 @Injectable()
@@ -43,10 +51,16 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state =>  state.session.applicationDate), (response) => response);
     public ocrUploadSuccess$: Observable<any> = this.select((state) => state.ocrUploadSuccess);
+    public ocrUploadInProgress$: Observable<any> = this.select((state) => state.ocrUploadInProgress);
     public ocrImportSuccess$: Observable<any> = this.select((state) => state.ocrImportSuccess);
     public ocrList$: Observable<any> = this.select((state) => state.ocrList);
     public ocrCompletedCount$: Observable<any> = this.select((state) => state.ocrCompletedCount);
     public ocrCompletedCountInProgress$: Observable<any> = this.select((state) => state.ocrCompletedCountInProgress);
+    public ocrExtractDocuments$: Observable<any> = this.select((state) => state.ocrExtractDocuments);
+    public ocrExtractDocumentsInProgress$: Observable<any> = this.select((state) => state.ocrExtractDocumentsInProgress);
+    public ocrMainList$: Observable<any> = this.select((state) => state.ocrMainList);
+    public ocrMainListInProgress$: Observable<any> = this.select((state) => state.ocrMainListInProgress);
+    public ocrImportInProgress$: Observable<any> = this.select((state) => state.ocrImportInProgress);
 
     /**
      * Get All Subscriptions
@@ -86,6 +100,41 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
             })
         );
     });
+    
+
+    readonly getAllMainPageOcrData = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ ocrMainListInProgress: true });
+                return this.ocrVoucherService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    ocrMainList: res?.body ?? [],
+                                    ocrMainListInProgress: false,
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    ocrMainList: [],
+                                    ocrMainListInProgress: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                ocrMainList: [],
+                                ocrMainListInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     readonly uploadOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
@@ -94,7 +143,6 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                 return this.ocrVoucherService.uploadOcrDocument(req?.fileName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            console.log(res);
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     ocrUploadInProgress: false,
@@ -132,19 +180,22 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar("success", res?.body?.message);
                                 return this.patchState({
-                                    ocrImportInProgress: false
+                                    ocrImportInProgress: false,
+                                    ocrImportSuccess: res?.body
                                 });
                             } else {
                                 this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
-                                    ocrImportInProgress: false
+                                    ocrImportInProgress: false,
+                                    ocrImportSuccess: null
                                 });
                             }
                         },
                         (error: any) => {
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
-                                ocrImportInProgress: false
+                                ocrImportInProgress: false,
+                                ocrImportSuccess: null
                             });
                         }
                     ),
@@ -163,7 +214,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    ocrCompletedCount: res?.body,
+                                    ocrCompletedCount: res?.body?.completedCount,
                                     ocrCompletedCountInProgress: false
                                 });
                             } else {
@@ -179,6 +230,40 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             return this.patchState({
                                 ocrCompletedCountInProgress: false,
                                 ocrCompletedCount: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getExtractDocuments = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: null });
+                return this.ocrVoucherService.getExtractDocuments(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    ocrExtractDocuments: res?.body,
+                                    ocrExtractDocumentsInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    ocrExtractDocumentsInProgress: false,
+                                    ocrExtractDocuments: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                ocrExtractDocumentsInProgress: false,
+                                ocrExtractDocuments: null
                             });
                         }
                     ),
