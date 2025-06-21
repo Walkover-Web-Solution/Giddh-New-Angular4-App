@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, combineLatest, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, combineLatest, debounceTime, delay, distinctUntilChanged, of as observableOf, skip, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -51,12 +51,14 @@ import { SettingsProfileActions } from "../../actions/settings/profile/settings.
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
 import { Transaction } from "../../models/api-models/Expences";
+import { OcrVoucherService } from "../../services/ocr-voucher.service";
+import { OcrVoucherStore } from "../../ocr-voucher/utility/ocr-voucher.store";
 
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore],
+    providers: [VoucherComponentStore, OcrVoucherStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -422,6 +424,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
+    /** True if ocr data is disabled */
+    public ocrDataEnabled: boolean = false;
+    /** Get ocr data */
+    public ocrVoucherDetails$: Observable<any> = this.ocrVoucherService.ocrVoucherDetails$;
+    public ocrVoucherDetails: any = {};
+    public ocrVoucherToken: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -515,6 +523,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private componentStore: VoucherComponentStore,
+        private ocrVoucherStore: OcrVoucherStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
@@ -538,6 +547,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
+        private ocrVoucherService: OcrVoucherService
     ) {
 
     }
@@ -556,74 +566,93 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyTaxes();
         this.getWarehouses();
 
+        // this.ocrVoucherService.getOcrData$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe(response => {
+        //     if (response) {
+        //         this.ocrDataEnabled = true;
+        //     }
+        // });
+
+        this.ocrVoucherService.ocrVoucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(voucherDetails => {
+            this.ocrVoucherDetails = voucherDetails;
+        });
+
+        this.ocrVoucherService.saveAndNext$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.generateVoucher();
+            }
+        });
+
+
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let params = response[0];
-                this.queryParams = cloneDeep(response[1]);
+                if (params?.voucherType) {
 
-                if (this.queryParams?.redirect) {
-                    this.redirectUrl = this.queryParams.redirect;
-                }
+                    this.queryParams = cloneDeep(response[1]);
 
-                this.company.countryName = "";
-                this.openAccountDropdown = false;
-                this.urlVoucherType = params.voucherType;
-                this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
-
-                if (this.voucherApiVersion !== 2) {
-                    this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
-                }
-
-                this.getVoucherType();
-                this.resetVoucherForm(!params?.uniqueName, true);
-
-                /** Open account dropdown on create */
-                this.getVoucherType();
-
-                if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
-                    this.isPendingEntries = true;
-                    this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
-                } else {
-                    this.isPendingEntries = false;
-                }
-
-                this.getCompanyProfile();
-                this.getIsTcsTdsApplicable();
-                this.getInvoiceSettings();
-                this.getCreatedTemplates();
-                this.getAccountOnboardingFormData();
-                this.searchStock();
-
-                if (this.invoiceType.isCashInvoice) {
-                    this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
-                    this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
-                } else {
-                    this.invoiceForm.get('account.uniqueName')?.patchValue(null);
-                }
-                this.invoiceForm.get('type').patchValue(this.voucherType);
-
-                if (params?.uniqueName) {
-                    if (params?.action === 'copy') {
-                        this.isCopyMode = true;
-                    } else {
-                        this.isUpdateMode = true;
-                        this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
+                    if (this.queryParams?.redirect) {
+                        this.redirectUrl = this.queryParams.redirect;
                     }
-                    this.useDefaultAccountDetails = false;
-                    this.getVoucherDetails(params);
-                    this.getUpdateVoucherText();
-                } else {
-                    this.depositAccountName = "";
-                }
 
-                if (params?.accountUniqueName === "cash") {
-                    this.invoiceType.isCashInvoice = true;
-                }
+                    this.company.countryName = "";
+                    this.openAccountDropdown = false;
+                    this.urlVoucherType = params.voucherType;
+                    this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
-                if (params?.accountUniqueName && !params?.uniqueName) {
-                    this.searchAccount(params?.accountUniqueName, 1, true);
-                } else {
-                    this.searchAccount();
+                    if (this.voucherApiVersion !== 2) {
+                        this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
+                    }
+
+                    this.resetVoucherForm(!params?.uniqueName, true);
+
+                    /** Open account dropdown on create */
+                    this.getVoucherType();
+
+                    if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
+                        this.isPendingEntries = true;
+                        this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
+                    } else {
+                        this.isPendingEntries = false;
+                    }
+
+                    this.getCompanyProfile();
+                    this.getIsTcsTdsApplicable();
+                    this.getInvoiceSettings();
+                    this.getCreatedTemplates();
+                    this.getAccountOnboardingFormData();
+                    this.searchStock();
+
+                    if (this.invoiceType.isCashInvoice) {
+                        this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
+                        this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+                    } else {
+                        this.invoiceForm.get('account.uniqueName')?.patchValue(null);
+                    }
+                    this.invoiceForm.get('type').patchValue(this.voucherType);
+
+                    if (params?.uniqueName) {
+                        if (params?.action === 'copy') {
+                            this.isCopyMode = true;
+                        } else {
+                            this.isUpdateMode = true;
+                            this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
+                        }
+                        this.useDefaultAccountDetails = false;
+                        this.getVoucherDetails(params);
+                        this.getUpdateVoucherText();
+                    } else {
+                        this.depositAccountName = "";
+                    }
+
+                    if (params?.accountUniqueName === "cash") {
+                        this.invoiceType.isCashInvoice = true;
+                    }
+
+                    if (params?.accountUniqueName && !params?.uniqueName) {
+                        this.searchAccount(params?.accountUniqueName, 1, true);
+                    } else {
+                        this.searchAccount();
+                    }
                 }
             }
         });
@@ -787,158 +816,209 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** Voucher details */
-        this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (!response.isCopyVoucher) {
-                    if (response?.cashVoucher) {
-                        this.getVoucherType(response);
-                    }
-                    this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                    this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(response.account?.uniqueName);
-                    this.invoiceForm.controls["account"]?.get("attentionTo").patchValue(response.account?.attentionTo);
-                    this.invoiceForm.controls["account"]?.get("email").patchValue(response.account?.email);
-                    this.invoiceForm.controls["account"]?.get("mobileNumber").patchValue(response.account?.mobileNumber ?? '');
-                    this.account.mobileNumber = response.account?.mobileNumber ?? '';
-                    this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+        combineLatest([
+            this.componentStore.voucherDetails$,
+            this.ocrVoucherService.ocrVoucherDetails$
+        ])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(([voucherDetails, ocrVoucherDetails]) => {
+                if (ocrVoucherDetails?.token) {
+                    this.ocrDataEnabled = true;
                 }
+                if (this.ocrDataEnabled) {
+                    voucherDetails = ocrVoucherDetails;
+                    this.ocrVoucherToken = ocrVoucherDetails?.token;
+                    this.company.countryName = "";
+                    this.openAccountDropdown = false;
+                    this.urlVoucherType = ocrVoucherDetails.type;
+                    this.voucherType = this.vouchersUtilityService.parseVoucherType(ocrVoucherDetails.type);
 
-                if (response?.purchaseOrderDetails?.length && !this.isCopyMode) {
-                    this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
-                    this.invoiceForm.get("linkedPo")?.patchValue(response?.purchaseOrderDetails?.map(po => { return po.uniqueName; }));
-                    this.selectedPoItems = this.invoiceForm.get("linkedPo")?.value;
+                    this.resetVoucherForm(true, true);
+
+                    /** Open account dropdown on create */
+                    this.getVoucherType();
+
+                    this.isPendingEntries = false;
+
+                    this.getCompanyProfile();
+                    this.getIsTcsTdsApplicable();
+                    this.getInvoiceSettings();
+                    this.getCreatedTemplates();
+                    this.getAccountOnboardingFormData();
+                    this.searchStock();
+
+                    if (this.invoiceType.isCashInvoice) {
+                        this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
+                        this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+                    } else {
+                        this.invoiceForm.get('account.uniqueName')?.patchValue(null);
+                    }
+                    this.invoiceForm.get('type').patchValue(this.voucherType);
+                    this.getUpdateVoucherText();
+                    this.depositAccountName = "";
+
+
+                    if (voucherDetails?.account?.uniqueName === "cash") {
+                        this.invoiceType.isCashInvoice = true;
+                    }
+
+                    this.searchAccount();
                 }
-                if (this.invoiceType.isCashInvoice) {
-                    this.depositAccountName = response.account?.name;
-                }
-
-
-                if (!response.isCopyVoucher) {
-                    this.getAccountDetails(response.account?.uniqueName);
-                    this.fillBillingShippingAddress("account", "billingDetails", response.account?.billingDetails, 0);
-                    this.fillBillingShippingAddress("account", "shippingDetails", response.account?.shippingDetails, 0);
-
-                    this.copyAccountBillingInShippingAddress = isEqual(response.account?.billingDetails, response.account?.shippingDetails);
-
-                    if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
-                        this.fillBillingShippingAddress("company", "billingDetails", response.company?.billingDetails, 0);
-                        this.fillBillingShippingAddress("company", "shippingDetails", response.company?.shippingDetails, 0);
-
-                        this.copyCompanyBillingInShippingAddress = isEqual(response.company?.billingDetails, response.company?.shippingDetails);
+                if (voucherDetails) {
+                    if (!voucherDetails.isCopyVoucher) {
+                        if (voucherDetails?.cashVoucher) {
+                            this.getVoucherType(voucherDetails);
+                        }
+                        if (voucherDetails.account?.uniqueName) {
+                            this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? voucherDetails.account?.customerName : voucherDetails.account?.name);
+                        } else {
+                            this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(null);
+                        }
+                        this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(voucherDetails.account?.uniqueName ?? null);
+                        this.invoiceForm.controls["account"]?.get("attentionTo").patchValue(voucherDetails.account?.attentionTo ?? '');
+                        this.invoiceForm.controls["account"]?.get("email").patchValue(voucherDetails.account?.email ?? '');
+                        this.invoiceForm.controls["account"]?.get("mobileNumber").patchValue(voucherDetails.account?.mobileNumber ?? '');
+                        this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? '';
+                        this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
                     }
 
-                    this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
-                    this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : response.number);
-                    this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
-                    this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
-
-                    this.invoiceForm.get("date").patchValue(response.date);
-                    this.invoiceForm.get("dueDate").patchValue(response.dueDate);
-
-                    if (response.referenceVoucher) {
-                        this.creditDebitNoteInvoiceSelected({
-                            value: response.referenceVoucher.uniqueName,
-                            additional: {
-                                voucherType: response.referenceVoucher.voucherType,
-                                voucherNumber: this.isCopyMode ? null : response.referenceVoucher.number,
-                                voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) : response.referenceVoucher.date
-                            }
-                        });
+                    if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
+                        this.purchaseOrderDetailsForEdit = voucherDetails?.purchaseOrderDetails;
+                        this.invoiceForm.get("linkedPo")?.patchValue(voucherDetails?.purchaseOrderDetails?.map(po => { return po.uniqueName; }));
+                        this.selectedPoItems = this.invoiceForm.get("linkedPo")?.value;
+                    }
+                    if (this.invoiceType.isCashInvoice) {
+                        this.depositAccountName = voucherDetails.account?.name;
                     }
 
-                    if (response.warehouse) {
-                        this.invoiceForm.controls["warehouse"]?.get("name").patchValue(response.warehouse?.name);
-                        this.invoiceForm.controls["warehouse"]?.get("uniqueName").patchValue(response.warehouse?.uniqueName);
-                    }
 
-                    this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(response.templateDetails?.other?.customField1);
-                    this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(response.templateDetails?.other?.customField2);
-                    this.invoiceForm.get("templateDetails.other.customField3")?.patchValue(response.templateDetails?.other?.customField3);
-                    this.invoiceForm.get("templateDetails.other.message2")?.patchValue(response.templateDetails?.other?.message2);
-                    this.invoiceForm.get("templateDetails.other.shippedVia")?.patchValue(response.templateDetails?.other?.shippedVia);
-                    this.invoiceForm.get("templateDetails.other.shippingDate")?.patchValue(response.templateDetails?.other?.shippingDate);
-                    this.invoiceForm.get("templateDetails.other.trackingNumber")?.patchValue(response.templateDetails?.other?.trackingNumber);
+                    if (!voucherDetails.isCopyVoucher) {
+                        this.getAccountDetails(voucherDetails.account?.uniqueName);
+                        this.fillBillingShippingAddress("account", "billingDetails", voucherDetails.account?.billingDetails, 0);
+                        this.fillBillingShippingAddress("account", "shippingDetails", voucherDetails.account?.shippingDetails, 0);
 
-                    if (response.attachedFiles) {
-                        this.invoiceForm.get("attachedFiles")?.patchValue(response.attachedFiles);
-                        this.selectedFileName = response.attachedFileName;
-                    }
+                        this.copyAccountBillingInShippingAddress = isEqual(voucherDetails.account?.billingDetails, voucherDetails.account?.shippingDetails);
 
-                    this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
+                        if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
+                            this.fillBillingShippingAddress("company", "billingDetails", voucherDetails.company?.billingDetails, 0);
+                            this.fillBillingShippingAddress("company", "shippingDetails", voucherDetails.company?.shippingDetails, 0);
 
-                    if (response.adjustments?.length && !this.isCopyMode) {
-                        response.adjustments = response.adjustments?.map(adjustment => {
-                            adjustment.adjustmentAmount = adjustment.amount;
-                            return adjustment;
-                        });
-                        this.advanceReceiptAdjustmentData = { adjustments: response.adjustments };
-                        this.calculateAdjustedVoucherTotal(response.adjustments);
-                    }
-                }
-
-
-                const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
-                entriesFormArray.clear();
-
-                response.entries?.forEach((entry: any, index: number) => {
-                    if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
-                        this.invoiceForm.get('isAdvanceReceipt').patchValue((entry.subVoucher === SubVoucher.AdvanceReceipt) ? true : false);
-                        this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
-                        this.invoiceForm.get("chequeNumber")?.patchValue(entry?.chequeNumber);
-                    }
-                    if (entry.transactions[0]?.stock) {
-                        this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
-                    }
-                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, !response.isCopyVoucher));
-                    if (entry.discounts?.length) {
-                        this.getSelectedDiscounts(index, entry.discounts);
-                    }
-
-                    if (entry.taxes) {
-                        let normalTaxes = [];
-                        let otherTax = null;
-                        entry.taxes?.forEach(tax => {
-                            if (this.otherTaxTypes.includes(tax.taxType)) {
-                                otherTax = tax;
-                            } else {
-                                if (!tax.taxDetail) {
-                                    tax.taxDetail = [{ taxValue: tax.taxPercent }];
-                                }
-                                normalTaxes.push(tax);
-                            }
-                        });
-
-                        if (normalTaxes?.length) {
-                            this.getSelectedTaxes(index, normalTaxes);
+                            this.copyCompanyBillingInShippingAddress = isEqual(voucherDetails.company?.billingDetails, voucherDetails.company?.shippingDetails);
                         }
 
-                        if (!otherTax && this.account?.otherApplicableTaxes?.length) {
-                            this.allCompanyTaxes?.forEach(tax => {
-                                if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
-                                    otherTax = tax;
+                        this.invoiceForm.get('exchangeRate')?.patchValue(voucherDetails.exchangeRate);
+                        this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : voucherDetails.number);
+                        this.invoiceForm.get('touristSchemeApplicable')?.patchValue(voucherDetails?.touristSchemeApplicable);
+                        this.invoiceForm.get('passportNumber').patchValue(voucherDetails?.passportNumber);
+
+                        this.invoiceForm.get("date").patchValue(voucherDetails.date);
+                        this.invoiceForm.get("dueDate").patchValue(voucherDetails.dueDate);
+
+                        if (voucherDetails.referenceVoucher) {
+                            this.creditDebitNoteInvoiceSelected({
+                                value: voucherDetails.referenceVoucher.uniqueName,
+                                additional: {
+                                    voucherType: voucherDetails.referenceVoucher.voucherType,
+                                    voucherNumber: this.isCopyMode ? null : voucherDetails.referenceVoucher.number,
+                                    voucherDate: this.isCopyMode ? dayjs(new Date()).format(GIDDH_DATE_FORMAT) : voucherDetails.referenceVoucher.date
                                 }
                             });
                         }
 
-                        if (otherTax) {
-                            const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
-                            if (selectedOtherTax?.length && selectedOtherTax[0]) {
-                                otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
-                                otherTax['name'] = selectedOtherTax[0].name;
-                                this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod, true);
-                            }
-                        } else if (this.invoiceForm.get('isAdvanceReceipt').value && normalTaxes?.length) {
-                            this.calculateReceiptPaymentAmount(this.getEntryFormGroup(index), true);
+                        if (voucherDetails.warehouse) {
+                            this.invoiceForm.controls["warehouse"]?.get("name").patchValue(voucherDetails.warehouse?.name);
+                            this.invoiceForm.controls["warehouse"]?.get("uniqueName").patchValue(voucherDetails.warehouse?.uniqueName);
                         }
 
+                        this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(voucherDetails.templateDetails?.other?.customField1);
+                        this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(voucherDetails.templateDetails?.other?.customField2);
+                        this.invoiceForm.get("templateDetails.other.customField3")?.patchValue(voucherDetails.templateDetails?.other?.customField3);
+                        this.invoiceForm.get("templateDetails.other.message2")?.patchValue(voucherDetails.templateDetails?.other?.message2);
+                        this.invoiceForm.get("templateDetails.other.shippedVia")?.patchValue(voucherDetails.templateDetails?.other?.shippedVia);
+                        this.invoiceForm.get("templateDetails.other.shippingDate")?.patchValue(voucherDetails.templateDetails?.other?.shippingDate);
+                        this.invoiceForm.get("templateDetails.other.trackingNumber")?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+
+                        if (voucherDetails.attachedFiles) {
+                            this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
+                            this.selectedFileName = voucherDetails.attachedFileName;
+                        }
+
+                        this.invoiceForm.get('isRcmEntry').patchValue((voucherDetails.subVoucher === SubVoucher.ReverseCharge) ? true : false);
+
+                        if (voucherDetails.adjustments?.length && !this.isCopyMode) {
+                            voucherDetails.adjustments = voucherDetails.adjustments?.map(adjustment => {
+                                adjustment.adjustmentAmount = adjustment.amount;
+                                return adjustment;
+                            });
+                            this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
+                            this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
+                        }
                     }
-                });
 
-                this.checkIfEntriesHasStock();
 
-                this.startLoader(false);
-                this.changeDetection.detectChanges();
-            }
-        });
+                    const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
+                    entriesFormArray.clear();
+
+                    voucherDetails.entries?.forEach((entry: any, index: number) => {
+                        if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
+                            this.invoiceForm.get('isAdvanceReceipt').patchValue((entry.subVoucher === SubVoucher.AdvanceReceipt) ? true : false);
+                            this.invoiceForm.get("chequeClearanceDate")?.patchValue(entry?.chequeClearanceDate);
+                            this.invoiceForm.get("chequeNumber")?.patchValue(entry?.chequeNumber);
+                        }
+                        if (entry.transactions[0]?.stock) {
+                            this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
+                        }
+                        this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, !voucherDetails.isCopyVoucher));
+                        if (entry.discounts?.length) {
+                            this.getSelectedDiscounts(index, entry.discounts);
+                        }
+
+                        if (entry.taxes) {
+                            let normalTaxes = [];
+                            let otherTax = null;
+                            entry.taxes?.forEach(tax => {
+                                if (this.otherTaxTypes.includes(tax.taxType)) {
+                                    otherTax = tax;
+                                } else {
+                                    if (!tax.taxDetail) {
+                                        tax.taxDetail = [{ taxValue: tax.taxPercent }];
+                                    }
+                                    normalTaxes.push(tax);
+                                }
+                            });
+
+                            if (normalTaxes?.length) {
+                                this.getSelectedTaxes(index, normalTaxes);
+                            }
+
+                            if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                                this.allCompanyTaxes?.forEach(tax => {
+                                    if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
+                                        otherTax = tax;
+                                    }
+                                });
+                            }
+
+                            if (otherTax) {
+                                const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                                if (selectedOtherTax?.length && selectedOtherTax[0]) {
+                                    otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
+                                    otherTax['name'] = selectedOtherTax[0].name;
+                                    this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod, true);
+                                }
+                            } else if (this.invoiceForm.get('isAdvanceReceipt').value && normalTaxes?.length) {
+                                this.calculateReceiptPaymentAmount(this.getEntryFormGroup(index), true);
+                            }
+
+                        }
+                    });
+
+                    this.checkIfEntriesHasStock();
+
+                    this.startLoader(false);
+                    this.changeDetection.detectChanges();
+                }
+            });
 
         /** Send email success */
         this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1813,6 +1893,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getAccountDetails(accountUniqueName: string): void {
+        if (!accountUniqueName) {
+            return;
+        }
         this.componentStore.getAccountDetails(accountUniqueName);
 
         if (!this.invoiceType.isCashInvoice && (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote)) {
@@ -2004,7 +2087,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-        
+
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
@@ -2251,7 +2334,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactions: this.formBuilder.array([
                 this.formBuilder.group({
                     account: this.formBuilder.group({
-                        name: [entryData ? entryData?.transactions[0]?.account?.name : ''],
+                        name: [entryData ? this.ocrDataEnabled ? entryData?.transactions[0]?.account?.uniqueName : entryData?.transactions[0]?.account?.name : ''],
                         uniqueName: [entryData ? entryData?.transactions[0]?.account?.uniqueName : '']
                     }),
                     amount: this.formBuilder.group({
@@ -3176,8 +3259,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
-            this.stockVariants[entryIndex] = observableOf([]);
-            this.stockUnits[entryIndex] = observableOf([]);
+        this.stockVariants[entryIndex] = observableOf([]);
+        this.stockUnits[entryIndex] = observableOf([]);
         if (!entries?.length) {
             this.addNewLineEntry();
         }
@@ -3298,7 +3381,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
-            
+
             if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 transactionFormGroup.get('amount.amountForAccount').patchValue(transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100));
@@ -3369,9 +3452,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) - totalTax
             }
             entryFormGroup.get('transactions.0.amount.amountForAccount').patchValue(amount);
-    
+
             this.calculateTotalTax();
-            this.calculateVoucherTotals();   
+            this.calculateVoucherTotals();
         }
     }
 
@@ -3576,14 +3659,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public generateVoucher(): void {
-        this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
-        if (this.isPendingEntries) {
-            this.saveVoucher(() => {
-                this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
-            });
+    public generateVoucher(type?: string): void {
+        if (type === 'skip') {
+            this.ocrVoucherStore.getExtractDocuments({ token: this.ocrVoucherToken, type: 'skip' });
         } else {
-            this.saveVoucher();
+            this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
+            if (this.isPendingEntries && !this.ocrDataEnabled) {
+                this.saveVoucher(() => {
+                    this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
+                });
+            } else {
+                this.saveVoucher();
+            }
         }
     }
 
@@ -3909,6 +3996,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response && response.status === "success") {
+                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: 'save' });
                         this.resetVoucherForm();
 
                         let message = this.localeData?.po_created;
@@ -3966,6 +4054,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.proformaService.generate(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
+                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: 'save' });
                         if (callback) {
                             this.resetVoucherForm(false);
                         } else {
@@ -4065,6 +4154,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
+                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: 'save' });
                         const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
 
                         if (isCashSalesPurchaseInvoice) {
@@ -4126,7 +4216,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public resetVoucherForm(openAccountDropdown: boolean = true, initialLoad: boolean = false): void {
-        const exchangeRate = this.invoiceForm.get('exchangeRate')?.value;
+        if (!initialLoad) {
+            this.ocrDataEnabled = false;
+        }
         const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
         entriesFormArray.clear();
         const depositFormArray = this.invoiceForm.get('deposits') as FormArray;

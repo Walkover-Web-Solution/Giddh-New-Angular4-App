@@ -143,10 +143,9 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
 
         /** Get Ocr List */
         this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response?.items) {
                 this.dataSource = new MatTableDataSource<any>(response?.items);
-                this.ocrVoucherService.listCount$.next(response?.totalItems);
+                // this.ocrVoucherService.listCount$.next(response?.totalItems);
                 if (this.dataSource?.filteredData?.length ||
                     this.ocrDocumentListForm?.controls['uploadedBy']?.value ||
                     this.ocrDocumentListForm?.controls['fileName']?.value ||
@@ -162,6 +161,12 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
                 this.dataSource = new MatTableDataSource<any>([]);
                 this.showData = false;
                 this.ocrDocumentsRequestParams.totalItems = 0;
+            }
+        });
+
+        this.ocrVoucherService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.getAllOcrDocuments(false);
             }
         });
 
@@ -431,9 +436,24 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
         this.showStatus = false;
         this.showUploadedBy = false;
         this.showFileName = false;
-        this.ocrDocumentListForm.reset();
+        this.ocrDocumentListForm.patchValue({
+            status: null,
+            fileName: null,
+            uploadedBy: null,
+            convertedStatus: null
+        });
         this.inlineSearch = '';
-        this.getAllOcrDocuments(false);
+        /** Universal date observer */
+        this.componentStore.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getAllOcrDocuments(true);
+            }
+        });
         this.changeDetection.detectChanges();
     }
 
