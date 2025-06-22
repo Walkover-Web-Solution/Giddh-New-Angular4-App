@@ -15,14 +15,14 @@
         [(expandAll)]="expandAll"
         [tbExportCsv]="true"
         [tbExportXLS]="true"
-        (showReportTally)="showReportTallyOption = $event"
+        (showReportTally)="showReconcileOption = $event"
     ></financial-filter>
     <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <div *ngIf="(data$ | async) && !(showLoader | async)">
         <trial-balance-grid
-            [ngClass]="{ 'show-tailed-checkbox': showReportTallyOption }"
+            [ngClass]="{ 'show-tailed-checkbox': showReconcileOption }"
             #tbGrid
             [search]="search"
             [from]="from"

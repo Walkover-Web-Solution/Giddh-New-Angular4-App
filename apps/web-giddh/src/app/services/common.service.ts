@@ -194,7 +194,7 @@ export class CommonService {
         return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 
     /**

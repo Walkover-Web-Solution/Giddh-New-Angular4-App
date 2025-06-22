@@ -1,9 +1,31 @@
 {
-    "to": "To",
-    "cc": "Cc",
-    "bcc": "Bcc",
+    "to": "को",
+    "cc": "सीसी",
+    "bcc": "बीसीसी",
     "email_content_suggestions": "सुझाव देखने के लिए '@' टाइप करें",
     "recipients": "प्राप्तकर्ता",
     "subject": "विषय",
-    "save_and_send":"सहेजें और भेजें"
+    "save_and_send": "सहेजें और भेजें",
+    "voucher_due": "वाउचर देय",
+    "attach_voucher_pdf": "वाउचर PDF संलग्न करें",
+    "day_of_week": "सप्ताह का दिन",
+    "date_of_month": "महीने की तारीख",
+    "other": "अन्य",
+    "others": "अन्य",
+    "trigger_name": "ट्रिगर नाम",
+    "enter_trigger_name": "ट्रिगर नाम दर्ज करें",
+    "trigger_module": "ट्रिगर मॉड्यूल",
+    "select_trigger_module": "ट्रिगर मॉड्यूल चुनें",
+    "actions": "क्रियाएं",
+    "select_action": "क्रिया चुनें",
+    "enter_time": "समय दर्ज करें",
+    "day_action": "दिन की क्रिया",
+    "select_time_action": "समय क्रिया चुनें",
+    "select_day_of_week": "सप्ताह का दिन चुनें",
+    "select_date_of_month": "महीने की तारीख चुनें",
+    "disabled_trigger": "अक्षम ट्रिगर",
+    "validation_error_message": {
+        "email_content_required": "ईमेल सामग्री आवश्यक है",
+        "email_subject_required": "ईमेल विषय आवश्यक है"
+    }
 }

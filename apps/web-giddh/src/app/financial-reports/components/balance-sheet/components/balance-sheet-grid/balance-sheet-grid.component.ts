@@ -26,6 +26,7 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 
 @Component({
     selector: 'balance-sheet-grid',
@@ -72,7 +73,8 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private tlPlService: TlPlService
     ) {
 
     }
@@ -214,6 +216,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                     payload: this.listOfCheckGroupsAccounts
                 };
                 this.financialReportsComponentStore.tailedReportAccountGroup(model);
+                this.tlPlService.isReportTailed$.next(true);
             }
         }, 400);
     }

@@ -64,7 +64,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
     /** True if show Tally Report options */
-    public showReportTallyOption: boolean;
+    public showReconcileOption: boolean;
 
     constructor(
         private store: Store<AppState>, 
