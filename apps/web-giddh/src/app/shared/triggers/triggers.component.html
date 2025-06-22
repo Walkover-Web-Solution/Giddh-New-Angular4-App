@@ -10,11 +10,11 @@
             <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" (click)="openCreateTriggerDialog()">
                 <mat-card-content>
                     <mat-card-header class="align-items-center">
-                        <mat-card-title>Basic</mat-card-title>
+                        <mat-card-title>{{ localeData?.basic }}</mat-card-title>
                         <mat-card-subtitle>
-                            <span class="d-inline-flex column-gap1 align-items-center"><i class="icon-mail"></i>Email</span> 
+                            <span class="d-inline-flex column-gap1 align-items-center"><i class="icon-mail"></i>{{ commonLocaleData?.app_email }}</span> 
                             &nbsp;&nbsp;
-                            <span class="d-inline-flex column-gap1 align-items-center"><i class="icon-chat2"></i> Whatsapp</span>
+                            <span class="d-inline-flex column-gap1 align-items-center"><i class="icon-chat2"></i> {{ localeData?.whatsapp }}</span>
                         </mat-card-subtitle>
                     </mat-card-header>
                 </mat-card-content>
@@ -22,7 +22,7 @@
             <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" routerLink="/pages/triggers/advance">
                 <mat-card-content>
                     <mat-card-header class="align-items-center">
-                        <mat-card-title>Advance</mat-card-title>
+                        <mat-card-title>{{ localeData?.advance }}</mat-card-title>
                     </mat-card-header>
                 </mat-card-content>
             </mat-card>

@@ -9,4 +9,12 @@
     .column-min-width {
         min-width: 300px;
     }
+    .max-width-80 {
+        max-width: 80px;
+    }
+    .nowrap {
+        .overflow-visible {
+            max-width: 100%;
+        }
+    }
 }

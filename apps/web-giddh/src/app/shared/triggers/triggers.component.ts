@@ -29,7 +29,6 @@ export class TriggersComponent implements OnInit {
         private router: Router
     ) { 
         this.componentStore.triggerList$.pipe(skip(1), take(1), filter(Boolean)).subscribe((res) => {
-            console.log("Redirect to basic trigger", res);
             if (res?.results?.length) {
                 this.router.navigate(["/pages/triggers/basic"]);
             } else {

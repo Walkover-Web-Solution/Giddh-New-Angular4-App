@@ -90,7 +90,6 @@ import { MatDividerModule } from '@angular/material/divider';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
-        // TriggersComponent,
         ShopifyIntegrationComponent,
         CustomerPortalComponent,
         TallyIntegrationComponent,

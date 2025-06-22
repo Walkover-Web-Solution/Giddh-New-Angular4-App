@@ -247,10 +247,8 @@ export class TemplateFroalaComponent implements OnInit {
             ).subscribe(triggerDetails => {
                 if (triggerDetails) {
                     triggerDetails['conditions'] = triggerDetails?.conditionMap;
-                    console.log(triggerDetails);
                     this.customTriggerForm.patchValue(triggerDetails);
                     this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity });
-                    console.log(this.customTriggerForm.value);
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
@@ -463,7 +461,6 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public initializeForm(template?: any): void {
-        console.log("Template", template);
         if (this.isTrigger) {
             this.customTriggerForm = this.formBuilder.group({
                 title: ['', [Validators.required]],

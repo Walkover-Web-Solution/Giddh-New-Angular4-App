@@ -852,6 +852,7 @@ export class InvoiceService {
     /**
      * Get email condition suggestions
      *
+     * @param {string} triggerModule
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InvoiceService
      */

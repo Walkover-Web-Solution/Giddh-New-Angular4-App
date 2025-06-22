@@ -196,7 +196,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
         return data.pipe(
             mergeMap((req) => {
                 this.patchState({ accountGroupList: null });
-                return this.inventoryService.getFlattenAccountsList(req).pipe(
+                return this.inventoryService.getFlattenGroupWithAccountsList(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

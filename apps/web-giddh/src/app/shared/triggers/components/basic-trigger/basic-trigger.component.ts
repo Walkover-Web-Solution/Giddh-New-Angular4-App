@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, ReplaySubject, take } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { Observable, take } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { NewConfirmationModalComponent } from "apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component";
 import { PAGE_SIZE_OPTIONS } from "apps/web-giddh/src/app/app.constant";
@@ -15,9 +15,7 @@ import { TemplateFroalaComponent } from "../../../template-froala/template-froal
     providers: [TriggerComponentStore]
 })
 
-export class BasicTriggerComponent implements OnInit, OnDestroy {
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+export class BasicTriggerComponent implements OnInit {
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -35,7 +33,8 @@ export class BasicTriggerComponent implements OnInit, OnDestroy {
         'executionTime',
         'conditions',
         'actions',
-        'disabled'
+        'disabled',
+        'other_action'
     ];
     /** Holds trigger list data */
     public triggerList$: Observable<any> = this.componentStore.triggerList$;
@@ -78,7 +77,7 @@ export class BasicTriggerComponent implements OnInit, OnDestroy {
      * @memberof BasicTriggerComponent
      */
     public handlePageChange(event: any): void {
-        this.triggerListRequest.count = event.pageSize; //PAGINATION IS PENDING FROM API
+        this.triggerListRequest.count = event.pageSize;
         this.triggerListRequest.page = event.pageIndex + 1;
         this.getTriggerList();
     }
@@ -107,14 +106,14 @@ export class BasicTriggerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Edit trigger
+     * Open create edit trigger dialog
      *
      * @param {any} triggerUniqueName
      * @memberof BasicTriggerComponent
      */
-    public editTrigger(triggerUniqueName: any): void {
+    public openCreateEditTriggerDialog(triggerUniqueName?: any): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
-            data: { isTrigger: true, triggerUniqueName },
+            data: { isTrigger: true, ...(triggerUniqueName ? { triggerUniqueName } : {}) },
             width: 'var(--aside-pane-width)',
             height: '100vh',
             position: {
@@ -128,15 +127,5 @@ export class BasicTriggerComponent implements OnInit, OnDestroy {
                 this.getTriggerList();
             }
         });
-    }
-
-    /**
-    * Lifecycle hook for destroy
-    *
-    * @memberof BasicTriggerComponent
-    */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 }

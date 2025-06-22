@@ -1616,7 +1616,26 @@ export class InventoryService {
      */
     public getFlattenAccountsList(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_FLATTEN_ACCOUNTS
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_FLATTEN_ACCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':query', encodeURIComponent(request.query || ''));
+
+        return this.http.get(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+    /**
+     * Get fatten group with accounts list
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getFlattenGroupWithAccountsList(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_FLATTEN_GROUP_WITH_ACCOUNTS
         ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         ?.replace(':page', encodeURIComponent(request.page))
         ?.replace(':count', encodeURIComponent(request.count))
