@@ -264,7 +264,7 @@ export class TemplateFroalaComponent implements OnInit {
             });
 
             /** Search for account group dropdown */
-            this.accountGroupDropdown.valueChanges.pipe(this.searchPipe, filter(search => search !== null || search !== undefined)).subscribe(search => {
+            this.accountGroupDropdown.valueChanges.pipe(this.searchPipe, filter(search => search !== null && search !== undefined)).subscribe(search => {
                 this.getFlattenAccountGroupList({
                     page: 1,
                     count: PAGINATION_LIMIT,
@@ -937,7 +937,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public getDayActionLabelValue(): string {  
         const executionTime = this.customTriggerForm?.get('executionTime');
-        if (!executionTime) return;
+        if (!executionTime) return '';
 
         const dayOfMonth = executionTime.get('dayOfMonth');
         const dayOfWeek = executionTime.get('dayOfWeek');
