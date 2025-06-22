@@ -1,3 +1,10 @@
 {
-	
+    "delete_trigger_message": "तुम्हाला खरोखर [NAME] हटवायचे आहे का?",
+    "switch_to_advance_trigger": "प्रगत ट्रिगरवर स्विच करा",
+    "title": "शीर्षक",
+    "email_subject": "ईमेल विषय",
+    "trigger_module": "ट्रिगर मॉड्यूल",
+    "execution_time": "अंमलबजावणी वेळ",
+    "conditions": "अटी",
+    "disabled": "अक्षम"
 }

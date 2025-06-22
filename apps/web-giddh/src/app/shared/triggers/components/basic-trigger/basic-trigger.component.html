@@ -1,3 +1,4 @@
+
 <ng-container
     appTranslate
     [file]="'triggers/basic'"
@@ -31,7 +32,7 @@
                     >
                         <!-- Title Column -->
                         <ng-container matColumnDef="title">
-                            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.title }} </mat-header-cell>
                             <mat-cell *matCellDef="let element">
                                 {{ element.title | titlecase }}
                             </mat-cell>
@@ -39,25 +40,25 @@
 
                         <!-- Entity Column -->
                         <ng-container matColumnDef="entity">
-                            <mat-header-cell *matHeaderCellDef> Entity </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_entity }} </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{ element.entity | titlecase }} </mat-cell>
                         </ng-container>
 
                         <!-- Email Subject Column -->
                         <ng-container matColumnDef="emailSubject">
-                            <mat-header-cell *matHeaderCellDef> Email Subject </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.email_subject }} </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{ element.emailSubject }} </mat-cell>
                         </ng-container>
 
                         <!-- Trigger Module Column -->
                         <ng-container matColumnDef="triggerModule">
-                            <mat-header-cell *matHeaderCellDef> Trigger Module </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.trigger_module }} </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{ (element.triggerModule | replace : "_" : " ") | titlecase }} </mat-cell>
                         </ng-container>
 
                         <!-- Execution Time Column -->
                         <ng-container matColumnDef="executionTime">
-                            <mat-header-cell *matHeaderCellDef> Execution Time </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.execution_time }} </mat-header-cell>
                             <mat-cell *matCellDef="let element">
                                 {{ element.executionTime?.time }} <br />
                                 {{ element.executionTime?.dayOfWeek || element.executionTime?.dayOfMonth }}
@@ -66,25 +67,25 @@
 
                         <!-- Conditions Column -->
                         <ng-container matColumnDef="conditions">
-                            <mat-header-cell *matHeaderCellDef class="column-min-width"> Conditions </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef class="column-min-width"> {{ localeData?.conditions }} </mat-header-cell>
                             <mat-cell *matCellDef="let element" class="column-min-width">
-                                DUE_BY: {{ element.conditionMap?.DUE_BY?.key }} =
+                                Due By: {{ element.conditionMap?.DUE_BY?.key }} =
                                 {{ element.conditionMap?.DUE_BY?.value }}<br />
-                                DUE_AMOUNT: {{ element.conditionMap?.DUE_AMOUNT?.key }} =
+                                Due Amount: {{ element.conditionMap?.DUE_AMOUNT?.key }} =
                                 {{ element.conditionMap?.DUE_AMOUNT?.value }}
                             </mat-cell>
                         </ng-container>
 
                         <!-- Actions Column -->
                         <ng-container matColumnDef="actions">
-                            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_actions }} </mat-header-cell>
                             <mat-cell *matCellDef="let element"> {{ (element.actions?.join(", ") | replace : "_" : " ") | titlecase }} </mat-cell>
                         </ng-container>
 
                         <!-- Disabled Column -->
                         <ng-container matColumnDef="disabled">
-                            <mat-header-cell *matHeaderCellDef> Disabled </mat-header-cell>
-                            <mat-cell *matCellDef="let element"> {{ element.disabled ? "Yes" : "No" }} </mat-cell>
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.disabled }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.disabled ? commonLocaleData?.app_yes : commonLocaleData?.app_no }} </mat-cell>
                         </ng-container>
 
                         <!-- Other Action Column -->
@@ -95,8 +96,8 @@
                                     <i class="icon-dots-three-vertical font-15"></i>
                                 </button>
                                 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="before">
-                                    <button mat-menu-item (click)="editTrigger(element?.uniqueName)">Edit</button>
-                                    <button mat-menu-item (click)="deleteTrigger(element)">Delete</button>
+                                    <button mat-menu-item (click)="editTrigger(element?.uniqueName)">{{ commonLocaleData?.app_edit }}</button>
+                                    <button mat-menu-item (click)="deleteTrigger(element)">{{ commonLocaleData?.app_delete }}</button>
                                 </mat-menu>
                             </mat-cell>
                         </ng-container>
