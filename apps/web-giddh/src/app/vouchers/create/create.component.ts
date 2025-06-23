@@ -50,9 +50,9 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
-import { Transaction } from "../../models/api-models/Expences";
 import { OcrVoucherService } from "../../services/ocr-voucher.service";
 import { OcrVoucherStore } from "../../ocr-voucher/utility/ocr-voucher.store";
+import { OcrAction } from "../../ocr-voucher/ocr-voucher.component";
 
 @Component({
     selector: "create",
@@ -427,9 +427,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** True if ocr data is disabled */
     public ocrDataEnabled: boolean = false;
-    /** Get ocr data */
+    /** Get ocr voucher details observable */
     public ocrVoucherDetails$: Observable<any> = this.ocrVoucherService.ocrVoucherDetails$;
+    /** Get ocr voucher details */
     public ocrVoucherDetails: any = {};
+    /** Get ocr token */
     public ocrVoucherToken: string = '';
 
     /**
@@ -567,11 +569,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyTaxes();
         this.getWarehouses();
 
-        // this.ocrVoucherService.getOcrData$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe(response => {
-        //     if (response) {
-        //         this.ocrDataEnabled = true;
-        //     }
-        // });
+        this.ocrVoucherService.getOcrData$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.ocrDataEnabled = true;
+            } else {
+                this.ocrDataEnabled = false;
+            }
+        });
 
         this.ocrVoucherService.ocrVoucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(voucherDetails => {
             this.ocrVoucherDetails = voucherDetails;
@@ -3662,8 +3666,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public generateVoucher(type?: string): void {
-        if (type === 'skip') {
-            this.ocrVoucherStore.getExtractDocuments({ token: this.ocrVoucherToken, type: 'skip' });
+        if (type === OcrAction.Skip) {
+            this.ocrVoucherService.skipAndNext$.next({ type: OcrAction.Skip, token: this.ocrVoucherToken });
         } else {
             this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
             if (this.isPendingEntries && !this.ocrDataEnabled) {
@@ -4002,7 +4006,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response && response.status === "success") {
-                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: 'save' });
+                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: OcrAction.Save });
                         this.resetVoucherForm();
 
                         let message = this.localeData?.po_created;
@@ -4060,7 +4064,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.proformaService.generate(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
-                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: 'save' });
+                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: OcrAction.Save });
                         if (callback) {
                             this.resetVoucherForm(false);
                         } else {
@@ -4160,7 +4164,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
-                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: 'save' });
+                        this.ocrVoucherService.saveAndNextSuccess$.next({ token: this.ocrVoucherToken, type: OcrAction.Save });
                         const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
 
                         if (isCashSalesPurchaseInvoice) {
