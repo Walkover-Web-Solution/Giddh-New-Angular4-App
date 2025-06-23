@@ -790,5 +790,7 @@
         "thursday": "Thursday",
         "friday": "Friday",
         "saturday": "Saturday"
-    }
+    },
+    "app_skip_and_next": "Skip and Next",
+    "app_save_and_next": "Save and Next"
 }

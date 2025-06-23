@@ -1919,10 +1919,10 @@
                                     <button mat-stroked-button (click)="resetVoucherForm()">{{
                                         commonLocaleData?.app_clear }}</button>
                                     <button mat-stroked-button color="primary" (click)="generateVoucher('skip')">
-                                        Skip and Next
+                                        {{ commonLocaleData?.app_skip_and_next }}
                                     </button>
                                     <button mat-stroked-button color="primary" (click)="generateVoucher('save')">
-                                        Save and Next
+                                        {{ commonLocaleData?.app_save_and_next }}
                                     </button>
                                 </div>
                             </div>

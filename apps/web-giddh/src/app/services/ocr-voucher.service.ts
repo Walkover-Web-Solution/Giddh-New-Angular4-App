@@ -25,6 +25,9 @@ export class OcrVoucherService {
     public saveAndNext$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     /** Holds the success status of the "Save and Next" action, updated with the latest data. */
     public saveAndNextSuccess$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the "Skip and Next" action is active. */
+    public skipAndNext$: BehaviorSubject<any> = new BehaviorSubject(null);
+    
 
     constructor(private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
