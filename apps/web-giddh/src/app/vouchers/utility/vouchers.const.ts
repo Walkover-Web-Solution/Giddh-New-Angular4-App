@@ -85,9 +85,9 @@ export const VoucherReportFilterModuleEnum = {
 /** Enum for Estimate Table Columns */
 export enum EstimateTableColumnsEnum {
     EstimateNo = 'estimate_no',
-    EstimateDate = 'estimate_date',
+    EstimateDate = 'estimatedate',
     Customer = 'customer',
-    TotalAmount = 'total_amt',
+    TotalAmount = 'grandTotal',
     ExpiryDate = 'expiry_date',
     Status = 'status',
     Action = 'action',
@@ -99,10 +99,10 @@ export enum EstimateTableColumnsEnum {
 /** Enum for Proforma Table Columns */
 export enum ProformaTableColumnsEnum {
     ProformaNo ='proforma_no',
-    ProformaDate ='proforma_date',
+    ProformaDate ='proformaDate',
     Customer = 'customer',
-    TotalAmount = 'total_amt',
-    ExpiryDate = 'expiry_date',
+    TotalAmount = 'grandTotal',
+    ExpiryDate = 'dueDate',
     Status = 'status',
     Action = 'action',
     CustomField1 = 'custom_field_1',
@@ -114,10 +114,10 @@ export enum ProformaTableColumnsEnum {
 export enum SalesTableColumnsEnum {
     InvoiceNo = 'invoice_no',
     Customer = 'customer',
-    InvoiceDate = 'invoice_date',
-    Amount = 'amount',
-    BalanceDue = 'balance_due',
-    DueDate = 'due_date',
+    InvoiceDate = 'date',
+    Amount = 'grandTotal',
+    BalanceDue = 'balanceDue',
+    DueDate = 'dueDate',
     Status = 'status',
     EInvoiceStatus = 'e_invoice_status',
     CustomField1 = 'custom_field_1',
@@ -132,7 +132,7 @@ export enum CreditDebitNoteTableColumnsEnum {
     Customer = 'customer',
     Date = 'date',
     LinkedInvoice = 'linked_invoice',
-    TotalAmount = 'total_amt',
+    TotalAmount = 'grandTotal',
     Status = 'status',
     EInvoiceStatus = 'e_invoice_status',
     CustomField1 = 'custom_field_1',
@@ -145,8 +145,8 @@ export enum PurchaseOrderTableColumnsEnum {
     OrderNo = 'order_no',
     VendorName = 'vendor_name',
     Date = 'date',
-    ExpectedDelivery = 'expected_delivery',
-    TotalAmount = 'total_amt',
+    ExpectedDelivery = 'dueDate',
+    TotalAmount = 'grandTotal',
     Status = 'status'
 };
 
@@ -156,8 +156,8 @@ export enum PurchaseBillTableColumnsEnum {
     Vendor = 'vendor',
     LinkedOrders = 'linked_orders',
     Date = 'date',
-    DueDate = 'due_date',
-    Amount = 'amount',
+    DueDate = 'dueDate',
+    Amount = 'grandTotal',
     Status = 'status',
     CustomField1 = 'custom_field_1',
     CustomField2 = 'custom_field_2',
@@ -172,8 +172,8 @@ export enum ReceiptTableColumnsEnum {
     CustomerName = 'customer_name',
     PaymentMode = 'payment_mode',
     Invoice = 'invoice',
-    TotalAmount = 'total_amt',
-    BalanceDue = 'balance_due'
+    TotalAmount = 'grandTotal',
+    BalanceDue = 'balanceDue'
 };
 
 /** Enum for Payment Table Columns */
@@ -183,6 +183,6 @@ export enum PaymentTableColumnsEnum {
     VendorName = 'vendor_name',
     PaymentMode = 'payment_mode',
     Invoice = 'invoice',
-    TotalAmount = 'total_amt',
-    BalanceDue = 'balance_due'
+    TotalAmount = 'grandTotal',
+    BalanceDue = 'balanceDue'
 };
