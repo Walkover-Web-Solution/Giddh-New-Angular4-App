@@ -1,29 +1,29 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { API_COUNT_LIMIT } from '../app.constant';
-import * as dayjs from 'dayjs';
-import * as duration from 'dayjs/plugin/duration';
-import { OcrVoucherStore } from './utility/ocr-voucher.store';
-import { LedgerComponentStore } from '../ledger/ledger.store';
-import { OcrVoucherService } from '../services/ocr-voucher.service';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { GeneralActions } from '../actions/general/general.actions';
-dayjs.extend(duration)
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { Observable, ReplaySubject, takeUntil } from "rxjs";
+import { API_COUNT_LIMIT } from "../app.constant";
+import * as dayjs from "dayjs";
+import * as duration from "dayjs/plugin/duration";
+import { OcrVoucherStore } from "./utility/ocr-voucher.store";
+import { LedgerComponentStore } from "../ledger/ledger.store";
+import { OcrVoucherService } from "../services/ocr-voucher.service";
+import { Store } from "@ngrx/store";
+import { AppState } from "../store";
+import { GeneralActions } from "../actions/general/general.actions";
+dayjs.extend(duration);
 
 export enum OcrAction {
-    Skip = 'skip',
-    Create = 'create',
-    List = 'list',
-    Save = 'save',
-    Upload = 'upload'
+    Skip = "skip",
+    Create = "create",
+    List = "list",
+    Save = "save",
+    Upload = "upload",
 }
 @Component({
-    selector: 'ocr-voucher',
-    templateUrl: './ocr-voucher.component.html',
-    styleUrls: ['./ocr-voucher.component.scss'],
+    selector: "ocr-voucher",
+    templateUrl: "./ocr-voucher.component.html",
+    styleUrls: ["./ocr-voucher.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [OcrVoucherStore, LedgerComponentStore]
+    providers: [OcrVoucherStore, LedgerComponentStore],
 })
 export class OcrVoucherComponent implements OnInit, OnDestroy {
     /** Subject to manage the unsubscription logic for observables to prevent memory leaks */
@@ -42,15 +42,15 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         count: API_COUNT_LIMIT,
         from: "",
         to: "",
-        sort: '',
-        sortBy: ''
-    }
+        sort: "",
+        sortBy: "",
+    };
     /** Observable for the OCR documents list from the store */
-    public ocrList$: Observable<any> = this.ocrVoucherStore.select(state => state.ocrList);
+    public ocrList$: Observable<any> = this.ocrVoucherStore.select((state) => state.ocrList);
     /** Observable indicating the progress state of the OCR documents list retrieval */
-    public ocrListInProgress$: Observable<any> = this.ocrVoucherStore.select(state => state.ocrListInProgress);
+    public ocrListInProgress$: Observable<any> = this.ocrVoucherStore.select((state) => state.ocrListInProgress);
     /** Currently selected toggle option */
-    public selectedToggle: string = '';
+    public selectedToggle: string = "";
     /** Upload action identifier */
     public upload: OcrAction = OcrAction.Upload;
     /** Create action identifier */
@@ -92,7 +92,7 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
     /** Observable for OCR upload in progress state */
     public ocrUploadInProgress$: Observable<boolean> = this.ocrVoucherStore.ocrUploadInProgress$;
     /** Current token for OCR operation */
-    public ocrCurrentToken: string = '';
+    public ocrCurrentToken: string = "";
     /** Flag to indicate loading state */
     public innerLoading: boolean = false;
     /** Holds images folder path */
@@ -115,7 +115,7 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
      * @memberof OcrVoucherComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getAllOcrDocuments(false);
         // Call getCompletedCount every 5 seconds
         setInterval(() => {
@@ -159,11 +159,13 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
-            if (voucherResponse) {
-                this.ocrVoucherStore.importOcrDocument(this.signedUrlResponse);
-            }
-        });
+        this.ledgerComponentStore.uploadVoucherSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((voucherResponse) => {
+                if (voucherResponse) {
+                    this.ocrVoucherStore.importOcrDocument(this.signedUrlResponse);
+                }
+            });
 
         this.ocrImportSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -173,7 +175,7 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
         });
 
         this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
+            if (res?.token) {
                 this.selectedToggle = OcrAction.Create;
                 this.ocrVoucherService.getOcrData$.next(true);
                 this.ocrVoucherService.ocrVoucherDetails$.next(res);
@@ -181,15 +183,38 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
                 this.innerLoading = false;
                 this.changeDetection.detectChanges();
             } else {
-                if (!this.innerLoading) {
-                    this.selectedToggle = OcrAction.List;
+                if (this.countVariable === 0) {
+                    this.innerLoading = false;
                 }
+                if (!this.innerLoading) {
+                    setTimeout(() => {
+                        this.selectedToggle = OcrAction.List;
+                    }, 300);
+                }
+                this.ocrVoucherService.getOcrData$.next(false);
+                this.ocrVoucherService.ocrVoucherDetails$.next(null);
+                setTimeout(() => {
+                    if (this.selectedToggle !== OcrAction.List) {
+                        this.ocrCurrentToken = "";
+                    }
+                }, 700);
+                this.changeDetection.detectChanges();
             }
         });
 
-        this.ocrVoucherService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.ocrVoucherService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.ocrVoucherStore.getExtractDocuments(response ?? '');
+                this.countVariable = 0;
+                this.innerLoading = true;
+                this.ocrVoucherStore.getExtractDocuments(response ?? "");
+                this.ocrVoucherStore.getCompletedCount(null);
+            }
+        });
+
+        this.ocrVoucherService.skipAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.type === OcrAction.Skip) {
+                this.innerLoading = true;
+                this.ocrVoucherStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token });
             }
         });
     }
@@ -208,11 +233,11 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
             convertedStatus: null,
             fileName: null,
             status: null,
-            uploadedBy: null
+            uploadedBy: null,
         };
         let request = {
             pagination: this.ocrDocumentsRequestParams,
-            model: reqObj
+            model: reqObj,
         };
         this.ocrVoucherStore.getAllMainPageOcrData(request);
     }
@@ -241,7 +266,7 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
             return;
         }
         if (value === OcrAction.Create && !this.buttonDisabled) {
-            this.ocrVoucherStore.getExtractDocuments('');
+            this.ocrVoucherStore.getExtractDocuments("");
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;
         }
@@ -275,7 +300,7 @@ export class OcrVoucherComponent implements OnInit, OnDestroy {
      * Lifecycle method that is triggered once all the view children are rendered.
      * @memberof OcrVoucherComponent
      */
-    public ngAfterViewInit(): void { }
+    public ngAfterViewInit(): void {}
 
     /**
      * Initiates the file upload dialog.
