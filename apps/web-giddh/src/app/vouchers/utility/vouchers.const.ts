@@ -83,10 +83,10 @@ export const VoucherReportFilterModuleEnum = {
 /** Enum for Estimate Table Columns */
 export enum EstimateTableColumnsEnum {
     EstimateNo = 'estimate_no',
-    EstimateDate = 'estimatedate',
+    EstimateDate = 'estimateDate',
     Customer = 'customer',
     TotalAmount = 'grandTotal',
-    ExpiryDate = 'expiry_date',
+    ExpiryDate = 'expireDate',
     Status = 'status',
     Action = 'action',
     CustomField1 = 'custom_field_1',
@@ -100,7 +100,7 @@ export enum ProformaTableColumnsEnum {
     ProformaDate ='proformaDate',
     Customer = 'customer',
     TotalAmount = 'grandTotal',
-    ExpiryDate = 'dueDate',
+    ExpiryDate = 'expireDate',
     Status = 'status',
     Action = 'action',
     CustomField1 = 'custom_field_1',
