@@ -117,7 +117,6 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };
         this.financialReportsComponentStore.tailedReportAccountGroup(model);
-        this.tlPlService.isReportTailed$.next(true);
     }
 
     /**

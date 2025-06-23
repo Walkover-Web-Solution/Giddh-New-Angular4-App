@@ -188,6 +188,5 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };
         this.financialReportsComponentStore.tailedReportAccountGroup(model);
-        this.tlPlService.isReportTailed$.next(true);
     }
 }
