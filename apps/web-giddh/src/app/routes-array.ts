@@ -20,6 +20,7 @@ export const ROUTES: Routes = [
     { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
+    { path: 'triggers', redirectTo: 'pages/triggers', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice' },
@@ -70,6 +71,7 @@ export const ROUTES: Routes = [
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
+            { path: 'triggers', loadChildren: () => import('./shared/triggers/triggers.module').then(module => module.TriggersModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),

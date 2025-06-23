@@ -961,6 +961,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
                             this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
+
                     }
 
                     const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
@@ -1662,7 +1663,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getCompanyTaxes(): void {
         this.store.dispatch(this.companyActions.getTax());
-
         this.componentStore.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.allCompanyTaxes = response;
@@ -3266,8 +3266,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
-        this.stockVariants[entryIndex] = observableOf([]);
-        this.stockUnits[entryIndex] = observableOf([]);
+            this.stockVariants[entryIndex] = observableOf([]);
+            this.stockUnits[entryIndex] = observableOf([]);
         if (!entries?.length) {
             this.addNewLineEntry();
         }
@@ -3388,7 +3388,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
-
             if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 transactionFormGroup.get('amount.amountForAccount').patchValue(transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100));

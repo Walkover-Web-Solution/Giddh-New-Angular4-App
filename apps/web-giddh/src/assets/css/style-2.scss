@@ -5270,6 +5270,18 @@ label {
 .d-grid {
     display: grid !important;
 }
+.grid-column-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-column-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid-column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-child-column-full {
+    grid-column: 1 / -1;
+}
 
 .on-hover {
     position: relative;
@@ -14034,4 +14046,31 @@ mat-list {
 
 .bg-white {
     background: var(--color-white) !important;
+}
+
+.template-froala-wrapper {
+    .balance-options {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+    }
 }

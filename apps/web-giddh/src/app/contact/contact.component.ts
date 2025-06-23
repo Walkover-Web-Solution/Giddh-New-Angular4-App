@@ -261,7 +261,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     /** Observable for custom header columns */
     public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
-        /** Holds advance Filters keys */
+    /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
         count: PAGINATION_LIMIT,
