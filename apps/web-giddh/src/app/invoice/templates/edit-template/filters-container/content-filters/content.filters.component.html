@@ -1888,17 +1888,19 @@
                                 </div>
                             </div>
                         </div>
-                        <ng-container *ngIf="customTemplate?.templateType === 'tally_template'">
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    name="bankQrCodeCheckbox"
-                                    [(ngModel)]="customTemplate.showBankQrCode"
-                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                />
-                                Show Bank QR Code
-                            </label>
-                            <div class="ml-3">
+                        <tr *ngIf="customTemplate?.templateType === 'tally_template'">
+                            <td>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="bankQrCodeCheckbox"
+                                        [(ngModel)]="customTemplate.showBankQrCode"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    />
+                                    Show Bank QR Code
+                                </label>
+                            </td>
+                            <td>
                                 <input
                                     type="text"
                                     name="bankQrCode"
@@ -1911,8 +1913,8 @@
                                     pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
                                     [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
                                 />
-                            </div>
-                        </ng-container>
+                            </td>
+                        </tr>
                         <div
                             class="form-group"
                             *ngIf="
@@ -1943,29 +1945,6 @@
             <div class="clearfix">
                 <h2>Footer</h2>
                 <div class="clearfix bd-rb scroll-auto">
-                <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
-                    <input
-                        type="checkbox"
-                        name="bankQrCodeCheckbox"
-                        [(ngModel)]="customTemplate.showBankQrCode"
-                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                    />
-                    Show Bank QR Code
-                    <div class="ml-3">
-                        <input
-                            type="text"
-                            name="bankQrCode"
-                            placeholder="Enter UPI ID"
-                            class="form-control"
-                            [(ngModel)]="customTemplate.qrCodeId"
-                            #bankQrCode="ngModel"
-                            (ngModelChange)="onFieldChange(null, null, null)"
-                            [disabled]="!customTemplate.showBankQrCode"
-                            pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
-                            [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
-                        />
-                    </div>
-                </ng-container>
                     <ng-container
                         *ngIf="
                             customTemplate?.templateType === 'gst_template_a' &&
@@ -2394,6 +2373,29 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
+                        <input
+                            type="checkbox"
+                            name="bankQrCodeCheckbox"
+                            [(ngModel)]="customTemplate.showBankQrCode"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        />
+                        Show Bank QR Code
+                        <div class="ml-3">
+                            <input
+                                type="text"
+                                name="bankQrCode"
+                                placeholder="Enter UPI ID"
+                                class="form-control"
+                                [(ngModel)]="customTemplate.qrCodeId"
+                                #bankQrCode="ngModel"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.showBankQrCode"
+                                pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
+                            />
+                        </div>
+                    </ng-container>
                     <div
                         class="clearfix mr-t1 form-group"
                         *ngIf="
