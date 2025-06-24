@@ -384,6 +384,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             return state;
         case AccountsAction.UPDATE_ACCOUNTV2:
             return Object.assign({}, state, { updateAccountInProcess: true, updateAccountIsSuccess: false });
+        case AccountsAction.UPDATE_ACCOUNTV2_PATCH:
+            return Object.assign({}, state, { updateAccountInProcess: true, updateAccountIsSuccess: false });
         case AccountsAction.RESET_UPDATE_ACCOUNTV2:
             return Object.assign({}, state, { updateAccountInProcess: false, updateAccountIsSuccess: false });
         case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {

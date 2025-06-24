@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import {
@@ -7,7 +7,9 @@ import {
 import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
     selector: '[balance-sheet-grid-row]',
@@ -16,7 +18,7 @@ import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [FinancialReportsComponentStore]
 })
-export class BalanceSheetGridRowComponent implements OnChanges {
+export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public padding: string;
@@ -30,9 +32,24 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     @Input() public isExpandToggledDuringSearch: boolean;
     /** Hold current url */
     private currentUrl: string = "";
+     /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService, private generalService: GeneralService) {
         this.currentUrl = this.router.url;
+    }
+
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof BalanceSheetGridRowComponent
+     */
+    public ngOnInit(): void {
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.tlPlService.isReportTailed$.next(true);
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -94,11 +111,21 @@ export class BalanceSheetGridRowComponent implements OnChanges {
             request: {
                 reportType: ReportType.BalanceSheet,
                 from: this.from,
-                to: this.to
+                to: this.to,
+                branchUniqueName: this.generalService.currentBranchUniqueName
             },
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };
         this.financialReportsComponentStore.tailedReportAccountGroup(model);
-        this.tlPlService.isReportTailed$.next(true);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof BalanceSheetGridRowComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

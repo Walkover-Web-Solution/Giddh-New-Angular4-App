@@ -155,7 +155,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         excludeTax: false,
         taxType: '',
         taxTypeLabel: '',
-        mobileNumber: ''
+        mobileNumber: '',
+        branch: null
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -580,12 +581,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 /** Open account dropdown on create */
                 this.getVoucherType();
 
-                if (params?.accountUniqueName && !params?.uniqueName) {
-                    this.searchAccount(params?.accountUniqueName, 1, true);
-                } else {
-                    this.searchAccount();
-                }
-
                 if (params?.accountUniqueName && this.queryParams?.entryUniqueNames) {
                     this.isPendingEntries = true;
                     this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: this.queryParams?.entryUniqueNames.split(",") } });
@@ -624,6 +619,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 if (params?.accountUniqueName === "cash") {
                     this.invoiceType.isCashInvoice = true;
+                }
+
+                if (params?.accountUniqueName && !params?.uniqueName) {
+                    this.searchAccount(params?.accountUniqueName, 1, true);
+                } else {
+                    this.searchAccount();
                 }
             }
         });
@@ -801,6 +802,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.account.mobileNumber = response.account?.mobileNumber ?? '';
                     this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
                 }
+                this.account.branch = response?.branch ?? null;
 
                 if (response?.purchaseOrderDetails?.length && !this.isCopyMode) {
                     this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
@@ -2714,10 +2716,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Callback for update account
      *
      * @param {UpdateAccountRequest} item
+     * @param {boolean} [usePatchApi=false]
      * @memberof VoucherCreateComponent
      */
-    public updateAccount(item: UpdateAccountRequest): void {
-        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    public updateAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
     }
 
     /**
@@ -3858,6 +3861,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 accountUniqueName: invoiceForm.account.uniqueName
             };
 
+            if (this.account.branch) {
+                getRequestObject['branchUniqueName'] = this.account.branch.uniqueName;
+            }
+
             if (!this.isUkAccount) {
                 if (invoiceForm.account?.billingDetails?.state?.code) {
                     invoiceForm.account.billingDetails.stateCode = invoiceForm.account.billingDetails.state?.code;
@@ -4150,7 +4157,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             applicableDiscounts: null,
             applicableTaxes: null,
             excludeTax: false,
-            taxTypeLabel: ''
+            taxTypeLabel: '',
+            branch: null
         };
 
         if (this.invoiceType.isCashInvoice) {
