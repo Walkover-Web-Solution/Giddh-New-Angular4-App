@@ -807,6 +807,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let copiedTemplate = cloneDeep(data);
         if (data.name) {
             data = this.newLineToBR(data);
+            data.sections['header'].data['companyName'].label = '';
             // data.sections['table'].content['taxes'].field = 'taxes';
             data.sections['footer'].data['grandTotal'].field = 'grandTotal';
             // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
@@ -849,16 +850,6 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
             }
 
-            this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
-                const companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name;
-                if (!data?.sections?.header?.data['companyName']?.label) { 
-                    data.sections['header'].data['companyName'].label = companyName;
-                }
-                if (!data?.sections?.footer?.data['companyName']?.label) { 
-                    data.sections['footer'].data['companyName'].label = companyName;
-                }
-            });
-            
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
@@ -884,6 +875,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             data.updatedBy = null;
             // data.copyFrom = 'gst_template_a'; // this should be dynamic
             data.sections['header'].data['address'].label = '';
+            data.sections['header'].data['companyName'].label = '';
             data.sections['table'].data['taxes'].field = 'taxes';
             data.sections['footer'].data['grandTotal'].field = 'grandTotal';
             // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
