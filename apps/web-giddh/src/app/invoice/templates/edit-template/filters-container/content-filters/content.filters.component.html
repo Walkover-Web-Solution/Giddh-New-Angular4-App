@@ -1917,11 +1917,7 @@
                         </tr>
                         <div
                             class="form-group"
-                            *ngIf="
-                                customTemplate?.templateType === 'tally_template' ||
-                                (voucherType === 'sales' &&
-                                customTemplate.sections['footer'].data['taxBifurcation'])
-                            "
+                            *ngIf="customTemplate?.templateType === 'tally_template'"
                         >
                             <div class="form-group">
                                 <label>
