@@ -67,8 +67,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public selectedFontSize: string = "";
     /** Default image size */
     public defaultImageSize: string = 'S';
-    /** Stores the active company name */
-    public companyName: string;
 
     constructor(
         private _invoiceUiDataService: InvoiceUiDataService,
@@ -88,7 +86,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             companyUniqueName = session.companyUniqueName;
             companies = session.companies;
             this.companyUniqueName = session.companyUniqueName;
-            this.companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name ?? '';
         });
 
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
@@ -196,8 +193,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         }
         template.copyFrom = cloneDeep(value);
         this.selectedTemplateUniqueName = value;
-        template.sections['header'].data['companyName'].label = this.companyName;
-        template.sections['footer'].data['companyName'].label = this.companyName;
         this._invoiceUiDataService.setCustomTemplate(cloneDeep(template));
     }
 
@@ -293,6 +288,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             data.updatedAt = null;
             data.updatedBy = null;
             data.sections['header'].data['pan'].label = '';
+            data.sections['header'].data['companyName'].label = '';
 
             data = this.newLineToBR(data);
 
