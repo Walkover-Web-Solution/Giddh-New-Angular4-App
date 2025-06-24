@@ -655,7 +655,7 @@
                     "label": "AI OCR",
                     "link": "/pages/ai-ocr",
                     "icon": "icon-audit-log",
-                    "description": "AI model"
+                    "description": "Upload images, pdf, jpeg, zip"
                 }
             ]
         }
