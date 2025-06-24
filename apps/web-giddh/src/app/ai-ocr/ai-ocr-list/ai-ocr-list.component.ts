@@ -5,21 +5,22 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../services/general.service';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
-import { OcrVoucherStore } from '../utility/ocr-voucher.store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { Sort } from '@angular/material/sort';
-import { OcrVoucherService } from '../../services/ocr-voucher.service';
+import { AiOcrStore } from '../utility/ai-ocr.store';
+import { AiOcrService } from '../../services/ai-ocr.service';
+
 
 @Component({
-    selector: 'ocr-voucher-list',
-    templateUrl: './ocr-voucher-list.component.html',
-    styleUrls: ['./ocr-voucher-list.component.scss'],
+    selector: 'ai-ocr-list',
+    templateUrl: './ai-ocr-list.component.html',
+    styleUrls: ['./ai-ocr-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [OcrVoucherStore]
+    providers: [AiOcrStore]
 })
-export class OcrVoucherListComponent implements OnInit, OnDestroy {
+export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Holds Paginator Reference */
@@ -104,8 +105,8 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     constructor(
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
-        private componentStore: OcrVoucherStore,
-        private ocrVoucherService: OcrVoucherService,
+        private componentStore: AiOcrStore,
+        private aiOcrService: AiOcrService,
         private modalService: BsModalService,
         private formBuilder: FormBuilder
     ) {
@@ -114,7 +115,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     /**
      * Initializes the component by subscribing to route parameters and fetching ocr data.
      *
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public ngOnInit(): void {
         this.initForm();
@@ -135,7 +136,6 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
         this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.items) {
                 this.dataSource = new MatTableDataSource<any>(response?.items);
-                // this.ocrVoucherService.listCount$.next(response?.totalItems);
                 if (this.dataSource?.filteredData?.length ||
                     this.ocrDocumentListForm?.controls['uploadedBy']?.value ||
                     this.ocrDocumentListForm?.controls['fileName']?.value ||
@@ -154,7 +154,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.ocrVoucherService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.getAllOcrDocuments(false);
             }
@@ -230,7 +230,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker.
      *
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef?.hide();
@@ -242,7 +242,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
  * @param {*} [value]
  * @param {*} [from]
  * @return {*} {void}
- * @memberof OcrVoucherListComponent
+ * @memberof AiOcrListComponent
  */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
@@ -269,7 +269,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
  * To show the datepicker.
  *
  * @param {*} element
- * @memberof OcrVoucherListComponent
+ * @memberof AiOcrListComponent
  */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -286,7 +286,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     *
     * @param {*} value
     * @return {*} {boolean}
-    * @memberof OcrVoucherListComponent
+    * @memberof AiOcrListComponent
     */
     public isNotNullOrUndefined(value: any): boolean {
         return value !== null && value !== undefined;
@@ -297,7 +297,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     *
     * @param {*} value
     * @return {*} {boolean}
-    * @memberof OcrVoucherListComponent
+    * @memberof AiOcrListComponent
     */
     public isNullOrEmpty(value: any): boolean {
         return value === null || value === "";
@@ -306,7 +306,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     /**
      * This will use for initializing the ocr document list form.
      *
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public initForm(): void {
         this.ocrDocumentListForm = this.formBuilder.group({
@@ -322,19 +322,19 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
      *
      * @param {*} title
      * @returns {string}
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public getSearchFieldText(title: any): string {
         return this.localeData?.search_field?.replace("[FIELD]", title);
     }
 
     /**
-     * Handles clicks outside the specified element for filtering in the OcrVoucherListComponent.
+     * Handles clicks outside the specified element for filtering in the AiOcrListComponent.
      *
      * @param event - The event triggered by the click.
      * @param element - The element outside of which the click occurred.
      * @param searchedFieldName - The name of the field being searched for.
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === 'File Status') {
@@ -374,7 +374,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
      * This will be used to toggle search field.
      *
      * @param {string} fieldName
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public toggleSearch(fieldName: string): void {
         if (fieldName === 'File Status') {
@@ -392,7 +392,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
      * Handle page change.
      *
      * @param {*} event
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
@@ -402,9 +402,9 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Clears the filters and resets the form in the OcrVoucherListComponent.
+     * Clears the filters and resets the form in the AiOcrListComponent.
      *
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public clearFilter(): void {
         this.showClearFilter = false;
@@ -433,10 +433,10 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Retrieves all OCR documents in the OcrVoucherListComponent.
+     * Retrieves all OCR documents in the AiOcrListComponent.
      *
      * @param resetPage - Indicates whether to reset the pagination page.
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public getAllOcrDocuments(resetPage: boolean): void {
         if (resetPage) {
@@ -453,7 +453,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
      * Handle Mat table sort event.
      *
      * @param {*} event
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public sortChange(event: Sort): void {
         this.ocrDocumentsRequestParams.sort = event?.direction ? event.direction : 'asc';
@@ -466,7 +466,7 @@ export class OcrVoucherListComponent implements OnInit, OnDestroy {
      * Lifecycle hook that is called when the component is destroyed.
      * Completes the subject indicating component destruction.
      *
-     * @memberof OcrVoucherListComponent
+     * @memberof AiOcrListComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

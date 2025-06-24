@@ -2,14 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { OcrVoucherService } from '../../services/ocr-voucher.service';
+import { AiOcrService } from '../../services/ai-ocr.service';
 @Component({
-    selector: 'ocr-voucher-create',
-    templateUrl: './ocr-voucher-create.component.html',
-    styleUrls: ['./ocr-voucher-create.component.scss']
+    selector: 'ai-ocr-create',
+    templateUrl: './ai-ocr-create.component.html',
+    styleUrls: ['./ai-ocr-create.component.scss']
 })
 
-export class OcrVoucherCreateComponent implements OnInit, OnDestroy {
+export class AiOcrCreateComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -28,17 +28,17 @@ export class OcrVoucherCreateComponent implements OnInit, OnDestroy {
     constructor(
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService,
-        private ocrVoucherService: OcrVoucherService
+        private aiOcrService: AiOcrService
     ) {
     }
 
     /**
      * Hook cycle for component initialization
      *
-     * @memberof OcrVoucherCreateComponent
+     * @memberof AiOcrCreateComponent
      */
     public ngOnInit(): void {
-        this.ocrVoucherService.ocrVoucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.aiOcrService.aiOcrDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.selectedVoucher = this.generalService.base64ToBlob(response.encodedData || response, 'application/pdf', 512);
                 const file = new Blob([this.selectedVoucher], { type: 'application/pdf' });
@@ -56,7 +56,7 @@ export class OcrVoucherCreateComponent implements OnInit, OnDestroy {
     /**
      * This will call on component destroy
      *
-     * @memberof OcrVoucherCreateComponent
+     * @memberof AiOcrCreateComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

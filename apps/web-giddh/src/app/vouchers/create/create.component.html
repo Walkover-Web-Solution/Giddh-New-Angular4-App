@@ -1851,7 +1851,7 @@
                                     </div>
                                 </div>
 
-                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4"  *ngIf="!ocrDataEnabled">
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4"  *ngIf="isMainVoucher">
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{
                                             commonLocaleData?.app_clear }}</button>
@@ -1914,8 +1914,8 @@
                                             updateVoucherText }}</button>
                                     </ng-container>
                                 </div>
-
-                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4" *ngIf="ocrDataEnabled">
+                                {{ocrDataEnabled}}
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4" *ngIf="!isMainVoucher">
                                     <button mat-stroked-button (click)="resetVoucherForm()">{{
                                         commonLocaleData?.app_clear }}</button>
                                     <button mat-stroked-button color="primary" (click)="generateVoucher('skip')">
