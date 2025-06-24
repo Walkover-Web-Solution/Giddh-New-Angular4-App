@@ -840,114 +840,104 @@
                         </td>
                     </tr>
                 </table>
-                <table *ngIf="inputTemplate.showBankQrCode || fieldsAndVisibility.footer.taxBifurcation?.display">
+
+                <table *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                    <thead>
+                        <tr>
+                            <th
+                                class="vertical-align-top text-center"
+                                rowspan="2"
+                                width="20%"
+                            >
+                                HSN/SAC
+                            </th>
+                            <th
+                                class="text-center vertical-align-top"
+                                rowspan="2"
+                            >
+                                Taxable Value
+                            </th>
+                            <th class="text-center" colspan="2" width="25%">CGST</th>
+                            <th class="text-center" colspan="2" width="25%">SGST</th>
+                            <th
+                                class="text-right vertical-align-top"
+                                rowspan="2"
+                            >
+                                Total Tax Amount
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" width="12.5%">Rate</th>
+                            <th class="text-center" width="12.5%">Amount</th>
+                            <th class="text-center" width="12.5%">Rate</th>
+                            <th class="text-center" width="12.5%">Amount</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
-                            <td width="20%" class="v-align-middle" *ngIf="inputTemplate.showBankQrCode" [ngClass]="{ 'border-top-none': !fieldsAndVisibility.footer.taxBifurcation?.display }">
-                                <img src="{{ imgPath }}bank-qr-code.png" alt="image" width="150px"/>
+                            <td>12345</td>
+                            <td
+                                class="text-center"
+                            >
+                                1700.00
                             </td>
-                            <td width="80%" class="p-0" *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="vertical-align-top text-center border-top-none border-left-none"
-                                                rowspan="2"
-                                                width="20%"
-                                            >
-                                                HSN/SAC
-                                            </th>
-                                            <th
-                                                class="text-center vertical-align-top border-top-none"
-                                                rowspan="2"
-                                            >
-                                                Taxable Value
-                                            </th>
-                                            <th class="text-center border-top-none" colspan="2" width="25%">CGST</th>
-                                            <th class="text-center border-top-none" colspan="2" width="25%">SGST</th>
-                                            <th
-                                                class="text-right vertical-align-top border-top-none"
-                                                rowspan="2"
-                                            >
-                                                Total Tax Amount
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-center  " width="12.5%">Rate</th>
-                                            <th class="text-center" width="12.5%">Amount</th>
-                                            <th class="text-center" width="12.5%">Rate</th>
-                                            <th class="text-center" width="12.5%">Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="border-left-none">12345</td>
-                                            <td
-                                                class="text-center"
-                                            >
-                                                1700.00
-                                            </td>
-                                            <td class="text-center">9 %</td>
-                                            <td class="text-center">153.00</td>
-                                            <td class="text-center">9 %</td>
-                                            <td class="text-center">153.00</td>
-                                            <td
-                                                class="text-right"
-                                            >
-                                                306.00
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border-left-none">54321</td>
-                                            <td
-                                                class="text-center"
-                                            >
-                                                100.00
-                                            </td>
-                                            <td class="text-center">9 %</td>
-                                            <td class="text-center">9.00</td>
-                                            <td class="text-center">9 %</td>
-                                            <td class="text-center">9.00</td>
-                                            <td
-                                                class="text-right"
-                                            >
-                                                18.00
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td
-                                                class="text-right border-left-none border-bottom-none"
-                                            >
-                                                <strong class="strong">Total</strong>
-                                            </td>
-                                            <td
-                                                class="text-center border-bottom-none"
-                                            >
-                                                <strong class="strong">1800.00</strong>
-                                            </td>
-                                            <td class="border-bottom-none"></td>
-                                            <td class="text-center border-bottom-none">
-                                                <strong class="strong">162.00</strong>
-                                            </td>
-                                            <td class="border-bottom-none"></td>
-                                            <td class="text-center border-bottom-none">
-                                                <strong class="strong">162.00</strong>
-                                            </td>
-                                            <td
-                                                class="text-right border-bottom-none"
-                                            >
-                                                <strong class="strong">324.00</strong>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">153.00</td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">153.00</td>
+                            <td
+                                class="text-right"
+                            >
+                                306.00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>54321</td>
+                            <td
+                                class="text-center"
+                            >
+                                100.00
+                            </td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">9.00</td>
+                            <td class="text-center">9 %</td>
+                            <td class="text-center">9.00</td>
+                            <td
+                                class="text-right"
+                            >
+                                18.00
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td
+                                class="text-right"
+                            >
+                                <strong class="strong">Total</strong>
+                            </td>
+                            <td
+                                class="text-center"
+                            >
+                                <strong class="strong">1800.00</strong>
+                            </td>
+                            <td></td>
+                            <td class="text-center">
+                                <strong class="strong">162.00</strong>
+                            </td>
+                            <td></td>
+                            <td class="text-center">
+                                <strong class="strong">162.00</strong>
+                            </td>
+                            <td
+                                class="text-right"
+                            >
+                                <strong class="strong">324.00</strong>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
-                
+
                 <p *ngIf="false">
                     Tax Amount (in words):
                     <strong class="strong">INR ... Only</strong>
@@ -994,7 +984,7 @@
                                                             <span class="font-12">
                                                                 for
                                                                 {{
-                                                                    fieldsAndVisibility.footer.companyName?.label || "Walkover Web Solutions Pvt"
+                                                                    fieldsAndVisibility.header.companyName?.label
                                                                 }}
                                                             </span>
                                                         </ng-container>
