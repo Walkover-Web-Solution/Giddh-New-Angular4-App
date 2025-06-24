@@ -10,5 +10,6 @@
         "uploadedBy": "Uploaded By",
         "fileStatus": "File Status",
         "convertedStatus": "Converted Status"
-    }
+    },
+    "no_data_found": "All vouchers are converted. No vouchers are left to convert."
 }

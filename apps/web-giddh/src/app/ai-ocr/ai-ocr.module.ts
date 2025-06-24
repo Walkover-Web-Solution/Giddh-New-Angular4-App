@@ -21,30 +21,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SharedModule } from '../shared/shared.module';
-import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
-import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
-import { OcrVoucherListComponent } from './ocr-voucher-list/ocr-voucher-list.component';
-import { OcrVoucherRoutingModule } from './ocr-voucher.routing.module';
-import { MatSelectModule } from '@angular/material/select';
-import { OcrVoucherComponent } from './ocr-voucher.component';
-import { OcrVoucherCreateComponent } from './ocr-voucher-create/ocr-voucher-create.component';
+import { aiOcrRoutingModule } from './ai-ocr.routing.module';
 import { VouchersModule } from '../vouchers/vouchers.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/giddh-progress-spinner.component';
+import { AiOcrComponent } from './ai-ocr.component';
+import { AiOcrCreateComponent } from './ai-ocr-create/ai-ocr-create.component';
+import { AiOcrListComponent } from './ai-ocr-list/ai-ocr-list.component';
 
 @NgModule({
     imports: [
@@ -52,7 +39,7 @@ import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/
         CommonModule,
         RouterModule,
         TranslateDirectiveModule,
-        OcrVoucherRoutingModule,
+        aiOcrRoutingModule,
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
@@ -81,17 +68,14 @@ import { GiddhProgressSpinnerComponent } from '../shared/giddh-progress-spinner/
         GiddhProgressSpinnerComponent
     ],
     exports: [
-        OcrVoucherListComponent,
-        OcrVoucherComponent,
-        OcrVoucherCreateComponent
     ],
     declarations: [
-        OcrVoucherListComponent,
-        OcrVoucherComponent,
-        OcrVoucherCreateComponent
+        AiOcrComponent,
+        AiOcrCreateComponent,
+        AiOcrListComponent
     ],
     providers: [
 
     ]
 })
-export class OcrVoucherModule { }
+export class AiOcrModule { }

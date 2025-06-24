@@ -1,13 +1,13 @@
 <ng-container
     appTranslate
-    [file]="'ocr-voucher'"
+    [file]="'ai-ocr'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-    <section class="ocr-voucher container-fluid pd-15 d-flex flex-column" [hidden]="isLoading">
-        <ng-container *ngIf="listCount === 0; else ocrVoucher">
+    <section class="ai-ocr container-fluid pd-15 d-flex flex-column" [hidden]="isLoading">
+        <ng-container *ngIf="listCount === 0; else aiOcr">
             <input
                 type="file"
                 #fileInput
@@ -24,7 +24,7 @@
                 </button>
             </div>
         </ng-container>
-        <ng-template #ocrVoucher>
+        <ng-template #aiOcr>
             <div class="d-flex justify-content-between">
                 <div>
                     <input
@@ -71,26 +71,26 @@
             <main class="flex-grow-1 overflow-auto main-ocr">
                 <ng-container [ngSwitch]="selectedToggle">
                     <ng-container *ngSwitchCase="create">
-                        <giddh-page-loader *ngIf="ocrExtractDocumentsInProgress$ | async"></giddh-page-loader>
-                        <ng-container *ngIf="!(ocrExtractDocumentsInProgress$ | async)">
+                        <giddh-page-loader *ngIf="innerLoading"></giddh-page-loader>
+                        <ng-container *ngIf="!innerLoading">
                             <ng-container *ngIf="ocrCurrentToken; else noDataFound">
-                                <ocr-voucher-create></ocr-voucher-create>
+                                <ai-ocr-create></ai-ocr-create>
                             </ng-container>
                             <ng-template #noDataFound>
                                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
-                                    <h1>No Voucher Found</h1>
+                                    <h1>{{localeData?.no_data_found}}</h1>
                                     <img
                                         class="mr-t1"
                                         height="200"
                                         src="{{ imgPath }}no-data.png"
-                                        [alt]="commonLocaleData?.app_no_data_found"
+                                        [alt]="localeData?.no_data_found"
                                     />
                                 </div>
                             </ng-template>
                         </ng-container>
                     </ng-container>
                     <ng-container *ngSwitchCase="list">
-                        <ocr-voucher-list></ocr-voucher-list>
+                        <ai-ocr-list></ai-ocr-list>
                     </ng-container>
                 </ng-container>
             </main>
