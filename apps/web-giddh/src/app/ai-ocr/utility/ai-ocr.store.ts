@@ -286,7 +286,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
     readonly getExtractDocuments = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: null });
+                this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: undefined });
                 return this.aiOcrService.getExtractDocuments(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
