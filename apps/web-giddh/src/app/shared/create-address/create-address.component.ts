@@ -23,6 +23,11 @@ function validateFieldWithPatterns(patterns: Array<string>) {
     }
 }
 
+/** Enum for tax type name */
+enum TaxTypeNameEnum {
+    GSTIN = 'GSTIN'
+}
+
 @Component({
     selector: 'create-address',
     templateUrl: './create-address.component.html',
@@ -72,6 +77,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public activeCompanyCountryCode: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Enum for tax type name */
+    public taxTypeNameEnum: typeof TaxTypeNameEnum = TaxTypeNameEnum;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -117,8 +124,15 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public checkGstNumValidation(): void {
-        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid && this.addressConfiguration.tax.name === 'GSTIN') {
-            this.getGstConfirmationPopup();
+        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
+            this.toasterService.clearAllToaster();
+            if (this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN) {
+                this.getGstConfirmationPopup();
+            }
+        } else if (this.addressForm.get('taxNumber').invalid) {
+            let message = this.commonLocaleData?.app_invalid_tax_name;
+            message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
+            this.toasterService.errorToast(message);
         }
     }
 
@@ -188,10 +202,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm = this.formBuilder.group({
                     name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                    state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
+                    state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
                     stateLabel: [this.addressToUpdate?.stateName && this.addressToUpdate?.stateCode ? this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName : null],
                     county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
-                    address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
+                    address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN ? [Validators.required] : []],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
                         return item?.uniqueName ===
                             this.addressToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
@@ -261,7 +275,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
 
 
-        if (this.addressConfiguration.tax && this.addressConfiguration.tax.name && this.addressConfiguration.tax.name === 'GSTIN') {
+        if (this.addressConfiguration.tax && this.addressConfiguration.tax.name && this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN) {
             const taxField = this.addressForm.get('taxNumber');
             taxField?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
                 if (taxField.valid && taxField?.value) {
@@ -279,7 +293,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             }
         });
         this.addressForm?.get('taxNumber')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-            if (value !== null && value !== undefined && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
+            if (value !== null && value !== undefined && this.addressConfiguration.tax && this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN) {
                 this.getStateCode(value);
             }
         });
@@ -337,7 +351,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
-            if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
+            if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === TaxTypeNameEnum.GSTIN) {
                 // Tax is valid and has value then address is mandatory for GST taxes
                 const addresssValue = (this.addressForm.get('address')?.value || '')?.trim();
                 this.addressForm.get('address').setValue(addresssValue);
@@ -524,7 +538,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public isStateReadonly(): boolean {
-        const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
+        const isGSTIN = this.addressConfiguration?.tax?.name === TaxTypeNameEnum.GSTIN;
         const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
         const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;
         return isGSTIN && stateLabelNotNull && taxNumberNotEmpty;
