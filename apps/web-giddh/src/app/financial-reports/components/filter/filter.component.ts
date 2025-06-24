@@ -310,6 +310,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
+                this.generalService.currentBranchUniqueName = this.currentBranch?.uniqueName;
                 this.filterForm.get('branchUniqueName').setValue(this.currentBranch?.uniqueName);
                 this.filterForm.updateValueAndValidity();
                 this.cd.detectChanges();
@@ -532,6 +533,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
+        this.generalService.currentBranchUniqueName = selectedEntity?.value;
         setTimeout(() => {
             this.expandAllChange.emit(false);
         }, 10);
@@ -668,7 +670,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         } else if (this.plBsExportXLS) {
             reportType = ReportType.ProfitLoss;
         }
-        this.componentStore.getReconcileDateRange(reportType);
+        this.componentStore.getReconcileDateRange({ reportType, branchUniqueName: this.generalService.currentBranchUniqueName });
     }
 
     /**
