@@ -9,6 +9,7 @@ export const TB_PL_BS_API = {
     DOWNLOAD_BALANCE_SHEET_EXCEL: 'company/:companyUniqueName/v2/balance-sheet-collapsed-download',
     DOWNLOAD_PROFIT_LOSS_EXCEL: 'company/:companyUniqueName/v2/profit-loss-collapsed-download',
     GET_MULTI_CURRENCY_REPORT: 'v2/company/:companyUniqueName/multicompany/:reportType',
-    TAILED_REPORT_ACCOUNT_GROUP : 'v2/company/:companyUniqueName/reports/entity-status?reportType=:reportType'
+    TAILED_REPORT_ACCOUNT_GROUP : 'v2/company/:companyUniqueName/reports/entity-status?from=:from&to=:to&reportType=:reportType',
+    TAILED_REPORT_DATE_RANGE: 'v2/company/:companyUniqueName/reports/entity-selection?reportType=:reportType'
 };
 

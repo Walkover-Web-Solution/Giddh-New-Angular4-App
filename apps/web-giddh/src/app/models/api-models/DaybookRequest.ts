@@ -41,6 +41,7 @@ export class ExportBodyRequest {
     ledgerView?: boolean;
     mergePdf?: boolean;
     copyTypes?: any[];
+    showInAccountCurrency?: boolean;
 }
 
 export interface DayBookRequestModel {

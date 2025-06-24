@@ -44,21 +44,6 @@
                                         (selectedOption)="handleBranchChange($event)">
                                     </reactive-dropdown-field>
 
-                                    <!-- Archive Filter Dropdown -->
-                                    <div [formGroup]="filterForm" >
-                                        <reactive-dropdown-field
-                                            *ngIf="filterForm?.get('accountArchiveStatus')?.value !== null"
-                                            class="w-100"
-                                            [name]="'accountArchiveStatus'"
-                                            [label]="commonLocaleData?.app_account_status"
-                                            [labelValue]="commonLocaleData?.app_unarchive"
-                                            [placeholder]="commonLocaleData?.app_select"
-                                            formControlName="accountArchiveStatus"
-                                            [options]="archivedOptions"
-                                            (selectedOption)="onArchivedFilterSelected($event)">
-                                        </reactive-dropdown-field>
-                                    </div>
-
                                     <!-- Universal Date Range Picker -->
                                     <form
                                         #invoiceForm="ngForm"
@@ -606,7 +591,13 @@
                                             (change)="selectAccount($event, account)"
                                         >
                                         </mat-checkbox>
+                                    <a
+                                        href="javascript:;"
+                                        class="btn-link-2"
+                                        (click)="showAccountPreview(account?.uniqueName)"
+                                    >
                                         <span class="text-ellipsis">{{ account.name }}</span>
+                                    </a>
                                     </div>
 
                                 <button
@@ -1016,7 +1007,13 @@
                                             [(ngModel)]="account.isSelected"
                                         >
                                         </mat-checkbox>
+                                    <a
+                                        href="javascript:;"
+                                        class="btn-link-2"
+                                        (click)="showAccountPreview(account?.uniqueName)"
+                                    >
                                         <span class="text-ellipsis">{{ account.name }}</span>
+                                    </a>
                                     </div>
                                     <button
                                         mat-icon-button

@@ -474,6 +474,8 @@ export class CustomTemplateResponse {
     public logoUniqueName?: string;
     public templateType?: string;
     public type?: string;
+    public showBankQrCode: boolean;
+    public qrCodeId: string;
 }
 
 export class Esignature {
@@ -672,6 +674,7 @@ export class IEwayBillfilter {
     count?: number;
     branchUniqueName?: string;
     gstin?: string;
+    failedRequestLog?: boolean;
 }
 
 export class InvoicePreviewDetailsVm {

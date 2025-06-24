@@ -128,9 +128,23 @@
           <ng-container matColumnDef="symbol">
             <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.profit_and_loss}}</th>
             <td mat-cell *matCellDef="let element" class="text-center">
-              <mat-spinner *ngIf="element.profitAndLoss === -2" class="ml-auto mr-auto" [diameter]="30"></mat-spinner>
-              <button mat-stroked-button class="z-index-0" *ngIf="element.profitAndLoss === -1" (click)="getProfitLoss(element)" aria-label="Show profit and loss" >{{ commonLocaleData?.app_show }}</button>
-              <span *ngIf="element.profitAndLoss > -1">{{ element.profitAndLoss }}</span>
+              <ng-container *ngIf="element.profitAndLoss === profitAndLossStatus; else loadedContent">
+                <mat-spinner class="ml-auto mr-auto" [diameter]="30"></mat-spinner>
+              </ng-container>
+              
+              <ng-template #loadedContent>
+                <ng-container *ngIf="element.profitAndLoss == null; else showValue">
+                  <button mat-stroked-button class="z-index-0" 
+                          (click)="getProfitLoss(element)" 
+                          aria-label="Show profit and loss">
+                    {{ commonLocaleData?.app_show }}
+                  </button>
+                </ng-container>
+              
+                <ng-template #showValue>
+                  <span>{{ element.profitAndLoss }}</span>
+                </ng-template>
+              </ng-template>
             </td>
           </ng-container>
 

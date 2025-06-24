@@ -960,6 +960,12 @@
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",
                     "description": "प्रत्येक प्रकल्पासाठी कार्यक्षमतेने मागोवा घ्या, व्यवस्थापित करा आणि आर्थिक विश्लेषण करा."
+                },
+                {
+                    "label": "AI",
+                    "link": "/pages/ocr-voucher",
+                    "icon": "icon-audit-log",
+                    "description": "AI model"
                 }
             ]
         },

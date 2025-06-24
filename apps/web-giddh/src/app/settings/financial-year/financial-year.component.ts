@@ -3,7 +3,7 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
-import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
@@ -94,7 +94,9 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             this.setYearRange();
             if (o) {
                 this.financialYearObj = cloneDeep(o);
-                this.selectedFYPeriod = this.financialYearObj.financialYearPeriod;
+                if (this.FYPeriodOptions?.length) {
+                    this.setLabelSelectedFYPeriod();
+                }
                 this.fyAddNewDropdownIsOpen = false;
                 this.fyPeriodDropdownIsOpen = false;
                 let yearOptions = cloneDeep(this.yearOptions);
@@ -105,8 +107,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                         yearOptions.splice(yearIndx, 1);
                     }
                 });
-                this.formatDateInFinancialYear(yearOptions);
-                this.yearOptions = cloneDeep(yearOptions);
+                this.yearOptions = cloneDeep(this.formatDateInFinancialYear(yearOptions));
             } else if (isNull(o)) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
@@ -121,7 +122,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
      * @memberof FinancialYearComponent
      */
     private formatDateInFinancialYear(yearOptions: IOption[]): IOption[] {
-        if (yearOptions.length === 0) {
+        if (yearOptions.length === 0 || !this.selectedFYPeriod) {
             return [];
         }
 
@@ -203,6 +204,20 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.financial_year_period_options?.apr_mar, value: 'APR-MAR' },
                 { label: this.localeData?.financial_year_period_options?.july_july, value: 'JULY-JULY' }
             ];
+
+            if (this.financialYearObj?.financialYearPeriod) {
+                this.setLabelSelectedFYPeriod();
+            }
         }
+    }
+
+    /**
+     * Sets the label of the selected FY period
+     *
+     * @private
+     * @memberof FinancialYearComponent
+     */
+    private setLabelSelectedFYPeriod(): void {
+        this.selectedFYPeriod = this.FYPeriodOptions.find(item => item.value === this.financialYearObj?.financialYearPeriod)?.label;
     }
 }

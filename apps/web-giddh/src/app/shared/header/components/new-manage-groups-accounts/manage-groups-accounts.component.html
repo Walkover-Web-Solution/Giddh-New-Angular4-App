@@ -13,18 +13,29 @@
     <div class="modal-header d-flex flex-row-reverse" role="dialog" id="alb" aria-labelledby="masterdialog" #header>
         <span class="d-flex align-items-center">
             <!-- Dropdown for Archive Accounts Filter -->
-            <select-field
-                class="d-block position-relative mr-r1"
-                [cssClass]="'form-control mat-field-border'"
-                [placeholder]="commonLocaleData?.app_account_status"
-                [options]="archivedOptions"
-                (selectedOption)="onArchivedFilterSelected($event)"
-                [allowValueReset]="true"
-                [defaultValue]="selectedArchivedOption"
-                (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"
-                [showDropdownIcon]="true"
-            ></select-field>
-
+            <a
+                href="javascript:void(0);"
+                aria-label="add financial year"
+                class="d-block position-relative mr-r1 modal-title bg underline"
+                (click)="archivedDropdownIsOpen = true"
+                *ngIf="!archivedDropdownIsOpen; else archivedDropdown"
+            >
+                {{ selectedArchivedLabel ?? commonLocaleData?.app_account_status }}
+            </a>
+            <ng-template #archivedDropdown>
+                <select-field
+                    class="d-block position-relative mr-r1"
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="commonLocaleData?.app_account_status"
+                    [options]="archivedOptions"
+                    (selectedOption)="onArchivedFilterSelected($event)"
+                    [allowValueReset]="true"
+                    [defaultValue]="selectedArchivedLabel"
+                    (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"
+                    [openDropdown]="true"
+                    [showDropdownIcon]="true"
+                ></select-field>
+            </ng-template>
             <div class="pull-right mr-r1 search-bar-wrapper">
                 <div class="form-inline">
                     <div class="form-group search-bar">
@@ -124,6 +135,7 @@
                         [commonLocaleData]="commonLocaleData"
                         [isMasterOpen]="true"
                         [activeGroupUniqueName]="activeGroupUniqueName"
+                        (accountUpdated)="handleUpdateAccount()"
                         #form
                         *ngIf="localeData?.page_heading"
                     >

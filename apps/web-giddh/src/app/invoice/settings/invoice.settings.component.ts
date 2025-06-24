@@ -640,7 +640,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {
-                right: '15px',
+                right: '0',
                 bottom: '0'
             },
             disableClose: true

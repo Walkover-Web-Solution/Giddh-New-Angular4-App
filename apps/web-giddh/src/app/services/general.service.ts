@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Injectable()
@@ -988,7 +989,7 @@ export class GeneralService {
      */
     public getAccountArchivedOptions(commonLocaleData: any): IOption[] {
         return [
-            { label: commonLocaleData?.app_unarchive, value: AccountArchivedStatusEnum.UNARCHIVED },
+            { label: commonLocaleData?.app_unarchived, value: AccountArchivedStatusEnum.UNARCHIVED },
             { label: commonLocaleData?.app_archived, value: AccountArchivedStatusEnum.ARCHIVED },
             { label: commonLocaleData?.app_both, value: AccountArchivedStatusEnum.BOTH }
         ];
@@ -1263,6 +1264,9 @@ export class GeneralService {
                 //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
                 taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             }
+        } else if (mainTaxPercentage) {
+            // This is for advance receipt without other taxes
+            taxableValue = giddhRoundOff(totalAmount / (1 + (mainTaxPercentage / 100)));
         }
         return taxableValue;
     }
@@ -2308,6 +2312,44 @@ export class GeneralService {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @param {any} commonLocaleData
+     * @param {boolean} [isDaily=false]
+     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
+        let days = [
+            { label: commonLocaleData?.app_weekdays.sunday, value: 'sunday' },
+            { label: commonLocaleData?.app_weekdays.monday, value: 'monday' },
+            { label: commonLocaleData?.app_weekdays.tuesday, value: 'tuesday' },
+            { label: commonLocaleData?.app_weekdays.wednesday, value: 'wednesday' },
+            { label: commonLocaleData?.app_weekdays.thursday, value: 'thursday' },
+            { label: commonLocaleData?.app_weekdays.friday, value: 'friday' },
+            { label: commonLocaleData?.app_weekdays.saturday, value: 'saturday' }
+        ];
+        if (isDaily) {
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: 'daily' }, ...days];
+        }
+        return days.filter(day => !excludeDays.includes(day.value));
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDaysOfMonth(): IOption[] {
+        return Array.from({ length: 31 }, (_, i) => ({
+            label: (i + 1).toString(),
+            value: (i + 1).toString()
+        }));
     }
 }
 

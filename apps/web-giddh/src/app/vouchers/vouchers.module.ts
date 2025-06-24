@@ -92,6 +92,7 @@ import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
 import { EWayBillModule } from "../shared/eWayBill/eWayBill.module";
 import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
 import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 
 @NgModule({
     declarations: [
@@ -189,10 +190,11 @@ import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-
         A11yModule,
         EWayBillModule,
         ValidateSectionPermissionDirectiveModule,
-        SubscriptionUpgradeButtonModule
+        SubscriptionUpgradeButtonModule,
+        SelectTableColumnModule
     ],
     exports: [
-
+VoucherCreateComponent
     ],
     providers: [TitleCasePipe, InvoiceUiDataService]
 })

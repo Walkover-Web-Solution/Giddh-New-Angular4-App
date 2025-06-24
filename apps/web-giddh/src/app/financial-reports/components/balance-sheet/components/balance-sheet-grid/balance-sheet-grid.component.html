@@ -30,16 +30,15 @@
                                                     [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
                                                     class="d-flex align-items-center"
                                                 >
-                                                    <button
-                                                        mat-icon-button
-                                                        class="w-auto h-auto p-0 mr-l1 mr-1"
+                                                    <span
+                                                        class="tailed-checkbox mr-l1 mr-1"
                                                         [matTooltip]="commonLocaleData?.app_clear_selected"
                                                         matTooltipPosition="before"
-                                                        (click)="uncheckAll(bsData.liabilities, bsData.assets)"
+                                                        (click)="openConfirmDialog()"
                                                         aria-label="clear selection"
                                                     >
-                                                        <img src="assets/icon/deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
-                                                    </button>
+                                                        <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
+                                                    </span>
                                                     <span class="mr-l15 mr-1">{{ localeData?.particular }}</span>
                                                     <i class="icon-search" (click)="toggleSearch()"></i>
                                                 </div>

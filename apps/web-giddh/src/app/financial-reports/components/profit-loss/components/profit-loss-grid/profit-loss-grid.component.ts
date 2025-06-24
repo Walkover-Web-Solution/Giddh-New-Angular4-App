@@ -21,8 +21,11 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'profit-loss-grid',
@@ -62,12 +65,21 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public isExpandToggledDuringSearch: boolean;
     /** List of check groups accounts */
     private listOfCheckGroupsAccounts: any[] = [];
+    /** Holds images folder path */
+    public imgPath: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone, private financialReportsComponentStore: FinancialReportsComponentStore) {
+    constructor(
+        private cd: ChangeDetectorRef,
+        private zone: NgZone,
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private dialog: MatDialog,
+        private generalService: GeneralService
+    ) {
 
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -89,7 +101,9 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 this.listOfCheckGroupsAccounts = [];
-                this.refresh.emit();
+                setTimeout(() => {
+                    this.refresh.emit();
+                }, 600);
             }
         });
     }
@@ -224,17 +238,21 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Unchecks all the accounts/groups in the profit loss grid.
      *
-     * @param {any} incArr - Array of income group/account details.
-     * @param {any} expArr - Array of expense group/account details.
      * @param {'group' | 'account'} [entityType='group'] - Type of entity to uncheck.
+     * @private
      * @memberof ProfitLossGridComponent
      */
-    public uncheckAll(incArr: any, expArr: any, entityType: 'group' | 'account' = 'group'): void {
-        this.extractCheckedAccountsGroups([...incArr, ...expArr], entityType);
+    private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups([...this.plData.incArr, ...this.plData.expArr], entityType);
         setTimeout(() => {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
-                    reportType: ReportType.ProfitLoss,
+                    request: {
+                        reportType: ReportType.ProfitLoss,
+                        from: this.from,
+                        to: this.to,
+                        branchUniqueName: this.generalService.currentBranchUniqueName
+                    },
                     payload: this.listOfCheckGroupsAccounts
                 };
                 this.financialReportsComponentStore.tailedReportAccountGroup(model);
@@ -252,19 +270,38 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ProfitLossGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(group => {
-            if (group.checked) {
+        groupAccountDetails.forEach(groupAccount => {
+            if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
-                    uniqueName: group.uniqueName,
+                    uniqueName: groupAccount.uniqueName,
                     entityType,
                     checked: false
                 });
             }
-            if (group.childGroups?.length) {
-                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            if (groupAccount.childGroups?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
-            if (group.accounts?.length) {
-                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            if (groupAccount.accounts?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
+            }
+        });
+    }
+
+    /**
+     * Opens a confirmation dialog to confirm the uncheck all action.
+     *
+     * @memberof ProfitLossGridComponent
+     */
+    public openConfirmDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.commonLocaleData?.app_uncheck_all_item_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.uncheckAll();
             }
         });
     }

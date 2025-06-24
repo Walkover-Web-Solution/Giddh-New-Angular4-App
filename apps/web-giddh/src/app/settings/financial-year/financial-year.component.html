@@ -9,12 +9,12 @@
         <form class="overflow-visible">
             <div class="row overflow-visible">
                 <div class="col-sm-12 overflow-visible">
-                    <div class="d-flex align-items-center column-gap4">
+                    <div class="financial-year-header d-flex align-items-start align-items-lg-center column-gap4 flex-lg-row flex-column row-gap1">
                         <div class="d-flex align-items-center column-gap2">
                             <a
                                 href="javascript:void(0);"
                                 aria-label="add financial year"
-                                class="d-inline-block w200 color-primary underline"
+                                class="d-inline-block select-financial-year color-primary underline"
                                 (click)="fyAddNewDropdownIsOpen = true"
                                 *ngIf="!fyAddNewDropdownIsOpen; else fyDropdown"
                             >
@@ -25,8 +25,8 @@
                                     [openDropdown]="true"
                                     [showLabel]="false"
                                     [appearance]="'fill'"
-                                    class="w200"
-                                    [cssClass]="'w-100 p-1 border-color-transparent'"
+                                    class="select-financial-year"
+                                    [cssClass]="'w-100 p-1 border-color-transparent bg-transparent'"
                                     [label]="localeData?.add_financial_year"
                                     [placeholder]="localeData?.select_financial_year"
                                     [options]="yearOptions"
@@ -55,7 +55,7 @@
                                     [showLabel]="false"
                                     [appearance]="'fill'"
                                     class="w150"
-                                    [cssClass]="'w-100 p-1 border-color-transparent'"
+                                    [cssClass]="'w-100 p-1 border-color-transparent bg-transparent'"
                                     [label]="localeData?.financial_year_period"
                                     [name]="'selectedFYPeriod'"
                                     [labelValue]="selectedFYPeriod"
@@ -99,15 +99,17 @@
                                             {{ localeData?.lock_status }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
-                                            <mat-slide-toggle
-                                                color="primary"
-                                                name="lockedUnlockedFinancial"
-                                                [checked]="element.isLocked"
-                                                (change)="lockUnlockFinancialYear(element)"
-                                            >
-                                                {{ element.isLocked ? localeData?.locked : localeData?.unlocked }}
-                                            </mat-slide-toggle>
-                                        </td>
+                                            <span class="d-inline-block w125">
+                                                <mat-slide-toggle
+                                                    color="primary"
+                                                    name="lockedUnlockedFinancial"
+                                                    [checked]="element.isLocked"
+                                                    (change)="lockUnlockFinancialYear(element)"
+                                                >
+                                                    <span class="d-inline-block">{{ element.isLocked ? localeData?.locked : localeData?.unlocked }}</span>
+                                                </mat-slide-toggle>
+                                            </span>
+                                    </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

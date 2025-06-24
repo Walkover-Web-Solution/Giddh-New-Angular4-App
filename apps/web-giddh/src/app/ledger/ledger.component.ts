@@ -632,7 +632,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
-
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 this.ledgerAccountResponse = ledgerAccount;
@@ -979,7 +978,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
                 this.needToReCalculate.next(false);
-                this.getTransactionData();
+                if (this.isAdvanceSearchImplemented) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
                 this.transactionCountConvertToEntries = null;
@@ -1020,7 +1023,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.ledgerBulkActionSuccess$.subscribe((yes: boolean) => {
             if (yes) {
                 this.entryUniqueNamesForBulkAction = [];
-                this.getTransactionData();
+                if (this.isAdvanceSearchImplemented) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
             }
         });
 
@@ -1473,7 +1480,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public generateLedger(): void {
-        if ((this.lc.blankLedger.transactions[1].particular === "sales" || this.lc.blankLedger.transactions[0].particular === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+        if ((this.lc.blankLedger.transactions[1].selectedAccount?.uniqueName === "sales" || this.lc.blankLedger.transactions[0].selectedAccount?.uniqueName === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
             this.openEwayBillDialog();
         } else {
             this.saveBlankTransaction();
@@ -1847,13 +1854,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
-            width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
-                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName }))
+                selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName })),
+                currencyTogglerModel: this.currencyTogglerModel,
+                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
             },
             role: 'alertdialog',
+            panelClass: ['mat-dialog-md'],
             ariaLabel: 'export'
         });
 

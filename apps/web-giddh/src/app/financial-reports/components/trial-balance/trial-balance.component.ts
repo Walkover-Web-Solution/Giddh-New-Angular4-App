@@ -11,6 +11,7 @@ import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial-balance-grid.component';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'trial-balance',
@@ -33,12 +34,15 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() public isDateSelected: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReportTallyOption: boolean;
 
     constructor(
         private store: Store<AppState>,
         private cd: ChangeDetectorRef,
         public tlPlActions: TBPlBsActions,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        private tlPlService: TlPlService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -63,6 +67,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
         this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
             let d = cloneDeep(p) as AccountDetails;
             if (d) {
+                this.expandAll = false;
                 if (d.message) {
                     setTimeout(() => {
                         this.toaster.clearAllToaster();
@@ -78,6 +83,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
             return d;
         })), takeUntil(this.destroyed$));
         this.data$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.tlPlService.isReportTailed$.next(true);
             this.cd.markForCheck();
         });
     }

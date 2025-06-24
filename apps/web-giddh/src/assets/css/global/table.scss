@@ -35,7 +35,6 @@
             }
         }
     }
-
 }
 
 /*--- menu-button-color ---*/
@@ -156,7 +155,7 @@ table {
         tr {
             th,
             td {
-                width: fit-content !important;
+                width: fit-content;
                 max-width: 194px !important;
             }
             .table-date-width {

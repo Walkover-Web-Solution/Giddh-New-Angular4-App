@@ -20,8 +20,11 @@ import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Se
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'trial-balance-grid',
@@ -77,12 +80,22 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public accountDetails: any;
     /** List of check groups accounts */
     private listOfCheckGroupsAccounts: any[] = [];
+    /** Holds images folder path */
+    public imgPath: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone, private financialReportsComponentStore: FinancialReportsComponentStore) {
+
+    constructor(
+        private cd: ChangeDetectorRef,
+        private zone: NgZone,
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private dialog: MatDialog,
+        private generalService: GeneralService
+    ) {
 
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -102,7 +115,9 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
         this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 this.listOfCheckGroupsAccounts = [];
-                this.refresh.emit();
+                setTimeout(() => {
+                    this.refresh.emit();
+                }, 600);
             }
         });
     }
@@ -257,16 +272,21 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Unchecks all the accounts/groups in the grid
      *
-     * @param {any} groupAccountDetails group or account details
      * @param {'group' | 'account'} [entityType='group'] type of entity
+     * @private
      * @memberof TrialBalanceGridComponent
      */
-    public uncheckAll(groupAccountDetails: any, entityType: 'group' | 'account' = 'group'): void {
-        this.extractCheckedAccountsGroups(groupAccountDetails, entityType);
+    private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups(this.data$.groupDetails, entityType);
         setTimeout(() => {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
-                    reportType: ReportType.TrialBalance,
+                    request: {
+                        reportType: ReportType.TrialBalance,
+                        from: this.from,
+                        to: this.to,
+                        branchUniqueName: this.generalService.currentBranchUniqueName
+                    },
                     payload: this.listOfCheckGroupsAccounts
                 };
                 this.financialReportsComponentStore.tailedReportAccountGroup(model);
@@ -284,20 +304,39 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(group => {
-            if (group.checked) {
+        groupAccountDetails.forEach(groupAccount => {
+            if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
-                    uniqueName: group.uniqueName,
+                    uniqueName: groupAccount.uniqueName,
                     entityType,
                     checked: false
                 });
             }
-            if (group.childGroups?.length) {
-                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            if (groupAccount.childGroups?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
-            if (group.accounts?.length) {
-                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            if (groupAccount.accounts?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
         });
     }
+
+    /**
+     * Opens a confirmation dialog to confirm the uncheck all action.
+     *
+     * @memberof TrialBalanceGridComponent
+     */
+    public openConfirmDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.commonLocaleData?.app_uncheck_all_item_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.uncheckAll();
+            }
+        });
+    } 
 }

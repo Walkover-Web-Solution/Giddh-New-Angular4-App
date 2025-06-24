@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
@@ -14,6 +14,7 @@ import { ReportType } from '../multi-currency-reports/multi-currency.const';
 @Injectable()
 export class TlPlService {
     private companyUniqueName: string;
+    public isReportTailed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
 
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
@@ -252,20 +253,53 @@ export class TlPlService {
     /**
      * Updates the tailed report for the given report type with the given account or group, either adding or removing it based on the value of the checked flag.
      * 
-     * @param {string} reportType - The type of report to update (e.g., "TrialBalance", "ProfitLoss", "Balance Sheet").
+     * @param {any} request - The request data to send in the request, including the reportType, from, and to.
      * @param {any} payload - The payload data to send in the request, including the uniqueName of the account or group to add or remove, the entityType of the payload (either "account" or "group"), and the checked flag indicating whether to add or remove the account or group.
+     * @param {string} branchUniqueName - The unique name of the branch to update the report for.
      * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the status of the report update.
      * @memberof TlPlService
      */
-    public tailedReportAccountGroup(reportType: typeof ReportType, payload: {uniqueName: string, entityType: 'account' | 'group', checked: boolean}[]): Observable<BaseResponse<any, any>> {
+    public tailedReportAccountGroup(request: {reportType: typeof ReportType, from: string, to: string, branchUniqueName?: string}, payload: {uniqueName: string, entityType: 'account' | 'group', checked: boolean}[]): Observable<BaseResponse<any, any>> {
+       let url = this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_ACCOUNT_GROUP
+       ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+       ?.replace(':reportType', request?.reportType?.toString())
+       ?.replace(':from', request?.from)
+       ?.replace(':to', request?.to);
+       if (request?.branchUniqueName) {
+           url += `&branchUniqueName=${request?.branchUniqueName}`;
+       }
         return this.http.post(
-            this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_ACCOUNT_GROUP
-            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
-            ?.replace(':reportType', reportType?.toString())
+            url
             , payload).pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = payload;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * Gets the reconcile date range for the given report type.
+     * 
+     * @param {typeof ReportType} reportType - The type of report to get the date range for (e.g., "TrialBalance", "ProfitLoss").
+     * @param {string} branchUniqueName - The unique name of the branch to get the date range for.
+     * @returns {Observable<BaseResponse<any, any>>} An observable of the response containing the date range.
+     * @memberof TlPlService
+     */
+    public getReconcileDateRange(reportType: typeof ReportType, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + TB_PL_BS_API.TAILED_REPORT_DATE_RANGE
+        ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+        ?.replace(':reportType', reportType?.toString());
+        if (branchUniqueName) {
+            url += `&branchUniqueName=${branchUniqueName}`;
+        }
+        return this.http.post(
+            url
+            , {}).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = { reportType };
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));

@@ -1,0 +1,138 @@
+
+<ng-container
+    appTranslate
+    [file]="'triggers/basic'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="trigger position-relative pd-15 overflow-visible">
+        <div class="container-fluid overflow-visible">
+            <div class="position-center position-absolute" *ngIf="isLoading$ | async">
+                <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
+            </div>
+            <div class="d-flex">
+                <button 
+                    mat-raised-button 
+                    color="primary"
+                    (click)="openCreateEditTriggerDialog()"
+                >
+                    + {{ commonLocaleData?.app_create_new }}
+                </button>
+                <button 
+                    mat-stroked-button 
+                    color="primary" 
+                    routerLink="/pages/triggers/advance" 
+                    [disabled]="isLoading$ | async"
+                    class="ml-auto"
+                >
+                    {{ localeData?.switch_to_advance_trigger }}
+                </button>
+            </div>
+            <div class="overflow-visible mt-3" *ngIf="!(isLoading$ | async) && (triggerList$ | async)?.results?.length">
+                <div class="table-responsive overflow-visible">
+                    <table
+                        mat-table
+                        [dataSource]="(triggerList$ | async)?.results"
+                        class="w-100"
+                    >
+                        <!-- Title Column -->
+                        <ng-container matColumnDef="title">
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.title }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="nowrap overflow-visible">
+                                {{ element.title | titlecase }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Entity Column -->
+                        <ng-container matColumnDef="entity">
+                            <mat-header-cell *matHeaderCellDef class="max-width-80"> {{ commonLocaleData?.app_entity }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="max-width-80"> {{ element.entity | titlecase }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Email Subject Column -->
+                        <ng-container matColumnDef="emailSubject">
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.email_subject }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.emailSubject }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Trigger Module Column -->
+                        <ng-container matColumnDef="triggerModule">
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.trigger_module }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ (element.triggerModule | replace : "_" : " ") | titlecase }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Execution Time Column -->
+                        <ng-container matColumnDef="executionTime">
+                            <mat-header-cell *matHeaderCellDef> {{ localeData?.execution_time }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.executionTime?.time }} <br />
+                                {{ (element.executionTime?.dayOfWeek || element.executionTime?.dayOfMonth) | titlecase }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Conditions Column -->
+                        <ng-container matColumnDef="conditions">
+                            <mat-header-cell *matHeaderCellDef class="column-min-width"> {{ localeData?.conditions }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="column-min-width">
+                                Due By: {{ element.conditionMap?.DUE_BY?.key }} =
+                                {{ element.conditionMap?.DUE_BY?.value }}<br />
+                                Due Amount: {{ element.conditionMap?.DUE_AMOUNT?.key }} =
+                                {{ element.conditionMap?.DUE_AMOUNT?.value }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_actions }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ (element.actions?.join(", ") | replace : "_" : " ") | titlecase }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Disabled Column -->
+                        <ng-container matColumnDef="disabled">
+                            <mat-header-cell *matHeaderCellDef class="max-width-80"> {{ localeData?.disabled }} </mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="max-width-80"> {{ element.disabled ? commonLocaleData?.app_yes : commonLocaleData?.app_no }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Other Action Column -->
+                        <ng-container matColumnDef="other_action">
+                            <mat-header-cell *matHeaderCellDef class="max-width-80">&nbsp;</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="text-right max-width-80">
+                                <button mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                                    <i class="icon-dots-three-vertical font-15"></i>
+                                </button>
+                                <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                                    <button mat-menu-item (click)="openCreateEditTriggerDialog(element?.uniqueName)">{{ commonLocaleData?.app_edit }}</button>
+                                    <button mat-menu-item (click)="deleteTrigger(element)">{{ commonLocaleData?.app_delete }}</button>
+                                </mat-menu>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                    </table>
+                    <div
+                        class="pagination-wrapper justify-content-end"
+                        *ngIf="(triggerList$ | async)?.totalItems > pageSizeOptions[0]"
+                    >
+                        <mat-paginator
+                            class="mt-3"
+                            (page)="handlePageChange($event)"
+                            [length]="(triggerList$ | async)?.totalItems"
+                            [pageSize]="triggerListRequest.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="triggerListRequest.page - 1"
+                        ></mat-paginator>
+                    </div>
+                </div>
+            </div>
+            <section class="mt-5" *ngIf="(triggerList$ | async)?.results?.length === 0">
+                <div class="no-data">
+                    <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                </div>
+            </section>
+        </div>
+    </div>
+</ng-container>

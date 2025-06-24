@@ -18,7 +18,7 @@
                             formControlName="activeGroupUniqueName"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('activeGroupUniqueName')?.value"
-                            (selectedOption)="selectGroup($event)"
+                            (selectedOption)="selectGroup($event); openConfirmLeaveDialog()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -32,6 +32,7 @@
                             [autoFocus]="true"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('name')?.value"
+                            (change)="openConfirmLeaveDialog()"
                         >
                         </input-field>
                     </div>
@@ -46,7 +47,7 @@
                             formControlName="countryCode"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('country').get('countryCode')?.value"
-                            (selectedOption)="selectCountry($event)"
+                            (selectedOption)="selectCountry($event); openConfirmLeaveDialog()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -57,6 +58,7 @@
                             [labelValue]="selectedCurrency ?? ''"
                             [options]="currencySource$ | async"
                             formControlName="currency"
+                            (selectedOption)="openConfirmLeaveDialog()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -67,6 +69,7 @@
                             >
                                 <input-field
                                     [name]="'number'"
+                                    class="flex-grow-1"
                                     [cssClass]="'text-right'"
                                     [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('openingBalance')?.value > 0 }"
                                     #autoFocusUpdate
@@ -77,35 +80,38 @@
                                     [allowDigitsOnly]="true"
                                     [readonly]="company?.isActive"
                                     [min]="0"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
-                                <div
-                                    class="input-group-addon d-flex align-item-center"
-                                    (click)="openingBalanceTypeChanged('DEBIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cp':
-                                            addAccountForm.get('openingBalance')?.value > 0 ||
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('openingBalance')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                                </div>
-                                <div
-                                    class="only-right-radius input-group-addon d-flex align-item-center"
-                                    (click)="openingBalanceTypeChanged('CREDIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cp':
-                                            addAccountForm.get('openingBalance')?.value > 0 ||
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('openingBalance')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                <div class="d-flex">
+                                    <div
+                                        class="input-group-addon d-flex align-item-center"
+                                        (click)="openingBalanceTypeChanged('DEBIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                            'cp':
+                                                addAccountForm.get('openingBalance')?.value > 0 ||
+                                                addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                    </div>
+                                    <div
+                                        class="only-right-radius input-group-addon d-flex align-item-center"
+                                        (click)="openingBalanceTypeChanged('CREDIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                            'cp':
+                                                addAccountForm.get('openingBalance')?.value > 0 ||
+                                                addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +136,7 @@
                         >
                             <input-field
                                 [name]="'number'"
+                                class="flex-grow-1"
                                 [cssClass]="'text-right'"
                                 [label]="localeData?.foreign_opening_balance"
                                 [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
@@ -139,29 +146,32 @@
                                 [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
-                            <div
-                                class="input-group-addon d-flex align-item-center"
-                                (click)="openingBalanceTypeChanged('DEBIT')"
-                                [ngClass]="{
-                                    'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
-                                }"
-                                *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
-                            >
-                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                            </div>
-                            <div
-                                class="only-right-radius input-group-addon d-flex align-item-center"
-                                (click)="openingBalanceTypeChanged('CREDIT')"
-                                [ngClass]="{
-                                    'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
-                                }"
-                                *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
-                            >
-                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                            <div class="d-flex">
+                                <div
+                                    class="input-group-addon d-flex align-item-center"
+                                    (click)="openingBalanceTypeChanged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                </div>
+                                <div
+                                    class="only-right-radius input-group-addon d-flex align-item-center"
+                                    (click)="openingBalanceTypeChanged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                </div>
                             </div>
                         </div>
                         <div
@@ -185,12 +195,14 @@
                                 <mat-radio-button
                                     color="primary"
                                     value="hsn"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                     {{ commonLocaleData?.app_hsn }}
                                 </mat-radio-button>
                                 <mat-radio-button
                                     color="primary"
                                     value="sac"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                     {{ commonLocaleData?.app_sac }}
                                 </mat-radio-button>
@@ -202,6 +214,7 @@
                             [placeholder]="commonLocaleData?.app_hsn"
                             [type]="'text'"
                             formControlName="hsnNumber"
+                            (change)="openConfirmLeaveDialog()"
                             [allowDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
                         >
@@ -212,6 +225,7 @@
                             [placeholder]="commonLocaleData?.app_sac"
                             [type]="'text'"
                             formControlName="sacNumber"
+                            (change)="openConfirmLeaveDialog()"
                             [allowDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
                         >
@@ -227,20 +241,21 @@
             [disablePagination]=true
             [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
+            animationDuration="0ms"
         >
             <mat-tab
                 [label]="localeData?.tabs?.address"
                 class="gstin-address"
                 *ngIf="!isHsnSacEnabledAcc"
             >
-                <div class="pd-t15 pd-b2 overflow-hidden" formArrayName="addresses">
+                <div class="pd-t15 overflow-hidden" formArrayName="addresses">
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls']
                                 | slice : 0 : gstDetailsLength;
                             let i = index;
-                            let f = first;
-                            let l = last
+                            let firstItem = first;
+                            let lastItem = last
                         "
                         [formGroupName]="i"
                     >
@@ -275,6 +290,7 @@
                                         rows="4"
                                         cols="5"
                                         class="form-control"
+                                        (change)="openConfirmLeaveDialog()"
                                     ></textarea>
                                 </div>
                             </div>
@@ -290,7 +306,7 @@
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
-                                    (selectedOption)="selectedState(gst, $event)"
+                                    (selectedOption)="selectedState(gst, $event); openConfirmLeaveDialog()"
                                 >
                                 </reactive-dropdown-field>
                                 
@@ -302,7 +318,7 @@
                                     formControlName="countyCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
-                                    (selectedOption)="selectedCounty(gst, $event)"
+                                    (selectedOption)="selectedCounty(gst, $event); openConfirmLeaveDialog()"
                                 >
                                 </reactive-dropdown-field>
                             </div>
@@ -315,6 +331,8 @@
                                     #gstNumberField
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
+                                    [maxlength]="15"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
                             </div>
@@ -335,6 +353,7 @@
                                     [type]="'number'"
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
                                     [allowDigitsOnly]="true"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
                             </div>
@@ -347,6 +366,7 @@
                                         [options]="partyTypeSource"
                                         [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
                                         [labelValue]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType?.value"
+                                        (selectedOption)="openConfirmLeaveDialog()"
                                     >
                                     </reactive-dropdown-field>
                                 </div>
@@ -370,7 +390,7 @@
                                     </div>
                                 </div> -->
                             </ng-container>
-                            <div class="col-sm-12 mr-b2" *ngIf="!f">
+                            <div class="col-sm-12 mr-b2" *ngIf="!firstItem">
                                 <button
                                     mat-stroked-button
                                     color="warn"
@@ -383,7 +403,7 @@
                         </div>
                         <div
                             class="d-flex justify-content-between column-gap15 pd-b2"
-                            *ngIf="l && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
+                            *ngIf="lastItem && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
                         >
                             <button
                                 mat-stroked-button
@@ -402,17 +422,19 @@
                             > {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
-                        <div *ngIf="l">
+                        <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
+                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             > + {{ localeData?.add_address }}
                             </button>
+                            <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                         </div>
                     </ng-container>
                 </div>
             </mat-tab>
+
             <mat-tab
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
@@ -426,6 +448,7 @@
                                 [placeholder]="localeData?.attention_to"
                                 [type]="'text'"
                                 formControlName="attentionTo"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
                         </div>
@@ -440,6 +463,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                 formControlName="mobileNo"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
                             <span id="init-contact-update-valid-msg" class="d-none"></span>
@@ -447,7 +471,7 @@
                         </div>
                     </div>
 
-                    <div class="row pd-b2">
+                    <div class="row">
                         <div class="col-sm-6">
                             <input-field
                                 [name]="'emailId'"
@@ -455,6 +479,7 @@
                                 [placeholder]="commonLocaleData?.app_email_id"
                                 [type]="'email'"
                                 formControlName="email"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
                             <span
@@ -467,10 +492,11 @@
                     <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                 </div>
             </mat-tab>
+
             <mat-tab
                 [label]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2 && isDebtorCreditor && activeGroupUniqueName === 'sundrydebtors'"
+                *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundryDebtors)"
             >
                 <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
@@ -546,7 +572,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row pd-b2">
+                    <div class="row">
                         <div class="col-lg-12">
                             <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
                                 <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
@@ -556,7 +582,8 @@
                     <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                 </div>                
             </mat-tab>
-            <!-- bank details visible when sundry credtiors selected , right now is hide -->
+
+            <!-- bank details visible when sundry creditors selected , right now is hide -->
             <mat-tab
                 [label]="localeData?.tabs?.bank_details"
                 class="bank-details-form"
@@ -569,8 +596,8 @@
                             *ngFor="
                                 let bank of addAccountForm.get('accountBankDetails')['controls'];
                                 let i = index;
-                                let f = first;
-                                let l = last
+                                let firstItem = first;
+                                let lastItem = last
                             "
                             [formGroupName]="i"
                         >
@@ -668,6 +695,7 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
                 </div>
             </mat-tab>
 
@@ -694,6 +722,7 @@
                                 <input-field
                                     [type]="'number'"
                                     [min]="'0'"
+                                    class="flex-grow-1"
                                     [cssClass]="'text-right'"
                                     [ngClass]="{'remove-right-border-radius': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                                     formControlName="closingBalanceTriggerAmount"
@@ -709,43 +738,32 @@
                                     "
                                 >
                                 </input-field>
-                                <div
-                                    class="input-group-addon d-flex align-item-center"
-                                    (click)="closingBalanceTypeChanged('DEBIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                <div class="d-flex">
+                                    <div
+                                        class="input-group-addon d-flex align-item-center"
+                                        (click)="closingBalanceTypeChanged('DEBIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                    </div>
+                                    <div
+                                        class="input-group-addon only-right-radius d-flex align-item-center"
+                                        (click)="closingBalanceTypeChanged('CREDIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                    </div>
                                 </div>
-                                <div
-                                    class="input-group-addon only-right-radius d-flex align-item-center"
-                                    (click)="closingBalanceTypeChanged('CREDIT')"
-                                    [ngClass]="{
-                                        'active-toggle-btn':
-                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
-                                    }"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
-                                >
-                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
-                                </div>
-                            </div>
-                        </div>
-
-                         <!-- Archived Account Toggle -->
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="archive" class="mr-r15">{{ localeData?.archive }}</label>
-                                <mat-slide-toggle 
-                                    color="primary" 
-                                    id="archive"
-                                    name="archive"
-                                    formControlName="archive" 
-                                ></mat-slide-toggle>
                             </div>
                         </div>
                     </div>
@@ -766,6 +784,7 @@
                     </div>
                 </div>
             </mat-tab>
+            
             <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <div class="pd-t15 overflow-hidden">
@@ -861,7 +880,7 @@
             </mat-tab>
         <!-- </tabset> -->
         </mat-tab-group>
-        <ng-container *ngIf="!isOtherSelectedTab && !isPortalSelectedTab && !isContactSelectedTab">
+        <ng-container *ngIf="isCustomSelectedTab">
             <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
         </ng-container>
     </form>
@@ -1027,10 +1046,12 @@
                             <select-multiple-fields
                                 [label]="localeData?.app_default_taxes"
                                 [commonLocaleData]="commonLocaleData"
+                                [selectedValues]="defaultTaxLabel"
                                 [placeholder]="commonLocaleData?.app_select"
-                                [options]="companyTaxDropDown$ | async"
-                                (selectedOption)="taxesSelected($event)"
-                                formControlName="taxes"
+                                [options]="companyTaxDropDown"
+                                [chipListUniqueName]="taxGroupForm.get('taxes').value" 
+                                (selectedOptionUniqueName)="taxesSelected($event)"
+                                (selectedOption)="defaultTaxLabel = $event"
                                 class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
                             ></select-multiple-fields>
                             <button
@@ -1078,7 +1099,24 @@
                 </div>
             </div>
         </ng-container>
-        <div class="d-flex column-gap15 pd-t15" *ngIf="isOtherSelectedTab">
+        <div class="d-flex column-gap15" *ngIf="isOtherSelectedTab">
+            <button
+                (click)="submit()"
+                mat-stroked-button
+                color="primary"
+                aria-label="update"
+            >
+                {{ commonLocaleData?.app_update }}
+            </button>
+
+            <button
+                class="ml-auto"
+                mat-stroked-button
+                color="primary"
+                (click)="accountArchiveUnarchive()"
+            >
+                {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
+            </button>
             <button
                 type="button"
                 *ngIf="showDeleteButton"
@@ -1088,14 +1126,6 @@
                 aria-label="delete"
             >
                 {{ commonLocaleData?.app_delete }}
-            </button>
-            <button
-                (click)="submit()"
-                mat-stroked-button
-                color="primary"
-                aria-label="update"
-            >
-                {{ commonLocaleData?.app_update }}
             </button>
         </div>
         <!--moveMergedAccount account modal  not used in present time-->
@@ -1115,24 +1145,32 @@
     </div>
 </ng-container>
 <ng-template #templateForDeleteAndUpdate>
-    <div class="d-flex column-gap15">
+    <div class="d-flex column-gap15 pd-t2">
         <button
-            *ngIf="showDeleteButton"
-            type="button"
-            mat-stroked-button
-            color="primary"
-            (click)="deleteClicked.emit(true)"
-            aria-label="delete"
+        (click)="submit()"
+        mat-stroked-button
+        color="primary"
+        aria-label="update"
         >
-            {{ commonLocaleData?.app_delete }}
-        </button>
-        <button
-            (click)="submit()"
-            mat-stroked-button
-            color="primary"
-            aria-label="update"
-        >
-            {{ commonLocaleData?.app_update }}
-        </button>
+        {{ commonLocaleData?.app_update }}
+    </button>
+    <button
+        class="ml-auto"
+        mat-stroked-button
+        color="primary"
+        (click)="accountArchiveUnarchive()"
+    >
+        {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
+    </button>
+    <button
+        *ngIf="showDeleteButton"
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="deleteClicked.emit(true)"
+        aria-label="delete"
+    >
+        {{ commonLocaleData?.app_delete }}
+    </button>
     </div>
 </ng-template>

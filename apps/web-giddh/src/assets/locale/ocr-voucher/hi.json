@@ -1,0 +1,14 @@
+{
+    "upload_button": "+ अपलोड",
+    "list": "सूची",
+    "vouchers": "वाउचर",
+    "voucher": "वाउचर",
+    "ready": "तैयार",
+    "labels": {
+        "date": "तारीख",
+        "fileName": "फ़ाइल नाम",
+        "uploadedBy": "द्वारा अपलोड किया गया",
+        "fileStatus": "फ़ाइल स्थिति",
+        "convertedStatus": "रूपांतरित स्थिति"
+    }
+}

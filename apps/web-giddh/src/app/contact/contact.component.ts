@@ -51,7 +51,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -62,7 +62,6 @@ import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
-import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Component({
     selector: "contact-detail",
@@ -262,14 +261,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     private customHeaderColumnsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     /** Observable for custom header columns */
     public customHeaderColumns$: Observable<any[]> = this.customHeaderColumnsSubject.asObservable();
-    /** This will use for account filter options */
-    public archivedOptions: IOption[] = [];
-    /** This will use for account filter form */
-    public filterForm: FormGroup = new FormGroup({
-        accountArchiveStatus: new FormControl<string | null>(null),
-    });
-    /** Holds account archived status enum  */
-    public accountArchivedStatusEnum = AccountArchivedStatusEnum;
+    /** Holds advance Filters keys */
+    public advanceFilters: any = {
+        page: 1,
+        count: PAGINATION_LIMIT,
+        q: '',
+        from: '',
+        to: '',
+        sort: '',
+        sortBy: ''
+    };
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -351,13 +352,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 const previousTab = this.activeTab;
 
-                this.filterForm.controls.accountArchiveStatus.setValue(null);
-                setTimeout(() => {
-                    this.filterForm.setValue({
-                        accountArchiveStatus: AccountArchivedStatusEnum.UNARCHIVED
-                    });
-                }, 0);
-
                 if (newTab !== previousTab) {
                     this.displayedColumns = [];
                     this.dynamicCustomColumns = [];
@@ -435,6 +429,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                                 startDate: dayjs(this.universalDate[0]),
                                 endDate: dayjs(this.universalDate[1]),
                             };
+                            this.advanceFilters.from = this.fromDate;
+                            this.advanceFilters.to = this.toDate;
                             this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         } else {
                             this.universalDate = [];
@@ -468,8 +464,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             .subscribe((term: any) => {
                 if (!this.defaultLoad) {
                     this.searchStr = term;
+                    this.advanceFilters.q = term;
                     this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
+                
                 this.defaultLoad = false;
             });
 
@@ -604,7 +602,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            ipcRenderer.send('open-url', `/pages/${part}/${accUniqueName}`);
+            url = `${location.origin}${location.pathname}#./pages/${part}`;
+            ipcRenderer.send('open-url', url);
         } else {
             if (part === 'ledger') {
                 url = url + `?redirectUrl=${this.currentUrl}`;
@@ -753,6 +752,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         if (this.currentPage !== event.page) {
             this.checkboxInfo.selectedPage = event.page;
+            this.advanceFilters.page = event.page + 1;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             this.getAccounts(this.fromDate, this.toDate, event.page, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
@@ -1212,18 +1212,8 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} [branchUniqueName] Current branch selected
      * @memberof ContactComponent
      */
-    private getAccounts(
-        fromDate: string,
-        toDate: string,
-        pageNumber?: number,
-        refresh?: string,
-        count: number = PAGINATION_LIMIT,
-        query?: string,
-        sortBy: string = "",
-        order: string = "asc",
-        branchUniqueName?: string,
-        accountArchiveStatus: string = AccountArchivedStatusEnum.UNARCHIVED
-    ): void {
+    private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
+        sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : "false";
@@ -1236,7 +1226,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const contacts$ = this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName, accountArchiveStatus).pipe(takeUntil(this.destroyed$));
+        const contacts$ = this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$));
         combineLatest([contacts$, this.customHeaderColumns$]).pipe(takeUntil(this.destroyed$)).subscribe(([res, headerColumns]) => {
             if (res && res.body && res.status === "success") {
                 this.openingBalance = res.body.openingBalance;
@@ -1314,6 +1304,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                         endDate: dayjs(res.body.toDate, GIDDH_DATE_FORMAT),
                     };
                     this.selectedDateRangeUi = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.advanceFilters.from = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.advanceFilters.to = dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
@@ -1562,8 +1554,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-
-            this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }
     }
 
@@ -1671,10 +1661,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public sort(key, ord = "asc") {
+    public sort(key: string, ord = "asc") {
         this.showClearFilter = true;
         this.key = key;
         this.order = ord;
+        this.advanceFilters.sort = ord;
+        this.advanceFilters.sortBy = key;
         this.getAccounts(this.fromDate, this.toDate, null, "false", PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
@@ -1776,23 +1768,28 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles selection of archived filter option
-     * 
-     * @param {any} event Event containing selected filter value
+     * Set all account to service variable and redirect to view page
+     *
      * @memberof ContactComponent
      */
-    public onArchivedFilterSelected(event: any): void {
-        this.getAccounts(
-            this.fromDate, 
-            this.toDate,
-            null,
-            "false",
-            PAGINATION_LIMIT,
-            this.searchStr,
-            this.key,
-            this.order,
-            (this.currentBranch ? this.currentBranch.uniqueName : ""),
-            event.value
-        );
+    public showAccountPreview(accountUniqueName: string): void {
+        const queryParams = {
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count,
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+            sort: this.advanceFilters.sort,
+            sortBy: this.advanceFilters.sortBy,
+            refresh: false
+        };
+
+        const searchString = this.advanceFilters.q;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        };
+
+        this.router.navigate([`/pages/contact/${this.activeTab}/${accountUniqueName}`], {
+            queryParams: queryParams
+        });
     }
 }

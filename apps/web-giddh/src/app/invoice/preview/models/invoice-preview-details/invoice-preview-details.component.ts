@@ -355,7 +355,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         //         this.filterVouchers(this.searchElement.nativeElement.value);
         //     }
         // } else {
-        // only of for voucher version 2
+        // only for voucher version 2
         if (this.voucherApiVersion === 2) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate) {
                 this.router.navigate(['/pages/vouchers/estimates/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
@@ -745,7 +745,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public goToInvoice(type?: string) {
         // remove fixed class because we are navigating to invoice generate page where user can scroll the page
-        // only of for voucher version 2
+        // only for voucher version 2
         if (this.voucherApiVersion === 2) {
             document.querySelector('body').classList.remove('fixed');
         // if (this.voucherApiVersion === 1) {

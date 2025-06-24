@@ -135,6 +135,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public discounts: any[] = [];
     /** Holds active group unique name */
     @Input() public activeGroupUniqueName: string = '';
+    /** Emitted when account is updated */
+    @Output() public accountUpdated = new EventEmitter<boolean>();
 
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
@@ -634,9 +636,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     }
 
-    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }) {
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }, isAccountArchived?: boolean) {
         accRequestObject.value.isMasterOpen = this.isMasterOpen;
-        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+        if (isAccountArchived) {
+            this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
+        } else {
+            this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+        }
+        this.accountUpdated.emit(true);
     }
 
     public showDeleteAccountModal() {

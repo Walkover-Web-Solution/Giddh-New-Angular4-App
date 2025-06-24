@@ -1,0 +1,99 @@
+<ng-container
+    appTranslate
+    [file]="'ocr-voucher'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+    <section class="ocr-voucher container-fluid pd-15 d-flex flex-column" [hidden]="isLoading">
+        <ng-container *ngIf="listCount === 0; else ocrVoucher">
+            <input
+                type="file"
+                #fileInput
+                accept=".png,.jpg,.jpeg,.zip,.pdf"
+                style="display: none"
+                (change)="onFileSelected($event)"
+            />
+            <div class="initial-screen position-absolute text-center">
+                <div class="mb-5">
+                    <img src="assets/images/create-discounts.png" alt="upload image" width="500px" height="auto" />
+                </div>
+                <button mat-raised-button color="primary" (click)="onUploadFile($event, fileInput)">
+                    {{ localeData?.upload_button }}
+                </button>
+            </div>
+        </ng-container>
+        <ng-template #ocrVoucher>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <input
+                        type="file"
+                        #fileInput
+                        accept=".png,.jpg,.jpeg,.zip,.pdf"
+                        style="display: none"
+                        (change)="onFileSelected($event)"
+                    />
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                        <mat-button-toggle [checked]="selectedToggle === 'upload'" class="w125" value="upload" (click)="onUploadFile($event, fileInput)">
+                            <giddh-progress-spinner
+                                *ngIf="ocrUploadInProgress$ | async"
+                                [diameter]="20"
+                            ></giddh-progress-spinner>
+                            <span *ngIf="!(ocrUploadInProgress$ | async)">{{ commonLocaleData?.app_upload }}</span>
+                        </mat-button-toggle>
+                        <mat-button-toggle
+                            value="create"
+                            (click)="onToggleChange('create')"
+                            [checked]="selectedToggle === 'create'"
+                            [disabled]="buttonDisabled || countVariable === 0"
+                        >
+                            <span
+                                >{{ commonLocaleData?.app_create }} ({{ countVariable }}
+                                {{ countVariable > 1 ? localeData?.vouchers : localeData?.voucher }}
+                                {{ localeData?.ready }})</span
+                            >
+                        </mat-button-toggle>
+                        <mat-button-toggle class="w125" value="list" [checked]="selectedToggle === 'list'" (click)="onToggleChange('list')">
+                            <span>{{ localeData?.list }} ({{ listCount }})</span>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div *ngIf="selectedToggle === 'create'">
+                    <button mat-stroked-button color="primary" (click)="onChangeVoucher('skip')" class="mr-r15">
+                        {{ commonLocaleData?.app_skip_and_next }}
+                    </button>
+                    <button mat-stroked-button color="primary" (click)="onChangeVoucher('save')">
+                        {{ commonLocaleData?.app_save_and_next }}
+                    </button>
+                </div>
+            </div>
+            <main class="flex-grow-1 overflow-auto main-ocr">
+                <ng-container [ngSwitch]="selectedToggle">
+                    <ng-container *ngSwitchCase="create">
+                        <giddh-page-loader *ngIf="ocrExtractDocumentsInProgress$ | async"></giddh-page-loader>
+                        <ng-container *ngIf="!(ocrExtractDocumentsInProgress$ | async)">
+                            <ng-container *ngIf="ocrCurrentToken; else noDataFound">
+                                <ocr-voucher-create></ocr-voucher-create>
+                            </ng-container>
+                            <ng-template #noDataFound>
+                                <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
+                                    <h1>No Voucher Found</h1>
+                                    <img
+                                        class="mr-t1"
+                                        height="200"
+                                        src="{{ imgPath }}no-data.png"
+                                        [alt]="commonLocaleData?.app_no_data_found"
+                                    />
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="list">
+                        <ocr-voucher-list></ocr-voucher-list>
+                    </ng-container>
+                </ng-container>
+            </main>
+        </ng-template>
+    </section>
+</ng-container>

@@ -494,7 +494,7 @@
                         }
                     }
                 },
-                                {
+                {
                     "label": "New Payment",
                     "link": "/pages/vouchers/payment/create",
                     "icon": "icon-reciept-new",
@@ -953,6 +953,12 @@
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",
                     "description": "Track, manage, and analyze financials for each project efficiently."
+                },
+                {
+                    "label": "AI",
+                    "link": "/pages/ocr-voucher",
+                    "icon": "icon-audit-log",
+                    "description": "AI model"
                 }
             ]
         },

@@ -50,7 +50,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/custom-paginator.scss";
 @import "../css/global/mat-chip.scss";
 @import "../css/global/select-multiple-fields.scss";
-@import"../css/global/override-material-theme-variables";
+@import "../css/global/override-material-theme-variables";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1606,7 +1606,7 @@ input {
 }
 
 .v-align-middle {
-    vertical-align: middle;
+    vertical-align: middle !important;
 }
 
 // Mat Divider
@@ -2382,7 +2382,6 @@ ul.sub-list {
 .text-gray {
     color: var(--color-gray);
 }
-
 // This color will same in all theme
 .text-static-white {
     color: var(--color-white-tertiary) !important;
@@ -2552,6 +2551,14 @@ modal-container.modal.fade.show {
 
 .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
     z-index: 999999 !important;
+}
+
+body {
+    &.datepicker-confirmation-open {
+        .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
+            z-index: 999 !important;
+        }
+    }
 }
 
 modal-container.modal {
@@ -3675,12 +3682,20 @@ input[type="checkbox"]:checked:after {
     font-size: 22px !important;
 }
 
+.font-18 {
+    font-size: var(--font-size-18) !important;
+}
+
 .font-20 {
     font-size: var(--font-size-20) !important;
 }
 
 .font-24 {
     font-size: var(--font-size-24) !important;
+}
+
+.font-30 {
+    font-size: var(--font-size-30) !important;
 }
 
 .icon-font-48 {
@@ -5252,6 +5267,18 @@ label {
 .d-grid {
     display: grid !important;
 }
+.grid-column-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-column-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid-column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-child-column-full {
+    grid-column: 1 / -1;
+}
 
 .on-hover {
     position: relative;
@@ -6143,17 +6170,6 @@ input[type="checkbox"][disabled]:after {
     padding-left: 15px !important;
 }
 
-.pl-sticky-group {
-    position: sticky;
-    left: 0;
-    z-index: 9;
-    background: var(--color-body-background);
-    max-width: 300px !important;
-    min-width: 300px !important;
-    padding-block: 10px !important;
-    padding-left: 15px !important;
-}
-
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
 }
@@ -7005,7 +7021,7 @@ GST filing
             tr {
                 height: auto;
 
-                >th,
+                > th,
                 td {
                     border: 1px solid var(--color-table-primary-content-bar-border) !important;
                     padding: 10px 30px 10px 10px !important;
@@ -7326,7 +7342,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: var(--color-abbey);
 }
 
-.tax-engine .table.transactions-table tbody>tr>td {
+.tax-engine .table.transactions-table tbody > tr > td {
     max-width: fit-content;
     font-size: var(--font-size-15);
     padding: 16px 12px;
@@ -7354,19 +7370,19 @@ perfect-scrollbar > .ps > .ps-overlay {
     .table {
         &.transactions-summary-table {
             tbody {
-                &>tr {
-                    &:not(.secondary-row)+tr.secondary-row {
-                        &>td {
+                & > tr {
+                    &:not(.secondary-row) + tr.secondary-row {
+                        & > td {
                             border-top: 1px solid var(--color-table-primary-content-bar-border) !important;
                         }
                     }
 
                     &.secondary-row {
-                        &>td:nth-child(1) {
+                        & > td:nth-child(1) {
                             padding-left: 50px !important;
                         }
 
-                        &>td {
+                        & > td {
                             border: none !important;
                             background-color: var(--color-white) !important;
                             border-right: 1px solid var(--color-table-primary-content-bar-border) !important;
@@ -7380,7 +7396,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     }
 }
 
-.tax-engine .table.transactions-table tbody>tr>td {
+.tax-engine .table.transactions-table tbody > tr > td {
     max-width: fit-content;
     font-size: var(--font-size-15);
     padding: 16px 12px;
@@ -7393,7 +7409,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     vertical-align: middle;
 }
 
-.tax-engine .table.transactions-summary-table>tbody>tr.secondary-row>td:first-child {
+.tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td:first-child {
     border-right: none !important;
 }
 
@@ -7612,8 +7628,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     table-layout: fixed;
 }
 
-.tax-engine .table.reconciliations-table tbody>tr>td:first-child,
-.tax-engine .table.reconciliations-table thead>tr>th:first-child {
+.tax-engine .table.reconciliations-table tbody > tr > td:first-child,
+.tax-engine .table.reconciliations-table thead > tr > th:first-child {
     padding: 13px 13px 13px 20px;
 }
 
@@ -7621,7 +7637,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-top: 1px solid var(--color-table-primary-header-bar-border);
 }
 
-.tax-engine .table.reconciliations-table thead>tr>th {
+.tax-engine .table.reconciliations-table thead > tr > th {
     border-bottom-width: 1px;
     font-size: var(--font-size-12);
 }
@@ -7632,12 +7648,12 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 13px;
 }
 
-.tax-engine .table tbody>tr>td,
-.tax-engine .table tbody>tr>th,
-.tax-engine .table tfoot>tr>td,
-.tax-engine .table tfoot>tr>th,
-.tax-engine .table thead>tr>td,
-.tax-engine .table thead>tr>th {
+.tax-engine .table tbody > tr > td,
+.tax-engine .table tbody > tr > th,
+.tax-engine .table tfoot > tr > td,
+.tax-engine .table tfoot > tr > th,
+.tax-engine .table thead > tr > td,
+.tax-engine .table thead > tr > th {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
@@ -7646,7 +7662,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .details .details-info,
-.warehouses>li div {
+.warehouses > li div {
     word-wrap: break-word;
 }
 
@@ -11605,7 +11621,7 @@ body {
         }
     }
 
-    .users-last-list>li:last-child {
+    .users-last-list > li:last-child {
         height: inherit !important;
     }
 
@@ -11663,7 +11679,6 @@ body {
         border: 0px;
         position: relative;
     }
-
 
     .sub-filter-nav-band .nav-tabs {
         overflow-x: auto;
@@ -11774,7 +11789,7 @@ body {
         display: block;
     }
 
-    .users-last-list>li:last-child {
+    .users-last-list > li:last-child {
         height: inherit !important;
     }
 
@@ -12191,6 +12206,13 @@ body.prevent-body-scroll {
 /*media query for height resolution end*/
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
+}
+body {
+    &.datepicker-confirmation-open {
+        .modal.fade.giddh-calendar.show {
+            z-index: 999;
+        }
+    }
 }
 
 *::-webkit-scrollbar {
@@ -14003,9 +14025,45 @@ mat-list {
 
 .advance-filter-button {
     .mdc-button__label {
-        color: var(--color-toast-primary-text) !important;
+        color: var(--color-common-primary-text) !important;
     }
-    .w150 {
-        width: 150px !important;
+}
+
+.w150 {
+    width: 150px !important;
+}
+
+.w150 {
+    width: 150px !important;
+}
+
+.bg-white {
+    background: var(--color-white) !important;
+}
+
+.template-froala-wrapper {
+    .balance-options {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
     }
 }

@@ -12,6 +12,7 @@ import { FormFieldsModule } from "apps/web-giddh/src/app/theme/form-fields/form-
 import { MatButtonModule } from "@angular/material/button";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
+import { NewConfirmModalModule } from "apps/web-giddh/src/app/theme/new-confirm-modal";
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { MatTabsModule } from "@angular/material/tabs";
         ConfirmationModalModule,
         MatButtonModule,
         MatRadioModule,
-        MatTabsModule
+        MatTabsModule,
+        NewConfirmModalModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

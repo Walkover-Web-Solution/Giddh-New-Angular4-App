@@ -10,11 +10,13 @@
         [style.padding-left]="padding + 'px !important'"
     >
         <mat-checkbox
+            *ngIf="!groupDetail.customGroup"
             color="primary"
             (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
             [(ngModel)]="groupDetail.checked"
             [checked]="groupDetail?.checked"
             (click)="$event.stopPropagation()"
+            class="tailed-checkbox"
         >
         </mat-checkbox>
         <span [innerHTML]="groupDetail?.groupName | uppercase | highlight: search"></span>
@@ -90,6 +92,7 @@
                     [(ngModel)]="account.checked"
                     [checked]="account?.checked"
                     (click)="$event.stopPropagation()"
+                    class="tailed-checkbox"
                 ></mat-checkbox>
                 <div
                     class="p-0 bd-r-right-none"

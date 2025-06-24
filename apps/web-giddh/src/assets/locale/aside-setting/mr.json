@@ -56,8 +56,8 @@
         },
         {
           "label": "ट्रिगर्स",
-          "link": "/pages/settings/trigger",
-          "icon": "<i class='icon-permission1'></i>"
+          "link": "/pages/triggers",
+          "icon": "<i class='icon-trigger'></i>"
         },
         {
           "label": "टॅग्ज",
@@ -154,8 +154,8 @@
         },
         {
           "label": "ट्रिगर्स",
-          "link": "/pages/settings/trigger",
-          "icon": "<i class='icon-permission1'></i>"
+          "link": "/pages/triggers",
+          "icon": "<i class='icon-trigger'></i>"
         },
         {
           "label": "टॅग्ज",
