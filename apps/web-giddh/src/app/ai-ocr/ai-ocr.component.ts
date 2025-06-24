@@ -175,32 +175,22 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         });
 
         this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.ocrCurrentToken = res?.token ? res.token : "";
             if (res?.token) {
                 this.selectedToggle = OcrAction.Create;
                 this.aiOcrService.getOcrData$.next(true);
                 this.aiOcrService.aiOcrDetails$.next(res);
-                this.ocrCurrentToken = res.token;
-                this.innerLoading = false;
-                this.changeDetection.detectChanges();
-            } else {
-                if (this.countVariable === 0) {
+                setTimeout(() => {
                     this.innerLoading = false;
-                }
-                // if (!this.innerLoading) {
-                //     setTimeout(() => {
-                //         this.selectedToggle = OcrAction.List;
-                //     }, 300);
-                // }
+                    this.isLoading = false;
+                }, 100);
+            } else {
                 this.aiOcrService.getOcrData$.next(false);
                 this.aiOcrService.aiOcrDetails$.next(null);
-                setTimeout(() => {
-                    if (this.selectedToggle !== OcrAction.List) {
-                        this.ocrCurrentToken = "";
-                        this.innerLoading = false;
-                    }
-                }, 700);
-                this.changeDetection.detectChanges();
+                this.innerLoading = false;
+                this.isLoading = false;
             }
+            this.changeDetection.detectChanges();
         });
 
         this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -217,8 +207,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             if (response?.type === OcrAction.Skip) {
                 this.innerLoading = true;
                 this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token });
-                this.changeDetection.detectChanges();
             }
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -257,6 +247,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             this.innerLoading = true;
             this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: this.ocrCurrentToken });
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -273,6 +264,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -300,12 +292,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle method that is triggered once all the view children are rendered.
-     * @memberof AiOcrComponent
-     */
-    public ngAfterViewInit(): void {}
-
-    /**
      * Initiates the file upload dialog.
      * @param event - The event triggering the upload.
      * @param fileInput - The file input element.
@@ -313,7 +299,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      */
     public onUploadFile(event: any, fileInput: HTMLInputElement): void {
         if (event) {
-            fileInput.value = '';
+            fileInput.value = "";
             fileInput.click();
         }
     }
