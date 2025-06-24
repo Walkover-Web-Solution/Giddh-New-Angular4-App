@@ -87,7 +87,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         let companies = null;
         let defaultTemplate = null;
 
-        this.store.pipe(select(s => s.session), take(1)).subscribe(session => {
+        this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
             companyUniqueName = session.companyUniqueName;
             companies = session.companies;
             this.companyUniqueName = session.companyUniqueName;
