@@ -8,7 +8,13 @@
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <section class="ai-ocr container-fluid pd-15 d-flex flex-column" [hidden]="isLoading">
         <ng-container *ngIf="listCount === 0; else aiOcr">
-            <ng-container *ngTemplateOutlet="fileInputTemplate"></ng-container>
+            <input
+            type="file"
+            #fileInput
+            accept=".png,.jpg,.jpeg,.zip,.pdf"
+            style="display: none"
+            (change)="onFileSelected($event)"
+        />
             <div class="initial-screen position-absolute text-center">
                 <div class="mb-5">
                     <img src="assets/images/create-discounts.png" alt="upload image" width="500px" height="auto" />
@@ -21,7 +27,13 @@
         <ng-template #aiOcr>
             <div class="d-flex justify-content-between">
                 <div class="custom-tab">
-                    <ng-container *ngTemplateOutlet="fileInputTemplate"></ng-container>
+                    <input
+                    type="file"
+                    #fileInput
+                    accept=".png,.jpg,.jpeg,.zip,.pdf"
+                    style="display: none"
+                    (change)="onFileSelected($event)"
+                />
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                         <mat-button-toggle
                             [checked]="selectedToggle === ocrAction.Upload"
@@ -95,12 +107,3 @@
         </ng-template>
     </section>
 </ng-container>
-<ng-template #fileInputTemplate>
-    <input
-        type="file"
-        #fileInput
-        accept=".png,.jpg,.jpeg,.zip,.pdf"
-        style="display: none"
-        (change)="onFileSelected($event)"
-    />
-</ng-template>
