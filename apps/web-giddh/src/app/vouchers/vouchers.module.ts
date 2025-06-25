@@ -93,7 +93,6 @@ import { EWayBillModule } from "../shared/eWayBill/eWayBill.module";
 import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
 import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
     declarations: [
@@ -122,7 +121,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     ],
     imports: [
         CommonModule,
-        BrowserAnimationsModule,
         ReactiveFormsModule,
         RouterModule,
         FormsModule,

@@ -53,8 +53,7 @@
         "icon": "./resources/icon.ico",
         "publisherName": "",
         "legalTrademarks": "",
-       "signAndEditExecutable": true,
-       "signingHashAlgorithms": ["sha256"]
+       "signAndEditExecutable": false
     },
     "nsis": {
         "oneClick": true,

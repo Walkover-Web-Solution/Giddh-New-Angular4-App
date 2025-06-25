@@ -3,7 +3,7 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -144,7 +144,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
     ],
     imports: [
         BrowserModule,
-        BrowserAnimationsModule,
+        isElectron ? NoopAnimationsModule : BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         FormFieldsModule,
