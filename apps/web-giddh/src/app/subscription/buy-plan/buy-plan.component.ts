@@ -455,7 +455,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') || (this.firstStepForm.get('duration')?.value === 'YEARLY' && response?.region?.code === 'IND') ) {
+                                const duration = this.firstStepForm.get('duration')?.value;
+                                if (((duration === 'MONTHLY' || duration === 'DAILY') && response?.region?.code !== 'IND') || (duration === 'YEARLY' && response?.region?.code === 'IND') ) {
                                     if (response?.status?.toLowerCase() === 'active') {
                                         this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                     } else {
@@ -463,7 +464,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                             planUniqueName: response?.planDetails?.uniqueName,
                                             paymentProvider: this.thirdStepForm.value.paymentProvider,
                                             subscriptionId: response.subscriptionId,
-                                            duration: this.firstStepForm.get('duration')?.value,
+                                            duration: duration,
                                             promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                                         };
                                         this.subscriptionComponentStore.buyPlan(model);
@@ -1389,7 +1390,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // Only Razorpay for non-IND countries with yearly duration
                 filterProviders(['RAZORPAY']);
             }
-        } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'YEARLY')) {
+        } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
             filterProviders(duration === 'YEARLY' ? ['RAZORPAY', 'PAYU'] : ['RAZORPAY']);
         }
@@ -1789,7 +1790,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             transactionId: string;
             provider: string;
           }>) => {
-            if (event.data?.status) {
+            if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
               const model = {
                 payuTransactionId: event.data.transactionId,
                 paymentProvider: event.data.provider,
@@ -1800,6 +1801,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
           
               // remove listener
               window.removeEventListener("message", handlePayUMessage);
+            } else if (event.data?.status?.toLocaleLowerCase() === 'failed') {
+                // remove listener
+                window.removeEventListener("message", handlePayUMessage);
             }
           };
           window.addEventListener("message", handlePayUMessage);
