@@ -893,9 +893,7 @@
                                     class="new-plan mt-4"
                                     *ngIf="
                                         filteredPaymentProviders?.length > 1 ||
-                                        ((firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                            firstStepForm.get('duration')?.value === 'DAILY') &&
-                                            selectedPlan?.entityCode === 'IND')
+                                        (['MONTHLY', 'YEARLY'].includes(firstStepForm.get('duration')?.value) && selectedPlan?.entityCode === 'IND')
                                     "
                                 >
                                     <mat-card class="outline-card">
