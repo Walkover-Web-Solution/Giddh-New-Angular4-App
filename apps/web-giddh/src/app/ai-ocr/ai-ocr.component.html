@@ -26,7 +26,7 @@
         </ng-container>
         <ng-template #aiOcr>
             <div class="d-flex justify-content-between">
-                <div>
+                <div class="custom-tab">
                     <input
                         type="file"
                         #fileInput
@@ -66,7 +66,6 @@
                     <button mat-stroked-button color="primary" (click)="onChangeVoucher('save')">
                         {{ commonLocaleData?.app_save_and_next }}
                     </button>
-                    {{ocrCurrentToken}}
                 </div>
             </div>
             <main class="flex-grow-1 overflow-auto main-ocr">
