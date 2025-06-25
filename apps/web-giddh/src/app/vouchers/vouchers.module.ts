@@ -91,6 +91,7 @@ import { A11yModule } from "@angular/cdk/a11y";
 import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
 import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
 import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 
 @NgModule({
     declarations: [
@@ -187,7 +188,8 @@ import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-
         TrimPipeModule,
         A11yModule,
         ValidateSectionPermissionDirectiveModule,
-        SubscriptionUpgradeButtonModule
+        SubscriptionUpgradeButtonModule,
+        SelectTableColumnModule
     ],
     exports: [
 
