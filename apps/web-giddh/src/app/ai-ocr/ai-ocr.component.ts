@@ -51,12 +51,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public ocrListInProgress$: Observable<any> = this.aiOcrStore.select((state) => state.ocrListInProgress);
     /** Currently selected toggle option */
     public selectedToggle: string = "";
-    /** Upload action identifier */
-    public upload: OcrAction = OcrAction.Upload;
-    /** Create action identifier */
-    public create: OcrAction = OcrAction.Create;
-    /** List action identifier */
-    public list: OcrAction = OcrAction.List;
     /** Observable for OCR upload success state */
     public ocrUploadSuccess$: Observable<any> = this.aiOcrStore.ocrUploadSuccess$;
     /** Observable for OCR import success state */
@@ -97,6 +91,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public innerLoading: boolean = false;
     /** Holds images folder path */
     public imgPath: string = "";
+    /** Holds images folder path */
+    public ocrAction = OcrAction;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -221,7 +217,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
         }
-
         let reqObj = {
             convertedStatus: null,
             fileName: null,

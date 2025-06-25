@@ -29,8 +29,7 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService,
         private aiOcrService: AiOcrService
-    ) {
-    }
+    ) {}
 
     /**
      * Hook cycle for component initialization
@@ -48,7 +47,6 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
                 this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
             } else {
                 this.isFileUploading = false;
-
             }
         });
     }

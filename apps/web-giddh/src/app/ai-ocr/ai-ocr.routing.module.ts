@@ -13,6 +13,6 @@ import { AiOcrComponent } from './ai-ocr.component';
     exports: [RouterModule]
 })
 
-export class aiOcrRoutingModule {
+export class AiOcrRoutingModule {
 
 }

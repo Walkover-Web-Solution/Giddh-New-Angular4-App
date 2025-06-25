@@ -1,28 +1,35 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { GeneralService } from '../../services/general.service';
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { Sort } from '@angular/material/sort';
-import { AiOcrStore } from '../utility/ai-ocr.store';
-import { AiOcrService } from '../../services/ai-ocr.service';
-
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnDestroy,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+} from "@angular/core";
+import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from "rxjs";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { GeneralService } from "../../services/general.service";
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import * as dayjs from "dayjs";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
+import { Sort } from "@angular/material/sort";
+import { AiOcrStore } from "../utility/ai-ocr.store";
+import { AiOcrService } from "../../services/ai-ocr.service";
 
 @Component({
-    selector: 'ai-ocr-list',
-    templateUrl: './ai-ocr-list.component.html',
-    styleUrls: ['./ai-ocr-list.component.scss'],
+    selector: "ai-ocr-list",
+    templateUrl: "./ai-ocr-list.component.html",
+    styleUrls: ["./ai-ocr-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AiOcrStore]
+    providers: [AiOcrStore],
 })
 export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    @ViewChild("datepickerTemplate") public datepickerTemplate: TemplateRef<any>;
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     /** This will hold local JSON data */
@@ -32,15 +39,15 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['date', 'fileName', 'uploadedBy', 'fileStatus', 'convertedStatus'];
+    public displayedColumns: string[] = ["date", "fileName", "uploadedBy", "fileStatus", "convertedStatus"];
     /** Hold the data of ocr list */
     public dataSource: any;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Holds Store ocr list observable*/
-    public ocrList$: Observable<any> = this.componentStore.select(state => state.ocrList);
+    public ocrList$: Observable<any> = this.componentStore.select((state) => state.ocrList);
     /** Holds Store ocr list in progress API success state as observable*/
-    public ocrListInProgress$: Observable<any> = this.componentStore.select(state => state.ocrListInProgress);
+    public ocrListInProgress$: Observable<any> = this.componentStore.select((state) => state.ocrListInProgress);
     /** This will use for ocr pagination logs object */
     public ocrDocumentsRequestParams: any = {
         page: 1,
@@ -49,15 +56,15 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         count: API_COUNT_LIMIT,
         from: "",
         to: "",
-        sort: '',
-        sortBy: ''
-    }
+        sort: "",
+        sortBy: "",
+    };
     /** Hold table page index number */
     public pageIndex: number = 0;
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /* Hold list searching value */
-    public inlineSearch: any = '';
+    public inlineSearch: any = "";
     /** Form Group for ocr document list form */
     public ocrDocumentListForm: FormGroup;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
@@ -74,12 +81,11 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public showData: boolean = true;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
-        const shouldShow = (
-            this.ocrDocumentListForm?.controls['uploadedBy']?.value ||
-            this.ocrDocumentListForm?.controls['status']?.value ||
-            this.ocrDocumentListForm?.controls['fileName']?.value ||
-            this.ocrDocumentListForm?.controls['convertedStatus']?.value
-        );
+        const shouldShow =
+            this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
+            this.ocrDocumentListForm?.controls["status"]?.value ||
+            this.ocrDocumentListForm?.controls["fileName"]?.value ||
+            this.ocrDocumentListForm?.controls["convertedStatus"]?.value;
         this.showData = shouldShow;
         return shouldShow;
     }
@@ -109,8 +115,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private modalService: BsModalService,
         private formBuilder: FormBuilder
-    ) {
-    }
+    ) {}
 
     /**
      * Initializes the component by subscribing to route parameters and fetching ocr data.
@@ -121,11 +126,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.initForm();
 
         /** Universal date observer */
-        this.componentStore.universalDate$.subscribe(dateObj => {
+        this.componentStore.universalDate$.subscribe((dateObj) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRangeUi =
+                    dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                    " - " +
+                    dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAllOcrDocuments(false);
@@ -133,14 +141,16 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         });
 
         /** Get Ocr List */
-        this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.items) {
                 this.dataSource = new MatTableDataSource<any>(response?.items);
-                if (this.dataSource?.filteredData?.length ||
-                    this.ocrDocumentListForm?.controls['uploadedBy']?.value ||
-                    this.ocrDocumentListForm?.controls['fileName']?.value ||
-                    this.ocrDocumentListForm?.controls['status']?.value ||
-                    this.ocrDocumentListForm?.controls['convertedStatus']?.value) {
+                if (
+                    this.dataSource?.filteredData?.length ||
+                    this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
+                    this.ocrDocumentListForm?.controls["fileName"]?.value ||
+                    this.ocrDocumentListForm?.controls["status"]?.value ||
+                    this.ocrDocumentListForm?.controls["convertedStatus"]?.value
+                ) {
                     this.showData = true;
                 } else {
                     this.showData = false;
@@ -154,77 +164,69 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 this.getAllOcrDocuments(false);
             }
         });
 
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
             }
         });
 
-        this.ocrDocumentListForm?.controls['status'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (this.isNotNullOrUndefined(searchedText)) {
-                this.showClearFilter = true;
-                this.getAllOcrDocuments(true);
-            }
-            if (this.isNullOrEmpty(searchedText)) {
-                this.showClearFilter = false;
-                this.showStatus = false;
-            }
-        });
+        this.ocrDocumentListForm?.controls["status"].valueChanges
+            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
+            .subscribe((searchedText) => {
+                if (this.isNotNullOrUndefined(searchedText)) {
+                    this.showClearFilter = true;
+                    this.getAllOcrDocuments(true);
+                }
+                if (this.isNullOrEmpty(searchedText)) {
+                    this.showClearFilter = false;
+                    this.showStatus = false;
+                }
+            });
 
-        this.ocrDocumentListForm?.controls['convertedStatus'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (this.isNotNullOrUndefined(searchedText)) {
-                this.showClearFilter = true;
-                this.getAllOcrDocuments(true);
-            }
-            if (this.isNullOrEmpty(searchedText)) {
-                this.showClearFilter = false;
-                this.showconvertedStatus = false;
-            }
-        });
+        this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
+            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
+            .subscribe((searchedText) => {
+                if (this.isNotNullOrUndefined(searchedText)) {
+                    this.showClearFilter = true;
+                    this.getAllOcrDocuments(true);
+                }
+                if (this.isNullOrEmpty(searchedText)) {
+                    this.showClearFilter = false;
+                    this.showconvertedStatus = false;
+                }
+            });
 
-        this.ocrDocumentListForm?.controls['uploadedBy'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (this.isNotNullOrUndefined(searchedText)) {
-                this.showClearFilter = true;
-                this.getAllOcrDocuments(true);
-            }
-            if (this.isNullOrEmpty(searchedText)) {
-                this.showClearFilter = false;
-                this.showUploadedBy = false;
-            }
-        });
+        this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
+            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
+            .subscribe((searchedText) => {
+                if (this.isNotNullOrUndefined(searchedText)) {
+                    this.showClearFilter = true;
+                    this.getAllOcrDocuments(true);
+                }
+                if (this.isNullOrEmpty(searchedText)) {
+                    this.showClearFilter = false;
+                    this.showUploadedBy = false;
+                }
+            });
 
-        this.ocrDocumentListForm?.controls['fileName'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (this.isNotNullOrUndefined(searchedText)) {
-                this.showClearFilter = true;
-                this.getAllOcrDocuments(true);
-            }
-            if (this.isNullOrEmpty(searchedText)) {
-                this.showClearFilter = false;
-                this.showFileName = false;
-            }
-        });
+        this.ocrDocumentListForm?.controls["fileName"].valueChanges
+            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
+            .subscribe((searchedText) => {
+                if (this.isNotNullOrUndefined(searchedText)) {
+                    this.showClearFilter = true;
+                    this.getAllOcrDocuments(true);
+                }
+                if (this.isNullOrEmpty(searchedText)) {
+                    this.showClearFilter = false;
+                    this.showFileName = false;
+                }
+            });
     }
 
     /**
@@ -236,14 +238,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.modalRef?.hide();
     }
 
-/**
- * Callback for date/range selection in datepicker.
- *
- * @param {*} [value]
- * @param {*} [from]
- * @return {*} {void}
- * @memberof AiOcrListComponent
- */
+    /**
+     * Callback for date/range selection in datepicker.
+     *
+     * @param {*} [value]
+     * @param {*} [from]
+     * @return {*} {void}
+     * @memberof AiOcrListComponent
+     */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -258,47 +260,50 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi =
+                dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                " - " +
+                dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.ocrDocumentsRequestParams.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.ocrDocumentsRequestParams.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAllOcrDocuments(true);
         }
     }
 
-/**
- * To show the datepicker.
- *
- * @param {*} element
- * @memberof AiOcrListComponent
- */
+    /**
+     * To show the datepicker.
+     *
+     * @param {*} element
+     * @memberof AiOcrListComponent
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+            Object.assign({}, { class: "modal-lg giddh-datepicker-modal", backdrop: false, ignoreBackdropClick: false })
         );
     }
 
     /**
-    * This will be used to check null or undefined values.
-    *
-    * @param {*} value
-    * @return {*} {boolean}
-    * @memberof AiOcrListComponent
-    */
+     * This will be used to check null or undefined values.
+     *
+     * @param {*} value
+     * @return {*} {boolean}
+     * @memberof AiOcrListComponent
+     */
     public isNotNullOrUndefined(value: any): boolean {
         return value !== null && value !== undefined;
     }
 
     /**
-    * This will be used to check null or space values.
-    *
-    * @param {*} value
-    * @return {*} {boolean}
-    * @memberof AiOcrListComponent
-    */
+     * This will be used to check null or space values.
+     *
+     * @param {*} value
+     * @return {*} {boolean}
+     * @memberof AiOcrListComponent
+     */
     public isNullOrEmpty(value: any): boolean {
         return value === null || value === "";
     }
@@ -313,7 +318,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             status: null,
             uploadedBy: null,
             fileName: null,
-            convertedStatus: null
+            convertedStatus: null,
         });
     }
 
@@ -337,20 +342,32 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (searchedFieldName === 'File Status') {
-            if (this.ocrDocumentListForm?.controls['status'].value !== null && this.ocrDocumentListForm?.controls['status'].value !== '') {
+        if (searchedFieldName === "File Status") {
+            if (
+                this.ocrDocumentListForm?.controls["status"].value !== null &&
+                this.ocrDocumentListForm?.controls["status"].value !== ""
+            ) {
                 return;
             }
-        } else if (searchedFieldName === 'Uploaded By') {
-            if (this.ocrDocumentListForm?.controls['uploadedBy'].value !== null && this.ocrDocumentListForm?.controls['uploadedBy'].value !== '') {
+        } else if (searchedFieldName === "Uploaded By") {
+            if (
+                this.ocrDocumentListForm?.controls["uploadedBy"].value !== null &&
+                this.ocrDocumentListForm?.controls["uploadedBy"].value !== ""
+            ) {
                 return;
             }
-        } else if (searchedFieldName === 'File Name') {
-            if (this.ocrDocumentListForm?.controls['fileName'].value !== null && this.ocrDocumentListForm?.controls['fileName'].value !== '') {
+        } else if (searchedFieldName === "File Name") {
+            if (
+                this.ocrDocumentListForm?.controls["fileName"].value !== null &&
+                this.ocrDocumentListForm?.controls["fileName"].value !== ""
+            ) {
                 return;
             }
-        } else if (searchedFieldName === 'Converted Status') {
-            if (this.ocrDocumentListForm?.controls['convertedStatus'].value !== null && this.ocrDocumentListForm?.controls['convertedStatus'].value !== '') {
+        } else if (searchedFieldName === "Converted Status") {
+            if (
+                this.ocrDocumentListForm?.controls["convertedStatus"].value !== null &&
+                this.ocrDocumentListForm?.controls["convertedStatus"].value !== ""
+            ) {
                 return;
             }
         }
@@ -358,13 +375,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
-            if (searchedFieldName === 'File Status') {
+            if (searchedFieldName === "File Status") {
                 this.showStatus = false;
-            } else if (searchedFieldName === 'Uploaded By') {
+            } else if (searchedFieldName === "Uploaded By") {
                 this.showUploadedBy = false;
-            } else if (searchedFieldName === 'File Name') {
+            } else if (searchedFieldName === "File Name") {
                 this.showFileName = false;
-            } else if (searchedFieldName === 'Converted Status') {
+            } else if (searchedFieldName === "Converted Status") {
                 this.showconvertedStatus = false;
             }
         }
@@ -377,13 +394,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public toggleSearch(fieldName: string): void {
-        if (fieldName === 'File Status') {
+        if (fieldName === "File Status") {
             this.showStatus = true;
-        } else if (fieldName === 'Uploaded By') {
+        } else if (fieldName === "Uploaded By") {
             this.showUploadedBy = true;
-        } else if (fieldName === 'File Name') {
+        } else if (fieldName === "File Name") {
             this.showFileName = true;
-        } else if (fieldName === 'Converted Status') {
+        } else if (fieldName === "Converted Status") {
             this.showconvertedStatus = true;
         }
     }
@@ -415,15 +432,18 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             status: null,
             fileName: null,
             uploadedBy: null,
-            convertedStatus: null
+            convertedStatus: null,
         });
-        this.inlineSearch = '';
+        this.inlineSearch = "";
         /** Universal date observer */
-        this.componentStore.universalDate$.subscribe(dateObj => {
+        this.componentStore.universalDate$.subscribe((dateObj) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRangeUi =
+                    dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                    " - " +
+                    dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAllOcrDocuments(true);
@@ -444,7 +464,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         }
         let request = {
             pagination: this.ocrDocumentsRequestParams,
-            model: this.ocrDocumentListForm.value
+            model: this.ocrDocumentListForm.value,
         };
         this.componentStore.getAllOcrList(request);
     }
@@ -456,7 +476,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public sortChange(event: Sort): void {
-        this.ocrDocumentsRequestParams.sort = event?.direction ? event.direction : 'asc';
+        this.ocrDocumentsRequestParams.sort = event?.direction ? event.direction : "asc";
         this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
         this.ocrDocumentsRequestParams.page = 1;
         this.getAllOcrDocuments(false);
