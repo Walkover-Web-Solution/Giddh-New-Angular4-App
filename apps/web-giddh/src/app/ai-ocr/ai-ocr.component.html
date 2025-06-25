@@ -8,13 +8,7 @@
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <section class="ai-ocr container-fluid pd-15 d-flex flex-column" [hidden]="isLoading">
         <ng-container *ngIf="listCount === 0; else aiOcr">
-            <input
-                type="file"
-                #fileInput
-                accept=".png,.jpg,.jpeg,.zip,.pdf"
-                style="display: none"
-                (change)="onFileSelected($event)"
-            />
+            <ng-container *ngTemplateOutlet="fileInputTemplate"></ng-container>
             <div class="initial-screen position-absolute text-center">
                 <div class="mb-5">
                     <img src="assets/images/create-discounts.png" alt="upload image" width="500px" height="auto" />
@@ -27,15 +21,14 @@
         <ng-template #aiOcr>
             <div class="d-flex justify-content-between">
                 <div class="custom-tab">
-                    <input
-                        type="file"
-                        #fileInput
-                        accept=".png,.jpg,.jpeg,.zip,.pdf"
-                        style="display: none"
-                        (change)="onFileSelected($event)"
-                    />
+                    <ng-container *ngTemplateOutlet="fileInputTemplate"></ng-container>
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                        <mat-button-toggle [checked]="selectedToggle === 'upload'" class="w125" value="upload" (click)="onUploadFile($event, fileInput)">
+                        <mat-button-toggle
+                            [checked]="selectedToggle === ocrAction.Upload"
+                            class="w125"
+                            value="upload"
+                            (click)="onUploadFile($event, fileInput)"
+                        >
                             <giddh-progress-spinner
                                 *ngIf="ocrUploadInProgress$ | async"
                                 [diameter]="20"
@@ -44,8 +37,8 @@
                         </mat-button-toggle>
                         <mat-button-toggle
                             value="create"
-                            (click)="onToggleChange('create')"
-                            [checked]="selectedToggle === 'create'"
+                            (click)="onToggleChange(ocrAction.Create)"
+                            [checked]="selectedToggle === ocrAction.Create"
                             [disabled]="buttonDisabled || countVariable === 0"
                         >
                             <span
@@ -54,12 +47,17 @@
                                 {{ localeData?.ready }})</span
                             >
                         </mat-button-toggle>
-                        <mat-button-toggle class="w125" value="list" [checked]="selectedToggle === 'list'" (click)="onToggleChange('list')">
+                        <mat-button-toggle
+                            class="w125"
+                            value="list"
+                            [checked]="selectedToggle === ocrAction.List"
+                            (click)="onToggleChange(ocrAction.List)"
+                        >
                             <span>{{ localeData?.list }} ({{ listCount }})</span>
                         </mat-button-toggle>
                     </mat-button-toggle-group>
                 </div>
-                <div *ngIf="selectedToggle === 'create'">
+                <div *ngIf="selectedToggle === ocrAction.Create">
                     <button mat-stroked-button color="primary" (click)="onChangeVoucher('skip')" class="mr-r15">
                         {{ commonLocaleData?.app_skip_and_next }}
                     </button>
@@ -70,7 +68,7 @@
             </div>
             <main class="flex-grow-1 overflow-auto main-ocr">
                 <ng-container [ngSwitch]="selectedToggle">
-                    <ng-container *ngSwitchCase="create">
+                    <ng-container *ngSwitchCase="ocrAction.Create">
                         <giddh-page-loader *ngIf="innerLoading"></giddh-page-loader>
                         <ng-container *ngIf="!innerLoading">
                             <ng-container *ngIf="ocrCurrentToken; else noDataFound">
@@ -78,7 +76,7 @@
                             </ng-container>
                             <ng-template #noDataFound>
                                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
-                                    <h1>{{localeData?.no_data_found}}</h1>
+                                    <h1>{{ localeData?.no_data_found }}</h1>
                                     <img
                                         class="mr-t1"
                                         height="200"
@@ -89,7 +87,7 @@
                             </ng-template>
                         </ng-container>
                     </ng-container>
-                    <ng-container *ngSwitchCase="list">
+                    <ng-container *ngSwitchCase="ocrAction.List">
                         <ai-ocr-list></ai-ocr-list>
                     </ng-container>
                 </ng-container>
@@ -97,3 +95,12 @@
         </ng-template>
     </section>
 </ng-container>
+<ng-template #fileInputTemplate>
+    <input
+        type="file"
+        #fileInput
+        accept=".png,.jpg,.jpeg,.zip,.pdf"
+        style="display: none"
+        (change)="onFileSelected($event)"
+    />
+</ng-template>
