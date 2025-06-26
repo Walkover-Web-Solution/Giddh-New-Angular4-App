@@ -383,6 +383,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                         { label: 'Open Sans', value: 'Open Sans' },
                         { label: 'Roboto', value: 'Roboto' }
                     ];
+                } else {
+                    this.presetFonts = this._presetFonts;
                 }
 
                 this.presetFonts.map(font => {
