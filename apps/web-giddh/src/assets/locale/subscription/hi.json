@@ -144,5 +144,10 @@
         "submit": "प्रस्तुत करें",
         "cancel": "रद्द करें",
         "razorpay": "RAZORPAY",
-        "paypal": "PAYPAL"
+        "paypal": "PAYPAL",
+        "active": "सक्रिय",
+        "trial": "परीक्षण",
+        "cancelled": "रद्द",
+        "expired": "समाप्त",
+        "select_status": "स्थिति का चयन करें"
 	}

@@ -828,7 +828,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
                 transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
             }
-            const amount = this.generalService.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
+            const amount = this.generalService.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value, this.companyDecimalPlaces);
             transaction.get('amount')?.patchValue(amount);
             transaction.get('actualAmount')?.patchValue(amount);
             transaction.get('total')?.patchValue(amount);
@@ -2262,11 +2262,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * Update account event handler
      *
-     * @param {AddAccountRequest} item Account details
+     * @param {UpdateAccountRequest} item Account details
+     * @param {boolean} [usePatchApi=false]
      * @memberof AccountAsVoucherComponent
      */
-    public updateSidebarAccount(item: UpdateAccountRequest): void {
-        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    public updateSidebarAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
     }
 
     /**

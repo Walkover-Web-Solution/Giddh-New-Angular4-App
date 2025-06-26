@@ -1,6 +1,43 @@
 .tb-pl-bs-header-tab {
     padding-top: 55px;
 }
+
+:host ::ng-deep {
+    .tailed-checkbox {
+        display: none;
+    }
+
+    .show-tailed-checkbox {
+        .tailed-checkbox {
+            display: inline-block;
+        }
+        .tailed-row {
+            &:has(:not(.pl-sticky-group)),
+            .pl-sticky-group,
+            .account {
+                background-color: var(--color-success-enable-bg-light);
+                color: var(--color-black);
+
+                .mat-mdc-checkbox {
+                    .mdc-form-field {
+                        .mdc-checkbox {
+                            .mdc-checkbox__background {
+                                border-color: inherit !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .uncheck-all-icon {
+        filter: var(--color-image-filter-tertiary);
+        width: 20px;
+        height: 20px;
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .tb-pl-bs-header-tab {
         padding-top: 15px;

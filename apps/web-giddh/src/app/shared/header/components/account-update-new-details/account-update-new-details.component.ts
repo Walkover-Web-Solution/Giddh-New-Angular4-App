@@ -105,6 +105,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
+    /** Emitted when the update via patch api . */
+    @Output() public updateViaPatchApi: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, isAccountArchived?: boolean }>
+        = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
@@ -732,7 +735,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     openingBalance: [''],
                     openingBalanceType: ['']
                 }),
-            ])
+            ]),
+            archive: ['']
         });
 
         this.getInvoiceSettings();
@@ -2238,7 +2242,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (!accountDetails.customFields) {
                     accountDetails.customFields = [];
                 }
-
+                
                 this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;
@@ -2541,5 +2545,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             calculateTotal = null;
         }
         this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
+    }
+
+    /**
+     * Handles toggling the archive status of an account
+     * 
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public accountArchiveUnarchive(): void {
+        let accountRequest: AccountRequestV2 = new AccountRequestV2();
+        if (this.accountDetails) {
+            accountRequest['uniqueName'] = this.accountDetails.uniqueName;
+        } else {
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
+        }
+        accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
+        this.updateViaPatchApi.emit({
+            value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
+            accountRequest
+        });
     }
 }

@@ -52,6 +52,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -115,7 +117,9 @@ import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date
         AsideMenuAccountModule,
         FinancialSearchPipe,
         MatButtonModule,
-        CompareWithDateRangePickerComponent
+        CompareWithDateRangePickerComponent,
+        MatCheckboxModule,
+        MatTooltipModule
     ],
 })
 export class FinancialReportsModule {

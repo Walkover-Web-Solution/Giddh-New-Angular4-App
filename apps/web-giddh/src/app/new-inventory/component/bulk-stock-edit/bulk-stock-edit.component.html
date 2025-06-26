@@ -43,7 +43,7 @@
                                 !isLoading
                             "
                             mat-stroked-button
-                            (click)="resetSearch(); isApiCalled = true"
+                            (click)="isApiCalled = true; resetSearch()"
                             aria-label="cross icon"
                         >
                             <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter }}
@@ -1144,14 +1144,14 @@
                             </form>
                         </div>
 
-                        <div class="pagination-wrapper mt-3" *ngIf="pagination.totalPages > 1 && !isLoading">
+                        <div class="pagination-wrapper mt-3" *ngIf="pagination?.totalPages > 1 && !isLoading">
                             <pagination
                                 class="pagination-sm"
                                 [(ngModel)]="pagination.currentPage"
-                                [totalItems]="pagination.totalItems"
+                                [totalItems]="pagination?.totalItems"
                                 [maxSize]="5"
                                 [boundaryLinks]="true"
-                                [itemsPerPage]="pagination.itemsPerPage"
+                                [itemsPerPage]="pagination?.itemsPerPage"
                                 [rotate]="false"
                                 (pageChanged)="pageChanged($event)"
                                 [firstText]="commonLocaleData?.app_first"
