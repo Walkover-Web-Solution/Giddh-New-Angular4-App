@@ -87,11 +87,6 @@ export class InvoiceUiDataService {
      * setCustomTemplate
      */
     public setCustomTemplate(template: CustomTemplateResponse) {
-        template.sections['header'].data['companyName'].label = this.companyName;
-        if (template.sections && template.sections.footer.data.companyName) {
-            template.sections['footer'].data['companyName'].label = this.companyName;
-        }
-
         this.BRToNewLine(template);
         this.customTemplate.next(template);
     }
@@ -169,15 +164,11 @@ export class InvoiceUiDataService {
             let allTemplates = _.cloneDeep(customCreatedTemplates);
             let selectedTemplateIndex = allTemplates?.findIndex((template) => template?.uniqueName === uniqueName);
             let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
-
+            
             if (selectedTemplate) {
                 if (selectedTemplate.sections['header'].data['companyName'].display) {
                     this.isCompanyNameVisible.next(true);
                 }
-                if (this.companyName && mode === 'create') {
-                    selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
-                }
-                selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
                 if (!selectedTemplate.logoUniqueName) {
                     this.isLogoVisible.next(false);
                 } else {
@@ -256,6 +247,14 @@ export class InvoiceUiDataService {
                             display: false,
                             width: null
                         };
+                }
+
+                if (!selectedTemplate.sections['header'].data['companyName'].label) {
+                    selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
+                }
+
+                if (!selectedTemplate.sections['footer'].data['companyName'].label) {
+                    selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
                 }
 
                 this.BRToNewLine(selectedTemplate);
