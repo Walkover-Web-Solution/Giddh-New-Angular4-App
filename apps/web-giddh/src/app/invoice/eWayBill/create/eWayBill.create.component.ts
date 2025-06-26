@@ -28,6 +28,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('subgrp', { static: true }) public subgrp: any;
     @ViewChild('doctypes', { static: true }) public doctype: any;
     @ViewChild('trans', { static: true }) public transport: any;
+    /** Element reference for transaction sub type */
+    @ViewChild('transSubType', { static: true }) public transSubType: any;
 
     public invoiceNumber: string = '';
     public invoiceBillingGstinNo: string = '';
@@ -102,6 +104,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public selectedDocType: string = "";
     /** Voucher details */
     public voucherDetails: any;
+    /** Transaction type dropdown - (Regular [1] | Bill to - ship to [2] | Bill from - Dispatch from [3] | Combination [4]) */
+    public transactionSubType: IOption[] = [];
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
@@ -198,7 +202,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (this.isUserlogedIn) {
             this.generateBill = generateBillform?.value;
             this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
-            this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
@@ -215,6 +218,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     public onCancelGenerateBill() {
         this.transport.clear();
+        this.transSubType.clear();
         this.generateEwayBillform.toPinCode = this.voucherDetails?.account?.billingDetails?.pincode || '';
         this.generateEwayBillform.transDistance = null;
         this.generateEwayBillform.transMode = null;
@@ -382,6 +386,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 { value: '1', label: this.localeData?.transaction_type?.regular },
                 { value: '2', label: this.localeData?.transaction_type?.credit_notes },
                 { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
+            ];
+            this.transactionSubType = [
+                { value: '1', label: this.localeData?.transaction_sub_type?.regular },
+                { value: '2', label: this.localeData?.transaction_sub_type?.bill_to_ship_to },
+                { value: '3', label: this.localeData?.transaction_sub_type?.bill_from_dispatch_from },
+                { value: '4', label: this.localeData?.transaction_sub_type?.combination }
             ];
             this.prefillDocType();
             this.prefillSubType();
