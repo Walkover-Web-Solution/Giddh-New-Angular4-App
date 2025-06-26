@@ -326,11 +326,12 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public validateGstNumber(): void {
         let isValid: boolean = false;
         if (this.changeBillingForm.get('taxNumber')?.value) {
-                if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
-                    for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
-                        let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                        if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
-                            isValid = true;
+            if (this.formFields['taxName']) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
+                        isValid = true;
                         }
                     }
                 } else {
@@ -346,6 +347,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 } else {
                     this.isGstinValid = true;
                 }
+            }
             this.changeDetection.detectChanges();
         }
 
