@@ -608,8 +608,8 @@ export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=$
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-// export const OTP_WIDGET_ID = '326a63733354393830313330';
-// export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
+// export const OTP_WIDGET_ID = '326a63733354393830313330'; //Comment this code only in "test-electron-build" branch
+// export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1'; //Comment this code only in "test-electron-build" branch
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
