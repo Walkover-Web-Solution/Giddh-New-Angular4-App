@@ -145,7 +145,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 this.selectedState = data.state?.name ? data?.state?.code +' - '+ data.state?.name : data?.county?.code +' - '+ data.county?.name;
                 this.billingDetails.billingName = data?.billingName;
                 this.billingDetails.uniqueName = data?.uniqueName;
-                if(this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
+                if (this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length > 1) {
                     setTimeout(() => {
                         this.validateGstNumber();
                     }, 300);
@@ -379,7 +379,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
-            if(!this.optionSelected) {
+            if (!this.optionSelected) {
                 this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
             }
         }
