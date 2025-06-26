@@ -91,6 +91,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     };
     /** Hold current time stamp  */
     public currentTimeStamp: string;
+    /** This will hold option selected state */
+    public optionSelected: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -143,9 +145,17 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 this.selectedState = data.state?.name ? data?.state?.code +' - '+ data.state?.name : data?.county?.code +' - '+ data.county?.name;
                 this.billingDetails.billingName = data?.billingName;
                 this.billingDetails.uniqueName = data?.uniqueName;
-                setTimeout(() => {
-                    this.validateGstNumber();
-                }, 300);
+                if(this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
+                    setTimeout(() => {
+                        this.validateGstNumber();
+                    }, 300);
+                }
+            }
+        });
+
+        this.changeBillingForm.get('taxNumber')?.valueChanges.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(value => {
+            if(value) {
+                this.optionSelected = false;
             }
         });
     }
@@ -369,6 +379,9 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
+            if(!this.optionSelected) {
+                this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
+            }
         }
         this.changeDetection.detectChanges();
     }
@@ -424,6 +437,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
       */
     public selectState(event: any): void {
         if (event?.value) {
+            this.optionSelected = true;
             this.changeBillingForm.controls['state'].patchValue({
                 name: event.label,
                 code: event.value
