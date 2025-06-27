@@ -377,10 +377,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerView: TLedgerView | null = null;
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
-    /** Hold ledger grid total columns static value */
-    public ledgerStatementViewGridTotalColumns: number = 6;
     /** Hold ledger grid total columns value */
-    public ledgerStatementViewGridColumnsValue: number[] = [1, 2, 1, 1, 1];
+    public ledgerStatementViewGridColumnsValue: number[] = [1, 3, 2, 2, 3];
+    /** Hold ledger grid total columns static value */
+    public ledgerStatementViewGridTotalColumns: number = this.getLedgerStatementViewGridTotalColumns();
     /** True if update account is bank account */
     public isUpdateAccount: boolean = false;
     /** Holds transaction type */
@@ -3656,24 +3656,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
             return;
         }
         if (this.searchText || this.isAdvanceSearchImplemented) {
-            if (this.breakpointScreenSize.tabScreen){
-                this.ledgerStatementViewGridTotalColumns = 4;
-                this.ledgerStatementViewGridColumnsValue = [1, 1, 1, 1];
+            if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
+                this.ledgerStatementViewGridColumnsValue = [1, 2, 1, 1];
+                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
             } else {
-                this.ledgerStatementViewGridTotalColumns = 5;
                 if (this.ledgerStatementViewGridColumnsValue.length > 4) {
                     this.ledgerStatementViewGridColumnsValue.pop();
                 }
+                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
             }
         } else {
-            if (this.breakpointScreenSize.tabScreen){
-                this.ledgerStatementViewGridTotalColumns = 5;
-                this.ledgerStatementViewGridColumnsValue = [1, 1, 1, 1, 1];
+            if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
+                this.ledgerStatementViewGridColumnsValue = [1, 2, 1, 1, 2];
+                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
             } else {
-                this.ledgerStatementViewGridTotalColumns = 6;
-                this.ledgerStatementViewGridColumnsValue = [1, 2, 1, 1, 1];
+                this.ledgerStatementViewGridColumnsValue = [1, 3, 2, 2, 3];
+                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
             }
         }
+    }
+
+    /**
+     * Get ledger statement view grid total columns
+     *
+     * @returns {number}
+     * @memberof LedgerComponent
+     */
+    private getLedgerStatementViewGridTotalColumns(): number {
+        return this.ledgerStatementViewGridColumnsValue.reduce((a, b) => a + b, 0);
     }
 
     /**
