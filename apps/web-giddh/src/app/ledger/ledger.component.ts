@@ -3710,23 +3710,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         if (this.searchText || this.isAdvanceSearchImplemented) {
             if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
-                this.ledgerStatementViewGridColumnsValue = [1, 2, 1, 1];
-                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
-            } else {
-                if (this.ledgerStatementViewGridColumnsValue.length > 4) {
-                    this.ledgerStatementViewGridColumnsValue.pop();
-                }
-                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
+                this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2];
+            } else if (this.ledgerStatementViewGridColumnsValue.length > 4) {
+                this.ledgerStatementViewGridColumnsValue.pop();
             }
         } else {
             if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
-                this.ledgerStatementViewGridColumnsValue = [1, 2, 1, 1, 2];
-                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
+                this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 3];
             } else {
-                this.ledgerStatementViewGridColumnsValue = [1, 3, 2, 2, 3];
-                this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
+                this.ledgerStatementViewGridColumnsValue = [2, 8, 2, 2, 3];
             }
         }
+        this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
     }
 
     /**
