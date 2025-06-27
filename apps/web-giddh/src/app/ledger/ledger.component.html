@@ -3375,8 +3375,6 @@
                             </mat-grid-tile>
 
                             <!-- Closing Balance Column -->
-                            <mat-grid-tile [attr.data-title]="commonLocaleData?.app_closing_balance" colspan="{{ledgerStatementViewGridColumnsValue[4]}}"></mat-grid-tile>
-                            
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_closing_balance" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
                             </mat-grid-tile>
                         </mat-grid-list>
