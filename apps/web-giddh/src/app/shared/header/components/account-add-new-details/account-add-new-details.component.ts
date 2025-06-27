@@ -980,6 +980,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnDestroy() {
         this.resetAddAccountForm();
         this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

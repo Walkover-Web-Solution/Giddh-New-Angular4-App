@@ -1165,6 +1165,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngOnDestroy() {
         this.resetUpdateAccountForm();
         this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
