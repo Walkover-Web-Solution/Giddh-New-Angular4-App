@@ -637,8 +637,9 @@ export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/return
 
 /** Break Point Screen Size*/
 export const BREAKPOINT_SCREEN_SIZE = {
-    SMALL_DESKTOP_SCREEN_SIZE: '(max-width: 1366px)',
-    TAB_SCREEN_SIZE: '(max-width: 1024px)'
+    MEDIUM_DESKTOP_SCREEN_SIZE: '(1536px > width > 1366px)',
+    SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
+    TAB_SCREEN_SIZE: '(1024px > width)'
 }
 
 /** HTML tag name  */
