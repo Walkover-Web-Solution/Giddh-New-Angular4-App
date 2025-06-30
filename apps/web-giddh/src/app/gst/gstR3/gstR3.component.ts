@@ -35,7 +35,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     /** Holds cancel confirmation dialog template ref */
     @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
-    /** Holds cancel confirmation dialog ref */
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
@@ -822,6 +821,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public fileGstr3B(): void {
-        this.componentStore.fileGstr3B({ period: this.currentPeriod, gstNumber: this.activeCompanyGstNumber, via: TaxServiceEnum.TAXPRO, monthYear: this.currentPeriod.from?.split('-').slice(1).join('-') });
+        const monthYear = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MM-YYYY');
+        this.componentStore.fileGstr3B({ 
+            period: this.currentPeriod, 
+            gstNumber: this.activeCompanyGstNumber, 
+            via: TaxServiceEnum.TAXPRO, 
+            monthYear 
+        });
     }
 }
