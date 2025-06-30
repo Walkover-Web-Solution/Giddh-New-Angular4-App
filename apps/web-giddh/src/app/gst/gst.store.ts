@@ -6,7 +6,7 @@ import { ToasterService } from "../services/toaster.service";
 import { TaxServiceType } from "./constants/gst.constant";
 
 export interface GstState {
-    fileGstr3BSuccess: boolean;
+    fileGstr3BSuccess: boolean | null;
 }
 
 const DEFAULT_STATE: GstState = {
@@ -39,19 +39,19 @@ export class GstComponentStore extends ComponentStore<GstState> {
                         (res: any) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar("success", res?.body);
-                                return this.patchState({
+                                this.patchState({
                                     fileGstr3BSuccess: true
                                 });
                             } else {
                                 this.toaster.showSnackBar("error", res?.message);
-                                return this.patchState({
+                                this.patchState({
                                     fileGstr3BSuccess: false
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
-                            return this.patchState({
+                            this.patchState({
                                 fileGstr3BSuccess: false
                             });
                         }
