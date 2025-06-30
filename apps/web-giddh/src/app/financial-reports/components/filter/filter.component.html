@@ -170,7 +170,7 @@
                     </button>
                 </form>
                 <div class="d-flex align-items-center column-gap1 download-data-icon">
-                    <ng-container *ngIf="isReconciled !== null">
+                    <ng-container *ngIf="isReconciled !== null && !isProjectWiseAccounting">
                         <p *ngIf="isReconcileModeDateRange" class="text-gray nowrap">{{ isReconcileModeDateRange }}</p>
                         <ng-container *ngIf="showReconcileOptions">
                             <button

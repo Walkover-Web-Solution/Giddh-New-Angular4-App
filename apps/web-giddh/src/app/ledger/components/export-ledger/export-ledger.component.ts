@@ -83,9 +83,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         attachmentExport: false,
         voucherExport: true,
         fileNameFormat: '',
-        ledgerView: true,
+        ledgerView: false,
         mergePdf: false,
-        copyTypes: []
+        copyTypes: [],
+        showInAccountCurrency: null
     }
     /** Stores the voucher API version of the company */
     public voucherApiVersion: 1 | 2;
@@ -96,7 +97,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     /** This will use for stop multiple hit api*/
     public isLoading: boolean = false;
     /** This will use for export as file type*/
-    public fileType: string = 'CSV';
+    public fileType: string = '';
     /** Holds the current date */
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
@@ -139,6 +140,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             });
         });
+
+        if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
+            this.exportRequest.showInAccountCurrency = !this.inputData?.currencyTogglerModel;
+        }
+
+        this.fileType = this.exportRequest.ledgerView ? 'XLSX' : 'CSV';
 
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
@@ -210,9 +217,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
             body.dataToSend.exportType = this.exportRequest.exportType;
             body.dataToSend.fileType = this.fileType;
+            if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
+                body.dataToSend.showInAccountCurrency = this.exportRequest.showInAccountCurrency;
+            }
             if (this.emailTypeSelected === this.emailTypeDetail) {
-                body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'Statement_View' : 'T_View';
-                if (this.exportRequest.ledgerView) {
+                body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
+                if (!this.exportRequest.ledgerView) {
                     body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
                     body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
                     body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
@@ -442,5 +452,15 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 { value: CopyType.TRANSPORT, label: this.localeData?.invoice_copy_options?.transport }
             ];
         }
+    }
+
+    /**
+     * Handler for fileType change from the view
+     *
+     * @param {string} newType
+     * @memberof ExportLedgerComponent
+     */
+    public onLedgerView(type: string): void {
+        this.fileType = type ? 'XLSX' : 'CSV';
     }
 }

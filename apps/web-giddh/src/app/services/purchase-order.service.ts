@@ -142,7 +142,9 @@ export class PurchaseOrderService {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE;
         url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
         url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-
+        if (getRequestObject.branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${getRequestObject.branchUniqueName}`);
+        }
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 

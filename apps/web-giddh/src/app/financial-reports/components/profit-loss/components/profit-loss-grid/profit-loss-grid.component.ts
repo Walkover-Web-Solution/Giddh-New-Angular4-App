@@ -26,7 +26,6 @@ import { FinancialReportsComponentStore } from '../../../../financial-reports.st
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 
 @Component({
     selector: 'profit-loss-grid',
@@ -70,12 +69,11 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public imgPath: string = "";
 
     constructor(
-        private cd: ChangeDetectorRef, 
-        private zone: NgZone, 
+        private cd: ChangeDetectorRef,
+        private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService,
-        private tlPlService: TlPlService
+        private generalService: GeneralService
     ) {
 
     }
@@ -105,7 +103,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.listOfCheckGroupsAccounts = [];
                 setTimeout(() => {
                     this.refresh.emit();
-                }, 200);
+                }, 600);
             }
         });
     }
@@ -252,12 +250,12 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                     request: {
                         reportType: ReportType.ProfitLoss,
                         from: this.from,
-                        to: this.to
+                        to: this.to,
+                        branchUniqueName: this.generalService.currentBranchUniqueName
                     },
                     payload: this.listOfCheckGroupsAccounts
                 };
                 this.financialReportsComponentStore.tailedReportAccountGroup(model);
-                this.tlPlService.isReportTailed$.next(true);
             }
         }, 400);
     }
@@ -272,19 +270,19 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ProfitLossGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(group => {
-            if (group.checked) {
+        groupAccountDetails.forEach(groupAccount => {
+            if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
-                    uniqueName: group.uniqueName,
+                    uniqueName: groupAccount.uniqueName,
                     entityType,
                     checked: false
                 });
             }
-            if (group.childGroups?.length) {
-                this.extractCheckedAccountsGroups(group.childGroups, 'group');
+            if (groupAccount.childGroups?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
             }
-            if (group.accounts?.length) {
-                this.extractCheckedAccountsGroups(group.accounts, 'account');
+            if (groupAccount.accounts?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
             }
         });
     }
@@ -306,5 +304,5 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.uncheckAll();
             }
         });
-    } 
+    }
 }
