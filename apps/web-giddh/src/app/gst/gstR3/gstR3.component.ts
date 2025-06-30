@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -14,20 +14,28 @@ import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
-import { GstReport } from '../constants/gst.constant';
+import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { BREAKPOINT_SCREEN_SIZE } from '../../app.constant';
+import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { GstComponentStore } from '../gst.store';
 
 @Component({
     selector: 'file-gstr3',
     templateUrl: './gstR3.component.html',
     styleUrls: ['gstR3.component.scss'],
+    providers: [GstComponentStore]
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
+    /** Aside authentication dialog open */
+    @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
+    /** Holds cancel confirmation dialog template ref */
+    @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
+    /** Holds cancel confirmation dialog ref */
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
@@ -90,6 +98,16 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public exemptValuesTableData: any[] = [];
      /** Holds true, if screen size  less than or equals to 1024px */
     public isTabScreen: boolean = false;
+    /** Holds selected service */
+    public selectedService: TaxServiceType;
+    /** Holds aside authentication dialog ref */
+    public asideAuthenticationDialogRef: MatDialogRef<any>;
+    /** Holds cancel confirmation dialog ref */
+    public cancelConfirmationDialogRef: MatDialogRef<any>;
+    /** Stores the active company information observable*/
+    public activeCompany$: Observable<any>;
+    /** Enum for restricted modules */
+    public restrictedModules: any = RestrictedModules;
 
     constructor(
         private store: Store<AppState>,
@@ -100,9 +118,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private invoicePurchaseActions: InvoicePurchaseActions,
         private generalService: GeneralService,
         public modalService: BsModalService,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private dialog: MatDialog,
+        private componentStore: GstComponentStore
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+        this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
@@ -250,6 +271,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.matches;
+        });
+
+        this.componentStore.fileGstr3BSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.asideAuthenticationDialogRef?.close();
+            }
         });
     }
 
@@ -756,5 +783,45 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.setIctTableData();
             this.setExemptValuesTableData();
         }
+    }
+
+    /**
+     * Open setting aside pane dialog
+     *
+     * @memberof FilingHeaderComponent
+     */
+    public openSettingAsidePane(): void {
+        this.selectedService = TaxServiceEnum.TAXPRO;
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            disableClose: true,
+            autoFocus: false
+        })
+    }
+
+    /**
+     * Open cancel confirmation dialog
+     *
+     * @memberof FilingHeaderComponent
+     */
+    public openCancelConfirmationDialog(): void {
+        this.cancelConfirmationDialogRef = this.dialog.open(this.cancelConfirmationDialog, {
+            panelClass: ['mat-dialog-sm'],
+            disableClose: true
+        });
+    }
+
+    /**
+     * File GSTR3B
+     *
+     * @memberof FileGstR3Component
+     */
+    public fileGstr3B(): void {
+        this.componentStore.fileGstr3B({ period: this.currentPeriod, gstNumber: this.activeCompanyGstNumber, via: TaxServiceEnum.TAXPRO, monthYear: this.currentPeriod.from?.split('-').slice(1).join('-') });
     }
 }
