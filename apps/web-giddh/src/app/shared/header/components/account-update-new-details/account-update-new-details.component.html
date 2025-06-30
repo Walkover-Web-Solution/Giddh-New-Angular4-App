@@ -989,9 +989,10 @@
                             [label]="localeData?.select_discounts"
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="discountList"
-                            (selectedOption)="$event && selectedDiscounts = $event.value; discountSelected()"
-                        >
-                        </reactive-dropdown-field>
+                            [labelValue]="selectedDiscounts?.label ?? ''"
+                            (selectedOption)="discountSelected($event)"
+                            (onClear)="discountSelected()"
+                        ></reactive-dropdown-field>
                         <button
                             mat-stroked-button
                             color="primary"
