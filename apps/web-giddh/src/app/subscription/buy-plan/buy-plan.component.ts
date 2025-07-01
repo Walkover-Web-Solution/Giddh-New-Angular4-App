@@ -560,7 +560,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeSubscriptionId = response?.subscriptionId;
                 this.upgradeRegion = response?.region?.code;
             }
-            if (response && response.dueAmount > 0) {
+            if (response?.payuHtml) {      
+                this.openPayUPayment(response.payuHtml);  
+            } else if (response && response.dueAmount > 0) {
                 if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
