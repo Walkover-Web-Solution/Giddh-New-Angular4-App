@@ -51,7 +51,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public fileReturnSucces: boolean = false;
     public showTaxPro: boolean = true;
     public gstAuthenticated$: Observable<boolean>;
-    public gstAuthenticated: boolean = false;
     public dateSelected: boolean = false;
     public userEmail: string = '';
     public selectedMMYYYY: string = '';
@@ -121,7 +120,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private componentStore: GstComponentStore
     ) {
-        this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+        this.gstAuthenticated$ = this.store.pipe(select(state => state.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
@@ -156,7 +155,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.selectedGstr = params['return_type'];
         });
 
-        this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.activeCompanyGstNumber = result;
