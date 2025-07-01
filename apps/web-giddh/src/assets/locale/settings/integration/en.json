@@ -53,8 +53,8 @@
         "delete_credentials_message": "Are you sure you want to delete the credentials?",
         "payu_form_heading": "Payu Details",
         "unlink_payu_message": "You don't have any account linked with Payu.",
-        "payu_merchant_key_placeholder": "Merchan key",
-        "payu_merchant_salt_placeholder": "Merchan salt"
+        "payu_merchant_key_placeholder": "Merchant key",
+        "payu_merchant_salt_placeholder": "Merchant salt"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",
