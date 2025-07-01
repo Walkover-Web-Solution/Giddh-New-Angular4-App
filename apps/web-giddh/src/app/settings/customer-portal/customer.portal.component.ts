@@ -166,6 +166,8 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public payuAccounts$: Observable<IOption[]>;
     /** Stores the list of accounts */
     public payuAccounts: IOption[];
+    /** True if form is submitted to show error if available */
+    public isFormSubmitted: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -793,7 +795,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.payuForm = this.formBuilder.group({
             merchantKey: [null, [Validators.required]],
             merchantSalt: [null, [Validators.required]],
-            accountUniqueName: [null]
+            accountUniqueName: [null, [Validators.required]]
         });
     }
 
@@ -932,6 +934,11 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
      * @memberof CustomerPortalComponent
      */
     public savePayuDetails(): void {
+        this.isFormSubmitted = false;
+        if (this.payuForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
         this.componentStore.payuCrudOperation({
             method: 'POST',
             payload: this.payuForm.value
