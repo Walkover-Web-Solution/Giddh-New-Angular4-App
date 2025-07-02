@@ -12,6 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
+import { cloneDeep } from "../../lodash-optimized";
 
 
 @Component({
@@ -246,7 +247,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                 this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
-            this.advanceSearchRequest = event.advanceSearchData.dataToSend;
+            this.advanceSearchRequest = cloneDeep(event.advanceSearchData);
             this.getAccountStatementList();
         }
     }
@@ -265,7 +266,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 })
             });
         }
-
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
             width: '980px',
             role: 'alertdialog',

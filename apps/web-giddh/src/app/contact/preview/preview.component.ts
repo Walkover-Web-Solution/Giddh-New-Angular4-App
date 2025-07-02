@@ -20,6 +20,7 @@ import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
 import { AccountService } from "../../services/account.service";
+import { SalesActions } from "../../actions/sales/sales.action";
 
 @Component({
     selector: "preview",
@@ -166,7 +167,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private salesAction: SalesActions
     ) {
         this.detectRouteChanges();
     }
@@ -377,7 +379,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      *        The object containing account update values and request details.
      * @memberof ContactPreviewComponent
      */
-    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
+        if(isPatch){
+            this.store.dispatch(this.salesAction.updateAccountDetailsForSales(accRequestObject, isPatch));
+        }else {
         accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -387,6 +392,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
+    }
     }
 
     /**
@@ -516,6 +522,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         }
         this.shouldShowBankDetail(accountUniqueName);
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
+        this.accountDetails = this.selectedContact;
         if (this.selectedContact?.uniqueName) {
             this.isContactNotFound = false;
             this.store.dispatch(this.accountsAction.resetActiveAccount());
