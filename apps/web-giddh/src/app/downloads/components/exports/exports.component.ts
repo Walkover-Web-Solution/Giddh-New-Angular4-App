@@ -152,14 +152,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
                     result.date = dayjs(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    let today = dayjs().format('YYYY-MM-DD');
-                    let expiryDate = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format('YYYY-MM-DD');
-                    if (dayjs(expiryDate)
-                        .isSameOrAfter(today)) {
-                        result.expireAt = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    } else {
-                        result.expireAt = this.localeData?.expired;
-                    }
+                    result.expireAt = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                 });
                 this.dataSource = response.body?.items;
                 this.downloadRequest.totalItems = response.body?.totalItems;
