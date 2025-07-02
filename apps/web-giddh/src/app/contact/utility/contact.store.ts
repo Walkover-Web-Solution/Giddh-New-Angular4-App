@@ -41,6 +41,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public getAccountStatementList$ = this.select((state) => state.accountStatementList);
     public updateAccountInProcess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountInProcess), (response) => response);;
     public updateAccountIsSuccess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess), (response) => response);
+    public isDeleteAccSuccess$: Observable<any> = this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), (response) => response);
     public activeAccount$: Observable<any> = this.select(this.store.select(state => state.groupwithaccounts.activeAccount), (response) => response);
     public activeGroupUniqueName$: Observable<string> = this.select(this.store.select(state => state.groupwithaccounts.activeGroupUniqueName), (response) => response);
     public activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), (response) => response);
