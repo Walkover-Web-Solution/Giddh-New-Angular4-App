@@ -10,7 +10,7 @@ import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
 import { ContactComponentStore } from "../utility/contact.store";
 import { MatTabChangeEvent } from "@angular/material/tabs";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { ContactAdvanceSearchModal } from "../../models/api-models/Contact";
@@ -19,6 +19,7 @@ import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
+import { AccountService } from "../../services/account.service";
 
 @Component({
     selector: "preview",
@@ -108,6 +109,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public isContactNotFound: boolean = false;
     /** Flag indicating if an account update operation is in progress */
     public isUpdateAccount: boolean = false;
+    /** Flag indicating if an account delete operation is in progress */
+    public isDeleteAccount: boolean = false;
     /** Flag indicating if GST is enabled for the account */
     public isGstEnabledAcc: boolean = false;
     /** Flag indicating if HSN/SAC is enabled for the account */
@@ -116,6 +119,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccountInProcess$: Observable<boolean> = this.componentStore.updateAccountInProcess$;
     /** Observable indicating if an account update was successful */
     public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
+    /** Observable indicating if an account delete was successful */
+    public isDeleteAccSuccess$: Observable<any> = this.componentStore.isDeleteAccSuccess$;
     /** Observable for the currently active account */
     public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
     /** Observable for the unique name of the currently active group */
@@ -160,7 +165,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        private accountService: AccountService
     ) {
         this.detectRouteChanges();
     }
@@ -225,6 +231,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 if (params) {
                     this.selectedContact = null;
                     this.isUpdateAccount = false;
+                    this.isDeleteAccount = false;
                     this.hasUpdatedBefore = false;
                     let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
                     this.activeGroupUniqueName$ = of(groupUniqueName);
@@ -234,7 +241,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                         this.activeAccountUniqueName = params?.accountUniqueName;
                         this.contactActiveTab = params?.type;
                         this.isSearching = false;
-
                     }
                     if (queryParams?.page) {
                         this.queryParams = queryParams;
@@ -301,6 +307,33 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
+
+        this.isDeleteAccSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
+    }
+
+
+    /**
+     * Decides if bank section should be shown if the current account belongs to sundrycreditors
+     *
+     * @private
+     * @param {string} accountUniqueName
+     * @memberof ContactPreviewComponent
+     */
+    private shouldShowBankDetail(accountUniqueName: string): void {
+        this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            if (response?.body) {
+                const accountDetails = response.body;
+                this.showBankDetail = accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
+            } else {
+                this.showBankDetail = false;
+            }
+            this.changeDetection.detectChanges();
+        });
     }
 
     /**
@@ -346,7 +379,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
-        this.isUpdateAccount = true;
         accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -365,6 +397,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      */
     public deleteAccount() {
         let activeAccUniqueName = null;
+        this.isDeleteAccount = true;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, this.contactActiveTab));
         this.hideDeleteAccountModal();
@@ -383,6 +416,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 // Reset the update flag on route change
                 this.hasUpdatedBefore = false;
                 this.isUpdateAccount = false;
+                this.isDeleteAccount = false;
             }
         });
     }
@@ -440,10 +474,17 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
             this.getAllApiCallCount++;
             if (this.contactList?.length) {
-                if (!this.hasUpdatedBefore && !this.isUpdateAccount) {
+                const acDetails = this.contactList.find((item: any) => item.uniqueName === this.activeAccountUniqueName);
+                if (acDetails) {
+                    this.accountDetails = acDetails;
+                }
+                if (this.accountDetails) {
+                    this.shouldShowBankDetail(this.accountDetails.uniqueName);
+                }
+                if (!this.hasUpdatedBefore && !this.isUpdateAccount && !this.isDeleteAccount) {
                     this.setSelectedContact(this.activeAccountUniqueName);
                     this.hasUpdatedBefore = true;
-                } else if (this.isUpdateAccount) {
+                } else if (this.isUpdateAccount || this.isDeleteAccount) {
                     const exists = this.contactList.some(account => account.uniqueName === this.activeAccountUniqueName);
                     if(exists) {
                         this.setSelectedContact(this.activeAccountUniqueName);
@@ -474,6 +515,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         if (isNewContactSelected) {
             this.isUpdateAccount = true;
         }
+        this.shouldShowBankDetail(accountUniqueName);
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
         if (this.selectedContact?.uniqueName) {
             this.isContactNotFound = false;
