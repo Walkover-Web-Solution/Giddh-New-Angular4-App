@@ -96,6 +96,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     /** True if the advance search feature is implemented and enabled */
     public isAdvanceSearchImplemented: boolean = false;
+    /** Branch unique name (input from parent) */
+    @Input() branchUniqueName: string;
 
 
     constructor(
@@ -123,12 +125,23 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                bsRangeValue: [dayjs(this.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.to, GIDDH_DATE_FORMAT).toDate()]
+            })
+        });
+
+        this.advanceSearchRequest.to = this.to;
+        this.advanceSearchRequest.page = 0;
+
+
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const searchValue = search?.trim();
             if (searchValue || searchValue === '') {
                 this.accountListRequest.q = searchValue;
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
+                this.advanceFiltersApplied = true;
                 this.getAccountStatementList();
             }
         });
@@ -170,6 +183,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.showTransactionInput = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
+        this.advanceSearchRequest = new AdvanceSearchRequest();
+        this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
 
         if (!onlyResetValue) {
             this.getAccountStatementList();
@@ -270,10 +285,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             const requestObj = {
                 body: this.advanceSearchRequest,
                 method: 'POST',
-                model: this.accountListRequest
+                model: this.accountListRequest,
+                branchUniqueName: this.branchUniqueName
             };
             this.contactComponentStore.getAccountStatementList(requestObj);
         } else {
+            if(this.branchUniqueName){
+                this.accountListRequest.branchUniqueName = this.branchUniqueName;
+            }
             this.contactComponentStore.getAccountStatementList(this.accountListRequest);
         }
     }
@@ -335,7 +354,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
-
+        let from = dayjs(value.startDate, GIDDH_DATE_FORMAT).toDate();
+        let to = dayjs(value.endDate, GIDDH_DATE_FORMAT).toDate();
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            page: 0,
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                bsRangeValue: [from, to]
+            })
+        });
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
