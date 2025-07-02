@@ -325,7 +325,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      */
     private shouldShowBankDetail(accountUniqueName: string): void {
         this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response?.body) {
                 const accountDetails = response.body;
                 this.showBankDetail = accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
