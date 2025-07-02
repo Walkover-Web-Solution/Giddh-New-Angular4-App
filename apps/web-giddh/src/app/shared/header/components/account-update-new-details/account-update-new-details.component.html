@@ -310,6 +310,7 @@
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="countyList"
                                     formControlName="countyCode"
+                                    [labelValue]="gst?.value?.county?.name ? gst.value.county.name : ''"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
                                     (selectedOption)="selectedCounty(gst, $event)"
