@@ -94,6 +94,7 @@
                                         <account-statement
                                             *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [branchUniqueName]="queryParams.branchUniqueName"
                                             [from]="queryParams.from"
                                             [to]="queryParams.to"
                                         ></account-statement>
@@ -111,6 +112,7 @@
                                         <ledger-statement
                                             *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [branchUniqueName]="queryParams.branchUniqueName"
                                             [from]="queryParams.from"
                                             [to]="queryParams.to"
                                         ></ledger-statement>

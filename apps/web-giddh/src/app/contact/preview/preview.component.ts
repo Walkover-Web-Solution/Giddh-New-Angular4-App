@@ -301,16 +301,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
-
-        if (this.isUpdateAccount) {
-            this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.hasUpdatedBefore = true;
-                    this.isUpdateAccount = true;
-                    this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-                }
-            });
-        }
     }
 
     /**
@@ -359,6 +349,13 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         this.isUpdateAccount = true;
         accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.hasUpdatedBefore = true;
+                this.isUpdateAccount = true;
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
     }
 
     /**
@@ -447,7 +444,12 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     this.setSelectedContact(this.activeAccountUniqueName);
                     this.hasUpdatedBefore = true;
                 } else if (this.isUpdateAccount) {
-                    this.setSelectedContact(this.selectedContact?.uniqueName);
+                    const exists = this.contactList.some(account => account.uniqueName === this.activeAccountUniqueName);
+                    if(exists) {
+                        this.setSelectedContact(this.activeAccountUniqueName);
+                    } else {
+                        this.setSelectedContact(this.contactList[0].uniqueName);
+                    }
                 } else {
                     this.setSelectedContact(this.contactList[0].uniqueName);
                 }

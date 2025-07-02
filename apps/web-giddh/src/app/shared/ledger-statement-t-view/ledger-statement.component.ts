@@ -166,6 +166,8 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public accountUniqueName: string;
     /** True if the ledger account supports multi-currency */
     public isLedgerAccountAllowsMultiCurrency: boolean = false;
+    /** Stores branch unique name */
+    @Input() public branchUniqueName: string;
 
     constructor(private generalService: GeneralService,
         private breakpointObserver: BreakpointObserver
@@ -451,6 +453,9 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             const toDate = this.to;
             this.trxRequest.from = fromDate;
             this.trxRequest.to = toDate;
+            if (this.branchUniqueName) {
+                this.trxRequest.branchUniqueName = this.branchUniqueName;
+            }
             this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.trxRequest.accountUniqueName));
             this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             this.store.dispatch(this.ledgerActions.GetTransactions({ ...this.trxRequest, from: fromDate, to: toDate }));

@@ -192,8 +192,10 @@ export class ContactService {
     public getAccountStatementList(requestObj: any): Observable<BaseResponse<any, any>> {
         const model = requestObj.model ? requestObj.model : requestObj;
         const body = requestObj.body ? requestObj.body : null;
+        let requestObjCopy = { ...requestObj };
+        delete requestObj.branchUniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
-
+        const branchUniqueName = requestObjCopy.branchUniqueName;
         // Helper to build URL
         const buildUrl = (isPost: boolean) => {
             let url = this.config.apiUrl + ACCOUNT_STATEMENT_API.GET
@@ -206,6 +208,9 @@ export class ContactService {
                 .replace(':sort', encodeURIComponent(model.sort));
             if (!isPost) {
                 url = url.replace(':q', encodeURIComponent(model.q));
+            }
+            if (branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${branchUniqueName}`);
             }
             return url;
         };

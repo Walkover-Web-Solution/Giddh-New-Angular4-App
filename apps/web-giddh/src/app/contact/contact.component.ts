@@ -269,7 +269,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         sort: '',
         sortBy: ''
     };
-    
+
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
@@ -465,7 +465,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.advanceFilters.q = term;
                     this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
-                
+
                 this.defaultLoad = false;
             });
 
@@ -1774,8 +1774,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         const queryParams = {
             page: this.advanceFilters.page,
             count: this.advanceFilters.count,
-            from: this.advanceFilters.from,
-            to: this.advanceFilters.to,
+            from: this.fromDate,
+            to: this.toDate,
             sort: this.advanceFilters.sort,
             sortBy: this.advanceFilters.sortBy,
             refresh: false
@@ -1785,6 +1785,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (searchString?.length) {
             queryParams['search'] = searchString;
         };
+
+        if (this.currentCompanyBranches?.length > 2 &&
+            (this.currentOrganizationType === 'COMPANY' || this.isConsolidatedBranch)) {
+            queryParams['branchUniqueName'] = this.currentBranch?.uniqueName;
+        }
 
         this.router.navigate([`/pages/contact/${this.activeTab}/${accountUniqueName}`], {
             queryParams: queryParams
