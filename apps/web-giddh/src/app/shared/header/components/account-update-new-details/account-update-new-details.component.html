@@ -297,6 +297,10 @@
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
                                     (selectedOption)="selectedState(gst, $event)"
+                                    [disabled]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [readonly]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [matTooltip]="isGstValid && gst.value.gstNumber?.length >= 2 ? localeData?.change_gst_number_to_update_the_state : ''"
+                                    matTooltipPosition="above"
                                 >
                                 </reactive-dropdown-field>
                                 
@@ -322,6 +326,7 @@
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                     [maxlength]="15"
+                                    [showError]="!isValidForm && !isGstValid"
                                 >
                                 </input-field>
                             </div>

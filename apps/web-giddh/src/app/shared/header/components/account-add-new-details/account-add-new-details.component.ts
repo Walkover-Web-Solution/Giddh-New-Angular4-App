@@ -1013,9 +1013,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedState(gstForm: FormGroup, event: IOption): void {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
-            if (gstForm.get('state').get('code')?.value !== event?.value) {
-                gstForm.get('gstNumber')?.patchValue("");
-            }
             gstForm.get('state').get('code')?.patchValue(event?.value);
             const name = event.label.split(' - ')[1];
             gstForm.get('state').get('name')?.patchValue(name);

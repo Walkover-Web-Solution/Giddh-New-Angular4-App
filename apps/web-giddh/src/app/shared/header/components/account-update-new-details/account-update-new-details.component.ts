@@ -158,7 +158,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
-    public selectedDiscounts: IOption = null
+    public selectedDiscounts: IOption = null;
     public selectedDiscountList: any[] = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
@@ -1192,9 +1192,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedState(gstForm: FormGroup, event: IOption): void {
         if (gstForm && event?.label) {
             gstForm.get('stateCode')?.patchValue(event?.value);
-            if (gstForm.get('state').get('code')?.value !== event?.value) {
-                gstForm.get('gstNumber')?.patchValue("");
-            }
             gstForm.get('state').get('code')?.patchValue(event?.value);
             const name = event.label.split(' - ')[1];
             gstForm.get('state').get('name')?.patchValue(name);
