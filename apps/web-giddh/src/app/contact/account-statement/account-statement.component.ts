@@ -52,7 +52,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         page: 1,
         count: '',
         sortBy: 'Date',
-        sort: 'asc',
+        sort: '',
         q: '',
     };
     /** Current page index for the paginator */
@@ -338,7 +338,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+            const position = this.generalService.getPosition(element.target);
+            position.y = position.y - 370;
+            this.dateFieldPosition = position;
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,

@@ -129,7 +129,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Observable indicating if virtual account is enabled */
     public virtualAccountEnable$: Observable<any> = this.componentStore.virtualAccountEnable$;
     /** Flag to show/hide bank details section */
-    public showBankDetail: boolean = false;
+    public showBankDetailPreview: boolean = false;
+    /** Flag to show/hide contact preview section */
+    public contactPreview: boolean = false;
     /** Flag to show/hide virtual account section */
     public showVirtualAccount: boolean = false;
     /** Flag indicating if the current group is a debtor/creditor */
@@ -329,9 +331,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 const accountDetails = response.body;
-                this.showBankDetail = accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
+                this.showBankDetailPreview = accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
             } else {
-                this.showBankDetail = false;
+                this.showBankDetailPreview = false;
             }
             this.changeDetection.detectChanges();
         });
@@ -380,9 +382,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
-        if(isPatch){
+        if (isPatch) {
             this.store.dispatch(this.salesAction.updateAccountDetailsForSales(accRequestObject, isPatch));
-        }else {
+        }
         accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -392,7 +394,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
-    }
     }
 
     /**
@@ -491,7 +492,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     this.hasUpdatedBefore = true;
                 } else if (this.isUpdateAccount || this.isDeleteAccount) {
                     const exists = this.contactList.some(account => account.uniqueName === this.activeAccountUniqueName);
-                    if(exists) {
+                    if (exists) {
                         this.setSelectedContact(this.activeAccountUniqueName);
                     } else {
                         this.setSelectedContact(this.contactList[0].uniqueName);
