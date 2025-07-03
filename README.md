@@ -12,8 +12,6 @@
 
 6. Run `npm run start` to local serve the project.
 
-7. Final Build
-
 # Contributing Guide
 
 Before contributing it is required that you should have a proper knowledge of Git. If you're unfamiliar with Git you should first visit the recommended [Udacity Git course](https://blog.udacity.com/2015/06/a-beginners-git-github-tutorial.html).
