@@ -12,7 +12,7 @@
 
 6. Run `npm run start` to local serve the project.
 
-7. DONE
+7. Final Build
 
 # Contributing Guide
 
