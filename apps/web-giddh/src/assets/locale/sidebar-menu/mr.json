@@ -650,14 +650,14 @@
                     "label": "प्रकल्पनिहाय लेखांकन",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new"
-                },
-                {
-                    "label": "AI OCR",
-                    "link": "/pages/ai-ocr",
-                    "icon": "icon-audit-log",
-                    "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
                 }
             ]
+        },
+        {
+            "label": "AI OCR",
+            "link": "/pages/ai-ocr",
+            "icon": "icon-audit-log",
+            "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
         }
     ],
     "switch_branch": "स्विच शाखा",

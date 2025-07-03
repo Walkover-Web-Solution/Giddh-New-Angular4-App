@@ -650,14 +650,14 @@
                     "label": "Project wise accounting",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new"
-                },
-                {
-                    "label": "AI OCR",
-                    "link": "/pages/ai-ocr",
-                    "icon": "icon-audit-log",
-                    "description": "Upload images, pdf, jpeg, zip"
                 }
             ]
+        }, 
+        {
+            "label": "AI OCR",
+            "link": "/pages/ai-ocr",
+            "icon": "icon-audit-log",
+            "description": "Upload images, pdf, jpeg, zip"
         }
     ],
     "switch_branch": "Switch Branch",
