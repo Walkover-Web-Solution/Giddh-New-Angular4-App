@@ -5262,6 +5262,18 @@ label {
 .d-grid {
     display: grid !important;
 }
+.grid-column-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-column-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid-column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-child-column-full {
+    grid-column: 1 / -1;
+}
 
 .on-hover {
     position: relative;

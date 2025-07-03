@@ -21,7 +21,7 @@ import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/Settings
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -65,12 +65,15 @@ import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/u
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
+import { SalesPersonService } from '../../../sales-person/utility/sales-person.service';
+import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
 
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
     styleUrls: ['./account-update-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonService, SalesPersonComponentStore]
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -103,7 +106,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
 
     public activeCompany: CompanyResponse;
-    @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
+    @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, salesPersonCreated: boolean }>
         = new EventEmitter();
     /** Emitted when the update via patch api . */
     @Output() public updateViaPatchApi: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, isAccountArchived?: boolean }>
@@ -285,6 +288,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public defaultTaxLabel: string[] = [];
     /** Store active parent group */
     public parentGroups: any[] = [];
+    /** Sales Person List */
+    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    /** True if sales person is created */
+    public salesPersonCreated: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -307,6 +314,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         public dialog: MatDialog,
         private settingsBranchAction: SettingsBranchActions,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
 
     }
@@ -335,6 +343,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.prepareTaxDropdown();
         this.getDiscountList();
         this.getCompanyBranches();
+        this.getSalesPersonList();
 
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
@@ -736,7 +745,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     openingBalanceType: ['']
                 }),
             ]),
-            archive: ['']
+            archive: [''],
+            salesPersonName: [''],
+            salesPersonUniqueName: ['']
         });
 
         this.getInvoiceSettings();
@@ -1111,7 +1122,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         delete accountRequest['portalDomain'];
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
-            accountRequest
+            accountRequest,
+            salesPersonCreated: this.salesPersonCreated
         });
     }
 
@@ -2244,6 +2256,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 
                 this.addAccountForm?.patchValue(accountDetails);
+                if (accountDetails.salesPerson) {
+                    this.addAccountForm.get('salesPersonName')?.patchValue(accountDetails.salesPerson.name);
+                    this.addAccountForm.get('salesPersonUniqueName')?.patchValue(accountDetails.salesPerson.uniqueName);
+                }
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;
                     this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
@@ -2564,5 +2580,34 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
             accountRequest
         });
+    }
+
+     /**
+     * Open sales person dialog
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+     public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, {
+            height: '100dvh',
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '0',
+                bottom: '0'
+            },
+            disableClose: true,
+            hasBackdrop: false
+        });
+
+        dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson(true);
     }
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, combineLatest, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, combineLatest, debounceTime, delay, distinctUntilChanged, filter, of as observableOf, take, takeUntil, tap } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -50,13 +50,15 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
-import { Transaction } from "../../models/api-models/Expences";
+import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
+import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
+import { SalesPersonService } from "../../shared/sales-person/utility/sales-person.service";
 
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore],
+    providers: [VoucherComponentStore, SalesPersonService, SalesPersonComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -423,6 +425,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -539,6 +543,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
 
     }
@@ -556,6 +561,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyBranches();
         this.getCompanyTaxes();
         this.getWarehouses();
+        this.getSalesPersonList();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -832,7 +838,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : response.number);
                     this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
                     this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
-
+                    this.invoiceForm.get('salesPersonName').patchValue(response?.salesPerson?.name);
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(response?.salesPerson?.uniqueName);
                     this.invoiceForm.get("date").patchValue(response.date);
                     this.invoiceForm.get("dueDate").patchValue(response.dueDate);
 
@@ -2166,6 +2173,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             isAdvanceReceipt: [false], //temp
             attachedFiles: [],
             salesPurchaseAsReceiptPayment: [null], //temp
+            salesPersonName: [''],
+            salesPersonUniqueName: ['']
         });
     }
     /**
@@ -2649,7 +2658,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             position: {
                 right: '0',
                 top: '0'
-            }
+            },
+            disableClose: true,
         });
 
         this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe(() => {
@@ -2710,6 +2720,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public addNewAccount(item: AddAccountRequest): void {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+        if (item?.salesPersonCreated) {
+            this.getSalesPersonList();
+        }
     }
 
     /**
@@ -2721,6 +2734,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
         this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
+        if (item?.salesPersonCreated) {
+            this.getSalesPersonList();
+        }
     }
 
     /**
@@ -5511,5 +5527,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (selectedUnitCode) {
             transaction.get('stock.stockUnit.code')?.patchValue(selectedUnitCode);
         }
+    }
+
+    /**
+     * Open sales person dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, {
+            height: '100dvh',
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '0',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson(true);
     }
 }

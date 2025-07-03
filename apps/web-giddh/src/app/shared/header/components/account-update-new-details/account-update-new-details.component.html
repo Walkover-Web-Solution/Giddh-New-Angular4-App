@@ -61,7 +61,7 @@
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <div
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
                             >
@@ -124,6 +124,23 @@
                                 {{ localeData?.bulk_add }}
                             </span>
                         </div>
+                    </div>
+                </div>
+                <div class="row pd-b2">
+                    <div class="col-sm-4">
+                        <!-- Sales Person -->
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [labelValue]="addAccountForm.get('salesPersonName')?.value"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            (selectedOption)="addAccountForm.get('salesPersonName')?.patchValue($event?.label)"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row pd-b2" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">

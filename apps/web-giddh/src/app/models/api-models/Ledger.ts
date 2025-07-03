@@ -132,6 +132,8 @@ export class LedgerResponse {
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
     public generateEInvoice?: boolean = null;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
+    public salesPersonUniqueName?: string;
 }
 
 /** Model adjusted amounts for invoices */

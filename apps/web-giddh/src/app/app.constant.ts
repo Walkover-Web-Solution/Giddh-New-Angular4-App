@@ -660,3 +660,13 @@ export const KeyCodesEnum = {
     ARROW_RIGHT: 'ArrowRight',
     ARROW_LEFT: 'ArrowLeft' 
 };
+
+export enum HttpMethod {
+    POST = 'post',
+    GET = 'get',
+    PUT = 'put',
+    DELETE = 'delete',
+    PATCH = 'patch'
+}
+
+export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
