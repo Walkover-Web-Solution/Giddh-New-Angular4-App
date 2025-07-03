@@ -599,6 +599,7 @@ export enum BootstrapToggleSwitch {
 }
 
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
+export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
 export const OTP_WIDGET_ID = '326a63733354393830313330';
@@ -638,8 +639,9 @@ export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/return
 
 /** Break Point Screen Size*/
 export const BREAKPOINT_SCREEN_SIZE = {
-    SMALL_DESKTOP_SCREEN_SIZE: '(max-width: 1366px)',
-    TAB_SCREEN_SIZE: '(max-width: 1024px)'
+    MEDIUM_DESKTOP_SCREEN_SIZE: '(1536px > width > 1366px)',
+    SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
+    TAB_SCREEN_SIZE: '(1024px > width)'
 }
 
 /** HTML tag name  */
