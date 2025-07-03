@@ -1016,7 +1016,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             ?.get("mobileNumber")
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
-                        this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+                        const mobileNo = this.invoiceForm.controls["account"]?.get("mobileNumber")?.value ? this.invoiceForm.controls["account"]?.get("mobileNumber")?.value : "";
+                        this.initIntl(mobileNo);
+                        this.changeDetection.detectChanges();
                     }
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
@@ -2501,7 +2503,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
-            this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+            const mobileNo = this.invoiceForm.controls["account"]?.get("mobileNumber")?.value ? this.invoiceForm.controls["account"]?.get("mobileNumber")?.value : "";
+            this.initIntl(mobileNo);
+            this.changeDetection.detectChanges();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
