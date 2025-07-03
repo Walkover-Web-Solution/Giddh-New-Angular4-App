@@ -282,6 +282,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public parentGroups: any[] = [];
     /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public showBankDetailPreview: boolean = false;
+    /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public contactPreview: boolean = false;
 
     constructor(
