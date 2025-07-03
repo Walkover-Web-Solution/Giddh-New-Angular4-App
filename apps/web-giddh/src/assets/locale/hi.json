@@ -789,5 +789,7 @@
         "saturday": "शनिवार"
     },
     "app_skip_and_next": "छोड़ें और अगला",
-    "app_save_and_next":"सहेजें और अगला"
+    "app_save_and_next":"सहेजें और अगला",
+    "app_sales_person": "विक्रेता",
+    "app_sales_person_placeholder": "विक्रेता चुनें"
 }

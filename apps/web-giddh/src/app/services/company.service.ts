@@ -343,7 +343,7 @@ export class CompanyService {
     }
 
     /**
-     * To get registered sales
+     * Get sale/purchase register v2 api
      *
      * @param {ReportsRequestModel} request Request body
      * @returns

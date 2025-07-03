@@ -99,6 +99,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public groupByOptions: IOption[] = [];
     /** Sales Person Unique Names */
     public salesPersonUniqueNames: string[] = [];
+    /** Account Unique Names */
     public accountUniqueNames: string[] = [];
     /** Sales Person List */
     public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
@@ -125,10 +126,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public salesRegisterList$: Observable<any[]> = this.componentStore.salesPurchaseList$;
     /** Holds report form */
     public reportForm: FormGroup = new FormGroup({
-        groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required), //possible values "salesPerson" , "duration"
+        groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
-        interval: new FormControl<DurationEnum | null>(null), //only require when group by is duration
+        interval: new FormControl<DurationEnum | null>(null),
     });
 
     constructor(
