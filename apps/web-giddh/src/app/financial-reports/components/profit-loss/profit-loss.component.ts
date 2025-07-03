@@ -2,7 +2,6 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, 
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -12,7 +11,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
 import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
-import { prepareProfitLossData } from '../../../store/tl-pl/tl-pl.reducer';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'profit-loss',
@@ -67,7 +66,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** True if show Tally Report options */
     public showReconcileOption: boolean;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
+    constructor(
+        private store: Store<AppState>, 
+        public tlPlActions: TBPlBsActions, 
+        private cd: ChangeDetectorRef, 
+        private toaster: ToasterService, 
+        private componentStore: ProjectWiseAccountingComponentStore,
+        private tlPlService: TlPlService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -79,6 +84,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([storeResponse, profitAndLossResponse]) => {
                 if (storeResponse || profitAndLossResponse) {
+                    this.tlPlService.isReportTailed$.next(true);
                     this.expandAll = false;
                     this.modifyResponse(storeResponse || profitAndLossResponse);
                 } else {
@@ -94,7 +100,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof ProfitLossComponent
      */
     public modifyResponse(response: ProfitLossData): void {
-        let data = this.projectUniqueName ? prepareProfitLossData(cloneDeep(response)) as ProfitLossData : cloneDeep(response) as ProfitLossData;
+        let data = cloneDeep(response) as ProfitLossData;
         let cogs;
         if (data?.incomeStatement?.costOfGoodsSold) {
             cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;;
@@ -258,7 +264,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 from: this.from,
                 to: this.to
             }
-            this.componentStore.getProjectProfitAndLoss(requestObject);
+            this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(requestObject)));
         } else {
             this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(request)));
         }

@@ -83,7 +83,8 @@
                                                     [type]="'text'"
                                                     formControlName="taxNumber"
                                                     [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"
-                                                    (input)="checkGstNumValidation()"
+                                                    #gstNumberField
+                                                    (input)="checkGstNumValidation(gstNumberField)"
                                                 ></input-field>
                                             </div>
                                             <div class="col-sm-4 form-group" *ngIf="addressConfiguration.stateList?.length || addressConfiguration.countyList?.length" >
@@ -170,7 +171,7 @@
                                                             addressForm?.get('taxNumber')?.valid &&
                                                             addressForm?.get('taxNumber')?.value &&
                                                             addressConfiguration?.tax &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN'
+                                                            addressConfiguration?.tax?.name === taxTypeNameEnum.GSTIN
                                                         "
                                                     ></textarea>
                                                 </mat-form-field>

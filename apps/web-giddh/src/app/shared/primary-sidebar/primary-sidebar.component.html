@@ -84,6 +84,7 @@
                                 <a
                                     aria-label="account"
                                     [routerLinkActive]="['active']"
+                                    class="cursor-pointer"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="
                                         analyzeAccounts($event, acc);

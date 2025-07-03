@@ -145,6 +145,7 @@
                                             [contactPreview]="true"
                                             [showVirtualAccount]="showVirtualAccount"
                                             [isDebtorCreditor]="isDebtorCreditor"
+                                            (updateViaPatchApi)="updateAccount($event, true)"
                                         >
                                         </account-update-new-details>
                                         <ng-container *ngIf="isContactNotFound">

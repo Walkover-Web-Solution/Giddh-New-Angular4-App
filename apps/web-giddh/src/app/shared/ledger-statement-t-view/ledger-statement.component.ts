@@ -453,6 +453,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             const toDate = this.to;
             this.trxRequest.from = fromDate;
             this.trxRequest.to = toDate;
+            this.trxRequest.isTView = true;
             if (this.branchUniqueName) {
                 this.trxRequest.branchUniqueName = this.branchUniqueName;
             }

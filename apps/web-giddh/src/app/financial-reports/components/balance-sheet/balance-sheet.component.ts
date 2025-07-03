@@ -18,6 +18,7 @@ import { BalanceSheetData, ProfitLossRequest } from '../../../models/api-models/
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store/roots';
 import { BalanceSheetGridComponent } from './components/balance-sheet-grid/balance-sheet-grid.component';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'balance-sheet',
@@ -67,10 +68,16 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     /** True if show Tally Report options */
     public showReconcileOption: boolean;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService) {
+    constructor(
+        private store: Store<AppState>, 
+        public tlPlActions: TBPlBsActions, 
+        private cd: ChangeDetectorRef, 
+        private toaster: ToasterService,
+        private tlPlService: TlPlService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
             if (p) {
+                this.tlPlService.isReportTailed$.next(true);
                 this.expandAll = false;
                 let data = cloneDeep(p) as BalanceSheetData;
                 if (data && data.message) {

@@ -96,6 +96,7 @@
             [updateAccountIsSuccess$]="updateAccountIsSuccess$"
             (deleteClicked)="showDeleteAccountModal()"
             (submitClicked)="updateAccount($event)"
+            (updateViaPatchApi)="updateAccount($event, true)"
             [showBankDetail]="showBankDetail"
             [showVirtualAccount]="showVirtualAccount"
             [isDebtorCreditor]="isDebtorCreditor"
@@ -146,7 +147,12 @@
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clearfix"></span>
-        <button aria-label="create account" class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">
+        <button
+            aria-label="create account"
+            class="btn isActive"
+            *ngIf="!isRootLevelGroup"
+            (click)="showAddAccountForm()"
+        >
             {{ commonLocaleData?.app_create_ac }}
         </button>
     </div>
@@ -212,8 +218,21 @@
 </div>
 <!-- ./ export ladger popup -->
 <!-- modals -->
-<div class="text-center master-export-btn overflow-hidden d-flex justify-content-center align-items-center" *ngIf="!((showEditGroup$ | async) || (activeGroupInProgress$ | async) || (showNewForm$ | async) || (activeAccount$ | async) || (showEditAccount$ | async) || (showAddNewAccount$ | async) || (showAddNewGroup$ | async))">
-    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">{{ commonLocaleData?.app_export }}</button>
+<div
+    class="text-center master-export-btn overflow-hidden d-flex justify-content-center align-items-center"
+    *ngIf="
+        !(
+            (showEditGroup$ | async) ||
+            (activeGroupInProgress$ | async) ||
+            (showNewForm$ | async) ||
+            (activeAccount$ | async) ||
+            (showEditAccount$ | async) ||
+            (showAddNewAccount$ | async) ||
+            (showAddNewGroup$ | async)
+        )
+    "
+>
+    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">
+        {{ commonLocaleData?.app_export }}
+    </button>
 </div>
-
-

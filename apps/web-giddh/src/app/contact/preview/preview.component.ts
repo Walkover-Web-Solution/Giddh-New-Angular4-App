@@ -383,18 +383,17 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
         if (isPatch) {
-            this.store.dispatch(this.salesAction.updateAccountDetailsForSales(accRequestObject));
-        } else {
-            accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
-            this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
-            this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.hasUpdatedBefore = true;
-                    this.isUpdateAccount = true;
-                    this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-                }
-            });
+            this.store.dispatch(this.salesAction.updateAccountDetailsForSales(accRequestObject, isPatch));
         }
+        accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
+        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.hasUpdatedBefore = true;
+                this.isUpdateAccount = true;
+                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
     }
 
     /**

@@ -5,6 +5,7 @@ import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
 import { InventoryModuleName } from "../../new-inventory/inventory.enum";
 import { ContactsTab } from "../../contact/contacts.enum";
+import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
 @Component({
     selector: "select-table-column",
     styleUrls: ["./select-table-column.component.scss"],
@@ -60,7 +61,16 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         InventoryModuleName.variant,
         InventoryModuleName.bulk,
         ContactsTab.customer,
-        ContactsTab.vendor
+        ContactsTab.vendor,
+        VoucherReportFilterModuleEnum.Sales,
+        VoucherReportFilterModuleEnum.Estimate,
+        VoucherReportFilterModuleEnum.Proforma,
+        VoucherReportFilterModuleEnum.CreditNote,
+        VoucherReportFilterModuleEnum.DebitNote,
+        VoucherReportFilterModuleEnum.Receipt,
+        VoucherReportFilterModuleEnum.Payment,
+        VoucherReportFilterModuleEnum.Purchase,
+        VoucherReportFilterModuleEnum.PurchaseOrder
     ]);
     /** Get dynamic mode */
     public get isDynamicMode(): boolean {
