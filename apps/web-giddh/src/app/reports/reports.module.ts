@@ -50,6 +50,9 @@ import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { MatSortModule } from '@angular/material/sort';
 import { GiddhTableModule } from '../shared/common-table/giddh.table.module';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
     declarations: [
@@ -114,7 +117,10 @@ import { MatSelectModule } from '@angular/material/select';
         SerialNumberPipe,
         MatSortModule,
         GiddhTableModule,
-        MatSelectModule
+        MatSelectModule,
+        NgxMatSelectSearchModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ]
 })
 

@@ -188,6 +188,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="row pd-b2">
+                    <div class="col-sm-4">
+                        <!-- Sales Person -->
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
+                    </div>
+                </div>
                 <ng-container *ngIf="isHsnSacEnabledAcc">
                     <div class="row pd-l2 d-flex"> 
                         <div class="d-flex align-items-center">

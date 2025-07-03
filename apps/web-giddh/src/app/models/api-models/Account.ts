@@ -213,8 +213,8 @@ export class AccountRequestV2 {
     public portalDomain?: any;
     public accountOpeningBalance?: AccountOpeningBalance[];
     public ledgerView?: TLedgerView;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
 }
-
 export class AccountResponseV2 {
     public name: string;
     public country: { countryCode: string, countryName: string };
@@ -287,10 +287,12 @@ export class CashFreeVirtualAccount {
 export class AddAccountRequest {
     activeGroupUniqueName: string;
     accountRequest: AccountRequestV2
+    salesPersonCreated: boolean = false;
 }
 
 export class UpdateAccountRequest {
     accountRequest: AccountRequestV2;
+    salesPersonCreated: boolean = false;
     value: {
         groupUniqueName: string;
         accountUniqueName: string;

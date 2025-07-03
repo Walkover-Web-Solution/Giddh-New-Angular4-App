@@ -1693,7 +1693,23 @@
                                         </p>
                                     </div>
                                 </ng-template>
-                                <div class="pull-right mr-t1 min-width-0">
+                            </div>
+                            <div class="row mr-t15">
+                                <!-- Sales Person -->
+                                <div class="col-6">
+                                    <reactive-dropdown-field 
+                                        [(ngModel)]="vm.selectedLedger.salesPersonUniqueName"
+                                        [name]="'sales-person'"
+                                        [label]="commonLocaleData?.app_sales_person"
+                                        [labelValue]="vm.selectedLedger.salesPerson?.name || ''"
+                                        [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                                        [options]="salesPersonList$ | async"
+                                        [showCreateNew]="true"
+                                        [createNewText]="commonLocaleData?.app_create_new"
+                                        (createOption)="openSalesPersonDialog()"
+                                    ></reactive-dropdown-field>
+                                </div>
+                                <div class="col-6">
                                     <div
                                         *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable"
                                         class="text-right table-amount last-table-amount"
@@ -1744,7 +1760,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pd-1 text-right bd-rb pr-0">
+                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0">
                                 <span class="in-words font-15">
                                     {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
                                 </span>
