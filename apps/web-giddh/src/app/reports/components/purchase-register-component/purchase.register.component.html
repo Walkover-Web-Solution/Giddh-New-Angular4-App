@@ -114,7 +114,7 @@
                                 panelClass="py-0"
                                 name="salesPerson"
                                 [multiple]="true"
-                                (selectionChange)="reportForm?.get('salesPersonUniqueNames')?.value?.length && getSalesRegister(dateRange.from, dateRange.to)"
+                                (selectionChange)="reportForm?.get('salesPersonUniqueNames')?.value?.length && getPurchaseRegister(dateRange.from, dateRange.to)"
                                 formControlName="salesPersonUniqueNames"
                             >
                                 <mat-option class="mt-0">
@@ -165,7 +165,7 @@
                             name="account"
                             [multiple]="true"
                             formControlName="accountUniqueNames"
-                            (selectionChange)="reportForm?.get('accountUniqueNames')?.value?.length && getSalesRegister(dateRange.from, dateRange.to)"
+                            (selectionChange)="reportForm?.get('accountUniqueNames')?.value?.length && getPurchaseRegister(dateRange.from, dateRange.to)"
                         >
                             <mat-option class="mt-0">
                                 <ngx-mat-select-search

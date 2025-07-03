@@ -661,6 +661,7 @@ export const KeyCodesEnum = {
     ARROW_LEFT: 'ArrowLeft' 
 };
 
+/** List of all the HTTP methods */
 export enum HttpMethod {
     POST = 'post',
     GET = 'get',
@@ -669,4 +670,5 @@ export enum HttpMethod {
     PATCH = 'patch'
 }
 
+/** Type of all HTTP methods */
 export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
