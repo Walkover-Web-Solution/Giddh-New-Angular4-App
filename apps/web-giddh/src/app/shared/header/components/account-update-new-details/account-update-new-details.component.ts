@@ -270,7 +270,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
     public isParentSundryDebtors: boolean = false;
-    /** Flag to determine if the parent group is "sundrydebtors". */
+    /** Flag to determine if the parent group is "sundrycreditors". */
     public isParentSundryCreditors: boolean = false;
     /** Flag to determine if the parent group is "bank accounts". */
     public isParentBankAccounts: boolean = false;
@@ -280,6 +280,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public defaultTaxLabel: string[] = [];
     /** Store active parent group */
     public parentGroups: any[] = [];
+    /** Flag to determine if the parent group is "sundrycreditors". */
+    @Input() public showBankDetailPreview: boolean = false;
+    /** Flag to determine if the parent group is "sundrycreditors". */
+    @Input() public contactPreview: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -1236,7 +1240,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.determineParentGroupTypes();
         this.toggleStateRequired();
         if (this.isParentSundryDebtors || this.isParentSundryCreditors) {
-            this.showBankDetail = this.isParentSundryCreditors
+            this.showBankDetail = this.contactPreview ? this.showBankDetailPreview : this.isParentSundryCreditors
             this.isDebtorCreditor = true;
         } else if (this.isParentBankAccounts) {
             this.isBankAccount = true;
