@@ -16,14 +16,14 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
 import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, BehaviorSubject } from 'rxjs';
-import { debounceTime, map, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, take, takeUntil, filter as rxjsFilter, tap } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -73,6 +73,9 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatSelect } from '@angular/material/select';
 import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
+import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
+import { SalesPersonService } from '../../../shared/sales-person/utility/sales-person.service';
+import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -93,7 +96,7 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore, SalesPersonService, SalesPersonComponentStore]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
@@ -344,6 +347,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isDatepickerOpen: boolean = false;
     /** Hold last valid index */
     public lastValidIndex: number;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
 
     constructor(
         private accountService: AccountService,
@@ -370,7 +375,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private invoiceAction: InvoiceActions,
         private renderer: Renderer2,
         @Inject(ServiceConfig) private serviceConfig,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
         this.breakPointObservar.observe([
             '(max-width: 991px)'
@@ -415,6 +421,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.store.dispatch(this.invoiceAction.getInvoiceSetting());
         this.getPurchaseSettings();
+        this.getSalesPersonList();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
@@ -2997,5 +3004,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public datepickerState(event: any): void {
         this.isDatepickerOpen = event;
+    }
+
+    /**
+     * Open sales person dialog
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        dialogRef.afterClosed().pipe(take(1), rxjsFilter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson(true);
     }
 }
