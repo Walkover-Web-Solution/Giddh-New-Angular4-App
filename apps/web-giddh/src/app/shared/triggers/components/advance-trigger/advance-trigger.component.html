@@ -9,6 +9,15 @@
         <div *ngIf="isCommunicationPlatformsLoading" class="mt-5">
             <giddh-page-loader></giddh-page-loader>
         </div>
+        <button 
+            class="pull-right"
+            mat-stroked-button 
+            color="primary" 
+            routerLink="/pages/triggers/basic" 
+            [disabled]="isCommunicationPlatformsLoading"
+        >
+            {{ localeData?.communication?.switch_to_basic_trigger }}
+        </button>
         <div
             class="discount box clearfix section-center position-relative overflow-visible"
             *ngIf="!isShowIntegrated && !communicationPlatforms?.MSG91?.isConnected && !isCommunicationPlatformsLoading"
@@ -111,14 +120,6 @@
                         </div>
                     </div>
                 </div>
-                <button 
-                    mat-stroked-button 
-                    color="primary" 
-                    routerLink="/pages/triggers/basic" 
-                    [disabled]="isCommunicationPlatformsLoading"
-                >
-                    {{ localeData?.communication?.switch_to_basic_trigger }}
-                </button>
             </div>
             <ng-container *ngIf="!editCommunicationPlatform">
                 <button

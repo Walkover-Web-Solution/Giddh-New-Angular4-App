@@ -246,9 +246,14 @@ export class TemplateFroalaComponent implements OnInit {
                 distinctUntilChanged()
             ).subscribe(triggerDetails => {
                 if (triggerDetails) {
+                    triggerDetails = {...triggerDetails, ...triggerDetails?.emailTemplate};
                     triggerDetails['conditions'] = triggerDetails?.conditionMap;
                     this.customTriggerForm.patchValue(triggerDetails);
-                    this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity });
+                    this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
+                    this.selectedBccEmails = this.customTriggerForm.get(EmailType.Bcc)?.value;
+                    this.selectedCcEmails = this.customTriggerForm.get(EmailType.Cc)?.value;
+                    this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity }, true);
+                    this.clickedOutsideEmail();
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
@@ -824,8 +829,10 @@ export class TemplateFroalaComponent implements OnInit {
      * @param {IOption} event - Selected option
      * @memberof TemplateFroalaComponent
      */
-    public onEntityChange(event: IOption): void {
-        this.customTriggerForm?.get('entityUniqueNames')?.setValue([]);
+    public onEntityChange(event: IOption, manuallySet: boolean = false): void {
+        if (!manuallySet) {
+            this.customTriggerForm?.get('entityUniqueNames')?.setValue([]);
+        }
         this.getFlattenAccountGroupList({
             page: 1,
             count: PAGINATION_LIMIT,
