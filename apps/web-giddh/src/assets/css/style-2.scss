@@ -1609,7 +1609,7 @@ input {
 }
 
 .v-align-middle {
-    vertical-align: middle;
+    vertical-align: middle !important;
 }
 
 // Mat Divider
@@ -14014,7 +14014,7 @@ mat-list {
 
 .advance-filter-button {
     .mdc-button__label {
-        color: var(--color-toast-primary-text) !important;
+        color: var(--color-common-primary-text) !important;
     }
 }
 
