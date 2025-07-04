@@ -1,8 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'sales-person'"
     (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="closeDialog()"
 >
@@ -50,7 +48,7 @@
                         class="flag-input"
                         [id]="'init-contact-add'"
                         [label]="commonLocaleData?.app_mobile_number"
-                        [placeholder]="localeData?.mobile_no_placeholder"
+                        [placeholder]="'9998899988'"
                         [floatLabel]="salesPersonForm?.controls?.mobileNumber?.value ? 'always' : 'auto'"
                         formControlName="mobileNumber"
                     >

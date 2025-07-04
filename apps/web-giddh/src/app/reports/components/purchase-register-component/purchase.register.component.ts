@@ -19,7 +19,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
@@ -635,16 +635,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, {
-            height: '100dvh',
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                bottom: '0'
-            },
-            disableClose: true
-        });
-
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
     }
 
@@ -700,6 +691,9 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         from: string = dayjs(this.dateRange?.from).format(GIDDH_DATE_FORMAT),
         to: string = dayjs(this.dateRange?.to).format(GIDDH_DATE_FORMAT)
     ): void {
+        if (!from || !to) {
+            return;
+        }
         this.componentStore.getSalesPurchaseList({
             payload: this.reportForm.value,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },

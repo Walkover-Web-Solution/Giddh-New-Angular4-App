@@ -8,7 +8,7 @@ import { SalesPersonService } from "./sales-person.service";
 import { HttpMethod } from "../../../app.constant";
 import { SalesPersonCreateUpdate } from "./sales-person.constant";
 
-export interface BuyPlanState {
+export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
     createUpdateSalesPersonSuccess: boolean;
     deleteSalesPersonSuccess: boolean;
@@ -16,7 +16,7 @@ export interface BuyPlanState {
     salesPersonListInProgress: boolean
 }
 
-export const DEFAULT_STATE: BuyPlanState = {
+export const DEFAULT_STATE: SalesPersonState = {
     salesPersonSaveInProgress: false,
     createUpdateSalesPersonSuccess: false,
     deleteSalesPersonSuccess: false,
@@ -25,7 +25,7 @@ export const DEFAULT_STATE: BuyPlanState = {
 };
 
 @Injectable()
-export class SalesPersonComponentStore extends ComponentStore<BuyPlanState> implements OnDestroy {
+export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> implements OnDestroy {
     constructor(
         private toasterService: ToasterService,
         private localeService: LocaleService,
@@ -47,7 +47,8 @@ export class SalesPersonComponentStore extends ComponentStore<BuyPlanState> impl
 
     /**
      * Get All Sales Person
-     *
+     * @param isDropdown – when true, maps `res.body.results` to an array of
+     *   `{ label: item.name, value: item.uniqueName }` for dropdowns.
      * @memberof SalesPersonComponentStore
      */
     readonly getAllSalesPerson = this.effect((data: Observable<boolean | void>) => {
@@ -149,7 +150,7 @@ export class SalesPersonComponentStore extends ComponentStore<BuyPlanState> impl
     readonly deleteSalesPerson = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((uniqueName) => {
-                this.patchState({ deleteSalesPersonSuccess: null });
+                this.patchState({ deleteSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(HttpMethod.DELETE, {}, uniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
