@@ -138,6 +138,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
 
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const searchValue = search?.trim();
+
             if (searchValue || searchValue === '') {
                 this.accountListRequest.q = searchValue;
                 this.isSearching = true;
@@ -281,16 +282,17 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public getAccountStatementList(): void {
         this.isLoading = true;
         this.accountListData = [];
+        const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
             const requestObj = {
-                body: this.advanceSearchRequest,
+                body: advReq,
                 method: 'POST',
                 model: this.accountListRequest,
                 branchUniqueName: this.branchUniqueName
             };
             this.contactComponentStore.getAccountStatementList(requestObj);
         } else {
-            if(this.branchUniqueName){
+            if (this.branchUniqueName) {
                 this.accountListRequest.branchUniqueName = this.branchUniqueName;
             }
             this.contactComponentStore.getAccountStatementList(this.accountListRequest);
