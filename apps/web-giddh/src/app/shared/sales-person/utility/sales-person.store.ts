@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
-import { BaseResponse } from "../../../models/api-models/BaseResponse";
+import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
 import { SalesPersonService } from "./sales-person.service";
@@ -12,7 +12,7 @@ export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
     createUpdateSalesPersonSuccess: boolean;
     deleteSalesPersonSuccess: boolean;
-    salesPersonList: any[],
+    salesPersonList: CommonPaginatedResponse<any>;
     salesPersonListInProgress: boolean
 }
 
@@ -20,7 +20,7 @@ export const DEFAULT_STATE: SalesPersonState = {
     salesPersonSaveInProgress: false,
     createUpdateSalesPersonSuccess: false,
     deleteSalesPersonSuccess: false,
-    salesPersonList: [],
+    salesPersonList: null,
     salesPersonListInProgress: false
 };
 
@@ -35,7 +35,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
     }
 
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.select((state) => state.salesPersonList);
+    public salesPersonList$: Observable<CommonPaginatedResponse<any>> = this.select((state) => state.salesPersonList);
     /** Sales Person Save In Progress */
     public salesPersonSaveInProgress$: Observable<boolean> = this.select((state) => state.salesPersonSaveInProgress);
     /** Save Sales Person Success */
@@ -47,15 +47,16 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
 
     /**
      * Get All Sales Person
-     * @param isDropdown – when true, maps `res.body.results` to an array of
+     * 
+     * @param {isDropdown: boolean, params: any} params – when true, maps `res.body.results` to an array of
      *   `{ label: item.name, value: item.uniqueName }` for dropdowns.
      * @memberof SalesPersonComponentStore
      */
-    readonly getAllSalesPerson = this.effect((data: Observable<boolean | void>) => {
+    readonly getAllSalesPerson = this.effect((data: Observable<{ isDropdown: boolean, params: any }>) => {
         return data.pipe(
-            switchMap((isDropdown: boolean = false) => {
+            switchMap(({ isDropdown, params }) => {
                 this.patchState({ salesPersonListInProgress: true });
-                return this.salesPersonService.salesPerson(HttpMethod.GET).pipe(
+                return this.salesPersonService.salesPerson(HttpMethod.GET, isDropdown, null, params).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
@@ -75,7 +76,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    salesPersonList: [],
+                                    salesPersonList: null,
                                     salesPersonListInProgress: false,
                                 });
                             }
@@ -83,7 +84,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                         (error: any) => {
                             this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
-                                salesPersonList: [],
+                                salesPersonList: null,
                                 salesPersonListInProgress: false
                             });
                         }
@@ -112,9 +113,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                         salesPersonSaveInProgress: false,
                                         createUpdateSalesPersonSuccess: true
                                     });
-                                    this.updateSalesPerson(res?.body);
                                 } else {
-                                    this.addSalesPerson(res?.body);
                                     this.patchState({
                                         salesPersonSaveInProgress: false,
                                         createUpdateSalesPersonSuccess: true
@@ -158,7 +157,6 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                 this.patchState({
                                     deleteSalesPersonSuccess: true
                                 });
-                                this.removeSalesPerson(uniqueName);
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
@@ -180,40 +178,6 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             })
         );
     });
-
-    /**
-     * Add Sales Person
-     *
-     * @param {SalesPersonCreateUpdate} salesPerson
-     * @memberof SalesPersonComponentStore
-     */
-    readonly addSalesPerson = this.updater((state, salesPerson: SalesPersonCreateUpdate) => ({
-        ...state,
-        salesPersonList: [...state.salesPersonList, salesPerson]
-    }));
-
-    /**
-     * Update Sales Person
-     *
-     * @param {SalesPersonCreateUpdate} salesPerson
-     * @memberof SalesPersonComponentStore
-     */
-    readonly updateSalesPerson = this.updater((state, salesPerson: SalesPersonCreateUpdate) => ({
-        ...state,
-        salesPersonList: state.salesPersonList.map((item) => item.uniqueName === salesPerson.uniqueName ? salesPerson : item)
-    }));
-
-    /**
-     * Remove Sales Person
-     *
-     * @param {string} uniqueName
-     * @memberof SalesPersonComponentStore
-     */
-    readonly removeSalesPerson = this.updater((state, uniqueName: string) => ({
-        ...state,
-        salesPersonList: state.salesPersonList.filter((item) => item.uniqueName !== uniqueName)
-    }));
-   
 
     /**
      * Lifecycle hook for component destroy

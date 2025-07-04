@@ -52,13 +52,12 @@ import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
 import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
-import { SalesPersonService } from "../../shared/sales-person/utility/sales-person.service";
 
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, SalesPersonService, SalesPersonComponentStore],
+    providers: [VoucherComponentStore, SalesPersonComponentStore],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -426,7 +425,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -5545,6 +5544,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson(true);
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }

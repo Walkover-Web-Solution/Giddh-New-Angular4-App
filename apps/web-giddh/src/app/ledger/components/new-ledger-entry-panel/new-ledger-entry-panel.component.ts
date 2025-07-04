@@ -44,7 +44,6 @@ import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { SalesPersonService } from '../../../shared/sales-person/utility/sales-person.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 
@@ -60,7 +59,7 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
-    providers: [SalesPersonService, SalesPersonComponentStore],
+    providers: [SalesPersonComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -145,7 +144,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
 
     public sourceWarehouse: true;
     public companyTaxesList$: Observable<TaxResponse[]>;
@@ -281,6 +280,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public taxDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
+     /** Delete attached file dialog ref */
+     public salesPersonDialogRef: MatDialogRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
 
@@ -1127,7 +1128,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -2273,8 +2274,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
+        this.salesPersonDialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        this.salesPersonDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
+            this.getSalesPersonList(); this.salesPersonDialogRef = undefined;
+        })).subscribe();
     }
 
     /**
@@ -2283,6 +2286,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson(true);
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }

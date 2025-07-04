@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { filter, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { filter, Observable, ReplaySubject, take, takeUntil, tap } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { SalesPersonComponentStore } from './utility/sales-person.store';
 import { SalesPersonService } from './utility/sales-person.service';
 import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/keyboardShortut.module';
@@ -15,6 +15,12 @@ import { ElementViewChildModule } from '../helpers/directives/elementViewChild/e
 import { MatTableModule } from '@angular/material/table';
 import { SalesPersonActionEnum, SalesPersonCreateUpdate } from './utility/sales-person.constant';
 import { InputFieldComponent } from '../../theme/form-fields/input-field/input-field.component';
+import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
+import { GeneralService } from '../../services/general.service';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+
 @Component({
     selector: 'app-sales-person',
     standalone: true,
@@ -25,6 +31,8 @@ import { InputFieldComponent } from '../../theme/form-fields/input-field/input-f
         MatButtonModule,
         MatDialogModule,
         MatTableModule,
+        MatExpansionModule,
+        MatPaginatorModule,
         KeyboardShortutModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
@@ -48,12 +56,12 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Sales Person List is modified */
     public salesPersonListIsModified: boolean = false;
-    /** True to show form */
-    public showForm: boolean = true;
+    /** True to open mat-expansion-panel */
+    public openMatExpansionPanel: boolean = true;
     /** Create form group of Name, Email and Mobile Number */
     public salesPersonForm: FormGroup;
     /** Sales Person Store */
-    public salesPersonList$: Observable<any[]> = this.componentStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.componentStore.salesPersonList$;
     /** Sales Person Save In Progress */
     public salesPersonSaveInProgress$: Observable<boolean> = this.componentStore.salesPersonSaveInProgress$;
     /** Create/Update Sales Person Success */
@@ -64,10 +72,19 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public salesPersonListInProgress$: Observable<boolean> = this.componentStore.salesPersonListInProgress$;
     /** Displayed columns for sales person table */
     public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'action'];
+    /** Active Row Index */
+    public activeRowIndex: number = -1;
     /** Sales Person Action Enum */
     public salesPersonActionEnum = SalesPersonActionEnum;
     /** Sales Person Unique Name in case of user edit or delete */
     public salesPersonUniqueName: string | null = null;
+    /** Holds page Size Options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Holds advance Filters keys */
+    public requestParams: any = {
+        page: 1,
+        count: this.pageSizeOptions[0]
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
@@ -75,6 +92,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentStore: SalesPersonComponentStore,
         private changeDetection: ChangeDetectorRef,
         private elementRef: ElementRef,
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) { }
 
     /**
@@ -91,10 +110,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isFormSubmitted = false;
             this.salesPersonForm.reset();
             this.salesPersonForm.markAsPristine();
-            this.showForm = false;
-            setTimeout(() => {
-                this.showForm = true;
-            }, 100);
+            this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
         this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true })).subscribe();
     }
@@ -152,7 +168,20 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.componentStore.createUpdateSalesPerson({ model: this.salesPersonForm?.value, uniqueName: this.salesPersonUniqueName });
                 break;
             case SalesPersonActionEnum.DELETE:
-                this.componentStore.deleteSalesPerson(element?.uniqueName);
+                const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                    panelClass: ['mat-dialog-sm'],
+                    data: {
+                        configuration: this.generalService.deleteConfiguration(
+                            this.commonLocaleData?.app_permanently_delete_message,
+                            this.commonLocaleData
+                        )
+                    }
+                });
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response === this.commonLocaleData?.app_yes) {
+                        this.componentStore.deleteSalesPerson(element?.uniqueName);
+                    }
+                });
                 break;
             case SalesPersonActionEnum.EDIT:
                 this.salesPersonUniqueName = element?.uniqueName;
@@ -162,10 +191,14 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                     mobileNumber: element?.mobileNumber
                 });
                 this.initIntl(element?.mobileNumber);
+                this.openMatExpansionPanel = false;
+                setTimeout(() => {
+                    this.openMatExpansionPanel = true;
+                }, 0);
                 this.nameField?.inputFocus();
                 break;
             default:
-                this.componentStore.getAllSalesPerson();
+                this.componentStore.getAllSalesPerson({ isDropdown: false, params: this.requestParams});
                 break;
         }
     }
@@ -220,6 +253,18 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public closeDialog(): void {
         this.dialogRef?.close(this.salesPersonListIsModified);
+    }
+
+    /**
+     * Handle page change event and make API call
+     *
+     * @param {*} event
+     * @memberof SalesPersonComponent
+     */
+    public handlePageChange(event: any): void {
+        this.requestParams.page = event.pageIndex + 1;
+        this.requestParams.count = event.pageSize;
+        this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
     }
 
     /**

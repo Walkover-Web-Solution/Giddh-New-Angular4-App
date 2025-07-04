@@ -132,6 +132,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
+    /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;

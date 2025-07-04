@@ -399,7 +399,7 @@
                                             formControlName="salesPersonUniqueName"
                                             [name]="'sales-person'"
                                             [label]="commonLocaleData?.app_sales_person"
-                                            [labelValue]="invoiceForm.get('salesPersonName')?.value"
+                                            [labelValue]="invoiceForm.get('salesPersonName')?.value || ''"
                                             [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                                             [options]="salesPersonList$ | async"
                                             [showCreateNew]="true"

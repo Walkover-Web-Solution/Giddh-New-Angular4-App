@@ -34,7 +34,7 @@ export const COMPANY_API = {
     EXPORT_SALES_ACCOUNT_WISE_REPORT: 'company/:companyUniqueName/us/export-sales-report-account-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName&taxUniqueName=:taxUniqueName',
 
     GET_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-overview?from=:fromDate&to=:toDate&interval=:interval',
-    GET_REGISTERED_PURCHASE_V2: 'v2/company/:companyUniqueName/v2/purchase-register-overview?from=:from&to=:to',
+    GET_REGISTERED_PURCHASE_V2: 'v2/company/:companyUniqueName/v2/purchases-register-overview?from=:from&to=:to',
     GET_DETAILED_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-detailed?',
     GET_COMPANY_INTEGRATED_BANK_LIST: 'company/:companyUniqueName/payment/banks/accounts',
     BULK_PAYMENT: 'company/:companyUniqueName/bank/payments',
