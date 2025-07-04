@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
+import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -58,7 +58,7 @@ export class VouchersUtilityService {
     }
 
     public parseVoucherType(voucherType: string): string {
-        return voucherType = voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
+        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
     public createQueryString(url: string, model: any): string {
@@ -86,9 +86,17 @@ export class VouchersUtilityService {
         let group: string;
 
         if (searchType === SearchType.CUSTOMER) {
-            group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.payment) ? 'sundrycreditors' : 'sundrydebtors';
+            if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum)) {
+                group = 'sundrydebtors';
+            } else {
+                group = 'sundrycreditors';
+            }
         } else if (searchType === SearchType.ITEM) {
-            group = voucherType === VoucherTypeEnum.receipt || voucherType === VoucherTypeEnum.payment ? 'bankaccounts, cash, loanandoverdraft' : (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ? 'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
+            group = [VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum) 
+                    ? 'bankaccounts, cash, loanandoverdraft' 
+                    : ([VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.purchaseOrder].includes(voucherType as VoucherTypeEnum) 
+                        ? 'operatingcost, indirectexpenses, fixedassets' 
+                        : 'otherincome, revenuefromoperations, fixedassets');
             withStocks = true;
         } else if (searchType === SearchType.BANK) {
             group = 'bankaccounts, cash, loanandoverdraft';
@@ -268,9 +276,9 @@ export class VouchersUtilityService {
                 voucherTotals.grandTotal += Number(entry.total?.amountForAccount);
             }
 
-            if (entry.otherTax?.type === 'tcs') {
+            if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
                 voucherTotals.tcsTotal += entry.otherTax?.amount;
-            } else if (entry.otherTax?.type === 'tds') {
+            } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
                 voucherTotals.tdsTotal += entry.otherTax?.amount;
             }
         });

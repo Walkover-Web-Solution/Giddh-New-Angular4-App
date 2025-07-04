@@ -3,12 +3,17 @@
 <html id="default" lang="en">
     <head>
         <title></title>
+
+        <style>
+            /* Importing Inter, Lato, Roboto, and Open Sans fonts */
+            @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+        </style>
     </head>
 
     <body
         *ngIf="inputTemplate.sections && inputTemplate.sections"
         [ngStyle]="{
-            'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans',
+            'font-family': inputTemplate.font ? inputTemplate.font : 'Inter',
             'padding-top': inputTemplate.topMargin + 'px',
             'padding-bottom': inputTemplate.bottomMargin + 'px',
             'padding-right': inputTemplate.rightMargin + 'px',
@@ -63,7 +68,7 @@
                                                     'font-size': inputTemplate.fontDefault + 'px'
                                                 }"
                                             >
-                                                {{ fieldsAndVisibility.header.companyName?.label }}
+                                                {{ fieldsAndVisibility.header.companyName?.label || "Walkover Web Solutions Pvt" }}
                                             </h2>
                                         </strong>
                                     </figure>
@@ -1077,79 +1082,88 @@
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <article tabindex="0">
-                        <table class="balance">
-                            <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-                                <th>
-                                    <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
-                                    Taxable Amount
-                                </th>
-                                <td><span [innerHTML]="rupeeSymbol"></span> 1800.00</td>
-                            </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
-                                <th>
-                                    {{ fieldsAndVisibility.footer.totalTax?.label }}
-                                </th>
-                                <td><span [innerHTML]="rupeeSymbol"></span> 324.00</td>
-                            </tr>
-                            <!--<tr>
-          <th>
-            {{fieldsAndVisibility.table.otherTaxBifurcation?.label}}{{fieldsAndVisibility.table.otherTaxBifurcation?.label ? fieldsAndVisibility.footer.otherTaxBifurcation?.label : 'TCS' }}
-          </th>
-          <td>
-            <span [innerHTML]="rupeeSymbol "></span> 2000.00
-          </td>
-        </tr>-->
-                            <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
-                                <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }} (INR)</th>
-                                <td class="strong"><span [innerHTML]="rupeeSymbol"></span>2124.00</td>
-                            </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
-                                <th>
-                                    <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
-                                    Total (In words)
-                                </th>
-                                <td>
-                                    Two Thousand One Hundred Twenty Four Only
-                                    <div class="inner mr-0">&nbsp;</div>
+                        <table>
+                            <tbody>
+                                <td class="v-align-middle pd-l4" width="25%">
+                                    <img *ngIf="inputTemplate.showBankQrCode" src="{{ imgPath }}bank-qr-code.png" alt="image" width="150px"/>
                                 </td>
-                            </tr>
-                            <tr
-                                *ngIf="
-                                    fieldsAndVisibility.footer.grandTotal?.display &&
-                                    fieldsAndVisibility.table.displayBaseCurrency.display
-                                "
-                            >
-                                <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }}(USD)</th>
-                                <td class="strong"><span [innerHTML]="dollarSymbol"></span>30.34</td>
-                            </tr>
-                            <tr
-                                *ngIf="
-                                    fieldsAndVisibility.footer.totalInWords?.display &&
-                                    fieldsAndVisibility.table.displayBaseCurrency.display
-                                "
-                            >
-                                <th>
-                                    <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
-                                    Total (In words)
-                                </th>
-                                <td>
-                                    Thirty dollars & thirty four cents
-                                    <div class="inner mr-0">&nbsp;</div>
-                                </td>
-                            </tr>
+                                <td width="75%">
+                                    <table class="balance w-auto">
+                                        <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
+                                            <th>
+                                                <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
+                                                Taxable Amount
+                                            </th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span> 1800.00</td>
+                                        </tr>
+                                        <tr *ngIf="fieldsAndVisibility.footer.totalTax?.display">
+                                            <th>
+                                                {{ fieldsAndVisibility.footer.totalTax?.label }}
+                                            </th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span> 324.00</td>
+                                        </tr>
+                                        <!--<tr>
+                    <th>
+                        {{fieldsAndVisibility.table.otherTaxBifurcation?.label}}{{fieldsAndVisibility.table.otherTaxBifurcation?.label ? fieldsAndVisibility.footer.otherTaxBifurcation?.label : 'TCS' }}
+                    </th>
+                    <td>
+                        <span [innerHTML]="rupeeSymbol "></span> 2000.00
+                    </td>
+                    </tr>-->
+                                        <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
+                                            <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }} (INR)</th>
+                                            <td class="strong"><span [innerHTML]="rupeeSymbol"></span>2124.00</td>
+                                        </tr>
+                                        <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                                            <th>
+                                                <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
+                                                Total (In words)
+                                            </th>
+                                            <td>
+                                                Two Thousand One Hundred Twenty Four Only
+                                                <div class="inner mr-0">&nbsp;</div>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="
+                                                fieldsAndVisibility.footer.grandTotal?.display &&
+                                                fieldsAndVisibility.table.displayBaseCurrency.display
+                                            "
+                                        >
+                                            <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }}(USD)</th>
+                                            <td class="strong"><span [innerHTML]="dollarSymbol"></span>30.34</td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="
+                                                fieldsAndVisibility.footer.totalInWords?.display &&
+                                                fieldsAndVisibility.table.displayBaseCurrency.display
+                                            "
+                                        >
+                                            <th>
+                                                <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
+                                                Total (In words)
+                                            </th>
+                                            <td>
+                                                Thirty dollars & thirty four cents
+                                                <div class="inner mr-0">&nbsp;</div>
+                                            </td>
+                                        </tr>
 
-                            <tr *ngIf="fieldsAndVisibility.footer.tcs?.display">
-                                <th>{{ fieldsAndVisibility.footer.tcs?.label }}</th>
-                                <td><span [innerHTML]="rupeeSymbol"></span>0.00</td>
-                            </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.tds?.display">
-                                <th>{{ fieldsAndVisibility.footer.tds?.label }}</th>
-                                <td><span [innerHTML]="rupeeSymbol"></span>0.00</td>
-                            </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.totalDue?.display">
-                                <th class="strong">{{ fieldsAndVisibility.footer.totalDue?.label }}</th>
-                                <td><span [innerHTML]="rupeeSymbol" class="strong"></span>7124.00</td>
-                            </tr>
+                                        <tr *ngIf="fieldsAndVisibility.footer.tcs?.display">
+                                            <th>{{ fieldsAndVisibility.footer.tcs?.label }}</th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span>0.00</td>
+                                        </tr>
+                                        <tr *ngIf="fieldsAndVisibility.footer.tds?.display">
+                                            <th>{{ fieldsAndVisibility.footer.tds?.label }}</th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span>0.00</td>
+                                        </tr>
+                                        <tr *ngIf="fieldsAndVisibility.footer.totalDue?.display">
+                                            <th class="strong">{{ fieldsAndVisibility.footer.totalDue?.label }}</th>
+                                            <td><span [innerHTML]="rupeeSymbol" class="strong"></span>7124.00</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tbody>
                         </table>
                         <table
                             class="tax-table item text-right"
@@ -1492,7 +1506,7 @@
                     </aside>
                     <footer style="text-align: center" [ngStyle]="{ 'border-color': inputTemplate.templateColor }">
                         <p class="font-12" *ngIf="fieldsAndVisibility.footer.companyName?.display">
-                            <strong>{{ fieldsAndVisibility.header.companyName?.label }}</strong>
+                            <strong>{{ fieldsAndVisibility.footer.companyName?.label || "Walkover Web Solutions Pvt" }}</strong>
                         </p>
                         <p
                             class="abc"

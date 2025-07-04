@@ -8,6 +8,7 @@ import {
     Input,
     OnChanges,
     OnDestroy,
+    OnInit,
     Output,
     Renderer2,
     SimpleChanges,
@@ -19,14 +20,20 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-a
 import { SearchService } from '../../../services/search.service';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../constants/trial-balance-profit.constant';
 import { Router } from '@angular/router';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
+import { FinancialReportsComponentStore } from '../../financial-reports.store';
+import { TlPlService } from '../../../services/tl-pl.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: '[grid-row]',
     styleUrls: ['./grid-row.component.scss'],
     templateUrl: './grid-row.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
-export class GridRowComponent implements OnChanges, OnDestroy {
+export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public from: string;
@@ -57,9 +64,25 @@ export class GridRowComponent implements OnChanges, OnDestroy {
         private searchService: SearchService,
         private renderer: Renderer2,
         @Inject(DOCUMENT) private document: Document,
-        private router: Router
+        private router: Router,
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private tlPlService: TlPlService,
+        private generalService: GeneralService
     ) {
         this.currentUrl = this.router.url;
+    }
+
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof GridRowComponent
+     */
+    public ngOnInit(): void {
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.tlPlService.isReportTailed$.next(true);
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -144,5 +167,26 @@ export class GridRowComponent implements OnChanges, OnDestroy {
          modal within a popover which can't display the modal within it */
         this.renderer.addClass(modalInstance._element.nativeElement, 'm-0')
         this.renderer.removeChild(parentNode, modalInstance._element.nativeElement);
+    }
+
+    /**
+     * Call tailed report api with given account/group unique name
+     * 
+     * @param event MatCheckboxChange event
+     * @param accountGroupUniqueName Unique name of account/group
+     * @param entityType Type of the entity, either 'account' or 'group'
+     * @memberof GridRowComponent
+     */
+     public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
+        const model = {
+            request: {
+                reportType: ReportType.TrialBalance,
+                from: this.from,
+                to: this.to,
+                branchUniqueName: this.generalService.currentBranchUniqueName
+            },
+            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
+        };
+        this.financialReportsComponentStore.tailedReportAccountGroup(model);
     }
 }

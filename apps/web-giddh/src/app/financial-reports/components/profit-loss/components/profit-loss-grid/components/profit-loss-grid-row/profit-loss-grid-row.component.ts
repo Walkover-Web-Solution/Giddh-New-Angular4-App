@@ -1,17 +1,24 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import {
     TRIAL_BALANCE_VIEWPORT_LIMIT,
 } from 'apps/web-giddh/src/app/financial-reports/constants/trial-balance-profit.constant';
+import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
     selector: '[profit-loss-grid-row]',
     templateUrl: './profit-loss-grid-row.component.html',
     styleUrls: ['./profit-loss-grid-row.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [FinancialReportsComponentStore]
 })
-export class ProfitLossGridRowComponent implements OnChanges {
+export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public padding: string;
@@ -28,9 +35,24 @@ export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public isExpandToggledDuringSearch: boolean;
     /** Hold current url */
     private currentUrl: string = "";
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private cd: ChangeDetectorRef, private router: Router) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService, private generalService: GeneralService) {
         this.currentUrl = this.router.url;
+    }
+
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof ProfitLossGridRowComponent
+     */
+    public ngOnInit(): void {
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.tlPlService.isReportTailed$.next(true);
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -92,5 +114,36 @@ export class ProfitLossGridRowComponent implements OnChanges {
         } else {
             return [];
         }
+    }
+
+    /**
+     * Call tailed report api with given account/group unique name
+     * 
+     * @param event MatCheckboxChange event
+     * @param accountGroupUniqueName Unique name of account/group
+     * @param entityType Type of the entity, either 'account' or 'group'
+     * @memberof ProfitLossGridRowComponent
+     */
+    public onItemChecked(event: MatCheckboxChange, accountGroupUniqueName: string, entityType: 'account' | 'group'): void {
+        const model = {
+            request: {
+                reportType: ReportType.ProfitLoss,
+                from: this.from,
+                to: this.to,
+                branchUniqueName: this.generalService.currentBranchUniqueName
+            },
+            payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
+        };
+        this.financialReportsComponentStore.tailedReportAccountGroup(model);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof ProfitLossGridRowComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

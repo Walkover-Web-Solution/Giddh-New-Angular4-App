@@ -30,13 +30,14 @@ import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { VoucherTypeEnum } from '../../../vouchers/utility/vouchers.const';
 import { PageEvent } from '@angular/material/paginator';
+import { EwayBillComponentStore } from '../utility/eWayBill.store';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'app-ewaybill-component',
     templateUrl: './eWayBill.component.html',
     styleUrls: [`./eWayBill.component.scss`],
-    providers: [VoucherComponentStore],
+    providers: [VoucherComponentStore, EwayBillComponentStore]
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
@@ -157,6 +158,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    /** Holds Store Eway Bill from place by pincode API response state as observable*/
+    public ewayBillFromPlace$: Observable<any> = this.componentStore.select(state => state.fromPlace);
 
     constructor(
         private store: Store<AppState>,
@@ -172,7 +175,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private gstReconcileService: GstReconcileService,
         public dialog: MatDialog,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private voucherComponentStore: VoucherComponentStore
+        private voucherComponentStore: VoucherComponentStore,
+        private componentStore: EwayBillComponentStore
     ) {
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
         this.EwayBillfilterRequest.page = 1;
@@ -357,6 +361,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.ewayBillFromPlace$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.updateEwayVehicleform.fromPlace = response;
+            }
+        });
     }
 
     public getAllFilteredInvoice() {
@@ -471,6 +481,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         };
 
         if (dialogType === 'vehicle') {
+            this.componentStore.getEwayBillFromPlace(ewayItem?.pincode);
             this.dialog.open(this.vehicleDialog, dialogConfig);
         } else if (dialogType === 'cancel') {
             this.cancelDialogRef = this.dialog.open(this.cancelDialog, dialogConfig);

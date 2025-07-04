@@ -774,5 +774,8 @@
         "t_view": "टी व्ह्यू",
         "statement_view": "विधान दृश्य"
     },
-    "app_closing_balance": "बंद होणारी शिल्लक"
+    "app_closing_balance": "बंद होणारी शिल्लक",
+    "app_uncheck_all_item_message": "आपण खरोखर सर्व ओळी अनचेक करू इच्छिता का?",
+    "app_account_status": "खाते स्थिती",
+    "app_both": "दोन्ही"
 }

@@ -24,6 +24,7 @@ export interface ComparedProfitLossRequest {
 
 export interface ProfitLossRequest extends TrialBalanceRequest, ComparedProfitLossRequest {
     fy?: number;
+    projectUniqueName?: string;
 }
 
 export class GetCogsRequest {

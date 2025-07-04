@@ -31,7 +31,7 @@
                             <button
                                 type="button"
                                 class="btn-angle-down"
-                                (click)="setSelectedRange(i); clickRange($event, range)"
+                                (click)="setSelectedRange(i); handleDateChange('range', $event, range)"
                                 [ngClass]="{
                                     'active':
                                         range.isSelected ||
@@ -52,7 +52,7 @@
                                 <li *ngFor="let subRange of range.ranges">
                                     <button
                                         type="button"
-                                        (click)="clickRange($event, subRange)"
+                                        (click)="handleDateChange('range', $event, subRange)"
                                         [ngClass]="{
                                             'active':
                                                 subRange.isSelected ||
@@ -81,7 +81,7 @@
                                 <li *ngFor="let financialYear of financialYears">
                                     <button
                                         type="button"
-                                        (click)="clickFinancialYear(financialYear)"
+                                        (click)="handleDateChange('financialYear', financialYear)"
                                         [ngClass]="{
                                             'active': selectedRangeLabel && selectedRangeLabel === financialYear.label
                                         }"
@@ -513,7 +513,7 @@
                                                     *ngIf="!isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
-                                                    (click)="clickApply($event)"
+                                                    (click)="handleDateChange('apply', $event)"
                                                 >
                                                     {{ commonLocaleData?.app_datepicker?.done }}
                                                 </button>
@@ -523,7 +523,7 @@
                                                     *ngIf="isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
-                                                    (click)="clickApply($event); closeCalender()"
+                                                    (click)="handleDateChange('apply', $event); closeCalender()"
                                                 >
                                                     {{ commonLocaleData?.app_datepicker?.done }}
                                                 </button>

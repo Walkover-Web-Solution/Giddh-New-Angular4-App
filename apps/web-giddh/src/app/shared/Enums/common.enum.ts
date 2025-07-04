@@ -32,6 +32,12 @@ export enum CopyType {
     TRANSPORT = "TRANSPORT"
 }
 
+export enum AccountArchivedStatusEnum {
+    UNARCHIVED = 'UNARCHIVED',
+    ARCHIVED = 'ARCHIVED',
+    BOTH = 'BOTH'
+}
+
 // Enum representing country names.
 export enum CountryNames {
     INDIA = "India",

@@ -277,16 +277,14 @@
                         ></input-field>
 
                         <!-- From Place -->
-                        <dropdown-field
+                        <input-field
                             [label]="localeData?.from_place_label"
                             [placeholder]="localeData?.from_place_placeholder"
                             [name]="'fromPlace'"
                             [required]="true"
-                            [autocomplete]="'off'"
-                            [options]="searchResults"
-                            [enableDynamicSearch]="true"
-                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                        ></dropdown-field>
+                            [(ngModel)]="updateEwayVehicleform.fromPlace"
+                            [disabled]="updateEwayVehicleform.fromPlace"
+                        ></input-field>
 
                         <!-- From State -->
                         <dropdown-field
