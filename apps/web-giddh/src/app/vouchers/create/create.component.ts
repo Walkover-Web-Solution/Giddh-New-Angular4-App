@@ -1025,9 +1025,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             ?.get("mobileNumber")
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
-                        const mobileNo = this.invoiceForm.controls["account"]?.get("mobileNumber")?.value ? this.invoiceForm.controls["account"]?.get("mobileNumber")?.value : "";
-                        this.initIntl(mobileNo);
-                        this.changeDetection.detectChanges();
+                        this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+                        this.checkMobileNumber();
                     }
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
@@ -1179,7 +1178,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         this.invoiceForm
                             .get("entries")
-                            ["controls"].push(this.getEntriesFormGroup(entry, !voucherDetails.isCopyVoucher));
+                        ["controls"].push(this.getEntriesFormGroup(entry, !voucherDetails.isCopyVoucher));
                         if (entry.discounts?.length) {
                             this.getSelectedDiscounts(index, entry.discounts);
                         }
@@ -2515,9 +2514,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
-            const mobileNo = this.invoiceForm.controls["account"]?.get("mobileNumber")?.value ? this.invoiceForm.controls["account"]?.get("mobileNumber")?.value : "";
-            this.initIntl(mobileNo);
-            this.changeDetection.detectChanges();
+            this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+            this.checkMobileNumber();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -2733,8 +2731,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.formBuilder.group({
             date: [
                 !this.invoiceType.isPurchaseOrder &&
-                !this.invoiceType.isEstimateInvoice &&
-                !this.invoiceType.isProformaInvoice
+                    !this.invoiceType.isEstimateInvoice &&
+                    !this.invoiceType.isProformaInvoice
                     ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)
                     : null,
             ],
@@ -2789,7 +2787,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             rateForAccount: [
                                 entryData
                                     ? entryData?.transactions[0]?.stock?.rate?.rateForAccount ??
-                                      entryData?.transactions[0]?.stock?.rate?.amountForAccount
+                                    entryData?.transactions[0]?.stock?.rate?.amountForAccount
                                     : 1,
                             ],
                         }),
@@ -3968,9 +3966,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .get("amount.amountForAccount")
                     .patchValue(
                         transactionFormGroup.get("amount.amountForAccount").value -
-                            (transactionFormGroup.get("amount.amountForAccount").value *
-                                (taxes?.[0]?.taxDetail?.taxValue ?? 1)) /
-                                100
+                        (transactionFormGroup.get("amount.amountForAccount").value *
+                            (taxes?.[0]?.taxDetail?.taxValue ?? 1)) /
+                        100
                     );
             }
         }
@@ -4014,7 +4012,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         (taxPercentage *
                             (transactionFormGroup.get("amount.amountForAccount")?.value -
                                 entryFormGroup.get("totalDiscount")?.value)) /
-                            100,
+                        100,
                         this.company.giddhBalanceDecimalPlaces
                     )
                 );
@@ -4025,7 +4023,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         (cessPercentage *
                             (transactionFormGroup.get("amount.amountForAccount")?.value -
                                 entryFormGroup.get("totalDiscount")?.value)) /
-                            100,
+                        100,
                         this.company.giddhBalanceDecimalPlaces
                     )
                 );
@@ -4127,8 +4125,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .setValue(
                         duePeriod > 0
                             ? dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT)
-                                  .add(duePeriod, "day")
-                                  .toDate()
+                                .add(duePeriod, "day")
+                                .toDate()
                             : dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).toDate()
                     );
             }
@@ -4824,10 +4822,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice
                     ? "purchase"
                     : this.invoiceType.isCreditNote
-                    ? "credit note"
-                    : this.invoiceType.isDebitNote
-                    ? "debit note"
-                    : "sales";
+                        ? "credit note"
+                        : this.invoiceType.isDebitNote
+                            ? "debit note"
+                            : "sales";
 
                 if (this.invoiceForm.get("salesPurchaseAsReceiptPayment").value) {
                     if (this.invoiceType.isPurchaseInvoice) {
@@ -5167,6 +5165,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * This will be used to check mobile number in input
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public checkMobileNumber(): void {
+        const input = document.getElementById("init-contact");
+        if (input) {
+            if (this.invoiceForm.controls["account"]?.get("mobileNumber")?.value) {
+                input.setAttribute("value", `+${this.invoiceForm.controls["account"]?.get("mobileNumber")?.value}`);
+            } else {
+                input.setAttribute("value", "");
+            }
+            this.changeDetection.detectChanges();
+        }
+    }
+
+    /**
      * Lifecycle hook for component destroy
      *
      * @memberof VoucherCreateComponent
@@ -5340,10 +5355,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return parseFloat(
             Number(
                 this.voucherTotals.grandTotal +
-                    this.voucherTotals.tcsTotal -
-                    this.adjustPaymentData.totalAdjustedAmount -
-                    this.totalDepositAmount -
-                    this.voucherTotals.tdsTotal
+                this.voucherTotals.tcsTotal -
+                this.adjustPaymentData.totalAdjustedAmount -
+                this.totalDepositAmount -
+                this.voucherTotals.tdsTotal
             ).toFixed(this.company?.giddhBalanceDecimalPlaces)
         );
     }
@@ -5379,12 +5394,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.voucherTotals.balanceDue = giddhRoundOff(
             this.voucherTotals.grandTotal +
-                this.voucherTotals.tcsTotal +
-                this.voucherTotals.roundOff -
-                this.voucherTotals.tdsTotal -
-                depositAmount -
-                Number(this.depositAmountBeforeUpdate) -
-                this.totalAdvanceReceiptsAdjustedAmount,
+            this.voucherTotals.tcsTotal +
+            this.voucherTotals.roundOff -
+            this.voucherTotals.tdsTotal -
+            depositAmount -
+            Number(this.depositAmountBeforeUpdate) -
+            this.totalAdvanceReceiptsAdjustedAmount,
             this.company?.giddhBalanceDecimalPlaces
         );
 
@@ -5395,11 +5410,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         ) {
             this.voucherTotals.balanceDue = giddhRoundOff(
                 this.voucherTotals.grandTotal +
-                    this.voucherTotals.tcsTotal +
-                    this.voucherTotals.roundOff -
-                    this.voucherTotals.tdsTotal -
-                    Number(this.depositAmountBeforeUpdate) -
-                    this.totalAdvanceReceiptsAdjustedAmount,
+                this.voucherTotals.tcsTotal +
+                this.voucherTotals.roundOff -
+                this.voucherTotals.tdsTotal -
+                Number(this.depositAmountBeforeUpdate) -
+                this.totalAdvanceReceiptsAdjustedAmount,
                 this.company?.giddhBalanceDecimalPlaces
             );
         }
@@ -6221,7 +6236,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (
                             isExistingEntry === -1 &&
                             control.get("transactions.0.stock.variant.uniqueName")?.value ===
-                                response.body?.stock?.variant?.uniqueName
+                            response.body?.stock?.variant?.uniqueName
                         ) {
                             isExistingEntry = entryIndex;
                         }
@@ -6562,28 +6577,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let invoiceType = this.invoiceType.isProformaInvoice
             ? this.localeData?.invoice_types?.proforma
             : this.invoiceType.isEstimateInvoice
-            ? this.localeData?.invoice_types?.estimate
-            : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.invoice
-            : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.credit_note
-            : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.debit_note
-            : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.purchase
-            : this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.cash_invoice
-            : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.cash_bill
-            : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.cash_credit_note
-            : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice
-            ? this.localeData?.invoice_types?.cash_debit_note
-            : this.invoiceType.isReceiptInvoice
-            ? this.localeData?.invoice_types?.receipt
-            : this.invoiceType.isPaymentInvoice
-            ? this.localeData?.invoice_types?.payment
-            : this.localeData?.invoice_types?.purchase_order;
+                ? this.localeData?.invoice_types?.estimate
+                : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice
+                    ? this.localeData?.invoice_types?.invoice
+                    : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice
+                        ? this.localeData?.invoice_types?.credit_note
+                        : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice
+                            ? this.localeData?.invoice_types?.debit_note
+                            : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice
+                                ? this.localeData?.invoice_types?.purchase
+                                : this.invoiceType.isCashInvoice
+                                    ? this.localeData?.invoice_types?.cash_invoice
+                                    : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice
+                                        ? this.localeData?.invoice_types?.cash_bill
+                                        : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice
+                                            ? this.localeData?.invoice_types?.cash_credit_note
+                                            : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice
+                                                ? this.localeData?.invoice_types?.cash_debit_note
+                                                : this.invoiceType.isReceiptInvoice
+                                                    ? this.localeData?.invoice_types?.receipt
+                                                    : this.invoiceType.isPaymentInvoice
+                                                        ? this.localeData?.invoice_types?.payment
+                                                        : this.localeData?.invoice_types?.purchase_order;
 
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);

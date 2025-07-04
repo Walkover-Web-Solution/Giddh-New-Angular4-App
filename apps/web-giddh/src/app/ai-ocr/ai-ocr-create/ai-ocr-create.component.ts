@@ -3,6 +3,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { AiOcrService } from '../../services/ai-ocr.service';
+import { FILE_ATTACHMENT_TYPE } from '../../app.constant';
 @Component({
     selector: 'ai-ocr-create',
     templateUrl: './ai-ocr-create.component.html',
@@ -24,6 +25,8 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
     public pdfFileURL: string = '';
     /** Holds Current selected invoice */
     public selectedVoucher: any;
+    /** Source of image to be previewed */
+    public imagePreviewSource: SafeUrl;
 
     constructor(
         private domSanitizer: DomSanitizer,
@@ -39,12 +42,22 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.aiOcrService.aiOcrDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.selectedVoucher = this.generalService.base64ToBlob(response.encodedData || response, 'application/pdf', 512);
-                const file = new Blob([this.selectedVoucher], { type: 'application/pdf' });
-                URL.revokeObjectURL(this.pdfFileURL);
-                this.pdfFileURL = URL.createObjectURL(file);
+                const fileExtention = response.fileExtention?.toLowerCase();
+                if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
+                    // Attached file type is image
+                    let objectURL = `data:image/${response.fileExtention};base64,` + response.encodedData;
+                    this.imagePreviewSource = this.domSanitizer.bypassSecurityTrustUrl(objectURL);
+                    this.sanitizedPdfFileUrl = null;
+                } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
+                    // Attached file type is PDF
+                    this.selectedVoucher = this.generalService.base64ToBlob(response.encodedData || response, 'application/pdf', 512);
+                    const file = new Blob([this.selectedVoucher], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    this.imagePreviewSource = null;
+                } 
                 this.isFileUploading = false;
-                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
             } else {
                 this.isFileUploading = false;
             }
