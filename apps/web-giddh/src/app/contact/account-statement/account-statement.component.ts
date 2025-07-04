@@ -99,6 +99,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public isAdvanceSearchImplemented: boolean = false;
     /** Branch unique name (input from parent) */
     @Input() branchUniqueName: string;
+    /** True if any filters are currently applied on report */
+    public clearFilter: boolean = false;
 
 
     constructor(
@@ -144,6 +146,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
                 this.advanceFiltersApplied = false;
+                this.clearFilter = true;
                 this.getAccountStatementList();
             }
         });
@@ -184,6 +187,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.transactionInput.patchValue(null, { emitEvent: false });
         this.showTransactionInput = false;
         this.advanceFiltersApplied = false;
+        this.clearFilter = false;
         this.isSearching = false;
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
@@ -216,6 +220,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.transactionInput.patchValue(null, { emitEvent: false });
             this.showTransactionInput = false;
             this.advanceFiltersApplied = false;
+            this.clearFilter = false;
             this.isSearching = false;
             this.accountListRequest.accountUniqueName = this.activeAccountUniqueName;
             this.accountListRequest.count = this.pageSizeOptions[1];
@@ -244,6 +249,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         if (!event.isClose && event.advanceSearchData) {
             this.advanceFiltersApplied = true;
+            this.clearFilter = true;
             if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
                 this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                 this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
