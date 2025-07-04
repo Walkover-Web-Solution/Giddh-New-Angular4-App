@@ -1211,6 +1211,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
+                this.getTransactionData();
+                this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+            }
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {

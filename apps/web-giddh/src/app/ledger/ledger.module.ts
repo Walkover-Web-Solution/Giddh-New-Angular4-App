@@ -146,7 +146,6 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         BankIntegrationModule,
         CarouselComponent,
         AsideMenuCreateTaxModule,
-        BankIntegrationModule,
         AsideMenuAccountModule
     ]
 })
