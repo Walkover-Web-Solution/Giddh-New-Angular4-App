@@ -205,10 +205,8 @@ export class ContactService {
                 .replace(':page', encodeURIComponent(model.page))
                 .replace(':from', encodeURIComponent(model.from))
                 .replace(':to', encodeURIComponent(model.to))
-                .replace(':sort', encodeURIComponent(model.sort));
-            if (!isPost) {
-                url = url.replace(':q', encodeURIComponent(model.q));
-            }
+                .replace(':sort', encodeURIComponent(model.sort))
+                .replace(':q', encodeURIComponent(model.q));
             if (branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${branchUniqueName}`);
             }
