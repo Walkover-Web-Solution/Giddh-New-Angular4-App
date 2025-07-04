@@ -143,7 +143,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.accountListRequest.q = searchValue;
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
-                this.advanceFiltersApplied = true;
+                this.advanceFiltersApplied = false;
                 this.getAccountStatementList();
             }
         });
