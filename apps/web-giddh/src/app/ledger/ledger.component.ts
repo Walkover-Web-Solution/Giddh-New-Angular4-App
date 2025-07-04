@@ -36,7 +36,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
 import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
 import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
@@ -89,6 +89,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public lc: LedgerVM;
     public selectedInvoiceList: string[] = [];
     public accountInprogress$: Observable<boolean>;
+    /** Holds the current blank ledger transaction */
+    public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
     public universalDate$: Observable<any>;
     public trxRequest: TransactionsRequest;
     public advanceSearchRequest: AdvanceSearchRequest;
@@ -109,6 +111,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Holds Bank Integration dailog template reference */
     @ViewChild('bankIntegrationPopup', { static: true }) public bankIntegrationPopup: TemplateRef<any>;
+    /** Holds update account dialog template reference */
+    @ViewChild('updateAccount', { static: true }) public updateAccount: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -147,6 +151,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public profileObj: any;
     public createAccountIsSuccess$: Observable<boolean>;
+    /** Observable to check if account is updated successfully */
+    public updateAccountIsSuccess$: Observable<boolean>;
     public companyTaxesList: TaxResponse[] = [];
     public selectedTxnAccUniqueName: string = '';
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
@@ -391,6 +397,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isUpdateAccount: boolean = false;
     /** Holds transaction type */
     public transactionType: typeof TransactionType = TransactionType;
+    /** Holds breakpoint screen size */
+    public breakpointScreenSize: { mediumDesktopScreen: boolean, smallDesktopScreen: boolean, tabScreen: boolean } = {
+        mediumDesktopScreen: false,
+        smallDesktopScreen: false,
+        tabScreen: false
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -432,6 +444,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
         this.accountInprogress$ = this.store.pipe(select(p => p.ledger.accountInprogress), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
         this.isLedgerCreateSuccess$ = this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$));
         this.lc.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
@@ -442,6 +455,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
     }
     /** True if active account is bank account */
     public get isBankAccount(): boolean {
@@ -1177,18 +1191,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.getLinkBankAccount();
                     }
                 }
-            }
-        });
-
-        this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
-                    this.getAdvanceSearchTxn();
-                } else {
-                    this.getTransactionData();
-                }
-                this.getTransactionData();
-                this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
     }
@@ -3704,5 +3706,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event) {
             this.closeAllAccountDropdown();
         }
+    }
+
+    /**
+     * Open Create Account Aside Pane
+     *
+     * @memberof LedgerComponent
+     */
+    public openAccountAsidePane(): void {
+        this.updateAccountDialogRef = this.dialog.open(this.updateAccount, {
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '0',
+                top: '0'
+            },
+            disableClose: true
+        });
     }
 }
