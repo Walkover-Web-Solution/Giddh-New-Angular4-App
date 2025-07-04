@@ -1160,6 +1160,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     }
 
+                    this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name);
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName);
+
                     const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                     entriesFormArray.clear();
 
