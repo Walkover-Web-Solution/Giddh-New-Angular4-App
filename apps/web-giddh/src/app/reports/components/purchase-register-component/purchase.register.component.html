@@ -54,7 +54,7 @@
                     </reactive-dropdown-field>
                 </div>
                 <ng-container *ngIf="reportForm?.get('groupBy')?.value === groupByEnum.Duration; else salesPersonBlock">
-                    <div class="mr-r15 financial-dropdown">
+                    <div class="mr-r15 dropdown-width">
                         <dropdown-field
                             [name]="'financialYear'"
                             [label]="commonLocaleData?.app_financial_year"

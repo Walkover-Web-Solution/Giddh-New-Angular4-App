@@ -25,7 +25,7 @@ import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -959,6 +959,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountRequest,
             salesPersonCreated: this.salesPersonCreated
         });
+        this.salesPersonCreated = false;
     }
 
     public closingBalanceTypeChanged(type: string) {
@@ -982,6 +983,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnDestroy() {
         this.resetAddAccountForm();
         this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.salesPersonCreated = false;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1943,17 +1945,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, {
-            height: '100dvh',
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                bottom: '0'
-            },
-            disableClose: true,
-            hasBackdrop: false
-        });
-
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
     }
 

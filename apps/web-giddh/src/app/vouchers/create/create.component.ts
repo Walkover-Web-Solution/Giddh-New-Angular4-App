@@ -35,7 +35,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
-import { AdjustedVoucherType, BranchHierarchyType, ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, HtmlElementEnum, KeyCodesEnum, RATE_FIELD_PRECISION, SubVoucher, ZIP_CODE_SUPPORTED_COUNTRIES } from "../../app.constant";
+import { AdjustedVoucherType, ASIDE_PANE_CONFIG, BranchHierarchyType, ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, HtmlElementEnum, KeyCodesEnum, RATE_FIELD_PRECISION, SubVoucher, ZIP_CODE_SUPPORTED_COUNTRIES } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -5535,16 +5535,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, {
-            height: '100dvh',
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                bottom: '0'
-            },
-            disableClose: true
-        });
-
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
     }
 

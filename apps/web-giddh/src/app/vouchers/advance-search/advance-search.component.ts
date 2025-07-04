@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { debounceTime, filter, map, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { GeneralService } from '../../services/general.service';
@@ -206,10 +206,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         if (adjustmentVoucherOptions?.length) {
             this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
+        this.getSalesPersonList();
         this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
             this.filteredSalesPersonList = res as IOption[];
         });
-        this.salesPersonStore.getAllSalesPerson(true);
         
         /** Search for action dropdown */
         this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
@@ -490,16 +490,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, {
-            height: '100dvh',
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                bottom: '0'
-            },
-            disableClose: true
-        });
-
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
     }
 

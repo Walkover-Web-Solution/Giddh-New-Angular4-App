@@ -40,8 +40,6 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('nameField') nameField: InputFieldComponent;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold local JSON data */
-    public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Mobile number library instance */
@@ -61,7 +59,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Create/Update Sales Person Success */
     public createUpdateSalesPersonSuccess$: Observable<boolean> = this.componentStore.createUpdateSalesPersonSuccess$;
     /** Delete Sales Person Success */
-    public deleteSalesPersonSuccess$: Observable<boolean> = this.componentStore.createUpdateSalesPersonSuccess$;
+    public deleteSalesPersonSuccess$: Observable<boolean> = this.componentStore.deleteSalesPersonSuccess$;
     /** Sales Person List In Progress */
     public salesPersonListInProgress$: Observable<boolean> = this.componentStore.salesPersonListInProgress$;
     /** Displayed columns for sales person table */
