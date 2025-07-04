@@ -486,8 +486,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public aiOcrToken: string = "";
     /** True if main create voucher module */
     public isMainVoucher: boolean = false;
-    /** This will show mobile number field */
-    public isMobileShow: boolean = true;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
