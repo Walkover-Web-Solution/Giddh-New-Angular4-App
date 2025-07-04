@@ -164,7 +164,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
-        private _invoiceService: InvoiceService,
+        private invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private modalService: BsModalService,
         private _location: LocationService,
@@ -446,7 +446,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
-        this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+        this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
@@ -458,7 +458,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = _.cloneDeep(ewayItem);
-        this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+        this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
@@ -801,15 +801,15 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     public onGenerateEwayBill(voucher: any): void {
         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-        this._invoiceService.selectedInvoicesLists = [];
-        this._invoiceService.VoucherType = "";
+        this.invoiceService.selectedInvoicesLists = [];
+        this.invoiceService.VoucherType = "";
         this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(voucher.uniqueName, {
             invoiceNumber: voucher.voucherNumber,
             voucherType: VoucherTypeEnum.sales,
             uniqueName: voucher.uniqueName
         }));
         voucher['voucherDate'] = voucher?.invoiceDate;
-        this._invoiceService.setSelectedInvoicesList([voucher]);
+        this.invoiceService.setSelectedInvoicesList([voucher]);
         setTimeout(() => {
             this.voucherComponentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
                 if (!response?.account?.billingDetails?.pincode) {

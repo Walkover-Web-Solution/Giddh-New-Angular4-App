@@ -530,7 +530,7 @@ export class InvoiceService {
         if ((model.count)) {
             url = url + 'count=' + model.count;
         }
-        if(model.failedRequestLog) {
+        if (model.failedRequestLog) {
             url = url + '&failedRequestLog=' + model.failedRequestLog;
         }
 
