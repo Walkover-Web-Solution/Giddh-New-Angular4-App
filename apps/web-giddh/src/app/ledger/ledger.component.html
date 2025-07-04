@@ -1250,7 +1250,7 @@
                             "
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
-                            <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
+                            <b class="blue-heading font-15 cursor-pointer" (click)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
                             <span class="dr-cr-category font-15 pull-right">{{ localeData?.dr }}</span>
                         </mat-grid-tile>
                         <mat-grid-tile
@@ -1262,7 +1262,7 @@
                             "
                             class="hidden-xs sticky-header pl-0 no-right-border"
                         >
-                            <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
+                            <b class="blue-heading font-15 cursor-pointer" (click)="openAccountAsidePane()">{{ lc.ledgerUnderStandingObj.text.cr }}</b>
                             <span class="dr-cr-category font-15 pull-right">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
@@ -3452,3 +3452,15 @@
         </ng-container>
     </div>
 </ng-container>
+
+<ng-template #updateAccount>
+    <aside-menu-account
+        [activeGroupUniqueName]="lc.activeAccount.parentGroups[lc.activeAccount.parentGroups.length-1]?.uniqueName"
+        [activeAccountDetails]="{uniqueName: lc.accountUnq}"
+        [isUpdateAccount]="true"
+        class="account-aside-menu-state transform-inherit" 
+        [commonLocaleData]="commonLocaleData"
+        (closeAsideEvent)="updateAccountDialogRef?.close()"
+    >
+    </aside-menu-account>
+</ng-template>
