@@ -192,10 +192,12 @@ export class ContactService {
     public getAccountStatementList(requestObj: any): Observable<BaseResponse<any, any>> {
         const model = requestObj.model ? requestObj.model : requestObj;
         const body = requestObj.body ? requestObj.body : null;
+        let requestObjCopy = { ...requestObj };
+        delete requestObj.branchUniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
-
+        const branchUniqueName = requestObjCopy.branchUniqueName;
         // Helper to build URL
-        const buildUrl = (isPost: boolean) => {
+        const buildUrl = () => {
             let url = this.config.apiUrl + ACCOUNT_STATEMENT_API.GET
                 .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
@@ -203,9 +205,10 @@ export class ContactService {
                 .replace(':page', encodeURIComponent(model.page))
                 .replace(':from', encodeURIComponent(model.from))
                 .replace(':to', encodeURIComponent(model.to))
-                .replace(':sort', encodeURIComponent(model.sort));
-            if (!isPost) {
-                url = url.replace(':q', encodeURIComponent(model.q));
+                .replace(':sort', encodeURIComponent(model.sort))
+                .replace(':q', encodeURIComponent(model.q));
+            if (branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${branchUniqueName}`);
             }
             return url;
         };
@@ -219,9 +222,9 @@ export class ContactService {
         const handleError = (e: any) => this.errorHandler.HandleCatch<any, any>(e);
 
         if (requestObj.method === 'POST') {
-            return this.http.post(buildUrl(true), body).pipe(handleResponse, catchError(handleError));
+            return this.http.post(buildUrl(), body).pipe(handleResponse, catchError(handleError));
         } else {
-            return this.http.get(buildUrl(false)).pipe(handleResponse, catchError(handleError));
+            return this.http.get(buildUrl()).pipe(handleResponse, catchError(handleError));
         }
     }
 }

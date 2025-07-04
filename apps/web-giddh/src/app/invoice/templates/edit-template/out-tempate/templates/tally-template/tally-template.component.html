@@ -213,7 +213,7 @@
                                     <tr>
                                         <td width="50%" class="padding-0">
                                             <table>
-                                                <tr *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display || showLogo">
+                                                <tr *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display || showLogo || fieldsAndVisibility?.header?.companyName?.display">
                                                     <td class="border-none border-bottom">
                                                         <table>
                                                             <tr>
@@ -844,7 +844,7 @@
                     <tbody>
                         <tr>
                             <td width="20%" class="v-align-middle" *ngIf="inputTemplate.showBankQrCode" [ngClass]="{ 'border-top-none': !fieldsAndVisibility.footer.taxBifurcation?.display }">
-                                <img src="{{ imgPath }}/bank-qr-code.png" alt="image" width="150px"/>
+                                <img src="{{ imgPath }}bank-qr-code.png" alt="image" width="150px"/>
                             </td>
                             <td width="80%" class="p-0" *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
                                 <table>

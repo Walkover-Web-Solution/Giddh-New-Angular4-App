@@ -195,31 +195,33 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.getTags();
-        this.componentStore.reconcileDateRange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
-                const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
-                this.isReconcileModeDateRange = fromDate + ' - ' + toDate;
-                const isSameDateRange = this.isSameDateRange(fromDate, toDate);
-                this.showReconcileOptions = isSameDateRange;
-                this.showConfirmationOnDateChange = isSameDateRange;
-                this.showTallyReportOptions(isSameDateRange);
-                this.cd.detectChanges();
-            } else if (response === null) {
-                this.showConfirmationOnDateChange = false;
-                this.isReconcileModeDateRange = null;
-                this.showReconcileOptions = true;
-                this.cd.detectChanges();
-            }
-        });
-
-        this.tlPlService.isReportTailed$.pipe(
-            filter(response => response !== null && response !== undefined),
-            debounceTime(200),
-            takeUntil(this.destroyed$)
-        ).subscribe(() => {
-            this.getReconcileDateRange();
-        });
+        if (!this.isProjectWiseAccounting) {
+            this.componentStore.reconcileDateRange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    const fromDate = dayjs(response.fromDate).format(GIDDH_DATE_FORMAT);
+                    const toDate = dayjs(response.toDate).format(GIDDH_DATE_FORMAT);
+                    this.isReconcileModeDateRange = fromDate + ' - ' + toDate;
+                    const isSameDateRange = this.isSameDateRange(fromDate, toDate);
+                    this.showReconcileOptions = isSameDateRange;
+                    this.showConfirmationOnDateChange = isSameDateRange;
+                    this.showTallyReportOptions(isSameDateRange);
+                    this.cd.detectChanges();
+                } else if (response === null) {
+                    this.showConfirmationOnDateChange = false;
+                    this.isReconcileModeDateRange = null;
+                    this.showReconcileOptions = true;
+                    this.cd.detectChanges();
+                }
+            });
+    
+            this.tlPlService.isReportTailed$.pipe(
+                filter(response => response !== null && response !== undefined),
+                debounceTime(200),
+                takeUntil(this.destroyed$)
+            ).subscribe(() => {
+                this.getReconcileDateRange();
+            });
+        }
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -310,6 +312,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
+                this.generalService.currentBranchUniqueName = this.currentBranch?.uniqueName;
                 this.filterForm.get('branchUniqueName').setValue(this.currentBranch?.uniqueName);
                 this.filterForm.updateValueAndValidity();
                 this.cd.detectChanges();
@@ -532,6 +535,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
+        this.generalService.currentBranchUniqueName = selectedEntity?.value;
         setTimeout(() => {
             this.expandAllChange.emit(false);
         }, 10);
@@ -659,13 +663,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsFilterComponent
      */
     public getReconcileDateRange(): void {
+        if (this.isProjectWiseAccounting) {
+            return;
+        }
         let reportType = ReportType.TrialBalance;
         if (this.BsExportXLS) {
             reportType = ReportType.BalanceSheet;
         } else if (this.plBsExportXLS) {
             reportType = ReportType.ProfitLoss;
         }
-        this.componentStore.getReconcileDateRange(reportType);
+        this.componentStore.getReconcileDateRange({ reportType, branchUniqueName: this.generalService.currentBranchUniqueName });
     }
 
     /**

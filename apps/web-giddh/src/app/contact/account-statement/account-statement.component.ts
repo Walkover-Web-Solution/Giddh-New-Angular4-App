@@ -12,6 +12,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
+import { cloneDeep } from "../../lodash-optimized";
 
 
 @Component({
@@ -51,7 +52,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         page: 1,
         count: '',
         sortBy: 'Date',
-        sort: 'asc',
+        sort: '',
         q: '',
     };
     /** Current page index for the paginator */
@@ -96,6 +97,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     /** True if the advance search feature is implemented and enabled */
     public isAdvanceSearchImplemented: boolean = false;
+    /** Branch unique name (input from parent) */
+    @Input() branchUniqueName: string;
 
 
     constructor(
@@ -123,12 +126,24 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                bsRangeValue: [dayjs(this.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.to, GIDDH_DATE_FORMAT).toDate()]
+            })
+        });
+
+        this.advanceSearchRequest.to = this.to;
+        this.advanceSearchRequest.page = 0;
+
+
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const searchValue = search?.trim();
+
             if (searchValue || searchValue === '') {
                 this.accountListRequest.q = searchValue;
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
+                this.advanceFiltersApplied = true;
                 this.getAccountStatementList();
             }
         });
@@ -170,6 +185,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.showTransactionInput = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
+        this.advanceSearchRequest = new AdvanceSearchRequest();
+        this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
 
         if (!onlyResetValue) {
             this.getAccountStatementList();
@@ -231,7 +248,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                 this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
-            this.advanceSearchRequest = event.advanceSearchData.dataToSend;
+            this.advanceSearchRequest = cloneDeep(event.advanceSearchData);
             this.getAccountStatementList();
         }
     }
@@ -250,7 +267,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 })
             });
         }
-
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
             width: '980px',
             role: 'alertdialog',
@@ -266,14 +282,19 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public getAccountStatementList(): void {
         this.isLoading = true;
         this.accountListData = [];
+        const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
             const requestObj = {
-                body: this.advanceSearchRequest,
+                body: advReq,
                 method: 'POST',
-                model: this.accountListRequest
+                model: this.accountListRequest,
+                branchUniqueName: this.branchUniqueName
             };
             this.contactComponentStore.getAccountStatementList(requestObj);
         } else {
+            if (this.branchUniqueName) {
+                this.accountListRequest.branchUniqueName = this.branchUniqueName;
+            }
             this.contactComponentStore.getAccountStatementList(this.accountListRequest);
         }
     }
@@ -285,7 +306,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public sortData(event: any): void {
-        this.accountListRequest.sort = event?.direction ?? 'asc';
+        this.accountListRequest.sort = event?.direction ? event?.direction : 'asc';
         this.accountListRequest.sortBy = event?.active;
         this.getAccountStatementList();
     }
@@ -319,7 +340,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+            const position = this.generalService.getPosition(element.target);
+            position.y = position.y - 370;
+            this.dateFieldPosition = position;
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
@@ -335,7 +358,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
-
+        let from = dayjs(value.startDate, GIDDH_DATE_FORMAT).toDate();
+        let to = dayjs(value.endDate, GIDDH_DATE_FORMAT).toDate();
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            page: 0,
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                bsRangeValue: [from, to]
+            })
+        });
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;

@@ -5,5 +5,27 @@
     "email_content_suggestions": "Type '@' to see suggestions",
     "recipients": "Recipients",
     "subject": "Subject",
-    "save_and_send":"Save and Send"
+    "save_and_send":"Save and Send",
+    "voucher_due":"Voucher Due",
+    "attach_voucher_pdf": "Attach Voucher PDF",
+    "day_of_week": "Day of Week",
+    "date_of_month": "Date of Month",
+    "other":"Other",
+    "others":"Others",
+    "trigger_name":"Trigger Name",
+    "enter_trigger_name":"Enter Trigger Name",
+    "trigger_module":"Trigger Module",
+    "select_trigger_module":"Select Trigger Module",
+    "actions":"Actions",
+    "select_action":"Select Action",
+    "enter_time":"Enter Time",
+    "day_action":"Day Action",
+    "select_time_action":"Select Time Action",
+    "select_day_of_week":"Select Day of Week",
+    "select_date_of_month":"Select Date of Month",
+    "disabled_trigger":"Disabled Trigger",
+    "validation_error_message": {
+        "email_content_required": "Email content is required",
+        "email_subject_required": "Email subject is required"
+    }
 }

@@ -99,7 +99,6 @@
     "adjustment_amount_error": "समायोजन राशि प्राप्तियों से अधिक है।",
     "voucher_no": "वाउचर संख्या",
     "compound_total": "यौगिक कुल",
-    "toedit_switch_branch": "संपादित करने के लिए, \"शाखा\" स्विच करें",
     "confirm_delete_entry": "क्या आप वाकई इस प्रविष्टि को हटाना चाहते हैं?",
     "multiple_stock_entry_error": "आप कई स्टॉक प्रविष्टि नहीं जोड़ सकते",
     "invalid_account_transaction_error": "कृपया लेनदेन में एक वैध खाते का चयन करें",

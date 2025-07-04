@@ -849,7 +849,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
             }
 
-            this.store.pipe(select(s => s.session), take(1)).subscribe(session => {
+            this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
                 const companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name;
                 if (!data?.sections?.header?.data['companyName']?.label) { 
                     data.sections['header'].data['companyName'].label = companyName;

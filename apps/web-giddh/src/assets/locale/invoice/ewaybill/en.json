@@ -91,6 +91,12 @@
         "credit_notes": "Credit Notes",
         "delivery_challan": "Delivery Challan"
     },
+    "transaction_sub_type": {
+        "regular": "Regular",
+        "bill_to_ship_to": "Bill to - ship to",
+        "bill_from_dispatch_from": "Bill from - dispatch from",
+        "combination": "Combination"
+    },
     "remove_invoice": "Are you sure want to remove invoice [VOUCHER_NUMBER] ?",
     "tab_generated_bills": "Generated Bills",
     "search_eway": "Search E-way",
@@ -102,5 +108,7 @@
     "create_e_way_bill": "Create E-Way Bill",
     "eway_bill_logs": "E-Way Bill Logs",
     "generate_eway_bill": "Generate E-Way Bill",
-    "reason": "Reason"
+    "reason": "Reason",
+    "transaction_sub_type_label": "Transaction Sub Type",
+    "transaction_type_placeholder": "Select Transaction Type"
 }

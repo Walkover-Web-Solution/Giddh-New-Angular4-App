@@ -1,0 +1,113 @@
+<ng-container
+    appTranslate
+    (commonLocaleData)="commonLocaleData = $event"
+    [keyboardShortcut]="'esc'"
+    (onShortcutPress)="closeDialog()"
+>
+    <div class="dialog-header">
+        <h3 class="modal-title">{{ commonLocaleData?.app_sales_person }}</h3>
+        <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
+    </div>
+    <mat-dialog-content class="dialog-body sales-person">
+        <form [formGroup]="salesPersonForm" (ngSubmit)="onSubmit()">
+            <div class="d-grid grid-column-2 column-gap15 row-gap15" *ngIf="showForm">
+                <div>
+                    <input-field
+                        #nameField
+                        [type]="'text'"
+                        [name]="'name'"
+                        [autofocus]="true"
+                        [label]="commonLocaleData?.app_name"
+                        [placeholder]="commonLocaleData?.app_name"
+                        formControlName="name"
+                        [required]="true"
+                        [showError]="
+                            (isFormSubmitted || salesPersonForm?.controls?.name?.dirty) &&
+                            salesPersonForm?.controls?.name?.invalid
+                        "
+                    ></input-field>
+                </div>
+                <div>
+                    <input-field
+                        [type]="'email'"
+                        [name]="'email'"
+                        [label]="commonLocaleData?.app_email"
+                        [placeholder]="commonLocaleData?.app_email"
+                        formControlName="email"
+                        [showError]="
+                            (isFormSubmitted || salesPersonForm?.controls?.email?.dirty) &&
+                            salesPersonForm?.controls?.email?.invalid
+                        "
+                    ></input-field>
+                </div>
+                <div class="mobile-number-wrapper voucher-preview-edit position-relative">
+                    <input-field
+                        [name]="'mobileNumber'"
+                        [type]="'tel'"
+                        #initContactAdd
+                        class="flag-input"
+                        [id]="'init-contact-add'"
+                        [label]="commonLocaleData?.app_mobile_number"
+                        [placeholder]="'9998899988'"
+                        [floatLabel]="salesPersonForm?.controls?.mobileNumber?.value ? 'always' : 'auto'"
+                        formControlName="mobileNumber"
+                    >
+                    </input-field>
+                    <span id="init-contact-add-valid-msg" class="d-none"></span>
+                    <span id="init-contact-add-error-msg" class="d-none"></span>
+                </div>
+                <div class="grid-child-column-full d-flex column-gap15">
+                    <button mat-stroked-button color="primary" [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid">
+                        {{ salesPersonUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
+                    </button>
+                    <button mat-stroked-button (click)="salesPersonForm?.reset(); salesPersonUniqueName = null" [disabled]="(salesPersonSaveInProgress$ | async)">
+                        {{ commonLocaleData?.app_clear }}
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <section class="table-responsive mt-5" *ngIf="(salesPersonList$ | async)?.results?.length">
+            <giddh-page-loader *ngIf="(salesPersonListInProgress$ | async); else showTable" class="mt-5"></giddh-page-loader>
+            <ng-template #showTable>
+                <table
+                    class="giddh-table table border"
+                    mat-table
+                    [dataSource]="(salesPersonList$ | async)?.results"
+                >
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container>
+                    <!-- Email Column -->
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_email }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.email || '-' }}</td>
+                    </ng-container>
+                    <!-- Mobile Number Column -->
+                    <ng-container matColumnDef="mobileNumber">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_mobile_number }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.mobileNumber || '-' }}</td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_action }}</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">
+                            <button class="min-width-unset mr-r1" mat-stroked-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
+                                <i class="icon-edit font-15"></i>
+                            </button>
+                            <button class="min-width-unset" mat-stroked-button color="warn" (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
+                                <i class="icon-trash font-15"></i>
+                            </button>
+                        </td>
+                    </ng-container>
+                    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let rowHistory; columns: displayedColumns"></tr>
+                </table>
+            </ng-template>
+        </section>
+    </mat-dialog-content>
+</ng-container>

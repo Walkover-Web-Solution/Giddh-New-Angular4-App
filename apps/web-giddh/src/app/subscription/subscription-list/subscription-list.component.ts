@@ -21,7 +21,6 @@ import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.comp
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -348,10 +347,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             }
         } else if (searchedFieldName === 'Plan Name') {
             if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Status') {
-            if (this.subscriptionListForm?.controls['status'].value !== null && this.subscriptionListForm?.controls['status'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Monthly/Yearly') {

@@ -71,6 +71,7 @@ import { CustomFieldsService } from "./custom-fields.service";
 import { VoucherService } from "./voucher.service";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { CountryCodeService } from './country-code.service';
+import { AiOcrService } from "./ai-ocr.service";
 
 @NgModule({
     imports: [CommonModule, RouterModule],
@@ -149,7 +150,8 @@ export class ServiceModule {
                 LedgerService,
                 VoucherService,
                 VouchersUtilityService,
-                CountryCodeService
+                CountryCodeService,
+                AiOcrService
             ]
         };
     }

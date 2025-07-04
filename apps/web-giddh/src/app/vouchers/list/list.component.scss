@@ -156,6 +156,11 @@ table {
     color: var(--color-secondary-success);
 }
 
+:host ::ng-deep select-table-column > button {
+    height: 42px !important;
+    padding: 0 !important;
+}
+
 @media screen and (max-width: 1199px) {
     .vouchers-wrapper {
         .invoice-video {

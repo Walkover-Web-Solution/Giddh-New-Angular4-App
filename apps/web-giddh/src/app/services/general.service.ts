@@ -19,8 +19,8 @@ import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
-import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Injectable()
 export class GeneralService {
@@ -2068,7 +2068,7 @@ export class GeneralService {
         return window.open(
             url,
             title,
-            `width=${width},height=${height},top=${top},left=${left}`
+            `popup,width=${width},height=${height},top=${top},left=${left}`
         );
     }
 
@@ -2312,6 +2312,44 @@ export class GeneralService {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @param {any} commonLocaleData
+     * @param {boolean} [isDaily=false]
+     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
+        let days = [
+            { label: commonLocaleData?.app_weekdays.sunday, value: 'sunday' },
+            { label: commonLocaleData?.app_weekdays.monday, value: 'monday' },
+            { label: commonLocaleData?.app_weekdays.tuesday, value: 'tuesday' },
+            { label: commonLocaleData?.app_weekdays.wednesday, value: 'wednesday' },
+            { label: commonLocaleData?.app_weekdays.thursday, value: 'thursday' },
+            { label: commonLocaleData?.app_weekdays.friday, value: 'friday' },
+            { label: commonLocaleData?.app_weekdays.saturday, value: 'saturday' }
+        ];
+        if (isDaily) {
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: 'daily' }, ...days];
+        }
+        return days.filter(day => !excludeDays.includes(day.value));
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDaysOfMonth(): IOption[] {
+        return Array.from({ length: 31 }, (_, i) => ({
+            label: (i + 1).toString(),
+            value: (i + 1).toString()
+        }));
     }
 }
 

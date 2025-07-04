@@ -24,6 +24,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: '[grid-row]',
@@ -65,7 +66,8 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
         @Inject(DOCUMENT) private document: Document,
         private router: Router,
         private financialReportsComponentStore: FinancialReportsComponentStore,
-        private tlPlService: TlPlService
+        private tlPlService: TlPlService,
+        private generalService: GeneralService
     ) {
         this.currentUrl = this.router.url;
     }
@@ -180,7 +182,8 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
             request: {
                 reportType: ReportType.TrialBalance,
                 from: this.from,
-                to: this.to
+                to: this.to,
+                branchUniqueName: this.generalService.currentBranchUniqueName
             },
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };

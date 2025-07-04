@@ -953,6 +953,18 @@
             ]
         },
         {
+            "label": "AI",
+            "icon": "icon-audit-log",
+            "items": [
+                {
+                    "label": "OCR",
+                    "link": "/pages/ai-ocr",
+                    "icon": "icon-audit-log",
+                    "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
+                }
+            ]
+        },
+        {
             "label": "समूह नाम",
             "link": "/pages/group-name",
             "icon": "icon-daybook-new",

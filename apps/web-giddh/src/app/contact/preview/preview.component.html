@@ -94,6 +94,7 @@
                                         <account-statement
                                             *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [branchUniqueName]="queryParams.branchUniqueName"
                                             [from]="queryParams.from"
                                             [to]="queryParams.to"
                                         ></account-statement>
@@ -111,6 +112,7 @@
                                         <ledger-statement
                                             *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [branchUniqueName]="queryParams.branchUniqueName"
                                             [from]="queryParams.from"
                                             [to]="queryParams.to"
                                         ></ledger-statement>
@@ -139,9 +141,11 @@
                                             [updateAccountIsSuccess$]="updateAccountIsSuccess$"
                                             (deleteClicked)="showDeleteAccountModal()"
                                             (submitClicked)="updateAccount($event)"
-                                            [showBankDetail]="showBankDetail"
+                                            [showBankDetailPreview]="showBankDetailPreview"
+                                            [contactPreview]="true"
                                             [showVirtualAccount]="showVirtualAccount"
                                             [isDebtorCreditor]="isDebtorCreditor"
+                                            (updateViaPatchApi)="updateAccount($event, true)"
                                         >
                                         </account-update-new-details>
                                         <ng-container *ngIf="isContactNotFound">

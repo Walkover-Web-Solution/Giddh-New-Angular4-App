@@ -17,7 +17,7 @@
                                 localeData?.invoice_types?.cash_debit_note : invoiceType.isCashInvoice &&
                                 invoiceType.isCreditNote ? localeData?.invoice_types?.cash_credit_note : (voucherType |
                                 voucherName: localeData | titlecase) }}</h1>
-
+                                
                             <mat-slide-toggle color="primary" class="ml-4"
                                 *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote"
                                 formControlName="salesPurchaseAsReceiptPayment">
@@ -392,6 +392,21 @@
                                             </div>
                                         </ng-container>
                                     </ng-container>
+
+                                     <!-- Sales Person -->
+                                     <div class="col-6 mr-t15">
+                                        <reactive-dropdown-field 
+                                            formControlName="salesPersonUniqueName"
+                                            [name]="'sales-person'"
+                                            [label]="commonLocaleData?.app_sales_person"
+                                            [labelValue]="invoiceForm.get('salesPersonName')?.value"
+                                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                                            [options]="salesPersonList$ | async"
+                                            [showCreateNew]="true"
+                                            [createNewText]="commonLocaleData?.app_create_new"
+                                            (createOption)="openSalesPersonDialog()"
+                                        ></reactive-dropdown-field>
+                                    </div>
 
                                     <!-- Warehouse -->
                                     <div class="col-6 mr-t15" *ngIf="showWarehouse && warehouses?.length > 1"
@@ -1851,7 +1866,7 @@
                                     </div>
                                 </div>
 
-                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4"  *ngIf="isMainVoucher">
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{
                                             commonLocaleData?.app_clear }}</button>
@@ -1913,6 +1928,16 @@
                                         <button mat-stroked-button color="primary" (click)="updateVoucher()">{{
                                             updateVoucherText }}</button>
                                     </ng-container>
+                                </div>
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4" *ngIf="!isMainVoucher">
+                                    <button mat-stroked-button (click)="resetVoucherForm()">{{
+                                        commonLocaleData?.app_clear }}</button>
+                                    <button mat-stroked-button color="primary" (click)="generateVoucher('skip')">
+                                        {{ commonLocaleData?.app_skip_and_next }}
+                                    </button>
+                                    <button mat-stroked-button color="primary" (click)="generateVoucher('save')">
+                                        {{ commonLocaleData?.app_save_and_next }}
+                                    </button>
                                 </div>
                             </div>
                         </div>

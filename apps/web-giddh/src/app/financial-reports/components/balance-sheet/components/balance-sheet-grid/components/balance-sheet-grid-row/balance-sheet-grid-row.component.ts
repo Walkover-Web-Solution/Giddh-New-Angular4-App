@@ -7,6 +7,7 @@ import {
 import { FinancialReportsComponentStore } from 'apps/web-giddh/src/app/financial-reports/financial-reports.store';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
@@ -34,7 +35,7 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
      /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService) {
+    constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService, private generalService: GeneralService) {
         this.currentUrl = this.router.url;
     }
 
@@ -110,7 +111,8 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
             request: {
                 reportType: ReportType.BalanceSheet,
                 from: this.from,
-                to: this.to
+                to: this.to,
+                branchUniqueName: this.generalService.currentBranchUniqueName
             },
             payload: [{ uniqueName: accountGroupUniqueName, entityType: entityType, checked: event.checked }]
         };

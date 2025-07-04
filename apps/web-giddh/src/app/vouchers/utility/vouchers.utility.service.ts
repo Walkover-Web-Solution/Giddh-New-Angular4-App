@@ -58,7 +58,7 @@ export class VouchersUtilityService {
     }
 
     public parseVoucherType(voucherType: string): string {
-        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
+        return voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType?.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
     public createQueryString(url: string, model: any): string {
@@ -90,10 +90,6 @@ export class VouchersUtilityService {
                 group = 'sundrydebtors';
             } else {
                 group = 'sundrycreditors';
-
-                if (!voucherType) { // Code for Debug Remove this code in Stage PR
-                    console.error("Voucher type is undefined")
-                }
             }
         } else if (searchType === SearchType.ITEM) {
             group = [VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum) 

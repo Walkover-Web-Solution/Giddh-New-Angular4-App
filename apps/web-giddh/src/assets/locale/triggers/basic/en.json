@@ -1,0 +1,10 @@
+{
+    "delete_trigger_message": "Are you sure you want to delete [NAME]?",
+    "switch_to_advance_trigger": "Switch to Advance Trigger",
+    "title": "Title",
+    "email_subject": "Email Subject",
+    "trigger_module": "Trigger Module",
+    "execution_time": "Execution Time",
+    "conditions": "Conditions",
+    "disabled": "Disabled"
+}

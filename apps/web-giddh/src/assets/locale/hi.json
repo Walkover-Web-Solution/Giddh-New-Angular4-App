@@ -411,8 +411,8 @@
     "app_particular": "विशेष",
     "app_particulars": "विवरण",
     "app_clo_bal": "जमा शेष",
-    "app_dr": "डेबिट",
-    "app_cr": "क्रेडिट",
+    "app_dr": "श्रेय",
+    "app_cr": "जमा",
     "app_pdf": "पीडीएफ",
     "app_excel": "एक्सेल",
     "app_ascending": "आरोही",
@@ -775,7 +775,21 @@
     "app_file_format": "फाइल प्रारूप",
     "app_select_file": "फाइल चुनें",
     "app_closing_balance": "जमा शेष",
+    "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?",
     "app_account_status": "खाता स्थिति",
     "app_both": "दोनों",
-    "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?"
+    "app_weekdays": {
+        "daily": "दैनिक",
+        "sunday": "रविवार",
+        "monday": "सोमवार",
+        "tuesday": "मंगलवार",
+        "wednesday": "बुधवार",
+        "thursday": "गुरुवार",
+        "friday": "शुक्रवार",
+        "saturday": "शनिवार"
+    },
+    "app_skip_and_next": "छोड़ें और अगला",
+    "app_save_and_next":"सहेजें और अगला",
+    "app_sales_person": "विक्रेता",
+    "app_sales_person_placeholder": "विक्रेता चुनें"
 }
