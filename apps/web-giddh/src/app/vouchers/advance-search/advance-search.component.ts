@@ -10,14 +10,13 @@ import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { GeneralService } from '../../services/general.service';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
-import { SalesPersonService } from '../../shared/sales-person/utility/sales-person.service';
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
 
 @Component({
     selector: 'app-advance-search',
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
-    providers: [SalesPersonService, SalesPersonComponentStore]
+    providers: [SalesPersonComponentStore]
 })
 export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -85,7 +84,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /** Holds date adjustment Voucher list items */
     public adjustmentVoucherOptions: IOption[] = [];
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** This will use for instance of sales person Dropdown */
     public salesPersonDropdown: FormControl = new FormControl();
     /** Filtered Sales Person List */
@@ -500,6 +499,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson(true);
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }

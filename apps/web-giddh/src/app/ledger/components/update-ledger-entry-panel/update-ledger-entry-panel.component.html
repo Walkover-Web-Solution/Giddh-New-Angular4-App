@@ -1374,7 +1374,7 @@
                         <ng-container
                             *ngIf="
                                 (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                vm.selectedLedger.voucher.shortCode !== 'jr'
+                                vm.selectedLedger.voucher.shortCode !== 'jr'; else showOnlySalesPerson
                             "
                         >
                             <div
@@ -1697,17 +1697,7 @@
                             <div class="row mr-t15">
                                 <!-- Sales Person -->
                                 <div class="col-6">
-                                    <reactive-dropdown-field 
-                                        [(ngModel)]="vm.selectedLedger.salesPersonUniqueName"
-                                        [name]="'sales-person'"
-                                        [label]="commonLocaleData?.app_sales_person"
-                                        [labelValue]="vm.selectedLedger.salesPerson?.name || ''"
-                                        [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
-                                        [options]="salesPersonList$ | async"
-                                        [showCreateNew]="true"
-                                        [createNewText]="commonLocaleData?.app_create_new"
-                                        (createOption)="openSalesPersonDialog()"
-                                    ></reactive-dropdown-field>
+                                    <ng-container *ngTemplateOutlet="salesPersonDropdown"></ng-container>
                                 </div>
                                 <div class="col-6">
                                     <div
@@ -1766,6 +1756,14 @@
                                 </span>
                             </div>
                         </ng-container>
+                        <ng-template #showOnlySalesPerson>
+                            <div class="row mr-t15">
+                                <!-- Sales Person -->
+                                <div class="col-6">
+                                    <ng-container *ngTemplateOutlet="salesPersonDropdown"></ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                     <!-- endregion -->
 
@@ -2595,4 +2593,18 @@
         ></aside-menu-create-tax-component>
     </ng-template>
 </ng-container>
-                                            
+
+<!-- Sales person dropdown template reference -->
+<ng-template #salesPersonDropdown>
+    <reactive-dropdown-field 
+        [(ngModel)]="vm.selectedLedger.salesPersonUniqueName"
+        [name]="'sales-person'"
+        [label]="commonLocaleData?.app_sales_person"
+        [labelValue]="vm.selectedLedger.salesPerson?.name || ''"
+        [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+        [options]="salesPersonList$ | async"
+        [showCreateNew]="true"
+        [createNewText]="commonLocaleData?.app_create_new"
+        (createOption)="openSalesPersonDialog()"
+    ></reactive-dropdown-field>
+</ng-template>

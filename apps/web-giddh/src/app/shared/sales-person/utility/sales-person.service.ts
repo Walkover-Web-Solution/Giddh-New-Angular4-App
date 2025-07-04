@@ -27,11 +27,14 @@ export class SalesPersonService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SalesPersonService
      */
-    public salesPerson(httpMethod: HttpMethodType = HttpMethod.GET, model: any = {}, uniqueName: string = null): Observable<BaseResponse<any, any>> {
+    public salesPerson(httpMethod: HttpMethodType = HttpMethod.GET, model: any = {}, uniqueName: string = null, params: any = {}): Observable<BaseResponse<any, any>> {
         let url = this.config?.apiUrl + 
         SALES_PERSON_API?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         if (uniqueName) {
             url += `/${encodeURIComponent(uniqueName)}`;
+        }
+        if (httpMethod === HttpMethod.GET) {
+            url += `?page=${params?.page || 1}&count=${params?.count || 200}`;
         }
         return this.http[httpMethod](url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

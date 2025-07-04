@@ -93,6 +93,7 @@ import { EWayBillModule } from "../shared/eWayBill/eWayBill.module";
 import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
 import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
+import { SalesPersonService } from "../shared/sales-person/utility/sales-person.service";
 
 @NgModule({
     declarations: [
@@ -196,7 +197,7 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
     exports: [
 VoucherCreateComponent
     ],
-    providers: [TitleCasePipe, InvoiceUiDataService]
+    providers: [TitleCasePipe, InvoiceUiDataService, SalesPersonService]
 })
 export class VouchersModule {
 

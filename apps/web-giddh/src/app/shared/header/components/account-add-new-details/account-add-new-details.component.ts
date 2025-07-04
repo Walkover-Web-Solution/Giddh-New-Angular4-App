@@ -43,14 +43,13 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
 import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
-import { SalesPersonService } from '../../../sales-person/utility/sales-person.service';
 import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
 
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore, SalesPersonService, SalesPersonComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore]
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -223,7 +222,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** True if sales person is created */
     public salesPersonCreated: boolean = false;
 
@@ -1964,7 +1963,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson(true);
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }
 

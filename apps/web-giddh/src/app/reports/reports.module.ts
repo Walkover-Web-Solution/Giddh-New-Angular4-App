@@ -53,6 +53,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 
 @NgModule({
     declarations: [
@@ -80,7 +81,7 @@ import { MatNativeDateModule } from '@angular/material/core';
         Daterangepicker,
         PaginationModule
     ],
-    providers: [],
+    providers: [SalesPersonService],
     imports: [
         ReportsRoutingModule,
         CommonModule,

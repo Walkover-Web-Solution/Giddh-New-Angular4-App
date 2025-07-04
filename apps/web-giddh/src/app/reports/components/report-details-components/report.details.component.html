@@ -46,7 +46,6 @@
                         [options]="groupByOptions"
                         formControlName="groupBy"
                         [labelValue]="groupByOptions?.[0]?.label"
-                        (selectedOption)="handleGroupByChange($event)"
                         [required]="true"
                     >
                     </reactive-dropdown-field>
@@ -112,7 +111,7 @@
                                 panelClass="py-0"
                                 name="salesPerson"
                                 [multiple]="true"
-                                (selectionChange)="reportForm?.get('salesPersonUniqueNames')?.value?.length && getSalesRegister(dateRange.from, dateRange.to)"
+                                (selectionChange)="getSalesRegister(dateRange.from, dateRange.to)"
                                 formControlName="salesPersonUniqueNames"
                             >
                                 <mat-option class="mt-0">
@@ -130,29 +129,15 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="date-range-wrapper custom-mat-form-field dropdown-width" [formGroup]="dateRangeForm">
-                        <mat-form-field
-                            [matDatepickerToggleIcon]="false"
-                            appearance="outline"
-                            (click)="picker?.open()"
-                            class="w-100"                                                     
-                        >
-                            <mat-label>{{ commonLocaleData?.app_date_range }}</mat-label>
-                            <mat-date-range-input [rangePicker]="picker">
-                                <input
-                                    matStartDate
-                                    [placeholder]="commonLocaleData?.app_start_date"
-                                    [formControl]="dateRangeForm?.get('from')"
-                                />
-                                <input
-                                    matEndDate
-                                    [placeholder]="commonLocaleData?.app_end_date"
-                                    [formControl]="dateRangeForm?.get('to')"
-                                    (dateChange)="onDateChange()"
-                                />
-                            </mat-date-range-input>
-                            <mat-date-range-picker #picker></mat-date-range-picker>
-                        </mat-form-field>
+                    <div class="custom-datepicker-wrapper">
+                        <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker border-radius-2"
+                            />
+                        </div>
                     </div>
                 </ng-template>
                 <div class="custom-mat-form-field dropdown-width">
@@ -163,7 +148,7 @@
                             name="account"
                             [multiple]="true"
                             formControlName="accountUniqueNames"
-                            (selectionChange)="reportForm?.get('accountUniqueNames')?.value?.length && getSalesRegister(dateRange.from, dateRange.to)"
+                            (selectionChange)="getSalesRegister(dateRange.from, dateRange.to)"
                         >
                             <mat-option class="mt-0">
                                 <ngx-mat-select-search
@@ -202,3 +187,30 @@
         ></giddh-table>
     </div>
 </ng-container>
+
+
+ <!-- Universal Datepicker  -->
+ <ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            >
+            </app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

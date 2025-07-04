@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -7,10 +7,10 @@ import { CompanyService } from "../../../services/company.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter, take, skip, debounceTime, tap } from "rxjs/operators";
+import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
-import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -19,25 +19,27 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
-import { SalesPersonService } from '../../../shared/sales-person/utility/sales-person.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
     styleUrls: ['./purchase.register.component.scss'],
-    providers: [ReportsComponentStore, SalesPersonService, SalesPersonComponentStore]
+    providers: [ReportsComponentStore, SalesPersonComponentStore]
 })
 export class PurchaseRegisterComponent implements OnInit, OnDestroy {
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     bsValue = new Date();
     public reportRespone: PurchaseReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -98,12 +100,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public durationEnum: typeof DurationEnum = DurationEnum;
     /** Group by options */
     public groupByOptions: IOption[] = [];
-    /** Sales Person Unique Names */
-    public salesPersonUniqueNames: string[] = [];
-    /** Account Unique Names */
-    public accountUniqueNames: string[] = [];
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** This will use for instance of sales person Dropdown */
     public salesPerson: FormControl = new FormControl();
     /** This will use for instance of account Dropdown */
@@ -114,11 +112,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public groupByEnum: typeof GroupBy = GroupBy;
     /** Date range */
     public dateRange: { from: any, to: any } = { from: null, to: null };
-    /** Date range form */
-    public dateRangeForm: FormGroup = new FormGroup({
-        from: new FormControl(),
-        to: new FormControl()
-    });
     /** Account search response */
     public accountSearchResponse: any[] = [];
     /** Account list */
@@ -132,6 +125,18 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         salesPersonUniqueNames: new FormControl<string[]>([]),
         interval: new FormControl<DurationEnum | null>(null),
     });
+    /** Hold Bootstrap Modal Reference */
+    public modalRef: BsModalRef;
+    /** Holds selected date range */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(
         private router: Router,
@@ -147,7 +152,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private dialog: MatDialog,
         private componentStore: ReportsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore) {
+        private salesPersonStore: SalesPersonComponentStore,
+        private modalService: BsModalService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -243,7 +249,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
         /** Search for sales person dropdown */
         this.salesPerson.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$)).subscribe((search: string) => {
+            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 if (!search) {
                     this.salesPersonList$.pipe(take(1)).subscribe(res => {
                         this.filteredSalesPersonList = res as IOption[];
@@ -258,9 +264,29 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
         /** Search for account dropdown */
         this.account.valueChanges.pipe(debounceTime(700),
-            takeUntil(this.destroyed$)).subscribe((search: string) => {
+            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
-            });
+        });
+
+        /** Handle group by change */
+        this.reportForm.get('groupBy')?.valueChanges.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((response) => {
+            if (response) {
+                if (response === GroupBy.SalesPerson) {
+                    this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+                    this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+                    this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+                }
+                this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
+            }
+        });
+
+        /** Universal date */
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
     }
 
     public goToDashboard() {
@@ -645,7 +671,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson(true);
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 
     /**
@@ -660,23 +686,61 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             count: 200,
             withStocks: false,
             group: 'revenuefromoperations,otherincome',
-            q: search,
+            q: search
         };
         this.componentStore.getAccounts(params);
     }
 
     /**
-     * Handle date range change
+    * To show the datepicker
+    *
+    * @param {*} element
+    * @memberof ReportsDetailsComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
      *
-     * @memberof PurchaseRegisterComponent
+     * @memberof ReportsDetailsComponent
      */
-    public onDateChange(): void {
-        if (
-            this.dateRangeForm?.get('from')?.value &&
-            this.dateRangeForm?.get('to')?.value &&
-            dayjs(this.dateRangeForm?.get('to')?.value).isSameOrAfter(dayjs(this.dateRangeForm?.get('from')?.value))
-        ) {
-            this.getPurchaseRegister(dayjs(this.dateRangeForm?.get('from')?.value).format(GIDDH_DATE_FORMAT), dayjs(this.dateRangeForm?.get('to')?.value).format(GIDDH_DATE_FORMAT));
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof ReportsDetailsComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+            this.getPurchaseRegister(
+                dayjs(value.startDate).format(GIDDH_DATE_FORMAT), 
+                dayjs(value.endDate).format(GIDDH_DATE_FORMAT)
+            );
         }
     }
 
@@ -699,17 +763,5 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: false
         });
-    }
-
-    /**
-     * Handle group by change
-     *
-     * @param {any} event
-     * @memberof PurchaseRegisterComponent
-     */
-    public handleGroupByChange(event: IOption): void {
-        if (event?.value === GroupBy.Duration) {
-            this.dateRangeForm?.reset();
-        }
     }
 }

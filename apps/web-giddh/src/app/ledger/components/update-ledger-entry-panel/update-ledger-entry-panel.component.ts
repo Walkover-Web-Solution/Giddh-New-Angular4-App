@@ -74,7 +74,6 @@ import { MatSelect } from '@angular/material/select';
 import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
-import { SalesPersonService } from '../../../shared/sales-person/utility/sales-person.service';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
@@ -96,7 +95,7 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    providers: [VoucherComponentStore, SalesPersonService, SalesPersonComponentStore]
+    providers: [VoucherComponentStore, SalesPersonComponentStore]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
@@ -348,7 +347,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Hold last valid index */
     public lastValidIndex: number;
     /** Sales Person List */
-    public salesPersonList$: Observable<any[]> = this.salesPersonStore.salesPersonList$;
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
 
     constructor(
         private accountService: AccountService,
@@ -3022,6 +3021,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson(true);
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }
