@@ -181,7 +181,7 @@
                         mat-stroked-button
                         (click)="setInitialAdvanceFilter()"
                         class="mx-auto"
-                        *ngIf="advanceFiltersApplied && !isLoading"
+                        *ngIf="(advanceFiltersApplied || clearFilter) && !isLoading"
                     >
                         <span class="d-inline-flex align-items-center column-gap5">
                             <span class="icon-cross font-12"></span>
