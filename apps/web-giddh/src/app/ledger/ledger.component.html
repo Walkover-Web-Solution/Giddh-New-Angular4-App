@@ -540,7 +540,7 @@
                         <!-- Middle Element | Current Account Name in Statement view -->
                          <div class="col-4 d-grid align-content-center">
                             <p *ngIf="ledgerView == ledgerViewEnum.StatementView" class="ledger-head border-none text-center mt-0">
-                                <b class="blue-heading font-15 mr-auto"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
+                                <b class="blue-heading font-15 mr-auto cursor-pointer" (click)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
                             </p>
                          </div>
 
@@ -3453,7 +3453,10 @@
 
 <ng-template #updateAccount>
     <aside-menu-account
-        [activeGroupUniqueName]="lc.activeAccount.parentGroups[lc.activeAccount.parentGroups.length-1]?.uniqueName"
+        [activeGroupUniqueName]="
+            lc.activeAccount?.parentGroups?.length
+                ? lc.activeAccount.parentGroups[lc.activeAccount.parentGroups.length - 1].uniqueName
+                : null"
         [activeAccountDetails]="{uniqueName: lc.accountUnq}"
         [isUpdateAccount]="true"
         class="account-aside-menu-state transform-inherit" 
