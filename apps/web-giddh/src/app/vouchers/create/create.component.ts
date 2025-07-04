@@ -101,7 +101,7 @@ import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sal
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, SalesPersonComponentStore],
+    providers: [VoucherComponentStore, AiOcrStore, SalesPersonComponentStore],
     animations: [
         trigger("slideInOut", [
             state(
