@@ -1223,6 +1223,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
+
+        this.updateAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            if (response) {
+                this.updateAccountDialogRef?.close();
+            }
+        });
+
+        this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.lc.activeAccount = response;
+                this.lc.getUnderstandingText(this.lc.activeAccount?.accountType, this.lc.activeAccount?.name, this.lc.activeAccount?.parentGroups, this.localeData);
+                this.cdRf.detectChanges();
+            }
+        });
+
     }
 
     private assignPrefixAndSuffixForCurrency() {
