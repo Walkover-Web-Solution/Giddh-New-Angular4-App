@@ -48,7 +48,6 @@
                         [options]="groupByOptions"
                         formControlName="groupBy"
                         [labelValue]="groupByOptions?.[0]?.label"
-                        (selectedOption)="handleGroupByChange($event)"
                         [required]="true"
                     >
                     </reactive-dropdown-field>
@@ -132,29 +131,15 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="date-range-wrapper custom-mat-form-field dropdown-width" [formGroup]="dateRangeForm">
-                        <mat-form-field
-                            [matDatepickerToggleIcon]="false"
-                            appearance="outline"
-                            (click)="picker?.open()"
-                            class="w-100"                                                     
-                        >
-                            <mat-label>{{ commonLocaleData?.app_date_range }}</mat-label>
-                            <mat-date-range-input [rangePicker]="picker">
-                                <input
-                                    matStartDate
-                                    [placeholder]="commonLocaleData?.app_start_date"
-                                    [formControl]="dateRangeForm?.get('from')"
-                                />
-                                <input
-                                    matEndDate
-                                    [placeholder]="commonLocaleData?.app_end_date"
-                                    [formControl]="dateRangeForm?.get('to')"
-                                    (dateChange)="onDateChange()"
-                                />
-                            </mat-date-range-input>
-                            <mat-date-range-picker #picker></mat-date-range-picker>
-                        </mat-form-field>
+                    <div class="custom-datepicker-wrapper">
+                        <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker border-radius-2"
+                            />
+                        </div>
                     </div>
                 </ng-template>
                 <div class="custom-mat-form-field dropdown-width">

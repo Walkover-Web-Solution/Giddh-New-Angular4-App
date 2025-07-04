@@ -5,6 +5,8 @@ import { SearchService } from "../../services/search.service";
 import { ToasterService } from "../../services/toaster.service";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CompanyService } from "../../services/company.service";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../store";
 
 export interface ReportsState {
     accountList: any;
@@ -22,12 +24,15 @@ export const DEFAULT_STATE: ReportsState = {
 export class ReportsComponentStore extends ComponentStore<ReportsState> implements OnDestroy {
 
     constructor(
+        private store: Store<AppState>,
         private toasterService: ToasterService,
         private searchService: SearchService,
         private companyService: CompanyService
     ) {
         super(DEFAULT_STATE);
     }
+
+    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public accountList$ = this.select((state) => state.accountList);
     public salesPurchaseList$ = this.select((state) => state.salesPurchaseList);
     public salesPurchaseListInProgress$ = this.select((state) => state.salesPurchaseListInProgress);
