@@ -837,8 +837,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.invoiceForm.get('number')?.patchValue(this.isCopyMode ? null : response.number);
                     this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
                     this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
-                    this.invoiceForm.get('salesPersonName').patchValue(response?.salesPerson?.name);
-                    this.invoiceForm.get('salesPersonUniqueName').patchValue(response?.salesPerson?.uniqueName);
                     this.invoiceForm.get("date").patchValue(response.date);
                     this.invoiceForm.get("dueDate").patchValue(response.dueDate);
 
@@ -882,8 +880,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.calculateAdjustedVoucherTotal(response.adjustments);
                     }
                 }
-
-
+                this.invoiceForm.get('salesPersonName').patchValue(response?.salesPerson?.name);
+                this.invoiceForm.get('salesPersonUniqueName').patchValue(response?.salesPerson?.uniqueName);
+                
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
 
