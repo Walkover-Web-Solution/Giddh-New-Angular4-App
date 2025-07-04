@@ -287,12 +287,12 @@ export class CashFreeVirtualAccount {
 export class AddAccountRequest {
     activeGroupUniqueName: string;
     accountRequest: AccountRequestV2
-    salesPersonCreated: boolean = false;
+    salesPersonCreated?: boolean = false;
 }
 
 export class UpdateAccountRequest {
     accountRequest: AccountRequestV2;
-    salesPersonCreated: boolean = false;
+    salesPersonCreated?: boolean = false;
     value: {
         groupUniqueName: string;
         accountUniqueName: string;
