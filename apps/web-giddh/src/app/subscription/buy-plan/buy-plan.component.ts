@@ -456,7 +456,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
                                 const duration = this.firstStepForm.get('duration')?.value;
-                                if (((duration === 'MONTHLY' || duration === 'DAILY') && response?.region?.code !== 'IND') || (duration === 'YEARLY' && response?.region?.code === 'IND') ) {
+                                if ((duration === 'MONTHLY' || duration === 'DAILY') && response?.region?.code !== 'IND') {
                                     if (response?.status?.toLowerCase() === 'active') {
                                         this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                     } else {
@@ -469,6 +469,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                         };
                                         this.subscriptionComponentStore.buyPlan(model);
                                     }
+                                } else if (this.firstStepForm.get('duration')?.value === 'YEARLY' && response?.region?.code === 'IND' && response?.status?.toLowerCase() === 'active') {
+                                    this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                 } else {
                                     const reqObj = {
                                         subscriptionId: response?.subscriptionId,
