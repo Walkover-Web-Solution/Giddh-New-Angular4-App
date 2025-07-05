@@ -519,12 +519,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                // 'pending', 'settings', 'templates' These tabs are not voucher list
-                let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
-                if (this.universalDate && !tab.includes(this.activeModule)) {
-                    this.getVouchers(true);
-                    this.getVoucherBalances();
-                }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
@@ -638,8 +632,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                     this.advanceFilters.to = this.queryParams.to;
                 }
-                this.getVouchers(true);
-                this.getVoucherBalances();
             }
         });
 
@@ -3268,6 +3260,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
             this.setEInvoiceColumns();
             this.getVouchers(false);
+            this.getVoucherBalances();
         });
        setTimeout(() => {
             this.isColumnsLoading = false;
