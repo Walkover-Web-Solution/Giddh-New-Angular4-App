@@ -56,5 +56,6 @@ module.exports = {
             minRatio: 0.8,
             deleteOriginalAssets: false
         })
-    ]
+    ],
+    cache: false
 }

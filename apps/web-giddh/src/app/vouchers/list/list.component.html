@@ -5769,12 +5769,8 @@
                     <edit-invoice></edit-invoice>
                 </div>
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
-                    <dropdown-field
-                        [name]="'design'"
-                        [label]="'Select Design for'"
-                        [placeholder]="'Select'"
-                        class="w-50 template-design d-block"
-                    >
+                    <dropdown-field [name]="'design'" [label]="localeData?.select_design_for" [placeholder]="commonLocaleData?.app_select"
+                        class="w-50 template-design d-block">
                     </dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">

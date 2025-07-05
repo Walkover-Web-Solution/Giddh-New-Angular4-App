@@ -403,6 +403,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
+            
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -3249,6 +3250,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             return;
         }
         this.getVouchersInProgress$.pipe(filter(inProgress => !inProgress), take(1)).subscribe(() => {
+            this.isColumnsLoading = true;
             this.dynamicCustomColumns = [];
             this.displayedColumns = [];
             this.dataSource = [];
@@ -3267,7 +3269,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.setEInvoiceColumns();
             this.getVouchers(false);
         });
-        this.isColumnsLoading = false;
+       setTimeout(() => {
+            this.isColumnsLoading = false;
+       }, 400);
     }
 
     /**
