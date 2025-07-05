@@ -155,7 +155,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
-    public selectedDiscounts: string = null;
+    public selectedDiscounts: IOption = null;
     public selectedDiscountList: any[] = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
@@ -1697,9 +1697,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeAccountName) {
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
-            assignDiscountObject.discounts = this.selectedDiscounts?.length ? [this.selectedDiscounts] : [];
+            assignDiscountObject.discounts = this.selectedDiscounts?.value ? [this.selectedDiscounts.value] : [];
             assignDiscountObject.isAccount = true;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
+            this.isDiscountSaveDisable$ = observableOf(true);
         }
     }
 
@@ -1812,10 +1813,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * To check discount list updated
-     *
+     * @param {*} event - event object containing selected discounts
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public discountSelected(): void {
+    public discountSelected(event: any): void {
+        if (event) {
+            this.selectedDiscounts = {
+                value: event.value,
+                label: event.label
+            };
+        } else {
+            this.selectedDiscounts = null;
+        }
         this.isDiscountSaveDisable$ = observableOf(false);
     }
 
@@ -2200,8 +2209,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 if (response.body[accountDetails?.uniqueName]) {
                                     let list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list)?.forEach(key => {
-                                        let UniqueName = list[key]['discount']['uniqueName'];
-                                        this.selectedDiscounts = UniqueName;
+                                        this.selectedDiscounts = {
+                                            value: list[key]['discount']['uniqueName'],
+                                            label: list[key]['discount']['name']
+                                        };
                                     });
                                 }
                             }
