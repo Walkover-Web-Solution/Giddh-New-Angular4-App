@@ -260,10 +260,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isValidForm: boolean = true;
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
-    /** Indicates whether the "Portal" tab is currently selected */
-    public isPortalSelectedTab: boolean = false;
-    /** Indicates whether the "Contact" tab is currently selected */
-    public isContactSelectedTab: boolean = false;
+    /** Indicates whether the "Custom" tab is currently selected */
+    public isCustomSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
     /** Holds active selected Tab Index */
@@ -472,10 +470,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                     this.changeDetectorRef.detectChanges();
                 }
-                if (this.formValueAssigned && response) {
-                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-                }
             });
+
+        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+            if (this.formValueAssigned && response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            }
+        });
 
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -541,7 +542,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.prepareTaxDropdown();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 4000);
+        }, 2500);
     }
 
     public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
@@ -568,7 +569,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             let col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                            this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                         }
 
                         if (activeAccountTaxHierarchy) {
@@ -668,8 +668,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.selectedTab = event.tab.textLabel;
             this.selectedTabIndex = event.index;
-            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
-            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
+            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
                 this.isOtherSelectedTab = true;
             } else {
@@ -677,6 +676,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             this.changeDetectorRef.detectChanges();
         }
+    }
+
+    /**
+     * Open confirm leave dialog
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public openConfirmLeaveDialog(): void {
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
     }
 
     public initializeNewForm() {
@@ -1107,7 +1115,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
-
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         delete accountRequest['portalDomain'];
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
@@ -1151,7 +1159,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * ngOnChanges
      */
     public ngOnChanges(s) {
-        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
@@ -1160,6 +1167,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngOnDestroy() {
         this.resetUpdateAccountForm();
         this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2136,7 +2144,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('addresses').reset();
         }
         this.selectedTabIndex = null;
-        this.isContactSelectedTab = this.isHsnSacEnabledAcc;
         this.changeDetectorRef.detectChanges();
         setTimeout(() => {
             this.selectedTabIndex = 0;
@@ -2253,7 +2260,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (!accountDetails.customFields) {
                     accountDetails.customFields = [];
                 }
-                
+
                 this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;
