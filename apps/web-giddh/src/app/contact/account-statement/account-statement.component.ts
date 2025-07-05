@@ -230,6 +230,15 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.accountListRequest.from = this.from;
             this.accountListRequest.to = this.to;
             let dateRange = { fromDate: '', toDate: '' };
+            this.advanceSearchRequest = new AdvanceSearchRequest();
+            this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [dayjs(this.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.to, GIDDH_DATE_FORMAT).toDate()]
+                })
+            });
+            this.advanceSearchRequest.to = this.to;
+            this.advanceSearchRequest.page = 0;
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
