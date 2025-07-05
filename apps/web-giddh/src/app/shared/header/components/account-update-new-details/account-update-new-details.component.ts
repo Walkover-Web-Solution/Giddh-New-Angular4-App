@@ -1356,7 +1356,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
-                        if (!this.addAccountForm.get('mobileCode')?.value && this.selectedAccountCallingCode) {
+                        if (!this.addAccountForm.get('mobileCode')?.value) {
                             this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }
