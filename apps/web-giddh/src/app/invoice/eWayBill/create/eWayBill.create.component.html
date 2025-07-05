@@ -124,6 +124,7 @@
                                 name="transactionType"
                                 [(ngModel)]="generateEwayBillform.transactionType"
                                 [ItemHeight]="33"
+                                [defaultValue]="transactionSubType?.[0]?.label"
                             ></sh-select>
                         </div>
                     </div>
