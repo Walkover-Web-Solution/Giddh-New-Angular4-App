@@ -13,7 +13,7 @@ import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
 import { cloneDeep } from "../../lodash-optimized";
-
+import { TransactionType } from "../../models/api-models/Ledger";
 
 @Component({
     selector: "account-statement",
@@ -28,6 +28,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** Reference to the Material paginator component */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
+    /** Unique name of the active account (input from parent) */
+    @Input() public activeAccountUniqueName: string;
+    /** Start date for the statement (input from parent) */
+    @Input() public from: string;
+    /** End date for the statement (input from parent) */
+    @Input() public to: string;
+    /** Branch unique name (input from parent) */
+    @Input() public branchUniqueName: string;
     /** Reference to the Material sort component */
     @ViewChild(MatSort) sort!: MatSort;
     /** Holds localized JSON data specific to this module */
@@ -39,7 +47,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
-    public displayedColumns: string[] = ['Date', 'Transactions', 'Details', 'Amount', 'Payments', 'Balance'];
+    public displayedColumns: string[] = ['date', 'transactions', 'details', 'amount', 'payments', 'balance'];
     /** Whether the panel is open (for expansion panels, etc.) */
     public panelOpenState: boolean = true;
     /** Data array for the account statement table rows */
@@ -51,7 +59,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         accountUniqueName: '',
         page: 1,
         count: '',
-        sortBy: 'Date',
+        sortBy: 'date',
         sort: '',
         q: '',
     };
@@ -87,21 +95,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public advanceFiltersApplied: boolean = false;
     /** Reference to the currently open advance search dialog */
     public advanceSearchDialogRef: any;
-    /** Unique name of the active account (input from parent) */
-    @Input() activeAccountUniqueName: string;
-    /** Start date for the statement (input from parent) */
-    @Input() from: string;
-    /** End date for the statement (input from parent) */
-    @Input() to: string;
     /** Request object for advance search filters */
     public advanceSearchRequest: AdvanceSearchRequest;
     /** True if the advance search feature is implemented and enabled */
     public isAdvanceSearchImplemented: boolean = false;
-    /** Branch unique name (input from parent) */
-    @Input() branchUniqueName: string;
     /** True if any filters are currently applied on report */
     public clearFilter: boolean = false;
-
+    /** Holds transaction type */
+    public transactionType: typeof TransactionType = TransactionType;
 
     constructor(
         public dialog: MatDialog,
@@ -120,12 +121,12 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            this.isLoading = false;
             if (response) {
                 this.accountListData = response.transactionDetailList;
                 this.responseAccountList = response;
                 this.totalRecords = response.totalItems;
             }
+            this.isLoading = false;
         });
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
@@ -136,7 +137,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
 
         this.advanceSearchRequest.to = this.to;
         this.advanceSearchRequest.page = 0;
-
 
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const searchValue = search?.trim();
