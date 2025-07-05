@@ -233,6 +233,7 @@
             [disablePagination]=true
             [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
+            animationDuration="0ms"
         >
             <mat-tab
                 [label]="localeData?.tabs?.address"
@@ -564,6 +565,7 @@
                 </div>                
             </mat-tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
+             {{showBankDetail}}
             <mat-tab
                 [label]="localeData?.tabs?.bank_details"
                 class="bank-details-form"
