@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -377,14 +377,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerView: TLedgerView | null = null;
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
-    /** Hold ledger grid total columns static value */
-    public ledgerStatementViewGridTotalColumns: number = 11;
     /** Hold ledger grid total columns value */
-    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2, 2];
+    public ledgerStatementViewGridColumnsValue: number[] = [1, 3, 2, 2, 3];
+    /** Hold ledger grid total columns static value */
+    public ledgerStatementViewGridTotalColumns: number = this.getLedgerStatementViewGridTotalColumns();
     /** True if update account is bank account */
     public isUpdateAccount: boolean = false;
     /** Holds transaction type */
     public transactionType: typeof TransactionType = TransactionType;
+    /** Holds breakpoint screen size */
+    public breakpointScreenSize: { mediumDesktopScreen: boolean, smallDesktopScreen: boolean, tabScreen: boolean } = {
+        mediumDesktopScreen: false,
+        smallDesktopScreen: false,
+        tabScreen: false
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -625,7 +631,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
-
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
@@ -667,22 +672,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.arrangeLedgerTransactionsForMobile();
             }
         });
-        const mediumScreen: string = "(max-width: 1536px)";
-        const smallScreen: string = "(max-width: 1366px)";
+
         this.breakpointObserver.observe([
-            smallScreen, mediumScreen
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE,
+            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE,
+            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.matches) {
-                if (result.breakpoints[smallScreen]) {
+                // Reset all breakpoint screen size
+                Object.keys(this.breakpointScreenSize).forEach(key => {
+                    this.breakpointScreenSize[key] = false;
+                });
+                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE]) {
+                    this.breakpointScreenSize.smallDesktopScreen = true;
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
-                } else if (result.breakpoints[mediumScreen]) {
+                    this.getLedgerStatementViewGridColumnsValue();
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE]) {
+                    this.breakpointScreenSize.mediumDesktopScreen = true;
                     this.ledgerGridTotalColumns = 8;
                     this.ledgerGridColumnsValue = [2, 3, 3]
+                    this.getLedgerStatementViewGridColumnsValue();
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE]) {
+                    this.breakpointScreenSize.tabScreen = true;
+                    this.ledgerGridTotalColumns = 8;
+                    this.ledgerGridColumnsValue = [2, 3, 3];
+                    this.getLedgerStatementViewGridColumnsValue();
                 } else {
                     this.ledgerGridTotalColumns = 4
                     this.ledgerGridColumnsValue = [1, 2, 1]
+                    this.getLedgerStatementViewGridColumnsValue();
                 }
+                this.cdRf.detectChanges();
             }
         });
         this.store.pipe(
@@ -3630,15 +3651,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLedgerStatementViewGridColumnsValue(): void {
+        if (this.ledgerView === LedgerViewEnum.TView) {
+            return;
+        }
         if (this.searchText || this.isAdvanceSearchImplemented) {
-            this.ledgerStatementViewGridTotalColumns = 9;
-            if (this.ledgerStatementViewGridColumnsValue.length > 4) {
+            if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
+                this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2];
+            } else if (this.ledgerStatementViewGridColumnsValue.length > 4) {
                 this.ledgerStatementViewGridColumnsValue.pop();
             }
         } else {
-            this.ledgerStatementViewGridTotalColumns = 11;
-            this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 2];
+            if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
+                this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 3];
+            } else {
+                this.ledgerStatementViewGridColumnsValue = [2, 8, 2, 2, 3];
+            }
         }
+        this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
+    }
+
+    /**
+     * Get ledger statement view grid total columns
+     *
+     * @returns {number}
+     * @memberof LedgerComponent
+     */
+    private getLedgerStatementViewGridTotalColumns(): number {
+        return this.ledgerStatementViewGridColumnsValue.reduce((a, b) => a + b, 0);
     }
 
     /**

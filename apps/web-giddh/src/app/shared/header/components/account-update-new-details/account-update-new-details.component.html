@@ -241,6 +241,7 @@
             [disablePagination]=true
             [selectedIndex]="selectedTabIndex"
             (selectedTabChange)="tabChanged($event)"
+            animationDuration="0ms"
         >
             <mat-tab
                 [label]="localeData?.tabs?.address"
@@ -306,6 +307,10 @@
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
                                     (selectedOption)="selectedState(gst, $event); openConfirmLeaveDialog()"
+                                    [disabled]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [readonly]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [matTooltip]="isGstValid && gst.value.gstNumber?.length >= 2 ? localeData?.change_gst_number_to_update_the_state : ''"
+                                    matTooltipPosition="above"
                                 >
                                 </reactive-dropdown-field>
                                 
@@ -315,6 +320,7 @@
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="countyList"
                                     formControlName="countyCode"
+                                    [labelValue]="gst?.value?.county?.name ? gst.value.county.name : ''"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
                                     (selectedOption)="selectedCounty(gst, $event); openConfirmLeaveDialog()"
@@ -332,6 +338,7 @@
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                     [maxlength]="15"
                                     (change)="openConfirmLeaveDialog()"
+                                    [showError]="!isValidForm && !isGstValid"
                                 >
                                 </input-field>
                             </div>
@@ -988,9 +995,10 @@
                             [label]="localeData?.select_discounts"
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="discountList"
-                            (selectedOption)="$event && selectedDiscounts = $event.value; discountSelected()"
-                        >
-                        </reactive-dropdown-field>
+                            [labelValue]="selectedDiscounts?.label ?? ''"
+                            (selectedOption)="discountSelected($event)"
+                            (onClear)="discountSelected()"
+                        ></reactive-dropdown-field>
                         <button
                             mat-stroked-button
                             color="primary"

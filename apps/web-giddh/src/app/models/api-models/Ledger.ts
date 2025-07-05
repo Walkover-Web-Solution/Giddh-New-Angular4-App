@@ -246,6 +246,7 @@ export class TransactionsRequest {
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
     public paginationToken?: string = '';
+    public isTView?: boolean = false;
 }
 
 export interface ReconcileRequest {
