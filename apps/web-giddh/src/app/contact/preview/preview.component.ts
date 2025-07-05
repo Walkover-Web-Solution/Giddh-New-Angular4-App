@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { combineLatest, debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
@@ -31,6 +31,10 @@ import { SalesActions } from "../../actions/sales/sales.action";
 export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Reference to the virtual scroll viewport used for scrolling contact lists */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
+    /** Reference to the delete account modal dialog */
+    @ViewChild("deleteAccountModal") public deleteAccountModal: TemplateRef<any>;
+    /** Reference to the delete account modal dialog */
+    public deleteAccountmodalRef: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds localized text for this component */
@@ -150,8 +154,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
     /** Observable for the list of contacts fetched from the store */
     public getContactsList$: Observable<any> = this.componentStore.getContactsList$;
-    /** Reference to the delete account modal dialog */
-    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
     /** Observable indicating if the edit account modal should be shown */
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
     /** Enum representing standard accounting group unique names */
@@ -362,7 +364,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public showDeleteAccountModal() {
-        this.deleteAccountModal?.show();
+        this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal);
     }
 
     /**
@@ -371,7 +373,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public hideDeleteAccountModal() {
-        this.deleteAccountModal?.hide();
+        this.deleteAccountmodalRef?.close()
     }
 
     /**
