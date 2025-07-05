@@ -26,9 +26,6 @@ import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { cloneDeep } from '../../../lodash-optimized';
-import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
-import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
-import { VoucherTypeEnum } from '../../../vouchers/utility/vouchers.const';
 import { PageEvent } from '@angular/material/paginator';
 import { EwayBillComponentStore } from '../utility/eWayBill.store';
 
@@ -37,7 +34,7 @@ import { EwayBillComponentStore } from '../utility/eWayBill.store';
     selector: 'app-ewaybill-component',
     templateUrl: './eWayBill.component.html',
     styleUrls: [`./eWayBill.component.scss`],
-    providers: [VoucherComponentStore, EwayBillComponentStore]
+    providers: [EwayBillComponentStore]
 })
 
 export class EWayBillComponent implements OnInit, OnDestroy {
@@ -164,7 +161,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
-        private invoiceService: InvoiceService,
+        private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private modalService: BsModalService,
         private _location: LocationService,
@@ -174,8 +171,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private gstReconcileService: GstReconcileService,
         public dialog: MatDialog,
-        private invoiceReceiptActions: InvoiceReceiptActions,
-        private voucherComponentStore: VoucherComponentStore,
         private componentStore: EwayBillComponentStore
     ) {
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
@@ -446,7 +441,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
-        this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+        this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
@@ -458,7 +453,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = _.cloneDeep(ewayItem);
-        this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
+        this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
@@ -561,7 +556,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     }
     detectChange() {
-       if (!this._cd['destroyed']) {
+        if (!this._cd['destroyed']) {
             this._cd.detectChanges();
         }
     }
@@ -570,40 +565,37 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         let model: any = {
 
         };
-        let request = cloneDeep(this.EwayBillfilterRequest);
-        if (request.fromDate) {
-            model.fromDate = request.fromDate;
+        let o = _.cloneDeep(this.EwayBillfilterRequest);
+        if (o.fromDate) {
+            model.fromDate = o.fromDate;
         }
-        if (request.toDate) {
-            model.toDate = request.toDate;
+        if (o.toDate) {
+            model.toDate = o.toDate;
         }
-        if (request.sort) {
-            model.sort = request.sort;
+        if (o.sort) {
+            model.sort = o.sort;
         }
-        if (request.sortBy) {
-            model.sortBy = request.sortBy;
+        if (o.sortBy) {
+            model.sortBy = o.sortBy;
         }
 
-        if (request.searchOn) {
-            model.searchOn = request.searchOn;
+        if (o.searchOn) {
+            model.searchOn = o.searchOn;
         }
-        if (request.searchTerm) {
-            model.searchTerm = request.searchTerm;
+        if (o.searchTerm) {
+            model.searchTerm = o.searchTerm;
         }
-        if (request.count) {
-            model.count = request.count;
+        if (o.count) {
+            model.count = o.count;
         }
-        if (request.page) {
-            model.page = request.page;
+        if (o.page) {
+            model.page = o.page;
         }
-        if (request.branchUniqueName) {
-            model.branchUniqueName = request.branchUniqueName;
+        if (o.branchUniqueName) {
+            model.branchUniqueName = o.branchUniqueName;
         }
-        if (request.gstin) {
-            model.gstin = request.gstin;
-        }
-        if (request.failedRequestLog) {
-            model.failedRequestLog = request.failedRequestLog;
+        if (o.gstin) {
+            model.gstin = o.gstin;
         }
 
         return model;
@@ -725,7 +717,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         } else {
             this.isDropUp = true;
         }
-        
+
         this._cd.detectChanges();
     }
 
@@ -777,51 +769,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public onTabChange(event: MatTabChangeEvent): void {
-        if (!event || event.index === this.activeTabIndex) return;
-
-        const colsToRemove = ['status', 'reason', 'ewbNo', 'ewayBillDate'];
-        this.displayedColumns = this.displayedColumns.filter(col => !colsToRemove.includes(col));
-        if (event.index === 0) {
-            this.displayedColumns.splice(-2, 0, 'ewbNo', 'ewayBillDate');
-            this.EwayBillfilterRequest.failedRequestLog = false;
-        } else if (event.index === 1) {
-            this.displayedColumns.splice(-2, 0, 'status', 'reason');
-            this.EwayBillfilterRequest.failedRequestLog = true;
+        if (event) {
+            this.activeTabIndex = event.index;
+            this.selectedTab = event.tab.textLabel;
         }
-        this.activeTabIndex = event.index;
-        this.selectedTab = event.tab.textLabel;
-        this.getAllFilteredInvoice();
     }
 
     /**
-     * This will generate eway bill for selected voucher
-     *
-     * @param {any} voucher
-     * @memberof EWayBillComponent
-     */
-    public onGenerateEwayBill(voucher: any): void {
-        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-        this.invoiceService.selectedInvoicesLists = [];
-        this.invoiceService.VoucherType = "";
-        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(voucher.uniqueName, {
-            invoiceNumber: voucher.voucherNumber,
-            voucherType: VoucherTypeEnum.sales,
-            uniqueName: voucher.uniqueName
-        }));
-        voucher['voucherDate'] = voucher?.invoiceDate;
-        this.invoiceService.setSelectedInvoicesList([voucher]);
-        setTimeout(() => {
-            this.voucherComponentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
-                if (!response?.account?.billingDetails?.pincode) {
-                    this._toaster.showSnackBar("error", this.localeData?.pincode_required);
-                } else {
-                    this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
-                }
-            });
-        }, 500);
-    }
-
-    /** Handles page change events and makes an API call to fetch data for the new page.
+     * Handles page change events and makes an API call to fetch data for the new page.
      *
      * @param {PageEvent} event - The event containing pagination details.
      * @memberof EWayBillComponent
