@@ -89,7 +89,6 @@ import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
 import { TrimPipeModule } from "../shared/helpers/pipes/trim/trim.module";
 import { A11yModule } from "@angular/cdk/a11y";
 import { InvoiceUiDataService } from "../services/invoice.ui.data.service";
-import { EWayBillModule } from "../shared/eWayBill/eWayBill.module";
 import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-section-permission/validate-section-permission.module";
 import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
@@ -117,7 +116,7 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         ConvertBillDialogComponent,
         FullAddressComponent,
         DownloadVoucherComponent,
-        CancelEInvoiceDialogComponent,
+        CancelEInvoiceDialogComponent
     ],
     imports: [
         CommonModule,
@@ -188,7 +187,6 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         CdkScrollModule,
         TrimPipeModule,
         A11yModule,
-        EWayBillModule,
         ValidateSectionPermissionDirectiveModule,
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule

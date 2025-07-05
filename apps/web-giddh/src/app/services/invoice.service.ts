@@ -484,8 +484,7 @@ export class InvoiceService {
     public getAllEwaybillsfilterList(body: IEwayBillfilter): Observable<BaseResponse<IEwayBillAllList, IEwayBillfilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.GENERATE_EWAYBILL, {
-            page: body?.page, count: body?.count, fromDate: body?.fromDate, toDate: body?.toDate, sort: body?.sort, sortBy: body?.sortBy, searchTerm: body?.searchTerm, searchOn: body?.searchOn, gstin: body?.gstin,
-            failedRequestLog: body?.failedRequestLog
+            page: body?.page, count: body?.count, fromDate: body?.fromDate, toDate: body?.toDate, sort: body?.sort, sortBy: body?.sortBy, searchTerm: body?.searchTerm, searchOn: body?.searchOn, gstin: body?.gstin
         });
         if (body?.branchUniqueName) {
             body.branchUniqueName = body?.branchUniqueName !== this.companyUniqueName ? body?.branchUniqueName : '';
@@ -529,9 +528,6 @@ export class InvoiceService {
         }
         if ((model.count)) {
             url = url + 'count=' + model.count;
-        }
-        if (model.failedRequestLog) {
-            url = url + '&failedRequestLog=' + model.failedRequestLog;
         }
 
         return url;

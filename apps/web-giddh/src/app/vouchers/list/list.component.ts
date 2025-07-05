@@ -403,7 +403,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
-            
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
