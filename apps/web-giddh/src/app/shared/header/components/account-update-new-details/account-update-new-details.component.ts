@@ -1109,9 +1109,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         if (this.intl) {
             let mobileNo = this.intl['init-contact-update']?.getNumber();
-            accountRequest['mobileNo'] = mobileNo;
+            if (mobileNo) {
+                accountRequest['mobileNo'] = mobileNo;
+            }
         }
-
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -1128,6 +1129,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
 
         delete accountRequest['portalDomain'];
+        delete accountRequest['mobileCode'];
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
