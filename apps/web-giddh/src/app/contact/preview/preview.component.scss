@@ -1,8 +1,6 @@
 .wrapper-background {
-    padding: 5px 0;
     background-color: var(--color-common-quinary-background-for-all-components);
-    height: calc(100vh - 280px);
-    overflow: auto;
+    height: calc(100vh - 200px);
 }
 .search-field {
     i {
@@ -16,7 +14,6 @@
 }
 
 .invoice-preview-wrapper {
-    display: flex;
     height: calc(100vh - 150px);
 
     .preview-list {
@@ -24,7 +21,6 @@
         overflow-y: auto;
 
         .single-invoice-detail {
-
             &:hover,
             &.active {
                 background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
@@ -36,8 +32,9 @@
         width: 100%;
         overflow-y: auto;
 
-        .preview-header {
-            background-color: var(--color-primary-invoice-preview-details-background);
+        .back-button {
+            right:5px;
+            top:5px;
         }
 
         .account-details-wrapper {

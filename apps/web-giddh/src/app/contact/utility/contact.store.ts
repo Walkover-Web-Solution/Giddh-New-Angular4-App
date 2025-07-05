@@ -113,7 +113,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
         return data$.pipe(
             switchMap(params => {
                 // Optionally patch state to indicate loading if needed
-                this.patchState({ getLastAccountsInProgress: true });
+                this.patchState({ getLastAccountsInProgress: true, contactsList: [] });
                 return this.contactService.GetContacts(
                     params.fromDate,
                     params.toDate,
