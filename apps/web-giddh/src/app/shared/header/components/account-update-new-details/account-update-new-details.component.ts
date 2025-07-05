@@ -1065,7 +1065,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (accountRequest.mobileCode && accountRequest.mobileNo) {
                 accountRequest.mobileNo = accountRequest.mobileNo;
             }
-            delete accountRequest['mobileCode'];
         }
 
         if (!this.showVirtualAccount) {
@@ -1110,6 +1109,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
 
         delete accountRequest['portalDomain'];
+        delete accountRequest['mobileCode'];
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
