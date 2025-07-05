@@ -122,7 +122,13 @@
                                 "
                             ></ng-container>
                         </th>
-                        <td mat-cell *matCellDef="let element" class="position-relative text-left">
+                        <td
+                            mat-cell
+                            *matCellDef="let element"
+                            class="position-relative text-left"
+                            matTooltipPosition="above"
+                            [matTooltip]="element?.status?.toLowerCase() === 'failed' ? element?.files[0]?.error : ''"
+                        >
                             <span
                                 [ngClass]="{
                                     'text-success': element?.status?.toLowerCase() === 'completed',
