@@ -523,6 +523,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         if (isNewContactSelected) {
             this.isUpdateAccount = true;
         }
+        this.accountDetails = this.selectedContact;
         this.shouldShowBankDetail(accountUniqueName);
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
         if (this.selectedContact?.uniqueName) {
