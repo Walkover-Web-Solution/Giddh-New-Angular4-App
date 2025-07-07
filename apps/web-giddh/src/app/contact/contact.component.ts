@@ -1780,6 +1780,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             to: this.toDate,
             sort: this.advanceFilters.sort,
             sortBy: this.advanceFilters.sortBy,
+            accountUniqueName: accountUniqueName,
             refresh: false
         };
 
