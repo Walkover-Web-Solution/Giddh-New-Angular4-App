@@ -93,6 +93,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public currentTimeStamp: string;
     /** This will hold option selected state */
     public optionSelected: boolean = false;
+    /** This will hold gstin input  */
+    public gstinInput: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -142,10 +144,10 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 this.getStates(data.country?.code);
                 this.setFormValues(data);
                 this.selectedCountry = data.country?.name;
-                this.selectedState = data.state?.name ? data?.state?.code +' - '+ data.state?.name : data?.county?.code +' - '+ data.county?.name;
+                this.selectedState = data.state?.name ? data?.state?.code + ' - ' + data.state?.name : data?.county?.code + ' - ' + data.county?.name;
                 this.billingDetails.billingName = data?.billingName;
                 this.billingDetails.uniqueName = data?.uniqueName;
-                if (this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length > 1) {
+                if (this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
                     setTimeout(() => {
                         this.validateGstNumber();
                     }, 300);
@@ -154,7 +156,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         });
 
         this.changeBillingForm.get('taxNumber')?.valueChanges.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(value => {
-            if(value) {
+            if (value) {
+                this.gstinInput = true;
                 this.optionSelected = false;
             }
         });
@@ -183,7 +186,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             taxNumber: null,
             country: ['', Validators.required],
             state: ['', Validators.required],
-            address: [''],
+            address: ['']
         });
     }
 
@@ -204,6 +207,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         this.changeBillingForm.controls['state'].setValue(data.state);
         this.changeBillingForm.controls['address'].setValue(data?.address);
         this.initIntl(this.changeBillingForm.get('mobileNumber')?.value);
+        this.changeBillingForm.markAsPristine();
         this.changeDetection.detectChanges();
     }
 
@@ -337,11 +341,11 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         let isValid: boolean = false;
         if (this.changeBillingForm.get('taxNumber')?.value) {
             if (this.formFields['taxName']) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
-                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
-                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                    if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
-                        isValid = true;
+                if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                    for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
+                        let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                        if (regex.test(this.changeBillingForm.get('taxNumber')?.value)) {
+                            isValid = true;
                         }
                     }
                 } else {
@@ -374,16 +378,17 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                     return true;
                 }
             });
+            this.changeDetection.detectChanges();
         } else {
             this.disabledState = false;
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
             if (!this.optionSelected) {
-                this.changeBillingForm.controls['state'].setValue({ label: '', value: '' });
+                this.changeBillingForm.controls['state'].setValue(null);
             }
+            this.changeDetection.detectChanges();
         }
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -412,7 +417,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 code: event.value
             });
             this.changeBillingForm.get('taxNumber')?.setValue('');
-            this.changeBillingForm.get('state')?.setValue('');
+            this.changeBillingForm.get('state')?.setValue(null);
             this.selectedState = "";
             this.selectedStateCode = "";
             this.disabledState = false;
@@ -537,7 +542,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        if (this.changeBillingForm.invalid || (this.changeBillingForm.get('taxNumber')?.value?.length >= 2 && !this.isGstinValid)) {
+        const isGstinInput = this.changeBillingForm.get('taxNumber')?.value && !this.gstinInput ? false : !this.isGstinValid;
+        if (this.changeBillingForm.invalid || (this.changeBillingForm.get('taxNumber')?.value && isGstinInput)) {
             this.isFormSubmitted = true;
             return;
         }
@@ -565,6 +571,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
                 code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
             };
+
         }
         this.componentStore.updateBillingDetails({ request: request, id: this.billingDetails.uniqueName });
     }
