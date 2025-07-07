@@ -6168,9 +6168,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private handleEnterPress(event: KeyboardEvent): void {
         const activeElement = document.activeElement;
-        const isInputFocused = activeElement && activeElement.tagName === HtmlElementEnum.Button;
-        if (!isInputFocused && event.key === KeyCodesEnum.ENTER) {
-            // Only navigate if no input field is focused
+        const isInputFocused = activeElement && (activeElement.tagName === HtmlElementEnum.Button || activeElement.tagName === HtmlElementEnum.Textarea);
+        if (!isInputFocused && event.key === KeyCodesEnum.ENTER) { // Only navigate if no input field is focused
             event.preventDefault();
         }
     }
