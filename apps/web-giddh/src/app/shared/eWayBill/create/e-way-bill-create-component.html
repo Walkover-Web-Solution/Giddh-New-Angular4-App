@@ -28,7 +28,7 @@
                                 formControlName="toGstIn"
                                 [disabled]="currentVoucher?.gstNumber"
                                 [readonly]="currentVoucher?.gstNumber"
-                                [showError]="isFromInvalid && !generateEwayBillform.get('toGstIn').value"
+                                [showError]="isFormInvalid && !generateEwayBillform.get('toGstIn').value"
                             >
                             </input-field>
                         </div>
@@ -41,7 +41,7 @@
                                 [label]="localeData?.pincode_receiver_label"
                                 [placeholder]="localeData?.pincode_receiver_placeholder"
                                 formControlName="toPinCode"
-                                [showError]="isFromInvalid && !generateEwayBillform.get('toPinCode').value"
+                                [showError]="isFormInvalid && !generateEwayBillform.get('toPinCode').value"
                             >
                             </input-field>
                         </div>
@@ -64,7 +64,7 @@
                                 (onClear)="generateEwayBillform.get('transName').patchValue(null); generateEwayBillform.get('transId').patchValue(null)"
                                 [createNewText]="commonLocaleData?.app_create_new"
                                 (createOption)="openTransporterModel()"
-                                [showError]="isFromInvalid && !generateEwayBillform.get('transId').value"
+                                [showError]="isFormInvalid && !generateEwayBillform.get('transId').value"
                             >
                             </reactive-dropdown-field>
                         </div>
@@ -79,7 +79,7 @@
                                 [label]="commonLocaleData?.distance_km_label"
                                 formControlName="distance"
                                 [required]="true"
-                                [showError]="isFromInvalid && !generateEwayBillform.get('distance').value"
+                                [showError]="isFormInvalid && !generateEwayBillform.get('distance').value"
                             >
                             </input-field>
                         </div>

@@ -151,7 +151,8 @@
                                     <td class="p-0 text-right">
                                         {{
                                             responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                                ? (responseAccountList.accountSummary.closingBalance?.type === transactionType.CREDIT
+                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
+                                                  transactionType.CREDIT
                                                       ? "-"
                                                       : "") +
                                                   (responseAccountList.accountAddress.currency?.symbol ?? "") +
@@ -308,7 +309,11 @@
                                     [ngClass]="{ 'bg-light-grey': i % 2 }"
                                     class="sort-header-right text-right"
                                 >
-                                    {{ element?.voucherAmount.type !== transactionType.DEBIT ? element?.voucherAmount?.amount : "-" }}
+                                    {{
+                                        element?.voucherAmount.type !== transactionType.DEBIT
+                                            ? element?.voucherAmount?.amount
+                                            : "-"
+                                    }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="balance">
@@ -337,23 +342,25 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                         <hr class="border-grey" />
-                        <table>
-                            <tr>
-                                <td class="font-16 fw-900">{{ localeData?.balance_due }}</td>
-                                <td>
-                                    {{
-                                        responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                            ? (responseAccountList.accountSummary.closingBalance?.type === transactionType.CREDIT
-                                                  ? "-"
-                                                  : "") +
-                                              (responseAccountList.accountAddress.currency?.symbol ?? "") +
-                                              responseAccountList.accountSummary.closingBalance.amount
-                                            : ""
-                                    }}
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="text-center pd-t1 pd-b1" *ngIf="isLoading || (!isLoading && !accountListData?.length)">
+                            <div class="d-flex justify-content-end">
+                                <span class="font-16 fw-900 pd-1">{{ localeData?.balance_due }}</span>
+                                <span class="pd-1">
+                                        {{
+                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
+                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
+                                                  transactionType.CREDIT
+                                                      ? "-"
+                                                      : "") +
+                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
+                                                  responseAccountList.accountSummary.closingBalance.amount
+                                                : ""
+                                        }}
+                                    </span>
+                            </div>
+                        <div
+                            class="text-center pd-t1 pd-b1"
+                            *ngIf="isLoading || (!isLoading && !accountListData?.length)"
+                        >
                             <div class="no-data" *ngIf="isLoading">
                                 <giddh-page-loader class="spinner-container position-absolute"></giddh-page-loader>
                             </div>

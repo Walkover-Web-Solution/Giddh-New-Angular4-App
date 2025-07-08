@@ -127,6 +127,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public activeGroupUniqueName$: Observable<string> = this.componentStore.activeGroupUniqueName$;
     /** Observable indicating if virtual account is enabled */
     public virtualAccountEnable$: Observable<any> = this.componentStore.virtualAccountEnable$;
+    /** Observable indicating if account statement is in progress */
+    public getAccountStatementInProgress$: Observable<boolean> = this.componentStore.getAccountStatementInProgress$;
     /** Flag to show/hide bank details section */
     public showBankDetailPreview: boolean = false;
     /** Flag to show/hide contact preview section */
@@ -155,6 +157,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public AccountingGroupEnum = AccountingGroupEnum;
     /** Property to track if the user has updated before */
     private hasUpdatedBefore: boolean = false;
+    /** Listens for Master open/close event, required to load the data once master is closed */
+    public isAddAndManageOpenedFromOutside$: Observable<boolean> = this.componentStore.isAddAndManageOpenedFromOutside$;
 
     constructor(
         private router: Router,
@@ -222,7 +226,13 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-
+        this.isAddAndManageOpenedFromOutside$.pipe(takeUntil(this.destroyed$)).subscribe((isAddAndManageOpenedFromOutside) => {
+            if (!isAddAndManageOpenedFromOutside) {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+            }
+        });
+        
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
                 this.params = params;
@@ -371,9 +381,12 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.router.navigate([], {
                     relativeTo: this.activatedRoute,
                     queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
-                    queryParamsHandling: 'merge', // keeps other params
-                    replaceUrl: true // optionally replace history entry
+                    queryParamsHandling: 'merge',
+                    replaceUrl: true
                 });
+            } else {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
             }
         });
     }
@@ -447,7 +460,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             this.getAllApiCallCount++;
             if (this.contactList?.length) {
                 const exists = this.contactList.some(account => account.uniqueName === this.activeAccountUniqueName);
-                if (exists && !this.isSearching) {
+                if (exists && (!this.isSearching || this.advanceFilters.q)) {
                     this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === this.activeAccountUniqueName);
                 } else {
                     this.selectedContact = this.contactList[0];
