@@ -5,10 +5,12 @@ import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import { AiOcrStore } from "./utility/ai-ocr.store";
 import { LedgerComponentStore } from "../ledger/ledger.store";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { AppState } from "../store";
 import { GeneralActions } from "../actions/general/general.actions";
 import { AiOcrService } from "../services/ai-ocr.service";
+import { GeneralService } from "../services/general.service";
+import { OrganizationType } from "../models/user-login-state";
 dayjs.extend(duration);
 
 export enum OcrAction {
@@ -93,6 +95,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** Holds images folder path */
     public ocrAction = OcrAction;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -100,7 +106,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
+        private generalService: GeneralService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(false));
     }
@@ -111,12 +118,27 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnInit(): void {
+        this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+            this.changeDetection.detectChanges();
+        });
+        this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+            }
+            this.changeDetection.detectChanges();
+        });
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getAllOcrDocuments(false);
+        this.aiOcrStore.getCompletedCount(null);
         // Call getCompletedCount every 5 seconds
-        setInterval(() => {
-            this.aiOcrStore.getCompletedCount(null);
-        }, 5000);
+        if (!this.isCompany && !this.isConsolidatedBranch) {
+            setInterval(() => {
+                this.aiOcrStore.getCompletedCount(null);
+            }, 5000);
+        }
 
         this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {

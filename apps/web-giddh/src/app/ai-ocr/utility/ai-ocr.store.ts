@@ -81,6 +81,13 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
     public ocrMainListInProgress$: Observable<any> = this.select((state) => state.ocrMainListInProgress);
     /** Observable indicating the progress state of OCR import. */
     public ocrImportInProgress$: Observable<any> = this.select((state) => state.ocrImportInProgress);
+    /** Observable for branch consolidation. */
+    public branchConsolidated$: Observable<any> = this.select(
+        this.store.select((state) => state.branchConsolidated),
+        (response) => response
+    );
+    /** Observable for the list of OCR documents. */
+    public branches$: Observable<any> = this.store.select((state) => state.settings.branches);
 
     /**
      * Effect to get all OCR documents.
