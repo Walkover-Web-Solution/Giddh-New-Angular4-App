@@ -273,6 +273,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
 
         this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.parentGroups[0]?.uniqueName) {
+                this.showBankDetailPreview = response?.parentGroups?.some(parent => parent?.uniqueName === 'sundrycreditors') ? true : false;
                 let col = response.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === this.AccountingGroupEnum.RevenueFromOperations || col === this.AccountingGroupEnum.OtherIncome || col === this.AccountingGroupEnum.OperatingCost || col === this.AccountingGroupEnum.IndirectExpenses;
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
@@ -467,7 +468,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
                 this.accountDetails = this.selectedContact;
                 this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
-                this.showBankDetailPreview = response?.body?.parentGroups?.some(parent => parent?.uniqueName === 'sundrycreditors') ? true : false;
             }
             this.isRefresh = false;
             this.changeDetection.detectChanges();
