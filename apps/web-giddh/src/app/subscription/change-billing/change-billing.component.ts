@@ -150,7 +150,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 if (this.changeBillingForm.get('taxNumber')?.value && this.changeBillingForm.get('taxNumber')?.value?.length >= 2) {
                     setTimeout(() => {
                         this.validateGstNumber();
-                    }, 300);
+                    }, 50);
                 }
             }
         });
