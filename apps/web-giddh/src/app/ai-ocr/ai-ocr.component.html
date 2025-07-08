@@ -19,7 +19,7 @@
                 <div class="mb-5">
                     <img src="assets/images/create-discounts.png" alt="upload image" width="500px" height="auto" />
                 </div>
-                <button mat-raised-button color="primary" (click)="onUploadFile($event, fileInput)">
+                <button mat-raised-button color="primary" (click)="onUploadFile($event, fileInput)" [disabled]="isCompany || isConsolidatedBranch">
                     {{ localeData?.upload_button }}
                 </button>
             </div>
@@ -36,6 +36,7 @@
                 />
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                         <mat-button-toggle
+                            [disabled]="isCompany || isConsolidatedBranch"
                             [checked]="selectedToggle === ocrAction.Upload"
                             class="w125"
                             value="upload"
@@ -48,10 +49,10 @@
                             <span *ngIf="!(ocrUploadInProgress$ | async)">{{ commonLocaleData?.app_upload }}</span>
                         </mat-button-toggle>
                         <mat-button-toggle
+                            [disabled]="(isCompany || isConsolidatedBranch) || buttonDisabled || countVariable === 0"
                             value="create"
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"
-                            [disabled]="buttonDisabled || countVariable === 0"
                         >
                             <span
                                 >{{ commonLocaleData?.app_create }} ({{ countVariable }}
