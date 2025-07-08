@@ -235,8 +235,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private shouldShowBankDetail(accountUniqueName: string): void {
         this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
-                const accountDetails = response.body;
-                this.showBankDetail = accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
+                this.accountDetails = response.body;
+                this.showBankDetail = this.accountDetails?.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
             } else {
                 this.showBankDetail = false;
             }
