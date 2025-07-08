@@ -45,8 +45,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds common JSON data */
     public commonLocaleData: any = {};
-    /** True, If From is valid */
-    public isFromInvalid: boolean = false;
+    /** True, If Form is valid */
+    public isFormInvalid: boolean = false;
     /** Getter for vehicle number form control */
     public get vehicleNo(): FormControl {
         return this.generateEwayBillform.get('vehNo') as FormControl;
@@ -153,7 +153,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     private initGenerateNewTransporterForm(): void {
         this.generateNewTransporterForm = this.formBuilder.group({
             transporterId: [null, Validators.required],
-            transporterName: [null, Validators.required],
+            transporterName: [null, Validators.required]
         });
     }
 
@@ -173,7 +173,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public sendResponse(response: any): void {
-        this.dialogRef.close(response);
+        this.dialogRef?.close(response);
     }
 
     /**
@@ -182,8 +182,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public onSubmitEwaybill(): void {
-        this.isFromInvalid = this.generateEwayBillform.invalid;
-        if (!this.isFromInvalid) {
+        this.isFormInvalid = this.generateEwayBillform.invalid;
+        if (!this.isFormInvalid) {
             const formData = this.generateEwayBillform?.value;
             Object.keys(formData).forEach(key => {
                 if (formData[key] === null || (typeof formData[key] === "string" && formData[key].trim() === "")) {
@@ -272,7 +272,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @param {*} trans The transporter details to edit
      * @memberof EWayBillCreateComponent
      */
-    public editTransporter(trans: any) {
+    public editTransporter(trans: any): void {
         this.setTransporterDetail(trans);
         this.transportEditMode = true;
     }
@@ -283,7 +283,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @param {*} trans The transporter details
      * @memberof EWayBillCreateComponent
      */
-    public setTransporterDetail(trans) {
+    public setTransporterDetail(trans: any): void {
         if (trans !== undefined && trans) {
             this.generateNewTransporterForm.get('transporterId').patchValue(trans.transporterId);
             this.generateNewTransporterForm.get('transporterName').patchValue(trans.transporterName);
@@ -298,7 +298,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @param {IEwayBillTransporter} trans The transporter to delete
      * @memberof EWayBillCreateComponent
      */
-    public deleteTransporter(trans: IEwayBillTransporter) {
+    public deleteTransporter(trans: IEwayBillTransporter): void {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();

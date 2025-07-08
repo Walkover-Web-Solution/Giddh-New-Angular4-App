@@ -1127,7 +1127,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
-
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         delete accountRequest['portalDomain'];
         delete accountRequest['mobileCode'];
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
@@ -1380,7 +1380,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
-                        if (!this.addAccountForm.get('mobileCode')?.value) {
+                        if (!this.addAccountForm.get('mobileCode')?.value && this.selectedAccountCallingCode) {
                             this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }

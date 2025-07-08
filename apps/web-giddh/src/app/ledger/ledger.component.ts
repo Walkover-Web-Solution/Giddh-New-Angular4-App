@@ -1237,7 +1237,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.cdRf.detectChanges();
             }
         });
-
     }
 
     private assignPrefixAndSuffixForCurrency() {

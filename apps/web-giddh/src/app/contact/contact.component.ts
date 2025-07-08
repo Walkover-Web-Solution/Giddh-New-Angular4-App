@@ -1773,17 +1773,19 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public showAccountPreview(accountUniqueName: string): void {
+        if (!accountUniqueName) {
+            return;
+        }
         const queryParams = {
             page: this.advanceFilters.page,
             count: this.advanceFilters.count,
-            from: this.fromDate,
-            to: this.toDate,
+            from: this.selectedDateRange?.startDate.format(GIDDH_DATE_FORMAT),
+            to: this.selectedDateRange?.endDate.format(GIDDH_DATE_FORMAT),
             sort: this.advanceFilters.sort,
             sortBy: this.advanceFilters.sortBy,
             accountUniqueName: accountUniqueName,
             refresh: false
         };
-
         const searchString = this.advanceFilters.q;
         if (searchString?.length) {
             queryParams['search'] = searchString;
