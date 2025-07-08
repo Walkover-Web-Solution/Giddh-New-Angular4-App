@@ -304,8 +304,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
             this.accountListRequest.page = 1;
-            this.accountListRequest.from = this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT);
-            this.accountListRequest.to = this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT);
+            this.accountListRequest.from = this.selectedDateRange?.startDate.format(GIDDH_DATE_FORMAT);
+            this.accountListRequest.to = this.selectedDateRange?.endDate.format(GIDDH_DATE_FORMAT);
             const requestObj = {
                 body: advReq,
                 method: 'POST',
