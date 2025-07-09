@@ -273,10 +273,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public projectBroadcast: any;
     /** Hold broadcast event for AI OCR */
     public aiOcrBroadcast: any;
-    /** True if consolidated branch */
-    public isConsolidatedBranch: boolean;
     /** Holds true if plan is either trial or cancelled */
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
+    /** True if consolidated branch */
+    public isConsolidatedBranch: boolean;
     /** Tracks the visibility of error messages related to subscription and plan. */
     public showAlertMessage: SubscriptionErrorFlags = {
         isObligationExpired: true,
