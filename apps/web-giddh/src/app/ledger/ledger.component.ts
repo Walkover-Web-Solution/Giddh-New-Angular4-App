@@ -1526,7 +1526,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public generateLedger(): void {
-        if ((this.lc.blankLedger.transactions[1].selectedAccount?.uniqueName === "sales" || this.lc.blankLedger.transactions[0].selectedAccount?.uniqueName === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+        if ((this.lc.blankLedger.transactions[1]?.selectedAccount?.uniqueName === "sales" || this.lc.blankLedger.transactions[0]?.selectedAccount?.uniqueName === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
             this.openEwayBillDialog();
         } else {
             this.saveBlankTransaction();

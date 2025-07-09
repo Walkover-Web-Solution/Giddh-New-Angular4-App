@@ -3422,7 +3422,7 @@
                                 [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
                                 [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                 (resetBlankLedger)="resetBlankTransaction()"
-                                (saveBlankLedger)="saveBlankTransaction()"
+                                (saveBlankLedger)="generateLedger()"
                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                 (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                 (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
