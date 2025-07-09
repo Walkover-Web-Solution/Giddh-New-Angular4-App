@@ -159,6 +159,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     private hasUpdatedBefore: boolean = false;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean> = this.componentStore.isAddAndManageOpenedFromOutside$;
+    /** Holds true if master is open */
+    private isMasterOpen: boolean = false;
 
     constructor(
         private router: Router,
@@ -227,6 +229,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.isAddAndManageOpenedFromOutside$.pipe(takeUntil(this.destroyed$)).subscribe((isAddAndManageOpenedFromOutside) => {
+            this.isMasterOpen = isAddAndManageOpenedFromOutside;
             if (!isAddAndManageOpenedFromOutside) {
                 this.store.dispatch(this.accountsAction.resetActiveAccount());
                 this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));

@@ -130,7 +130,7 @@
                                             *ngIf="
                                                 !(updateAccountInProcess$ | async) &&
                                                 (activeAccount$ | async) &&
-                                                !isContactNotFound
+                                                !isContactNotFound && !isMasterOpen
                                             "
                                         >
                                             <account-update-new-details
