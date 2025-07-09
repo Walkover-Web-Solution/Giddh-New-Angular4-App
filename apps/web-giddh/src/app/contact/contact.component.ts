@@ -600,7 +600,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/${part}`;
+            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
             ipcRenderer.send('open-url', url);
         } else {
             if (part === 'ledger') {
