@@ -44,12 +44,7 @@ export class AiOcrService {
      * @memberof AiOcrService
      */
     public getAllOcrDocuments(query: any, model: any): Observable<BaseResponse<any, any>> {
-        let branchUniqueName = "";
-        if (query?.branchUniqueName) {
-            branchUniqueName = query?.branchUniqueName;
-        } else {
-            branchUniqueName = this.generalService.currentBranchUniqueName ?? "";
-        }
+        const branchUniqueName = query?.branchUniqueName ? query?.branchUniqueName : this.generalService.currentBranchUniqueName ?? "";
         return this.http
             .post(
                 this.config.apiUrl +

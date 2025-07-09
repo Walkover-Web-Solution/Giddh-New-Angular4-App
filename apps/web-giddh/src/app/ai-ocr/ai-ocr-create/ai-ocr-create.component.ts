@@ -4,6 +4,9 @@ import { GeneralService } from '../../services/general.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { AiOcrService } from '../../services/ai-ocr.service';
 import { FILE_ATTACHMENT_TYPE } from '../../app.constant';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
 @Component({
     selector: 'ai-ocr-create',
     templateUrl: './ai-ocr-create.component.html',
@@ -31,8 +34,11 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
     constructor(
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService,
-        private aiOcrService: AiOcrService
-    ) {}
+        private aiOcrService: AiOcrService,
+        private store: Store<AppState>,
+        private generalActions: GeneralActions
+    ) {
+    }
 
     /**
      * Hook cycle for component initialization
@@ -41,6 +47,7 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.aiOcrService.aiOcrDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.store.dispatch(this.generalActions.openSideMenu(false));
             if (response) {
                 const fileExtention = response.fileExtention?.toLowerCase();
                 if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
