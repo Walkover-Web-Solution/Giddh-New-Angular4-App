@@ -2221,7 +2221,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private openUrl(url: string): void {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${url}`;
+            url = location.origin + location.pathname + `#.${url}`;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
