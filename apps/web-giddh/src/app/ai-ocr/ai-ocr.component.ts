@@ -99,6 +99,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** Hold broadcast event */
+    public broadcast: any;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -319,6 +321,16 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             fileInput.value = "";
             fileInput.click();
         }
+    }
+
+    /**
+     * This will use for go to branch mode
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public gotToBranchTab(): void {
+        this.broadcast = new BroadcastChannel("ai-ocr");
+        this.broadcast.postMessage({ success: true });
     }
 
     /**
