@@ -81,9 +81,11 @@
                         <mat-tab [label]="localeData?.statement">
                             <div class="wrapper-background pd-1 pd-t05 pd-b05 overflow-auto">
                                 <div class="account-statement-wrapper">
-                                    <mat-card class="pd-15">
+                                    <div class="no-data" *ngIf="(getAccountStatementInProgress$ | async)">
+                                        <giddh-page-loader></giddh-page-loader>
+                                    </div>
+                                    <mat-card class="pd-15" *ngIf="selectedContact?.uniqueName && (getAccountStatementInProgress$ | async) === false">
                                         <account-statement
-                                            *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
                                             [branchUniqueName]="queryParams.branchUniqueName"
                                             [from]="queryParams.from"
@@ -97,7 +99,7 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.transaction">
-                            <div class="wrapper-background pd-1">
+                            <div class="wrapper-background pd-1 overflow-auto">
                                 <div class="account-statement-wrapper">
                                     <mat-card>
                                         <ledger-statement
@@ -115,39 +117,41 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.account_details">
-                            <div class="wrapper-background d-flex flex-column">
+                            <div class="wrapper-background d-flex flex-column overflow-auto">
                                 <div
                                     class="account-details-wrapper pd-t15 pd-b15 pd-l05 pd-r05 flex-grow-1 d-flex flex-column"
                                 >
                                     <div class="no-data" *ngIf="updateAccountInProcess$ | async">
                                         <giddh-page-loader></giddh-page-loader>
                                     </div>
-                                    <mat-card
-                                        class="pd-15 flex-grow-1"
-                                        *ngIf="
-                                            !(updateAccountInProcess$ | async) &&
-                                            (activeAccount$ | async) &&
-                                            !isContactNotFound
-                                        "
-                                    >
-                                        <account-update-new-details
-                                            [activeAccount$]="activeAccount$"
-                                            [activeGroupUniqueName]="parentGroupUniqueName"
-                                            [isGstEnabledAcc]="isGstEnabledAcc"
-                                            [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                                            [updateAccountInProcess$]="updateAccountInProcess$"
-                                            (isGroupSelected)="isGroupSelected($event)"
-                                            [accountDetails]="accountDetails"
-                                            [updateAccountIsSuccess$]="updateAccountIsSuccess$"
-                                            (deleteClicked)="showDeleteAccountModal()"
-                                            (submitClicked)="updateAccount($event)"
-                                            [showBankDetailPreview]="showBankDetailPreview"
-                                            [contactPreview]="true"
-                                            [showVirtualAccount]="showVirtualAccount"
-                                            [isDebtorCreditor]="isDebtorCreditor"
-                                            (updateViaPatchApi)="updateAccount($event, true)"
+                                    <mat-card *ngIf="!(updateAccountInProcess$ | async)">
+                                        <div
+                                            class="pd-15 flex-grow-1"
+                                            *ngIf="
+                                                !(updateAccountInProcess$ | async) &&
+                                                (activeAccount$ | async) &&
+                                                !isContactNotFound
+                                            "
                                         >
-                                        </account-update-new-details>
+                                            <account-update-new-details
+                                                [activeAccount$]="activeAccount$"
+                                                [activeGroupUniqueName]="parentGroupUniqueName"
+                                                [isGstEnabledAcc]="isGstEnabledAcc"
+                                                [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                                                [updateAccountInProcess$]="updateAccountInProcess$"
+                                                (isGroupSelected)="isGroupSelected($event)"
+                                                [accountDetails]="accountDetails"
+                                                [updateAccountIsSuccess$]="updateAccountIsSuccess$"
+                                                (deleteClicked)="showDeleteAccountModal()"
+                                                (submitClicked)="updateAccount($event)"
+                                                [showBankDetailPreview]="showBankDetailPreview"
+                                                [contactPreview]="true"
+                                                [showVirtualAccount]="showVirtualAccount"
+                                                [isDebtorCreditor]="isDebtorCreditor"
+                                                (updateViaPatchApi)="updateAccount($event, true)"
+                                            >
+                                            </account-update-new-details>
+                                        </div>
                                         <ng-container *ngIf="isContactNotFound">
                                             <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
                                         </ng-container>
@@ -174,7 +178,7 @@
 
 <!-- Single template for user not found -->
 <ng-template #noContactFound>
-    <div class="no-data">
+    <div class="text-center contact-no-data-message">
         <h1>{{ localeData?.user_not_found_message }}</h1>
     </div>
 </ng-template>

@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
@@ -120,8 +120,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public ngOnInit(): void {
-        this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response) {
+        this.accountStatementList$.pipe(delay(100), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response && response.transactionDetailList?.length) {
                 this.accountListData = response.transactionDetailList;
                 this.responseAccountList = response;
                 this.totalRecords = response.totalItems;
@@ -189,6 +189,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.advanceFiltersApplied = false;
         this.clearFilter = false;
         this.isSearching = false;
+        let dateRange = { fromDate: '', toDate: '' };
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
+        this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+        this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
 
@@ -299,6 +303,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.accountListData = [];
         const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
+            this.accountListRequest.page = 1;
+            this.accountListRequest.from = this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT);
+            this.accountListRequest.to = this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT);
             const requestObj = {
                 body: advReq,
                 method: 'POST',

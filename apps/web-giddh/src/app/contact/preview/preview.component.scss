@@ -35,7 +35,7 @@
         .back-button {
             right:5px;
             top:5px;
-            z-index:99999 !important;
+            z-index:99 !important;
         }
 
         .account-details-wrapper {
@@ -47,6 +47,13 @@
             max-width: 1024px;
         }
     }
+}
+
+.contact-no-data-message {
+    margin-top: 150px;
+    font-size: var(--font-size-32);
+    color: var(--color-common-primary-text);
+    height: 200px;
 }
 @media screen and (max-width: 1199px) {
     .list-responsive {
