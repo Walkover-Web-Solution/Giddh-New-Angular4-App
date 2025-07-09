@@ -507,7 +507,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public sortChange(event: Sort): void {
-        console.log(event);
         if (event) {
             this.ocrDocumentsRequestParams.sort = event.direction ? event.direction : "asc";
             this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
