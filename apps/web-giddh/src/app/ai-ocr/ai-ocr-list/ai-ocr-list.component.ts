@@ -19,6 +19,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helper
 import { Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
+import { OrganizationType } from "../../models/user-login-state";
 
 @Component({
     selector: "ai-ocr-list",
@@ -58,6 +59,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         to: "",
         sort: "",
         sortBy: "",
+        branchUniqueName: ""
     };
     /** Hold table page index number */
     public pageIndex: number = 0;
@@ -107,6 +109,10 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** True if is company */
+    public isCompany: boolean = true;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -115,7 +121,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private modalService: BsModalService,
         private formBuilder: FormBuilder
-    ) {}
+    ) { }
 
     /**
      * Initializes the component by subscribing to route parameters and fetching ocr data.
@@ -173,6 +179,22 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
+            }
+        });
+
+        this.componentStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
+            if (branchList) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
+                if (!this.isCompany) {
+                    this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+                }
+                this.branches = [];
+                branchList.forEach((branch) => {
+                    this.branches.push({
+                        label: branch?.name,
+                        value: branch?.uniqueName
+                    });
+                });
             }
         });
 
