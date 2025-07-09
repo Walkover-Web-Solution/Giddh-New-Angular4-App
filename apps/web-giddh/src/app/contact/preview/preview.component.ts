@@ -235,7 +235,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
             }
         });
-        
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
                 this.params = params;
@@ -280,6 +280,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 let col = response.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === this.AccountingGroupEnum.RevenueFromOperations || col === this.AccountingGroupEnum.OtherIncome || col === this.AccountingGroupEnum.OperatingCost || col === this.AccountingGroupEnum.IndirectExpenses;
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                this.changeDetection.detectChanges();
             }
         });
         this.componentStore.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -375,24 +376,27 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @memberof ContactPreviewComponent
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
+        this.updateAccountInProcess$ = of(true);
         if (isPatch) {
-            this.store.dispatch(this.salesAction.updateAccountDetailsForSales(accRequestObject, isPatch));
+            this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
+        } else {
+            accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
+            this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+            this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.updateAccountInProcess$ = of(false);
+                    this.router.navigate([], {
+                        relativeTo: this.activatedRoute,
+                        queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
+                        queryParamsHandling: 'merge',
+                        replaceUrl: true
+                    });
+                } else {
+                    this.store.dispatch(this.accountsAction.resetActiveAccount());
+                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                }
+            });
         }
-        accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
-        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
-        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.router.navigate([], {
-                    relativeTo: this.activatedRoute,
-                    queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
-                    queryParamsHandling: 'merge',
-                    replaceUrl: true
-                });
-            } else {
-                this.store.dispatch(this.accountsAction.resetActiveAccount());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
-            }
-        });
     }
 
     /**
