@@ -16,9 +16,13 @@ import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } fr
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { Sort } from "@angular/material/sort";
+import { MatSort, Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
+import { OrganizationType } from "../../models/user-login-state";
+import { AppState } from "../../store";
+import { Store } from "@ngrx/store";
+import { GeneralActions } from "../../actions/general/general.actions";
 
 @Component({
     selector: "ai-ocr-list",
@@ -28,6 +32,8 @@ import { AiOcrService } from "../../services/ai-ocr.service";
     providers: [AiOcrStore],
 })
 export class AiOcrListComponent implements OnInit, OnDestroy {
+    /** Holds table sorting reference */
+    @ViewChild(MatSort) sortBy: MatSort;
     /** Directive to get reference of element */
     @ViewChild("datepickerTemplate") public datepickerTemplate: TemplateRef<any>;
     /** Holds Paginator Reference */
@@ -56,8 +62,9 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         count: API_COUNT_LIMIT,
         from: "",
         to: "",
-        sort: "",
-        sortBy: "",
+        sort: "desc",
+        sortBy: "DATE",
+        branchUniqueName: ""
     };
     /** Hold table page index number */
     public pageIndex: number = 0;
@@ -107,6 +114,10 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** True if is company */
+    public isCompany: boolean = true;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -114,8 +125,11 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         private componentStore: AiOcrStore,
         private aiOcrService: AiOcrService,
         private modalService: BsModalService,
-        private formBuilder: FormBuilder
-    ) {}
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>,
+        private generalActions: GeneralActions
+    ) {
+     }
 
     /**
      * Initializes the component by subscribing to route parameters and fetching ocr data.
@@ -126,7 +140,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.initForm();
 
         /** Universal date observer */
-        this.componentStore.universalDate$.subscribe((dateObj) => {
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -142,6 +156,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
 
         /** Get Ocr List */
         this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.store.dispatch(this.generalActions.openSideMenu(true));
             if (response?.items) {
                 this.dataSource = new MatTableDataSource<any>(response?.items);
                 if (
@@ -173,6 +188,22 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
+            }
+        });
+
+        this.componentStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
+            if (branchList) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
+                if (!this.isCompany) {
+                    this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+                }
+                this.branches = [];
+                branchList.forEach((branch) => {
+                    this.branches.push({
+                        label: branch?.name,
+                        value: branch?.uniqueName
+                    });
+                });
             }
         });
 
@@ -476,10 +507,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public sortChange(event: Sort): void {
-        this.ocrDocumentsRequestParams.sort = event?.direction ? event.direction : "asc";
-        this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
-        this.ocrDocumentsRequestParams.page = 1;
-        this.getAllOcrDocuments(false);
+        console.log(event);
+        if (event) {
+            this.ocrDocumentsRequestParams.sort = event.direction ? event.direction : "asc";
+            this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
+            this.ocrDocumentsRequestParams.page = 1;
+            this.getAllOcrDocuments(false);
+        }
     }
 
     /**

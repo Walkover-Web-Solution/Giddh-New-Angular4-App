@@ -9,31 +9,45 @@
     <section class="ai-ocr container-fluid pd-15 d-flex flex-column" [hidden]="isLoading">
         <ng-container *ngIf="listCount === 0; else aiOcr">
             <input
-            type="file"
-            #fileInput
-            accept=".png,.jpg,.jpeg,.pdf"
-            style="display: none"
-            (change)="onFileSelected($event)"
-        />
+                type="file"
+                #fileInput
+                accept=".png,.jpg,.jpeg,.pdf"
+                style="display: none"
+                (change)="onFileSelected($event)"
+            />
             <div class="initial-screen position-absolute text-center">
-                <div class="mb-5">
-                    <img src="assets/images/create-discounts.png" alt="upload image" width="500px" height="auto" />
+                <div class="mb-2" [ngClass]="{ 'mb-5': !isCompany && !isConsolidatedBranch }">
+                    <img src="assets/images/ai-ocr.png" alt="upload image" width="350px" height="auto" />
                 </div>
-                <button mat-raised-button color="primary" (click)="onUploadFile($event, fileInput)" [disabled]="isCompany || isConsolidatedBranch">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="onUploadFile($event, fileInput)"
+                    *ngIf="!isCompany && !isConsolidatedBranch"
+                >
                     {{ localeData?.upload_button }}
                 </button>
+                <div
+                    class="mr-t1 d-flex justify-content-center align-items-center"
+                    *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
+                >
+                    <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+                    <button mat-stroked-button color="primary" (click)="gotToBranchTab()">
+                        {{ localeData?.go_to_branch }}
+                    </button>
+                </div>
             </div>
         </ng-container>
         <ng-template #aiOcr>
             <div class="d-flex justify-content-between">
                 <div class="custom-tab">
                     <input
-                    type="file"
-                    #fileInput
-                    accept=".png,.jpg,.jpeg,.pdf"
-                    style="display: none"
-                    (change)="onFileSelected($event)"
-                />
+                        type="file"
+                        #fileInput
+                        accept=".png,.jpg,.jpeg,.pdf"
+                        style="display: none"
+                        (change)="onFileSelected($event)"
+                    />
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                         <mat-button-toggle
                             [disabled]="isCompany || isConsolidatedBranch"
@@ -49,7 +63,7 @@
                             <span *ngIf="!(ocrUploadInProgress$ | async)">{{ commonLocaleData?.app_upload }}</span>
                         </mat-button-toggle>
                         <mat-button-toggle
-                            [disabled]="(isCompany || isConsolidatedBranch) || buttonDisabled || countVariable === 0"
+                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0"
                             value="create"
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"

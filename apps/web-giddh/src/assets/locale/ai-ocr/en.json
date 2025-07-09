@@ -11,5 +11,7 @@
         "fileStatus": "File Status",
         "convertedStatus": "Converted Status"
     },
-    "no_data_found": "All vouchers are converted. No vouchers are left to convert."
+    "no_data_found": "All vouchers are converted. No vouchers are left to convert.",
+    "go_to_branch_information": "No data to display please go to branch mode and upload file",
+    "go_to_branch": " Go to branch"
 }

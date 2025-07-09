@@ -17,6 +17,18 @@
                     />
                 </div>
             </div>
+            <div *ngIf="isCompany" class="mr-l1">
+                <reactive-dropdown-field
+                    [label]="commonLocaleData?.app_branch"
+                    [options]="branches"
+                    (selectedOption)="
+                        ocrDocumentsRequestParams.branchUniqueName = $event?.value; getAllOcrDocuments(false)
+                    "
+                    (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; getAllOcrDocuments(false)"
+                    [labelValue]="activeCompany?.name"
+                    [placeholder]="commonLocaleData?.app_select_branch"
+                ></reactive-dropdown-field>
+            </div>
             <button
                 *ngIf="
                     showClearFilter ||
@@ -47,7 +59,8 @@
                     [dataSource]="dataSource"
                     matSort
                     (matSortChange)="sortChange($event)"
-                    multiTemplateDataRows
+                    [matSortDirection]="ocrDocumentsRequestParams.sort"
+                    [matSortActive]="ocrDocumentsRequestParams.sortBy"
                     class="giddh-table w-100"
                 >
                     <ng-container matColumnDef="date">
@@ -179,8 +192,33 @@
                 </table>
             </form>
         </section>
-        <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(ocrListInProgress$ | async)">
-            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+        <div class="no-data" *ngIf="!(ocrListInProgress$ | async) && !dataSource?.filteredData?.length">
+            <no-data
+                *ngIf="
+                    ocrDocumentListForm?.controls['user']?.value ||
+                    ocrDocumentListForm?.controls['fileName']?.value ||
+                    ocrDocumentListForm?.controls['status']?.value ||
+                    ocrDocumentListForm?.controls['convertedStatus']?.value
+                "
+                [primaryMessage]="commonLocaleData?.app_no_data_found"
+                [secondaryMessage]="' '"
+            ></no-data>
+            <div
+                *ngIf="
+                    !(
+                        ocrDocumentListForm?.controls['user']?.value ||
+                        ocrDocumentListForm?.controls['fileName']?.value ||
+                        ocrDocumentListForm?.controls['status']?.value ||
+                        ocrDocumentListForm?.controls['convertedStatus']?.value
+                    )
+                "
+                class="d-flex justify-content-center align-items-center"
+            >
+                <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+                <button mat-stroked-button color="primary" (click)="gotToBranchTab()">
+                    {{ localeData?.go_to_branch }}
+                </button>
+            </div>
         </div>
         <div
             class="pagination-wrapper justify-content-end"

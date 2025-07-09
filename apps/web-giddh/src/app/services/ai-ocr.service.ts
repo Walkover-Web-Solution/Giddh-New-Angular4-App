@@ -33,29 +33,29 @@ export class AiOcrService {
         public http: HttpWrapperService,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
-    ) {}
+    ) { }
 
     /**
      * Retrieves all OCR documents with pagination and provided model.
      *
-     * @param pagination - Pagination details.
+     * @param query - Query parameters for pagination and filtering.
      * @param model - Data model for filtering.
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof AiOcrService
      */
-    public getAllOcrDocuments(pagination: any, model: any): Observable<BaseResponse<any, any>> {
-        const branchUniqueName = this.generalService.currentBranchUniqueName ?? "";
+    public getAllOcrDocuments(query: any, model: any): Observable<BaseResponse<any, any>> {
+        const branchUniqueName = query?.branchUniqueName ? query?.branchUniqueName : this.generalService.currentBranchUniqueName ?? "";
         return this.http
             .post(
                 this.config.apiUrl +
-                    AI_OCR_API.GET_ALL_DOCUMENTS?.replace(":page", encodeURIComponent(pagination?.page ?? ""))
-                        ?.replace(":count", encodeURIComponent(pagination?.count ?? ""))
-                        ?.replace(":from", encodeURIComponent(pagination?.from ?? ""))
-                        ?.replace(":to", encodeURIComponent(pagination?.to ?? ""))
-                        ?.replace(":sort", encodeURIComponent(pagination?.sort ?? ""))
-                        ?.replace(":sortBy", encodeURIComponent(pagination?.sortBy ?? ""))
-                        ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
-                        ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName)),
+                AI_OCR_API.GET_ALL_DOCUMENTS?.replace(":page", encodeURIComponent(query?.page ?? ""))
+                    ?.replace(":count", encodeURIComponent(query?.count ?? ""))
+                    ?.replace(":from", encodeURIComponent(query?.from ?? ""))
+                    ?.replace(":to", encodeURIComponent(query?.to ?? ""))
+                    ?.replace(":sort", encodeURIComponent(query?.sort ?? ""))
+                    ?.replace(":sortBy", encodeURIComponent(query?.sortBy ?? ""))
+                    ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
+                    ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName)),
                 model
             )
             .pipe(
@@ -81,9 +81,9 @@ export class AiOcrService {
         return this.http
             .get(
                 this.config.apiUrl +
-                    AI_OCR_API.UPLOAD_DOCUMENTS?.replace(":fileName", encodeURIComponent(fileName))
-                        ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
-                        ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))
+                AI_OCR_API.UPLOAD_DOCUMENTS?.replace(":fileName", encodeURIComponent(fileName))
+                    ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
+                    ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))
             )
             .pipe(
                 map((res) => {
@@ -108,10 +108,10 @@ export class AiOcrService {
         return this.http
             .post(
                 this.config.apiUrl +
-                    AI_OCR_API.IMPORT?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))?.replace(
-                        ":companyUniqueName",
-                        encodeURIComponent(this.generalService.companyUniqueName)
-                    ),
+                AI_OCR_API.IMPORT?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))?.replace(
+                    ":companyUniqueName",
+                    encodeURIComponent(this.generalService.companyUniqueName)
+                ),
                 payload
             )
             .pipe(
@@ -136,10 +136,10 @@ export class AiOcrService {
         return this.http
             .get(
                 this.config.apiUrl +
-                    AI_OCR_API.COMPLETED_COUNT?.replace(
-                        ":branchUniqueName",
-                        encodeURIComponent(branchUniqueName)
-                    )?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
+                AI_OCR_API.COMPLETED_COUNT?.replace(
+                    ":branchUniqueName",
+                    encodeURIComponent(branchUniqueName)
+                )?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
             )
             .pipe(
                 map((res) => {
@@ -164,10 +164,10 @@ export class AiOcrService {
         return this.http
             .get(
                 this.config.apiUrl +
-                    AI_OCR_API.EXTRACT_DOCUMENTS?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))
-                        ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
-                        ?.replace(":currentToken", encodeURIComponent(req.type === "skip" ? req.token : ""))
-                        ?.replace(":nextToken", encodeURIComponent(req.type === "save" ? req.token : ""))
+                AI_OCR_API.EXTRACT_DOCUMENTS?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))
+                    ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
+                    ?.replace(":currentToken", encodeURIComponent(req.type === "skip" ? req.token : ""))
+                    ?.replace(":nextToken", encodeURIComponent(req.type === "save" ? req.token : ""))
             )
             .pipe(
                 map((res) => {
