@@ -392,6 +392,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             } else {
                 this.store.dispatch(this.accountsAction.resetActiveAccount());
                 this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                setTimeout(() => {
+                    this.updateAccountInProcess$ = of(false);
+                }, 500);
             }
         });
     }
