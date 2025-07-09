@@ -379,21 +379,21 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         } else {
             accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
             this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
-            this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.updateAccountInProcess$ = of(false);
-                    this.router.navigate([], {
-                        relativeTo: this.activatedRoute,
-                        queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
-                        queryParamsHandling: 'merge',
-                        replaceUrl: true
-                    });
-                } else {
-                    this.store.dispatch(this.accountsAction.resetActiveAccount());
-                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
-                }
-            });
         }
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.updateAccountInProcess$ = of(false);
+                this.router.navigate([], {
+                    relativeTo: this.activatedRoute,
+                    queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
+                    queryParamsHandling: 'merge',
+                    replaceUrl: true
+                });
+            } else {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+            }
+        });
     }
 
     /**
