@@ -59,7 +59,8 @@
                     [dataSource]="dataSource"
                     matSort
                     (matSortChange)="sortChange($event)"
-                    multiTemplateDataRows
+                    [matSortDirection]="ocrDocumentsRequestParams.sort"
+                    [matSortActive]="ocrDocumentsRequestParams.sortBy"
                     class="giddh-table w-100"
                 >
                     <ng-container matColumnDef="date">

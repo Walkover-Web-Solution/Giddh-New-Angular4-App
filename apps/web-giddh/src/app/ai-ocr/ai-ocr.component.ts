@@ -5,9 +5,6 @@ import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import { AiOcrStore } from "./utility/ai-ocr.store";
 import { LedgerComponentStore } from "../ledger/ledger.store";
-import { select, Store } from "@ngrx/store";
-import { AppState } from "../store";
-import { GeneralActions } from "../actions/general/general.actions";
 import { AiOcrService } from "../services/ai-ocr.service";
 import { GeneralService } from "../services/general.service";
 import { OrganizationType } from "../models/user-login-state";
@@ -52,7 +49,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /** Observable indicating the progress state of the OCR documents list retrieval */
     public ocrListInProgress$: Observable<any> = this.aiOcrStore.select((state) => state.ocrListInProgress);
     /** Currently selected toggle option */
-    public selectedToggle: string = "";
+    public selectedToggle: string = '';
     /** Observable for OCR upload success state */
     public ocrUploadSuccess$: Observable<any> = this.aiOcrStore.ocrUploadSuccess$;
     /** Observable for OCR import success state */
@@ -107,11 +104,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private ledgerComponentStore: LedgerComponentStore,
         private aiOcrService: AiOcrService,
         private changeDetection: ChangeDetectorRef,
-        private store: Store<AppState>,
-        private generalActions: GeneralActions,
         private generalService: GeneralService
     ) {
-        this.store.dispatch(this.generalActions.openSideMenu(false));
     }
 
     /**
@@ -120,6 +114,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnInit(): void {
+        this.selectedToggle = OcrAction.List;
         this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
