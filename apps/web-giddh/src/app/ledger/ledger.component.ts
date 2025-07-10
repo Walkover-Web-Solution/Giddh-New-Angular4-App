@@ -3736,6 +3736,39 @@ export class LedgerComponent implements OnInit, OnDestroy {
             transaction.creditAmount = res.actualAmount
             transaction.creditTotal = res.total.amount;
         }
+        let particular: any;
+        if (res.transactions?.length) {
+            res.transactions.forEach(item => {
+                const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
+                if (Object.hasOwn(item.particular, 'category') && ['income','expenses','assets'].includes(item.particular.category) && item.particular.uniqueName !== "roundoff") {
+                    if (item.particular.category === 'assets') {
+                        window.alert('Fixed Assets');
+                        console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
+                        // showDiscountAndTaxPopup = uNameStr.includes('fixedassets');
+                        particular = item.particular;
+                    } else {
+                        particular = item.particular;
+                    }
+                    
+                    if (item.inventory) {
+                        particular['uniqueName'] = particular?.uniqueName?.split('#')[0];
+                        particular = { ...particular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
+                    }
+                }
+            })
+        }
+        let selectedAccountName = "";
+        let selectedAccountUniqueName = "";
+
+        if (particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
+            selectedAccountName = `${res.particular?.name}${particular?.stock ? ' (' + particular?.stock?.name + ')': ''}`;
+            selectedAccountUniqueName = res.particular?.uniqueName;
+            // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
+        } else {
+            selectedAccountName = particular?.name;
+            selectedAccountUniqueName = particular?.uniqueName;
+        }
+
         let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
         if (res?.discounts?.length) {
             res.discounts.forEach(discount => {
@@ -3765,6 +3798,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.taxes = res?.taxes ?? [];
         transaction.reverseChargeTaxableAmount = res.reverseChargeTaxableAmount;
         transaction.itcAvailable = res.itcAvailable;
+        transaction.particular = selectedAccountUniqueName;
         transaction.type = isDebitTransaction ? TransactionType.Debit : TransactionType.Credit;
         
         let warehouseUniqueName = null;
@@ -3788,27 +3822,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.touristSchemeApplicable = res.touristSchemeApplicable;
         this.lc.blankLedger.passportNumber = res.passportNumber;
 
-        let particular: any;
-        if (res.transactions?.length) {
-            res.transactions.forEach(item => {
-                const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
-                if (Object.hasOwn(item.particular, 'category') && ['income','expenses','assets'].includes(item.particular.category) && item.particular.uniqueName !== "roundoff") {
-                    if (item.particular.category === 'assets') {
-                        window.alert('Fixed Assets');
-                        console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
-                        // showDiscountAndTaxPopup = uNameStr.includes('fixedassets');
-                        particular = item.particular;
-                    } else {
-                        particular = item.particular;
-                    }
-                    
-                    if (item.inventory) {
-                        particular['uniqueName'] = particular?.uniqueName?.split('#')[0];
-                        particular = { ...particular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
-                    }
-                }
-            })
-        }
         // this.lc.blankLedger.transactions[0].particular = particular?.uniqueName; ref - 3810
 
         const txnIndex = this.lc.blankLedger.transactions.length - 1;
@@ -3821,18 +3834,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.blankLedger.transactions[txnIndex].type = TransactionType.Credit;
             this.lc.blankLedger.transactions[txnIndex].creditAmount = res.actualAmount;
             this.lc.blankLedger.transactions[txnIndex].creditTotal = res.total.amount;
-        }
-
-        let selectedAccountName = "";
-        let selectedAccountUniqueName = "";
-
-        if (particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
-            selectedAccountName = `${res.particular?.name}${particular?.stock ? ' (' + particular?.stock?.name + ')': ''}`;
-            selectedAccountUniqueName = res.particular?.uniqueName;
-            // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
-        } else {
-            selectedAccountName = particular?.name;
-            selectedAccountUniqueName = particular?.uniqueName;
         }
 
         this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName; // UniqueName to select in  ledger particular Dropdown rishi2#stock11
@@ -3876,7 +3877,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         );
         setTimeout(() => {
             this.lc.showNewLedgerPanel = true;
-            this.focusDebitCreditDropdowns(this.lc.blankLedger.transactions[txnIndex].type as TransactionType);
         }, 200);
     }
 
@@ -3889,6 +3889,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 tax.isDisabled = false;
             });
         }
+        // txn.selectedAccount = {
+        //     ...txn.selectedAccount,
+        //     ...event.additional,
+        //     applicableTaxes: txn?.taxes,
+        //     accountApplicableDiscounts: txn?.discounts,
+        // }
         // txn.selectedAccount = {
         //     ...event.additional,
         //     label: event.label,
