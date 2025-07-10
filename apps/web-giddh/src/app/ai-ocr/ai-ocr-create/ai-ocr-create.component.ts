@@ -77,6 +77,7 @@ export class AiOcrCreateComponent implements OnInit, OnDestroy {
      * @memberof AiOcrCreateComponent
      */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.generalActions.openSideMenu(true));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -73,7 +73,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /** Observable for OCR document extraction in progress state */
     public ocrExtractDocumentsInProgress$: Observable<boolean> = this.aiOcrStore.ocrExtractDocumentsInProgress$;
     /** Flag to indicate loading state */
-    public isLoading: boolean = false;
+    public isLoading: boolean = true;
     /** Local OCR list data */
     public ocrList: any;
     /** Main OCR list data */
@@ -106,6 +106,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService
     ) {
+        this.selectedToggle = OcrAction.List;
     }
 
     /**
@@ -114,28 +115,21 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnInit(): void {
-        this.selectedToggle = OcrAction.List;
         this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
         this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getAllOcrDocuments(false);
-        this.aiOcrStore.getCompletedCount(null);
-        // Call getCompletedCount every 5 seconds
-        if (!this.isCompany && !this.isConsolidatedBranch) {
-            setInterval(() => {
-                this.aiOcrStore.getCompletedCount(null);
-            }, 5000);
-        }
+
 
         this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -143,11 +137,38 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.ocrMainList = res;
                 this.changeDetection.detectChanges();
             }
+            if (this.listCount > 0) {
+                this.aiOcrStore.getCompletedCount(null);
+            }
+            this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.ocrCurrentToken = res?.token ? res.token : "";
+                if (res?.token) {
+                    this.selectedToggle = OcrAction.Create;
+                    this.aiOcrService.getOcrData$.next(true);
+                    this.aiOcrService.aiOcrDetails$.next(res);
+                    setTimeout(() => {
+                        this.innerLoading = false;
+                    }, 200);
+                } else {
+                    this.aiOcrService.getOcrData$.next(false);
+                    this.aiOcrService.aiOcrDetails$.next(null);
+                    this.innerLoading = false;
+                }
+                this.changeDetection.detectChanges();
+            });
         });
 
+        // Call getCompletedCount every 5 seconds
+        setInterval(() => {
+            if (this.listCount > 0) {
+                this.aiOcrStore.getCompletedCount(null);
+            }
+        }, 5000);
+
+
         this.ocrMainListInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
-            this.isLoading = inProgress;
             this.aiOcrService.ocrList$.next(this.ocrList);
+            this.isLoading = inProgress;
             this.selectedToggle = OcrAction.List;
             this.changeDetection.detectChanges();
         });
@@ -189,24 +210,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.ocrCurrentToken = res?.token ? res.token : "";
-            if (res?.token) {
-                this.selectedToggle = OcrAction.Create;
-                this.aiOcrService.getOcrData$.next(true);
-                this.aiOcrService.aiOcrDetails$.next(res);
-                setTimeout(() => {
-                    this.innerLoading = false;
-                    this.isLoading = false;
-                }, 100);
-            } else {
-                this.aiOcrService.getOcrData$.next(false);
-                this.aiOcrService.aiOcrDetails$.next(null);
-                this.innerLoading = false;
-                this.isLoading = false;
-            }
-            this.changeDetection.detectChanges();
-        });
 
         this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -321,7 +324,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /**
      * This will use for go to branch mode
      *
-     * @memberof ProjectWiseAccountingListComponent
+     * @memberof AiOcrComponent
      */
     public gotToBranchTab(): void {
         this.broadcast = new BroadcastChannel("ai-ocr");
@@ -334,6 +337,12 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnDestroy(): void {
+        this.aiOcrService.getOcrData$.next(null);
+        this.aiOcrService.ocrList$.next(null);
+        this.aiOcrService.aiOcrDetails$.next(null);
+        this.aiOcrService.uploadDataSuccess$.next(null);
+        this.aiOcrService.saveAndNext$.next(null);
+        this.aiOcrService.skipAndNext$.next(null);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -118,6 +118,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public branches: Array<any>;
     /** True if is company */
     public isCompany: boolean = true;
+    /** Hold broadcast event */
+    public broadcast: any;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -362,6 +364,16 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      */
     public getSearchFieldText(title: any): string {
         return this.localeData?.search_field?.replace("[FIELD]", title);
+    }
+
+    /**
+     * This will use for go to branch mode
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public gotToBranchTab(): void {
+        this.broadcast = new BroadcastChannel("ai-ocr");
+        this.broadcast.postMessage({ success: true });
     }
 
     /**
