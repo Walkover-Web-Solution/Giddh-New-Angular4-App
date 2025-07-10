@@ -220,5 +220,6 @@
     "import_voucher": "वाउचर आयात करें",
     "import_bank_statement": "बैंक स्टेटमेंट आयात करें",
     "no_data_found_message":"कोई लेन-देन नहीं मिला। कृपया लेन-देन प्राप्त करने के लिए पृष्ठ बदलें।",
-    "opening_closing_balance_filter_message": "हम फ़िल्टर लागू होने पर खुलने वाले और बंद होने वाले शेष राशि नहीं दिखाते हैं।"
+    "opening_closing_balance_filter_message": "हम फ़िल्टर लागू होने पर खुलने वाले और बंद होने वाले शेष राशि नहीं दिखाते हैं।",
+    "duplicate": "डुप्लिकेट"
 }
