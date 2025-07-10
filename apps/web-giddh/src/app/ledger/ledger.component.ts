@@ -19,8 +19,8 @@ import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType } from '../models/api-models/Ledger';
-import { SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
@@ -59,6 +59,8 @@ import { LedgerComponentStore } from './ledger.store';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 
 @Component({
     selector: 'ledger',
@@ -546,7 +548,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.isStock = Boolean(e.additional?.stock);
         txn.stockUniqueName = e.additional?.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
-        if (!txn.isStock) {
+        if (txn.duplicateEntry) {
+            this.handeLoadDetailsForDuplicateEntry(e, txn);
+        } else if (!txn.isStock) {
             this.loadDetails(e, txn, '', allowChangeDetection);
         }
         this.cdRf.markForCheck();
@@ -1589,26 +1593,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
             }
             let newTrx = this.lc.addNewTransaction(event.type);
-            this.lc.blankLedger?.transactions.push(newTrx);
-            this.selectBlankTxn(newTrx);
+                this.lc.blankLedger?.transactions.push(newTrx);
+                this.selectBlankTxn(newTrx);
         }
         this.closeAllAccountDropdown();
 
         setTimeout(() => {
-            if (this.ledgerView === LedgerViewEnum.StatementView) {
-                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit) || dropdown?.cssClass?.includes(TransactionType.Credit));
-                debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
-            } else {
-                if (event?.type === TransactionType.Debit) {
-                    const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit));
-                    debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
-                } else {
-                    const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Credit));
-                    creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
-                }
-            }
+            this.focusDebitCreditDropdowns(event?.type);
         }, 0);
     }
+
+    /**
+     * Focus the debit or credit dropdown
+     * 
+     * @param type The type of transaction
+     * @memberof LedgerComponent
+     */
+    private focusDebitCreditDropdowns(type: TransactionType) {
+        if (this.ledgerView === LedgerViewEnum.StatementView) {
+            const debitCreditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit) || dropdown?.cssClass?.includes(TransactionType.Credit));
+            debitCreditDropdowns[debitCreditDropdowns?.length - 1]?.openDropdownPanel();
+        } else {
+            if (type === TransactionType.Debit) {
+                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit));
+                debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
+            } else {
+                const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Credit));
+                creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
+            }
+        }
+    }
+        
+    
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
@@ -2031,11 +2047,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         })
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
-            this.hideUpdateLedgerModal();
             this.entryManipulated();
             if (this.isAdvanceSearchImplemented) {
                 this.createLedgerBalance();
             }
+            this.store.pipe(select(state => state.ledger.transactionDetails), take(1)).subscribe((res: LedgerResponse) => {
+                if (res) {
+                    this.prepareDuplicateTransaction(res);
+                    this.store.dispatch(this.ledgerActions.resetLedgerTrxDetails());
+                }
+            });
         });
     }
 
@@ -3385,7 +3406,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.groupTaxes ?? []);
                 if (txn?.taxesVm?.length) {
                     txn?.taxesVm.forEach(tax => {
-                        tax.isChecked = false;
+                        tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
                         tax.isDisabled = false;
                     });
                 }
@@ -3396,7 +3417,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     category: data.body.category,
                     value: event?.value,
                     isHilighted: true,
-                    applicableTaxes: taxes,
+                    applicableTaxes: txn.duplicateEntry ? [] : taxes,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,
@@ -3406,7 +3427,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     nameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
                     stock: data.body.stock,
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
-                    accountApplicableDiscounts: data.body.applicableDiscounts,
+                    accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
@@ -3463,7 +3484,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     delete txn.inventory;
                 }
-                if (rate > 0) {
+                if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
@@ -3690,5 +3711,268 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event) {
             this.closeAllAccountDropdown();
         }
+    }
+
+    /**
+     * Prepare duplicate transaction
+     *
+     * @param {any} res
+     * @memberof LedgerComponent
+     */
+    private prepareDuplicateTransaction(res: any): void {
+        if (!res) return;
+        const isDebitTransaction: boolean = res?.total?.type === TransactionType.Debit;
+        const transaction: TransactionVM = new TransactionVM();
+
+        transaction.duplicateEntry = true; // Use this to handle duplicate entry logic every where
+        transaction.amount = res?.actualAmount;
+        transaction.convertedAmount = res?.actualAmount;
+        transaction.total = res?.total.amount;
+        transaction.convertedTotal = res?.total.amount;
+        if (isDebitTransaction) {
+            transaction.debitAmount = res.actualAmount
+            transaction.debitTotal = res.total.amount;
+        } else {
+            transaction.creditAmount = res.actualAmount
+            transaction.creditTotal = res.total.amount;
+        }
+        let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
+        if (res?.discounts?.length) {
+            res.discounts.forEach(discount => {
+
+                if (!discount?.discount?.uniqueName) {
+                    discounts[0].isActive = true;
+                    discounts[0].amount = discount?.discount?.discountValue;
+                    discounts[0].discountValue = discount?.discount?.discountValue;
+                    discounts[0].discountType = discount?.discount?.discountType;
+                    return;
+                }
+
+                const discountObj: LedgerDiscountClass = discount?.discount;
+                discounts.push({
+                    amount: discount?.convertedAmount,
+                    discountValue: discountObj?.discountValue,
+                    discountType: discountObj?.discountType,
+                    isActive: true,
+                    particular: discount?.account?.uniqueName,
+                    discountUniqueName: discountObj?.uniqueName,
+                    name: discountObj?.name,
+                    uniqueName: discountObj?.uniqueName
+                });
+            }); 
+        }
+        transaction.discounts = discounts;
+        transaction.taxes = res?.taxes ?? [];
+        transaction.reverseChargeTaxableAmount = res.reverseChargeTaxableAmount;
+        transaction.itcAvailable = res.itcAvailable;
+        transaction.type = isDebitTransaction ? TransactionType.Debit : TransactionType.Credit;
+        
+        let warehouseUniqueName = null;
+        if (res.transactions?.length) {
+            const inventory = res.transactions.find(txn => txn.inventory !== null)?.inventory;
+            if (inventory) {
+                res['inventory'] = inventory;
+                warehouseUniqueName = inventory?.warehouse?.uniqueName || null;
+                transaction.inventory = inventory;
+            }
+        }
+        this.selectBlankTxn(transaction);
+        this.lc.blankLedger.isOtherTaxesApplicable = res.isOtherTaxesApplicable;
+        this.lc.blankLedger.otherTaxesSum = res.otherTaxesSum;
+        this.lc.blankLedger.voucherType = null;
+        this.lc.blankLedger.chequeNumber = res.chequeNumber;
+        this.lc.blankLedger.chequeClearanceDate = res.chequeClearanceDate;
+        this.lc.blankLedger.tagNames = res.tagNames;
+        this.lc.blankLedger.description = res.description;
+        this.lc.blankLedger.generateInvoice = res.voucherGenerated;
+        this.lc.blankLedger.touristSchemeApplicable = res.touristSchemeApplicable;
+        this.lc.blankLedger.passportNumber = res.passportNumber;
+
+        let particular: any;
+        if (res.transactions?.length) {
+            res.transactions.forEach(item => {
+                const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
+                if (Object.hasOwn(item.particular, 'category') && ['income','expenses','assets'].includes(item.particular.category) && item.particular.uniqueName !== "roundoff") {
+                    if (item.particular.category === 'assets') {
+                        window.alert('Fixed Assets');
+                        console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
+                        // showDiscountAndTaxPopup = uNameStr.includes('fixedassets');
+                        particular = item.particular;
+                    } else {
+                        particular = item.particular;
+                    }
+                    
+                    if (item.inventory) {
+                        particular['uniqueName'] = particular?.uniqueName?.split('#')[0];
+                        particular = { ...particular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
+                    }
+                }
+            })
+        }
+        // this.lc.blankLedger.transactions[0].particular = particular?.uniqueName; ref - 3810
+
+        const txnIndex = this.lc.blankLedger.transactions.length - 1;
+        this.lc.blankLedger.transactions[txnIndex].duplicateEntry = true; // Use this to handle duplicate entry logic every where
+        if (isDebitTransaction) {
+            this.lc.blankLedger.transactions[txnIndex].type = TransactionType.Debit;
+            this.lc.blankLedger.transactions[txnIndex].debitAmount = res.actualAmount;
+            this.lc.blankLedger.transactions[txnIndex].debitTotal = res.total.amount;
+        } else {
+            this.lc.blankLedger.transactions[txnIndex].type = TransactionType.Credit;
+            this.lc.blankLedger.transactions[txnIndex].creditAmount = res.actualAmount;
+            this.lc.blankLedger.transactions[txnIndex].creditTotal = res.total.amount;
+        }
+
+        let selectedAccountName = "";
+        let selectedAccountUniqueName = "";
+
+        if (particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
+            selectedAccountName = `${res.particular?.name}${particular?.stock ? ' (' + particular?.stock?.name + ')': ''}`;
+            selectedAccountUniqueName = res.particular?.uniqueName;
+            // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
+        } else {
+            selectedAccountName = particular?.name;
+            selectedAccountUniqueName = particular?.uniqueName;
+        }
+
+        this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName; // UniqueName to select in  ledger particular Dropdown rishi2#stock11
+        this.lc.blankLedger.transactions[txnIndex].selectedAccount = {label: selectedAccountName, value: selectedAccountUniqueName, category: particular?.category, additional: {name: selectedAccountName, uniqueName: selectedAccountUniqueName, stock: particular?.stock || null}}; // Name to select in  ledger particular Dropdown Divyanshu | Sales (delete stock)
+        
+        this.lc.blankLedger.transactions[txnIndex].amount = res?.actualAmount;
+        this.lc.blankLedger.transactions[txnIndex].convertedAmount = res?.actualAmount;
+        this.lc.blankLedger.transactions[txnIndex].total = res?.total.amount;
+        this.lc.blankLedger.transactions[txnIndex].convertedTotal = res?.total.amount;
+        this.lc.blankLedger.transactions[txnIndex].discounts = discounts;
+        this.lc.blankLedger.transactions[txnIndex].taxes = res?.taxes ?? [];
+        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList;
+
+        // Other Tax Logic
+        let tax: TaxResponse;
+        
+        let otherTaxesModal = new SalesOtherTaxesModal();
+        otherTaxesModal.itemLabel = res.particular?.name;
+
+        if (res?.tcsTaxes && res?.tcsTaxes.length) {
+            tax = this.companyTaxesList.find(item => item?.uniqueName === res?.tcsTaxes[0]);
+            this.lc.blankLedger.otherTaxType = OtherTaxTypeEnum.TCS;
+        } else if (res?.tdsTaxes && res?.tdsTaxes.length) {
+            tax = this.companyTaxesList.find(item => item?.uniqueName === res?.tdsTaxes[0]);
+            this.lc.blankLedger.otherTaxType = OtherTaxTypeEnum.TDS;
+        }
+
+        if (tax) {
+            otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+            otherTaxesModal.tcsCalculationMethod = res.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            this.lc.blankLedger.otherTaxModal = otherTaxesModal;
+            this.lc.blankLedger.isOtherTaxesApplicable = true;
+        }
+        
+        this.selectAccount(
+            this.lc.blankLedger.transactions[txnIndex].selectedAccount,// This value assigned above
+            this.lc.blankLedger.transactions[txnIndex],
+            false,
+            false,
+            false
+        );
+        setTimeout(() => {
+            this.lc.showNewLedgerPanel = true;
+            this.focusDebitCreditDropdowns(this.lc.blankLedger.transactions[txnIndex].type as TransactionType);
+        }, 200);
+    }
+
+    private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
+        txn.showTaxationDiscountBox = false;
+        // Take taxes of parent group and stock's own taxes
+        if (txn?.taxesVm?.length) {
+            txn?.taxesVm.forEach(tax => {
+                tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
+                tax.isDisabled = false;
+            });
+        }
+        // txn.selectedAccount = {
+        //     ...event.additional,
+        //     label: event.label,
+        //     name: event.label,
+        //     category: null,
+        //     value: null,
+        //     isHilighted: true,
+        //     applicableTaxes: txn.duplicateEntry,
+        //     currency: null,
+        //     currencySymbol: null,
+        //     email: null,
+        //     isFixed: null,
+        //     mergedAccounts: null,
+        //     mobileNo: null,
+        //     nameStr: event.additional?.stock ? event?.additional?.oppositeAccount?.parentGroups?.join(', ') : event?.additional?.parentGroups?.map(parent => parent?.name).join(', '),
+        //     stock: event?.additional?.stock,
+        //     uNameStr: event.additional?.stock ? event?.additional?.oppositeAccount?.parentGroups?.join(', ') : event?.additional?.parentGroups?.map(parent => parent?.uniqueName ?? parent).join(', '),
+        //     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : event?.additional?.applicableDiscounts,
+        //     parentGroups: event.additional?.stock ? event?.additional?.oppositeAccount?.parentGroups : event?.additional?.parentGroups, // added due to parentGroups is getting null in search API
+        // };
+        // if (txn?.selectedAccount && txn.selectedAccount.stock) {
+        //     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+        // }
+        // if (!this.isHideBankLedgerPopup) {
+        //     this.lc.currentBlankTxn = txn;
+        // }
+        // let rate = 0;
+        // let unitCode = '';
+        // let stockName = '';
+        // let stockUniqueName = '';
+        // let stockUnitUniqueName = '';
+
+        txn.isMrpDiscountApplied = false;
+
+        //#region unit rates logic
+        // if (txn?.selectedAccount?.stock) {
+        //     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
+        //     const defaultUnit = {
+        //         stockUnitCode: defaultUnitRates[0].stockUnitCode,
+        //         code: defaultUnitRates[0].stockUnitCode,
+        //         rate: defaultUnitRates[0].rate,
+        //         name: txn.selectedAccount.stock.name
+        //     };
+            // const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
+            // txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+            // stockName = defaultUnit.name;
+            // rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+            // stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+            // unitCode = defaultUnit.code;
+            // stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
+
+            // const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+            // if (hasMrpDiscount?.length) {
+            //     rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+            // }
+        // }
+        // if (stockName && stockUniqueName) {
+        //     txn.inventory = {
+        //         stock: {
+        //             name: stockName,
+        //             uniqueName: stockUniqueName,
+        //         },
+        //         variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
+        //         quantity: 1,
+        //         unit: {
+        //             stockUnitCode: unitCode,
+        //             code: unitCode,
+        //             rate: rate,
+        //             stockUnitUniqueName: stockUnitUniqueName
+        //         }
+        //     };
+        // } else {
+        //     delete txn.inventory;
+        // }
+        // if (rate > 0 && !txn.duplicateEntry) {
+        //     txn.amount = rate;
+        // }
+        // check if selected account category allows to show taxationDiscountBox in newEntry popup
+        txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+        txn.showOtherTax = this.showOtherTax(txn);
+        // this.handleRcmVisibility(txn);
+        // this.handleTaxableAmountVisibility(txn);
+        this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
+        this.needToReCalculate.next(true);
+        // this.getTransactionCountConvertToEntries();
     }
 }

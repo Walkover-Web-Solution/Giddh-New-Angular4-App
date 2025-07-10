@@ -342,6 +342,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isDatepickerOpen: boolean = false;
     /** Hold last valid index */
     public lastValidIndex: number;
+    /** True if duplicate entry */
+    public isDuplicateEntry: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -425,7 +427,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
+        this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response;
             } else {
@@ -491,7 +493,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // check if delete entry is success
-        this.isDeleteTrxEntrySuccess$.subscribe(del => {
+        this.isDeleteTrxEntrySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(del => {
             if (del) {
                 this.store.dispatch(this.ledgerAction.resetDeleteTrxEntryModal());
                 this.closeUpdateLedgerModal.emit(true);
@@ -500,7 +502,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // check if update entry is success
-        this.isTxnUpdateSuccess$.subscribe(upd => {
+        this.isTxnUpdateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(upd => {
             if (upd) {
                 this.store.dispatch(this.ledgerAction.ResetUpdateLedger());
                 this.resetPreviousSearchResults();
@@ -836,7 +838,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public deleteAttachedFile() {
-        this.ledgerService.removeAttachment(this.vm.selectedLedger?.attachedFile).subscribe((response) => {
+        this.ledgerService.removeAttachment(this.vm.selectedLedger?.attachedFile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === 'success') {
                 this.vm.selectedLedger.attachedFile = '';
                 this.vm.selectedLedger.attachedFileName = '';
@@ -1007,8 +1009,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        // Remove the transaction details for ledger once the component is destroyed
-        this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
+        if (!this.isDuplicateEntry) {
+            // Remove the transaction details for ledger once the component is destroyed
+            this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
+        }
         document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
 
@@ -1412,14 +1416,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public hideDiscount(): void {
         if (this.discountComponent) {
-            this.discountComponent.change();
+            this.discountComponent?.change();
             this.discountComponent.discountMenu = false;
         }
     }
 
     public hideTax(): void {
         if (this.taxControll) {
-            this.taxControll.change();
+            this.taxControll?.change();
         }
     }
 
@@ -2994,5 +2998,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public datepickerState(event: any): void {
         this.isDatepickerOpen = event;
+    }
+
+    /**
+     * This will be use for duplicate entry
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public duplicateEntry(): void {
+        this.isDuplicateEntry = true;
+        this.closeUpdateLedgerModal.emit();
     }
 }
