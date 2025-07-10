@@ -63,8 +63,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         sort: '',
         q: '',
     };
-    /** Current page index for the paginator */
-    public pageIndex: number = 0;
     /** Options for the number of rows shown per page */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Total number of records available for pagination */
@@ -122,9 +120,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.accountStatementList$.pipe(delay(100), takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.transactionDetailList?.length) {
-                this.accountListData = response.transactionDetailList;
-                this.responseAccountList = response;
-                this.totalRecords = response.totalItems;
+                    this.accountListData = response.transactionDetailList;
+                    this.responseAccountList = response;
+                    this.totalRecords = response.totalItems;
             }
             this.isLoading = false;
         });
@@ -208,10 +206,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
-        this.pageIndex = event.pageIndex;
         this.accountListRequest.count = event.pageSize;
         this.accountListRequest.page = event.pageIndex + 1;
-        this.getAccountStatementList();
+        this.getAccountStatementList(true);
     }
 
     /**
@@ -298,12 +295,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      *
      * @memberof AccountStatementComponent
      */
-    public getAccountStatementList(): void {
+    public getAccountStatementList(isAdvanceSearch: boolean = false): void {
         this.isLoading = true;
         this.accountListData = [];
         const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
-            this.accountListRequest.page = 1;
+            if (!isAdvanceSearch) {
+                this.accountListRequest.page = 1;
+            }
             this.accountListRequest.from = this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT);
             this.accountListRequest.to = this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT);
             const requestObj = {
