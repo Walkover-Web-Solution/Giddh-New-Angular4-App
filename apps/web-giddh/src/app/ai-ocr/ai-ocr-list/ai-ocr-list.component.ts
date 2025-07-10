@@ -118,6 +118,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public branches: Array<any>;
     /** True if is company */
     public isCompany: boolean = true;
+    /** Hold broadcast event */
+    public broadcast: any;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -365,6 +367,16 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will use for go to branch mode
+     *
+     * @memberof ProjectWiseAccountingListComponent
+     */
+    public gotToBranchTab(): void {
+        this.broadcast = new BroadcastChannel("ai-ocr");
+        this.broadcast.postMessage({ success: true });
+    }
+
+    /**
      * Handles clicks outside the specified element for filtering in the AiOcrListComponent.
      *
      * @param event - The event triggered by the click.
@@ -507,7 +519,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public sortChange(event: Sort): void {
-        console.log(event);
         if (event) {
             this.ocrDocumentsRequestParams.sort = event.direction ? event.direction : "asc";
             this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
