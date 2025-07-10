@@ -17,7 +17,7 @@
                     />
                 </div>
             </div>
-            <div *ngIf="isCompany" class="mr-l1">
+            <div *ngIf="isCompany && activeCompany?.name" class="mr-l1">
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_branch"
                     [options]="branches"
