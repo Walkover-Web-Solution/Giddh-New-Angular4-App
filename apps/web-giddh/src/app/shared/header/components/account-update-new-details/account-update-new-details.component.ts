@@ -701,6 +701,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['']
@@ -2163,6 +2164,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // fill form with active account
         combineLatest([this.activeAccount$, this.customFieldsService.list(this.customFieldsRequest)]).pipe(takeUntil(this.destroyed$)).subscribe(results => {
             if (results && results[0] && results[1]) {
+                console.log( results[0]);
+                console.log( results[1]);
+
                 this.companyCustomFields = [];
                 this.addAccountForm.setControl('customFields', this._fb.array([]));
                 let acc = results[0];

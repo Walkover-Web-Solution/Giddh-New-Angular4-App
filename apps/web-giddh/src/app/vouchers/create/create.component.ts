@@ -156,7 +156,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         taxType: '',
         taxTypeLabel: '',
         mobileNumber: '',
-        branch: null
+        branch: null,
+        duePeriod: null
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -1817,7 +1818,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getAccountDetails(accountUniqueName: string): void {
-        this.componentStore.getAccountDetails(accountUniqueName);
+        this.componentStore.getAccountDetails({ uniqueName: accountUniqueName, voucherType: this.voucherType });
 
         if (!this.invoiceType.isCashInvoice && (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote)) {
             this.fetchPreviousVouchers();
@@ -2004,11 +2005,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.baseCurrency = accountData.currency;
         this.account.baseCurrencySymbol = accountData.currencySymbol;
         this.account.addresses = accountData.addresses;
+        this.account.duePeriod = accountData.duePeriod;
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-        
+
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
@@ -2073,6 +2075,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
+        this.updateDueDate();
     }
 
     /**
@@ -3180,8 +3183,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
-            this.stockVariants[entryIndex] = observableOf([]);
-            this.stockUnits[entryIndex] = observableOf([]);
+        this.stockVariants[entryIndex] = observableOf([]);
+        this.stockUnits[entryIndex] = observableOf([]);
         if (!entries?.length) {
             this.addNewLineEntry();
         }
@@ -3302,7 +3305,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
-            
+
             if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 transactionFormGroup.get('amount.amountForAccount').patchValue(transactionFormGroup.get('amount.amountForAccount').value - (transactionFormGroup.get('amount.amountForAccount').value * (taxes?.[0]?.taxDetail?.taxValue ?? 1) / 100));
@@ -3373,9 +3376,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 amount = (entryFormGroup.get('total.amountForAccount').value ?? 0) - totalTax
             }
             entryFormGroup.get('transactions.0.amount.amountForAccount').patchValue(amount);
-    
+
             this.calculateTotalTax();
-            this.calculateVoucherTotals();   
+            this.calculateVoucherTotals();
         }
     }
 
@@ -3399,7 +3402,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public updateDueDate(): void {
         if (this.invoiceForm.get("date").value) {
             let duePeriod: number;
-            if (this.invoiceType.isEstimateInvoice) {
+            if (this.account.duePeriod) {
+                duePeriod = this.account.duePeriod;
+            } else if (this.invoiceType.isEstimateInvoice) {
                 duePeriod = this.invoiceSettings?.estimateSettings ? this.invoiceSettings?.estimateSettings.duePeriod : 0;
             } else if (this.invoiceType.isProformaInvoice) {
                 duePeriod = this.invoiceSettings?.proformaSettings ? this.invoiceSettings?.proformaSettings.duePeriod : 0;

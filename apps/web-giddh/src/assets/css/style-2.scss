@@ -14013,3 +14013,16 @@ mat-list {
 .bg-white {
     background: var(--color-white) !important;
 }
+
+.mention-item {
+    padding: 8px 12px;
+}
+
+.tribute-container li {
+    background: var(--color-white) !important;
+}
+
+.tribute-container .highlight {
+    background-color: var(--color-primary-filter-background) !important;
+    color: var(--color-giddh-blue);
+}
