@@ -3721,7 +3721,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private prepareDuplicateTransaction(res: any): void {
         if (!res) return;
-        const isDebitTransaction: boolean = res?.total?.type === TransactionType.Debit;
+        let isDebitTransaction: boolean;
         const transaction: TransactionVM = new TransactionVM();
 
         transaction.duplicateEntry = true; // Use this to handle duplicate entry logic every where
@@ -3729,13 +3729,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.convertedAmount = res?.actualAmount;
         transaction.total = res?.total.amount;
         transaction.convertedTotal = res?.total.amount;
-        if (isDebitTransaction) {
-            transaction.debitAmount = res.actualAmount
-            transaction.debitTotal = res.total.amount;
-        } else {
-            transaction.creditAmount = res.actualAmount
-            transaction.creditTotal = res.total.amount;
-        }
         let particular: any;
         if (res.transactions?.length) {
             res.transactions.forEach(item => {
@@ -3756,6 +3749,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
             })
+        }
+        if (res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
+            isDebitTransaction = res?.total?.type === TransactionType.Debit ? true : false;
+        } else {
+            isDebitTransaction = res?.total?.type === TransactionType.Debit ? false : true;
+        }
+        const transactionType = isDebitTransaction ? TransactionType.Debit : TransactionType.Credit;
+        if (isDebitTransaction) {
+            transaction.debitAmount = res.actualAmount
+            transaction.debitTotal = res.total.amount;
+        } else {
+            transaction.creditAmount = res.actualAmount
+            transaction.creditTotal = res.total.amount;
         }
         let selectedAccountName = "";
         let selectedAccountUniqueName = "";
@@ -3799,14 +3805,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.reverseChargeTaxableAmount = res.reverseChargeTaxableAmount;
         transaction.itcAvailable = res.itcAvailable;
         transaction.particular = selectedAccountUniqueName;
-        transaction.type = isDebitTransaction ? TransactionType.Debit : TransactionType.Credit;
+        transaction.type = transactionType;
         
-        let warehouseUniqueName = null;
+        // let warehouseUniqueName = null;
         if (res.transactions?.length) {
             const inventory = res.transactions.find(txn => txn.inventory !== null)?.inventory;
             if (inventory) {
                 res['inventory'] = inventory;
-                warehouseUniqueName = inventory?.warehouse?.uniqueName || null;
+                // warehouseUniqueName = inventory?.warehouse?.uniqueName || null;
                 transaction.inventory = inventory;
             }
         }
@@ -3824,14 +3830,39 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // this.lc.blankLedger.transactions[0].particular = particular?.uniqueName; ref - 3810
 
-        const txnIndex = this.lc.blankLedger.transactions.length - 1;
+        let txnIndex: number;
+        
+        if (this.ledgerView === LedgerViewEnum.TView) {
+            let filterTypedTxn = this.lc.blankLedger.transactions?.filter(txn => txn.type === (transactionType));
+            if (filterTypedTxn[filterTypedTxn.length - 1]?.particular) {
+                const newTrx = this.lc.addNewTransaction(transactionType);
+                this.lc.blankLedger?.transactions.push(newTrx);
+                txnIndex = this.lc.blankLedger.transactions.length - 1;
+            } else {
+                txnIndex = this.lc.blankLedger.transactions.findIndex(txn => txn.id === filterTypedTxn[filterTypedTxn.length - 1].id);
+            }
+        } else {
+            let filterTypedTxn = this.lc.blankLedger.transactions[this.lc.blankLedger.transactions?.length - 1];
+            if (filterTypedTxn?.particular) {
+                const newTrx = this.lc.addNewTransaction(transactionType);
+                this.lc.blankLedger?.transactions.push(newTrx);
+            } else {
+                this.lc.blankLedger.transactions[this.lc.blankLedger.transactions?.length - 1].type = transactionType;
+            }
+            txnIndex = this.lc.blankLedger.transactions.length - 1;
+        }
+
+
+        if (this.lc.blankLedger.transactions[txnIndex].particular) {
+            const newTrx = this.lc.addNewTransaction(transactionType);
+            this.lc.blankLedger?.transactions.push(newTrx);
+        }
+        
         this.lc.blankLedger.transactions[txnIndex].duplicateEntry = true; // Use this to handle duplicate entry logic every where
         if (isDebitTransaction) {
-            this.lc.blankLedger.transactions[txnIndex].type = TransactionType.Debit;
             this.lc.blankLedger.transactions[txnIndex].debitAmount = res.actualAmount;
             this.lc.blankLedger.transactions[txnIndex].debitTotal = res.total.amount;
         } else {
-            this.lc.blankLedger.transactions[txnIndex].type = TransactionType.Credit;
             this.lc.blankLedger.transactions[txnIndex].creditAmount = res.actualAmount;
             this.lc.blankLedger.transactions[txnIndex].creditTotal = res.total.amount;
         }
@@ -3918,9 +3949,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // if (txn?.selectedAccount && txn.selectedAccount.stock) {
         //     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
         // }
-        // if (!this.isHideBankLedgerPopup) {
-        //     this.lc.currentBlankTxn = txn;
-        // }
+        if (!this.isHideBankLedgerPopup) {
+            this.lc.currentBlankTxn = txn;
+        }
         // let rate = 0;
         // let unitCode = '';
         // let stockName = '';
