@@ -60,7 +60,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       menuItemTemplate: (item: any) =>
         `<div class="mention-item">${item.original.key}</div>`,
       selectTemplate: (item: any) =>
-        `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}`
+       item?.original?.value ? `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}` : '',
     };
 
     this.destroyTribute(); // Clean up any previous instance
@@ -69,7 +69,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
     this.tributeInstance.attach(this.hostElement.nativeElement);
 
     this.hostElement.nativeElement.addEventListener('tribute-replaced', (event: any) => {
-      this.mentionSelected.emit(event.detail.item.original);
+      this.mentionSelected.emit(event?.detail?.item?.original ?? "");
     });
   }
 

@@ -42,7 +42,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public isFileUploaded: boolean = false;
     public isFileUploadInProgress: boolean = false;
     public companyUniqueName = null;
-    @ViewChild('mentionTextarea') textarea!: ElementRef<HTMLTextAreaElement>;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -64,8 +63,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     };
     /** Hold list of suggestion items for Tribute.js */
     public suggestionList: any[] = [];
-    /** Holds Store get email content suggestions API success state as observable*/
-    public accountSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
+    /** Holds Store get account content suggestions API success state as observable*/
+    public voucherSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
 
     constructor(
         private store: Store<AppState>,
@@ -140,9 +139,9 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.assignImageSignature();
         });
 
-        this.accountSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.accountSuggestions) {
-                this.suggestionList = response.accountSuggestions.map(item => ({
+        this.voucherSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.voucherSuggestions) {
+                this.suggestionList = response.voucherSuggestions.map(item => ({
                     key: item,
                     value: item
                 }));
