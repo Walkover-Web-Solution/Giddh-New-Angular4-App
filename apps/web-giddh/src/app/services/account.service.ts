@@ -217,14 +217,14 @@ export class AccountService {
      * @returns {Observable<BaseResponse<AccountResponseV2, string>>}
      * @memberof AccountService
      */
-    public GetAccountDetailsV2(accountUniqueName: string, source?: string, invoiceType: string = ""): Observable<BaseResponse<AccountResponseV2, string>> {
+    public GetAccountDetailsV2(accountUniqueName: string, source?: string): Observable<BaseResponse<AccountResponseV2, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (accountUniqueName) {
             if (!source) {
                 source = "";
             }
 
-            return this.http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':source', encodeURIComponent(source))?.replace(':invoiceType', encodeURIComponent(invoiceType))).pipe(map((res) => {
+            return this.http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))?.replace(':source', encodeURIComponent(source))).pipe(map((res) => {
                 let data: BaseResponse<AccountResponseV2, string> = res;
                 data.queryString = { accountUniqueName };
                 return data;

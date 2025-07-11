@@ -491,10 +491,10 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getAccountDetails = this.effect((data: Observable<any>) => {
+    readonly getAccountDetails = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.accountService.GetAccountDetailsV2(req.uniqueName, "", req.voucherType).pipe(
+                return this.accountService.GetAccountDetailsV2(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({

@@ -1,58 +1,97 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import Tribute from 'tributejs';
 
 @Directive({
   selector: '[appTributeMention]'
 })
-export class TributeMentionDirective implements OnInit, OnDestroy {
-  @Input('appTributeMention') config: any = {};
-  @Input('appTributeMentionValues') values: any[] = [];
-  @Output() mentioned = new EventEmitter<any>();
-  private tribute!: Tribute<any>;
+export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
-  constructor(private elementRef: ElementRef) { }
+  /** Tribute.js configuration options.*/
+  @Input('appTributeMention') tributeConfig: any = {};
+  /** List of values to be shown in the mention dropdown.*/
+  @Input('appTributeMentionValues') mentionList: any[] = [];
+  /** Emits the selected item when a user picks a mention from the list.*/
+  @Output() mentionSelected = new EventEmitter<any>();
+  /** Holds the Tribute instance. */
+  private tributeInstance!: Tribute<any>;
 
-  ngOnInit() {
+  constructor(private hostElement: ElementRef) { }
+
+  /**
+   * Lifecycle hook: called when the directive is initialized.
+   * 
+   * @returns {void}
+   * @memberof TributeMentionDirective
+   */
+  public ngOnInit(): void {
     this.initializeTribute();
   }
 
-  private initializeTribute() {
-    const mergedConfig = {
-      ...this.config,
-      values: this.values, // Combine the config with current values
-      requireLeadingSpace: true,
-      positionMenu: true,
-      menuItemTemplate: (item) => `<div class="mention-item">${item.original.key}</div>`,
-      selectTemplate: (item) => `${this.config.suggestionPrefix || ''}${item.original.value}${this.config.suggestionSuffix || ''}`
-    };
-
-    this.cleanUpTribute(); // Clean up any existing instance
-
-    this.tribute = new Tribute(mergedConfig);
-    this.tribute.attach(this.elementRef.nativeElement);
-
-    this.elementRef.nativeElement.addEventListener('tribute-replaced', (event: any) => {
-      this.mentioned.emit(event.detail.item.original);
-    });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if ((changes.config || changes.values) && (changes.values?.currentValue !== changes.values?.previousValue)) {
+  /**
+   * Reinitializes Tribute when config or values change.
+   * 
+   * @returns {void}
+   * @memberof TributeMentionDirective
+   */
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes.mentionList &&
+      changes.mentionList.currentValue !== changes.mentionList.previousValue
+    ) {
+      this.initializeTribute();
+    }
+    if (changes.tributeConfig) {
       this.initializeTribute();
     }
   }
 
-  ngOnDestroy() {
-    this.cleanUpTribute();
+  /**
+   * Initializes the Tribute.js instance and attaches it to the host element.
+   * 
+   * @returns {void}
+   * @memberof TributeMentionDirective
+   */
+  private initializeTribute(): void {
+    const tributeOptions = {
+      ...this.tributeConfig,
+      values: this.mentionList,
+      requireLeadingSpace: true,
+      positionMenu: true,
+      menuItemTemplate: (item: any) =>
+        `<div class="mention-item">${item.original.key}</div>`,
+      selectTemplate: (item: any) =>
+        `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}`
+    };
+
+    this.destroyTribute(); // Clean up any previous instance
+
+    this.tributeInstance = new Tribute(tributeOptions);
+    this.tributeInstance.attach(this.hostElement.nativeElement);
+
+    this.hostElement.nativeElement.addEventListener('tribute-replaced', (event: any) => {
+      this.mentionSelected.emit(event.detail.item.original);
+    });
   }
 
-  private cleanUpTribute() {
-    if (this.tribute) {
-      try {
-        this.tribute.detach(this.elementRef.nativeElement);
-      } catch (e) {
-        console.warn('Error detaching tribute', e);
-      }
+  /**
+   * Cleans up the Tribute.js instance when directive is destroyed or reinitialized.
+   * 
+   * @returns {void}
+   * @memberof TributeMentionDirective
+   */
+  private destroyTribute(): void {
+    if (this.tributeInstance) {
+        this.tributeInstance.detach(this.hostElement.nativeElement);
     }
+  }
+
+  /**
+   * Lifecycle hook: called when the directive is destroyed.
+   * 
+   * @returns {void}
+   * @memberof TributeMentionDirective
+   */
+  public ngOnDestroy(): void {
+    this.destroyTribute();
   }
 }

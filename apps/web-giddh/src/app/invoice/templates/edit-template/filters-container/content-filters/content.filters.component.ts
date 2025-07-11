@@ -56,12 +56,14 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public voucherApiVersion: 1 | 2;
     /** Holds the value if company is Indian */
     public isIndianCompany: boolean = false;
+    /** Hold tribute options */
     public mentionConfig = {
         trigger: '{',
         suggestionPrefix: '{',
         suggestionSuffix: '}'
     };
-    mentionValues: any[] = [];
+    /** Hold list of suggestion items for Tribute.js */
+    public suggestionList: any[] = [];
     /** Holds Store get email content suggestions API success state as observable*/
     public accountSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
 
@@ -140,7 +142,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
 
         this.accountSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.accountSuggestions) {
-                this.mentionValues = response.accountSuggestions.map(item => ({
+                this.suggestionList = response.accountSuggestions.map(item => ({
                     key: item,
                     value: item
                 }));
@@ -161,7 +163,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
 
         this.files = []; // local uploading files array
 
-        this.getEmailContents();
+        this.getAccountContents();
     }
 
 
@@ -175,17 +177,12 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     }
 
     /**
-     * Fetches email content suggestions from the server and updates the store.
-     *
-     * This function triggers the `getEmailContentSuggestions` action in the `CustomEmailComponentStore`
-     * with a `null` payload. It is responsible for fetching email content suggestions based on the provided
-     * parameters and updating the store with the retrieved data.
+     * Fetches account content suggestions 
      *
      * @returns {void}
-     *
-     * @memberof TemplateFroalaComponent
+     * @memberof ContentFilterComponent
      */
-    public getEmailContents(): void {
+    public getAccountContents(): void {
         this.componentStore.getEmailContentSuggestions("account");
     }
 
