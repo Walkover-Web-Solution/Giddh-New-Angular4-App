@@ -3010,7 +3010,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
-<<<<<<< HEAD
      * Open sales person dialog
      *
      * @memberof UpdateLedgerEntryPanelComponent
@@ -3027,7 +3026,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
-=======
+    }
+
+    /**
      * This will be use for duplicate entry
      *
      * @memberof UpdateLedgerEntryPanelComponent
@@ -3035,6 +3036,5 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public duplicateEntry(): void {
         this.isDuplicateEntry = true;
         this.closeUpdateLedgerModal.emit();
->>>>>>> f8471804e9 (Working)
     }
 }
