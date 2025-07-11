@@ -189,8 +189,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.salesRegisterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.salesRegisterTotal = new ReportsModel();
-                this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
-                this.reportRespone = this.filterReportResp(response);
+                this.salesRegisterTotal.particular =
+                 this.reportForm?.get('groupBy')?.value === this.groupByEnum.Duration
+                 ? this.activeFinacialYr?.uniqueName 
+                 : this.getCustomParticular();
+                
+                this.reportRespone = this.filterReportResp(response);                
             }
         });
 
@@ -275,6 +279,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                    this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
                    this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
                }
+               this.reportForm?.get('groupBy')?.patchValue(response);
                this.getSalesRegister(this.dateRange.from, this.dateRange.to);
            }
         });
@@ -312,6 +317,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             reportsModel.to = item.to;
             reportsModel.interval = this.interval;
             reportsModel.selectedMonth = this.selectedMonth;
+            reportsModel.salesPerson = item.salesPerson;
 
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
@@ -335,6 +341,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 reportsModelCombined.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
                 reportsModelCombined.interval = this.interval;
                 reportsModelCombined.selectedMonth = this.selectedMonth;
+                reportsModelCombined.salesPerson = item.salesPerson;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = this.commonLocaleData?.app_quarter + ' ' + indexMonths / 3;
@@ -348,6 +355,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 reportsModel.particular = this.formatParticular(mdyTo, mdyFrom, index, this.monthNames);
                 reportModelArray.push(reportsModel);
                 index++;
+            } else if (item?.salesPerson?.name) {
+                this.setSalesRegisterTotal(item);
+                reportsModel.particular = item.salesPerson.name
+                reportModelArray.push(reportsModel);
             }
         });
         return reportModelArray;
@@ -558,7 +569,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.salesRegisterTotal.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
         this.salesRegisterTotal.interval = this.interval;
         this.salesRegisterTotal.selectedMonth = this.selectedMonth;
-        this.showColum();
+        this.showColum(item);
     }
 
     /**
@@ -638,10 +649,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
 
     /**
      * Updates the visibility of table columns based on specific conditions.
-     *
+     * 
+     * @param {any} item - The transaction item.
      * @memberof ReportsDetailsComponent
      */
-    public showColum(): void {
+    public showColum(item: any): void {
         Object.keys(this.columnDefinitions).filter((key) => !['sales', 'particular'].includes(key)).forEach((key) => {
             if (['tcsTotal', 'tdsTotal'].includes(key)) {
                 this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
@@ -649,6 +661,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.columnDefinitions[key][1] = !!this.salesRegisterTotal[key];
             }
         });
+        if (item?.salesPerson?.name) {
+            this.columnDefinitions['particular'][3] = false;
+        } else {
+            this.columnDefinitions['particular'][3] = true;
+        }
     }
 
     /**
@@ -770,9 +787,19 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             return;
         }
         this.componentStore.getSalesPurchaseList({
-            payload: this.reportForm.value, 
+            payload: this.reportForm.value,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: true
         });
+    }
+
+    /**
+     * Get custom particular
+     *
+     * @returns {string}
+     * @memberof ReportsDetailsComponent
+     */
+    public getCustomParticular(): string {
+        return `${dayjs(this.dateRange?.from).format('MMMYYYY')}-${dayjs(this.dateRange?.to).format('MMMYYYY')}`;
     }
 }

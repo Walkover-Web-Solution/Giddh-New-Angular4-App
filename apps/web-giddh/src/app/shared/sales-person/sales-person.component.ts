@@ -132,7 +132,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private initForm(value?: SalesPersonCreateUpdate): void {
         this.salesPersonForm = new FormGroup({
-            name: new FormControl(value?.name || '', Validators.required),
+            name: new FormControl(value?.name || '', [Validators.required, Validators.maxLength(250)]),
             email: new FormControl(value?.email || '', [Validators.email]),
             mobileNumber: new FormControl(value?.mobileNumber || '')
         });
@@ -185,12 +185,12 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 break;
             case SalesPersonActionEnum.EDIT:
                 this.salesPersonUniqueName = element?.uniqueName;
-                this.salesPersonForm.setValue({
-                    name: element?.name,
-                    email: element?.email,
-                    mobileNumber: element?.mobileNumber
-                });
-                this.initIntl(element?.mobileNumber);
+                this.initForm(element);
+                if (element?.mobileNumber) {
+                    this.initIntl(element?.mobileNumber);
+                } else {
+                    this.initIntl();
+                }
                 this.openMatExpansionPanel = false;
                 setTimeout(() => {
                     this.openMatExpansionPanel = true;
@@ -211,7 +211,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public initIntl(inputValue?: string): void {
         let times = 0;
         const parentDom = this.elementRef?.nativeElement;
-        const input = document.getElementById('init-contact-add');
+        const input = document.getElementById('init-sales-person-contact');
         const interval = setInterval(() => {
             times += 1;
             if (input) {
@@ -223,8 +223,10 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 );
                 if (inputValue) {
                     input.setAttribute('value', `+${inputValue}`);
-                    this.changeDetection.detectChanges();
+                } else {
+                    input.setAttribute('value', '');
                 }
+                this.changeDetection.detectChanges();
             }
             if (times > 25) {
                 clearInterval(interval);
