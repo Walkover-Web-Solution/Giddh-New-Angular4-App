@@ -530,9 +530,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
         }
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length && !this.currentTxn.duplicateEntry) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length) {
+        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length && !this.currentTxn.duplicateEntry) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
         } else {
             this.taxListForStock = [];
@@ -586,6 +586,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.amountChanged();
                         this.calculateTax();
                     }
+                    document.getElementById("saveLedger")?.focus();
                     this.cdRef.markForCheck();
                 }, 10);
             }
