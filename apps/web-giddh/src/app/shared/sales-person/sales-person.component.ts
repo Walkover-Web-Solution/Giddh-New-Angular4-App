@@ -186,11 +186,6 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             case SalesPersonActionEnum.EDIT:
                 this.salesPersonUniqueName = element?.uniqueName;
                 this.initForm(element);
-                // this.salesPersonForm?.setValue({
-                //     name: element?.name,
-                //     email: element?.email,
-                //     mobileNumber: element?.mobileNumber
-                // });
                 if (element?.mobileNumber) {
                     this.initIntl(element?.mobileNumber);
                 } else {
