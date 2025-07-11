@@ -685,7 +685,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             page: 1,
             count: 200,
             withStocks: false,
-            group: 'revenuefromoperations,otherincome',
+            group: 'indirectexpenses,operatingcost',
             q: search
         };
         this.componentStore.getAccounts(params);

@@ -880,8 +880,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.calculateAdjustedVoucherTotal(response.adjustments);
                     }
                 }
-                this.invoiceForm.get('salesPersonName').patchValue(response?.salesPerson?.name);
-                this.invoiceForm.get('salesPersonUniqueName').patchValue(response?.salesPerson?.uniqueName);
+                this.invoiceForm.get('salesPersonName').patchValue(response?.salesPerson?.name || '');
+                this.invoiceForm.get('salesPersonUniqueName').patchValue(response?.salesPerson?.uniqueName || null);
                 
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
@@ -2015,6 +2015,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
+
+        this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+        this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
