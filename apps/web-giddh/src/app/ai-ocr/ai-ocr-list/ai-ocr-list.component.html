@@ -208,7 +208,8 @@
             <div
                 *ngIf="
                     isCompany &&
-                    !(
+                    !(  
+                        showClearFilter ||
                         ocrDocumentListForm?.controls['user']?.value ||
                         ocrDocumentListForm?.controls['fileName']?.value ||
                         ocrDocumentListForm?.controls['status']?.value ||
