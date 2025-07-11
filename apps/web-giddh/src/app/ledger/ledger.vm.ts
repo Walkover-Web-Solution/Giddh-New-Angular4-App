@@ -142,13 +142,14 @@ export class LedgerVM {
             delete bl.creditAmount;
             delete bl.debitTotal;
             delete bl.creditTotal;
+            delete bl.duplicateEntry;
         });
 
         // map over transactions array
         requestObj.transactions.map((bl) => {
             if (bl) {
                 // set transaction.particular to selectedAccount uniqueName
-                bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
+                bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName || bl.selectedAccount?.value : bl.particular;
                 bl.isInclusiveTax = false;
                 // filter taxes uniqueNames
                 bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
@@ -502,6 +503,7 @@ export class TransactionVM {
     public stockUniqueName?: string;
     public oppositeAccountUniqueName?: string;
     public isMrpDiscountApplied?: boolean;
+    public duplicateEntry?: boolean = false;
 }
 
 export interface IInventory {
