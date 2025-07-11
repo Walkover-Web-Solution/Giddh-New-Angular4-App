@@ -1160,8 +1160,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     }
 
-                    this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name);
-                    this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName);
+                    this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
 
                     const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                     entriesFormArray.clear();
@@ -2474,6 +2474,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
+
+        this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+        this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {

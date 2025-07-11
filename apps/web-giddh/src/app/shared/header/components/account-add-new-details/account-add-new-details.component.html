@@ -131,9 +131,21 @@
                 </div>
                 <div
                     class="row pd-b2"
-                    *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
                 >
+                    <!-- Sales Person -->
                     <div class="col-sm-4">
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                         <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                         >
                             <input-field
@@ -186,21 +198,6 @@
                                 localeData?.bulk_add
                             }}</span>
                         </div>
-                    </div>
-                </div>
-                <div class="row pd-b2">
-                    <div class="col-sm-4">
-                        <!-- Sales Person -->
-                        <reactive-dropdown-field 
-                            formControlName="salesPersonUniqueName"
-                            [name]="'sales-person'"
-                            [label]="commonLocaleData?.app_sales_person"
-                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
-                            [options]="salesPersonList$ | async"
-                            [showCreateNew]="true"
-                            [createNewText]="commonLocaleData?.app_create_new"
-                            (createOption)="openSalesPersonDialog()"
-                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <ng-container *ngIf="isHsnSacEnabledAcc">

@@ -22,6 +22,7 @@
                     <div class="d-grid grid-column-3 column-gap15 row-gap15 mr-l15 mr-r15 mr-b15">
                         <div>
                             <input-field
+                                tabindex="1"
                                 #nameField
                                 [type]="'text'"
                                 [name]="'name'"
@@ -30,6 +31,7 @@
                                 [placeholder]="commonLocaleData?.app_name"
                                 formControlName="name"
                                 [required]="true"
+                                [maxlength]="250"
                                 [showError]="
                                     (isFormSubmitted || salesPersonForm?.controls?.name?.dirty) &&
                                     salesPersonForm?.controls?.name?.invalid
@@ -49,27 +51,27 @@
                                 "
                             ></input-field>
                         </div>
-                        <div class="mobile-number-wrapper voucher-preview-edit position-relative">
+                        <div class="giddh-mobile-wrapper position-relative">
                             <input-field
                                 [name]="'mobileNumber'"
                                 [type]="'tel'"
                                 #initContactAdd
                                 class="flag-input"
-                                [id]="'init-contact-add'"
+                                [id]="'init-sales-person-contact'"
                                 [label]="commonLocaleData?.app_mobile_number"
-                                [placeholder]="'9998899988'"
+                                [placeholder]="''"
                                 [floatLabel]="salesPersonForm?.controls?.mobileNumber?.value ? 'always' : 'auto'"
                                 formControlName="mobileNumber"
                             >
                             </input-field>
-                            <span id="init-contact-add-valid-msg" class="d-none"></span>
-                            <span id="init-contact-add-error-msg" class="d-none"></span>
+                            <span id="init-sales-person-contact-valid-msg" class="d-none"></span>
+                            <span id="init-sales-person-contact-error-msg" class="d-none"></span>
                         </div>
                         <div class="grid-child-column-full d-flex justify-content-end column-gap15">
                             <button mat-stroked-button color="primary" [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid">
                                 {{ salesPersonUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                             </button>
-                            <button mat-stroked-button (click)="salesPersonForm?.reset(); salesPersonUniqueName = null" [disabled]="(salesPersonSaveInProgress$ | async)">
+                            <button mat-stroked-button tabindex="2" (click)="salesPersonForm?.reset(); salesPersonUniqueName = null; nameField?.inputFocus()" [disabled]="(salesPersonSaveInProgress$ | async)">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                         </div>
