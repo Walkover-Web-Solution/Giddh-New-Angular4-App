@@ -194,7 +194,9 @@
         </section>
         <div class="no-data" *ngIf="!(ocrListInProgress$ | async) && !dataSource?.filteredData?.length">
             <no-data
+                class="mr-t15 d-block mr-b1"
                 *ngIf="
+                    showClearFilter ||
                     ocrDocumentListForm?.controls['user']?.value ||
                     ocrDocumentListForm?.controls['fileName']?.value ||
                     ocrDocumentListForm?.controls['status']?.value ||
@@ -205,6 +207,7 @@
             ></no-data>
             <div
                 *ngIf="
+                    isCompany &&
                     !(
                         ocrDocumentListForm?.controls['user']?.value ||
                         ocrDocumentListForm?.controls['fileName']?.value ||
