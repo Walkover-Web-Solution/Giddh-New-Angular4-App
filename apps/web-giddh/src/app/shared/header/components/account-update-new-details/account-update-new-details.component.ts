@@ -710,6 +710,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['']
@@ -1127,9 +1128,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         delete accountRequest['portalDomain'];
         delete accountRequest['mobileCode'];
-        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest,
