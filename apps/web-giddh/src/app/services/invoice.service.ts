@@ -843,6 +843,8 @@ export class InvoiceService {
             url += '?isForCustomer=true';
         } else if (type === 'vendor') {
             url += '?isForVendor=true';
+        } else if(type === 'account') {
+            url += '?isForAccount=true';
         }
 
         return this.http.get(url).pipe(

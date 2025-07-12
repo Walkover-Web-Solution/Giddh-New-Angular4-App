@@ -204,10 +204,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         applicableDiscounts: null,
         applicableTaxes: null,
         excludeTax: false,
-        taxType: "",
-        taxTypeLabel: "",
-        mobileNumber: "",
+        taxType: '',
+        taxTypeLabel: '',
+        mobileNumber: '',
         branch: null,
+        duePeriod: null
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -2466,6 +2467,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.baseCurrency = accountData.currency;
         this.account.baseCurrencySymbol = accountData.currencySymbol;
         this.account.addresses = accountData.addresses;
+        this.account.duePeriod = accountData.duePeriod;
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
@@ -2575,6 +2577,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
+        this.updateDueDate();
     }
 
     /**
@@ -3834,8 +3837,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get("entries") as FormArray;
         entries.removeAt(entryIndex);
-            this.stockVariants[entryIndex] = observableOf([]);
-            this.stockUnits[entryIndex] = observableOf([]);
+        this.stockVariants[entryIndex] = observableOf([]);
+        this.stockUnits[entryIndex] = observableOf([]);
         if (!entries?.length) {
             this.addNewLineEntry();
         }
@@ -4096,10 +4099,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public updateDueDate(): void {
         if (this.invoiceForm.get("date").value) {
             let duePeriod: number;
-            if (this.invoiceType.isEstimateInvoice) {
-                duePeriod = this.invoiceSettings?.estimateSettings
-                    ? this.invoiceSettings?.estimateSettings.duePeriod
-                    : 0;
+            if (this.account.duePeriod) {
+                duePeriod = this.account.duePeriod;
+            } else if (this.invoiceType.isEstimateInvoice) {
+                duePeriod = this.invoiceSettings?.estimateSettings ? this.invoiceSettings?.estimateSettings.duePeriod : 0;
             } else if (this.invoiceType.isProformaInvoice) {
                 duePeriod = this.invoiceSettings?.proformaSettings
                     ? this.invoiceSettings?.proformaSettings.duePeriod
