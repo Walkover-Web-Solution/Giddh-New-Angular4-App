@@ -55,16 +55,10 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public voucherApiVersion: 1 | 2;
     /** Holds the value if company is Indian */
     public isIndianCompany: boolean = false;
-    /** Hold tribute options */
-    public mentionConfig = {
-        trigger: '{',
-        suggestionPrefix: '{',
-        suggestionSuffix: '}'
-    };
     /** Hold list of suggestion items for Tribute.js */
     public suggestionList: any[] = [];
     /** Holds Store get account content suggestions API success state as observable*/
-    public voucherSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
+    public accountSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
 
     constructor(
         private store: Store<AppState>,
@@ -139,9 +133,9 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.assignImageSignature();
         });
 
-        this.voucherSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.voucherSuggestions) {
-                this.suggestionList = response.voucherSuggestions.map(item => ({
+        this.accountSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.accountSuggestions) {
+                this.suggestionList = response.accountSuggestions.map(item => ({
                     key: item,
                     value: item
                 }));
