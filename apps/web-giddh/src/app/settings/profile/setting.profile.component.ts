@@ -1028,9 +1028,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             name: addressDetails.formValue.name,
             pincode: addressDetails.formValue.pincode,
             county: { code: addressDetails.formValue.county },
+            isDefault: addressDetails.formValue.isDefault,
             linkEntity
         };
-
+        
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
@@ -1085,6 +1086,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             pincode: addressDetails.formValue.pincode,
             uniqueName: addressDetails.formValue?.uniqueName,
             county: { code: addressDetails.formValue.county },
+            isDefault: addressDetails.formValue.isDefault,
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
