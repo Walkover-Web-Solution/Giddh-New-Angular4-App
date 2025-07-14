@@ -3037,4 +3037,50 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isDuplicateEntry = true;
         this.closeUpdateLedgerModal.emit();
     }
+
+    /**
+     * Handle sales person selection
+     *
+     * @param {IOption} event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public handleSalesPersonSelection(event: IOption): void {
+        let defaultSalesPerson: string;
+        let isPartOfMultiEntryVoucher: boolean;
+        this.selectedLedgerStream$.pipe(take(1)).subscribe(response => {
+            defaultSalesPerson = response?.salesPerson?.uniqueName
+            isPartOfMultiEntryVoucher = response?.isPartOfMultiEntryVoucher
+        });
+
+        if (!isPartOfMultiEntryVoucher) {
+            this.vm.selectedLedger.salesPerson.name = event?.label;
+            this.vm.selectedLedger.salesPersonUniqueName = event?.value;
+            return;
+        }
+
+        if ((defaultSalesPerson === event?.value) || (this.vm.selectedLedger.salesPersonUniqueName === event?.value)) {
+            return;
+        }
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    this.localeData?.change_salesperson_confirmation,
+                    this.commonLocaleData
+                )
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.vm.selectedLedger.salesPerson.name = event?.label;
+                this.vm.selectedLedger.salesPersonUniqueName = event?.value;
+            } else {
+                const lastSalesPersonName = this.vm.selectedLedger.salesPerson.name;
+                this.vm.selectedLedger.salesPerson.name = null;
+                this.changeDetectorRef.detectChanges();
+                this.vm.selectedLedger.salesPerson.name = lastSalesPersonName;
+                this.vm.selectedLedger.salesPersonUniqueName = this.vm.selectedLedger.salesPersonUniqueName;
+            }
+        });
+    }
 }
