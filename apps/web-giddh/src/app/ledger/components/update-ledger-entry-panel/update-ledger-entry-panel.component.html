@@ -2607,14 +2607,14 @@
 <!-- Sales person dropdown template reference -->
 <ng-template #salesPersonDropdown>
     <reactive-dropdown-field 
-        [(ngModel)]="vm.selectedLedger.salesPersonUniqueName"
         [name]="'sales-person'"
         [label]="commonLocaleData?.app_sales_person"
-        [labelValue]="vm.selectedLedger.salesPerson?.name || ''"
+        [labelValue]="vm.selectedLedger.salesPerson?.name"
         [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
         [options]="salesPersonList$ | async"
         [showCreateNew]="true"
         [createNewText]="commonLocaleData?.app_create_new"
         (createOption)="openSalesPersonDialog()"
+        (selectedOption)="handleSalesPersonSelection($event)"
     ></reactive-dropdown-field>
 </ng-template>
