@@ -112,7 +112,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.salesPersonForm.markAsPristine();
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
-        this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true })).subscribe();
+        this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true; this.salesPersonAction(SalesPersonActionEnum.GET_ALL); })).subscribe();
     }
 
     /**
