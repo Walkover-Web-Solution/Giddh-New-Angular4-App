@@ -632,7 +632,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                     this.advanceFilters.to = this.queryParams.to;
                 }
-                console.log("Run");
                 this.getVouchers(true);
                 this.getVoucherBalances();
             }
