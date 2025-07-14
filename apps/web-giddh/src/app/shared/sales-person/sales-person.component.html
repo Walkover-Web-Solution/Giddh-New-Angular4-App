@@ -10,7 +10,7 @@
     </div>
     <mat-dialog-content class="dialog-body sales-person">
         <mat-accordion>
-            <mat-expansion-panel [expanded]="openMatExpansionPanel">
+            <mat-expansion-panel [expanded]="openMatExpansionPanel" class="overflow-visible">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="p-0">
                         <span class="text-primary">
@@ -55,7 +55,6 @@
                             <input-field
                                 [name]="'mobileNumber'"
                                 [type]="'tel'"
-                                #initContactAdd
                                 class="flag-input"
                                 [id]="'init-sales-person-contact'"
                                 [label]="commonLocaleData?.app_mobile_number"

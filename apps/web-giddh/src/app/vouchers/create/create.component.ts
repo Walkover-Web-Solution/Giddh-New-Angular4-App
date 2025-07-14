@@ -2475,9 +2475,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
-
-        this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
-        this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+        if (!this.isUpdateMode) { // Take sales person details only if account is new else assign from get voucher response
+            this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+            this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+        }
 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {

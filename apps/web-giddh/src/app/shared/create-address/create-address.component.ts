@@ -69,6 +69,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public hideLinkEntity: boolean = true;
     /** True, if aside pane needs to be closed */
     @Input() public closeSidePane: boolean;
+    /** Indicates the addresses available.*/
+    @Input() public isAddress: boolean = false; 
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     /** Holds Selected Entity */
@@ -79,6 +81,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** Enum for tax type name */
     public taxTypeNameEnum: typeof TaxTypeNameEnum = TaxTypeNameEnum;
+    /** Holds the type of address configuration */
+    public addressConfigurationType: typeof SettingsAsideFormType = SettingsAsideFormType;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -188,7 +192,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 county: ['', this.addressConfiguration.countyList?.length ? Validators.required : null],
                 address: [''],
                 linkedEntity: [[]],
-                pincode: []
+                pincode: [],
+                isDefault: [false]
             });
             if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                 && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
@@ -210,7 +215,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         return item?.uniqueName ===
                             this.addressToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
                     })],
-                    pincode: [this.addressToUpdate.pincode]
+                    pincode: [this.addressToUpdate.pincode],
+                    isDefault: [this.addressToUpdate.isDefault || false]
                 });
                 const linkedEntity = [...this.addressToUpdate.linkedEntities];
                 while (linkedEntity?.length) {

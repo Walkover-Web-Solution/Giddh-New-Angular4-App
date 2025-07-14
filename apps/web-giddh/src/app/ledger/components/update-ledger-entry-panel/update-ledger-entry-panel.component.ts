@@ -2378,6 +2378,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAcc = resp[0].particular?.uniqueName;
         this.firstBaseAccountSelected = resp[0].particular?.uniqueName;
 
+        if (resp[0].salesPerson) {
+            this.vm.selectedLedger.salesPersonUniqueName = resp[0].salesPerson.uniqueName;
+        } else {
+            this.vm.selectedLedger.salesPersonUniqueName = null;
+            this.vm.selectedLedger.salesPerson = {
+                name: '',
+                uniqueName: '',
+                email: null
+            };
+        }
+
         const initialAccounts: Array<IOption> = [];
         this.vm.selectedLedger.transactions?.map((t, index) => {
             t.amount = giddhRoundOff(t.amount, this.vm.giddhBalanceDecimalPlaces);
@@ -3038,7 +3049,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.closeUpdateLedgerModal.emit();
     }
 
-    /**
+     /**
      * Handle sales person selection
      *
      * @param {IOption} event
