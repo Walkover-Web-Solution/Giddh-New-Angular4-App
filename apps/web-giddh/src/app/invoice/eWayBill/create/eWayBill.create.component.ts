@@ -122,6 +122,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
         this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : '';
         this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
+        this.generateEwayBillform.transactionType = '1'; // transactionType is default 1 for Regular
     }
 
     public toggleEwayBillCredentialsPopup() {
