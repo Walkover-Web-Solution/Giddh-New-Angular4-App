@@ -209,14 +209,8 @@ export class ImportsComponent implements OnInit, OnDestroy {
                         total: total
                     }
                     result.date = dayjs(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    let today = dayjs().format('YYYY-MM-DD');
-                    let expiryDate = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format('YYYY-MM-DD');
-                    if (dayjs(expiryDate)
-                        .isSameOrAfter(today)) {
-                        result.expireAt = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    } else {
-                        result.expireAt = this.localeData?.expired;
-                    }
+                    result.expireAt = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    
                 });
                 this.dataSource = response.body?.items;
                 this.importRequest.page = response.body?.page;

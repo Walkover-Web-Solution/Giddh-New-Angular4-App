@@ -13,6 +13,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-fields.module';
 import { NewConfirmModalModule } from 'apps/web-giddh/src/app/theme/new-confirm-modal';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -29,7 +30,8 @@ import { NewConfirmModalModule } from 'apps/web-giddh/src/app/theme/new-confirm-
         MatRadioModule,
         MatTabsModule,
         FormFieldsModule,
-        NewConfirmModalModule
+        NewConfirmModalModule,
+        MatTooltipModule
     ]
 })
 export class AccountAddNewDetailsModule { }

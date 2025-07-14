@@ -50,7 +50,7 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
-import { Transaction } from "../../models/api-models/Expences";
+import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 
 @Component({
     selector: "create",
@@ -419,6 +419,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private totalDepositAmount: number = 0;
     /** Holds current route query parameters */
     public queryParams: any = {};
+    /** E-way bill dialog response */
+    public eWayBillResponse: any = {};
     /** True if we need to calculate tax in tax dropdown */
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
@@ -538,7 +540,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private proformaService: ProformaService,
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
-        private changeDetection: ChangeDetectorRef,
+        private changeDetection: ChangeDetectorRef
     ) {
 
     }
@@ -3574,7 +3576,30 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Generate voucher
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
+     * @param {any} event using for pinCode and gstNumber
+     * @returns {void}
+     * 
+     * @memberof VoucherCreateComponent
+     */
+    public openEwayBillDialog(): void {
+        this.dialog?.closeAll();
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true,
+            data: {
+                pincode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode")?.value,
+                gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.eWayBillResponse = response;
+            this.saveVoucher();
+        });
+    }
+
+    /**
+     * Generates a voucher
      *
      * @memberof VoucherCreateComponent
      */
@@ -3585,7 +3610,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.router.navigate([`/pages/vouchers/preview/${this.queryParams.voucherType}/pending`]);
             });
         } else {
-            this.saveVoucher();
+            if (this.voucherType === "sales" && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+                this.openEwayBillDialog();
+            } else {
+                this.saveVoucher();
+            }
         }
     }
 
@@ -4068,6 +4097,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
+                if (this.eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
+                    invoiceForm.ewayBillDetails = this.eWayBillResponse;
+                    this.eWayBillResponse = null;
+                }
                 this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
@@ -5130,7 +5163,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private handleEnterPress(event: KeyboardEvent): void {
         const activeElement = document.activeElement;
-        const isInputFocused = activeElement && activeElement.tagName === HtmlElementEnum.Button;
+        const isInputFocused = activeElement && (activeElement.tagName === HtmlElementEnum.Button || activeElement.tagName === HtmlElementEnum.Textarea);
         if (!isInputFocused && event.key === KeyCodesEnum.ENTER) { // Only navigate if no input field is focused
             event.preventDefault();
         }
