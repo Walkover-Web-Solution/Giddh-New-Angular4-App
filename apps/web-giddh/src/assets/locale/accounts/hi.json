@@ -94,5 +94,6 @@
     "branch_name": "शाखा का नाम",
     "swift_code": "स्विफ्ट कोड",
     "bulk_add": "थोक जोड़ें",
-    "enter_value": "मान दर्ज करें"
+    "enter_value": "मान दर्ज करें",
+    "change_gst_number_to_update_the_state": "जीएसटी नंबर बदलें राज्य को अपडेट करने के लिए"
 }

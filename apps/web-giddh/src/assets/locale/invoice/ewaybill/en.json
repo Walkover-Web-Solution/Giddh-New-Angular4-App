@@ -55,7 +55,7 @@
     "document_type": "Document Type",
     "gstin_receiver_label": "GSTIN of Receiver",
     "gstin_receiver_placeholder": "Enter GSTIN of receiver",
-    "pincode_receiver_label": "PinCode of Receiver",
+    "pincode_receiver_label": "Pincode of Receiver*",
     "pincode_receiver_placeholder": "Enter pincode",
     "transporter_placeholder": "Select the Transporter's name",
     "distance_km_label": "Distance in KM",
@@ -98,5 +98,9 @@
     "download_eway_bill": "Download E-way Bill",
     "mode_of_transportation": "Mode of Transportation",
     "pincode_required": "Please update pincode in voucher before creating eway bill.",
-    "select_gstin": "Select GSTIN"
+    "select_gstin": "Select GSTIN",
+    "create_e_way_bill": "Create E-Way Bill",
+    "eway_bill_logs": "E-Way Bill Logs",
+    "generate_eway_bill": "Generate E-Way Bill",
+    "reason": "Reason"
 }
