@@ -40,7 +40,7 @@
         </ng-container>
         <ng-template #aiOcr>
             <div class="d-flex justify-content-between">
-                <div class="custom-tab">
+                <div class="custom-tab d-flex align-items-center">
                     <input
                         type="file"
                         #fileInput
@@ -48,31 +48,33 @@
                         style="display: none"
                         (change)="onFileSelected($event)"
                     />
-                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                        <mat-button-toggle
-                            [disabled]="isCompany || isConsolidatedBranch"
-                            [checked]="selectedToggle === ocrAction.Upload"
-                            class="w125"
-                            value="upload"
-                            (click)="onUploadFile($event, fileInput)"
-                        >
-                            <giddh-progress-spinner
-                                *ngIf="ocrUploadInProgress$ | async"
-                                [diameter]="20"
-                            ></giddh-progress-spinner>
-                            <span *ngIf="!(ocrUploadInProgress$ | async)">{{ commonLocaleData?.app_upload }}</span>
-                        </mat-button-toggle>
+                    <a
+                        aria-label="show"
+                        mat-button
+                        [disabled]="isCompany || isConsolidatedBranch"
+                        href="javascript:void(0)"
+                        class="icomoon-ico d-flex align-items-center"
+                        [matTooltip]="commonLocaleData?.app_upload"
+                        matTooltipClass="tooltip-black"
+                        [matTooltipPosition]="'above'"
+                        (click)="onUploadFile($event, fileInput)"
+                    >
+                        <giddh-progress-spinner
+                            *ngIf="ocrUploadInProgress$ | async"
+                            [diameter]="20"
+                        ></giddh-progress-spinner>
+                        <span *ngIf="!(ocrUploadInProgress$ | async)"> <i class="icon-upload lh-0"></i></span>
+                    </a>
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="overflow-visible">
                         <mat-button-toggle
                             [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0"
                             value="create"
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"
                         >
-                            <span
-                                >{{ commonLocaleData?.app_create }} ({{ countVariable }}
-                                {{ countVariable > 1 ? localeData?.vouchers : localeData?.voucher }}
-                                {{ localeData?.ready }})</span
-                            >
+                        <div matBadge="{{ countVariable }}" matBadgeOverlap="true">
+                            {{ commonLocaleData?.app_create }} {{ localeData?.voucher }}
+                        </div>
                         </mat-button-toggle>
                         <mat-button-toggle
                             class="w125"
@@ -80,7 +82,7 @@
                             [checked]="selectedToggle === ocrAction.List"
                             (click)="onToggleChange(ocrAction.List)"
                         >
-                            <span>{{ localeData?.list }} ({{ listCount }})</span>
+                            <span>{{ localeData?.list }}</span>
                         </mat-button-toggle>
                     </mat-button-toggle-group>
                 </div>

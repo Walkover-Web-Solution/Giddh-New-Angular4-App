@@ -106,6 +106,12 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService
     ) {
+        this.aiOcrService.getOcrData$.next(null);
+        this.aiOcrService.ocrList$.next(null);
+        this.aiOcrService.aiOcrDetails$.next(null);
+        this.aiOcrService.uploadDataSuccess$.next(null);
+        this.aiOcrService.saveAndNext$.next(null);
+        this.aiOcrService.skipAndNext$.next(null);
         this.selectedToggle = OcrAction.List;
     }
 

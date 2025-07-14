@@ -7,6 +7,13 @@
 }
 
 .td-search-box {
-    padding: 0 0 0 10px!important;
+    padding: 0 0 0 10px !important;
 }
 
+.custom-datepicker-wrapper {
+    position: fixed;
+    position-anchor: --list;
+    left: anchor(right);
+    top: anchor(top);
+    margin-left: 5px !important;
+}
