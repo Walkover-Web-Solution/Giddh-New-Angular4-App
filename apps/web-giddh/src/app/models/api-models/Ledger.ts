@@ -134,6 +134,7 @@ export class LedgerResponse {
     public generateEInvoice?: boolean = null;
     public salesPerson?: { name: string, uniqueName: string, email: string };
     public salesPersonUniqueName?: string;
+    public isPartOfMultiEntryVoucher?: boolean;
 }
 
 /** Model adjusted amounts for invoices */
