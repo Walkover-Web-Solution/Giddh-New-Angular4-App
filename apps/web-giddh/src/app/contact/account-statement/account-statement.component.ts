@@ -43,7 +43,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Holds common localized JSON data shared across modules */
     public commonLocaleData: any = {};
     /** True if API call is in progress */
-    public isLoading: boolean = false;
+    public isLoading: boolean = true;
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
@@ -118,14 +118,17 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public ngOnInit(): void {
-        this.accountStatementList$.pipe(delay(100), takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.transactionDetailList?.length) {
                     this.accountListData = response.transactionDetailList;
                     this.responseAccountList = response;
                     this.totalRecords = response.totalItems;
             }
-            this.isLoading = false;
+            setTimeout(() => {
+                this.isLoading = false;
+            }, 200);
         });
+        
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -243,9 +246,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-            if (!this.isLoading) {
-                this.getAccountStatementList();
-            }
+            this.getAccountStatementList();
         }
     }
 
