@@ -7,7 +7,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, skip, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -567,7 +567,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
         /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.universalDate$.pipe(skip(1), filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (localStorage.getItem('universalSelectedDate')) {
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
@@ -632,6 +632,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                     this.advanceFilters.to = this.queryParams.to;
                 }
+                console.log("Run");
+                this.getVouchers(true);
+                this.getVoucherBalances();
             }
         });
 
