@@ -20,8 +20,8 @@
         </div>
     </div>
     <div class="container-fluid font-15 mr-t1">
-        <div class="d-flex justify-content-between">
-            <div class="d-flex mr-b15 custom-mat-form-field">
+        <div class="d-flex justify-content-between" [formGroup]="reportForm">
+            <div class="d-flex mr-b15 column-gap15">
                 <div
                     *ngIf="
                         currentCompanyBranches?.length > 2 &&
@@ -40,56 +40,132 @@
                     >
                     </dropdown-field>
                 </div>
-                <div class="mr-r15 financial-dropdown">
-                    <dropdown-field
-                        [name]="'financialYear'"
-                        [label]="commonLocaleData?.app_financial_year"
-                        [placeholder]="activeFinacialYr?.uniqueName"
-                        [options]="financialOptions"
-                        (selectedOption)="currentActiveFinacialYear.value =  $event?.value; selectFinancialYearOption($event)"
-                        [defaultValue]="activeFinacialYr?.uniqueName"
+                <div> 
+                    <reactive-dropdown-field
+                        [name]="'groupBy'"
+                        [label]="localeData?.group_by"
+                        [placeholder]="commonLocaleData?.app_select"
+                        [options]="groupByOptions"
+                        formControlName="groupBy"
+                        [labelValue]="groupByOptions?.[0]?.label"
                         [required]="true"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
-                <div class="mr-r15">
-                    <mat-form-field appearance="outline" class="duration-dropdown">
-                        <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
-                        <mat-select #durationMatSelect [value]="selectedType">
-                            <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
-                                {{ commonLocaleData?.app_duration?.monthly }}
-                            </mat-option>
-                            <mat-option (click)="populateRecords(durationEnum.Quarterly)" [value]="commonLocaleData?.app_duration?.quarterly">
-                                {{ commonLocaleData?.app_duration?.quarterly }}
-                            </mat-option>
-                            <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position pointer-event-none">
-                                <span
-                                    class="w-100 d-flex justify-content-between pointer-event-all"
-                                    [matMenuTriggerFor]="monthMenu"
-                                    (click)="$event.stopPropagation()"
+                <ng-container *ngIf="reportForm?.get('groupBy')?.value === groupByEnum.Duration; else salesPersonBlock">
+                    <div class="mr-r15 dropdown-width">
+                        <dropdown-field
+                            [name]="'financialYear'"
+                            [label]="commonLocaleData?.app_financial_year"
+                            [placeholder]="activeFinacialYr?.uniqueName"
+                            [options]="financialOptions"
+                            (selectedOption)="currentActiveFinacialYear.value =  $event?.value; selectFinancialYearOption($event)"
+                            [defaultValue]="activeFinacialYr?.uniqueName"
+                            [required]="true"
+                        >
+                        </dropdown-field>
+                    </div>
+                    <div class="mr-r15 custom-mat-form-field">
+                        <mat-form-field appearance="outline" class="duration-dropdown">
+                            <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
+                            <mat-select #durationMatSelect [value]="selectedType">
+                                <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
+                                    {{ commonLocaleData?.app_duration?.monthly }}
+                                </mat-option>
+                                <mat-option (click)="populateRecords(durationEnum.Quarterly)" [value]="commonLocaleData?.app_duration?.quarterly">
+                                    {{ commonLocaleData?.app_duration?.quarterly }}
+                                </mat-option>
+                                <mat-option [value]="commonLocaleData?.app_duration?.weekly" class="dropdown-tick-icon-position pointer-event-none">
+                                    <span
+                                        class="w-100 d-flex justify-content-between pointer-event-all"
+                                        [matMenuTriggerFor]="monthMenu"
+                                        (click)="$event.stopPropagation()"
+                                    >
+                                        <div class="w-50">
+                                            {{ commonLocaleData?.app_duration?.weekly }}
+                                        </div>
+                                        <div class="w-50 pd-l4">
+                                            <i class="icon-dots-three-vertical"></i>
+                                        </div>
+                                    </span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
+                            <div class="grid-columns-3 d-grid column-gap5 pd-1">
+                            <button 
+                                mat-menu-item 
+                                *ngFor="let month of monthNames" 
+                                (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
+                                aria-label="Select month"
+                            >
+                                {{ month | slice: 0:3 }}
+                            </button>
+                            </div>
+                        </mat-menu>
+                    </div>
+                </ng-container>
+                <ng-template #salesPersonBlock>
+                    <div class="custom-mat-form-field dropdown-width" *ngIf="(salesPersonList$ | async)?.length">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
+                            <mat-select
+                                panelClass="py-0"
+                                name="salesPerson"
+                                [multiple]="true"
+                                (selectionChange)="reportForm?.get('salesPersonUniqueNames')?.value?.length && getPurchaseRegister(dateRange.from, dateRange.to)"
+                                formControlName="salesPersonUniqueNames"
+                            >
+                                <mat-option class="mt-0">
+                                    <ngx-mat-select-search
+                                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                        [formControl]="salesPerson"
+                                    >
+                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
+                                    {{ salesPerson?.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="custom-datepicker-wrapper">
+                        <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker border-radius-2"
+                            />
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="custom-mat-form-field dropdown-width">
+                    <mat-form-field appearance="outline">
+                        <mat-label>{{ commonLocaleData?.app_account }}</mat-label>
+                        <mat-select
+                            panelClass="py-0"
+                            name="account"
+                            [multiple]="true"
+                            formControlName="accountUniqueNames"
+                            (selectionChange)="reportForm?.get('accountUniqueNames')?.value?.length && getPurchaseRegister(dateRange.from, dateRange.to)"
+                        >
+                            <mat-option class="mt-0">
+                                <ngx-mat-select-search
+                                    [placeholderLabel]="commonLocaleData?.app_select"  
+                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                    [formControl]="account"
                                 >
-                                    <div class="w-50">
-                                        {{ commonLocaleData?.app_duration?.weekly }}
-                                    </div>
-                                    <div class="w-50 pd-l4">
-                                        <i class="icon-dots-three-vertical"></i>
-                                    </div>
-                                </span>
+                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngFor="let account of (accountList$ | async)?.results || []" [value]="account?.uniqueName">
+                                {{ account?.name }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
-                        <div class="grid-columns-3 d-grid column-gap5 pd-1">
-                          <button 
-                            mat-menu-item 
-                            *ngFor="let month of monthNames" 
-                            (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
-                            aria-label="Select month"
-                          >
-                            {{ month | slice: 0:3 }}
-                          </button>
-                        </div>
-                    </mat-menu>
                 </div>
             </div>
             <button 

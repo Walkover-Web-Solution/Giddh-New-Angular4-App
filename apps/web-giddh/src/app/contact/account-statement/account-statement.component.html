@@ -9,7 +9,7 @@
             <table class="w-100">
                 <tr>
                     <td width="65%" class="vertical-align-top">
-                        <address class="address-block font-20" *ngIf="responseAccountList.accountName">
+                        <address class="address-block font-18" *ngIf="responseAccountList.accountName">
                             <h2 class="font-20">{{ responseAccountList.accountName }}</h2>
                             <ng-container *ngIf="responseAccountList.accountAddress">
                                 <p *ngIf="responseAccountList.accountAddress.email">
@@ -151,7 +151,8 @@
                                     <td class="p-0 text-right">
                                         {{
                                             responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                                ? (responseAccountList.accountSummary.closingBalance?.type === "CREDIT"
+                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
+                                                  transactionType.Credit
                                                       ? "-"
                                                       : "") +
                                                   (responseAccountList.accountAddress.currency?.symbol ?? "") +
@@ -181,7 +182,7 @@
                         mat-stroked-button
                         (click)="setInitialAdvanceFilter()"
                         class="mx-auto"
-                        *ngIf="advanceFiltersApplied && !isLoading"
+                        *ngIf="(advanceFiltersApplied || clearFilter) && !isLoading"
                     >
                         <span class="d-inline-flex align-items-center column-gap5">
                             <span class="icon-cross font-12"></span>
@@ -190,7 +191,6 @@
                     </button>
                     <button
                         aria-label="filter"
-                        id="advance-filter"
                         mat-stroked-button
                         (click)="onOpenAdvanceSearch()"
                         class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
@@ -212,7 +212,7 @@
                             [matSortActive]="accountListRequest.sortBy"
                             [ngClass]="{ 'account-table': isLoading }"
                         >
-                            <ng-container matColumnDef="Date">
+                            <ng-container matColumnDef="date">
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -229,7 +229,7 @@
                                     {{ element.date ?? "-" }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="Transactions">
+                            <ng-container matColumnDef="transactions">
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -259,7 +259,7 @@
                                     {{ element?.voucherType ?? "-" }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="Details">
+                            <ng-container matColumnDef="details">
                                 <th mat-header-cell *matHeaderCellDef class="bg-black text-white font-16 fw-900">
                                     {{ localeData?.details }}
                                 </th>
@@ -272,7 +272,7 @@
                                     {{ element?.voucherNumber ?? "-" }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="Amount">
+                            <ng-container matColumnDef="amount">
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -288,20 +288,20 @@
                                 >
                                     <span
                                         >{{
-                                            element?.voucherAmount.type === "DEBIT"
+                                            element?.voucherAmount.type === transactionType.Debit
                                                 ? element?.voucherAmount?.amount
                                                 : "-"
                                         }}
                                     </span>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="Payments">
+                            <ng-container matColumnDef="payments">
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
                                     class="bg-black text-white sort-header-right text-right font-16 fw-900"
                                 >
-                                    {{ commonLocaleData?.app_payments }}
+                                    {{ commonLocaleData?.app_payment }}
                                 </th>
                                 <td
                                     mat-cell
@@ -309,10 +309,14 @@
                                     [ngClass]="{ 'bg-light-grey': i % 2 }"
                                     class="sort-header-right text-right"
                                 >
-                                    {{ element?.voucherAmount.type != "DEBIT" ? element?.voucherAmount?.amount : "-" }}
+                                    {{
+                                        element?.voucherAmount.type !== transactionType.Debit
+                                            ? element?.voucherAmount?.amount
+                                            : "-"
+                                    }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="Balance">
+                            <ng-container matColumnDef="balance">
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
@@ -328,7 +332,7 @@
                                 >
                                     {{
                                         element.closingBalance?.amount >= 0
-                                            ? (element.closingBalance?.type === "CREDIT" ? "-" : "") +
+                                            ? (element.closingBalance?.type === transactionType.Credit ? "-" : "") +
                                               element.closingBalance.amount
                                             : ""
                                     }}
@@ -338,23 +342,25 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                         <hr class="border-grey" />
-                        <table class="d-flex justify-content-end">
-                            <tr>
-                                <td class="font-16 fw-900">{{ localeData?.balance_due }}</td>
-                                <td>
-                                    {{
-                                        responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                            ? (responseAccountList.accountSummary.closingBalance?.type === "CREDIT"
-                                                  ? "-"
-                                                  : "") +
-                                              (responseAccountList.accountAddress.currency?.symbol ?? "") +
-                                              responseAccountList.accountSummary.closingBalance.amount
-                                            : ""
-                                    }}
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="text-center pd-t1 pd-b1">
+                            <div class="d-flex justify-content-end">
+                                <span class="font-16 fw-900 pd-1">{{ localeData?.balance_due }}</span>
+                                <span class="pd-1">
+                                        {{
+                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
+                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
+                                                  transactionType.Credit
+                                                      ? "-"
+                                                      : "") +
+                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
+                                                  responseAccountList.accountSummary.closingBalance.amount
+                                                : ""
+                                        }}
+                                    </span>
+                            </div>
+                        <div
+                            class="text-center pd-t1 pd-b1"
+                            *ngIf="isLoading || (!isLoading && !accountListData?.length)"
+                        >
                             <div class="no-data" *ngIf="isLoading">
                                 <giddh-page-loader class="spinner-container position-absolute"></giddh-page-loader>
                             </div>
@@ -372,7 +378,7 @@
                             [showFirstLastButtons]="true"
                             [pageSizeOptions]="pageSizeOptions"
                             [hidePageSize]="false"
-                            [pageIndex]="pageIndex"
+                            [pageIndex]="accountListRequest.page - 1"
                         >
                         </mat-paginator>
                     </div>
@@ -441,4 +447,3 @@
         (closeModelEvent)="closeAdvanceSearchPopup($event)"
     ></advance-search-model>
 </ng-template>
-<!-- endregion -->

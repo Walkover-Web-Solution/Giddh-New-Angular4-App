@@ -1,4 +1,5 @@
 .mat-mdc-table {
+    background: var(--color-body-background) !important;
     &.table-striped {
         .mdc-data-table__content {
             .mat-mdc-row {

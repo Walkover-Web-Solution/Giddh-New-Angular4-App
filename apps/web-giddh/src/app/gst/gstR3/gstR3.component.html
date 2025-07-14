@@ -115,13 +115,27 @@
                                     </mat-menu>
                                 </div>
                             </li>
-                            <!-- <li>
+                            <li>
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        class="btn-2 pull-right btn authenticate-btn"
-                                        [ngClass]="{ 'btn-success': gstAuthenticated }"
-                                        (click)="returnGstr3B = { via: 'TAXPRO' }"
+                                        mat-stroked-button
+                                        color="primary"
+                                        (click)="gstAuthenticated ? fileGstr3B() : openSettingAsidePane()"
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
+                                    >
+                                        {{ localeData?.filing?.return_file }}
+                                    </button>
+                                </div>
+                            </li>
+                            <li>
+                                <div *ngIf="showTaxPro">
+                                    <button
+                                        *ngIf="isCompany && showGstFiling"
+                                        mat-stroked-button
+                                        color="primary"
+                                        (click)="openSettingAsidePane()"
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
                                     >
                                         {{
                                             gstAuthenticated
@@ -130,7 +144,7 @@
                                         }}
                                     </button>
                                 </div>
-                            </li> -->
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -875,4 +889,27 @@
 </ng-container>
 <ng-template #watchVideoTemplateGSTR3>
     <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pd-r15"></watch-video>
+</ng-template>
+
+<!-- Authentication Dialog -->
+<ng-template #asideAuthentication>
+    <gst-aside-menu
+        [selectedService]="selectedService"
+        [returnType]="selectedGst"
+        (fileGst)="fileGstr3B()"
+        (cancelConfirmationEvent)="openCancelConfirmationDialog()"
+        (closeAsideEvent)="asideAuthenticationDialogRef?.close()"
+        (fileGstComplete)="asideAuthenticationDialogRef?.close()"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></gst-aside-menu>
+</ng-template>
+
+<!-- Region Cancel Confirmation Dialog -->
+<ng-template #cancelConfirmationDialog>
+    <confirm-modal
+        [body]="localeData?.filing?.cancel_title"
+        (successCallBack)="cancelConfirmationDialogRef?.close(); asideAuthenticationDialogRef?.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef?.close()"
+    ></confirm-modal>
 </ng-template>

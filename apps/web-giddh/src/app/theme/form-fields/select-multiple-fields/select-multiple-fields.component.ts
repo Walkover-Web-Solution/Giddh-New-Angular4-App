@@ -68,8 +68,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showMatLabel: boolean = false;
     /** List of selected values represented by their unique names. */
     @Input() public chipListUniqueName: string[] = [];
-    /** True if field is required */
-    @Input() public required: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -223,9 +221,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         }
         const selectOptionValue = option?.option?.value?.label;
         this.writeValue([...this.value, option?.option?.value?.value]);
-        if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue)) {
+        if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
             this.chipListUniqueName.push(option.option.value.value);
-            this.chipList.push(this.chipPrefix + selectOptionValue);
+            this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
             this.emitList();
         }
     }

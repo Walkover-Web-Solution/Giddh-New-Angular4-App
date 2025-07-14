@@ -57,7 +57,7 @@
             [selectedIndex]="activeTabIndex"
             (selectedTabChange)="onTabChange($event)"
             class="table-header-sticky"
-           
+            animationDuration="0ms"
         >
             <mat-tab [label]="localeData?.tab_generated_bills">
                 <ng-container *ngTemplateOutlet="ewayBillTable"></ng-container>
@@ -283,7 +283,7 @@
                             [name]="'fromPlace'"
                             [required]="true"
                             [(ngModel)]="updateEwayVehicleform.fromPlace"
-                            [disabled]="true"
+                            [disabled]="updateEwayVehicleform.fromPlace"
                         ></input-field>
 
                         <!-- From State -->

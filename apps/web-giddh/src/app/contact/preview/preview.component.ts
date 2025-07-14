@@ -1,8 +1,8 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { combineLatest, debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, take, takeUntil } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, skip, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
@@ -14,11 +14,12 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { ContactAdvanceSearchModal } from "../../models/api-models/Contact";
-import { ModalDirective } from "ngx-bootstrap/modal";
 import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
+import { AccountService } from "../../services/account.service";
+import { SalesActions } from "../../actions/sales/sales.action";
 
 @Component({
     selector: "preview",
@@ -29,6 +30,10 @@ import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
 export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Reference to the virtual scroll viewport used for scrolling contact lists */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
+    /** Reference to the delete account modal dialog */
+    @ViewChild("deleteAccountModal") public deleteAccountModal: TemplateRef<any>;
+    /** Reference to the delete account modal dialog */
+    public deleteAccountmodalRef: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds localized text for this component */
@@ -106,8 +111,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public isLoadMore: boolean;
     /** Flag indicating if the selected contact was not found */
     public isContactNotFound: boolean = false;
-    /** Flag indicating if an account update operation is in progress */
-    public isUpdateAccount: boolean = false;
     /** Flag indicating if GST is enabled for the account */
     public isGstEnabledAcc: boolean = false;
     /** Flag indicating if HSN/SAC is enabled for the account */
@@ -116,14 +119,20 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccountInProcess$: Observable<boolean> = this.componentStore.updateAccountInProcess$;
     /** Observable indicating if an account update was successful */
     public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
+    /** Observable indicating if an account delete was successful */
+    public isDeleteAccSuccess$: Observable<any> = this.componentStore.isDeleteAccSuccess$;
     /** Observable for the currently active account */
     public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
     /** Observable for the unique name of the currently active group */
     public activeGroupUniqueName$: Observable<string> = this.componentStore.activeGroupUniqueName$;
     /** Observable indicating if virtual account is enabled */
     public virtualAccountEnable$: Observable<any> = this.componentStore.virtualAccountEnable$;
+    /** Observable indicating if account statement is in progress */
+    public getAccountStatementInProgress$: Observable<boolean> = this.componentStore.getAccountStatementInProgress$;
     /** Flag to show/hide bank details section */
-    public showBankDetail: boolean = false;
+    public showBankDetailPreview: boolean = false;
+    /** Flag to show/hide contact preview section */
+    public contactPreview: boolean = false;
     /** Flag to show/hide virtual account section */
     public showVirtualAccount: boolean = false;
     /** Flag indicating if the current group is a debtor/creditor */
@@ -142,14 +151,16 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
     /** Observable for the list of contacts fetched from the store */
     public getContactsList$: Observable<any> = this.componentStore.getContactsList$;
-    /** Reference to the delete account modal dialog */
-    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
     /** Observable indicating if the edit account modal should be shown */
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
     /** Enum representing standard accounting group unique names */
     public AccountingGroupEnum = AccountingGroupEnum;
     /** Property to track if the user has updated before */
     private hasUpdatedBefore: boolean = false;
+    /** Listens for Master open/close event, required to load the data once master is closed */
+    public isAddAndManageOpenedFromOutside$: Observable<boolean> = this.componentStore.isAddAndManageOpenedFromOutside$;
+    /** Holds true if master is open */
+    private isMasterOpen: boolean = false;
 
     constructor(
         private router: Router,
@@ -160,9 +171,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction
+        private accountsAction: AccountsAction,
+        private accountService: AccountService,
+        private salesAction: SalesActions
     ) {
-        this.detectRouteChanges();
     }
 
     /**
@@ -216,56 +228,59 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        combineLatest([
-            this.activatedRoute.params,
-            this.activatedRoute.queryParams
-        ])
-            .pipe(delay(0), takeUntil(this.destroyed$))
-            .subscribe(([params, queryParams]) => {
-                if (params) {
-                    this.selectedContact = null;
-                    this.isUpdateAccount = false;
-                    this.hasUpdatedBefore = false;
-                    let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
-                    this.activeGroupUniqueName$ = of(groupUniqueName);
-                    this.parentGroupUniqueName = groupUniqueName;
-                    this.params = params;
-                    if (params?.accountUniqueName) {
-                        this.activeAccountUniqueName = params?.accountUniqueName;
-                        this.contactActiveTab = params?.type;
-                        this.isSearching = false;
+        this.isAddAndManageOpenedFromOutside$.pipe(takeUntil(this.destroyed$)).subscribe((isAddAndManageOpenedFromOutside) => {
+            this.isMasterOpen = isAddAndManageOpenedFromOutside;
+            if (!isAddAndManageOpenedFromOutside) {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+            }
+        });
 
-                    }
-                    if (queryParams?.page) {
-                        this.queryParams = queryParams;
-                        this.advanceFilters.page = Number(queryParams.page);
-                        this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
-                        this.advanceFilters.from = queryParams.from ?? '';
-                        this.advanceFilters.to = queryParams.to ?? '';
-                        this.advanceFilters.q = queryParams.search ?? '';
-                        this.advanceFilters.refresh = queryParams.refresh ?? true;
-                        if (queryParams.sort && queryParams.sortBy) {
-                            this.key = queryParams.sortBy;
-                            this.order = queryParams.sort;
-                        } else {
-                            this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
-                            this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
-                        }
-                        const searchString = queryParams.search;
-                        if (searchString) {
-                            this.search.setValue(searchString);
-                        } else {
-                            this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-                        }
-                    }
+        this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((params) => {
+            if (params) {
+                this.params = params;
+                this.contactActiveTab = params?.type;
+                let groupUniqueName = (this.contactActiveTab === "customer") ? this.AccountingGroupEnum.SundryDebtors : this.AccountingGroupEnum.SundryCreditors;
+                this.activeGroupUniqueName$ = of(groupUniqueName);
+                this.parentGroupUniqueName = groupUniqueName;
+            }
+        });
+
+        this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((queryParams) => {
+            if (queryParams) {
+                this.isSearching = false;
+                this.selectedContact = null;
+                this.queryParams = queryParams;
+                this.activeAccountUniqueName = queryParams?.accountUniqueName;
+                this.advanceFilters.page = Number(queryParams.page);
+                this.advanceFilters.count = queryParams.count ? Number(queryParams.count) : PAGINATION_LIMIT;
+                this.advanceFilters.from = queryParams.from ?? '';
+                this.advanceFilters.to = queryParams.to ?? '';
+                this.advanceFilters.q = queryParams.search ?? '';
+                this.advanceFilters.refresh = queryParams.refresh ?? true;
+                if (queryParams.sort && queryParams.sortBy) {
+                    this.key = queryParams.sortBy;
+                    this.order = queryParams.sort;
+                } else {
+                    this.key = (this.contactActiveTab === "vendor") ? "amountDue" : "name";
+                    this.order = (this.contactActiveTab === "vendor") ? "desc" : "asc";
                 }
-            });
+                const searchString = queryParams.search;
+                if (searchString) {
+                    this.search.setValue(searchString);
+                } else {
+                    this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+            }
+        });
 
         this.componentStore.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.parentGroups[0]?.uniqueName) {
+                this.showBankDetailPreview = response?.parentGroups?.some(parent => parent?.uniqueName === 'sundrycreditors') ? true : false;
                 let col = response.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === this.AccountingGroupEnum.RevenueFromOperations || col === this.AccountingGroupEnum.OtherIncome || col === this.AccountingGroupEnum.OperatingCost || col === this.AccountingGroupEnum.IndirectExpenses;
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                this.changeDetection.detectChanges();
             }
         });
         this.componentStore.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -298,19 +313,24 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 };
                 this.isSearching = true;
                 this.advanceFilters.q = search;
-                this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
-        if (this.isUpdateAccount) {
-            this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.hasUpdatedBefore = true;
-                    this.isUpdateAccount = true;
-                    this.getContactsList(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-                }
-            });
-        }
+        this.isDeleteAccSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.contactList = [];
+                this.advanceFilters.page = 1;
+                this.advanceFilters.q = '';
+                this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.router.navigate([], {
+                    relativeTo: this.activatedRoute,
+                    queryParams: { accountUniqueName: this.queryParams.accountUniqueName },
+                    queryParamsHandling: 'merge', // keeps other params
+                    replaceUrl: true // optionally replace history entry
+                });
+            }
+        });
     }
 
     /**
@@ -320,7 +340,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
  * @param {any} event The group selection event containing the group value.
  * @memberof ContactPreviewComponent
  */
-    public isGroupSelected(event: any) {
+    public isGroupSelected(event: any): void {
         if (event) {
             this.activeGroupUniqueName$ = of(event.value);
             // in case of sundrycreditors or sundrydebtors no need to show address tab
@@ -335,8 +355,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      *
      * @memberof ContactPreviewComponent
      */
-    public showDeleteAccountModal() {
-        this.deleteAccountModal?.show();
+    public showDeleteAccountModal(): void {
+        this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal);
     }
 
     /**
@@ -344,8 +364,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      *
      * @memberof ContactPreviewComponent
      */
-    public hideDeleteAccountModal() {
-        this.deleteAccountModal?.hide();
+    public hideDeleteAccountModal(): void {
+        this.deleteAccountmodalRef?.close()
     }
 
     /**
@@ -355,10 +375,31 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      *        The object containing account update values and request details.
      * @memberof ContactPreviewComponent
      */
-    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
-        this.isUpdateAccount = true;
-        accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
-        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
+        this.updateAccountInProcess$ = of(true);
+        if (isPatch) {
+            this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
+        } else {
+            accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
+            this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
+        }
+        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.updateAccountInProcess$ = of(false);
+                this.router.navigate([], {
+                    relativeTo: this.activatedRoute,
+                    queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
+                    queryParamsHandling: 'merge',
+                    replaceUrl: true
+                });
+            } else {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                setTimeout(() => {
+                    this.updateAccountInProcess$ = of(false);
+                }, 500);
+            }
+        });
     }
 
     /**
@@ -366,28 +407,11 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      *
      * @memberof ContactPreviewComponent
      */
-    public deleteAccount() {
+    public deleteAccount(): void {
         let activeAccUniqueName = null;
-        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
+        this.activeAccount$.pipe(take(1)).subscribe(account => activeAccUniqueName = account?.uniqueName);
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, this.contactActiveTab));
         this.hideDeleteAccountModal();
-    }
-
-    /**
-     * Detects route changes and resets the update flag.
-     * 
-     * @private
-     * @memberof ContactPreviewComponent
-     */
-    private detectRouteChanges(): void {
-        // Use Angular's Router to listen to route changes
-        this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                // Reset the update flag on route change
-                this.hasUpdatedBefore = false;
-                this.isUpdateAccount = false;
-            }
-        });
     }
 
     /**
@@ -413,26 +437,29 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            // Handle page number is more than total pages in query params
-            if (this.totalPages < this.advanceFilters.page) {
-                this.advanceFilters.page = 1;
-                this.getContactsList(
-                    this.advanceFilters.from,
-                    this.advanceFilters.to,
-                    this.params.page,
-                    "true",
-                    PAGINATION_LIMIT,
-                    this.advanceFilters.q ?? '',
-                    this.key,
-                    this.order,
-                    (this.currentBranch ? this.currentBranch.uniqueName : "")
-                );
-                return;
-            }
-            response.results?.forEach((item: any, index: number) => {
+            response?.results?.forEach((item: any, index: number) => {
                 item.index = index + 1;
                 currentContactList.push(item);
             });
+
+            if (this.isSearching) {
+                // Handle page number is more than total pages in query params
+                if (this.totalPages < this.advanceFilters.page) {
+                    this.advanceFilters.page = 1;
+                    this.getContactsListData(
+                        this.advanceFilters.from,
+                        this.advanceFilters.to,
+                        this.advanceFilters.page,
+                        "true",
+                        PAGINATION_LIMIT,
+                        this.advanceFilters.q ?? '',
+                        this.key,
+                        this.order,
+                        (this.currentBranch ? this.currentBranch.uniqueName : "")
+                    );
+                    return;
+                }
+            }
 
             if ((this.isSearching || (this.advanceFilters.page === 1) && (this.pageNumberHistory.length === 1)) || this.isRefresh) {
                 this.contactList = currentContactList;
@@ -443,14 +470,14 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
             this.getAllApiCallCount++;
             if (this.contactList?.length) {
-                if (!this.hasUpdatedBefore && !this.isUpdateAccount) {
-                    this.setSelectedContact(this.activeAccountUniqueName);
-                    this.hasUpdatedBefore = true;
-                } else if (this.isUpdateAccount) {
-                    this.setSelectedContact(this.selectedContact?.uniqueName);
+                const exists = this.contactList.some(account => account.uniqueName === this.activeAccountUniqueName);
+                if (exists && (!this.isSearching || this.advanceFilters.q)) {
+                    this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === this.activeAccountUniqueName);
                 } else {
-                    this.setSelectedContact(this.contactList[0].uniqueName);
+                    this.selectedContact = this.contactList[0];
                 }
+                this.accountDetails = this.selectedContact;
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
             }
             this.isRefresh = false;
             this.changeDetection.detectChanges();
@@ -469,11 +496,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         if (isNewContactSelected && this.selectedContact?.uniqueName === accountUniqueName) {
             return;
         }
-        if (isNewContactSelected) {
-            this.isUpdateAccount = true;
-        }
         this.selectedContact = this.contactList?.find(contact => contact?.uniqueName === accountUniqueName);
-        if (this.selectedContact?.uniqueName) {
+        if (isNewContactSelected && this.selectedContact?.uniqueName) {
+            this.accountDetails = this.selectedContact;
             this.isContactNotFound = false;
             this.store.dispatch(this.accountsAction.resetActiveAccount());
             this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
@@ -481,6 +506,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             this.selectedContact = null;
             this.isContactNotFound = true;
         }
+
     }
 
     /**
@@ -517,7 +543,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      * @param {string} [branchUniqueName] The unique name of the branch to filter by.
      * @memberof ContactPreviewComponent
      */
-    private getContactsList(
+    private getContactsListData(
         fromDate: string,
         toDate: string,
         pageNumber?: number,
@@ -547,8 +573,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             postData: this.advanceSearchRequestModal,
             branchUniqueName
         });
-
-        this.componentStore.getContactsList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.componentStore.getContactsList$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 this.handleGetAllContactResponse(res);
             }

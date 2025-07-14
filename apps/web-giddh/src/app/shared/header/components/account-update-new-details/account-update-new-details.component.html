@@ -63,7 +63,7 @@
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <div
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
                             >
@@ -127,6 +127,23 @@
                                 {{ localeData?.bulk_add }}
                             </span>
                         </div>
+                    </div>
+                </div>
+                <div class="row pd-b2">
+                    <div class="col-sm-4">
+                        <!-- Sales Person -->
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [labelValue]="addAccountForm.get('salesPersonName')?.value"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            (selectedOption)="addAccountForm.get('salesPersonName')?.patchValue($event?.label)"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row pd-b2" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
@@ -307,6 +324,10 @@
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
                                     (selectedOption)="selectedState(gst, $event); openConfirmLeaveDialog()"
+                                    [disabled]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [readonly]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [matTooltip]="isGstValid && gst.value.gstNumber?.length >= 2 ? localeData?.change_gst_number_to_update_the_state : ''"
+                                    matTooltipPosition="above"
                                 >
                                 </reactive-dropdown-field>
                                 
@@ -316,6 +337,7 @@
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="countyList"
                                     formControlName="countyCode"
+                                    [labelValue]="gst?.value?.county?.name ? gst.value.county.name : ''"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
                                     (selectedOption)="selectedCounty(gst, $event); openConfirmLeaveDialog()"
@@ -333,6 +355,7 @@
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                     [maxlength]="15"
                                     (change)="openConfirmLeaveDialog()"
+                                    [showError]="!isValidForm && !isGstValid"
                                 >
                                 </input-field>
                             </div>
@@ -769,9 +792,25 @@
                     </div>
 
                     <div class="row pd-b2">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'duePeriod'"
+                                [label]="localeData?.default_expiry_days"
+                                [placeholder]="'00'"
+                                [type]="'text'"
+                                [maxlength]="3"
+                                [allowDigitsOnly]="true"
+                                formControlName="duePeriod"
+                                class="settings-field d-block"
+                                [matSuffix]="commonLocaleData?.app_days"
+                            ></input-field>
+                        </div>
+                    </div>
+                    
+                    <div class="row pd-b2">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>{{ localeData?.description_label }}</label>
+                                <label>{{ commonLocaleData?.app_note }}</label>
                                 <textarea
                                     rows="3 "
                                     cols="4"
@@ -989,9 +1028,10 @@
                             [label]="localeData?.select_discounts"
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="discountList"
-                            (selectedOption)="$event && selectedDiscounts = $event.value; discountSelected()"
-                        >
-                        </reactive-dropdown-field>
+                            [labelValue]="selectedDiscounts?.label ?? ''"
+                            (selectedOption)="discountSelected($event)"
+                            (onClear)="discountSelected()"
+                        ></reactive-dropdown-field>
                         <button
                             mat-stroked-button
                             color="primary"

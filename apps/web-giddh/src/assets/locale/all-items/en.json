@@ -953,12 +953,18 @@
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",
                     "description": "Track, manage, and analyze financials for each project efficiently."
-                },
+                }
+            ]
+        },
+        {
+            "label": "AI",
+            "icon": "icon-audit-log",
+            "items": [
                 {
-                    "label": "AI",
-                    "link": "/pages/ocr-voucher",
+                    "label": "OCR",
+                    "link": "/pages/ai-ocr",
                     "icon": "icon-audit-log",
-                    "description": "AI model"
+                    "description": "Upload images, pdf, jpeg, zip"
                 }
             ]
         },

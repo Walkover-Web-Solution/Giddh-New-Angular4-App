@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'ocr-voucher'"
+    [file]="'ai-ocr'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
@@ -11,6 +11,7 @@
                 <div *ngIf="!isFileUploading" class="error danger text-center">
                     <span>{{ localeData?.invoice_preview_unavailable }}</span>
                 </div>
+                <img height="100%" width="100%" *ngIf="!isFileUploading && imagePreviewSource" [src]="imagePreviewSource" alt="pdf" />
                 <iframe
                     *ngIf="!isFileUploading && sanitizedPdfFileUrl"
                     #pdfContainer

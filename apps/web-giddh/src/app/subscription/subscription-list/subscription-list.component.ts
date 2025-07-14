@@ -21,7 +21,6 @@ import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.comp
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -330,7 +329,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        console.log(event, element, searchedFieldName)
         if (searchedFieldName === 'companyName') {
             if (this.subscriptionListForm?.controls['companyName'].value !== null && this.subscriptionListForm?.controls['companyName'].value !== '') {
                 return;

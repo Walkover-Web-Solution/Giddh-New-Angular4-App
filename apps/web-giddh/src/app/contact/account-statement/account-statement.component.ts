@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
@@ -12,7 +12,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
-
+import { cloneDeep } from "../../lodash-optimized";
+import { TransactionType } from "../../models/api-models/Ledger";
 
 @Component({
     selector: "account-statement",
@@ -27,6 +28,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** Reference to the Material paginator component */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
+    /** Unique name of the active account (input from parent) */
+    @Input() public activeAccountUniqueName: string;
+    /** Start date for the statement (input from parent) */
+    @Input() public from: string;
+    /** End date for the statement (input from parent) */
+    @Input() public to: string;
+    /** Branch unique name (input from parent) */
+    @Input() public branchUniqueName: string;
     /** Reference to the Material sort component */
     @ViewChild(MatSort) sort!: MatSort;
     /** Holds localized JSON data specific to this module */
@@ -38,7 +47,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
-    public displayedColumns: string[] = ['Date', 'Transactions', 'Details', 'Amount', 'Payments', 'Balance'];
+    public displayedColumns: string[] = ['date', 'transactions', 'details', 'amount', 'payments', 'balance'];
     /** Whether the panel is open (for expansion panels, etc.) */
     public panelOpenState: boolean = true;
     /** Data array for the account statement table rows */
@@ -50,12 +59,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         accountUniqueName: '',
         page: 1,
         count: '',
-        sortBy: 'Date',
-        sort: 'asc',
+        sortBy: 'date',
+        sort: '',
         q: '',
     };
-    /** Current page index for the paginator */
-    public pageIndex: number = 0;
     /** Options for the number of rows shown per page */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Total number of records available for pagination */
@@ -86,17 +93,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public advanceFiltersApplied: boolean = false;
     /** Reference to the currently open advance search dialog */
     public advanceSearchDialogRef: any;
-    /** Unique name of the active account (input from parent) */
-    @Input() activeAccountUniqueName: string;
-    /** Start date for the statement (input from parent) */
-    @Input() from: string;
-    /** End date for the statement (input from parent) */
-    @Input() to: string;
     /** Request object for advance search filters */
     public advanceSearchRequest: AdvanceSearchRequest;
     /** True if the advance search feature is implemented and enabled */
     public isAdvanceSearchImplemented: boolean = false;
-
+    /** True if any filters are currently applied on report */
+    public clearFilter: boolean = false;
+    /** Holds transaction type */
+    public transactionType: typeof TransactionType = TransactionType;
 
     constructor(
         public dialog: MatDialog,
@@ -114,21 +118,33 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public ngOnInit(): void {
-        this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            this.isLoading = false;
-            if (response) {
-                this.accountListData = response.transactionDetailList;
-                this.responseAccountList = response;
-                this.totalRecords = response.totalItems;
+        this.accountStatementList$.pipe(delay(100), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response && response.transactionDetailList?.length) {
+                    this.accountListData = response.transactionDetailList;
+                    this.responseAccountList = response;
+                    this.totalRecords = response.totalItems;
             }
+            this.isLoading = false;
         });
+
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                bsRangeValue: [dayjs(this.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.to, GIDDH_DATE_FORMAT).toDate()]
+            })
+        });
+
+        this.advanceSearchRequest.to = this.to;
+        this.advanceSearchRequest.page = 0;
 
         this.transactionInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const searchValue = search?.trim();
+
             if (searchValue || searchValue === '') {
                 this.accountListRequest.q = searchValue;
                 this.isSearching = true;
                 this.accountListRequest.page = 1;
+                this.advanceFiltersApplied = false;
+                this.clearFilter = true;
                 this.getAccountStatementList();
             }
         });
@@ -169,7 +185,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.transactionInput.patchValue(null, { emitEvent: false });
         this.showTransactionInput = false;
         this.advanceFiltersApplied = false;
+        this.clearFilter = false;
         this.isSearching = false;
+        let dateRange = { fromDate: '', toDate: '' };
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
+        this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+        this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.advanceSearchRequest = new AdvanceSearchRequest();
+        this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
 
         if (!onlyResetValue) {
             this.getAccountStatementList();
@@ -183,10 +206,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
-        this.pageIndex = event.pageIndex;
         this.accountListRequest.count = event.pageSize;
         this.accountListRequest.page = event.pageIndex + 1;
-        this.getAccountStatementList();
+        this.getAccountStatementList(true);
     }
 
     /**
@@ -199,6 +221,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.transactionInput.patchValue(null, { emitEvent: false });
             this.showTransactionInput = false;
             this.advanceFiltersApplied = false;
+            this.clearFilter = false;
             this.isSearching = false;
             this.accountListRequest.accountUniqueName = this.activeAccountUniqueName;
             this.accountListRequest.count = this.pageSizeOptions[1];
@@ -208,6 +231,15 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.accountListRequest.from = this.from;
             this.accountListRequest.to = this.to;
             let dateRange = { fromDate: '', toDate: '' };
+            this.advanceSearchRequest = new AdvanceSearchRequest();
+            this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
+            this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                    bsRangeValue: [dayjs(this.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.to, GIDDH_DATE_FORMAT).toDate()]
+                })
+            });
+            this.advanceSearchRequest.to = this.to;
+            this.advanceSearchRequest.page = 0;
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -227,11 +259,12 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
         if (!event.isClose && event.advanceSearchData) {
             this.advanceFiltersApplied = true;
+            this.clearFilter = true;
             if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
                 this.selectedDateRange = { startDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                 this.selectedDateRangeUi = dayjs(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
-            this.advanceSearchRequest = event.advanceSearchData.dataToSend;
+            this.advanceSearchRequest = cloneDeep(event.advanceSearchData);
             this.getAccountStatementList();
         }
     }
@@ -250,7 +283,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 })
             });
         }
-
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
             width: '980px',
             role: 'alertdialog',
@@ -263,17 +295,27 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      *
      * @memberof AccountStatementComponent
      */
-    public getAccountStatementList(): void {
+    public getAccountStatementList(isAdvanceSearch: boolean = false): void {
         this.isLoading = true;
         this.accountListData = [];
+        const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
+            if (!isAdvanceSearch) {
+                this.accountListRequest.page = 1;
+            }
+            this.accountListRequest.from = this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT);
+            this.accountListRequest.to = this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT);
             const requestObj = {
-                body: this.advanceSearchRequest,
+                body: advReq,
                 method: 'POST',
-                model: this.accountListRequest
+                model: this.accountListRequest,
+                branchUniqueName: this.branchUniqueName
             };
             this.contactComponentStore.getAccountStatementList(requestObj);
         } else {
+            if (this.branchUniqueName) {
+                this.accountListRequest.branchUniqueName = this.branchUniqueName;
+            }
             this.contactComponentStore.getAccountStatementList(this.accountListRequest);
         }
     }
@@ -285,7 +327,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public sortData(event: any): void {
-        this.accountListRequest.sort = event?.direction ?? 'asc';
+        this.accountListRequest.sort = event?.direction ? event?.direction : 'asc';
         this.accountListRequest.sortBy = event?.active;
         this.getAccountStatementList();
     }
@@ -319,7 +361,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+            const position = this.generalService.getPosition(element.target);
+            position.y = position.y - 370;
+            this.dateFieldPosition = position;
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
@@ -335,7 +379,14 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
-
+        let from = dayjs(value.startDate, GIDDH_DATE_FORMAT).toDate();
+        let to = dayjs(value.endDate, GIDDH_DATE_FORMAT).toDate();
+        this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+            page: 0,
+            dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                bsRangeValue: [from, to]
+            })
+        });
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;

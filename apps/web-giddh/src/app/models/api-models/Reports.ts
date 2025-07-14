@@ -16,6 +16,7 @@ export class ReportsModel {
     public to?: string;
     public interval?: string;
     public selectedMonth?: string;
+    public salesPerson?: {name: string, uniqueName: string};
 }
 /*
 * Report Response Model to be bind with get sales report API

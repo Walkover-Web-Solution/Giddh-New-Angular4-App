@@ -1,4 +1,3 @@
-
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
@@ -6,13 +5,13 @@ import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { OcrVoucherService } from "../../services/ocr-voucher.service";
+import { AiOcrService } from "../../services/ai-ocr.service";
 
-export interface OcrVoucherState {
+export interface AiOcrState {
     ocrListInProgress: boolean;
     ocrList: any;
     ocrMainListInProgress: boolean;
-    ocrMainList: any
+    ocrMainList: any;
     ocrUploadInProgress: boolean;
     ocrUploadSuccess: any;
     ocrImportInProgress: boolean;
@@ -23,7 +22,7 @@ export interface OcrVoucherState {
     ocrExtractDocumentsInProgress: boolean;
 }
 
-export const DEFAULT_OCR_VOUCHER_STATE: OcrVoucherState = {
+export const DEFAULT_AI_OCR_VOUCHER_STATE: AiOcrState = {
     ocrListInProgress: null,
     ocrList: [],
     ocrMainListInProgress: null,
@@ -35,22 +34,29 @@ export const DEFAULT_OCR_VOUCHER_STATE: OcrVoucherState = {
     ocrCompletedCount: null,
     ocrCompletedCountInProgress: null,
     ocrExtractDocuments: null,
-    ocrExtractDocumentsInProgress: null
+    ocrExtractDocumentsInProgress: null,
 };
 
 @Injectable()
-export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements OnDestroy {
-
-    constructor(private toasterService: ToasterService,
-        private ocrVoucherService: OcrVoucherService,
-        private store: Store<AppState>) {
-        super(DEFAULT_OCR_VOUCHER_STATE);
+export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy {
+    constructor(
+        private toasterService: ToasterService,
+        private aiOcrService: AiOcrService,
+        private store: Store<AppState>
+    ) {
+        super(DEFAULT_AI_OCR_VOUCHER_STATE);
     }
 
     /** Observable for the active company details. */
-    public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
+    public activeCompany$: Observable<any> = this.select(
+        this.store.select((state) => state.session.activeCompany),
+        (response) => response
+    );
     /** Observable for the universal application date. */
-    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public universalDate$: Observable<any> = this.select(
+        this.store.select((state) => state.session.applicationDate),
+        (response) => response
+    );
     /** Observable indicating the success state of OCR upload. */
     public ocrUploadSuccess$: Observable<any> = this.select((state) => state.ocrUploadSuccess);
     /** Observable indicating the progress state of OCR upload. */
@@ -66,27 +72,36 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     /** Observable for extracted OCR documents. */
     public ocrExtractDocuments$: Observable<any> = this.select((state) => state.ocrExtractDocuments);
     /** Observable indicating the progress state of document extraction. */
-    public ocrExtractDocumentsInProgress$: Observable<any> = this.select((state) => state.ocrExtractDocumentsInProgress);
+    public ocrExtractDocumentsInProgress$: Observable<any> = this.select(
+        (state) => state.ocrExtractDocumentsInProgress
+    );
     /** Observable for the main list of OCR documents. */
     public ocrMainList$: Observable<any> = this.select((state) => state.ocrMainList);
     /** Observable indicating the progress state of the main list retrieval. */
     public ocrMainListInProgress$: Observable<any> = this.select((state) => state.ocrMainListInProgress);
     /** Observable indicating the progress state of OCR import. */
     public ocrImportInProgress$: Observable<any> = this.select((state) => state.ocrImportInProgress);
+    /** Observable for branch consolidation. */
+    public branchConsolidated$: Observable<any> = this.select(
+        this.store.select((state) => state.branchConsolidated),
+        (response) => response
+    );
+    /** Observable for the list of OCR documents. */
+    public branches$: Observable<any> = this.store.select((state) => state.settings.branches);
 
     /**
      * Effect to get all OCR documents.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     readonly getAllOcrList = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrListInProgress: true });
-                return this.ocrVoucherService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
+                return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     ocrList: res?.body ?? [],
                                     ocrListInProgress: false,
@@ -103,7 +118,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrList: [],
-                                ocrListInProgress: false
+                                ocrListInProgress: false,
                             });
                         }
                     ),
@@ -116,16 +131,16 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     /**
      * Effect to get all main page OCR data.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     readonly getAllMainPageOcrData = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrMainListInProgress: true });
-                return this.ocrVoucherService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
+                return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     ocrMainList: res?.body ?? [],
                                     ocrMainListInProgress: false,
@@ -142,7 +157,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrMainList: [],
-                                ocrMainListInProgress: false
+                                ocrMainListInProgress: false,
                             });
                         }
                     ),
@@ -155,25 +170,25 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     /**
      * Effect to upload OCR document.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     readonly uploadOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrUploadInProgress: true, ocrUploadSuccess: null });
-                return this.ocrVoucherService.uploadOcrDocument(req?.fileName).pipe(
+                return this.aiOcrService.uploadOcrDocument(req?.fileName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     ocrUploadInProgress: false,
-                                    ocrUploadSuccess: res.body
+                                    ocrUploadSuccess: res.body,
                                 });
                             } else {
                                 this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
                                     ocrUploadInProgress: false,
-                                    ocrUploadSuccess: null
+                                    ocrUploadSuccess: null,
                                 });
                             }
                         },
@@ -181,7 +196,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrUploadInProgress: false,
-                                ocrUploadSuccess: null
+                                ocrUploadSuccess: null,
                             });
                         }
                     ),
@@ -194,26 +209,26 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     /**
      * Effect to import OCR document.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     readonly importOcrDocument = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrImportInProgress: true, ocrImportSuccess: null });
-                return this.ocrVoucherService.importOcrDocument(req).pipe(
+                return this.aiOcrService.importOcrDocument(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res?.status === "success") {
                                 this.toasterService.showSnackBar("success", res?.body?.message);
                                 return this.patchState({
                                     ocrImportInProgress: false,
-                                    ocrImportSuccess: res?.body
+                                    ocrImportSuccess: res?.body,
                                 });
                             } else {
                                 this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
                                     ocrImportInProgress: false,
-                                    ocrImportSuccess: null
+                                    ocrImportSuccess: null,
                                 });
                             }
                         },
@@ -221,7 +236,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrImportInProgress: false,
-                                ocrImportSuccess: null
+                                ocrImportSuccess: null,
                             });
                         }
                     ),
@@ -234,25 +249,25 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     /**
      * Effect to get completed count of OCR documents.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     readonly getCompletedCount = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrCompletedCountInProgress: true });
-                return this.ocrVoucherService.getCompletedCount().pipe(
+                return this.aiOcrService.getCompletedCount().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     ocrCompletedCount: res?.body?.completedCount,
-                                    ocrCompletedCountInProgress: false
+                                    ocrCompletedCountInProgress: false,
                                 });
                             } else {
                                 this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
                                     ocrCompletedCountInProgress: false,
-                                    ocrCompletedCount: null
+                                    ocrCompletedCount: null,
                                 });
                             }
                         },
@@ -260,7 +275,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrCompletedCountInProgress: false,
-                                ocrCompletedCount: null
+                                ocrCompletedCount: null,
                             });
                         }
                     ),
@@ -273,25 +288,25 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     /**
      * Effect to extract OCR documents.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     readonly getExtractDocuments = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: null });
-                return this.ocrVoucherService.getExtractDocuments(req).pipe(
+                this.patchState({ ocrExtractDocumentsInProgress: true, ocrExtractDocuments: undefined });
+                return this.aiOcrService.getExtractDocuments(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res?.status === "success") {
                                 return this.patchState({
                                     ocrExtractDocuments: res?.body,
-                                    ocrExtractDocumentsInProgress: false
+                                    ocrExtractDocumentsInProgress: false,
                                 });
                             } else {
                                 this.toasterService.showSnackBar("error", res?.message);
                                 return this.patchState({
                                     ocrExtractDocumentsInProgress: false,
-                                    ocrExtractDocuments: null
+                                    ocrExtractDocuments: null,
                                 });
                             }
                         },
@@ -299,7 +314,7 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
                                 ocrExtractDocumentsInProgress: false,
-                                ocrExtractDocuments: null
+                                ocrExtractDocuments: null,
                             });
                         }
                     ),
@@ -310,9 +325,18 @@ export class OcrVoucherStore extends ComponentStore<OcrVoucherState> implements 
     });
 
     /**
+     * Effect to reset OCR state.
+     *
+     * @memberof AiOcrStore
+     */
+    public reset(): void {
+        this.setState(() => DEFAULT_AI_OCR_VOUCHER_STATE);
+    }
+
+    /**
      * Lifecycle hook for component destruction.
      *
-     * @memberof OcrVoucherStore
+     * @memberof AiOcrStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

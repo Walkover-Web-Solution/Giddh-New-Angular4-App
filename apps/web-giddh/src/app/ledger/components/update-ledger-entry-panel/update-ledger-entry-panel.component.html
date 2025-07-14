@@ -1374,7 +1374,7 @@
                         <ng-container
                             *ngIf="
                                 (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                vm.selectedLedger.voucher.shortCode !== 'jr'
+                                vm.selectedLedger.voucher.shortCode !== 'jr'; else showOnlySalesPerson
                             "
                         >
                             <div
@@ -1693,7 +1693,13 @@
                                         </p>
                                     </div>
                                 </ng-template>
-                                <div class="pull-right mr-t1 min-width-0">
+                            </div>
+                            <div class="row mr-t15">
+                                <!-- Sales Person -->
+                                <div class="col-6">
+                                    <ng-container *ngTemplateOutlet="salesPersonDropdown"></ng-container>
+                                </div>
+                                <div class="col-6">
                                     <div
                                         *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable"
                                         class="text-right table-amount last-table-amount"
@@ -1744,12 +1750,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pd-1 text-right bd-rb pr-0">
+                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0">
                                 <span class="in-words font-15">
                                     {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
                                 </span>
                             </div>
                         </ng-container>
+                        <ng-template #showOnlySalesPerson>
+                            <div class="row mr-t15">
+                                <!-- Sales Person -->
+                                <div class="col-6">
+                                    <ng-container *ngTemplateOutlet="salesPersonDropdown"></ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                     <!-- endregion -->
 
@@ -2466,15 +2480,7 @@
                                         class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
                                        *ngIf="!isPettyCash && voucherApiVersion === 2"
                                     >
-                                        <div class="d-flex column-gap15">
-                                            <button
-                                                mat-stroked-button
-                                                color="warn"
-                                                id="update-ledger-delete-button"
-                                                (click)="showDeleteEntryModal()"
-                                            >
-                                                {{ commonLocaleData?.app_delete }}
-                                            </button>
+                                        <div class="d-flex column-gap15 w-100">
                                             <button
                                                 mat-stroked-button
                                                 color="primary"
@@ -2484,6 +2490,24 @@
                                                 (click)="saveLedgerTransaction()"
                                             >
                                                 {{ commonLocaleData?.app_update }}
+                                            </button>
+                                            <button
+                                                aria-label="Duplicate entry button"
+                                                mat-stroked-button
+                                                color="primary"
+                                                (click)="duplicateEntry()"
+                                            >
+                                                {{ localeData?.duplicate }}
+                                            </button>
+
+                                            <button
+                                                class="ml-auto"
+                                                mat-stroked-button
+                                                color="warn"
+                                                id="update-ledger-delete-button"
+                                                (click)="showDeleteEntryModal()"
+                                            >
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </div>
                                     </div>
@@ -2579,4 +2603,18 @@
         ></aside-menu-create-tax-component>
     </ng-template>
 </ng-container>
-                                            
+
+<!-- Sales person dropdown template reference -->
+<ng-template #salesPersonDropdown>
+    <reactive-dropdown-field 
+        [name]="'sales-person'"
+        [label]="commonLocaleData?.app_sales_person"
+        [labelValue]="vm.selectedLedger.salesPerson?.name"
+        [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+        [options]="salesPersonList$ | async"
+        [showCreateNew]="true"
+        [createNewText]="commonLocaleData?.app_create_new"
+        (createOption)="openSalesPersonDialog()"
+        (selectedOption)="handleSalesPersonSelection($event)"
+    ></reactive-dropdown-field>
+</ng-template>
