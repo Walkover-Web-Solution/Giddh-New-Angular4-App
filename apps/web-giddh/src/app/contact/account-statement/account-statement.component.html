@@ -4,7 +4,10 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="common-wrapper" *ngIf="totalRecords !== null && responseAccountList">
+<div class="no-data" *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+    <div class="common-wrapper" *ngIf="accountListData?.length && !isLoading">
         <div class="account-statement p-20 mr-t20">
             <table class="w-100">
                 <tr>

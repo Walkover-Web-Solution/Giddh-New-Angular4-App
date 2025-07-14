@@ -80,11 +80,11 @@
                     >
                         <mat-tab [label]="localeData?.statement">
                             <div class="wrapper-background pd-1 pd-t05 pd-b05 overflow-auto">
-                                <div class="account-statement-wrapper">
-                                    <div class="no-data" *ngIf="(getAccountStatementInProgress$ | async)">
-                                        <giddh-page-loader></giddh-page-loader>
-                                    </div>
-                                    <mat-card class="pd-15" *ngIf="selectedContact?.uniqueName && (getAccountStatementInProgress$ | async) === false">
+                                <div class="account-statement-wrapper h-100">
+                                    <mat-card
+                                        class="pd-15 h-100"
+                                        *ngIf="selectedContact?.uniqueName && !isContactNotFound"
+                                    >
                                         <account-statement
                                             [activeAccountUniqueName]="selectedContact?.uniqueName"
                                             [branchUniqueName]="queryParams.branchUniqueName"
