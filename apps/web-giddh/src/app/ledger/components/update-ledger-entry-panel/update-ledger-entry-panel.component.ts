@@ -3040,9 +3040,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public handleSalesPersonSelection(event: IOption): void {
         let defaultSalesPerson: string;
-        this.selectedLedgerStream$.pipe(take(1), map(response => response?.salesPerson?.uniqueName)).subscribe(response => {
-            defaultSalesPerson = response
+        let isPartOfMultiEntryVoucher: boolean;
+        this.selectedLedgerStream$.pipe(take(1)).subscribe(response => {
+            defaultSalesPerson = response?.salesPerson?.uniqueName
+            isPartOfMultiEntryVoucher = response?.isPartOfMultiEntryVoucher
         });
+
+        if (!isPartOfMultiEntryVoucher) {
+            this.vm.selectedLedger.salesPerson.name = event?.label;
+            this.vm.selectedLedger.salesPersonUniqueName = event?.value;
+            return;
+        }
 
         if ((defaultSalesPerson === event?.value) || (this.vm.selectedLedger.salesPersonUniqueName === event?.value)) {
             return;
