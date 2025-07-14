@@ -568,7 +568,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         /** Universal date */
-        this.componentStore.universalDate$.pipe(skip(1), filter(Boolean), takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (localStorage.getItem('universalSelectedDate')) {
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
