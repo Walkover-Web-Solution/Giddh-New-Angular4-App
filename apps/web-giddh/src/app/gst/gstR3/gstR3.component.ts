@@ -840,13 +840,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public checkAuthenticationAndFileGstr3B(): void {
-        this.gstAuthenticated$.pipe(take(1)).subscribe(isAuthenticated => {
-            if (isAuthenticated) {
-                this.fileGstr3B();
-            } else {
-                this.openSettingAsidePane();
-            }
-        });
+        if (this.gstAuthenticated) {
+            this.fileGstr3B();
+        } else {
+            this.openSettingAsidePane();
+        }
     }
 
     /**
