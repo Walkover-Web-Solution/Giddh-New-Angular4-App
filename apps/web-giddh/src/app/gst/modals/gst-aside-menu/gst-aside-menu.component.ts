@@ -225,6 +225,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        this.resetLocalFlags();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

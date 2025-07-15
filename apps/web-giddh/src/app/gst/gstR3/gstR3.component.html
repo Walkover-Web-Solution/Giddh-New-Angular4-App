@@ -121,10 +121,10 @@
                                         *ngIf="isCompany && showGstFiling"
                                         mat-stroked-button
                                         color="primary"
-                                        (click)="gstAuthenticated ? fileGstr3B() : openSettingAsidePane()"
+                                        (click)="checkAuthenticationAndFileGstr3B()"
                                         [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
                                     >
-                                        {{ localeData?.filing?.return_file }}
+                                        {{ localeData?.filing?.push_to_portal }}
                                     </button>
                                 </div>
                             </li>
@@ -152,7 +152,14 @@
             <div *ngIf="isTabScreen" class="pull-right pd-r15">
                 <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
             </div>
-            <div class="scroll-y noscroll-x fill body scrollbox">
+            <div *ngIf="isCompany && showGstFiling" class="px-1">
+                <span class="pull-right px-3">
+                    <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                        (onUpgradePlan)="buyPlan($event)">
+                    </restricted-module-message>
+                </span>
+            </div>
+            <div class="scroll-y noscroll-x fill body scrollbox mt-3">
                 <!--Hide this feature (Approved by Shubhendra Sir )-->
                 <!-- <div class="gstr3b-header hidden-print">
                     <ul class="sel-tab" [class.no-border]="!isCompany || !showGstFiling">
@@ -867,7 +874,7 @@
                             <img src="assets/images/return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
                             <button class="btn-2 btn-lg file-your-return" (click)="returnGstr3B = { via: 'TAXPRO' }">
-                                {{ localeData?.gstr3b?.file_return }}
+                                {{ localeData?.gstr3b?.push_to_portal }}
                             </button>
                         </div>
 
@@ -895,7 +902,7 @@
 <ng-template #asideAuthentication>
     <gst-aside-menu
         [selectedService]="selectedService"
-        [returnType]="selectedGst"
+        [returnType]="returnType"
         (fileGst)="fileGstr3B()"
         (cancelConfirmationEvent)="openCancelConfirmationDialog()"
         (closeAsideEvent)="asideAuthenticationDialogRef?.close()"
