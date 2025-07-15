@@ -14,7 +14,7 @@
     <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</h3>
     <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</h3>
     <h3 *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</h3>
-    <i (click)="closeAsidePane($event)" aria-label="close icon" class="icon-cross"></i>
+    <i (click)="toggleCancelModel()" aria-label="close icon" class="icon-cross"></i>
 </div>
 
 <mat-dialog-content>
@@ -100,7 +100,7 @@
                         <button
                             mat-stroked-button
                             class="btn btn-default"
-                            (click)="toggleCancelModel(); resetLocalFlags()"
+                            (click)="toggleCancelModel()"
                         >
                             {{ commonLocaleData?.app_cancel }}
                         </button>
@@ -172,7 +172,7 @@
                             {{ commonLocaleData?.app_submit }}
                         </button>
 
-                        <button mat-stroked-button (click)="toggleCancelModel(); resetLocalFlags()">
+                        <button mat-stroked-button (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>

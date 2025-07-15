@@ -106,6 +106,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** Holds GST return type */
+    public returnType: string = GstReport.Gstr3b;
 
     constructor(
         private store: Store<AppState>,
@@ -820,11 +822,38 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public fileGstr3B(): void {
         const monthYear = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MM-YYYY');
+        const currentDateTime = this.generalService.getCurrentDateTime();
         this.componentStore.fileGstr3B({ 
             period: this.currentPeriod, 
             gstNumber: this.activeCompanyGstNumber, 
             via: TaxServiceEnum.TAXPRO, 
-            monthYear 
+            monthYear,
+            currentDateTime
         });
+    }
+
+    /**
+     * Checks authentication status and either files GSTR3B or opens settings pane
+     *
+     * @memberof FileGstR3Component
+     */
+    public checkAuthenticationAndFileGstr3B(): void {
+        this.gstAuthenticated$.pipe(take(1)).subscribe(isAuthenticated => {
+            if (isAuthenticated) {
+                this.fileGstr3B();
+            } else {
+                this.openSettingAsidePane();
+            }
+        });
+    }
+
+    /**
+    * Navigates to the page for buy plan.
+    * 
+    * @param subscriptionId
+    * @memberof FileGstR3Component
+    */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }

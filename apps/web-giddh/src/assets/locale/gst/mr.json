@@ -13,7 +13,7 @@
 	"all_transactions": "सर्व व्यवहार",
 	"create_transactions": "1. आपले व्यवहार तयार करा",
 	"push_gstin": "2. जीएसटीएन वर ढकलणे",
-	"file_return": "3. फाइल रिटर्न",
+	"push_to_portal_tab":"3. पोर्टलवर पुश करा",
 	"month_report_download_note_gstr2": "जीएसटीआर2 सारांश पाहण्यासाठी महिन्यानुसार तारीख निवडा.",
 	"gstr2_label": "जीएसटीआर-2",
 	"inward_supplies_details": "वस्तू आणि सेवांच्या आवक पुरवठ्यांचा तपशील",
@@ -36,11 +36,10 @@
 			"overview": "1. विहंगावलोकन",
 			"reconcilation": "2. सामंजस्य",
 			"push_gstn": "2. जीएसटीएन वर ढकलणे",
-			"file_return": "3. आपला रिटर्न दाखल करा"
+			"push_to_portal":"3. पोर्टलवर जा"
 		},
 		"gst_filed": "एप्रिल २०० of पर्यंतचा जीएसटी रिटर्न यशस्वीरित्या दाखल केला जातो",
 		"return_file_note": "नवीनतम डेटाचे रिटर्न फाइल करण्यासाठी खाली क्लिक करा",
-		"return_file": "आपला रिटर्न दाखल करा",
 		"click_to_proceed": "पुढे जाण्यासाठी खाली क्लिक करा",
 		"gst_filed_success": "[PERIOD_FROM] ची जीएसटी रिटर्न - [PERIOD_TO] यशस्वीरित्या फाइल केली गेली आहे",
 		"loading_gst_data": "[SELECTED_GST] डेटा लोड करीत आहे.",
@@ -167,7 +166,7 @@
 		"composition_schema": "रचना योजना, सूट, शून्य",
 		"nongst_supply": "जीएसटी न मिळालेला पुरवठा",
 		"click_proceed": "पुढे जाण्यासाठी खाली क्लिक करा",
-		"file_return": "आपला रिटर्न दाखल करा"
+        "push_to_portal":"पोर्टलवर पुश करा"
 	},
 	"aside_menu": {
 		"choose_provider": "प्रदाता (जीएसपी) निवडा",
