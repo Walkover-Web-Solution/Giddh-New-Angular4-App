@@ -51,6 +51,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public fileReturnSucces: boolean = false;
     public showTaxPro: boolean = true;
     public gstAuthenticated$: Observable<boolean>;
+    public gstAuthenticated: boolean = false;
     public dateSelected: boolean = false;
     public userEmail: string = '';
     public selectedMMYYYY: string = '';
@@ -156,7 +157,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
-
+        
+        this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.activeCompanyGstNumber = result;
@@ -838,13 +840,11 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public checkAuthenticationAndFileGstr3B(): void {
-        this.gstAuthenticated$.pipe(take(1)).subscribe(isAuthenticated => {
-            if (isAuthenticated) {
-                this.fileGstr3B();
-            } else {
-                this.openSettingAsidePane();
-            }
-        });
+        if (this.gstAuthenticated) {
+            this.fileGstr3B();
+        } else {
+            this.openSettingAsidePane();
+        }
     }
 
     /**

@@ -138,7 +138,7 @@
                                         [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
                                     >
                                         {{
-                                            isAuthenticated
+                                            gstAuthenticated
                                                 ? localeData?.filing?.authenticated
                                                 : localeData?.filing?.authenticate
                                         }}
