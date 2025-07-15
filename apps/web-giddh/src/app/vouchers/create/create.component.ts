@@ -2521,6 +2521,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.account.mobileNumber = accountData?.mobileNo ?? "";
             this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
             this.checkMobileNumber();
+            this.updateDueDate();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -2577,7 +2578,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
-        this.updateDueDate();
     }
 
     /**
