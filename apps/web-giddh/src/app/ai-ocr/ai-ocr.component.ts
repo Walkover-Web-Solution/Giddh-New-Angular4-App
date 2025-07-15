@@ -219,7 +219,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
         this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.countVariable = 0;
                 this.innerLoading = true;
                 this.aiOcrStore.getExtractDocuments(response ?? "");
                 this.aiOcrStore.getCompletedCount(null);

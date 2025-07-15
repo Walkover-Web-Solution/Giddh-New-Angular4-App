@@ -1551,7 +1551,7 @@
                                                     </div>
                                                     <div class="col-12 mt-3" formGroupName="templateDetails">
                                                         <mat-accordion>
-                                                            <mat-expansion-panel>
+                                                            <mat-expansion-panel [expanded]="ocrDataEnabled">
                                                                 <mat-expansion-panel-header>
                                                                     <mat-panel-title>
                                                                         {{ commonLocaleData?.app_other_details }}
@@ -1644,7 +1644,7 @@
                                                                                 <input type="file"
                                                                                     class="position-absolute"
                                                                                     name="invoiceFile" id="invoiceFile"
-                                                                                    (change)="uploadFile()"
+                                                                                    (change)="uploadFile(false)"
                                                                                     droppable="true" />
                                                                                 <ng-container *ngIf="isFileUploading">
                                                                                     <mat-spinner

@@ -74,6 +74,7 @@ import {
     AdjustedVoucherType,
     BranchHierarchyType,
     ENTRY_DESCRIPTION_LENGTH,
+    FILE_ATTACHMENT_TYPE,
     HIGH_RATE_FIELD_PRECISION,
     HtmlElementEnum,
     KeyCodesEnum,
@@ -98,6 +99,7 @@ import { MatSelectChange } from "@angular/material/select";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
+import { MatAccordion } from "@angular/material/expansion";
 
 @Component({
     selector: "create",
@@ -943,6 +945,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe(([voucherDetails, aiOcrDetails]) => {
                 if (!this.isMainVoucher && aiOcrDetails?.token) {
                     this.ocrDataEnabled = true;
+                    this.uploadFile(true);
                 } else {
                     this.ocrDataEnabled = false;
                 }
@@ -967,7 +970,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.getCreatedTemplates();
                     this.getAccountOnboardingFormData();
                     this.searchStock();
-
                     if (this.invoiceType.isCashInvoice) {
                         this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
                         this.componentStore.getBriefAccounts({
@@ -3542,11 +3544,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public uploadFile(): void {
+    public uploadFile(isOcr: boolean): void {
         const selectedFile: any = document.getElementById("invoiceFile");
         this.selectedFileName = "";
-        if (selectedFile?.files?.length) {
-            const file = selectedFile?.files[0];
+        if (selectedFile?.files?.length || isOcr) {
+            let mimeType = null;
+            let file = null;
+            if (isOcr) {
+                const fileExtention = this.aiOcrDetails?.fileExtention?.toLowerCase();
+                if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
+                    mimeType = `image/${fileExtention}`;
+                } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
+                    mimeType = 'application/pdf';
+                }
+                this.selectedFileName = this.aiOcrDetails?.fileName ? `${this.aiOcrDetails?.fileName}.${fileExtention}` : `${Date.now()}.${fileExtention}`;
+                // Convert base64 to Blob/File and upload
+                const blob = this.generalService.base64ToBlob(this.aiOcrDetails?.encodedData, mimeType, 512);
+                file = new File([blob], this.selectedFileName, { type: mimeType });
+            } else {
+                file = selectedFile?.files[0];
+            }
 
             this.generalService.getSelectedFile(file, (blob: any, file: any) => {
                 this.isFileUploading = true;
@@ -3558,11 +3575,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.isFileUploading = false;
                         if (response?.status === "success") {
                             this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
-                            this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
+                            if (!this.ocrDataEnabled) {
+                                this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
+                            }
                         } else {
                             this.selectedFileName = "";
                             this.invoiceForm.get("attachedFiles")?.patchValue([]);
-                            this.toasterService.showSnackBar("error", response.message);
+                            if (!this.ocrDataEnabled) {
+                                this.toasterService.showSnackBar("error", response.message);
+                            }
                         }
                     });
             });
@@ -4402,9 +4423,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
-        if (!hasTransactions) {
-            this.toasterService.showSnackBar("warning", this.localeData?.no_product_error);
-            return false;
+        if (this.localeData?.no_product_error) {
+            if (!hasTransactions) {
+                this.toasterService.showSnackBar("warning", this.localeData?.no_product_error);
+                return false;
+            }
         }
 
         if (invoiceForm.isRcmEntry) {
@@ -4613,7 +4636,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             let getRequestObject = {
                 companyUniqueName: this.activeCompany?.uniqueName,
-                accountUniqueName: invoiceForm.account.uniqueName,
+                accountUniqueName: invoiceForm.account?.uniqueName,
             };
 
             if (this.account.branch) {
@@ -4850,7 +4873,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let accountUniqueName = this.invoiceType.isCashInvoice
                 ? deposits.at(0).get("accountUniqueName")?.value ?? invoiceForm.account?.uniqueName ?? "cash"
                 : invoiceForm.account?.uniqueName;
-            invoiceForm.account.uniqueName = accountUniqueName;
+            if (invoiceForm?.account?.uniqueName) {
+                invoiceForm.account.uniqueName = accountUniqueName;
+            }
             if (this.isUpdateMode) {
                 this.voucherService
                     .updateVoucher(invoiceForm)
@@ -4870,7 +4895,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
             } else {
                 this.voucherService
-                    .generateVoucher(invoiceForm.account.uniqueName, invoiceForm)
+                    .generateVoucher(invoiceForm.account?.uniqueName, invoiceForm)
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
