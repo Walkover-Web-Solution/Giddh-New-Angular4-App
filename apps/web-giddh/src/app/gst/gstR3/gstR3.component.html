@@ -152,8 +152,8 @@
             <div *ngIf="isTabScreen" class="pull-right pd-r15">
                 <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
             </div>
-            <div class="px-1">
-                <span class="pull-right px-3" *ngIf="isCompany && showGstFiling">
+            <div *ngIf="isCompany && showGstFiling" class="px-1">
+                <span class="pull-right px-3">
                     <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
                         (onUpgradePlan)="buyPlan($event)">
                     </restricted-module-message>
