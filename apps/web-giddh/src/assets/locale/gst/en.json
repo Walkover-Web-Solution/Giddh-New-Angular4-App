@@ -13,7 +13,7 @@
     "all_transactions": "All Transactions",
     "create_transactions": "1. Create your transactions",
     "push_gstin": "2. Push to GSTN",
-    "file_return": "3. File return",
+    "push_to_portal_tab":"3. Push to Portal",
     "month_report_download_note_gstr2": "Select month Wise Date to view GSTR2 summary.",
     "gstr2_label": "GSTR-2",
     "inward_supplies_details": "Details of inward supplies of goods and services",
@@ -36,11 +36,10 @@
             "overview": "1. Overview",
             "reconcilation": "2. Reconcilation",
             "push_gstn": "2. Push to GSTN",
-            "file_return": "3. File your Return"
+            "push_to_portal":"3. Push to Portal"
         },
         "gst_filed": "GST Return of April 2009 till date is filed successfully",
         "return_file_note": "Click below to file return of latest data",
-        "return_file": "File your Return",
         "click_to_proceed": "Click below to proceed",
         "gst_filed_success": "Gst Return Of [PERIOD_FROM] - [PERIOD_TO] is Filed Successfully",
         "loading_gst_data": "Loading [SELECTED_GST] Data.",
@@ -167,7 +166,7 @@
         "composition_schema": "Composition Scheme, Exempted, Nil Rated",
         "nongst_supply": "Non-GST supply",
         "click_proceed": "Click below to proceed",
-        "file_return": "File your Return"
+        "push_to_portal":"Push to Portal"
     },
     "aside_menu": {
         "choose_provider": "Choose Provider (GSP)",

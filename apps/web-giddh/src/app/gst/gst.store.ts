@@ -30,7 +30,7 @@ export class GstComponentStore extends ComponentStore<GstState> {
      *
      * @memberof GstComponentStore
      */
-    readonly fileGstr3B = this.effect((data: Observable<{ period: any, gstNumber: string, via: TaxServiceType, monthYear: string }>) => {
+    readonly fileGstr3B = this.effect((data: Observable<{ period: any, gstNumber: string, via: TaxServiceType, monthYear: string, currentDateTime: string }>) => {
         this.patchState({ fileGstr3BSuccess: false });
         return data.pipe(
             switchMap((req) => {
