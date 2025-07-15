@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-fields.module';
 import { NewConfirmModalModule } from 'apps/web-giddh/src/app/theme/new-confirm-modal';
 import { SalesPersonService } from '../../../sales-person/utility/sales-person.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -30,7 +31,8 @@ import { SalesPersonService } from '../../../sales-person/utility/sales-person.s
         MatRadioModule,
         MatTabsModule,
         FormFieldsModule,
-        NewConfirmModalModule
+        NewConfirmModalModule,
+        MatTooltipModule
     ],
     providers: [SalesPersonService]
 })

@@ -14,6 +14,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NewConfirmModalModule } from "apps/web-giddh/src/app/theme/new-confirm-modal";
 import { SalesPersonService } from "../../../sales-person/utility/sales-person.service";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { SalesPersonService } from "../../../sales-person/utility/sales-person.s
         MatButtonModule,
         MatRadioModule,
         MatTabsModule,
-        NewConfirmModalModule
+        NewConfirmModalModule,
+        MatTooltipModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

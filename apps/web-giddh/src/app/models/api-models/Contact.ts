@@ -2,6 +2,24 @@ export interface DueRangeRequest {
     range: string[];
 }
 
+/**
+ * Interface for parameters required by getContactsEffect
+ */
+export interface GetContactsParams {
+    fromDate: string;
+    toDate: string;
+    groupUniqueName: string;
+    pageNumber: number;
+    refresh: string;
+    count: number;
+    query?: string;
+    sortBy?: string;
+    order?: string;
+    postData?: ContactAdvanceSearchModal;
+    branchUniqueName?: string;
+}
+
+
 export class DueAmountReportQueryRequest {
     public q: string = '';
     public from?: string = '';
