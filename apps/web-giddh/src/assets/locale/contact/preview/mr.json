@@ -1,0 +1,18 @@
+{
+  "statement_of_accounts": "खात्याचे विवरण",
+  "account_summary": "खाते सारांश",
+  "opening_balance": "प्रारंभिक शिल्लक",
+  "invoiced_amount": "चलन रक्कम",
+  "amount_paid": "भरलेली रक्कम",
+  "balance_due": "बाकी शिल्लक",
+  "transactions": "व्यवहार",
+  "details": "तपशील",
+  "amount": "रक्कम",
+  "payments": "देयके",
+  "balance": "शिल्लक",
+  "no_account_statements_found": "दिलेल्या निकषांसाठी कोणतेही खाते विवरण सापडले नाही.",
+  "transaction": "व्यवहार",
+  "statement": "विवरण",
+  "account_details": "खाते तपशील",
+  "user_not_found_message": "वापरकर्ता सापडला नाही. माहिती पाहण्यासाठी कृपया ग्राहक बदला."
+}
