@@ -78,6 +78,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public salesPersonActionEnum = SalesPersonActionEnum;
     /** Sales Person Unique Name in case of user edit or delete */
     public salesPersonUniqueName: string | null = null;
+    /** Sales Person Details in case of user edit */
+    public currentSalesPerson: SalesPersonCreateUpdate | null = null;
     /** Holds page Size Options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds advance Filters keys */
@@ -111,6 +113,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.salesPersonForm.reset();
             this.salesPersonForm.markAsPristine();
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
+            this.focusInputField();
         })).subscribe();
         this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true; this.salesPersonAction(SalesPersonActionEnum.GET_ALL); })).subscribe();
     }
@@ -158,14 +161,17 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof SalesPersonComponent
      */
     public salesPersonAction(action: SalesPersonActionEnum, element?: any): void {
+        const salesPersonForm = this.salesPersonForm?.value;
         switch (action) {
             case SalesPersonActionEnum.CREATE:
-                const model = this.salesPersonForm?.value;
-                model.mobileNumber = model.mobileNumber ? (this.intlClass.selectedCountryData.dialCode + model.mobileNumber) : null;
-                this.componentStore.createUpdateSalesPerson({ model: model, uniqueName: null });
+                salesPersonForm.mobileNumber = salesPersonForm.mobileNumber ? (this.intlClass.selectedCountryData.dialCode + salesPersonForm.mobileNumber) : null;
+                this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: null });
                 break;
             case SalesPersonActionEnum.UPDATE:
-                this.componentStore.createUpdateSalesPerson({ model: this.salesPersonForm?.value, uniqueName: this.salesPersonUniqueName });
+                if (salesPersonForm.mobileNumber != this.currentSalesPerson?.mobileNumber) {
+                    salesPersonForm.mobileNumber = salesPersonForm.mobileNumber ? (this.intlClass.selectedCountryData.dialCode + salesPersonForm.mobileNumber) : null;
+                }
+                this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: this.salesPersonUniqueName });
                 break;
             case SalesPersonActionEnum.DELETE:
                 const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
@@ -185,6 +191,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 break;
             case SalesPersonActionEnum.EDIT:
                 this.salesPersonUniqueName = element?.uniqueName;
+                this.currentSalesPerson = element;
                 this.initForm(element);
                 if (element?.mobileNumber) {
                     this.initIntl(element?.mobileNumber);
@@ -194,13 +201,23 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.openMatExpansionPanel = false;
                 setTimeout(() => {
                     this.openMatExpansionPanel = true;
+                    this.focusInputField();
                 }, 0);
-                this.nameField?.inputFocus();
                 break;
             default:
                 this.componentStore.getAllSalesPerson({ isDropdown: false, params: this.requestParams});
                 break;
         }
+    }
+
+    /**
+     * Focus on Name input field
+     *
+     * @private
+     * @memberof SalesPersonComponent
+     */
+    private focusInputField(): void {
+        this.nameField?.inputFocus();
     }
 
     /**
