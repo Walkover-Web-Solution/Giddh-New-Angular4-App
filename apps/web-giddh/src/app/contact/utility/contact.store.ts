@@ -39,6 +39,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public getLastAccountsInProgress$ = this.select((state) => state.getLastAccountsInProgress);
     public getContactsList$ = this.select((state) => state.contactsList);
     public getAccountStatementList$ = this.select((state) => state.accountStatementList);
+    public getAccountStatementInProgress$ = this.select((state) => state.getAccountStatementInProgress);
     public updateAccountInProcess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountInProcess), (response) => response);;
     public updateAccountIsSuccess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess), (response) => response);
     public isDeleteAccSuccess$: Observable<any> = this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), (response) => response);
@@ -48,6 +49,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), (response) => response);
     public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);
     public showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), (response) => response);
+    public isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), (response) => response);
 
     /**
      * Send email template
@@ -164,7 +166,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
         return data$.pipe(
             switchMap(req => {
                 // Optionally patch state to indicate loading if needed
-                this.patchState({ getAccountStatementInProgress: true });
+                this.patchState({ getAccountStatementInProgress: true, accountStatementList: [] });
                 return this.contactService.getAccountStatementList(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
