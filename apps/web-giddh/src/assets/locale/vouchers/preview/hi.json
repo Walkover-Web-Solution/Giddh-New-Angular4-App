@@ -371,5 +371,9 @@
     "new_receipt": "+ नया रिसीप्ट",
     "new_payment": "+ नया भुगतान",
     "cancel_voucher_confirmation_message": "क्या आप वाकई इस वाउचर को रद्द करना चाहते हैं?",
-    "delete_email_confirmation_message": "क्या आप वाकई इस ईमेल को हटाना चाहते हैं?"
+    "delete_email_confirmation_message": "क्या आप वाकई इस ईमेल को हटाना चाहते हैं?",
+    "custom_field_1": "कस्टम फील्ड 1",
+    "custom_field_2": "कस्टम फील्ड 2",
+    "custom_field_3": "कस्टम फील्ड 3",
+    "select_design_for": "डिज़ाइन के लिए चुनें"
 }

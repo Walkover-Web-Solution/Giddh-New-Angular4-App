@@ -18,7 +18,6 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
 import { OrganizationType } from '../../models/user-login-state';
-
 @Component({
     selector: 'project-wise-accounting',
     styleUrls: ['./project-wise-accounting.component.scss'],
@@ -91,6 +90,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public projectName: FormControl = new FormControl<string>('');
     /** Stores the searched status value for the status filter */
     public projectStatus: FormControl = new FormControl<string>('');
+    /** Stores loading status of profit and loss */
+    public profitAndLossStatus: string = 'loading';
 
     constructor(
         public dialog: MatDialog,
@@ -274,7 +275,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public handleProjectResponse(response: any): void {
         if (response.isCreateFlow) {
-            response.body["profitAndLoss"] = -1;
+            response.body["profitAndLoss"] = null;
             this.totalResults += 1;
             this.dataSource = [response.body, ...this.dataSource];
         } else {
@@ -298,7 +299,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     private addDefaultProfitAndLoss(response: ProjectDetails[]): ProjectDetails[] {
         return response.map(project => ({
             ...project,
-            profitAndLoss: -1
+            profitAndLoss: null
         }));
     }
 
@@ -441,7 +442,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public getProfitLoss(event: any): void {
         if (event?.uniqueName) {
-            event.profitAndLoss = -2;
+            event.profitAndLoss = this.profitAndLossStatus;
             const profitRequest = {
                 companyUniqueName: this.activeCompany.uniqueName,
                 projectUniqueName: event.uniqueName,
@@ -484,7 +485,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.dataSource.forEach((data) => {
-                data.profitAndLoss = -1;
+                data.profitAndLoss = null;
             });
         }
     }

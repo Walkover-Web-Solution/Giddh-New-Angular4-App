@@ -207,10 +207,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isValidForm: boolean = true;
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
-    /** Indicates whether the "Portal" tab is currently selected */
-    public isPortalSelectedTab: boolean = false;
-    /** Indicates whether the "Contact" tab is currently selected */
-    public isContactSelectedTab: boolean = false;
+    /** Indicates whether the "Custom" tab is currently selected */
+    public isCustomSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
     /** Holds active selected Tab Index */
@@ -306,7 +304,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.isParentSundrydebtors = this.checkParentGroup(parent, this.accountingGroupEnum.SundryDebtors);
                     this.showHideAddressTab();
                     this.selectedTabIndex = null;
-                    this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                     this.changeDetectorRef.detectChanges();
 
                     setTimeout(() => {
@@ -411,11 +408,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     this.changeDetectorRef.detectChanges();
                 }
-                if (this.formValueAssigned && response) {
-                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-                }
             });
 
+        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+            if (this.formValueAssigned && response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            }
+        });
 
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -516,7 +515,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addNewPortalUser();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 4000);
+        }, 2500);
     }
 
     public isShowBankDetails(accountType: string) {
@@ -944,6 +943,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.isParentSundrydebtors || this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors)) {
             delete accountRequest['portalDomain'];
         }
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest
@@ -954,6 +954,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
+    }
+
+    /**
+     * Open confirm leave dialog
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public openConfirmLeaveDialog(): void {
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
     }
 
     /**
@@ -971,6 +980,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnDestroy() {
         this.resetAddAccountForm();
         this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1343,8 +1353,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTabIndex = event.index;
-            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
-            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
+            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
         }
     }
 

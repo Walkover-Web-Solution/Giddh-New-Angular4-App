@@ -493,6 +493,12 @@ aside-menu-account .container-fluid {
 .border-top-none {
     border-top: none !important;
 }
+.border-bottom-none {
+    border-bottom: none !important;
+}
+.border-left-none {
+    border-left: none !important;
+}
 .bd-r-right-none {
     border-right: none;
 }
@@ -527,6 +533,15 @@ aside-menu-account .container-fluid {
 }
 .pf {
     position: fixed;
+}
+.vertical-align-top {
+    vertical-align: top;
+}
+.vertical-align-bottom {
+    vertical-align: bottom;
+}
+.vertical-align-middle {
+    vertical-align: middle;
 }
 .black-color {
     color: var(--color-nero);
