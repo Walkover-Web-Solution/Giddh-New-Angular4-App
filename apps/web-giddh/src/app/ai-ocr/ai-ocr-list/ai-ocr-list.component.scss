@@ -17,3 +17,35 @@
     top: anchor(top);
     margin-left: 5px !important;
 }
+
+.custom-branch-wrapper {
+    position: fixed;
+    position-anchor: --datepicker;
+    left: anchor(right);
+    top: anchor(top);
+    margin-left: 5px !important;
+}
+
+.custom-datepicker-wrapper {
+    anchor-name: --datepicker;
+}
+
+.custom-clear-wrapper {
+    position: fixed;
+    position-anchor: --branch;
+    left: anchor(right);
+    top: anchor(top);
+    margin-left: 5px !important;
+}
+
+.custom-branch-wrapper {
+    anchor-name: --branch;
+}
+
+.custom-default-button {
+    position: fixed;
+    position-anchor: --datepicker;
+    left: anchor(right);
+    top: anchor(top);
+    margin-left: 5px !important;
+}
