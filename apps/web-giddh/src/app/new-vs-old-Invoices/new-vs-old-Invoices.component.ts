@@ -30,9 +30,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public selectedYear: string;
     public NewVsOldInvoicesQueryRequest: NewVsOldInvoicesRequest;
     public columnName: string = '';
-    public crdTotal: number = 0;
-    public invTotal: number = 0;
-    public clientTotal: number = 0;
     public newSalesClientTotal: number = 0;
     public totalSalesClientTotal: number = 0;
     public clientAllTotal: number = 0;
@@ -55,6 +52,102 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public bifurcationClients: string = "";
     /** This will hold report year */
     public reportYear: string;
+    public dummyJson  = {
+        "status": "success",
+        "body": {
+            "totalSales": {
+                "invoiceCount": 85,
+                "total": 11932386.5000,
+                "month": "total",
+                "uniqueCount": 5,
+                "uniqueNames": [
+                    "ssmgz1751452891339",
+                    "yztoq1752053194689",
+                    "ohkbo1752648832236",
+                    "vkt3u1752066666409",
+                    "y4ut41752224225850"
+                ],
+                "fromDate": null,
+                "toDate": null
+            },
+            "newSales": {
+                "invoiceCount": 2,
+                "total": 3740,
+                "month": "July",
+                "uniqueCount": 1,
+                "uniqueNames": [
+                    "oq6ue1752557857526",
+                    "d7vlp1752577919911"
+                ],
+                "fromDate": "01-07-2025",
+                "toDate": "31-07-2025"
+            },
+            "oldSales": {
+                "invoiceCount": 83,
+                "total": 11928646.5000,
+                "month": "old sales",
+                "uniqueCount": 4,
+                "uniqueNames": [],
+                "fromDate": "01-01-2025",
+                "toDate": "31-08-2024"
+            },
+            "carriedSales": [
+                {
+                    "invoiceCount": 1,
+                    "total": 256523,
+                    "month": "June",
+                    "uniqueCount": 1,
+                    "uniqueNames": [
+                        "qhupq1752052819577"
+                    ],
+                    "fromDate": "01-06-2025",
+                    "toDate": "30-06-2025"
+                },
+                {
+                    "invoiceCount": 1,
+                    "total": 500,
+                    "month": "May",
+                    "uniqueCount": 1,
+                    "uniqueNames": [
+                        "4e2o71751463947733"
+                    ],
+                    "fromDate": "01-05-2025",
+                    "toDate": "31-05-2025"
+                },
+                {
+                    "invoiceCount": 0,
+                    "total": 0,
+                    "month": "LQ",
+                    "uniqueCount": 0,
+                    "uniqueNames": [],
+                    "fromDate": "01-04-2025",
+                    "toDate": "28-02-2025"
+                },
+                {
+                    "invoiceCount": 0,
+                    "total": 0,
+                    "month": "Last 6 Months",
+                    "uniqueCount": 0,
+                    "uniqueNames": [],
+                    "fromDate": "01-01-2025",
+                    "toDate": "31-08-2024"
+                },
+                {
+                    "invoiceCount": 81,
+                    "total": 11671623.5000,
+                    "month": "LY",
+                    "uniqueCount": 2,
+                    "uniqueNames": [
+                        "ssmgz1751452891339",
+                        "yztoq1752053194689",
+                        "ohkbo1752648832236"
+                    ],
+                    "fromDate": "01-08-2023",
+                    "toDate": "01-08-2024"
+                }
+            ]
+        }
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -113,13 +206,26 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 invoiceCount: null,
                 total: null,
                 month: '',
-                uniqueCount: null
+                uniqueCount: null,
+                fromDate: null,
+                toDate: null   
             },
             newSales: {
                 invoiceCount: null,
                 total: null,
                 month: '',
-                uniqueCount: null
+                uniqueCount: null,
+                fromDate: null,
+                toDate: null   
+            },
+            oldSales: {
+                invoiceCount: null,
+                total: null,
+                month: '',
+                uniqueCount: null,
+                uniqueNames: [],
+                fromDate: null,
+                toDate: null
             },
             carriedSales: []
         };
@@ -143,17 +249,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success" && response?.body) {
-                this.newVsOldInvoicesData = response?.body;
-
-                this.crdTotal = 0;
-                this.invTotal = 0;
-                this.clientTotal = 0;
-
-                this.newVsOldInvoicesData.carriedSales?.forEach((sale) => {
-                    this.crdTotal += sale.total;
-                    this.invTotal += sale.invoiceCount;
-                    this.clientTotal += sale.uniqueCount;
-                });
+                const dummyResponse = this.dummyJson;
+                this.newVsOldInvoicesData = dummyResponse?.body;
+                console.log(this.newVsOldInvoicesData);
 
                 this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
                 this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
@@ -220,5 +318,16 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         if(this.columnName) {
             this.bifurcationClients = this.localeData?.bifurcation_clients?.replace("[COLUMN_NAME]", this.columnName);
         }
+    }
+
+    /**
+     * This will show client list
+     *
+     * @param {any} newVsOldInvoicesData
+     * @param {string} type
+     * @memberof NewVsOldInvoicesComponent
+     */
+    public showClientList(newVsOldInvoicesData: any, type: string, subType: string): void {
+       console.log(newVsOldInvoicesData, type, subType);
     }
 }
