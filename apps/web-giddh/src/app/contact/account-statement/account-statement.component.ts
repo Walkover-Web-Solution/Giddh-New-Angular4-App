@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, Template
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Observable, ReplaySubject } from "rxjs";
+import { combineLatest, Observable, ReplaySubject } from "rxjs";
 import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
@@ -69,6 +69,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public totalRecords: number | null = null;
     /** Observable for the list of account statements from the store */
     public accountStatementList$: Observable<any> = this.contactComponentStore.getAccountStatementList$;
+    /** Observable for the in progress state of account statement */
+    public getAccountStatementInProgress$: Observable<boolean> = this.contactComponentStore.getAccountStatementInProgress$;
     /** Stores the selected date range for API queries */
     public selectedDateRange: any;
     /** Stores the selected date range formatted for UI display */
@@ -118,17 +120,33 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public ngOnInit(): void {
-        this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response && response.transactionDetailList?.length) {
-                    this.accountListData = response.transactionDetailList;
-                    this.responseAccountList = response;
-                    this.totalRecords = response.totalItems;
+
+        combineLatest([
+            this.accountStatementList$,
+            this.getAccountStatementInProgress$
+        ])
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(([response, getAccountStatementInProgress]: [any, boolean]) => {
+            let loaderTimeout = 200; // default
+    
+            // First priority: if in progress, use longer timeout
+            if (getAccountStatementInProgress) {
+                loaderTimeout = 300;
             }
+    
+            // Second priority: if response is present, add 200ms
+            if (response && response.transactionDetailList?.length) {
+                this.accountListData = response.transactionDetailList;
+                this.responseAccountList = response;
+                this.totalRecords = response.totalItems;
+                loaderTimeout += 200;
+            }
+    
             setTimeout(() => {
                 this.isLoading = false;
-            }, 200);
+            }, loaderTimeout);
         });
-        
+
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
