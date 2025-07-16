@@ -203,7 +203,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (this.isUserlogedIn) {
             this.generateBill = generateBillform?.value;
             this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
-            this.generateBill['transactionType'] = '1'; // transactionType is default 1 for Regular
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
@@ -228,6 +227,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.generateEwayBillform.vehicleNo = null;
         this.generateEwayBillform.transDocNo = null;
         this.generateEwayBillform.transDocDate = null;
+        this.generateEwayBillform.transactionType = '1';
     }
 
     public selectTransporter(e) {
