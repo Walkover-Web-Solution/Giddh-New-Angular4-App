@@ -522,7 +522,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
             }
-        }, 2000);
+        }, 500);
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
