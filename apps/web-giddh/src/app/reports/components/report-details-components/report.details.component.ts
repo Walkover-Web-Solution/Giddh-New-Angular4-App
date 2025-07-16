@@ -343,7 +343,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 reportsModelCombined.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
                 reportsModelCombined.interval = this.interval;
                 reportsModelCombined.selectedMonth = this.selectedMonth;
-                reportsModelCombined.salesPerson = item.salesPerson;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = this.commonLocaleData?.app_quarter + ' ' + indexMonths / 3;
