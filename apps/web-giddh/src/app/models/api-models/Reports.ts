@@ -143,6 +143,7 @@ export class PurchaseReportsModel {
     public to?: string;
     public interval?: string;
     public selectedMonth?: string;
+    public salesPerson?: {name: string, uniqueName: string};
 }
 
 export interface PurchaseRegisteDetailedResponse {

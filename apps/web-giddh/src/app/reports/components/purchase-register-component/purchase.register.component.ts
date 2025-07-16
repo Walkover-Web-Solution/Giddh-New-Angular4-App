@@ -316,6 +316,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             reportsModel.to = item.to;
             reportsModel.interval = this.interval;
             reportsModel.selectedMonth = this.selectedMonth;
+            reportsModel.salesPerson = item.salesPerson;
 
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
@@ -569,7 +570,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             this.purchaseRegisterTotal.interval = this.interval;
             this.purchaseRegisterTotal.selectedMonth = this.selectedMonth;
-            this.showColum();
+            this.showColum(item);
         }
     }
 
@@ -635,9 +636,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     /**
      * Updates the visibility of table columns based on specific conditions.
      *
+     * @param {any} item - The transaction item.
      * @memberof PurchaseRegisterComponent
      */
-    public showColum(): void {
+    public showColum(item: any): void {
         Object.keys(this.columnDefinitions).filter((key) => !['purchase', 'particular'].includes(key)).forEach((key) => {
             if (['tcsTotal', 'tdsTotal'].includes(key)) {
                 this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.purchaseRegisterTotal[key];
@@ -645,6 +647,11 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.columnDefinitions[key][1] = !!this.purchaseRegisterTotal[key];
             }
         });
+        if (item?.salesPerson?.name) {
+            this.columnDefinitions['particular'][3] = false;
+        } else {
+            this.columnDefinitions['particular'][3] = true;
+        }
     }
 
     /**
