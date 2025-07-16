@@ -193,7 +193,6 @@
         "filing_period": "Filing Period",
         "gst_return_type": "GST Return Type",
         "type_submit": "Type <strong>SUBMIT</strong> in the text box<span class='text-danger'>*</span>",
-        "gst_form_acceptance": "I accept that on clicking proceed, the return will be locked. I can't undo this or make changes to the return either via Giddh or the GSTN portal.",
         "otp_required_error": "Please add Otp..",
         "submit_gst_error": "Please Enter Submit In Text Box.."
     },
