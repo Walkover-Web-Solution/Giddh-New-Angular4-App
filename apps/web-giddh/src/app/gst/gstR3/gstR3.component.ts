@@ -162,6 +162,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.activeCompanyGstNumber = result;
+                // get session details
+                this.store.dispatch(this.gstAction.GetGSPSession(this.activeCompanyGstNumber));
             }
 
             let request: GstOverViewRequest = new GstOverViewRequest();

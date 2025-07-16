@@ -9,6 +9,7 @@ import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcil
 import { ToasterService } from '../../../services/toaster.service';
 import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { cloneDeep, isEqual } from '../../../lodash-optimized';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -58,6 +59,8 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     public providerOptions: IOption[] = [];
     /** Holds Tax Service Enum */
     public taxServiceEnum: any = TaxServiceEnum;
+    /** Holds initial form value to detect change at time of dialog close */
+    public initialFormValue: any;
 
     constructor(
         private store: Store<AppState>,
@@ -79,6 +82,9 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
                 if (gstNo && gstNo[0]) {
                     this.defaultGstNumber = gstNo[0];
                     this.taxProForm.gstin = this.defaultGstNumber;
+                    setTimeout(() => {
+                        this.initialFormValue = cloneDeep(this.taxProForm);
+                    }, 0);
                 }
             }
         });
@@ -142,6 +148,9 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.taxProForm.gstin = a;
+                setTimeout(() => {
+                    this.initialFormValue = cloneDeep(this.taxProForm);
+                }, 0);
             }
         });
     }
@@ -221,7 +230,11 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
      * @memberof GstAsideMenuComponent
      */
     public toggleCancelModel(): void {
-        this.cancelConfirmationEvent.emit(true);
+        if (isEqual(this.taxProForm, this.initialFormValue)) {
+            this.closeAsideEvent.emit(true);
+        } else {
+            this.cancelConfirmationEvent.emit(true);
+        }
     }
 
     public ngOnDestroy() {
