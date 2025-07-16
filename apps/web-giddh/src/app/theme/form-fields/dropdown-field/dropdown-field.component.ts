@@ -92,6 +92,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** Close autocomplete on foucus out if true */
     /** Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
+    
     constructor(private cdr: ChangeDetectorRef
     ) {
     }
@@ -121,7 +122,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
                 }
             });
         } else {
-            this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
                     this.filterOptions(search);
                 } else {

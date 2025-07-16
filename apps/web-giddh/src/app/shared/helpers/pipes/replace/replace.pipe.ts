@@ -24,6 +24,6 @@ export class ReplacePipe implements PipeTransform {
      * @memberof ReplacePipe
      */
     transform(value: any = '', expressionToReplace: string = '', replaceWith: any): string {
-        return String(value)?.replace(expressionToReplace, replaceWith);
+        return String(value)?.replaceAll(expressionToReplace, replaceWith);
     }
 }

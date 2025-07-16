@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChildren, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChildren, EventEmitter, Output, Inject } from '@angular/core';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'aside-create-combo',
@@ -20,9 +21,9 @@ export class CreateComboComponent implements OnInit {
     public imgPath: string = '';
 
     @ViewChildren('unitNameType') public unitNameType: ShSelectComponent;
-
+    constructor(@Inject(ServiceConfig) private serviceConfig ){}
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 }

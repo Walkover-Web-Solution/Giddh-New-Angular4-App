@@ -921,7 +921,7 @@ textarea {
     }
 }
 
-.voucher-preview-edit {
+.voucher-preview-edit, .giddh-mobile-wrapper {
     .flag-input {
         .mdc-floating-label {
             padding-left: 40px !important;
@@ -2478,7 +2478,7 @@ ul.sub-list {
 }
 
 .w-fit-content {
-    width: fit-content;
+    width: fit-content !important;
 }
 
 .btn-green {
@@ -3670,7 +3670,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .font-14 {
-    font-size: var(--font-size-14);
+    font-size: var(--font-size-14) !important;
 }
 
 .font-15 {
@@ -3835,7 +3835,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .download-invoice-ledger {
-    padding-left: 15px;
+    padding-left: 5px;
     align-items: center;
     font-size: var(--font-size-15);
 }
@@ -5261,6 +5261,18 @@ label {
 
 .d-grid {
     display: grid !important;
+}
+.grid-column-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-column-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid-column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-child-column-full {
+    grid-column: 1 / -1;
 }
 
 .on-hover {
@@ -10382,6 +10394,14 @@ giddh-datepicker {
                             display: flex;
                         }
                     }
+
+                    .linked-entities {
+                        sh-select {
+                            .menu {
+                                min-width: 300px;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -11251,6 +11271,7 @@ inventory-master {
 }
 
 /* template froala */
+
 body {
     &.hide-chat-widget {
         chat-widget {
@@ -12430,7 +12451,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-.table-position-left {
+.table-header-fix {
     position: sticky;
     top: 0;
     background-color: var(--color-white);
@@ -12883,7 +12904,7 @@ hamburger-menu {
 
                 i {
                     position: absolute;
-                    left: 16px;
+                    left: 10px;
                     top: 50%;
                     transform: translateY(-50%);
                 }
@@ -13458,6 +13479,7 @@ voucher-component {
     z-index: 8;
     right: 0;
     top: 15px;
+
     .arrow-dropdown {
         width: 0;
         height: 0;
@@ -13880,10 +13902,6 @@ import-wizard {
     }
 }
 
-.z-index-0 {
-    z-index: 0;
-}
-
 // table header search icon
 .table-search-icon {
     top: 2px;
@@ -13933,6 +13951,10 @@ mat-list {
             text-align: left;
         }
     }
+}
+
+.z-index-0 {
+    z-index: 0;
 }
 
 .search-table {
@@ -14010,6 +14032,50 @@ mat-list {
     width: 150px !important;
 }
 
+.w150 {
+    width: 150px !important;
+}
+
 .bg-white {
     background: var(--color-white) !important;
+}
+
+.template-froala-wrapper {
+    .balance-options {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+    }
+}
+
+.mention-item {
+    padding: 8px 12px;
+}
+
+.tribute-container li {
+    background: var(--color-white) !important;
+}
+
+.tribute-container .highlight {
+    background-color: var(--color-primary-filter-background) !important;
+    color: var(--color-giddh-blue);
 }

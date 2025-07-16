@@ -63,14 +63,13 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
 import { CommonModule } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
 import { MatListModule } from '@angular/material/list';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
-import { TriggersComponent } from './triggers/triggers.component';
 import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
@@ -91,7 +90,6 @@ import { MatDividerModule } from '@angular/material/divider';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
-        TriggersComponent,
         ShopifyIntegrationComponent,
         CustomerPortalComponent,
         TallyIntegrationComponent,

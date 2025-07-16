@@ -600,75 +600,75 @@
                                     </a>
                                     </div>
 
-                                    <button
-                                        mat-icon-button
-                                        id="edit-model-basic"
-                                        class="table-menu-first-td"
-                                        [matMenuTriggerFor]="editModelBasic"
-                                        #trigger="matMenuTrigger"
-                                        aria-label="dots"
-                                    >
-                                        <span class="icon-dots-three-vertical"></span>
-                                    </button>
+                                <button
+                                    mat-icon-button
+                                    id="edit-model-basic"
+                                    class="table-menu-first-td"
+                                    [matMenuTriggerFor]="editModelBasic"
+                                    #trigger="matMenuTrigger"
+                                    aria-label="dots"
+                                >
+                                    <span class="icon-dots-three-vertical"></span>
+                                </button>
 
-                                    <mat-menu #editModelBasic="matMenu">
-                                        <div class="account-detail-custom-header">
-                                            <div class="d-flex p-0">
-                                                <div class="account-detail-padding flex-fill border-right-0">
-                                                    <h3 class="account-detail-custom-title word-break">
-                                                        <span (click)="updateCustomerAcc('customer', account)">
-                                                            {{ account?.name }}
-                                                        </span>
-                                                    </h3>
-                                                </div>
-                                                <a
-                                                    (click)="updateCustomerAcc('customer', account)"
-                                                    class="edit-icon pl-1 pd-t05"
-                                                >
-                                                    <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
-                                                </a>
+                                <mat-menu #editModelBasic="matMenu">
+                                    <div class="account-detail-custom-header">
+                                        <div class="d-flex p-0">
+                                            <div class="account-detail-padding flex-fill border-right-0">
+                                                <h3 class="account-detail-custom-title word-break">
+                                                    <span (click)="updateCustomerAcc('customer', account)">
+                                                        {{ account?.name }}
+                                                    </span>
+                                                </h3>
                                             </div>
-                                            <div class="custom-detail">
-                                                <h4>{{ account?.mobileNo }}</h4>
-                                                <h4>{{ account?.email }}</h4>
-                                                <h4>{{ account?.gstIn }}</h4>
-                                            </div>
+                                            <a
+                                                (click)="updateCustomerAcc('customer', account)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
-                                        <button
-                                            mat-menu-item
-                                            *ngIf="!isMobileScreen"
-                                            class="menu-table-item"
-                                            (click)="performActions(1, account)"
-                                            aria-label="ledger"
-                                        >
-                                            {{ commonLocaleData?.app_goto_ledger }}
-                                        </button>
-                                        <button
-                                            mat-menu-item
-                                            class="menu-table-item"
-                                            (click)="performActions(2, account)"
-                                            aria-label="generate invoice"
-                                        >
-                                            {{ commonLocaleData?.app_generate_invoice }}
-                                        </button>
-                                        <!-- <button
+                                        <div class="custom-detail">
+                                            <h4>{{ account?.mobileNo }}</h4>
+                                            <h4>{{ account?.email }}</h4>
+                                            <h4>{{ account?.gstIn }}</h4>
+                                        </div>
+                                    </div>
+                                    <button
+                                        mat-menu-item
+                                        *ngIf="!isMobileScreen"
+                                        class="menu-table-item"
+                                        (click)="performActions(1, account)"
+                                        aria-label="ledger"
+                                    >
+                                        {{ commonLocaleData?.app_goto_ledger }}
+                                    </button>
+                                    <button
                                         mat-menu-item
                                         class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
+                                        (click)="performActions(2, account)"
+                                        aria-label="generate invoice"
+                                    >
+                                        {{ commonLocaleData?.app_generate_invoice }}
+                                    </button>
+                                    <!-- <button
+                                    mat-menu-item
+                                    class="menu-table-item"
+                                    (click)="performActions(4, account, $event)"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
                                     </button> -->
-                                        <button
-                                            mat-menu-item
-                                            class="menu-table-item"
-                                            (click)="openCustomEmailDialog(account, activeTab, false)"
-                                            aria-label="send email"
-                                        >
-                                            {{ commonLocaleData?.app_send_email }}
-                                        </button>
-                                    </mat-menu>
-                                </div>
-                            </td>
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="openCustomEmailDialog(account, activeTab, false)"
+                                        aria-label="send email"
+                                    >
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </td>
                         </ng-container>
 
                         <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.PARENT_GROUP" [matColumnDef]="customerColumn.value">

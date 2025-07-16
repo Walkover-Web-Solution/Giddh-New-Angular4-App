@@ -2,13 +2,20 @@ import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'PORTAL_URL': PORTAL_URL,
+    'OTP_WIDGET_ID': OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
     'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER
+    'APP_FOLDER': APP_FOLDER,
+    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY,
 };
 
 /** Add Company business type*/
@@ -641,7 +648,6 @@ export const BREAKPOINT_SCREEN_SIZE = {
     SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
     TAB_SCREEN_SIZE: '(1024px > width)'
 }
-
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',
@@ -659,4 +665,27 @@ export const KeyCodesEnum = {
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
     ARROW_LEFT: 'ArrowLeft' 
+};
+
+/** List of all the HTTP methods */
+export enum HttpMethod {
+    POST = 'post',
+    GET = 'get',
+    PUT = 'put',
+    DELETE = 'delete',
+    PATCH = 'patch'
+}
+
+/** Type of all HTTP methods */
+export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
+
+/** Config for aside pane */
+export const ASIDE_PANE_CONFIG: MatDialogConfig = {
+    height: '100dvh',
+    width: 'var(--aside-pane-width)',
+    position: {
+        right: '0',
+        bottom: '0'
+    },
+    disableClose: true
 };

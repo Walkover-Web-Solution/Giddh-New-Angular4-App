@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -29,6 +29,7 @@ import { CommonService } from "../../../services/common.service";
 import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-modal/confirmation-modal.component";
 import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
+import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
     selector: "stock-create-edit",
@@ -280,6 +281,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private location: Location,
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private manufacturingService: ManufacturingService,
         private componentStore: InventoryComponentStore,
         private commonService: CommonService,
@@ -294,7 +296,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 

@@ -120,7 +120,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public ngOnInit(): void {
-
+      
         combineLatest([
             this.accountStatementList$,
             this.getAccountStatementInProgress$
@@ -146,8 +146,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             }, loaderTimeout);
         });
-
-
+        
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                 bsRangeValue: [dayjs(this.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.to, GIDDH_DATE_FORMAT).toDate()]

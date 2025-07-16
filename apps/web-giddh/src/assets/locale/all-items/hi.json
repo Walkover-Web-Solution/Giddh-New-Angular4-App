@@ -940,10 +940,27 @@
                     "icon": "icon-tally-import1"
                 },
                 {
+                    "label": "बहु-मुद्रा रिपोर्ट",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
+                },
+                {
                     "label": "परियोजनावार लेखांकन",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",
                     "description": "प्रत्येक परियोजना के वित्तीय विवरण को कुशलतापूर्वक ट्रैक, प्रबंधित और विश्लेषण करें।"
+                }
+            ]
+        },
+        {
+            "label": "AI",
+            "icon": "icon-audit-log",
+            "items": [
+                {
+                    "label": "OCR",
+                    "link": "/pages/ai-ocr",
+                    "icon": "icon-audit-log",
+                    "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 }
             ]
         },

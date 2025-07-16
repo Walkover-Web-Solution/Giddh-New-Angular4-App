@@ -15,6 +15,22 @@
             })(window, document, "script", "dataLayer", "GTM-K2L9QG");
         </script>
         <!-- End Google Tag Manager -->
+        <script type="text/javascript">
+            window.onload = function () {
+                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
+
+                // Get the logo URL from whiteLabelConfig, with a fallback to the default logo
+                const logoUrl = whiteLabelConfig?.body?.giddhWhiteLabel?.logo || "./assets/images/giddh-big-logo.svg";
+
+                // Ensure DOM is fully loaded before updating the image
+                document.addEventListener("DOMContentLoaded", function () {
+                    let logoElement = document.querySelector("#main-giddh-loader img");
+                    if (logoElement) {
+                        logoElement.src = logoUrl;
+                    }
+                });
+            };
+        </script>
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
         <script type="text/javascript">

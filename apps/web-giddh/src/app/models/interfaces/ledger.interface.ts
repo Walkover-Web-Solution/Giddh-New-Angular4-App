@@ -119,6 +119,8 @@ export interface ITransactionItem {
     companyCurrencyCode?: string;
     companyCurrencySymbol: string;
     voucherGeneratedType?: string;
+    reverseChargeTaxableAmount?: number | null;
+    itcAvailable?: string | null;
 }
 
 /**

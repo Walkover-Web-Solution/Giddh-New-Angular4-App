@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
@@ -23,6 +23,7 @@ import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
 import { BreakpointObserver } from "@angular/cdk/layout";
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -126,6 +127,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private invoicePurchaseActions: InvoicePurchaseActions,
         private gstReconcileActions: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
         private router: Router,
@@ -153,7 +155,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 this.showDate = true;
             }
         });
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.activeCompanyGstNumber = a;

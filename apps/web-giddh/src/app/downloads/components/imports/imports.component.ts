@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, TemplateRef, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -7,7 +7,6 @@ import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter' // load on demand
 dayjs.extend(isSameOrAfter) // use plugin
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
-import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
@@ -18,6 +17,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
+import { download } from '@giddh-workspaces/utils';
+import { ServiceConfig } from '../../../services/service.config';
 
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
@@ -96,7 +97,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** Instance of is electron variable */
     public isElectron: any = isElectron;
 
-    constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -112,7 +113,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('import-page');
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -339,10 +340,10 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Branch change handler
-   *
-   * @memberof EWayBillComponent
-   */
+    * Branch change handler
+    *
+    * @memberof ImportsComponent
+    */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.importRequest.branchUniqueName = selectedEntity?.value;
@@ -375,7 +376,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
@@ -395,7 +396,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }

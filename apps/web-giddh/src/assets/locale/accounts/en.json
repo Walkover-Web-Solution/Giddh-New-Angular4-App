@@ -95,5 +95,6 @@
     "swift_code": "Swift Code",
     "bulk_add": "Bulk Add",
     "enter_value": "Enter value",
-    "change_gst_number_to_update_the_state": "Change GST number to update the state"
+    "change_gst_number_to_update_the_state": "Change GST number to update the state",
+    "default_expiry_days": "Default expiry days"
 }

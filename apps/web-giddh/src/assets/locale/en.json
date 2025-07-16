@@ -215,7 +215,8 @@
         "yearly": "Yearly",
         "month": "Month",
         "year": "Year",
-        "weekly": "Weekly"
+        "weekly": "Weekly",
+        "daily": "Daily"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",
@@ -753,13 +754,14 @@
     "app_select_year": "Select Year",
     "app_select_month": "Select Month",
     "app_user_settings": "User Settings",
-    "app_subscription": "Subscription",
     "app_custom_email": "Custom Email",
-    "app_custom_email_template": "Custom Email Template",
+    "app_custom_email_template":"Custom Email Template",
+    "app_subscription": "Subscription",
     "app_send_voucher_type_whatsapp": "Send [VOUCHER_TYPE] via whatsapp",
     "app_send_payment_receipt_type_whatsapp": "Send [VOUCHER_TYPE] voucher via whatsapp",
     "app_no_access_limit_module": "You currently don't have access to this module. Upgrade your plan to unlock it without any hassle",
     "app_upgrade": "Upgrade",
+    "app_link_account":"Link Account",
     "app_click_here": "Click here",
     "go_to_company_mode": "To edit, go to company mode.",
     "app_bank_accounts":"Bank Accounts",
@@ -778,5 +780,19 @@
     "app_closing_balance": "Closing Balance",
     "app_uncheck_all_item_message": "Are you sure you want to uncheck all rows?",
     "app_account_status": "Account Status",
-    "app_both": "Both"
+    "app_both": "Both",
+    "app_weekdays": {
+        "daily": "Daily",
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+    },
+    "app_skip_and_next": "Skip and Next",
+    "app_save_and_next": "Save and Next",
+    "app_sales_person": "Sales Person",
+    "app_sales_person_placeholder": "Select sales person"
 }
