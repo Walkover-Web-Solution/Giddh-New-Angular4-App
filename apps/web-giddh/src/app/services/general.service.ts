@@ -1098,7 +1098,7 @@ export class GeneralService {
      */
     public getAvailableThemes(): any {
         return [
-            { label: 'Default', value: 'default-theme' },
+            { label: 'Light', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
         ];
     }
