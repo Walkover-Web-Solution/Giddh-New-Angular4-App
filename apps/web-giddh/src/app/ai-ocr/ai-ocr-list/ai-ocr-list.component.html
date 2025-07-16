@@ -17,7 +17,11 @@
                     />
                 </div>
             </div>
-            <div *ngIf="isCompany && activeCompany?.name" class="mr-l1">
+            <div
+                *ngIf="isCompany && activeCompany?.name"
+                class="mr-l1"
+                [ngClass]="{ 'custom-branch-wrapper': isCompany }"
+            >
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_branch"
                     [options]="branches"
@@ -39,6 +43,7 @@
                 "
                 mat-stroked-button
                 class="min160 mr-l1"
+                [ngClass]="isCompany ? 'custom-clear-wrapper' : 'custom-default-button'"
                 color="primary"
                 (click)="clearFilter()"
             >
@@ -46,7 +51,7 @@
             </button>
         </div>
         <giddh-page-loader *ngIf="ocrListInProgress$ | async"></giddh-page-loader>
-        <section [hidden]="!showData || (ocrListInProgress$ | async)" class="mt-4">
+        <section [hidden]="!showData || (ocrListInProgress$ | async)">
             <form
                 class="table-responsive table-header-sticky overflow-visible"
                 name="ocrDocumentListForm"
@@ -208,7 +213,7 @@
             <div
                 *ngIf="
                     isCompany &&
-                    !(  
+                    !(
                         showClearFilter ||
                         ocrDocumentListForm?.controls['user']?.value ||
                         ocrDocumentListForm?.controls['fileName']?.value ||

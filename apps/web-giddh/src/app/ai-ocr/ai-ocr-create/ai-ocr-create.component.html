@@ -11,7 +11,10 @@
                 <div *ngIf="!isFileUploading" class="error danger text-center">
                     <span>{{ localeData?.invoice_preview_unavailable }}</span>
                 </div>
-                <img height="100%" width="100%" *ngIf="!isFileUploading && imagePreviewSource" [src]="imagePreviewSource" alt="pdf" />
+                <div class="w-100">
+                    <img height="100%" width="100%" *ngIf="!isFileUploading && imagePreviewSource" [src]="imagePreviewSource" alt="img" />
+                </div>
+               
                 <iframe
                     *ngIf="!isFileUploading && sanitizedPdfFileUrl"
                     #pdfContainer

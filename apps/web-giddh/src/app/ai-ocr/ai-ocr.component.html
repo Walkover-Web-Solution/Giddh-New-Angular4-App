@@ -48,12 +48,12 @@
                         style="display: none"
                         (change)="onFileSelected($event)"
                     />
-                    <a
+                    <button
                         aria-label="show"
-                        mat-button
+                        mat-stroked-button
+                        color="primary"
                         [disabled]="isCompany || isConsolidatedBranch"
-                        href="javascript:void(0)"
-                        class="icomoon-ico d-flex align-items-center"
+                        class="icomoon-ico d-flex align-items-center cursor-pointer"
                         [matTooltip]="commonLocaleData?.app_upload"
                         matTooltipClass="tooltip-black"
                         [matTooltipPosition]="'above'"
@@ -64,7 +64,7 @@
                             [diameter]="20"
                         ></giddh-progress-spinner>
                         <span *ngIf="!(ocrUploadInProgress$ | async)"> <i class="icon-upload lh-0"></i></span>
-                    </a>
+                    </button>
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="overflow-visible">
                         <mat-button-toggle
                             [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0"
@@ -72,9 +72,16 @@
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"
                         >
-                        <div matBadge="{{ countVariable }}" matBadgeOverlap="true">
-                            {{ commonLocaleData?.app_create }} {{ localeData?.voucher }}
-                        </div>
+                            <div
+                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                matBadge="{{ countVariable }}"
+                                matBadgeOverlap="true"
+                            >
+                                {{ commonLocaleData?.app_create }} {{ localeData?.voucher }}
+                            </div>
+                            <div *ngIf="isCompany || isConsolidatedBranch">
+                                {{ commonLocaleData?.app_create }} {{ localeData?.voucher }}
+                            </div>
                         </mat-button-toggle>
                         <mat-button-toggle
                             class="w125"
@@ -94,6 +101,9 @@
                         {{ commonLocaleData?.app_save_and_next }}
                     </button>
                 </div>
+            </div>
+            <div class="mr-t1 d-flex align-items-center" *ngIf="isCompany">
+                <span class="font-16 mr-r1">{{ localeData?.create_voucher_messgae }} </span>
             </div>
             <main class="flex-grow-1 overflow-auto main-ocr">
                 <ng-container [ngSwitch]="selectedToggle">

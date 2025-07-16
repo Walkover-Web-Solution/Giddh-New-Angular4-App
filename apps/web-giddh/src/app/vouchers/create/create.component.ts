@@ -5200,6 +5200,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnDestroy(): void {
         this.componentStore.resetAll();
+        this.aiOcrService.getOcrData$.next(null);
+        this.aiOcrService.ocrList$.next(null);
+        this.aiOcrService.aiOcrDetails$.next(null);
+        this.aiOcrService.uploadDataSuccess$.next(null);
+        this.aiOcrService.saveAndNext$.next(null);
+        this.aiOcrService.skipAndNext$.next(null);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
