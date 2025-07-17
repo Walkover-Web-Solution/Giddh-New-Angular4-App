@@ -3807,7 +3807,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
         if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber : '';
+            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, '') : '';
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
@@ -5163,7 +5163,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private handleEnterPress(event: KeyboardEvent): void {
         const activeElement = document.activeElement;
-        const isInputFocused = activeElement && (activeElement.tagName === HtmlElementEnum.Button || activeElement.tagName === HtmlElementEnum.Textarea);
+        const isInputFocused = activeElement && activeElement.tagName === HtmlElementEnum.Button;
         if (!isInputFocused && event.key === KeyCodesEnum.ENTER) { // Only navigate if no input field is focused
             event.preventDefault();
         }
