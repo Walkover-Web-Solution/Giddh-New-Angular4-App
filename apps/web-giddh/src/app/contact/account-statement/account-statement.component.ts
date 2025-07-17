@@ -14,6 +14,7 @@ import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
 import { cloneDeep } from "../../lodash-optimized";
 import { TransactionType } from "../../models/api-models/Ledger";
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: "account-statement",
@@ -149,6 +150,13 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.advanceFiltersApplied = false;
                 this.clearFilter = true;
                 this.getAccountStatementList();
+            }
+        });
+
+        this.contactComponentStore.exportAccountStatementResponse$.pipe(takeUntil(this.destroyed$)).subscribe(exportResponse => {
+            if (exportResponse?.data) {
+                const data = this.generalService.base64ToBlob(exportResponse.data, 'application/xml', 512);
+                saveAs(data, exportResponse.name);
             }
         });
     }
@@ -429,6 +437,21 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.showTransactionInput = false;
             }
         }
+    }
+
+    /**
+     * Export account statement
+     *
+     * @memberof AccountStatementComponent
+     */
+    public exportAccountStatement(): void {
+        const requestObj = {
+            accountUniqueName: this.accountListRequest.accountUniqueName,
+            query: this.accountListRequest.q,
+            from: this.accountListRequest.from,
+            to: this.accountListRequest.to
+        }
+        this.contactComponentStore.exportAccountStatement(requestObj);
     }
 
     /**
