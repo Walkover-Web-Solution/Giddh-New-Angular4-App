@@ -857,7 +857,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private getFlattenAccountGroupList(model: any): void {
-        this.componentStore.getFlattenAccountGroupList(model);
+        this.componentStore.getFlattenAccountGroupList({request: model, model: ["sundrydebtors", "sundrycreditors"]});
     }
 
     /**
