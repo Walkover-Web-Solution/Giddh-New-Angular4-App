@@ -55,7 +55,6 @@
                         <mat-select
                         name="actions"
                         [multiple]="true"
-                        [required]="true"
                         [formControl]="customTriggerForm?.controls?.actions"
                         >
                         <mat-select-trigger>
@@ -122,11 +121,10 @@
                     <mat-form-field appearance="outline">
                         <mat-label>{{ commonLocaleData?.app_time }}</mat-label>
                         <input
-                        matInput
-                        type="time"
-                        [placeholder]="localeData?.enter_time"
-                        formControlName="time"
-                        required
+                            matInput
+                            type="time"
+                            [placeholder]="localeData?.enter_time"
+                            formControlName="time"
                         />
                     </mat-form-field>
                     </div>
@@ -414,7 +412,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" (click)="$event.stopPropagation()">
                         <input
                             type="text"
                             #subjectInputField

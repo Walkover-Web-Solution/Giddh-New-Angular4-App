@@ -28,9 +28,9 @@ export class TriggersComponent implements OnInit {
         private campaignIntegrationService: CampaignIntegrationService,
         private router: Router
     ) { 
-        this.componentStore.triggerList$.pipe(skip(1), take(1), filter(Boolean)).subscribe((res) => {
+        this.componentStore.triggerList$.pipe(skip(1), filter(Boolean), take(1)).subscribe((res) => {
             if (res?.results?.length) {
-                this.router.navigate(["/pages/triggers/basic"]);
+                this.router.navigate(["/pages/settings/trigger/basic"]);
             } else {
                 this.campaignIntegrationService.getTriggersList({
                     count: 1,
@@ -38,7 +38,7 @@ export class TriggersComponent implements OnInit {
                 }).pipe(filter(Boolean)).subscribe(response => {
                     if (response?.status === "success") {
                         if (response?.body?.items?.length > 0) {
-                            this.router.navigate(["/pages/triggers/advance"]);
+                            this.router.navigate(["/pages/settings/trigger/advance"]);
                         } else {
                             this.isLoading = false;
                         }
@@ -79,7 +79,7 @@ export class TriggersComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((response) => {
             if (response) {
-                this.router.navigate(["/pages/triggers/basic"]);
+                this.router.navigate(["/pages/settings/trigger/basic"]);
             }
         });
     }
