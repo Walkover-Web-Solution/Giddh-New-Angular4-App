@@ -227,4 +227,21 @@ export class ContactService {
             return this.http.get(buildUrl()).pipe(handleResponse, catchError(handleError));
         }
     }
+
+    /**
+     * Export account statement API call
+     * 
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof ContactService
+     */
+    public exportAccountStatement(requestObj: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNT_STATEMENT_API.EXPORT_ACCOUNT_STATEMNET, requestObj)).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.request = '';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
+    }
 }
