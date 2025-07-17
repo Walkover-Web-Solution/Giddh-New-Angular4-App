@@ -15,6 +15,7 @@ import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { AccountingGroupEnum } from '../Enums/common.enum';
 
 @Component({
     selector: 'template-froala',
@@ -857,7 +858,10 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private getFlattenAccountGroupList(model: any): void {
-        this.componentStore.getFlattenAccountGroupList(model);
+        this.componentStore.getFlattenAccountGroupList({
+            request: model,
+            model: [AccountingGroupEnum.SundryDebtors, AccountingGroupEnum.SundryCreditors]
+        });
     }
 
     /**

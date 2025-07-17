@@ -192,16 +192,16 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
      *
      * @memberof CustomEmailComponentStore
      */
-    readonly getFlattenAccountGroupList = this.effect((data: Observable<any>) => {
+    readonly getFlattenAccountGroupList = this.effect((data: Observable<{request: any, model: string[]}>) => {
         return data.pipe(
             mergeMap((req) => {
                 this.patchState({ accountGroupList: null });
-                return this.inventoryService.getFlattenGroupWithAccountsList(req).pipe(
+                return this.inventoryService.getFlattenGroupWithAccountsList(req.request, req.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    accountGroupList: res?.body?.results?.filter((item: any) => item?.type === req.entity) ?? []
+                                    accountGroupList: res?.body?.results?.filter((item: any) => item?.type === req.request.entity) ?? []
                                 });
                             } else {
                                 if (res.message) {

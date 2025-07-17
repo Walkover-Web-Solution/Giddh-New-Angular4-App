@@ -1633,17 +1633,16 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public getFlattenGroupWithAccountsList(request: any): Observable<BaseResponse<any, any>> {
+    public getFlattenGroupWithAccountsList(request: any, model: string[]): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_FLATTEN_GROUP_WITH_ACCOUNTS
         ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         ?.replace(':page', encodeURIComponent(request.page))
         ?.replace(':count', encodeURIComponent(request.count))
-        ?.replace(':group', encodeURIComponent(request.group))
         ?.replace(':query', encodeURIComponent(request.query || ''))
         ?.replace(':entity', encodeURIComponent(request.entity || 'BOTH'));
 
-        return this.http.get(apiUrl).pipe(map((res) => {
+        return this.http.post(apiUrl, model).pipe(map((res) => {
             let data: BaseResponse<any[], string> = res;
             data.request = '';
             data.queryString = {};
