@@ -7,7 +7,7 @@ import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
-import { EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
+import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
 import { cloneDeep } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -308,6 +308,11 @@ export class TemplateFroalaComponent implements OnInit {
                 this.toEmails = mappedEmail;
                 this.ccEmails = mappedEmail;
                 this.bccEmails = mappedEmail;
+
+                if (this.isTrigger) {
+                    this.voucherList = this.generalService.getVoucherTypeList(this.commonLocaleData, response?.voucherNames);
+                    this.filteredVoucherList = this.voucherList;
+                }
             }
         });
 
@@ -481,7 +486,7 @@ export class TemplateFroalaComponent implements OnInit {
                 bcc: [''],
                 executionTime: this.getExecutionTimeFormGroup(),
                 actions: [[TriggerActionEnum.AttachVoucherPdf]],
-                html: ['', [Validators.required]],
+                html: [DEFAULT_TRIGGER_TEMPLATE, [Validators.required]],
                 disabled: [false]
             });
         } else {
@@ -659,7 +664,7 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
         }
-
+        
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -907,8 +912,6 @@ export class TemplateFroalaComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData, true, ['sunday']);
-            this.voucherList = this.generalService.getVoucherTypeList(this.commonLocaleData);
-            this.filteredVoucherList = this.voucherList;
             this.dayOfMonthOptions = this.generalService.getDaysOfMonth();
             this.triggerOptions = [
                 { label: this.localeData?.voucher_due, value: TriggerModuleEnum.VoucherDue }

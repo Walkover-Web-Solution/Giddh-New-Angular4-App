@@ -2262,38 +2262,61 @@ export class GeneralService {
      * Retrieves a list of available voucher types with localized labels.
      *
      * @param commonLocaleData 
+     * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
-    public getVoucherTypeList(commonLocaleData: any): IOption[] {
-        return [{
+    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = ['sales', 'purchase', 'purchase order', 'receipt', 'payment', 'estimate', 'proforma', 'debit note', 'credit note']): IOption[] {
+        const allVouchers = [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.purchase,
             value: 'purchase'
-        }, {
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.purchase_order,
+            value: 'purchase order'
+        },
+        {
             label: commonLocaleData?.app_voucher_types.receipt,
             value: 'receipt'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.payment,
             value: 'payment'
-        }, {
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.estimate,
+            value: 'estimate'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.proforma,
+            value: 'proforma'
+        },
+        {
             label: commonLocaleData?.app_voucher_types.journal,
             value: 'journal'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.contra,
             value: 'contra'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.debit_note,
             value: 'debit note'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.credit_note,
             value: 'credit note'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
+
+        return onlyVouchers.length > 0 ? allVouchers.filter(voucher => onlyVouchers.includes(voucher.value)) : allVouchers;
     }
 
     /**

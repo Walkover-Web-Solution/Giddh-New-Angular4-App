@@ -87,9 +87,12 @@
     "app_voucher_types": {
         "sales": "विक्री",
         "purchase": "खरेदी",
+        "purchase_order": "खरेदी अर्थात",
         "purchases": "खरेदी",
         "receipt": "पावती",
         "payment": "देय",
+        "estimate": "आयात",
+        "proforma": "प्रोफॉर्मा",
         "journal": "जर्नल",
         "contra": "कॉन्ट्रा",
         "debit_note": "डेबिट टीप",
