@@ -252,6 +252,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
                     this.selectedBccEmails = this.customTriggerForm.get(EmailType.Bcc)?.value;
                     this.selectedCcEmails = this.customTriggerForm.get(EmailType.Cc)?.value;
+                    this.showDayOfWeek = Boolean(triggerDetails.executionTime.dayOfWeek);
                     this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity }, true);
                     this.clickedOutsideEmail();
                 }
@@ -343,6 +344,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private readonly searchPipe = pipe(
+        distinctUntilChanged(),
         debounceTime(700),
         takeUntil(this.destroyed$)
     );
@@ -478,7 +480,7 @@ export class TemplateFroalaComponent implements OnInit {
                 cc: [''],
                 bcc: [''],
                 executionTime: this.getExecutionTimeFormGroup(),
-                actions: [[TriggerActionEnum.AttachVoucherPdf], [Validators.required]],
+                actions: [[TriggerActionEnum.AttachVoucherPdf]],
                 html: ['', [Validators.required]],
                 disabled: [false]
             });
@@ -524,7 +526,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private getExecutionTimeFormGroup(value?: any): FormGroup {
         return this.formBuilder.group({
-            time: [value?.time ?? '', [Validators.required]],
+            time: [value?.time ?? ''],
             dayOfWeek: [value?.dayOfWeek ?? ''],
             dayOfMonth: [value?.dayOfMonth ?? '']
         });
@@ -643,7 +645,9 @@ export class TemplateFroalaComponent implements OnInit {
         if (!formValue.executionTime.dayOfMonth) {
             delete formValue.executionTime.dayOfMonth;
         }
-
+        if (!formValue.executionTime.time) {
+            delete formValue.executionTime.time;
+        }
         if (!formValue.voucherTypes?.length) {
             delete formValue.voucherTypes;
         }
