@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import Tribute from 'tributejs';
 
 @Directive({
@@ -14,6 +14,12 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
   @Output() mentionSelected = new EventEmitter<any>();
   /** Holds the Tribute instance. */
   private tributeInstance!: Tribute<any>;
+
+  private triggerMap: { [key: string]: { prefix: string, suffix: string } } = {
+    '@': { prefix: '@', suffix: '' },
+    '{': { prefix: '{', suffix: '}' }
+  };
+
 
   constructor(private hostElement: ElementRef) { }
 
@@ -34,10 +40,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    * @memberof TributeMentionDirective
    */
   public ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes.mentionList &&
-      changes.mentionList.currentValue !== changes.mentionList.previousValue
-    ) {
+    if (changes.mentionList && changes.mentionList.currentValue !== changes.mentionList.previousValue) {
       this.initializeTribute();
     }
     if (changes.tributeConfig) {
@@ -52,6 +55,9 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    * @memberof TributeMentionDirective
    */
   private initializeTribute(): void {
+    const trigger = this.tributeConfig.trigger || '{'; // Default trigger '{'
+    const triggerSettings = this.triggerMap[trigger];
+
     const tributeOptions = {
       ...this.tributeConfig,
       values: this.mentionList,
@@ -60,7 +66,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       menuItemTemplate: (item: any) =>
         `<div class="mention-item">${item.original.key}</div>`,
       selectTemplate: (item: any) =>
-       item?.original?.value ? `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}` : '',
+        item?.original?.value ? `${triggerSettings.prefix || ''}${item.original.value}${triggerSettings.suffix || ''}` : 'OOOOKKKK',
     };
 
     this.destroyTribute(); // Clean up any previous instance
@@ -81,7 +87,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    */
   private destroyTribute(): void {
     if (this.tributeInstance) {
-        this.tributeInstance.detach(this.hostElement.nativeElement);
+      this.tributeInstance.detach(this.hostElement.nativeElement);
     }
   }
 
