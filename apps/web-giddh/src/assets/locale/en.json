@@ -87,9 +87,12 @@
     "app_voucher_types": {
         "sales": "Sales",
         "purchase": "Purchase",
+        "purchase_order": "Purchase Order",
         "purchases": "Purchases",
         "receipt": "Receipt",
         "payment": "Payment",
+        "estimate": "Estimate",
+        "proforma": "Proforma",
         "journal": "Journal",
         "contra": "Contra",
         "debit_note": "Debit Note",

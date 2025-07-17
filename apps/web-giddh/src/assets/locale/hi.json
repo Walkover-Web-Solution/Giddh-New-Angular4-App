@@ -87,9 +87,12 @@
     "app_voucher_types": {
         "sales": "बिक्री",
         "purchase": "खरीद",
+        "purchase_order": "खरीद अर्थात",
         "purchases": "खरीद",
         "receipt": "रसीद",
         "payment": "भुगतान",
+        "estimate": "आयात",
+        "proforma": "प्रोफॉर्मा",
         "journal": "पत्रिका",
         "contra": "विपरीत",
         "debit_note": "डेबिट नोट",
