@@ -4,7 +4,10 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="common-wrapper" *ngIf="totalRecords !== null && responseAccountList">
+<div class="no-data" *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+    <div class="common-wrapper" *ngIf="accountListData?.length && !isLoading">
         <div class="account-statement p-20 mr-t20">
             <table class="w-100">
                 <tr>
@@ -152,7 +155,7 @@
                                         {{
                                             responseAccountList.accountSummary.closingBalance?.amount >= 0
                                                 ? (responseAccountList.accountSummary.closingBalance?.type ===
-                                                  transactionType.CREDIT
+                                                  transactionType.Credit
                                                       ? "-"
                                                       : "") +
                                                   (responseAccountList.accountAddress.currency?.symbol ?? "") +
@@ -288,7 +291,7 @@
                                 >
                                     <span
                                         >{{
-                                            element?.voucherAmount.type === transactionType.DEBIT
+                                            element?.voucherAmount.type === transactionType.Debit
                                                 ? element?.voucherAmount?.amount
                                                 : "-"
                                         }}
@@ -310,7 +313,7 @@
                                     class="sort-header-right text-right"
                                 >
                                     {{
-                                        element?.voucherAmount.type !== transactionType.DEBIT
+                                        element?.voucherAmount.type !== transactionType.Debit
                                             ? element?.voucherAmount?.amount
                                             : "-"
                                     }}
@@ -332,7 +335,7 @@
                                 >
                                     {{
                                         element.closingBalance?.amount >= 0
-                                            ? (element.closingBalance?.type === transactionType.CREDIT ? "-" : "") +
+                                            ? (element.closingBalance?.type === transactionType.Credit ? "-" : "") +
                                               element.closingBalance.amount
                                             : ""
                                     }}
@@ -348,7 +351,7 @@
                                         {{
                                             responseAccountList.accountSummary.closingBalance?.amount >= 0
                                                 ? (responseAccountList.accountSummary.closingBalance?.type ===
-                                                  transactionType.CREDIT
+                                                  transactionType.Credit
                                                       ? "-"
                                                       : "") +
                                                   (responseAccountList.accountAddress.currency?.symbol ?? "") +
@@ -378,7 +381,7 @@
                             [showFirstLastButtons]="true"
                             [pageSizeOptions]="pageSizeOptions"
                             [hidePageSize]="false"
-                            [pageIndex]="pageIndex"
+                            [pageIndex]="accountListRequest.page - 1"
                         >
                         </mat-paginator>
                     </div>

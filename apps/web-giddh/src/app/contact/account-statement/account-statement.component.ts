@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
@@ -43,7 +43,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Holds common localized JSON data shared across modules */
     public commonLocaleData: any = {};
     /** True if API call is in progress */
-    public isLoading: boolean = false;
+    public isLoading: boolean = true;
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
@@ -63,8 +63,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         sort: '',
         q: '',
     };
-    /** Current page index for the paginator */
-    public pageIndex: number = 0;
     /** Options for the number of rows shown per page */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Total number of records available for pagination */
@@ -121,13 +119,16 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response) {
-                this.accountListData = response.transactionDetailList;
-                this.responseAccountList = response;
-                this.totalRecords = response.totalItems;
+            if (response && response.transactionDetailList?.length) {
+                    this.accountListData = response.transactionDetailList;
+                    this.responseAccountList = response;
+                    this.totalRecords = response.totalItems;
             }
-            this.isLoading = false;
+            setTimeout(() => {
+                this.isLoading = false;
+            }, 200);
         });
+        
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -189,6 +190,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.advanceFiltersApplied = false;
         this.clearFilter = false;
         this.isSearching = false;
+        let dateRange = { fromDate: '', toDate: '' };
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
+        this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+        this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.advanceSearchRequest.accountUniqueName = this.activeAccountUniqueName;
 
@@ -204,10 +209,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
-        this.pageIndex = event.pageIndex;
         this.accountListRequest.count = event.pageSize;
         this.accountListRequest.page = event.pageIndex + 1;
-        this.getAccountStatementList();
+        this.getAccountStatementList(true);
     }
 
     /**
@@ -242,9 +246,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-            if (!this.isLoading) {
-                this.getAccountStatementList();
-            }
+            this.getAccountStatementList();
         }
     }
 
@@ -294,11 +296,16 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      *
      * @memberof AccountStatementComponent
      */
-    public getAccountStatementList(): void {
+    public getAccountStatementList(isAdvanceSearch: boolean = false): void {
         this.isLoading = true;
         this.accountListData = [];
         const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
+            if (!isAdvanceSearch) {
+                this.accountListRequest.page = 1;
+            }
+            this.accountListRequest.from = this.selectedDateRange.startDate.format(GIDDH_DATE_FORMAT);
+            this.accountListRequest.to = this.selectedDateRange.endDate.format(GIDDH_DATE_FORMAT);
             const requestObj = {
                 body: advReq,
                 method: 'POST',

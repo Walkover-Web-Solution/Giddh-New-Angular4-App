@@ -10,7 +10,7 @@ import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions
 import { slice } from '../../lodash-optimized';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
-import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
+import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
 import { DEFAULT_AC } from '../../models/default-menus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
@@ -38,6 +38,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the active ledger account details */
     public activeAccount$: Observable<AccountResponse>;
+    /** Stores the active ledger account details */
+    public activeAccount: AccountResponse;
     /** Stores the active company details */
     public selectedCompanyDetails: CompanyResponse;
     /** Current organization type */
@@ -105,6 +107,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private currentUrl: string = "";
     /** Hold previous url */
     private previousUrl: string = "";
+    /** Holds active company unique name */
+    public ledgerAccount$: Observable<AccountResponse | AccountResponseV2>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -120,6 +124,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         public dialog: MatDialog,
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
+        this.ledgerAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
@@ -342,6 +347,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.router.url.includes("/ledger")) {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if (account) {
+                    this.activeAccount = account;
+                }
                 if (account && !this.isItemAdded) {
                     this.isItemAdded = true;
                     // save data to db
@@ -349,6 +357,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     item.time = +new Date();
                     item.route = this.router.url;
                     item.parentGroups = account.parentGroups;
+                    item.uniqueName = account?.uniqueName;
+                    item.name = account.name;
+                    this.doEntryInDb('accounts', item);
+                }
+            });
+
+            this.ledgerAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if (account && account.uniqueName === this.activeAccount?.uniqueName) {
+                    let item: any = {};
                     item.uniqueName = account?.uniqueName;
                     item.name = account.name;
                     this.doEntryInDb('accounts', item);
