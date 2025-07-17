@@ -2266,7 +2266,7 @@ export class GeneralService {
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
-    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = ['sales', 'purchase', 'purchase order', 'receipt', 'payment', 'estimate', 'proforma', 'debit note', 'credit note']): IOption[] {
+    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = []): IOption[] {
         const allVouchers = [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
