@@ -234,6 +234,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                     this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
                     this.getCreatedTemplates();
+                    this.getCreateNewVoucherText();
                     this.subscribeStoreObservable();
                 }
                 if (params?.page) {

@@ -167,6 +167,7 @@
 <ng-template #cancelConfirmationDialog>
     <confirm-modal
         [body]="localeData?.filing?.cancel_title"
+        [permanentlyDeleteMessage]="' '"
         (successCallBack)="cancelConfirmationDialogRef?.close(); asideAuthenticationDialogRef?.close()"
         (cancelCallBack)="cancelConfirmationDialogRef?.close()"
     ></confirm-modal>

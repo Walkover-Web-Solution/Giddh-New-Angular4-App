@@ -97,7 +97,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
     readonly getAllOcrList = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ ocrListInProgress: true });
+                this.patchState({ ocrList: [], ocrListInProgress: true });
                 return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -136,7 +136,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
     readonly getAllMainPageOcrData = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ ocrMainListInProgress: true });
+                this.patchState({ ocrMainList: [], ocrMainListInProgress: true });
                 return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -254,7 +254,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
     readonly getCompletedCount = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ ocrCompletedCountInProgress: true });
+                this.patchState({ ocrCompletedCount: null, ocrCompletedCountInProgress: true });
                 return this.aiOcrService.getCompletedCount().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {

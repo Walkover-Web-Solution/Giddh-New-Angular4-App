@@ -480,7 +480,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
-    /** True if ocr data is disabled */
+     /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
     public aiOcrDetails$: Observable<any> = this.aiOcrService.aiOcrDetails$;
@@ -4573,9 +4573,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
         if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
-                ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber
-                : "";
+            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, '') : '';
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
@@ -5073,7 +5071,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             roundOff: 0,
             tcsTotal: 0,
             tdsTotal: 0,
-            balanceDue: 0,
+            balanceDue: 0
         };
         this.hasStock = false;
 
@@ -5089,7 +5087,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             subTotal: 0,
             totalTaxableValue: 0,
             totalAdjustedAmount: 0,
-            convertedTotalAdjustedAmount: 0,
+            convertedTotalAdjustedAmount: 0
         };
 
         this.invoiceForm.get("type").patchValue(this.voucherType);
