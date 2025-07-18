@@ -14,7 +14,7 @@ export interface CustomEmailState {
     emailConditionSuggestions: any;
     emailTemplates: any;
     updateCustomEmailIsSuccess: any;
-    accountGroupList: IOption[];
+    accountGroupList: any;
 }
 
 export const DEFAULT_CUSTOM_EMAIL_STATE: CustomEmailState = {
@@ -201,7 +201,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    accountGroupList: res?.body?.results?.filter((item: any) => item?.type === req.request.entity) ?? []
+                                    accountGroupList: res?.body?.results ?? []
                                 });
                             } else {
                                 if (res.message) {
