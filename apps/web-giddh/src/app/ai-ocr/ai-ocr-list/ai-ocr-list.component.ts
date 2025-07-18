@@ -86,16 +86,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public showFileName = false;
     /* True if show header */
     public showData: boolean = true;
-    /** Getter for show search element by type */
-    public get shouldShowElement(): boolean {
-        const shouldShow =
-            this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
-            this.ocrDocumentListForm?.controls["status"]?.value ||
-            this.ocrDocumentListForm?.controls["fileName"]?.value ||
-            this.ocrDocumentListForm?.controls["convertedStatus"]?.value;
-        this.showData = shouldShow;
-        return shouldShow;
-    }
     /** This will use for active company */
     public activeCompany: any = {};
     /** This will store selected date range to use in api */
@@ -131,7 +121,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalActions: GeneralActions
     ) {
-     }
+    }
 
     /**
      * Initializes the component by subscribing to route parameters and fetching ocr data.
@@ -260,6 +250,23 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     this.showFileName = false;
                 }
             });
+    }
+
+    /**
+     * Getter for show search element by type
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof AiOcrListComponent
+     */
+    public get shouldShowElement(): boolean {
+        const shouldShow =
+            this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
+            this.ocrDocumentListForm?.controls["status"]?.value ||
+            this.ocrDocumentListForm?.controls["fileName"]?.value ||
+            this.ocrDocumentListForm?.controls["convertedStatus"]?.value;
+        this.showData = shouldShow;
+        return shouldShow;
     }
 
     /**
