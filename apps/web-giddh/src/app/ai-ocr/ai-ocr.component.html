@@ -73,13 +73,9 @@
                             [checked]="selectedToggle === ocrAction.Create"
                         >
                             <div
-                                *ngIf="!isCompany && !isConsolidatedBranch"
                                 matBadge="{{ countVariable }}"
                                 matBadgeOverlap="true"
                             >
-                                {{ commonLocaleData?.app_create }} {{ localeData?.voucher }}
-                            </div>
-                            <div *ngIf="isCompany || isConsolidatedBranch">
                                 {{ commonLocaleData?.app_create }} {{ localeData?.voucher }}
                             </div>
                         </mat-button-toggle>

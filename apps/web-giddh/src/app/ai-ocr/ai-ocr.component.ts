@@ -95,7 +95,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
-    public isCompany: boolean;
+    public isCompany: boolean = false;
     /** Hold broadcast event */
     public broadcast: any;
 
@@ -146,22 +146,25 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             if (this.listCount > 0) {
                 this.aiOcrStore.getCompletedCount(null);
             }
-            this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                this.ocrCurrentToken = res?.token ? res.token : "";
-                if (res?.token) {
-                    this.selectedToggle = OcrAction.Create;
-                    this.aiOcrService.getOcrData$.next(true);
-                    this.aiOcrService.aiOcrDetails$.next(res);
-                    setTimeout(() => {
-                        this.innerLoading = false;
-                    }, 200);
-                } else {
-                    this.aiOcrService.getOcrData$.next(false);
-                    this.aiOcrService.aiOcrDetails$.next(null);
+        });
+
+        this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.ocrCurrentToken = res?.token ? res.token : "";
+            this.aiOcrService.saveAndNext$.next(null);
+            this.aiOcrService.skipAndNext$.next(null);
+            if (res?.token) {
+                this.selectedToggle = OcrAction.Create;
+                this.aiOcrService.getOcrData$.next(true);
+                this.aiOcrService.aiOcrDetails$.next(res);
+                setTimeout(() => {
                     this.innerLoading = false;
-                }
-                this.changeDetection.detectChanges();
-            });
+                }, 200);
+            } else {
+                this.aiOcrService.getOcrData$.next(false);
+                this.aiOcrService.aiOcrDetails$.next(null);
+                this.innerLoading = false;
+            }
+            this.changeDetection.detectChanges();
         });
 
         // Call getCompletedCount every 5 seconds
@@ -181,7 +184,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
         // Update countVariable when the completed count is retrieved
         this.ocrCompletedCount$.pipe(takeUntil(this.destroyed$)).subscribe((count: number) => {
-            if (count) {
+            if (count != null) { 
                 this.countVariable = count;
                 this.buttonDisabled = this.countVariable === 0 ? true : false;
                 this.changeDetection.detectChanges();
@@ -218,7 +221,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
 
         this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
+            if (response?.type === OcrAction.Save && response !== null) {
+                this.aiOcrService.saveAndNextSuccess$.next(null);
+                this.aiOcrService.skipAndNext$.next(null);
                 this.innerLoading = true;
                 this.aiOcrStore.getExtractDocuments(response ?? "");
                 this.aiOcrStore.getCompletedCount(null);
@@ -227,7 +232,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         });
 
         this.aiOcrService.skipAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response?.type === OcrAction.Skip) {
+            if (response?.type === OcrAction.Skip && response !== null) {
+                this.aiOcrService.saveAndNextSuccess$.next(null);
+                this.aiOcrService.skipAndNext$.next(null);
                 this.innerLoading = true;
                 this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token });
             }
