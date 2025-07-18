@@ -195,8 +195,6 @@ export class TemplateFroalaComponent implements OnInit {
     public accountGroupDropdown: FormControl = new FormControl();
     /** This will use for instance of action Dropdown */
     public actionListDropdown: FormControl = new FormControl();
-    /** Holds static group for trigger */
-    public groupForTrigger: string = 'sundrydebtors';
     /** Holds true if form is invalid */
     public isFormInvalid: boolean = false;
     /** Holds true if it is trigger */
@@ -275,7 +273,6 @@ export class TemplateFroalaComponent implements OnInit {
                 this.getFlattenAccountGroupList({
                     page: 1,
                     count: PAGINATION_LIMIT,
-                    group: this.groupForTrigger,
                     entity: this.customTriggerForm?.get('entity')?.value,
                     query: search || ''
                 });
@@ -846,7 +843,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.getFlattenAccountGroupList({
             page: 1,
             count: PAGINATION_LIMIT,
-            group: this.groupForTrigger,
             entity: event.value
         });
     }
