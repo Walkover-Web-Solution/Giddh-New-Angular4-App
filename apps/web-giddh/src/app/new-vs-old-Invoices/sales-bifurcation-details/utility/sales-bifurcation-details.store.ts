@@ -5,10 +5,9 @@ import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-model
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
 import { SalesBifurcationDetailsService } from "./sales-bifurcation-details.service";
-import { HttpMethod } from "../../../app.constant";
 
 export interface SalesBifurcationDetailsState {
-    salesBifurcationDetailsList: CommonPaginatedResponse<any>;
+    salesBifurcationDetailsList: any;
     salesBifurcationDetailsListInProgress: boolean
 }
 
@@ -39,17 +38,17 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
      *   `{ label: item.name, value: item.uniqueName }` for dropdowns.
      * @memberof SalesBifurcationDetailsStore
      */
-    readonly getAllSalesBifurcationDetails = this.effect((data: Observable<{params: any }>) => {
+    readonly getAllSalesBifurcationDetails = this.effect((data: Observable<{ params: any }>) => {
         return data.pipe(
             switchMap(({ params }) => {
                 this.patchState({ salesBifurcationDetailsListInProgress: true });
-                return this.salesBifurcationDetailsService.salesBifurcationDetails(HttpMethod.GET, null, null, params).pipe(
+                return this.salesBifurcationDetailsService.salesBifurcationDetails(params).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                let response = res?.body;
+                                console.log(res);
                                 this.patchState({
-                                    salesBifurcationDetailsList: response,
+                                    salesBifurcationDetailsList: res.body,
                                     salesBifurcationDetailsListInProgress: false,
                                 });
                             } else {

@@ -180,19 +180,19 @@
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div class="div-cell align-end">
                             <a class="d-inline-flex cursor-pointer" href="javascript:void(0)" (click)="showClientList(newVsOldInvoicesData?.oldSales,'old', 'client')">
-                                <amount-field  [amount]="newVsOldInvoicesData?.oldSales.uniqueCount" [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field  [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="newVsOldInvoicesData?.oldSales.total" [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field [amount]="newVsOldInvoicesData?.oldSales?.total" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
                             <a class="d-inline-flex cursor-pointer" href="javascript:void(0)" (click)="showClientList(newVsOldInvoicesData?.oldSales,'old', 'invoice')">
-                                <amount-field [amount]="newVsOldInvoicesData?.oldSales.invoiceCount" [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
                             </a>
                         </div>

@@ -6,11 +6,14 @@ import { Store, select } from '@ngrx/store';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
+import { ASIDE_PANE_CONFIG } from '../app.constant';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -52,108 +55,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public bifurcationClients: string = "";
     /** This will hold report year */
     public reportYear: string;
-    public dummyJson  = {
-        "status": "success",
-        "body": {
-            "totalSales": {
-                "invoiceCount": 85,
-                "total": 11932386.5000,
-                "month": "total",
-                "uniqueCount": 5,
-                "uniqueNames": [
-                    "ssmgz1751452891339",
-                    "yztoq1752053194689",
-                    "ohkbo1752648832236",
-                    "vkt3u1752066666409",
-                    "y4ut41752224225850"
-                ],
-                "fromDate": null,
-                "toDate": null
-            },
-            "newSales": {
-                "invoiceCount": 2,
-                "total": 3740,
-                "month": "July",
-                "uniqueCount": 1,
-                "uniqueNames": [
-                    "oq6ue1752557857526",
-                    "d7vlp1752577919911"
-                ],
-                "fromDate": "01-07-2025",
-                "toDate": "31-07-2025"
-            },
-            "oldSales": {
-                "invoiceCount": 83,
-                "total": 11928646.5000,
-                "month": "old sales",
-                "uniqueCount": 4,
-                "uniqueNames": [],
-                "fromDate": "01-01-2025",
-                "toDate": "31-08-2024"
-            },
-            "carriedSales": [
-                {
-                    "invoiceCount": 1,
-                    "total": 256523,
-                    "month": "June",
-                    "uniqueCount": 1,
-                    "uniqueNames": [
-                        "qhupq1752052819577"
-                    ],
-                    "fromDate": "01-06-2025",
-                    "toDate": "30-06-2025"
-                },
-                {
-                    "invoiceCount": 1,
-                    "total": 500,
-                    "month": "May",
-                    "uniqueCount": 1,
-                    "uniqueNames": [
-                        "4e2o71751463947733"
-                    ],
-                    "fromDate": "01-05-2025",
-                    "toDate": "31-05-2025"
-                },
-                {
-                    "invoiceCount": 0,
-                    "total": 0,
-                    "month": "LQ",
-                    "uniqueCount": 0,
-                    "uniqueNames": [],
-                    "fromDate": "01-04-2025",
-                    "toDate": "28-02-2025"
-                },
-                {
-                    "invoiceCount": 0,
-                    "total": 0,
-                    "month": "Last 6 Months",
-                    "uniqueCount": 0,
-                    "uniqueNames": [],
-                    "fromDate": "01-01-2025",
-                    "toDate": "31-08-2024"
-                },
-                {
-                    "invoiceCount": 81,
-                    "total": 11671623.5000,
-                    "month": "LY",
-                    "uniqueCount": 2,
-                    "uniqueNames": [
-                        "ssmgz1751452891339",
-                        "yztoq1752053194689",
-                        "ohkbo1752648832236"
-                    ],
-                    "fromDate": "01-08-2023",
-                    "toDate": "01-08-2024"
-                }
-            ]
-        }
-    }
+    /** Delete attached file dialog ref */
+    public salesBifurcationDetailsDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private newVsOldInvoicesService: NewVsOldInvoicesService
+        private newVsOldInvoicesService: NewVsOldInvoicesService,
+        private dialog: MatDialog
     ) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
     }
@@ -249,10 +159,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success" && response?.body) {
-                const dummyResponse = this.dummyJson;
-                this.newVsOldInvoicesData = dummyResponse?.body;
-                console.log(this.newVsOldInvoicesData);
-
+                this.newVsOldInvoicesData = response?.body;
                 this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
                 this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
                 this.clientAllTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
@@ -328,6 +235,16 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public showClientList(newVsOldInvoicesData: any, type: string, subType: string): void {
-       console.log(newVsOldInvoicesData, type, subType);
+        const data = {
+            newVsOldInvoicesData,
+            type,
+            subType,
+            newVsOldInvoicesQueryRequest: this.NewVsOldInvoicesQueryRequest
+        };
+       ASIDE_PANE_CONFIG.data = data;
+       this.salesBifurcationDetailsDialogRef = this.dialog.open(SalesBifurcationDetailsComponent, ASIDE_PANE_CONFIG);
+       this.salesBifurcationDetailsDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
+           this.getSalesBifurcation(); this.salesBifurcationDetailsDialogRef = undefined;
+       })).subscribe();
     }
 }

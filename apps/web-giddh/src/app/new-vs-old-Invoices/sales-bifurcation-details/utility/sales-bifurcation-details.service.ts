@@ -1,14 +1,12 @@
 import { Inject, Injectable, Optional } from "@angular/core";
-import { environment } from "src/environments/environment";
 import { Observable, catchError, map } from "rxjs";
 import { HttpWrapperService } from "../../../services/http-wrapper.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { GiddhErrorHandler } from "../../../services/catchManager/catchmanger";
 import { IServiceConfigArgs, ServiceConfig } from "../../../services/service.config";
 import { GeneralService } from "../../../services/general.service";
-import { HttpMethod, HttpMethodType } from "../../../app.constant";
 
-const SALES_PERSON_API = 'company/:companyUniqueName/salesperson';
+const SALES_BIFURCATION_API = 'company/:companyUniqueName/new-old-sales/details?value=:value&type=:type&dataType=:dataType&page=:page&count=:count&q=:q&sort=:sort&fromDate=:fromDate&toDate=:toDate';
 
 @Injectable()
 export class SalesBifurcationDetailsService {
@@ -17,29 +15,33 @@ export class SalesBifurcationDetailsService {
         private errorHandler: GiddhErrorHandler,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
-    ) {  }
+    ) { }
 
     /**
      * Get sales person list
      *
-     * @param {string} uniqueName
-     * @param {HttpMethodType} [httpMethod=HttpMethod.GET]
+     * @param {any} params
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SalesBifurcationDetailsService
      */
-    public salesBifurcationDetails(httpMethod: HttpMethodType = HttpMethod.GET, model: any = {}, uniqueName: string = null, params: any = {}): Observable<BaseResponse<any, any>> {
-        let url = this.config?.apiUrl + 
-        SALES_PERSON_API?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
-        if (uniqueName) {
-            url += `/${encodeURIComponent(uniqueName)}`;
-        }
-        if (httpMethod === HttpMethod.GET) {
-            url += `?page=${params?.page || 1}&count=${params?.count || 200}`;
-        }
-        return this.http[httpMethod](url, model).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    public salesBifurcationDetails(params: any = {}): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SALES_BIFURCATION_API
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':type', params?.type?.toString())
+            ?.replace(':value', params?.value?.toString())
+            ?.replace(':dataType', params?.dataType?.toString())
+            ?.replace(':page', params?.page?.toString())
+            ?.replace(':count', params?.count?.toString())
+            ?.replace(':q', params?.q?.toString())
+            ?.replace(':sort', params?.sort?.toString())
+            ?.replace(':fromDate', params?.fromDate?.toString())
+            ?.replace(':toDate', params?.toDate?.toString()))
+            .pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.queryString = params;
+                return data;
+            }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, null, params)));
     }
 
 }
