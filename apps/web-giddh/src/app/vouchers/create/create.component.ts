@@ -650,6 +650,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.aiOcrService.getOcrData$.next(null);
                         this.aiOcrService.aiOcrDetails$.next(null);
                         this.aiOcrService.saveAndNext$.next(null);
+                        this.aiOcrService.skipAndNext$.next(null);
                         this.queryParams = cloneDeep(response[1]);
 
                         if (this.queryParams?.redirect) {
@@ -738,8 +739,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         });
 
                         this.aiOcrService.saveAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                            if (response) {
-                                this.generateVoucher();
+                            if (response && response !== null) {
+                                this.generateVoucher('save');
                             }
                         });
                     }
@@ -962,6 +963,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.openAccountDropdown = false;
                     this.urlVoucherType = aiOcrDetails.type;
                     this.voucherType = this.vouchersUtilityService.parseVoucherType(aiOcrDetails.type);
+                    this.aiOcrService.saveAndNext$.next(null);
+                    this.aiOcrService.skipAndNext$.next(null);
 
                     this.resetVoucherForm(true, true);
 
@@ -5218,12 +5221,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnDestroy(): void {
         this.componentStore.resetAll();
-        this.aiOcrService.getOcrData$.next(null);
-        this.aiOcrService.ocrList$.next(null);
-        this.aiOcrService.aiOcrDetails$.next(null);
-        this.aiOcrService.uploadDataSuccess$.next(null);
-        this.aiOcrService.saveAndNext$.next(null);
-        this.aiOcrService.skipAndNext$.next(null);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
