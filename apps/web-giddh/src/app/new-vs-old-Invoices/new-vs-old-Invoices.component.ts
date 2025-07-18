@@ -6,11 +6,14 @@ import { Store, select } from '@ngrx/store';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
+import { ASIDE_PANE_CONFIG } from '../app.constant';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -55,12 +58,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public bifurcationClients: string = "";
     /** This will hold report year */
     public reportYear: string;
+    /** Delete attached file dialog ref */
+    public salesBifurcationDetailsDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private newVsOldInvoicesService: NewVsOldInvoicesService
+        private newVsOldInvoicesService: NewVsOldInvoicesService,
+        private dialog: MatDialog
     ) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
     }
@@ -144,17 +150,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success" && response?.body) {
                 this.newVsOldInvoicesData = response?.body;
-
-                this.crdTotal = 0;
-                this.invTotal = 0;
-                this.clientTotal = 0;
-
-                this.newVsOldInvoicesData.carriedSales?.forEach((sale) => {
-                    this.crdTotal += sale.total;
-                    this.invTotal += sale.invoiceCount;
-                    this.clientTotal += sale.uniqueCount;
-                });
-
                 this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
                 this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
                 this.clientAllTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
@@ -220,5 +215,26 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         if(this.columnName) {
             this.bifurcationClients = this.localeData?.bifurcation_clients?.replace("[COLUMN_NAME]", this.columnName);
         }
+    }
+
+    /**
+     * This will show client list
+     *
+     * @param {any} newVsOldInvoicesData
+     * @param {string} type
+     * @memberof NewVsOldInvoicesComponent
+     */
+    public showClientList(newVsOldInvoicesData: any, type: string, subType: string): void {
+        const data = {
+            newVsOldInvoicesData,
+            type,
+            subType,
+            newVsOldInvoicesQueryRequest: this.NewVsOldInvoicesQueryRequest
+        };
+       ASIDE_PANE_CONFIG.data = data;
+       this.salesBifurcationDetailsDialogRef = this.dialog.open(SalesBifurcationDetailsComponent, ASIDE_PANE_CONFIG);
+       this.salesBifurcationDetailsDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
+           this.getSalesBifurcation(); this.salesBifurcationDetailsDialogRef = undefined;
+       })).subscribe();
     }
 }

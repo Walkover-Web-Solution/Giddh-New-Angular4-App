@@ -268,6 +268,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public ngOnInit(): void {
+        this.businessTypes['dilpreet'] = 'dilpreet';
         document.querySelector('body').classList.add('create-company');
         this.initCompanyForm();
         this.getStates();
