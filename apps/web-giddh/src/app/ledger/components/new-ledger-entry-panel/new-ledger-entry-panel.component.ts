@@ -2275,7 +2275,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public openSalesPersonDialog(): void {
         this.salesPersonDialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        this.salesPersonDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
+        this.salesPersonDialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {
             this.getSalesPersonList(); this.salesPersonDialogRef = undefined;
         })).subscribe();
     }

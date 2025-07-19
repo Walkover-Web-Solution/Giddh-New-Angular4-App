@@ -3020,7 +3020,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1), rxjsFilter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
+        dialogRef.afterClosed().pipe(rxjsFilter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
     }
 
     /**
