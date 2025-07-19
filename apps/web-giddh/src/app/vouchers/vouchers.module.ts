@@ -194,7 +194,7 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
         SelectTableColumnModule
     ],
     exports: [
-
+VoucherCreateComponent
     ],
     providers: [TitleCasePipe, InvoiceUiDataService]
 })
