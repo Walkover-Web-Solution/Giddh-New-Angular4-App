@@ -50,43 +50,44 @@
                 
                     <!-- Actions -->
                     <div class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
-                        <mat-label>{{ localeData?.actions }}</mat-label>
-                        <mat-select
-                        name="actions"
-                        [multiple]="true"
-                        [formControl]="customTriggerForm?.controls?.actions"
-                        >
-                        <mat-select-trigger>
-                            {{ (customTriggerForm?.controls?.actions?.value?.[0] | replace : '_' :
-                            ' ') | titlecase }}
-                            <span
-                            *ngIf="(customTriggerForm?.controls?.actions?.value?.length || 0) > 1"
-                            class="example-additional-selection"
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{ localeData?.actions }}</mat-label>
+                            <mat-select
+                                name="actions"
+                                [multiple]="true"
+                                [formControl]="customTriggerForm?.controls?.actions"
                             >
-                            (+{{(customTriggerForm?.controls?.actions?.value?.length || 0) - 1}}
-                            {{customTriggerForm?.controls?.actions?.value?.length === 2 ?
-                            localeData?.other : localeData?.others}})
-                            </span>
-                        </mat-select-trigger>
-                        <mat-option class="balance-options">
-                            <ngx-mat-select-search
-                            [placeholderLabel]="localeData?.select_action"
-                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                            [formControl]="actionListDropdown"
-                            >
-                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                        </mat-option>
-                
-                        <mat-option
-                            *ngFor="let action of filteredActionList"
-                            [value]="action?.value"
-                        >
-                            {{ action?.label }}
-                        </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                                <mat-select-trigger>
+                                    {{ (customTriggerForm?.controls?.actions?.value?.[0] | replace : '_' :
+                                    ' ') | titlecase }}
+                                    <span
+                                        *ngIf="(customTriggerForm?.controls?.actions?.value?.length || 0) > 1"
+                                        class="example-additional-selection"
+                                    >
+                                        (+{{(customTriggerForm?.controls?.actions?.value?.length || 0) - 1}}
+                                        {{customTriggerForm?.controls?.actions?.value?.length === 2 ?
+                                        localeData?.other : localeData?.others}})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option class="balance-options">
+                                    <ngx-mat-select-search
+                                        [placeholderLabel]="localeData?.select_action"
+                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                        [formControl]="actionListDropdown"
+                                        [clearSearchInput]="false"
+                                    >
+                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                        
+                                <mat-option
+                                    *ngFor="let action of filteredActionList"
+                                    [value]="action?.value"
+                                >
+                                    {{ action?.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 
                     <!-- Conditions (Dynamic fields) -->
@@ -195,88 +196,94 @@
                     *ngIf="customTriggerForm?.controls?.entity?.value"
                     class="custom-mat-form-field"
                     >
-                    <mat-form-field appearance="outline">
-                        <mat-label
-                        >{{customTriggerForm?.controls?.entity?.value === entityEnum.Account ?
-                        commonLocaleData?.app_account : commonLocaleData?.app_group}}</mat-label
-                        >
-                        <mat-select
-                        name="voucherTypes"
-                        [multiple]="true"
-                        [formControl]="customTriggerForm?.controls?.entityUniqueNames"
-                        >
-                        <mat-select-trigger>
-                            {{ customTriggerForm?.controls?.entityUniqueNames?.value?.[0] |
-                            titlecase }}
-                            <span
-                            *ngIf="(customTriggerForm?.controls?.entityUniqueNames?.value?.length || 0) > 1"
-                            class="example-additional-selection"
+                        <mat-form-field appearance="outline">
+                            <mat-label
+                            >{{customTriggerForm?.controls?.entity?.value === entityEnum.Account ?
+                            commonLocaleData?.app_account : commonLocaleData?.app_group}}</mat-label
                             >
-                            (+{{(customTriggerForm?.controls?.entityUniqueNames?.value?.length
-                            || 0) - 1}}
-                            {{customTriggerForm?.controls?.entityUniqueNames?.value?.length ===
-                            2 ? localeData?.other : localeData?.others}})
-                            </span>
-                        </mat-select-trigger>
-                        <mat-option class="balance-options">
-                            <ngx-mat-select-search
-                            [placeholderLabel]="customTriggerForm?.controls?.entity?.value === entityEnum.Account ? commonLocaleData?.app_select_account : commonLocaleData?.app_select_group"
-                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                            [formControl]="accountGroupDropdown"
+                            <mat-select
+                            name="voucherTypes"
+                            [multiple]="true"
+                            [formControl]="customTriggerForm?.controls?.entityUniqueNames"
                             >
-                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                        </mat-option>
-                
-                        <mat-option
-                            *ngFor="let accountGroup of accountGroupList$ | async"
-                            [value]="accountGroup?.uniqueName"
-                        >
-                            {{ accountGroup?.name }}
-                        </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                            <mat-select-trigger>
+                                {{ customTriggerForm?.controls?.entityUniqueNames?.value?.[0] |
+                                titlecase }}
+                                <span
+                                *ngIf="(customTriggerForm?.controls?.entityUniqueNames?.value?.length || 0) > 1"
+                                class="example-additional-selection"
+                                >
+                                (+{{(customTriggerForm?.controls?.entityUniqueNames?.value?.length
+                                || 0) - 1}}
+                                {{customTriggerForm?.controls?.entityUniqueNames?.value?.length ===
+                                2 ? localeData?.other : localeData?.others}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option class="balance-options">
+                                <ngx-mat-select-search
+                                    [placeholderLabel]="
+                                        customTriggerForm?.controls?.entity?.value === entityEnum.Account 
+                                            ? commonLocaleData?.app_select_account 
+                                            : commonLocaleData?.app_select_group
+                                    "
+                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                    [formControl]="accountGroupDropdown"
+                                    [clearSearchInput]="false"
+                                >
+                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                </ngx-mat-select-search>
+                            </mat-option>
+                    
+                            <mat-option
+                                *ngFor="let accountGroup of accountGroupList$ | async"
+                                [value]="accountGroup?.uniqueName"
+                            >
+                                {{ accountGroup?.name }}
+                            </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 
                     <!-- Voucher Types -->
                     <div class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
-                        <mat-label>{{commonLocaleData?.app_voucher}}</mat-label>
-                        <mat-select
-                        name="voucherTypes"
-                        [multiple]="true"
-                        [formControl]="customTriggerForm?.controls?.voucherTypes"
-                        >
-                        <mat-select-trigger>
-                            {{ customTriggerForm?.controls?.voucherTypes?.value?.[0] | titlecase
-                            }}
-                            <span
-                            *ngIf="(customTriggerForm?.controls?.voucherTypes?.value?.length || 0) > 1"
-                            class="example-additional-selection"
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{commonLocaleData?.app_voucher}}</mat-label>
+                            <mat-select
+                                name="voucherTypes"
+                                [multiple]="true"
+                                [formControl]="customTriggerForm?.controls?.voucherTypes"
                             >
-                            (+{{(customTriggerForm?.controls?.voucherTypes?.value?.length || 0)
-                            - 1}} {{customTriggerForm?.controls?.voucherTypes?.value?.length ===
-                            2 ? localeData?.other : localeData?.others}})
-                            </span>
-                        </mat-select-trigger>
-                        <mat-option class="balance-options">
-                            <ngx-mat-select-search
-                            [placeholderLabel]="commonLocaleData?.app_select_voucher"
-                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                            [formControl]="voucherListDropdown"
-                            >
-                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                            </ngx-mat-select-search>
-                        </mat-option>
-                
-                        <mat-option
-                            *ngFor="let voucher of filteredVoucherList"
-                            [value]="voucher?.value"
-                        >
-                            {{ voucher?.label }}
-                        </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                                <mat-select-trigger>
+                                    {{ customTriggerForm?.controls?.voucherTypes?.value?.[0] | titlecase
+                                    }}
+                                    <span
+                                    *ngIf="(customTriggerForm?.controls?.voucherTypes?.value?.length || 0) > 1"
+                                    class="example-additional-selection"
+                                    >
+                                    (+{{(customTriggerForm?.controls?.voucherTypes?.value?.length || 0)
+                                    - 1}} {{customTriggerForm?.controls?.voucherTypes?.value?.length ===
+                                    2 ? localeData?.other : localeData?.others}})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option class="balance-options">
+                                    <ngx-mat-select-search
+                                        [placeholderLabel]="commonLocaleData?.app_select_voucher"
+                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                        [formControl]="voucherListDropdown"
+                                        [clearSearchInput]="false"
+                                    >
+                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                        
+                                <mat-option
+                                    *ngFor="let voucher of filteredVoucherList"
+                                    [value]="voucher?.value"
+                                >
+                                    {{ voucher?.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 
                     <!-- Disabled Trigger Checkbox -->

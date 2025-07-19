@@ -1,13 +1,10 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
-import { Store } from "@ngrx/store";
-import { AppState } from "apps/web-giddh/src/app/store";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
 import { InvoiceService } from "../../../services/invoice.service";
 import { InventoryService } from "../../../services/inventory.service";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 
 export interface CustomEmailState {
     emailContentSuggestions: any;
@@ -118,7 +115,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
      */
     readonly getEmailContentSuggestions = this.effect((data: Observable<string>) => {
         return data.pipe(
-            mergeMap((searchTerm) => {
+            switchMap((searchTerm) => {
                 this.patchState({ emailContentSuggestions: null });
                 return this.invoiceService.getEmailContentSuggestions(searchTerm).pipe(
                     tapResponse(
@@ -156,7 +153,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
      */
     readonly getAllEmailTemplate = this.effect((data: Observable<any>) => {
         return data.pipe(
-            mergeMap((req) => {
+            switchMap((req) => {
                 this.patchState({ emailTemplates: null });
                 return this.invoiceService.getEmailTemplate(req).pipe(
                     tapResponse(
@@ -194,8 +191,8 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
      */
     readonly getFlattenAccountGroupList = this.effect((data: Observable<{request: any, model: string[]}>) => {
         return data.pipe(
-            mergeMap((req) => {
-                this.patchState({ accountGroupList: null });
+            switchMap((req) => {
+                this.patchState({ accountGroupList: [] });
                 return this.inventoryService.getFlattenGroupWithAccountsList(req.request, req.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
