@@ -42,8 +42,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds common localized JSON data shared across modules */
     public commonLocaleData: any = {};
-    /** True if API call is in progress */
-    public isLoading: boolean = true;
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
@@ -69,6 +67,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public totalRecords: number | null = null;
     /** Observable for the list of account statements from the store */
     public accountStatementList$: Observable<any> = this.contactComponentStore.getAccountStatementList$;
+    /** Observable for the loading state of account statement list */
+    public getAccountStatementInProgress$: Observable<any> = this.contactComponentStore.getAccountStatementInProgress$;
     /** Stores the selected date range for API queries */
     public selectedDateRange: any;
     /** Stores the selected date range formatted for UI display */
@@ -124,9 +124,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                     this.responseAccountList = response;
                     this.totalRecords = response.totalItems;
             }
-            setTimeout(() => {
-                this.isLoading = false;
-            }, 200);
         });
         
 
@@ -297,7 +294,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public getAccountStatementList(isAdvanceSearch: boolean = false): void {
-        this.isLoading = true;
         this.accountListData = [];
         const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
