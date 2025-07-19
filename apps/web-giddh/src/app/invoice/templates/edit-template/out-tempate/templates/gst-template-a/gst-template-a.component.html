@@ -51,7 +51,7 @@
                                                     [hidden]="!showLogo"
                                                     [src]="logoSrc"
                                                     class="pull-left"
-                                                    alt="logo"
+                                                    alt="brand-logo"
                                                     [ngStyle]="{ 'height': inputTemplate.logoSize + 'px' }"
                                                 />
                                             </div>
@@ -93,12 +93,7 @@
                                             fieldsAndVisibility.header.gstComposition?.display
                                         "
                                     >
-                                        {{
-                                            fieldsAndVisibility.header.gstComposition?.label
-                                                ? fieldsAndVisibility.header.gstComposition?.label
-                                                : "Registered under Composition
-                                    Scheme"
-                                        }}
+                                        {{ fieldsAndVisibility.header.gstComposition?.label }}
                                     </p>
                                 </td>
 
@@ -1482,22 +1477,12 @@
                                     <td [ngStyle]="{ 'font-size': inputTemplate.fontDefault + 'px' }">
                                         <strong>
                                             <h2
-                                                *ngIf="fieldsAndVisibility.footer.thanks?.label"
                                                 [ngStyle]="{
                                                     'color': inputTemplate.templateColor,
                                                     'font-size': inputTemplate.fontDefault + 'px'
                                                 }"
                                                 [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
                                             ></h2>
-                                            <h2
-                                                *ngIf="!fieldsAndVisibility.footer.thanks?.label"
-                                                [ngStyle]="{
-                                                    'color': inputTemplate.templateColor,
-                                                    'font-size': inputTemplate.fontDefault + 'px'
-                                                }"
-                                            >
-                                                Thank You for your business.
-                                            </h2>
                                         </strong>
                                     </td>
                                 </tr>

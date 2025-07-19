@@ -368,9 +368,10 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
+        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
+            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -1097,7 +1098,7 @@ export class GeneralService {
      */
     public getAvailableThemes(): any {
         return [
-            { label: 'Default', value: 'default-theme' },
+            { label: 'Light', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
         ];
     }
@@ -1147,9 +1148,9 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
-                if (this.voucherApiVersion !== 2) {
-                    item.exchangeRate = balanceDueAmountConversionRate;
-                }
+                // if (this.voucherApiVersion !== 2) {
+                //     item.exchangeRate = balanceDueAmountConversionRate;
+                // }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2067,7 +2068,7 @@ export class GeneralService {
         return window.open(
             url,
             title,
-            `width=${width},height=${height},top=${top},left=${left}`
+            `popup,width=${width},height=${height},top=${top},left=${left}`
         );
     }
 
@@ -2227,17 +2228,22 @@ export class GeneralService {
     }
 
     /**
-     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     * Retrieves the decoded white label data from the local storage.
      *
-     * @param {string} text - The string containing placeholders.
-     * @param {string[]} args - The list of values to replace the placeholders.
-     * @returns {string} A string where placeholders are replaced with corresponding arguments.
-     * @memberof GeneralService
+     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
+     *
+     * @throws {Error} If there is an error parsing the white label data from the local storage.
      */
-    public replacePlaceholders(text: string, ...args: string[]): string {
-        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    public getDecodedWhiteLabel(): any {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            console.error('Error parsing whiteLabel data from localStorage:', error);
+            return null;
+        }
     }
-    
+
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
@@ -2259,41 +2265,114 @@ export class GeneralService {
     }
 
     /**
+    * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+    *
+    * @param {string} text - The string containing placeholders.
+    * @param {string[]} args - The list of values to replace the placeholders.
+    * @returns {string} A string where placeholders are replaced with corresponding arguments.
+    * @memberof GeneralService
+    */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+
+    /**
      * Retrieves a list of available voucher types with localized labels.
      *
      * @param commonLocaleData 
-     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
+     * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
+     * @returns {IOption[]} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
-    public getVoucherTypeList(commonLocaleData: any): IOption[] {
-        return [{
+    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = []): IOption[] {
+        const allVouchers = [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.purchase,
             value: 'purchase'
-        }, {
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.purchase_order,
+            value: 'purchase order'
+        },
+        {
             label: commonLocaleData?.app_voucher_types.receipt,
             value: 'receipt'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.payment,
             value: 'payment'
-        }, {
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.estimate,
+            value: 'estimate'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.proforma,
+            value: 'proforma'
+        },
+        {
             label: commonLocaleData?.app_voucher_types.journal,
             value: 'journal'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.contra,
             value: 'contra'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.debit_note,
             value: 'debit note'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.credit_note,
             value: 'credit note'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
+
+        return onlyVouchers.length > 0 ? allVouchers.filter(voucher => onlyVouchers.includes(voucher.value)) : allVouchers;
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @param {any} commonLocaleData
+     * @param {boolean} [isDaily=false]
+     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
+        let days = [
+            { label: commonLocaleData?.app_weekdays.sunday, value: 'sunday' },
+            { label: commonLocaleData?.app_weekdays.monday, value: 'monday' },
+            { label: commonLocaleData?.app_weekdays.tuesday, value: 'tuesday' },
+            { label: commonLocaleData?.app_weekdays.wednesday, value: 'wednesday' },
+            { label: commonLocaleData?.app_weekdays.thursday, value: 'thursday' },
+            { label: commonLocaleData?.app_weekdays.friday, value: 'friday' },
+            { label: commonLocaleData?.app_weekdays.saturday, value: 'saturday' }
+        ];
+        if (isDaily) {
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: 'daily' }, ...days];
+        }
+        return days.filter(day => !excludeDays.includes(day.value));
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDaysOfMonth(): IOption[] {
+        return Array.from({ length: 31 }, (_, i) => ({
+            label: (i + 1).toString(),
+            value: (i + 1).toString()
+        }));
     }
 }
 

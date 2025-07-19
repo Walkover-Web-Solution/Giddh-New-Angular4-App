@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import * as localeData from 'dayjs/plugin/localeData' // load on demand
@@ -28,6 +28,7 @@ import { SettingsFinancialYearActions } from '../../actions/settings/financial-y
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
+import { ServiceConfig } from '../../services/service.config';
 
 export enum DateType {
     start = 'start',
@@ -272,7 +273,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         private store: Store<AppState>, 
         private settingsFinancialYearActions: SettingsFinancialYearActions, 
         private dialog: MatDialog, 
-        private generalService: GeneralService 
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
@@ -328,7 +330,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.activeFinancialYear) {

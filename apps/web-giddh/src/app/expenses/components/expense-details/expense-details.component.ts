@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
@@ -21,6 +21,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'app-expense-details',
@@ -158,6 +159,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private expenseService: ExpenseService,
         private searchService: SearchService,
         private dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
         private companyActions: CompanyActions,
         private lightbox: Lightbox,
         private generalService: GeneralService,
@@ -206,7 +208,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
         this.comment = res?.description;
         let imgs = res?.attachedFileUniqueNames;
-        let imgPrefix = ApiUrl + 'company/' + this.companyUniqueName + '/image/';
+        let imgPrefix = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/';
         this.imageURL = [];
 
         if (imgs) {
@@ -434,9 +436,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.imgUploadInprogress = false;
                     if (response?.status === 'success') {
-                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
+                        this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
                         let img = {
-                            src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName
+                            src: (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName
                         }
                         this.DownloadAttachedImgResponse.push(response?.body);
                         this.imgAttachedFileName = response?.body?.name;

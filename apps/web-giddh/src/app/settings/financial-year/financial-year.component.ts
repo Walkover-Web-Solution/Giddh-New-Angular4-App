@@ -133,7 +133,12 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             return option;
         });
     }
-
+    
+    /**
+     * Lock Unlock Financial Year
+     *
+     * @memberof FinancialYearComponent
+     */
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
         if (financialYear) {
             let year = cloneDeep(financialYear);

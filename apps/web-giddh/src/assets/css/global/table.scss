@@ -1,4 +1,5 @@
 .mat-mdc-table {
+    background: var(--color-body-background) !important;
     &.table-striped {
         .mdc-data-table__content {
             .mat-mdc-row {
@@ -24,7 +25,7 @@
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             background-color: var(--color-body-background) !important;
-            z-index: 9 !important;
+            z-index: 1 !important;
         }
     }
 
@@ -134,12 +135,14 @@ table {
                 &:not(.active-row) {
                     td {
                         mat-form-field {
+
                             mat-label,
                             .dropdown-bg,
                             .mdc-notched-outline {
                                 visibility: hidden;
                             }
                         }
+
                         .editable-table-hide-element {
                             visibility: hidden;
                         }
@@ -148,9 +151,7 @@ table {
             }
         }
     }
-}
 
-table {
     &.mat-mdc-table {
         tr {
             th,

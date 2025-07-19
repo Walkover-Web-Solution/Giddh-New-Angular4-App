@@ -4,10 +4,10 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-<div class="no-data" *ngIf="isLoading">
+<div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
     <giddh-page-loader></giddh-page-loader>
 </div>
-    <div class="common-wrapper" *ngIf="accountListData?.length && !isLoading">
+    <div class="common-wrapper" *ngIf="accountListData?.length && !(getAccountStatementInProgress$ | async)">
         <div class="account-statement p-20 mr-t20">
             <table class="w-100">
                 <tr>
@@ -170,7 +170,7 @@
                 </tr>
             </table>
             <div class="inner-content">
-                <div class="w-100 d-flex align-items-baseline">
+                <div class="w-100 d-flex align-items-center justify-content-between">
                     <div class="custom-datepicker-wrapper">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <input
@@ -192,17 +192,29 @@
                             <span>{{ commonLocaleData?.app_clear_filter }}</span>
                         </span>
                     </button>
-                    <button
-                        aria-label="filter"
-                        mat-stroked-button
-                        (click)="onOpenAdvanceSearch()"
-                        class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
-                        [matTooltip]="commonLocaleData?.app_advance_search"
-                        [matTooltipPosition]="'above'"
-                        matTooltipClass="tooltip-black"
-                    >
-                        <span class="icon-advance-filter"></span>
-                    </button>
+                    <div class="d-flex justify-content-between">
+                        <button
+                            mat-stroked-button
+                            class="mr-r1"
+                            [matTooltip]="commonLocaleData?.app_export"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                            (click)="exportAccountStatement()"
+                        >
+                            <i aria-label="export-account"class="icon-export-icon lh-0"></i>
+                        </button>
+                        <button
+                            aria-label="filter"
+                            mat-stroked-button
+                            (click)="onOpenAdvanceSearch()"
+                            class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
+                            [matTooltip]="commonLocaleData?.app_advance_search"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                        >
+                            <span class="icon-advance-filter"></span>
+                        </button>
+                    </div>
                 </div>
                 <div class="invoice-table mr-t15">
                     <div class="table-responsive position-relative">

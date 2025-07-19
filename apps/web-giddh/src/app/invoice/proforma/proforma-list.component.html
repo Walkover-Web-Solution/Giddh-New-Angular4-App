@@ -10,18 +10,18 @@
                 <div class="d-flex more-filter">
                     <div class="d-flex btn-wrapper">
                         <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-r15">
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
+                            <!-- <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
                                 {{ localeData?.new_proforma }}
-                            </button>
+                            </button> -->
                             <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/proformas/create']">
                                 {{ localeData?.new_proforma }}
                             </button>
                         </div>
 
                         <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
+                            <!-- <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
                                 {{ localeData?.new_estimate }}
-                            </button>
+                            </button> -->
                             <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/estimates/create']">
                                 {{ localeData?.new_estimate }}
                             </button>

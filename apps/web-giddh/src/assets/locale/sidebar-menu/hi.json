@@ -647,11 +647,29 @@
                     "icon": "icon-tally-import1"
                 },
                 {
+                    "label": "बहु-मुद्रा रिपोर्ट",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency",
+                    "description": "बहु-मुद्रा रिपोर्ट",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "tabIndex": 0
+                        }
+                    }
+                },
+                {
                     "label": "परियोजनावार लेखांकन",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new"
                 }
             ]
+        },
+        {
+            "label": "AI OCR",
+            "link": "/pages/ai-ocr",
+            "icon": "icon-audit-log",
+            "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
         }
     ],
     "switch_branch": "स्विच शाखा",

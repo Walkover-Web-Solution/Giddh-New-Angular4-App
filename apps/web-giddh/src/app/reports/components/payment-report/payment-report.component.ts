@@ -161,6 +161,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     };
     /** Holds last filters applyed */
     public lastListingFilters: any;
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     /** @ignore */
     constructor(
@@ -197,9 +199,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        if (this.voucherApiVersion === 1) {
-            this.router.navigate(['pages', 'home']);
-        }
+        // if (this.voucherApiVersion === 1) {
+        //     this.router.navigate(['pages', 'home']);
+        // }
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/payment'));
