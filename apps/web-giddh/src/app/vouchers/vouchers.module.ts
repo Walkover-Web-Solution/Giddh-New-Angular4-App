@@ -195,7 +195,7 @@ import { SalesPersonService } from "../shared/sales-person/utility/sales-person.
         SelectTableColumnModule
     ],
     exports: [
-
+VoucherCreateComponent
     ],
     providers: [TitleCasePipe, InvoiceUiDataService, SalesPersonService]
 })

@@ -55,6 +55,11 @@
     color: var(--color-common-primary-text);
     height: 200px;
 }
+
+.mat-card-wrapper {
+    min-height: 100%;
+}
+
 @media screen and (max-width: 1199px) {
     .list-responsive {
         flex-wrap: wrap;
