@@ -2613,7 +2613,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
      public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
     }
 
     /**
