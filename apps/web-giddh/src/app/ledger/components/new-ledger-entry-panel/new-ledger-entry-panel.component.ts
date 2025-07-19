@@ -352,7 +352,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-                this.selectedWarehouse = String(this.defaultWarehouse);
+                if (!this.currentTxn?.duplicateEntry) {
+                    this.selectedWarehouse = String(this.defaultWarehouse);
+                }
             }
         });
 
@@ -486,6 +488,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn?.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
+            } else if (this.currentTxn?.duplicateEntry) {
+                this.selectedWarehouse = this.currentTxn.inventory?.warehouse?.uniqueName ?? this.blankLedger.transactions[0].inventory?.warehouse?.uniqueName;
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
