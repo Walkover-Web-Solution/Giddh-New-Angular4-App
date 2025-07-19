@@ -13,7 +13,7 @@
 
 .button-wrapper {
     position: fixed;
-    position-anchor: --list;
+    position-anchor: --wrapper;
     left: anchor(right);
     top: anchor(top);
     margin-left: 5px !important;
