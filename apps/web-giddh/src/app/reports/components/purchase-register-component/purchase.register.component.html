@@ -113,7 +113,7 @@
                                 panelClass="py-0"
                                 name="salesPerson"
                                 [multiple]="true"
-                                (selectionChange)="reportForm?.get('salesPersonUniqueNames')?.value?.length && getPurchaseRegister(dateRange.from, dateRange.to)"
+                                (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
                                 formControlName="salesPersonUniqueNames"
                             >
                                 <mat-option class="mt-0">
@@ -121,6 +121,7 @@
                                         [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
                                         [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                         [formControl]="salesPerson"
+                                        [clearSearchInput]="false"
                                     >
                                         <i class="icon-cross" ngxMatSelectSearchClear></i>
                                     </ngx-mat-select-search>
@@ -150,13 +151,14 @@
                             name="account"
                             [multiple]="true"
                             formControlName="accountUniqueNames"
-                            (selectionChange)="reportForm?.get('accountUniqueNames')?.value?.length && getPurchaseRegister(dateRange.from, dateRange.to)"
+                            (selectionChange)="getPurchaseRegister(dateRange.from, dateRange.to)"
                         >
                             <mat-option class="mt-0">
                                 <ngx-mat-select-search
                                     [placeholderLabel]="commonLocaleData?.app_select"  
                                     [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                     [formControl]="account"
+                                    [clearSearchInput]="false"
                                 >
                                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                                 </ngx-mat-select-search>
