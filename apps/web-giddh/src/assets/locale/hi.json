@@ -778,5 +778,8 @@
     "app_account_status": "खाता स्थिति",
     "app_both": "दोनों",
     "app_skip_and_next": "छोड़ें और अगला",
-    "app_save_and_next":"सहेजें और अगला"
+    "app_save_and_next":"सहेजें और अगला",
+    "app_client": "ग्राहक",
+    "app_search_by_name_and_unique_name": "नाम और अद्वितीय नाम द्वारा खोजें",
+    "app_search_by_invoice_number_customer_name_and_amount": "खरीद बिल नंबर, ग्राहक नाम और राशि द्वारा खोजें."
 }
