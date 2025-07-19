@@ -1,0 +1,240 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { GeneralService } from '../../services/general.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TemplateFroalaComponent } from '../template-froala/template-froala.component';
+import { take } from 'rxjs';
+import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
+import { AsideMenuAccountModule } from '../aside-menu-account/aside.menu.account.module';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+
+@Component({
+    selector: 'app-action-menu',
+    standalone: true,
+    imports: [CommonModule, MatMenuModule, MatButtonModule,AccountUpdateNewDetailsModule,AsideMenuAccountModule],
+    templateUrl: './action-menu.component.html',
+    styleUrls: ['./action-menu.component.scss'],
+    animations: [
+        trigger("slideInOut", [
+            state("in", style({
+                transform: "translate3d(0, 0, 0)",
+            })),
+            state("out", style({
+                transform: "translate3d(100%, 0, 0)",
+            })),
+            transition("in => out", animate("400ms ease-in-out")),
+            transition("out => in", animate("400ms ease-in-out")),
+        ]),
+    ],
+})
+export class ActionMenuComponent {
+    /** Account object for which the action menu is displayed */
+    @Input() account: any;
+    /** Locale data for displaying button labels */
+    @Input() commonLocaleData: any;
+    /** Whether to show the 'Go to Ledger' button */
+    @Input() showGotoLedger: boolean = true;
+    /** Whether to show the 'Generate Invoice' button */
+    @Input() showGenerateInvoice: boolean = true;
+    /** Whether to show the 'Send Email' button */
+    @Input() showSendEmail: boolean = true;
+    /** If true, menu button visibility is based on row index */
+    @Input() useRowIndexVisibility: boolean = false;
+    /** The currently active row index for show/hide logic */
+    @Input() activeRowIndex?: number;
+    /** The row index of this menu instance */
+    @Input() rowIndex?: number;
+    /** Whether the current screen is mobile */
+    @Input() isMobileScreen: boolean = false;
+    /** Event emitted when the 'Go to Ledger' action is triggered */
+    @Output() gotoLedger: EventEmitter<void> = new EventEmitter<void>();
+    /** Event emitted when the 'Generate Invoice' action is triggered */
+    @Output() generateInvoice: EventEmitter<void> = new EventEmitter<void>();
+    /** Event emitted when the 'Send Email' action is triggered */
+    @Output() sendEmail: EventEmitter<void> = new EventEmitter<void>();
+    /** Event emitted when the 'Edit Account' action is triggered */
+    @Output() editAccount: EventEmitter<void> = new EventEmitter<void>();
+    /** From date */
+    @Input() fromDate: string = '';
+    /** To date */
+    @Input() toDate: string = '';
+    /** Current URL */
+    @Input() currentUrl: string = '';
+    /** Purchase or Sales */
+    public purchaseOrSales: string = '';
+    /** Voucher API version */
+    public voucherApiVersion: number;
+    /** Account aside menu state */
+    public accountAsideMenuState: string = "out";
+    /** Active account details */
+    public activeAccountDetails: any;
+    /** Is update account */
+    public isUpdateAccount: boolean = false;
+    /** Selected group for create account */
+    public selectedGroupForCreateAcc: string = '';
+
+    constructor(private generalService: GeneralService, private dialog: MatDialog) {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+    }
+
+    /**
+       * Handles the 'Go to Ledger' action
+       *
+       * @param {number} type
+       * @param {any} account
+       * @param {Event} [event]
+       * @memberof ActionMenuComponent
+       */
+    public performActions(type: number, account: any, event?: Event): void {
+        switch (type) {
+            case 1: // go to ledger
+                if (this.voucherApiVersion === 2) {
+                    const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
+                    this.goToRoute("ledger", additionalParams, account?.uniqueName);
+                } else {
+                    this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                }
+                break;
+
+            case 2: // go to sales or purchase
+                this.purchaseOrSales = this.account?.accountType;
+                if (this.purchaseOrSales === "purchase") {
+                    if (this.voucherApiVersion === 2) {
+                        this.goToRoute("vouchers/purchase/" + account?.uniqueName + "/create", "", "");
+                    } else {
+                        this.goToRoute("proforma-invoice/invoice/purchase", "", account?.uniqueName);
+                    }
+                } else {
+                    let isCashInvoice = account?.uniqueName === "cash";
+                    if (this.voucherApiVersion === 2) {
+                        if (isCashInvoice) {
+                            this.goToRoute("vouchers/cash/create", "", "");
+                        } else {
+                            this.goToRoute("vouchers/sales/" + account?.uniqueName + "/create", "", "");
+                        }
+                    } else {
+                        this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
+                    }
+                }
+                break;
+            case 3: // send email
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.openCustomEmailDialog(account, this.account?.accountType, false);
+                break;
+            case 4: // edit account
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.updateCustomerAcc(this.account?.accountType === 'sales' ? 'customer' : 'vendor', account);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Go to route
+     *
+     * @param {string} part
+     * @param {string} [additionalParams=""]
+     * @param {string} accUniqueName
+     * @memberof ActionMenuComponent
+     */
+    public goToRoute(part: string, additionalParams: string = "", accUniqueName: string): void {
+        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
+        if (additionalParams) {
+            url = `${url}${additionalParams}`;
+        }
+        if (isElectron) {
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
+            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+            ipcRenderer.send('open-url', url);
+        } else {
+            if (part === 'ledger') {
+                url = url + `?redirectUrl=${this.currentUrl}`;
+            }
+            (window as any).open(url);
+        }
+    }
+
+    /**
+     * Update customer account
+     *
+     * @param {"customer" | "vendor"} accountType
+     * @param {any} account
+     * @memberof ActionMenuComponent
+     */
+    public updateCustomerAcc(accountType: "customer" | "vendor", account: any): void {
+        console.log(accountType, account);
+        this.activeAccountDetails = account;
+        this.isUpdateAccount = true;
+        this.selectedGroupForCreateAcc = accountType === "customer" ? "sundrydebtors" : "sundrycreditors";
+        this.toggleAccountAsidePane();
+    }
+
+    /**
+     * Toggle body class
+     *
+     * @memberof ActionMenuComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.accountAsideMenuState === "in") {
+            document.querySelector("body").classList.add("fixed");
+        } else {
+            document.querySelector("body").classList.remove("fixed");
+        }
+    }
+
+    /**
+     * Toggle account aside pane
+     *
+     * @param {Event} [event]
+     * @memberof ActionMenuComponent
+     */
+    public toggleAccountAsidePane(event?: Event): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
+
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Open custom email dialog
+     *
+     * @param {any} account
+     * @param {string} activeTab
+     * @param {boolean} sendBulk
+     * @memberof ContactComponent
+     */
+    public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.sendEmail.emit();
+            }
+        });
+    }
+
+    public getUpdatedList(grpName?: any): void {
+        if (grpName) {
+            this.editAccount.emit();
+        }
+    }
+}
