@@ -27,6 +27,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
+import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
 
 @NgModule({
     declarations: [
@@ -62,7 +63,8 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         GiddhPageLoaderModule,
         MatMenuModule,
         MatSortModule,
-        AttachmentsModule
+        AttachmentsModule,
+        ActionMenuComponent
     ],
     providers: []
 })

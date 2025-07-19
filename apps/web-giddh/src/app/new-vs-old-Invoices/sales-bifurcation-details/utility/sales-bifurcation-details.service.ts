@@ -5,8 +5,8 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { GiddhErrorHandler } from "../../../services/catchManager/catchmanger";
 import { IServiceConfigArgs, ServiceConfig } from "../../../services/service.config";
 import { GeneralService } from "../../../services/general.service";
+import { SALES_BIFURCATION_API } from "./sales-bifurcation-details.api";
 
-const SALES_BIFURCATION_API = 'company/:companyUniqueName/new-old-sales/details?value=:value&type=:type&dataType=:dataType&page=:page&count=:count&q=:q&sort=:sort&fromDate=:fromDate&toDate=:toDate';
 
 @Injectable()
 export class SalesBifurcationDetailsService {
@@ -34,6 +34,7 @@ export class SalesBifurcationDetailsService {
             ?.replace(':count', params?.count?.toString())
             ?.replace(':q', params?.q?.toString())
             ?.replace(':sort', params?.sort?.toString())
+            ?.replace(':sortBy', params?.sortBy?.toString())
             ?.replace(':fromDate', params?.fromDate?.toString())
             ?.replace(':toDate', params?.toDate?.toString()))
             .pipe(map((res) => {

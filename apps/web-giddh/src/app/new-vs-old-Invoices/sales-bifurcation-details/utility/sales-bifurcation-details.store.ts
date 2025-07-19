@@ -41,12 +41,11 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
     readonly getAllSalesBifurcationDetails = this.effect((data: Observable<{ params: any }>) => {
         return data.pipe(
             switchMap(({ params }) => {
-                this.patchState({ salesBifurcationDetailsListInProgress: true });
+                this.patchState({ salesBifurcationDetailsList: null, salesBifurcationDetailsListInProgress: true });
                 return this.salesBifurcationDetailsService.salesBifurcationDetails(params).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                console.log(res);
                                 this.patchState({
                                     salesBifurcationDetailsList: res.body,
                                     salesBifurcationDetailsListInProgress: false,
