@@ -10,7 +10,8 @@
     padding: 0 0 0 10px !important;
 }
 
-.custom-datepicker-wrapper {
+
+.button-wrapper {
     position: fixed;
     position-anchor: --list;
     left: anchor(right);
@@ -18,34 +19,7 @@
     margin-left: 5px !important;
 }
 
-.custom-branch-wrapper {
-    position: fixed;
-    position-anchor: --datepicker;
-    left: anchor(right);
-    top: anchor(top);
-    margin-left: 5px !important;
+.button-wrapper {
+    anchor-name: --wrapper;
 }
 
-.custom-datepicker-wrapper {
-    anchor-name: --datepicker;
-}
-
-.custom-clear-wrapper {
-    position: fixed;
-    position-anchor: --branch;
-    left: anchor(right);
-    top: anchor(top);
-    margin-left: 5px !important;
-}
-
-.custom-branch-wrapper {
-    anchor-name: --branch;
-}
-
-.custom-default-button {
-    position: fixed;
-    position-anchor: --datepicker;
-    left: anchor(right);
-    top: anchor(top);
-    margin-left: 5px !important;
-}

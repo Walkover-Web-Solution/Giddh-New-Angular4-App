@@ -89,6 +89,9 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
+import { OcrAction } from "../../ai-ocr/ai-ocr.component";
+import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
+import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ServiceConfig } from "../../services/service.config";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
@@ -477,7 +480,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
-    /** True if ocr data is disabled */
+     /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
     public aiOcrDetails$: Observable<any> = this.aiOcrService.aiOcrDetails$;
@@ -1000,7 +1003,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 if (voucherDetails) {
                     this.account.branch = voucherDetails?.branch ?? null;
-
                     if (!voucherDetails.isCopyVoucher) {
                         if (voucherDetails?.cashVoucher) {
                             this.getVoucherType(voucherDetails);
@@ -1161,6 +1163,45 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
 
+                        this.invoiceForm
+                            .get("templateDetails.other.customField1")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField1);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField2);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField3")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField3);
+                        this.invoiceForm
+                            .get("templateDetails.other.message2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.message2);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippedVia")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippedVia);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippingDate")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippingDate);
+                        this.invoiceForm
+                            .get("templateDetails.other.trackingNumber")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+
+                        if (voucherDetails.attachedFiles) {
+                            this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
+                            this.selectedFileName = voucherDetails.attachedFileName;
+                        }
+
+                        this.invoiceForm
+                            .get("isRcmEntry")
+                            .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
+
+                        if (voucherDetails.adjustments?.length && !this.isCopyMode) {
+                            voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
+                                adjustment.adjustmentAmount = adjustment.amount;
+                                return adjustment;
+                            });
+                            this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
+                            this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
+                        }
                     }
 
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
@@ -4948,6 +4989,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     });
             } else {
+                if (this.eWayBillResponse && Object.keys(this.eWayBillResponse).length > 0) {
+                    invoiceForm.ewayBillDetails = this.eWayBillResponse;
+                    this.eWayBillResponse = null;
+                }
                 this.voucherService
                     .generateVoucher(invoiceForm.account?.uniqueName, invoiceForm)
                     .pipe(takeUntil(this.destroyed$))

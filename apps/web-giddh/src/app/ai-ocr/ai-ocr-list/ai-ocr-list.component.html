@@ -20,7 +20,6 @@
             <div
                 *ngIf="isCompany && activeCompany?.name"
                 class="mr-l1"
-                [ngClass]="{ 'custom-branch-wrapper': isCompany }"
             >
                 <reactive-dropdown-field
                     [label]="commonLocaleData?.app_branch"
@@ -43,7 +42,6 @@
                 "
                 mat-stroked-button
                 class="min160 mr-l1"
-                [ngClass]="isCompany ? 'custom-clear-wrapper' : 'custom-default-button'"
                 color="primary"
                 (click)="clearFilter()"
             >
