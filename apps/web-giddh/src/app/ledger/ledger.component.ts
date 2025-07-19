@@ -3544,23 +3544,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     }
                 }
-                if (stockName && stockUniqueName) {
-                    txn.inventory = {
-                        stock: {
-                            name: stockName,
-                            uniqueName: stockUniqueName,
-                        },
-                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
-                        quantity: 1,
-                        unit: {
-                            stockUnitCode: unitCode,
-                            code: unitCode,
-                            rate: rate,
-                            stockUnitUniqueName: stockUnitUniqueName
-                        }
-                    };
-                } else {
-                    delete txn.inventory;
+                if (!txn.duplicateEntry) {
+                    if (stockName && stockUniqueName) {
+                        txn.inventory = {
+                            stock: {
+                                name: stockName,
+                                uniqueName: stockUniqueName,
+                            },
+                            variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
+                            quantity: 1,
+                            unit: {
+                                stockUnitCode: unitCode,
+                                code: unitCode,
+                                rate: rate,
+                                stockUnitUniqueName: stockUnitUniqueName
+                            }
+                        };
+                    } else {
+                        delete txn.inventory;
+                    }
                 }
                 if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
@@ -3819,6 +3821,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         const transaction: TransactionVM = new TransactionVM();
 
         transaction.duplicateEntry = true; // Use this to handle duplicate entry logic every where
+        transaction.subVoucher = res?.subVoucher;
         transaction.amount = res?.actualAmount;
         transaction.convertedAmount = res?.actualAmount;
         transaction.total = res?.total.amount;
@@ -3826,16 +3829,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let particular: any;
         if (res.transactions?.length) {
             res.transactions.forEach(item => {
-                const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
+                // const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
                 if (Object.hasOwn(item.particular, 'category') && ['income','expenses','assets'].includes(item.particular.category) && item.particular.uniqueName !== "roundoff") {
-                    if (item.particular.category === 'assets') {
-                        window.alert('Fixed Assets');
-                        console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
-                        // showDiscountAndTaxPopup = uNameStr.includes('fixedassets');
-                        particular = item.particular;
-                    } else {
-                        particular = item.particular;
-                    }
+                    particular = item.particular;
+                    // if (item.particular.category === 'assets') {
+                    //     // window.alert('Fixed Assets');
+                    //     console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
+                    //     // showDiscountAndTaxPopup = uNameStr.includes('fixedassets');
+                    // } else {
+                    //     particular = item.particular;
+                    // }
                     
                     if (item.inventory) {
                         particular['uniqueName'] = particular?.uniqueName?.split('#')[0];
@@ -3900,10 +3903,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.itcAvailable = res.itcAvailable;
         transaction.particular = selectedAccountUniqueName;
         transaction.type = transactionType;
-        
+        let inventory;
         // let warehouseUniqueName = null;
         if (res.transactions?.length) {
-            const inventory = res.transactions.find(txn => txn.inventory !== null)?.inventory;
+            inventory = res.transactions.find(txn => txn.inventory !== null)?.inventory;
             if (inventory) {
                 res['inventory'] = inventory;
                 // warehouseUniqueName = inventory?.warehouse?.uniqueName || null;
@@ -3953,6 +3956,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         
         this.lc.blankLedger.transactions[txnIndex].duplicateEntry = true; // Use this to handle duplicate entry logic every where
+        this.lc.blankLedger.transactions[txnIndex].subVoucher = res?.subVoucher;
+        this.lc.blankLedger.transactions[txnIndex].inventory = inventory;
         if (isDebitTransaction) {
             this.lc.blankLedger.transactions[txnIndex].debitAmount = res.actualAmount;
             this.lc.blankLedger.transactions[txnIndex].debitTotal = res.total.amount;
@@ -3962,7 +3967,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName; // UniqueName to select in  ledger particular Dropdown rishi2#stock11
-        this.lc.blankLedger.transactions[txnIndex].selectedAccount = {label: selectedAccountName, value: selectedAccountUniqueName, category: particular?.category, additional: {name: selectedAccountName, uniqueName: selectedAccountUniqueName, stock: particular?.stock || null}}; // Name to select in  ledger particular Dropdown Divyanshu | Sales (delete stock)
+        this.lc.blankLedger.transactions[txnIndex].selectedAccount = {
+                label: selectedAccountName, 
+                value: selectedAccountUniqueName, 
+                name: selectedAccountName, 
+                uniqueName: selectedAccountUniqueName, 
+                category: particular?.category, 
+                parentGroups: particular?.parentGroups,
+                uNameStr : particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+                additional: {
+                    name: selectedAccountName, 
+                    uniqueName: selectedAccountUniqueName, 
+                    stock: particular?.stock || null
+                }
+            }; // Name to select in ledger particular Dropdown Divyanshu | Sales (delete stock)
         
         this.lc.blankLedger.transactions[txnIndex].amount = res?.actualAmount;
         this.lc.blankLedger.transactions[txnIndex].convertedAmount = res?.actualAmount;
@@ -4100,7 +4118,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         txn.showOtherTax = this.showOtherTax(txn);
-        // this.handleRcmVisibility(txn);
+        this.handleRcmVisibility(txn);
         // this.handleTaxableAmountVisibility(txn);
         this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
         this.needToReCalculate.next(true);

@@ -504,6 +504,7 @@ export class TransactionVM {
     public oppositeAccountUniqueName?: string;
     public isMrpDiscountApplied?: boolean;
     public duplicateEntry?: boolean = false;
+    public subVoucher?: string;
 }
 
 export interface IInventory {
