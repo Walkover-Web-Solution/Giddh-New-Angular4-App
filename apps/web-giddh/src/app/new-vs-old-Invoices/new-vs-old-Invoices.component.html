@@ -146,7 +146,11 @@
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
                                     [currencySymbol]="false"
@@ -166,7 +170,11 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
                                     [currencySymbol]="false"
@@ -179,20 +187,40 @@
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div class="div-cell align-end">
-                            <a class="d-inline-flex cursor-pointer" href="javascript:void(0)" (click)="showClientList(newVsOldInvoicesData?.oldSales,'old', 'client')">
-                                <amount-field  [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount" [currencySymbol]="false" [currencyCode]="false">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.oldSales, 'old', 'client')"
+                            >
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
-                                <amount-field [amount]="newVsOldInvoicesData?.oldSales?.total" [currencySymbol]="false" [currencyCode]="false">
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.oldSales?.total"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <a class="d-inline-flex cursor-pointer" href="javascript:void(0)" (click)="showClientList(newVsOldInvoicesData?.oldSales,'old', 'invoice')">
-                                <amount-field [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount" [currencySymbol]="false" [currencyCode]="false">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.oldSales, 'old', 'invoice')"
+                            >
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
                             </span>
                         </div>
@@ -206,7 +234,11 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
@@ -226,7 +258,11 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
@@ -239,7 +275,11 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
@@ -259,7 +299,11 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
@@ -272,7 +316,11 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
                                     [currencySymbol]="false"
@@ -292,7 +340,11 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
                                     [currencySymbol]="false"
@@ -305,7 +357,11 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[3]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[3], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.uniqueCount"
                                     [currencySymbol]="false"
@@ -325,7 +381,11 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[3], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.invoiceCount"
                                     [currencySymbol]="false"
@@ -340,7 +400,11 @@
                             {{ newVsOldInvoicesData?.carriedSales[4]?.month }}
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[4], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.uniqueCount"
                                     [currencySymbol]="false"
@@ -360,7 +424,11 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[4], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.invoiceCount"
                                     [currencySymbol]="false"
@@ -383,14 +451,18 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -403,14 +475,18 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -426,14 +502,18 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -446,14 +526,18 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -501,14 +585,18 @@
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -521,27 +609,35 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.totalSales, 'total', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -554,27 +650,35 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.totalSales, 'total', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -587,27 +691,35 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -620,27 +732,35 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -653,14 +773,18 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -676,14 +800,18 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -696,14 +824,18 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -719,14 +851,18 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -739,14 +875,18 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>

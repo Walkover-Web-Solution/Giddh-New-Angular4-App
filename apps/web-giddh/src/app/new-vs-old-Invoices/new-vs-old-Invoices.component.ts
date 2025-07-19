@@ -225,6 +225,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public showClientList(newVsOldInvoicesData: any, type: string, subType: string): void {
+        this.NewVsOldInvoicesQueryRequest.type = this.NewVsOldInvoicesQueryRequest.type == 'quater'?'quarter':'month';
         const data = {
             newVsOldInvoicesData,
             type,
