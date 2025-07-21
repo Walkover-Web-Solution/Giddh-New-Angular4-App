@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, isEqual } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
@@ -16,6 +16,7 @@ import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 @Component({
     selector: 'template-froala',
@@ -199,6 +200,10 @@ export class TemplateFroalaComponent implements OnInit {
     public isFormInvalid: boolean = false;
     /** Holds true if it is trigger */
     public isTrigger: boolean;
+    /** Holds initial form values for change detection */
+    private initialFormValues: any;
+    /** Holds true if form has unsaved changes */
+    public hasUnsavedChanges: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -208,7 +213,8 @@ export class TemplateFroalaComponent implements OnInit {
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
-        private titleCasePipe: TitleCasePipe
+        private titleCasePipe: TitleCasePipe,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) { }
 
     /**
@@ -372,6 +378,11 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailFocusStates.isTo = emailType === EmailType.To;
         this.emailFocusStates.isCc = emailType === EmailType.Cc;
         this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
+        
+        // Trigger change detection for email selections
+        setTimeout(() => {
+            this.checkForUnsavedChanges();
+        }, 100);
     }
 
     /**
@@ -479,14 +490,20 @@ export class TemplateFroalaComponent implements OnInit {
                 entityUniqueNames: [''],
                 voucherTypes: [''],
                 emailSubject: ['', [Validators.required]],
-                to: [''],
-                cc: [''],
-                bcc: [''],
+                to: [[]],
+                cc: [[]],
+                bcc: [[]],
                 executionTime: this.getExecutionTimeFormGroup(),
                 actions: [[TriggerActionEnum.AttachVoucherPdf]],
                 html: [DEFAULT_TRIGGER_TEMPLATE, [Validators.required]],
                 disabled: [false]
             });
+            
+            // Store initial values and setup change detection
+            setTimeout(() => {
+                this.initialFormValues = cloneDeep(this.customTriggerForm.value);
+                this.setupFormChangeDetection();
+            }, 100);
         } else {
             this.emailForm = this.formBuilder.group({
                 to: [template?.to ?? ''],
@@ -496,6 +513,12 @@ export class TemplateFroalaComponent implements OnInit {
                 emailSubject: [template?.emailSubject ?? ''],
                 html: [template?.html ?? '']
             });
+            
+            // Store initial values and setup change detection
+            setTimeout(() => {
+                this.initialFormValues = cloneDeep(this.emailForm.value);
+                this.setupFormChangeDetection();
+            }, 100);
         }
     }
 
@@ -572,6 +595,8 @@ export class TemplateFroalaComponent implements OnInit {
                 this.triggerStore.getTriggerDetails(this.inputData.triggerUniqueName);
             }, 50);
         }
+        this.initialFormValues = cloneDeep(this.customTriggerForm.value);
+        this.setupFormChangeDetection();
     }
 
     /**
@@ -622,6 +647,9 @@ export class TemplateFroalaComponent implements OnInit {
 
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
+        
+        // Reset unsaved changes flag as we're saving
+        this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
     }
 
@@ -662,6 +690,9 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
         }
+        
+        // Reset unsaved changes flag as we're saving
+        this.hasUnsavedChanges = false;
         
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
@@ -781,6 +812,11 @@ export class TemplateFroalaComponent implements OnInit {
             this.showBcc = this.selectedBccEmails.length > 0;
             this.showCc = this.selectedCcEmails.length > 0;
         }
+        
+        // Trigger change detection for email selections
+        setTimeout(() => {
+            this.checkForUnsavedChanges();
+        }, 100);
     }
 
     /**
@@ -963,5 +999,83 @@ export class TemplateFroalaComponent implements OnInit {
         }
         return '';
     }
-    
+
+    /**
+     * Sets up form change detection to track unsaved changes
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private setupFormChangeDetection(): void {
+        const form = this.isTrigger ? this.customTriggerForm : this.emailForm;
+        
+        form.valueChanges.pipe(
+            takeUntil(this.destroyed$),
+            debounceTime(300)
+        ).subscribe((res) => {
+            console.log('Form changed', res);
+            this.checkForUnsavedChanges();
+        });
+
+        // Also listen to selected email changes
+        this.checkForUnsavedChanges();
+    }
+
+    /**
+     * Checks if form has unsaved changes
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private checkForUnsavedChanges(): void {
+        if (!this.initialFormValues) {
+            return;
+        }
+
+        const form = this.isTrigger ? this.customTriggerForm : this.emailForm;
+        const currentValues = cloneDeep(form.value);
+        
+        // Include selected emails in comparison
+        currentValues.to = this.selectedToEmails;
+        currentValues.cc = this.selectedCcEmails;
+        currentValues.bcc = this.selectedBccEmails;
+
+        // Compare current values with initial values
+        this.hasUnsavedChanges = !isEqual(this.initialFormValues, currentValues);
+    }
+
+    /**
+     * Shows leave confirmation dialog
+     *
+     * @private
+     * @returns {Promise<boolean>}
+     * @memberof TemplateFroalaComponent
+     */
+    private showLeaveConfirmation(): Promise<boolean> {
+        return new Promise((resolve) => {
+            const dialogRef = this.pageLeaveUtilityService.openDialog();
+
+            dialogRef.afterClosed().subscribe((result) => {
+                resolve(Boolean(result));
+            });
+        });
+    }
+
+    /**
+     * Handles dialog close with unsaved changes check
+     *
+     * @returns {Promise<void>}
+     * @memberof TemplateFroalaComponent
+     */
+    public async handleDialogClose(): Promise<void> {
+        if (this.hasUnsavedChanges) {
+            const shouldLeave = await this.showLeaveConfirmation();
+            if (shouldLeave) {
+                this.hasUnsavedChanges = false; // Reset to avoid multiple confirmations
+                this.dialogRef.close();
+            }
+        } else {
+            this.dialogRef.close();
+        }
+    }
 }
