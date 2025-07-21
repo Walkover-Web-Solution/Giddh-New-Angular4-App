@@ -152,7 +152,6 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.showClearFilter = false;
         this.requestParams.q = '';
         this.searchValue?.setValue(null);
-        this.initApiCall();
     }
 
     /**
@@ -181,9 +180,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
 
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
-            height: '790px',
             role: 'alertdialog',
-            ariaLabel: 'template'
+            ariaLabel: 'sales-bifurcation-details'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
