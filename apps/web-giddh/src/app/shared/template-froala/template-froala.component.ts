@@ -344,6 +344,12 @@ export class TemplateFroalaComponent implements OnInit {
                 this.dialogRef.close(response);
             }
         });
+
+        this.accountGroupList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.setupTriggerFormChangeDetection(this.customTriggerForm);
+            }
+        });
     }
 
     /**
@@ -487,7 +493,7 @@ export class TemplateFroalaComponent implements OnInit {
                 title: ['', [Validators.required]],
                 triggerModule: [TriggerModuleEnum.VoucherDue, [Validators.required]],
                 entity: [''],
-                entityUniqueNames: [''],
+                entityUniqueNames: [[]],
                 voucherTypes: [''],
                 emailSubject: ['', [Validators.required]],
                 to: [[]],
@@ -500,10 +506,7 @@ export class TemplateFroalaComponent implements OnInit {
             });
             
             // Store initial values and setup change detection
-            setTimeout(() => {
-                this.initialFormValues = cloneDeep(this.customTriggerForm.value);
-                this.setupFormChangeDetection();
-            }, 100);
+            this.setupTriggerFormChangeDetection(this.customTriggerForm);
         } else {
             this.emailForm = this.formBuilder.group({
                 to: [template?.to ?? ''],
@@ -515,11 +518,22 @@ export class TemplateFroalaComponent implements OnInit {
             });
             
             // Store initial values and setup change detection
-            setTimeout(() => {
-                this.initialFormValues = cloneDeep(this.emailForm.value);
-                this.setupFormChangeDetection();
-            }, 100);
+            this.setupTriggerFormChangeDetection(this.emailForm);
         }
+    }
+
+    /**
+     * Sets up form change detection to track unsaved changes
+     *
+     * @private
+     * @param {FormGroup} form - The form group to track
+     * @memberof TemplateFroalaComponent
+     */
+    private setupTriggerFormChangeDetection(form: FormGroup): void {
+        setTimeout(() => {
+            this.initialFormValues = cloneDeep(form.value);
+            this.setupFormChangeDetection();
+        }, 100);
     }
 
     /**
@@ -595,8 +609,7 @@ export class TemplateFroalaComponent implements OnInit {
                 this.triggerStore.getTriggerDetails(this.inputData.triggerUniqueName);
             }, 50);
         }
-        this.initialFormValues = cloneDeep(this.customTriggerForm.value);
-        this.setupFormChangeDetection();
+        this.setupTriggerFormChangeDetection(this.customTriggerForm);
     }
 
     /**
@@ -1013,7 +1026,6 @@ export class TemplateFroalaComponent implements OnInit {
             takeUntil(this.destroyed$),
             debounceTime(300)
         ).subscribe((res) => {
-            console.log('Form changed', res);
             this.checkForUnsavedChanges();
         });
 
