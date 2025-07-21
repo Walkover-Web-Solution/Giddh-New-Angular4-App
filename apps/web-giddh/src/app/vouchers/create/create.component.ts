@@ -5081,7 +5081,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public onSingleToggleChange(): void {
         // Toggle between cash and OCR voucher type
-        const newType = this.invoiceType.isCashInvoice ? this.ocrVoucherType : 'cash';
+        const newType = this.invoiceType.isCashInvoice ? this.ocrVoucherType : VoucherTypeEnum.cash;
         this.onToggleChange(newType);
     }
     
@@ -5092,7 +5092,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public onToggleChange(type: string): void {
-        this.invoiceType.isCashInvoice = type === 'cash' ? true : false;
+        this.invoiceType.isCashInvoice = type === VoucherTypeEnum.cash ? true : false;
         this.voucherType = this.vouchersUtilityService.parseVoucherType(type);
         if(this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
