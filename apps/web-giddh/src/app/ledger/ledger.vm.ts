@@ -443,6 +443,8 @@ export class BlankLedgerVM {
     public mergePB?: boolean;
     public referenceVoucher?: ReferenceVoucher;
     public generateEInvoice?: boolean;
+    public salesPersonUniqueName?: string;
+    public salesPersonName?: string;
 }
 
 export class IInvoiceLinkingRequest {

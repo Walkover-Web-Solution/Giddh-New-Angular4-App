@@ -3724,19 +3724,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private prepareDuplicateTransaction(res: any): void {
         if (!res) return;
         let isDebitTransaction: boolean;
+        const isJournalVoucher = res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher;
         const transaction: TransactionVM = new TransactionVM();
 
         transaction.duplicateEntry = true; // Use this to handle duplicate entry logic every where
         transaction.subVoucher = res?.subVoucher;
-        transaction.amount = res?.actualAmount;
-        transaction.convertedAmount = res?.actualAmount;
-        transaction.total = res?.total.amount;
-        transaction.convertedTotal = res?.total.amount;
         let transactionsParticular: any;
+        let sumOfTax = 0;
         if (res.transactions?.length) {
             res.transactions.forEach(item => {
                 // const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
-                if (Object.hasOwn(item.particular, 'category') && ['income','expenses','assets'].includes(item.particular.category) && item.particular.uniqueName !== "roundoff") {
+                if (Object.hasOwn(item.particular, 'category') && (['income','expenses','assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
                     transactionsParticular = item.particular;
                     // if (item.particular.category === 'assets') {
                     //     // window.alert('Fixed Assets');
@@ -3751,8 +3749,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         transactionsParticular = { ...transactionsParticular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
                     }
                 }
+
+                if (item.isTax) {
+                    sumOfTax += item.amount;
+                }
             })
         }
+        const transactionAmount = isJournalVoucher ? res?.total.amount - sumOfTax : res?.actualAmount;
+        transaction.amount = transactionAmount;
+        transaction.convertedAmount = transactionAmount;
+        transaction.total = res?.total.amount;
+        transaction.convertedTotal = res?.total.amount;
+
         if (res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
             isDebitTransaction = res?.total?.type === TransactionType.Debit ? true : false;
         } else {
@@ -3760,16 +3768,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         const transactionType = isDebitTransaction ? TransactionType.Debit : TransactionType.Credit;
         if (isDebitTransaction) {
-            transaction.debitAmount = res.actualAmount
+            transaction.debitAmount = transactionAmount
             transaction.debitTotal = res.total.amount;
         } else {
-            transaction.creditAmount = res.actualAmount
+            transaction.creditAmount = transactionAmount
             transaction.creditTotal = res.total.amount;
         }
         let selectedAccountName = "";
         let selectedAccountUniqueName = "";
 
-        if (transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
+        if ((transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) || isJournalVoucher) {
             selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
             selectedAccountUniqueName = res.particular?.uniqueName;
             // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
@@ -3830,6 +3838,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.generateInvoice = res.voucherGenerated;
         this.lc.blankLedger.touristSchemeApplicable = res.touristSchemeApplicable;
         this.lc.blankLedger.passportNumber = res.passportNumber;
+        this.lc.blankLedger.salesPersonUniqueName = res.salesPerson?.uniqueName;
+        this.lc.blankLedger.salesPersonName = res.salesPerson?.name;
 
         // this.lc.blankLedger.transactions[0].particular = particular?.uniqueName; ref - 3810
 
@@ -3863,12 +3873,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         
         this.lc.blankLedger.transactions[txnIndex].duplicateEntry = true; // Use this to handle duplicate entry logic every where
         this.lc.blankLedger.transactions[txnIndex].subVoucher = res?.subVoucher;
-        this.lc.blankLedger.transactions[txnIndex].inventory = inventory;
+        this.lc.blankLedger.transactions[txnIndex].inventory = inventory || null;
         if (isDebitTransaction) {
-            this.lc.blankLedger.transactions[txnIndex].debitAmount = res.actualAmount;
+            this.lc.blankLedger.transactions[txnIndex].debitAmount = transactionAmount;
             this.lc.blankLedger.transactions[txnIndex].debitTotal = res.total.amount;
         } else {
-            this.lc.blankLedger.transactions[txnIndex].creditAmount = res.actualAmount;
+            this.lc.blankLedger.transactions[txnIndex].creditAmount = transactionAmount;
             this.lc.blankLedger.transactions[txnIndex].creditTotal = res.total.amount;
         }
 
@@ -3878,9 +3888,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 value: selectedAccountUniqueName, 
                 name: selectedAccountName, 
                 uniqueName: selectedAccountUniqueName, 
-                category: res?.particular?.category, 
-                parentGroups: res?.particular?.parentGroups,
-                uNameStr : res?.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+                category: transactionsParticular?.category, 
+                parentGroups: transactionsParticular?.parentGroups, // Check - https://app.clickup.com/t/86cznbfpd
+                uNameStr : transactionsParticular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
                 additional: {
                     name: selectedAccountName, 
                     uniqueName: selectedAccountUniqueName, 
@@ -3888,13 +3898,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }; // Name to select in ledger particular Dropdown Divyanshu | Sales (delete stock)
         
-        this.lc.blankLedger.transactions[txnIndex].amount = res?.actualAmount;
-        this.lc.blankLedger.transactions[txnIndex].convertedAmount = res?.actualAmount;
+        this.lc.blankLedger.transactions[txnIndex].amount = transactionAmount;
+        this.lc.blankLedger.transactions[txnIndex].convertedAmount = transactionAmount;
         this.lc.blankLedger.transactions[txnIndex].total = res?.total.amount;
         this.lc.blankLedger.transactions[txnIndex].convertedTotal = res?.total.amount;
         this.lc.blankLedger.transactions[txnIndex].discounts = discounts;
         this.lc.blankLedger.transactions[txnIndex].taxes = res?.taxes ?? [];
-        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList?.filter(tax => !TCS_TDS_TAXES_TYPES?.includes(tax?.taxType));
+        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList?.filter(tax => !TCS_TDS_TAXES_TYPES?.includes(tax?.taxType)) || [];
 
         // Other Tax Logic
         let tax: TaxResponse;
