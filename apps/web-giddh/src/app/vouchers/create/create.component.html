@@ -1552,7 +1552,7 @@
                                                     </div>
                                                     <div class="col-12 mt-3" formGroupName="templateDetails">
                                                         <mat-accordion>
-                                                            <mat-expansion-panel>
+                                                            <mat-expansion-panel [expanded]="ocrDataEnabled">
                                                                 <mat-expansion-panel-header>
                                                                     <mat-panel-title>
                                                                         {{ commonLocaleData?.app_other_details }}
@@ -1645,7 +1645,7 @@
                                                                                 <input type="file"
                                                                                     class="position-absolute"
                                                                                     name="invoiceFile" id="invoiceFile"
-                                                                                    (change)="uploadFile()"
+                                                                                    (change)="uploadFile(false)"
                                                                                     droppable="true" />
                                                                                 <ng-container *ngIf="isFileUploading">
                                                                                     <mat-spinner
@@ -1852,7 +1852,7 @@
                                     </div>
                                 </div>
 
-                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4"  *ngIf="isMainVoucher">
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{
                                             commonLocaleData?.app_clear }}</button>
@@ -1914,6 +1914,16 @@
                                         <button mat-stroked-button color="primary" (click)="updateVoucher()">{{
                                             updateVoucherText }}</button>
                                     </ng-container>
+                                </div>
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4" *ngIf="!isMainVoucher">
+                                    <button mat-stroked-button (click)="resetVoucherForm()">{{
+                                        commonLocaleData?.app_clear }}</button>
+                                    <button mat-stroked-button color="primary" (click)="generateVoucher('skip')">
+                                        {{ commonLocaleData?.app_skip_and_next }}
+                                    </button>
+                                    <button mat-stroked-button color="primary" (click)="generateVoucher('save')">
+                                        {{ commonLocaleData?.app_save_and_next }}
+                                    </button>
                                 </div>
                             </div>
                         </div>

@@ -789,5 +789,7 @@
         "thursday": "गुरुवार",
         "friday": "शुक्रवार",
         "saturday": "शनिवार"
-    }
+    },
+    "app_skip_and_next": "छोड़ें और अगला",
+    "app_save_and_next":"सहेजें और अगला"
 }
