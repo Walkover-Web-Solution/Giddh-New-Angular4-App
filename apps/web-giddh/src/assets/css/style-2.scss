@@ -1215,9 +1215,11 @@ textarea {
 
 body {
     &.template-wrapper {
-        mat-tab-body {
-            &.mat-mdc-tab-body-active {
-                z-index: unset !important;
+        .invoice-list {
+            mat-tab-body {
+                &.mat-mdc-tab-body-active {
+                    z-index: unset !important;
+                }
             }
         }
     }
