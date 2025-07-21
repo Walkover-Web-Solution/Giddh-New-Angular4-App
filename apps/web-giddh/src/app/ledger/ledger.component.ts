@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -3732,12 +3732,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.convertedAmount = res?.actualAmount;
         transaction.total = res?.total.amount;
         transaction.convertedTotal = res?.total.amount;
-        let particular: any;
+        let transactionsParticular: any;
         if (res.transactions?.length) {
             res.transactions.forEach(item => {
                 // const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
                 if (Object.hasOwn(item.particular, 'category') && ['income','expenses','assets'].includes(item.particular.category) && item.particular.uniqueName !== "roundoff") {
-                    particular = item.particular;
+                    transactionsParticular = item.particular;
                     // if (item.particular.category === 'assets') {
                     //     // window.alert('Fixed Assets');
                     //     console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
@@ -3747,8 +3747,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     // }
                     
                     if (item.inventory) {
-                        particular['uniqueName'] = particular?.uniqueName?.split('#')[0];
-                        particular = { ...particular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
+                        transactionsParticular['uniqueName'] = transactionsParticular?.uniqueName?.split('#')[0];
+                        transactionsParticular = { ...transactionsParticular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
                     }
                 }
             })
@@ -3769,13 +3769,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let selectedAccountName = "";
         let selectedAccountUniqueName = "";
 
-        if (particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
-            selectedAccountName = `${res.particular?.name}${particular?.stock ? ' (' + particular?.stock?.name + ')': ''}`;
+        if (transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
+            selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
             selectedAccountUniqueName = res.particular?.uniqueName;
             // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
         } else {
-            selectedAccountName = particular?.name;
-            selectedAccountUniqueName = particular?.uniqueName;
+            selectedAccountName = transactionsParticular?.name;
+            selectedAccountUniqueName = transactionsParticular?.uniqueName;
         }
 
         let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
@@ -3878,13 +3878,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 value: selectedAccountUniqueName, 
                 name: selectedAccountName, 
                 uniqueName: selectedAccountUniqueName, 
-                category: particular?.category, 
-                parentGroups: particular?.parentGroups,
-                uNameStr : particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+                category: res?.particular?.category, 
+                parentGroups: res?.particular?.parentGroups,
+                uNameStr : res?.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
                 additional: {
                     name: selectedAccountName, 
                     uniqueName: selectedAccountUniqueName, 
-                    stock: particular?.stock || null
+                    stock: transactionsParticular?.stock || null
                 }
             }; // Name to select in ledger particular Dropdown Divyanshu | Sales (delete stock)
         
@@ -3894,7 +3894,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.transactions[txnIndex].convertedTotal = res?.total.amount;
         this.lc.blankLedger.transactions[txnIndex].discounts = discounts;
         this.lc.blankLedger.transactions[txnIndex].taxes = res?.taxes ?? [];
-        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList;
+        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList?.filter(tax => !TCS_TDS_TAXES_TYPES?.includes(tax?.taxType));
 
         // Other Tax Logic
         let tax: TaxResponse;

@@ -581,11 +581,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.amountChanged();
                         this.calculateTax();
                     }
-                    document.getElementById("saveLedger")?.focus();
                     this.cdRef.markForCheck();
                 }, 10);
             }
         });
+        document.getElementById("saveLedger")?.focus();
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -1840,7 +1840,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         return item;
                     });
                 });
-            } else {
+            } else if (!this.currentTxn?.duplicateEntry){
                 this.currentTxn?.discounts?.map(item => {
                     item.isActive = false;
                     return item;
