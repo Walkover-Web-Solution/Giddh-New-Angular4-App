@@ -27,6 +27,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { ActionMenuComponent } from '../shared/action-menu/action-menu.component
         MatMenuModule,
         MatSortModule,
         AttachmentsModule,
-        ActionMenuComponent
+        ActionMenuComponent,
+        FroalaTemplateEditorModule
     ],
     providers: []
 })
