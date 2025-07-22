@@ -95,5 +95,6 @@
     "swift_code": "स्विफ्ट कोड",
     "bulk_add": "मोठ्या प्रमाणात जोडा",
     "enter_value": "मूल्य प्रविष्ट करा",
-    "change_gst_number_to_update_the_state": "जीएसटी नंबर बदलणे राज्य अद्यतनित करण्यासाठी"
+    "change_gst_number_to_update_the_state": "जीएसटी नंबर बदलणे राज्य अद्यतनित करण्यासाठी",
+    "permission_role_name": "रॉल निवडा"
 }

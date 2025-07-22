@@ -70,13 +70,11 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         });
 
         this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
-            if (permissions) {
-                permissions.forEach((permission: GetAllPermissionResponse) => {
-                    this.allPermissions.push({
-                        value: permission.uniqueName,
-                        label: permission.name
-                    });
-                });
+            if (permissions?.length) {
+                this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
+                    label: permission.name,
+                    value: permission.uniqueName
+                }));
             }
         });
     }
@@ -127,7 +125,6 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
-        console.log(model, event);
         let data = cloneDeep(model);
         let newPermission = event.value;
         data.roleUniqueName = newPermission;

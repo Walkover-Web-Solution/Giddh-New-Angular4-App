@@ -63,10 +63,12 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         });
 
         this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
-            this.allPermissions = permissions.map((permission: any) => ({
-                label: permission.name,
-                value: permission.uniqueName,
-            }));
+            if (permissions?.length) {
+                this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
+                    label: permission.name,
+                    value: permission.uniqueName
+                }));
+            }
         });
     }
 
