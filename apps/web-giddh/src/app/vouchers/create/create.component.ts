@@ -481,7 +481,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
-     /** True if OCR data is enabled for voucher creation. */
+    /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
     public aiOcrDetails$: Observable<any> = this.aiOcrService.aiOcrDetails$;
@@ -491,6 +491,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public aiOcrToken: string = "";
     /** True if main create voucher module */
     public isMainVoucher: boolean = false;
+    /** Holds OCR voucher type */
+    public ocrVoucherType: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -960,6 +962,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.openAccountDropdown = false;
                     this.urlVoucherType = aiOcrDetails.type;
                     this.voucherType = this.vouchersUtilityService.parseVoucherType(aiOcrDetails.type);
+                    this.ocrVoucherType = aiOcrDetails.type;
                     this.aiOcrService.saveAndNext$.next(null);
                     this.aiOcrService.skipAndNext$.next(null);
 
@@ -5012,6 +5015,49 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
             }
         }
+    }
+
+    /**
+     * Handles single toggle button change between OCR voucher type and cash mode
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public onSingleToggleChange(): void {
+        // Toggle between cash and OCR voucher type
+        const newType = this.invoiceType.isCashInvoice ? this.ocrVoucherType : 'cash';
+        this.onToggleChange(newType);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Toggles between create and list
+     *
+     * @param {string} type
+     * @memberof VoucherCreateComponent
+     */
+    public onToggleChange(type: string): void {
+        this.invoiceType.isCashInvoice = type === 'cash' ? true : false;
+        if (this.invoiceType.isCashInvoice) {
+            this.accountFormFields = cloneDeep(this.companyFormFields);
+            this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
+            this.account.taxType = cloneDeep(this.company.taxType);
+            this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
+        }
+        this.voucherType = this.vouchersUtilityService.parseVoucherType(type);
+        this.company.countryName = null;
+        this.getAccountOnboardingFormData();
+        this.getCompanyProfile();
+        this.getCountryList();
+        this.getDiscountsList();
+        this.getCompanyBranches();
+        this.getCompanyTaxes();
+        this.getWarehouses();
+        this.getIsTcsTdsApplicable();
+        this.getInvoiceSettings();
+        this.getCreatedTemplates();
+        this.searchStock();
+        this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+        this.changeDetection.detectChanges();
     }
 
     /**
