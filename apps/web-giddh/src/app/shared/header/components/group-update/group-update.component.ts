@@ -159,12 +159,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.uniqueName = activeGroup.uniqueName;
                 if (activeGroup.applicableDiscounts && activeGroup.applicableDiscounts.length) {
                     let list = activeGroup.applicableDiscounts;
-                    Object.keys(list)?.forEach(key => {
-                        this.selectedDiscounts = {
-                            value: list[key].uniqueName,
-                            label: list[key].name
-                        };
-                    });
+                    this.selectedDiscounts = {
+                        value: list[0].uniqueName,
+                        label: list[0].name
+                    };
                 }
                 this.groupDetailForm?.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
                 if (activeGroup.fixed) {
