@@ -3819,6 +3819,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!res) return;
         let isDebitTransaction: boolean;
         const isJournalVoucher = res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher;
+        const isActiveAccountAndParticularIsSame = res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName;
         const transaction: TransactionVM = new TransactionVM();
 
         transaction.duplicateEntry = true; // Use this to handle duplicate entry logic every where
@@ -3855,7 +3856,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.total = res?.total.amount;
         transaction.convertedTotal = res?.total.amount;
 
-        if (res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName) {
+        if (isActiveAccountAndParticularIsSame) {
             isDebitTransaction = res?.total?.type === TransactionType.Debit ? true : false;
         } else {
             isDebitTransaction = res?.total?.type === TransactionType.Debit ? false : true;
@@ -3871,13 +3872,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let selectedAccountName = "";
         let selectedAccountUniqueName = "";
 
-        if ((transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) || isJournalVoucher) {
+        // if ((transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) || isJournalVoucher) {
+        //     selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
+        //     selectedAccountUniqueName = res.particular?.uniqueName;
+        //     // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
+        // } 
+        if (isActiveAccountAndParticularIsSame) {
+            selectedAccountName = transactionsParticular?.name;
+            selectedAccountUniqueName = transactionsParticular?.uniqueName;
+        } else { // if ((transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) || isJournalVoucher) {
             selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
             selectedAccountUniqueName = res.particular?.uniqueName;
             // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
-        } else {
-            selectedAccountName = transactionsParticular?.name;
-            selectedAccountUniqueName = transactionsParticular?.uniqueName;
         }
 
         let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
@@ -3977,18 +3983,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName; // UniqueName to select in  ledger particular Dropdown rishi2#stock11
+        const particular = isActiveAccountAndParticularIsSame ? transactionsParticular : res.particular;
         this.lc.blankLedger.transactions[txnIndex].selectedAccount = {
                 label: selectedAccountName, 
                 value: selectedAccountUniqueName, 
                 name: selectedAccountName, 
                 uniqueName: selectedAccountUniqueName, 
-                category: transactionsParticular?.category, 
-                parentGroups: transactionsParticular?.parentGroups, // Check - https://app.clickup.com/t/86cznbfpd
-                uNameStr : transactionsParticular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+                category: particular?.category, 
+                parentGroups: particular?.parentGroups, // Check - https://app.clickup.com/t/86cznbfpd
+                uNameStr : particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
                 additional: {
                     name: selectedAccountName, 
                     uniqueName: selectedAccountUniqueName, 
-                    stock: transactionsParticular?.stock || null
+                    stock: particular?.stock || null
                 }
             }; // Name to select in ledger particular Dropdown Divyanshu | Sales (delete stock)
         
