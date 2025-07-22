@@ -220,5 +220,6 @@
     "select_statement": "वक्तव्य निवडा",
     "import_voucher": "व्हाउचर आयात करा",
     "import_bank_statement": "बँक स्टेटमेंट आयात करा",
-    "opening_closing_balance_filter_message": "फिल्टर लागू केल्यावर आम्ही ओपनिंग आणि क्लोजिंग बॅलन्स दाखवत नाही"
+    "opening_closing_balance_filter_message": "फिल्टर लागू केल्यावर आम्ही ओपनिंग आणि क्लोजिंग बॅलन्स दाखवत नाही",
+    "change_salesperson_confirmation": "तुम्हाला खात्री आहे की तुम्हाला या नोंदीवरील विक्रेता बदलायचा आहे?<br />हे लिंक केलेल्या व्हाउचरवरील विक्रेत्याला देखील अपडेट करेल."
 }
