@@ -4,7 +4,10 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="common-wrapper" *ngIf="totalRecords !== null && responseAccountList">
+<div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+    <div class="common-wrapper" *ngIf="accountListData?.length && !(getAccountStatementInProgress$ | async)">
         <div class="account-statement p-20 mr-t20">
             <table class="w-100">
                 <tr>
@@ -378,7 +381,7 @@
                             [showFirstLastButtons]="true"
                             [pageSizeOptions]="pageSizeOptions"
                             [hidePageSize]="false"
-                            [pageIndex]="pageIndex"
+                            [pageIndex]="accountListRequest.page - 1"
                         >
                         </mat-paginator>
                     </div>

@@ -131,7 +131,7 @@
                                 [type]="'text'"
                                 formControlName="taxNumber"
                                 [showError]="
-                                    (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
+                                    isFormSubmitted && (changeBillingForm.get('taxNumber')?.value && !isGstinValid)
                                 "
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
@@ -146,11 +146,12 @@
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_state"
                                     [options]="states"
-                                    [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
+                                    [showError]="isFormSubmitted && changeBillingForm.get('state')?.invalid"
                                     [readonly]="disabledState"
                                     [defaultValue]="selectedState"
                                     (selectedOption)="selectState($event)"
                                     [ngClass]="{ 'readonly-field': disabledState }"
+                                    [required]="true"
                                 >
                                 </dropdown-field>
                             </div>
@@ -161,7 +162,6 @@
                                     [label]="commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
-                                    [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
                                     [defaultValue]="selectedState"
                                     (selectedOption)="changeBillingForm.get('state')?.patchValue($event)"
                                 >

@@ -172,9 +172,13 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
-                                    accountStatementList: res?.body ?? [],
-                                    getAccountStatementInProgress: false
+                                    accountStatementList: res?.body ?? []
                                 });
+                                setTimeout(() => {
+                                    this.patchState({
+                                        getAccountStatementInProgress: false
+                                    });
+                                }, 400);
                             } else {
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);

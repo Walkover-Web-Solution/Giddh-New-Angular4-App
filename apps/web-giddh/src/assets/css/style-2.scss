@@ -51,6 +51,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/mat-chip.scss";
 @import "../css/global/select-multiple-fields.scss";
 @import "../css/global/override-material-theme-variables";
+@import "../css/global/tribute-js.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -14012,17 +14013,4 @@ mat-list {
 
 .bg-white {
     background: var(--color-white) !important;
-}
-
-.mention-item {
-    padding: 8px 12px;
-}
-
-.tribute-container li {
-    background: var(--color-white) !important;
-}
-
-.tribute-container .highlight {
-    background-color: var(--color-primary-filter-background) !important;
-    color: var(--color-giddh-blue);
 }
