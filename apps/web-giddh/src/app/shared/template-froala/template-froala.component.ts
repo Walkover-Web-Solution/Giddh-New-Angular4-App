@@ -354,10 +354,11 @@ export class TemplateFroalaComponent implements OnInit {
         (this.isTrigger ? this.customTriggerForm : this.emailForm).valueChanges.pipe(
             takeUntil(this.destroyed$),
             debounceTime(300),
+            skip(1),
             distinctUntilChanged()
         ).subscribe(response => {
             if (response) {
-                if (!response.title) return;
+                if (this.inputData?.triggerUniqueName && !response.title) return;
                 this.hasUnsavedChanges = true;
             }
         });
