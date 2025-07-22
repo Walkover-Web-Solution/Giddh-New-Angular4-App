@@ -701,6 +701,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['']
