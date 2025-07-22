@@ -334,17 +334,13 @@ export class TemplateFroalaComponent implements OnInit {
                 this.clickedOutsideEmail();
                 
                 // Patch existing form instead of recreating it
-                if (this.emailForm) {
-                    this.emailForm.patchValue({
-                        to: response.to ?? '',
-                        cc: response.cc ?? '',
-                        bcc: response.bcc ?? '',
-                        emailSubject: response.emailSubject ?? '',
-                        html: response.html ?? ''
-                    }, { emitEvent: false });
-                } else {
-                    this.initializeForm(response);
-                }
+                this.emailForm.patchValue({
+                    to: response.to ?? null,
+                    cc: response.cc ?? null,
+                    bcc: response.bcc ?? null,
+                    emailSubject: response.emailSubject ?? null,
+                    html: response.html ?? null
+                }, { emitEvent: false });
             }
         });
 
@@ -358,22 +354,11 @@ export class TemplateFroalaComponent implements OnInit {
         (this.isTrigger ? this.customTriggerForm : this.emailForm).valueChanges.pipe(
             takeUntil(this.destroyed$),
             debounceTime(300),
-            skip(1),
             distinctUntilChanged()
         ).subscribe(response => {
             if (response) {
-               this.hasUnsavedChanges = true;
-               console.log("Has unsaved changes", response);
-            }
-        });
-
-        this.customTriggerForm.get('entityUniqueNames').valueChanges.pipe(
-            takeUntil(this.destroyed$),
-            distinctUntilChanged()
-        ).subscribe(response => {
-            if (response) {
-            //    this.hasUnsavedChanges = true;
-               console.log("entityUniqueNames", response);
+                if (!response.title) return;
+                this.hasUnsavedChanges = true;
             }
         });
     }
@@ -511,12 +496,12 @@ export class TemplateFroalaComponent implements OnInit {
     public initializeForm(template?: any): void {
         if (this.isTrigger) {
             this.customTriggerForm = this.formBuilder.group({
-                title: ['', [Validators.required]],
+                title: [null, [Validators.required]],
                 triggerModule: [TriggerModuleEnum.VoucherDue, [Validators.required]],
-                entity: [''],
+                entity: [null],
                 entityUniqueNames: [[]],
-                voucherTypes: [''],
-                emailSubject: ['', [Validators.required]],
+                voucherTypes: [null],
+                emailSubject: [null, [Validators.required]],
                 to: [[]],
                 cc: [[]],
                 bcc: [[]],
@@ -524,16 +509,16 @@ export class TemplateFroalaComponent implements OnInit {
                 actions: [[TriggerActionEnum.AttachVoucherPdf]],
                 html: [DEFAULT_TRIGGER_TEMPLATE, [Validators.required]],
                 disabled: [false]
-            });
+            }, { emitEvent: false });
         } else {
             this.emailForm = this.formBuilder.group({
-                to: [template?.to ?? ''],
-                cc: [template?.cc ?? ''],
-                bcc: [template?.bcc ?? ''],
+                to: [template?.to ?? null],
+                cc: [template?.cc ?? null],
+                bcc: [template?.bcc ?? null],
                 voucherTypes: [[this.inputData]],
-                emailSubject: [template?.emailSubject ?? ''],
-                html: [template?.html ?? '']
-            });
+                emailSubject: [template?.emailSubject ?? null],
+                html: [template?.html ?? null]
+            }, { emitEvent: false });
         }
     }
 
@@ -590,8 +575,8 @@ export class TemplateFroalaComponent implements OnInit {
                     requiredFields.push(fieldName);
 
                     dynamicControls.addControl(fieldName, new FormGroup({
-                        key: new FormControl(''),
-                        value: new FormControl('')
+                        key: new FormControl(null),
+                        value: new FormControl(null)
                     }));
                 }
             });
@@ -911,8 +896,8 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public onTimeActionChange(event?: IOption): void {
-        this.customTriggerForm?.get('executionTime')?.get('dayOfMonth')?.setValue('', { emitEvent: false });
-        this.customTriggerForm?.get('executionTime')?.get('dayOfWeek')?.setValue('', { emitEvent: false });
+        this.customTriggerForm?.get('executionTime')?.get('dayOfMonth')?.setValue(null, { emitEvent: false });
+        this.customTriggerForm?.get('executionTime')?.get('dayOfWeek')?.setValue(null, { emitEvent: false });
 
         if (event?.value) {
             this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
@@ -984,7 +969,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getLabelValue(options: IOption[], value: string): string {
-        return options?.find(option => option?.value?.toUpperCase() === value.toUpperCase())?.label || '';
+        return options?.find(option => option?.value?.toUpperCase() === value?.toUpperCase())?.label || '';
     }
 
     /**
@@ -1032,7 +1017,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public async handleDialogClose(): Promise<void> {
-        if (this.hasUnsavedChanges) {
+        if (this.hasUnsavedChanges || !this.validateEmailRecipientsUnchanged()) {
             const shouldLeave = await this.showLeaveConfirmation();
             if (shouldLeave) {
                 this.hasUnsavedChanges = false; // Reset to avoid multiple confirmations
@@ -1041,5 +1026,25 @@ export class TemplateFroalaComponent implements OnInit {
         } else {
             this.dialogRef.close();
         }
+    }
+
+    /**
+     * Validates if the email recipients (to, cc, bcc) have been modified
+     *
+     * @returns {boolean} true if recipients are unchanged, false if modified
+     * @memberof TemplateFroalaComponent
+     */
+    private validateEmailRecipientsUnchanged(): boolean {
+        const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
+        const { to, bcc, cc } = currentForm;
+        
+        const formRecipients = { to, bcc, cc };
+        const selectedRecipients = {
+            to: this.selectedToEmails,
+            bcc: this.selectedBccEmails,
+            cc: this.selectedCcEmails
+        };
+
+        return isEqual(formRecipients, selectedRecipients);
     }
 }
