@@ -553,7 +553,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      */
     public openShareGroupDialog(): void {
         this.shareGroupRef = this.dialog.open(this.shareGroupDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
         this.shareGroupRef.afterOpened().pipe(take(1)).subscribe(() => {
             this.shareGroupModalComp.getGroupSharedWith();
@@ -576,7 +577,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      */
     public openShareAccountDialog(): void {
         this.shareAccountRef = this.dialog.open(this.shareAccountDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
 
         this.shareAccountRef.afterOpened().pipe(take(1)).subscribe(() => {
@@ -613,7 +615,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountRef = this.dialog.open(this.deleteMergedAccountDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
@@ -686,7 +689,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             ?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
             ?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountRef = this.dialog.open(this.moveMergedAccountDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
@@ -736,7 +740,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      */
     public openDeleteAccountDialog(): void {
         this.deleteAccountRef = this.dialog.open(this.deleteAccountDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
@@ -769,7 +774,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      */
     public exportGroupLedger(): void {
         this.groupExportLedgerRef = this.dialog.open(this.groupExportLedgerDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 

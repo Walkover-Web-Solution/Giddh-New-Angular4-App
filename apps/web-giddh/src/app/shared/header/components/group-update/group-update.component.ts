@@ -214,11 +214,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                                 // set value in tax group form
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: allTaxes });
-                                }, 100);
+                                }, 200);
                             } else {
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: applicableTaxes });
-                                }, 100);
+                                }, 200);
                             }
 
                         } else {
@@ -228,7 +228,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                             // set value in tax group form
                             setTimeout(() => {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
-                            }, 100);
+                            }, 200);
 
                         }
                     }
@@ -238,7 +238,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 setTimeout(() => {
                     this.filterTaxesForDebtorCreditor();
-                }, 150);
+                }, 200);
             }
         });
     }

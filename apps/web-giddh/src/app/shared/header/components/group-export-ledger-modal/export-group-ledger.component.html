@@ -9,7 +9,7 @@
             <h3>{{ localeData?.export_group_ledger }}</h3>
             <i mat-dialog-close aria-label="close icon" class="icon-cross" (click)="closeExportGroupLedgerModal.emit('close')"></i>
         </div>
-        <div class="modal-body">
+        <mat-dialog-content class="dialog-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mr-b15">
                     <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
@@ -138,11 +138,18 @@
                           ></master-export-option>
                     </div>
                 </ng-container>
-                <button class="btn-success btn min-width-100" (click)="exportLedger()">
+                <button
+                    mat-stroked-button 
+                    color="primary" 
+                    class="pull-right" 
+                    [matTooltip]="commonLocaleData?.app_export" 
+                    matTooltipPosition="above" 
+                    (click)="exportLedger()"
+                >
                     {{ commonLocaleData?.app_export }}
                 </button>
             </form>
-        </div>
+        </mat-dialog-content>
     </div>
 </ng-container>
 <ng-template #datepickerTemplate>
