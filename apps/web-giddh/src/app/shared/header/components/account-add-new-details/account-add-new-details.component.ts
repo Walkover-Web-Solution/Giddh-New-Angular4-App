@@ -565,6 +565,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['', Validators.required]
