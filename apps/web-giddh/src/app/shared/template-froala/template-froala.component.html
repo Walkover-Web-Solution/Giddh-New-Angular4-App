@@ -20,17 +20,17 @@
                     *ngIf="isTrigger"
                 >
                     <!-- Trigger Name -->
-                    <div>
-                    <input-field
-                        [type]="'text'"
-                        [name]="'triggerName'"
-                        [required]="true"
-                        [label]="localeData?.trigger_name"
-                        [placeholder]="localeData?.enter_trigger_name"
-                        formControlName="title"
-                        [showError]="isFormInvalid && customTriggerForm?.controls?.title?.invalid"
-                    >
-                    </input-field>
+                    <div class="custom-mat-form-field">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{localeData?.trigger_name}}</mat-label>
+                            <input
+                                matInput
+                                name="triggerName"
+                                formControlName="title"
+                                [required]="true"
+                                [placeholder]="localeData?.enter_trigger_name"
+                            >
+                        </mat-form-field>
                     </div>
                 
                     <!-- Trigger Module -->
@@ -94,54 +94,55 @@
                     <ng-container *ngFor="let field of emailConditionSuggestions$ | async">
                     <div>
                         <reactive-dropdown-field
-                        [name]="field.variable"
-                        [labelValue]="getLabelValue(emailConditionSuggestionsLabelOptions[field.variable].options, customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')?.value)"
-                        [formControl]="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')"
-                        [placeholder]="commonLocaleData?.app_select"
-                        [label]="emailConditionSuggestionsLabelOptions[field.variable].dropdownLabel"
-                        [options]="emailConditionSuggestionsLabelOptions[field.variable].options"
-                        [showError]="isFormInvalid && customTriggerForm?.controls?.conditions?.invalid"
+                            [name]="field.variable"
+                            [labelValue]="getLabelValue(emailConditionSuggestionsLabelOptions[field.variable].options, customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')?.value)"
+                            [formControl]="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [label]="emailConditionSuggestionsLabelOptions[field.variable].dropdownLabel"
+                            [options]="emailConditionSuggestionsLabelOptions[field.variable].options"
+                            [showError]="isFormInvalid && customTriggerForm?.controls?.conditions?.invalid"
                         >
                         </reactive-dropdown-field>
                     </div>
-                    <div>
-                        <input-field
-                        [type]="'text'"
-                        [name]="field.variable"
-                        [label]="emailConditionSuggestionsLabelOptions[field.variable].inputLabel"
-                        [placeholder]="commonLocaleData?.app_enter"
-                        [formControl]="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('value')"
-                        [showError]="isFormInvalid && customTriggerForm?.controls?.conditions?.invalid"
-                        >
-                        </input-field>
+                    <div class="custom-mat-form-field">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{ emailConditionSuggestionsLabelOptions[field.variable].inputLabel }}</mat-label>
+                            <input
+                                matInput
+                                [name]="field.variable"
+                                [formControl]="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('value')"
+                                [required]="true"
+                                [placeholder]="commonLocaleData?.app_enter"
+                            >
+                        </mat-form-field>
                     </div>
                     </ng-container>
                 
                     <!-- Execution Time -->
                     <div formGroupName="executionTime" class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
-                        <mat-label>{{ commonLocaleData?.app_time }}</mat-label>
-                        <input
-                            matInput
-                            type="time"
-                            [placeholder]="localeData?.enter_time"
-                            formControlName="time"
-                        />
-                    </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{ commonLocaleData?.app_time }}</mat-label>
+                            <input
+                                matInput
+                                type="time"
+                                [placeholder]="localeData?.enter_time"
+                                formControlName="time"
+                            />
+                        </mat-form-field>
                     </div>
                 
                     <!-- Day Action (Day of Week or Day of Month) -->
                     <div>
-                    <reactive-dropdown-field
-                        [labelValue]="getDayActionLabelValue()"
-                        [name]="'entity'"
-                        [label]="localeData?.day_action"
-                        [placeholder]="localeData?.select_time_action"
-                        [options]="timeOtherOptions"
-                        (selectedOption)="onTimeActionChange($event)"
-                        (onClear)="onTimeActionChange(); showDayOfWeek = null; setTimeActionValidator()"
-                    >
-                    </reactive-dropdown-field>
+                        <reactive-dropdown-field
+                            [labelValue]="getDayActionLabelValue()"
+                            [name]="'entity'"
+                            [label]="localeData?.day_action"
+                            [placeholder]="localeData?.select_time_action"
+                            [options]="timeOtherOptions"
+                            (selectedOption)="onTimeActionChange($event)"
+                            (onClear)="onTimeActionChange(); showDayOfWeek = null; setTimeActionValidator()"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                 
                     <!-- Day of Week or Day of Month -->
@@ -162,14 +163,14 @@
                     <!-- Day of Month -->
                     <ng-template #dayOfMonthTemplate>
                         <reactive-dropdown-field
-                        [name]="'entity'"
-                        [label]="localeData?.date_of_month"
-                        [placeholder]="localeData?.select_date_of_month"
-                        [options]="dayOfMonthOptions"
-                        [labelValue]="getLabelValue(dayOfMonthOptions, customTriggerForm?.controls?.executionTime?.get('dayOfMonth')?.value)"
-                        formControlName="dayOfMonth"
-                        [required]="true"
-                        [showError]="isFormInvalid && customTriggerForm?.controls?.executionTime?.controls?.dayOfMonth?.invalid"
+                            [name]="'entity'"
+                            [label]="localeData?.date_of_month"
+                            [placeholder]="localeData?.select_date_of_month"
+                            [options]="dayOfMonthOptions"
+                            [labelValue]="getLabelValue(dayOfMonthOptions, customTriggerForm?.controls?.executionTime?.get('dayOfMonth')?.value)"
+                            formControlName="dayOfMonth"
+                            [required]="true"
+                            [showError]="isFormInvalid && customTriggerForm?.controls?.executionTime?.controls?.dayOfMonth?.invalid"
                         >
                         </reactive-dropdown-field>
                     </ng-template>
