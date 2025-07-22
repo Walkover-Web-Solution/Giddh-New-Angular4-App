@@ -32,7 +32,7 @@
                             [disabled]="isUserRestricted"
                             [readonly]="isUserRestricted"
                             [options]="allPermissions"
-                            [name]="selectedPermission"
+                            [name]="'selectedPermission'"
                             [required]="true"
                             [readonlyInput]="true"
                             (selectedOption)="$event && selectedPermission = $event.value"
