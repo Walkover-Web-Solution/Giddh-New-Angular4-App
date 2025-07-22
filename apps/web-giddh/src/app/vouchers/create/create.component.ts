@@ -5117,7 +5117,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             label = this.ocrVoucherType;
         }
-        console.log('label', label);
         this.voucherType = this.vouchersUtilityService.parseVoucherType(label);
         this.company.countryName = null;
         this.getAccountOnboardingFormData();
