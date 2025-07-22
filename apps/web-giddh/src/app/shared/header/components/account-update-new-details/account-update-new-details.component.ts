@@ -701,6 +701,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['']
@@ -1098,9 +1099,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         if (this.intl) {
             let mobileNo = this.intl['init-contact-update']?.getNumber();
-            accountRequest['mobileNo'] = mobileNo;
+            if (mobileNo) {
+                accountRequest['mobileNo'] = mobileNo;
+            }
         }
-
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -1117,6 +1119,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         delete accountRequest['portalDomain'];
+        delete accountRequest['mobileCode'];
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -1363,7 +1366,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.addAccountForm.get('currency')?.patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
-                        if (!this.addAccountForm.get('mobileCode')?.value) {
+                        if (!this.addAccountForm.get('mobileCode')?.value && this.selectedAccountCallingCode) {
                             this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }

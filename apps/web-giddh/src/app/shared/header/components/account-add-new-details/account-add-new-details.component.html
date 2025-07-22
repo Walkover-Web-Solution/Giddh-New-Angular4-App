@@ -769,10 +769,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row pd-b2">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'duePeriod'"
+                                [label]="localeData?.default_expiry_days"
+                                [placeholder]="'00'"
+                                [type]="'text'"
+                                [maxlength]="3"
+                                [allowDigitsOnly]="true"
+                                formControlName="duePeriod"
+                                class="settings-field d-block"
+                                [matSuffix]="commonLocaleData?.app_days"
+                            ></input-field>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="description">{{ localeData?.description_label }}</label>
+                                <label>{{ commonLocaleData?.app_note }}</label>
                                 <textarea
                                     id="description"
                                     rows="3 "

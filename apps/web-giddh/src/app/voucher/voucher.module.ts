@@ -37,7 +37,7 @@ import { VoucherPrintInPlaceComponent } from "./components/voucher-print-inplace
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
@@ -61,8 +61,8 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         TaxControlModule,
         DiscountControlModule,
         LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+            style: "slide-left",
+            spinnerSize: 30,
         }),
         SelectModule.forRoot(),
         SendEmailInvoiceModule,
@@ -91,15 +91,10 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         MatCardModule,
         MatExpansionModule,
         MatDividerModule,
-        OnloadDirectiveModule
+        OnloadDirectiveModule,
     ],
     exports: [VoucherComponent],
-    declarations: [
-        VoucherRendererComponent,
-        VoucherComponent,
-        VoucherPrintInPlaceComponent
-    ],
+    declarations: [VoucherRendererComponent, VoucherComponent, VoucherPrintInPlaceComponent],
     providers: [TitleCasePipe],
 })
-export class VoucherModule {
-}
+export class VoucherModule {}

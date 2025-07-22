@@ -778,5 +778,7 @@
     "app_closing_balance": "Closing Balance",
     "app_uncheck_all_item_message": "Are you sure you want to uncheck all rows?",
     "app_account_status": "Account Status",
-    "app_both": "Both"
+    "app_both": "Both",
+    "app_skip_and_next": "Skip and Next",
+    "app_save_and_next": "Save and Next"
 }

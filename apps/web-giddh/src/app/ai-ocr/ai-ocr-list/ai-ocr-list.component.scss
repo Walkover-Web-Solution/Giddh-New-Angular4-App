@@ -1,0 +1,25 @@
+.ocr-container {
+    max-width: var(--center-content-max-width);
+
+    .giddh-table {
+        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+    }
+}
+
+.td-search-box {
+    padding: 0 0 0 10px !important;
+}
+
+
+.button-wrapper {
+    position: fixed;
+    position-anchor: --wrapper;
+    left: anchor(right);
+    top: anchor(top);
+    margin-left: 5px !important;
+}
+
+.button-wrapper {
+    anchor-name: --wrapper;
+}
+
