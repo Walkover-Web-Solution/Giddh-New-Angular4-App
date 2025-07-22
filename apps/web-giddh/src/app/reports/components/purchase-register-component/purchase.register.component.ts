@@ -649,6 +649,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         });
         if (item?.salesPerson?.name) {
             this.columnDefinitions['particular'][3] = false;
+            this.columnDefinitions['cumulative'][1] = true;
         } else {
             this.columnDefinitions['particular'][3] = true;
         }
