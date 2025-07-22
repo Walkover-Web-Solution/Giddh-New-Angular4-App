@@ -213,10 +213,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         applicableDiscounts: null,
         applicableTaxes: null,
         excludeTax: false,
-        taxType: "",
-        taxTypeLabel: "",
-        mobileNumber: "",
+        taxType: '',
+        taxTypeLabel: '',
+        mobileNumber: '',
         branch: null,
+        duePeriod: null
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -2474,6 +2475,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.baseCurrency = accountData.currency;
         this.account.baseCurrencySymbol = accountData.currencySymbol;
         this.account.addresses = accountData.addresses;
+        this.account.duePeriod = accountData.duePeriod;
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
@@ -2528,6 +2530,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
             this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+            this.updateDueDate();
             this.checkMobileNumber();
         } else {
             if (
@@ -4126,7 +4129,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public updateDueDate(): void {
         if (this.invoiceForm.get("date").value) {
             let duePeriod: number;
-            if (this.invoiceType.isEstimateInvoice) {
+            if (this.account.duePeriod) {
+                duePeriod = this.account.duePeriod;
+            } else if (this.invoiceType.isEstimateInvoice) {
                 duePeriod = this.invoiceSettings?.estimateSettings
                     ? this.invoiceSettings?.estimateSettings.duePeriod
                     : 0;
