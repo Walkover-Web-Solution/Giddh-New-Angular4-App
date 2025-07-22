@@ -3039,16 +3039,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 
-    /**
-     * This will be use for duplicate entry
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public duplicateEntry(): void {
-        this.isDuplicateEntry = true;
-        this.closeUpdateLedgerModal.emit();
-    }
-
      /**
      * Handle sales person selection
      *
@@ -3093,5 +3083,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.vm.selectedLedger.salesPersonUniqueName = this.vm.selectedLedger.salesPersonUniqueName;
             }
         });
+    }
+
+    /**
+     * This will be use for duplicate entry
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public duplicateEntry(): void {
+        this.isDuplicateEntry = true;
+        this.closeUpdateLedgerModal.emit();
     }
 }

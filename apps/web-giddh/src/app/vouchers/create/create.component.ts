@@ -2565,8 +2565,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
             this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
-            this.checkMobileNumber();
             this.updateDueDate();
+            this.checkMobileNumber();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -4030,7 +4030,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(totalTaxWithoutCess));
             entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(cessPercentage));
-            if (this.invoiceForm.get('isAdvanceReceipt').value && taxes?.[0]?.taxDetail?.taxValue > 0) {
+
+            if (this.invoiceForm.get("isAdvanceReceipt").value && taxes?.[0]?.taxDetail?.taxValue > 0) {
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                 transactionFormGroup
                     .get("amount.amountForAccount")
@@ -4166,7 +4167,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.account.duePeriod) {
                 duePeriod = this.account.duePeriod;
             } else if (this.invoiceType.isEstimateInvoice) {
-                duePeriod = this.invoiceSettings?.estimateSettings ? this.invoiceSettings?.estimateSettings.duePeriod : 0;
+                duePeriod = this.invoiceSettings?.estimateSettings
+                    ? this.invoiceSettings?.estimateSettings.duePeriod
+                    : 0;
             } else if (this.invoiceType.isProformaInvoice) {
                 duePeriod = this.invoiceSettings?.proformaSettings
                     ? this.invoiceSettings?.proformaSettings.duePeriod

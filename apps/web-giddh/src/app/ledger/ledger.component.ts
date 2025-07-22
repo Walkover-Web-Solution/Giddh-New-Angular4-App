@@ -3809,7 +3809,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
+    /** 
      * Prepare duplicate transaction
      *
      * @param {any} res
