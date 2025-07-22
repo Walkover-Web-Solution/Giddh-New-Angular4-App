@@ -2567,7 +2567,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
             this.updateDueDate();
             this.checkMobileNumber();
-            this.updateDueDate();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
