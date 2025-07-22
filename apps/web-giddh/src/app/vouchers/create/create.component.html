@@ -37,17 +37,21 @@
                             <mat-button-toggle
                                 *ngIf="ocrDataEnabled"
                                 class="single-toggle-button"
-                                [checked]="invoiceType.isCashInvoice"
+                                [checked]="!invoiceType.isCashInvoice"
                                 (click)="onSingleToggleChange()"
-                                [value]="invoiceType.isCashInvoice ? 'cash' : 'voucherType'"
+                                [value]="!invoiceType.isCashInvoice ? 'cash' : 'voucherType'"
                             >
-                                <span>{{ invoiceType.isCashInvoice && invoiceType.isSalesInvoice ?
-                                    localeData?.invoice_types?.cash_invoice : invoiceType.isCashInvoice &&
+                                <span>{{ !invoiceType.isCashInvoice && invoiceType.isSalesInvoice ?
+                                    localeData?.invoice_types?.cash_invoice : !invoiceType.isCashInvoice &&
                                     invoiceType.isPurchaseInvoice ? localeData?.invoice_types?.cash_bill :
-                                    invoiceType.isCashInvoice && invoiceType.isDebitNote ?
-                                    localeData?.invoice_types?.cash_debit_note : invoiceType.isCashInvoice &&
-                                    invoiceType.isCreditNote ? localeData?.invoice_types?.cash_credit_note : (voucherType |
-                                    voucherName: localeData | titlecase) }}</span>
+                                    !invoiceType.isCashInvoice && invoiceType.isDebitNote ?
+                                    localeData?.invoice_types?.cash_debit_note : !invoiceType.isCashInvoice &&
+                                    invoiceType.isCreditNote ? localeData?.invoice_types?.cash_credit_note : 
+                                    (invoiceType.isSalesInvoice ? localeData?.invoice_types?.invoice :
+                                    invoiceType.isPurchaseInvoice ? localeData?.invoice_types?.purchase :
+                                    invoiceType.isDebitNote ? localeData?.invoice_types?.debit_note :
+                                    invoiceType.isCreditNote ? localeData?.invoice_types?.credit_note :
+                                    (voucherType | voucherName: localeData | titlecase)) }}</span>
                             </mat-button-toggle>
                         </div>
                     </div>
@@ -1439,31 +1443,31 @@
                                                                                     entryIndex
                                                                                 )
                                                                             ">
-                                                                            <img src="{{
+                                                                        <img src="{{
                                                                                     imgPath
                                                                                 }}edit-pencilicon.svg"
                                                                                 alt="edit icon" />
-                                                                        </a>
-                                                                    </span>
-                                                                </ng-container>
-                                                                <ng-container *ngIf="entry.get('otherTax.name')?.value">
-                                                                    <span>{{ entry.get('otherTax.name')?.value }}
-                                                                        :</span>
-                                                                    <amount-field
-                                                                        [amount]="entry.get('otherTax.amount')?.value"
-                                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                                    </amount-field>
-                                                                </ng-container>
-                                                            </div>
-                                                            <div class="font-14 text-gray mt-1"
-                                                                *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
+                                                                    </a>
+                                                                </span>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="entry.get('otherTax.name')?.value">
+                                                                <span>{{ entry.get('otherTax.name')?.value }}
+                                                                    :</span>
                                                                 <amount-field
-                                                                    [amount]="currencySwitched ? entry.get('otherTax.amount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
-                                                                    [currencySymbol]="company.baseCurrencySymbol"
-                                                                    [currencyCode]="company.baseCurrency">
+                                                                    [amount]="entry.get('otherTax.amount')?.value"
+                                                                    [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                    [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                 </amount-field>
-                                                            </div>
+                                                            </ng-container>
+                                                        </div>
+                                                        <div class="font-14 text-gray mt-1"
+                                                            *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
+                                                            <amount-field
+                                                                [amount]="currencySwitched ? entry.get('otherTax.amount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                [currencySymbol]="company.baseCurrencySymbol"
+                                                                [currencyCode]="company.baseCurrency">
+                                                            </amount-field>
+                                                        </div>
                                                         </div>
 
                                                         <!-- Delete Row Button -->
