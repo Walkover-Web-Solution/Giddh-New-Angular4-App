@@ -10,7 +10,7 @@ import { createSelector } from "reselect";
 import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -123,7 +123,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
-        interval: new FormControl<DurationEnum | null>(null),
+        interval: new FormControl<DurationEnum | null>(null)
     });
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
@@ -792,7 +792,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         } else {
             const fromDate = dayjs(this.dateRange?.from, GIDDH_DATE_FORMAT);
             const toDate = dayjs(this.dateRange?.to, GIDDH_DATE_FORMAT);
-            return `${fromDate.format('MMMYYYY')}-${toDate.format('MMMYYYY')}`;
+            return `${fromDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}-${toDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}`;
         }
     }
 }
