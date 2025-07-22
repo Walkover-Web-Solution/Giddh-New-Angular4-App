@@ -238,8 +238,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public writeValue(value: any): void {
         if (value !== undefined && value !== null) {
             this.value = value;
-            this.onChange(value);
+        } else {
+            this.value = '';
         }
+        this.onChange(value);
     }
 
     /**
