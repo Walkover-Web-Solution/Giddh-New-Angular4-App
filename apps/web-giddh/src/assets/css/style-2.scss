@@ -14013,3 +14013,8 @@ mat-list {
 .bg-white {
     background: var(--color-white) !important;
 }
+
+.only-right-radius {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}

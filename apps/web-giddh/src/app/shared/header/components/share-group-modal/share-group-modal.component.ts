@@ -13,6 +13,7 @@ import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 
 @Component({
     selector: 'share-group-modal',
@@ -40,6 +41,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** All permissions role options */
+    public allPermissions: IOption[] = [];
 
 
     @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
@@ -63,6 +66,17 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
                     );
                     this.isUserRestricted = !module?.remainingUsers;
                 }
+            }
+        });
+
+        this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
+            if (permissions) {
+                permissions.forEach((permission: GetAllPermissionResponse) => {
+                    this.allPermissions.push({
+                        value: permission.uniqueName,
+                        label: permission.name
+                    });
+                });
             }
         });
     }
@@ -113,8 +127,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
+        console.log(model, event);
         let data = cloneDeep(model);
-        let newPermission = event.target?.value;
+        let newPermission = event.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }
