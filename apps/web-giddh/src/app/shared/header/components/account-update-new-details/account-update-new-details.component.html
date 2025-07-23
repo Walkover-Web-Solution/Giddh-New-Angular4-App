@@ -63,7 +63,7 @@
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4">
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <div
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
                             >
@@ -129,8 +129,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="row pd-b2" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
-                    <div class="form-group col-xs-12 col-sm-4">
+                <div class="row pd-b2">
+                    <div class="col-sm-4">
+                        <!-- Sales Person -->
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [labelValue]="addAccountForm.get('salesPersonName')?.value"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            (selectedOption)="addAccountForm.get('salesPersonName')?.patchValue($event?.label)"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                         <div
                             [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                         >
@@ -775,9 +790,25 @@
                     </div>
 
                     <div class="row pd-b2">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'duePeriod'"
+                                [label]="localeData?.default_expiry_days"
+                                [placeholder]="'00'"
+                                [type]="'text'"
+                                [maxlength]="3"
+                                [allowDigitsOnly]="true"
+                                formControlName="duePeriod"
+                                class="settings-field d-block"
+                                [matSuffix]="commonLocaleData?.app_days"
+                            ></input-field>
+                        </div>
+                    </div>
+                    
+                    <div class="row pd-b2">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>{{ localeData?.description_label }}</label>
+                                <label>{{ commonLocaleData?.app_note }}</label>
                                 <textarea
                                     rows="3 "
                                     cols="4"

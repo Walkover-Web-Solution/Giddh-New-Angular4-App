@@ -2,6 +2,7 @@ import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 export const Configuration = {
     'AppUrl': AppUrl,
@@ -659,4 +660,27 @@ export const KeyCodesEnum = {
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
     ARROW_LEFT: 'ArrowLeft' 
+};
+
+/** List of all the HTTP methods */
+export enum HttpMethod {
+    POST = 'post',
+    GET = 'get',
+    PUT = 'put',
+    DELETE = 'delete',
+    PATCH = 'patch'
+}
+
+/** Type of all HTTP methods */
+export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
+
+/** Config for aside pane */
+export const ASIDE_PANE_CONFIG: MatDialogConfig = {
+    height: '100dvh',
+    width: 'var(--aside-pane-width)',
+    position: {
+        right: '0',
+        bottom: '0'
+    },
+    disableClose: true
 };
