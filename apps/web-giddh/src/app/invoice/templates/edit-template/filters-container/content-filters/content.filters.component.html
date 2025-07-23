@@ -312,9 +312,9 @@
                                 #gstComposition="hasFocus"
                                 type="text"
                                 name="gstComposition"
-                                placeholder="Registered under Composition Scheme"
                                 [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label"
                                 (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.sections['header'].data['gstComposition'].display"
                             />
                             <ng-container
                                 *ngIf="
