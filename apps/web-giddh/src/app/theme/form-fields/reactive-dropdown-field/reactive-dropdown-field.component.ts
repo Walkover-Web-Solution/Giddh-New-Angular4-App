@@ -37,6 +37,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public readonly: boolean;
     /** True if field is disabled */
     @Input() public disabled: boolean;
+    /** True if field is input readonly */
+    @Input() public inputReadonly: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: string = 'off';
     /** True if field is required */
