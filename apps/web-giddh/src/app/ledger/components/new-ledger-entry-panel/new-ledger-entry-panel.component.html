@@ -362,6 +362,7 @@
                     [(ngModel)]="blankLedger.salesPersonUniqueName"
                     [name]="'sales-person'"
                     [label]="commonLocaleData?.app_sales_person"
+                    [labelValue]="blankLedger.salesPersonName || ''"
                     [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                     [options]="salesPersonList$ | async"
                     [showCreateNew]="true"
