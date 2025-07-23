@@ -1,10 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -44,6 +44,8 @@ import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
+import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -57,6 +59,7 @@ const NEW_LEDGER_ENTRIES = [
     selector: 'new-ledger-entry-panel',
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
+    providers: [SalesPersonComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -140,6 +143,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
 
     public sourceWarehouse: true;
     public companyTaxesList$: Observable<TaxResponse[]>;
@@ -275,6 +280,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public taxDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
+     /** Delete attached file dialog ref */
+     public salesPersonDialogRef: MatDialogRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
 
@@ -292,7 +299,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private ledgerUtilityService: LedgerUtilityService,
         private commonService: CommonService,
         private settingsTaxesAction: SettingsTaxesActions,
-        private companyActions: CompanyActions
+        private companyActions: CompanyActions,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -408,6 +416,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getAllDiscounts();
+        this.getSalesPersonList();
         if (this.voucherApiVersion === 2) {
             this.manualGenerateVoucherChecked = true;
         } else {
@@ -1124,7 +1133,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen || this.asideMenuStateForOtherTaxesDialogRef || this.discountDialogRef || this.taxDialogRef || this.deleteAttachedFileDialogRef || this.salesPersonDialogRef || this.openedDialogsRef?.some(dialog => dialog !== undefined)) {
             return;
         }
 
@@ -2273,5 +2282,26 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getVoucherLabel(voucherTypeList: IOption[]): string {
         return voucherTypeList.find(item => item.value === this.blankLedger.voucherType)?.label || '';
+    }
+
+    /**
+     * Open sales person dialog
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public openSalesPersonDialog(): void {
+        this.salesPersonDialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        this.salesPersonDialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {
+            this.getSalesPersonList(); this.salesPersonDialogRef = undefined;
+        })).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }

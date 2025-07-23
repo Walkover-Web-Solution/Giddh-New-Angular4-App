@@ -321,6 +321,30 @@ export class CompanyService {
     /**
      * To get registered sales
      *
+     * @param {any} payload Request body
+     * @param {{ branchUniqueName: string; from: string; to: string }} params
+     * @returns
+     * @memberof CompanyService
+     */
+    public getSalesRegisterV2(payload: any, params: { branchUniqueName: string; from: string; to: string }, isSalesRegister = true) {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let contextPath = this.config.apiUrl + (isSalesRegister ? COMPANY_API.GET_REGISTERED_SALES_V2 : COMPANY_API.GET_REGISTERED_PURCHASE_V2)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(params.from))
+            ?.replace(':to', encodeURIComponent(params.to));
+        if (params.branchUniqueName) {
+            params.branchUniqueName = params.branchUniqueName !== this.companyUniqueName ? params.branchUniqueName : '';
+            contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(params.branchUniqueName)}`);
+        }
+        return this.http.post(contextPath, payload).pipe(map((res) => {
+            let data: BaseResponse<ReportsResponseModel, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
+    }
+
+    /**
+     * Get sale/purchase register v2 api
+     *
      * @param {ReportsRequestModel} request Request body
      * @returns
      * @memberof CompanyService

@@ -20,10 +20,12 @@ import {
     debounceTime,
     delay,
     distinctUntilChanged,
+    filter,
     of as observableOf,
     skip,
     take,
     takeUntil,
+    tap
 } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
@@ -72,6 +74,7 @@ import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus"
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
 import {
     AdjustedVoucherType,
+    ASIDE_PANE_CONFIG,
     BranchHierarchyType,
     ENTRY_DESCRIPTION_LENGTH,
     FILE_ATTACHMENT_TYPE,
@@ -96,6 +99,8 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
+import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
+import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -105,7 +110,7 @@ import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, AiOcrStore],
+    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore],
     animations: [
         trigger("slideInOut", [
             state(
@@ -481,7 +486,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
-     /** True if OCR data is enabled for voucher creation. */
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
     public aiOcrDetails$: Observable<any> = this.aiOcrService.aiOcrDetails$;
@@ -491,6 +498,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public aiOcrToken: string = "";
     /** True if main create voucher module */
     public isMainVoucher: boolean = false;
+    /** Holds OCR voucher type */
+    public ocrVoucherType: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -619,8 +628,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
+        private salesPersonStore: SalesPersonComponentStore,
         private aiOcrService: AiOcrService
-    ) { }
+    ) {
+
+    }
 
     /**
      * Lifecycle hook for component initialization
@@ -635,6 +647,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyBranches();
         this.getCompanyTaxes();
         this.getWarehouses();
+        this.getSalesPersonList();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
             .pipe(delay(1), takeUntil(this.destroyed$))
@@ -960,6 +973,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.openAccountDropdown = false;
                     this.urlVoucherType = aiOcrDetails.type;
                     this.voucherType = this.vouchersUtilityService.parseVoucherType(aiOcrDetails.type);
+                    this.ocrVoucherType = aiOcrDetails.type;
                     this.aiOcrService.saveAndNext$.next(null);
                     this.aiOcrService.skipAndNext$.next(null);
 
@@ -1157,7 +1171,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
                     }
-
+                    this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
+                    
                     const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
@@ -2471,6 +2487,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
+        if (!this.isUpdateMode) { // Take sales person details only if account is new else assign from get voucher response
+            this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+            this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+        }
 
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
@@ -2672,6 +2692,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             isAdvanceReceipt: [false], //temp
             attachedFiles: [],
             salesPurchaseAsReceiptPayment: [null], //temp
+            salesPersonName: [''],
+            salesPersonUniqueName: ['']
         });
     }
     /**
@@ -3246,9 +3268,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
             position: {
-                right: "0",
-                top: "0",
+                right: '0',
+                top: '0'
             },
+            disableClose: true,
         });
 
         this.accountAsideMenuRef
@@ -3318,6 +3341,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public addNewAccount(item: AddAccountRequest): void {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+        if (item?.salesPersonCreated) {
+            this.getSalesPersonList();
+        }
     }
 
     /**
@@ -3329,6 +3355,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
         this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
+        if (item?.salesPersonCreated) {
+            this.getSalesPersonList();
+        }
     }
 
     /**
@@ -5015,6 +5044,64 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Handles single toggle button change between OCR voucher type and cash mode
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public onSingleToggleChange(): void {
+        // Toggle between cash and OCR voucher type
+        const newType = this.invoiceType.isCashInvoice ? this.ocrVoucherType : VoucherTypeEnum.cash;
+        this.onToggleChange(newType);
+        this.changeDetection.detectChanges();
+    }
+
+    
+
+    /**
+     * Toggles between create and list
+     *
+     * @param {string} type
+     * @memberof VoucherCreateComponent
+     */
+    public onToggleChange(type: string): void {
+        this.invoiceType.isCashInvoice = type === VoucherTypeEnum.cash ? true : false;
+        if (this.invoiceType.isCashInvoice) {
+            this.accountFormFields = cloneDeep(this.companyFormFields);
+            this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
+            this.account.taxType = cloneDeep(this.company.taxType);
+            this.invoiceForm.get("account.uniqueName")?.patchValue(VoucherTypeEnum.cash);
+        }
+        let label: VoucherTypeEnum | string;
+        if (this.invoiceType.isCashInvoice && this.invoiceType.isSalesInvoice) {
+            label = VoucherTypeEnum.cash;
+        } else if (this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice) {
+            label = VoucherTypeEnum.cashBill;
+        } else if (this.invoiceType.isCashInvoice && this.invoiceType.isDebitNote) {
+            label = VoucherTypeEnum.cashDebitNote;
+        } else if (this.invoiceType.isCashInvoice && this.invoiceType.isCreditNote) {
+            label = VoucherTypeEnum.cashCreditNote;
+        } else {
+            label = this.ocrVoucherType;
+        }
+        this.voucherType = this.vouchersUtilityService.parseVoucherType(label);
+        this.company.countryName = null;
+        this.getAccountOnboardingFormData();
+        this.getCompanyProfile();
+        this.getCountryList();
+        this.getDiscountsList();
+        this.getCompanyBranches();
+        this.getCompanyTaxes();
+        this.getWarehouses();
+        this.getIsTcsTdsApplicable();
+        this.getInvoiceSettings();
+        this.getCreatedTemplates();
+        this.searchStock();
+        this.searchAccount();
+        this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+        this.changeDetection.detectChanges();
+    }
+
+    /**
      * Resets voucher form
      *
      * @memberof VoucherCreateComponent
@@ -6665,5 +6752,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (selectedUnitCode) {
             transaction.get("stock.stockUnit.code")?.patchValue(selectedUnitCode);
         }
+    }
+
+    /**
+     * Open sales person dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }
