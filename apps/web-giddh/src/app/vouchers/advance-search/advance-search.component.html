@@ -36,28 +36,32 @@
             <input-field [type]="'number'" [allowDigitsOnly]="true" [placeholder]="'00'" [label]="commonLocaleData?.app_amount" class="w-50" name="balanceDue" formControlName="balanceDue">
             </input-field>
         </div>
-        <mat-form-field appearance="outline" class="w-100 mr-b15">
-            <mat-label>{{ commonLocaleData?.app_status }}</mat-label>
-            <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="balanceStatus">
-                <mat-option value="paid">{{ commonLocaleData?.app_payment_status?.paid }}</mat-option>
-                <mat-option value="partial-paid">{{ commonLocaleData?.app_payment_status?.partially_paid }}</mat-option>
-                <mat-option value="unpaid">{{ commonLocaleData?.app_payment_status?.unpaid }}</mat-option>
-                <mat-option value="hold">{{ commonLocaleData?.app_payment_status?.hold }}</mat-option>
-                <mat-option value="cancel">{{ commonLocaleData?.app_payment_status?.cancel }}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100 mr-b15" *ngIf="isEInvoiceEnabled">
-            <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
-            <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">{{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">{{ localeData?.e_invoice_statuses_label?.pushed }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">{{ localeData?.e_invoice_statuses_label?.push_initiated }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">{{ localeData?.e_invoice_statuses_label?.cancelled }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">{{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">{{ localeData?.e_invoice_statuses_label?.failed }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{ localeData?.e_invoice_statuses_label?.na }}</mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div class="custom-mat-form-field">
+            <mat-form-field appearance="outline" class="w-100 mr-b15">
+                <mat-label>{{ commonLocaleData?.app_status }}</mat-label>
+                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="balanceStatus">
+                    <mat-option value="paid">{{ commonLocaleData?.app_payment_status?.paid }}</mat-option>
+                    <mat-option value="partial-paid">{{ commonLocaleData?.app_payment_status?.partially_paid }}</mat-option>
+                    <mat-option value="unpaid">{{ commonLocaleData?.app_payment_status?.unpaid }}</mat-option>
+                    <mat-option value="hold">{{ commonLocaleData?.app_payment_status?.hold }}</mat-option>
+                    <mat-option value="cancel">{{ commonLocaleData?.app_payment_status?.cancel }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="custom-mat-form-field">
+            <mat-form-field appearance="outline" class="w-100 mr-b15" *ngIf="isEInvoiceEnabled">
+                <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
+                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">{{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">{{ localeData?.e_invoice_statuses_label?.pushed }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">{{ localeData?.e_invoice_statuses_label?.push_initiated }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">{{ localeData?.e_invoice_statuses_label?.cancelled }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">{{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">{{ localeData?.e_invoice_statuses_label?.failed }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{ localeData?.e_invoice_statuses_label?.na }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
         <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
             <textarea matInput rows="2" [placeholder]="commonLocaleData?.app_description" formControlName="description"></textarea>
@@ -81,18 +85,20 @@
             </reactive-dropdown-field>
             <input-field [type]="'number'" [allowDigitsOnly]="true" [label]="commonLocaleData?.app_amount" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
-        <mat-form-field appearance="outline" class="w-100 mr-b15" *ngIf="isEInvoiceEnabled">
-            <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
-            <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">{{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">{{ localeData?.e_invoice_statuses_label?.pushed }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">{{ localeData?.e_invoice_statuses_label?.push_initiated }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">{{ localeData?.e_invoice_statuses_label?.cancelled }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">{{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">{{ localeData?.e_invoice_statuses_label?.failed }}</mat-option>
-                <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{ localeData?.e_invoice_statuses_label?.na }}</mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div class="custom-mat-form-field">
+            <mat-form-field appearance="outline" class="w-100 mr-b15" *ngIf="isEInvoiceEnabled">
+                <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
+                <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="eInvoiceStatus">
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.yet_to_be_pushed">{{ localeData?.e_invoice_statuses_label?.yet_to_be_pushed }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.pushed">{{ localeData?.e_invoice_statuses_label?.pushed }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.push_initiated">{{ localeData?.e_invoice_statuses_label?.push_initiated }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.cancelled">{{ localeData?.e_invoice_statuses_label?.cancelled }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.mark_as_cancelled">{{ localeData?.e_invoice_statuses_label?.mark_as_cancelled }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.failed">{{ localeData?.e_invoice_statuses_label?.failed }}</mat-option>
+                    <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{ localeData?.e_invoice_statuses_label?.na }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </ng-container>
 
     <ng-container *ngIf="type === 'receipt' || type === 'payment'">
@@ -230,6 +236,33 @@
             </input-field>
         </div>
     </ng-container>
+
+    <!-- Sales Person -->
+    <div class="custom-mat-form-field mr-t15" *ngIf="(salesPersonList$ | async)?.length">
+        <mat-form-field appearance="outline">
+            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
+            <mat-select
+                panelClass="py-0"
+                name="salesPerson"
+                [multiple]="true"
+                [formControl]="searchForm?.controls?.salesPersonUniqueNames"
+            >
+                <mat-option class="mt-0">
+                    <ngx-mat-select-search
+                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                        [formControl]="salesPersonDropdown"
+                    >
+                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                    </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
+                    {{ salesPerson?.label }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    
 
     <div class="d-flex justify-content-end column-gap1 mt-3">
         <button mat-stroked-button color="primary" (click)="search()">{{ commonLocaleData?.app_search }}</button>

@@ -355,8 +355,22 @@
                 </div>
             </div>
         </div>
-        <div class="row warehouse-field mr-b05 mr-t15">
-            <div class="col-md-12">
+        <div class="row warehouse-field mr-b15 mr-t15">
+            <!-- Sales Person -->
+            <div class="col-5 pr-0">
+                <reactive-dropdown-field 
+                    [(ngModel)]="blankLedger.salesPersonUniqueName"
+                    [name]="'sales-person'"
+                    [label]="commonLocaleData?.app_sales_person"
+                    [labelValue]="blankLedger.salesPersonName || ''"
+                    [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                    [options]="salesPersonList$ | async"
+                    [showCreateNew]="true"
+                    [createNewText]="commonLocaleData?.app_create_new"
+                    (createOption)="openSalesPersonDialog()"
+                ></reactive-dropdown-field>
+            </div>
+            <div class="col-7">
                 <div class="text-right" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
