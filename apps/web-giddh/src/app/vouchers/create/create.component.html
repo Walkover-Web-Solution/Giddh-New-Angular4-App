@@ -1390,7 +1390,7 @@
 
                                                             <div class="wrap-td-data">
                                                                 <div class="text-field-container"
-                                                                    *ngIf="activeEntryIndex === entryIndex">
+                                                                    [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'">
                                                                     <input matInput
                                                                         [placeholder]="commonLocaleData?.app_total"
                                                                         class="form-control text-right pr-0" type="text"
