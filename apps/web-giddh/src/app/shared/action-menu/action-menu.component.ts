@@ -9,11 +9,14 @@ import { take } from 'rxjs';
 import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../aside-menu-account/aside.menu.account.module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OrganizationType } from '../../models/user-login-state';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'app-action-menu',
     standalone: true,
-    imports: [CommonModule, MatMenuModule, MatButtonModule,AccountUpdateNewDetailsModule,AsideMenuAccountModule],
+    imports: [CommonModule, MatMenuModule, MatButtonModule, AccountUpdateNewDetailsModule, AsideMenuAccountModule],
     templateUrl: './action-menu.component.html',
     styleUrls: ['./action-menu.component.scss'],
     animations: [
@@ -74,9 +77,16 @@ export class ActionMenuComponent {
     public isUpdateAccount: boolean = false;
     /** Selected group for create account */
     public selectedGroupForCreateAcc: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
-    constructor(private generalService: GeneralService, private dialog: MatDialog) {
+    constructor(private generalService: GeneralService, private dialog: MatDialog, private store: Store<AppState>) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+            }
+        });
     }
 
     /**

@@ -106,14 +106,18 @@
                     <div class="div-row">
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.totalSales, 'total', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                         <div class="div-cell align-end">
                             <span class="d-inline-flex">
@@ -126,14 +130,18 @@
                             </span>
                         </div>
                         <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="showClientList(newVsOldInvoicesData?.totalSales, 'total', 'client')"
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
