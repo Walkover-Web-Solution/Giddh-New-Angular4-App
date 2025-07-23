@@ -5098,12 +5098,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public onToggleChange(type: string): void {
-        this.invoiceType.isCashInvoice = type === 'cash' ? true : false;
+        this.invoiceType.isCashInvoice = type === VoucherTypeEnum.cash ? true : false;
         if (this.invoiceType.isCashInvoice) {
             this.accountFormFields = cloneDeep(this.companyFormFields);
             this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
             this.account.taxType = cloneDeep(this.company.taxType);
-            this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
+            this.invoiceForm.get("account.uniqueName")?.patchValue(VoucherTypeEnum.cash);
         }
         let label: VoucherTypeEnum | string;
         if (this.invoiceType.isCashInvoice && this.invoiceType.isSalesInvoice) {

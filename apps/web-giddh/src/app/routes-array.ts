@@ -24,7 +24,6 @@ export const ROUTES: Routes = [
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice' },
     { path: 'user-details', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
-    { path: 'ai-ocr', loadChildren: () => import('./ai-ocr/ai-ocr.module').then(module => module.AiOcrModule) },
     { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
