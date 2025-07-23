@@ -5050,10 +5050,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public onSingleToggleChange(): void {
         // Toggle between cash and OCR voucher type
-        const newType = this.invoiceType.isCashInvoice ? this.ocrVoucherType : 'cash';
+        const newType = this.invoiceType.isCashInvoice ? this.ocrVoucherType : VoucherTypeEnum.cash;
         this.onToggleChange(newType);
         this.changeDetection.detectChanges();
     }
+
+    
 
     /**
      * Toggles between create and list
@@ -5062,14 +5064,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public onToggleChange(type: string): void {
-        this.invoiceType.isCashInvoice = type === 'cash' ? true : false;
+        this.invoiceType.isCashInvoice = type === VoucherTypeEnum.cash ? true : false;
         if (this.invoiceType.isCashInvoice) {
             this.accountFormFields = cloneDeep(this.companyFormFields);
             this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
             this.account.taxType = cloneDeep(this.company.taxType);
-            this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
+            this.invoiceForm.get("account.uniqueName")?.patchValue(VoucherTypeEnum.cash);
         }
-        this.voucherType = this.vouchersUtilityService.parseVoucherType(type);
+        let label: VoucherTypeEnum | string;
+        if (this.invoiceType.isCashInvoice && this.invoiceType.isSalesInvoice) {
+            label = VoucherTypeEnum.cash;
+        } else if (this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice) {
+            label = VoucherTypeEnum.cashBill;
+        } else if (this.invoiceType.isCashInvoice && this.invoiceType.isDebitNote) {
+            label = VoucherTypeEnum.cashDebitNote;
+        } else if (this.invoiceType.isCashInvoice && this.invoiceType.isCreditNote) {
+            label = VoucherTypeEnum.cashCreditNote;
+        } else {
+            label = this.ocrVoucherType;
+        }
+        this.voucherType = this.vouchersUtilityService.parseVoucherType(label);
         this.company.countryName = null;
         this.getAccountOnboardingFormData();
         this.getCompanyProfile();
@@ -5082,6 +5096,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getInvoiceSettings();
         this.getCreatedTemplates();
         this.searchStock();
+        this.searchAccount();
         this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
         this.changeDetection.detectChanges();
     }
