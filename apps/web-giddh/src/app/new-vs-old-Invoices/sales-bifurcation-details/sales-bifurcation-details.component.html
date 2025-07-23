@@ -84,6 +84,7 @@
                                 [showGotoLedger]="true"
                                 [showGenerateInvoice]="true"
                                 [showSendEmail]="true"
+                                (sendEmail)="sendEmailSuccess($event)"
                                 [activeRowIndex]="activeRowIndex"
                                 [rowIndex]="i"
                                 [useRowIndexVisibility]="true"

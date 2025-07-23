@@ -56,7 +56,7 @@ export class ActionMenuComponent {
     /** Event emitted when the 'Generate Invoice' action is triggered */
     @Output() generateInvoice: EventEmitter<void> = new EventEmitter<void>();
     /** Event emitted when the 'Send Email' action is triggered */
-    @Output() sendEmail: EventEmitter<void> = new EventEmitter<void>();
+    @Output() sendEmail: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Event emitted when the 'Edit Account' action is triggered */
     @Output() editAccount: EventEmitter<void> = new EventEmitter<void>();
     /** From date */
@@ -179,7 +179,6 @@ export class ActionMenuComponent {
      * @memberof ActionMenuComponent
      */
     public updateCustomerAcc(accountType: "customer" | "vendor", account: any): void {
-        console.log(accountType, account);
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
         this.selectedGroupForCreateAcc = accountType === "customer" ? "sundrydebtors" : "sundrycreditors";
@@ -237,11 +236,17 @@ export class ActionMenuComponent {
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.sendEmail.emit();
+                this.sendEmail.emit(true);
             }
         });
     }
 
+    /**
+     * Get updated list
+     *
+     * @param {any} [grpName]
+     * @memberof ActionMenuComponent
+     */
     public getUpdatedList(grpName?: any): void {
         if (grpName) {
             this.editAccount.emit();
