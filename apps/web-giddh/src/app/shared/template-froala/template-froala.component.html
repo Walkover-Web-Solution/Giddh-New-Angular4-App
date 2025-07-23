@@ -101,6 +101,7 @@
                             [label]="emailConditionSuggestionsLabelOptions[field.variable].dropdownLabel"
                             [options]="emailConditionSuggestionsLabelOptions[field.variable].options"
                             [showError]="isFormInvalid && customTriggerForm?.controls?.conditions?.invalid"
+                            (onClear)="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')?.patchValue(null)"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -111,7 +112,6 @@
                                 matInput
                                 [name]="field.variable"
                                 [formControl]="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('value')"
-                                [required]="true"
                                 [placeholder]="commonLocaleData?.app_enter"
                             >
                         </mat-form-field>
