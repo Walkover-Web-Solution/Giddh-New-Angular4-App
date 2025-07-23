@@ -3567,6 +3567,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
                 }
+
+                if (data.body?.salesPerson && !this.isSundryDebtorCreditor) {
+                    this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || null;
+                    this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || '';
+                } else {
+                    this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse?.salesPerson?.uniqueName || null;
+                    this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse?.salesPerson?.name || '';
+                }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 txn.showOtherTax = this.showOtherTax(txn);
