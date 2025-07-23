@@ -54,35 +54,37 @@
         <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
             <mat-list role="list" class="shared-list group-shared-list">
                 <ng-container *ngFor="let val of activeGroupSharedWith$ | async; let i = index">
-                    <mat-list-item class="d-flex">
-                        <div class="user-name-email col-md-6">
-                            <i class="icon-user1 pd-r1"></i>
-                            <span class="user-email">
-                                <small *ngIf="val.emailId !== val.userName">{{ val.userName }}</small>
-                                <small>{{ val.emailId }}</small>
-                            </span>
-                        </div>
-                        <div class="col-md-6 d-flex align-items-center justify-content-between pr-0">
-                            <reactive-dropdown-field
-                                class="pull-left w-75"
-                                [label]="localeData?.permission_role_name"
-                                [placeholder]="commonLocaleData?.app_select"
-                                [options]="allPermissions"
-                                [name]="'selectedPermission' + i"
-                                [inputReadonly]="true"
-                                [labelValue]="val?.roleName"
-                                (selectedOption)="$event && updatePermission(val, $event)"
-                            >
-                            </reactive-dropdown-field>
+                    <mat-list-item class="p-0 mat-list-item-height">
+                        <div class="d-flex pd-t1 pd-b1">
+                            <div class="user-name-email col-md-6">
+                                <i class="icon-user1 pd-r1"></i>
+                                <span class="user-email">
+                                    <small *ngIf="val.emailId !== val.userName">{{ val.userName }}</small>
+                                    <small>{{ val.emailId }}</small>
+                                </span>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center justify-content-between pr-0">
+                                <reactive-dropdown-field
+                                    class="pull-left w-75"
+                                    [label]="localeData?.permission_role_name"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [options]="allPermissions"
+                                    [name]="'selectedPermission' + i"
+                                    [inputReadonly]="true"
+                                    [labelValue]="val?.roleName"
+                                    (selectedOption)="$event && updatePermission(val, $event)"
+                                >
+                                </reactive-dropdown-field>
 
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
-                                aria-label="delete icon"
-                            >
-                                <i class="icon-trash delete"></i>
-                            </button>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
+                                    aria-label="delete icon"
+                                >
+                                    <i class="icon-trash delete"></i>
+                                </button>
+                            </div>
                         </div>
                     </mat-list-item>
                 </ng-container>

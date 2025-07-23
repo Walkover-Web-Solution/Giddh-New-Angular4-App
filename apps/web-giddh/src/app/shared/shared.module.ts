@@ -62,6 +62,7 @@ import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/s
 import { CallBackPageComponent } from './call-back-page/call-back-page.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -143,7 +144,8 @@ export function provideConfig() {
         CallBackPageComponent,
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatListModule
     ],
     exports: [
         CommonModule,

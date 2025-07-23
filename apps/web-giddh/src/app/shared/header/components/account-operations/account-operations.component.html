@@ -194,7 +194,7 @@
     <confirm-modal
         [title]="localeData?.delete_account_title"
         [body]="localeData?.delete_account_content"
-        (cancelCallBack)="hideDeleteAccountModal()"
+        (cancelCallBack)="closeDeleteAccountDialog()"
         (successCallBack)="deleteAccount()"
     >
     </confirm-modal>
