@@ -40,7 +40,7 @@
 
   <button
     mat-menu-item
-    *ngIf="showGenerateInvoice"
+    *ngIf="showGenerateInvoice && !isCompany"
     class="menu-table-item"
     (click)="performActions(2, account)"
     aria-label="generate invoice"
