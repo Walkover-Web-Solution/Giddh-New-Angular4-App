@@ -63,6 +63,7 @@ import { CallBackPageComponent } from './call-back-page/call-back-page.component
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -132,7 +133,8 @@ import { MatMenuModule } from '@angular/material/menu';
         CallBackPageComponent,
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatListModule
     ],
     exports: [
         CommonModule,
