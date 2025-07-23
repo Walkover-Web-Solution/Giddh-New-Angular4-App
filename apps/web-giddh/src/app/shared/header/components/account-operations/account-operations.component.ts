@@ -547,7 +547,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens share group dialog
+     * Open share group dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -562,7 +562,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Closes share group dialog
+     * Close share group dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -571,7 +571,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens share account dialog
+     * Open share account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -587,7 +587,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Closes share account dialog
+     * Close share account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -605,7 +605,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens delete merged account dialog
+     * Open delete merged account dialog
      * @param merge string
      * @returns void
      * @memberof AccountOperationsComponent
@@ -621,7 +621,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Closes delete merged account dialog
+     * Close delete merged account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -680,7 +680,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens move merged account dialog
+     * Open move merged account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -695,7 +695,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Closes move merged account dialog
+     * Close move merged account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -734,7 +734,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens delete account dialog
+     * Open delete account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -746,7 +746,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Closes delete account dialog
+     * Close delete account dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */
@@ -768,7 +768,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens group export ledger dialog
+     * Open group export ledger dialog
      * @returns void
      * @memberof AccountOperationsComponent
      */

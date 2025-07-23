@@ -29,7 +29,7 @@
                             [options]="allPermissions"
                             [name]="'selectedPermission'"
                             [required]="true"
-                            [readonlyInput]="true"
+                            [inputReadonly]="true"
                             (selectedOption)="$event && (selectedPermission = $event.value)"
                         >
                         </reactive-dropdown-field>
@@ -40,8 +40,6 @@
                     <button
                         mat-stroked-button
                         color="primary"
-                        [matTooltip]="commonLocaleData?.app_share"
-                        matTooltipPosition="above"
                         [disabled]="shareGroupForm.invalid || isUserRestricted" 
                         (click)="shareGroup()">
                         {{ commonLocaleData?.app_share }}
@@ -54,9 +52,9 @@
         </restricted-module-message>
         <!--shared with array-->
         <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
-            <div>
-                <ul class="shared-list group-shared-list">
-                    <li *ngFor="let val of activeGroupSharedWith$ | async; let i = index">
+            <mat-list role="list" class="shared-list group-shared-list">
+                <ng-container *ngFor="let val of activeGroupSharedWith$ | async; let i = index">
+                    <mat-list-item class="d-flex">
                         <div class="user-name-email col-md-6">
                             <i class="icon-user1 pd-r1"></i>
                             <span class="user-email">
@@ -64,15 +62,14 @@
                                 <small>{{ val.emailId }}</small>
                             </span>
                         </div>
-
-                        <div class="col-md-6 d-flex align-items-center justify-content-between p-0 pd-l15">
+                        <div class="col-md-6 d-flex align-items-center justify-content-between pr-0">
                             <reactive-dropdown-field
                                 class="pull-left w-75"
                                 [label]="localeData?.permission_role_name"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="allPermissions"
                                 [name]="'selectedPermission' + i"
-                                [readonlyInput]="true"
+                                [inputReadonly]="true"
                                 [labelValue]="val?.roleName"
                                 (selectedOption)="$event && updatePermission(val, $event)"
                             >
@@ -87,9 +84,9 @@
                                 <i class="icon-trash delete"></i>
                             </button>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </mat-list-item>
+                </ng-container>
+            </mat-list>
         </div>
     </mat-dialog-content>
 </div> 
