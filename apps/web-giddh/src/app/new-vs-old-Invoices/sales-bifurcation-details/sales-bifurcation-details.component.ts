@@ -62,8 +62,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     public selectedItem: any;
     /** Holds Sales Bifurcation Details Action Enum */
     public salesBifurcationDetailsActionEnum: typeof SalesBifurcationDetailsActionEnum = SalesBifurcationDetailsActionEnum;
-   
-   
+
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesBifurcationDetailsData: any,
         public dialogRef: MatDialogRef<any>,
@@ -105,13 +105,13 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.requestParams.q = searchedText;
                 this.requestParams.page = 1;
-                this.requestParams.count = this.pageSizeOptions[0];
+                this.requestParams.count = this.pageSizeOptions[3];
                 this.initApiCall();
             } else if (searchedText === '') {
                 this.showClearFilter = false;
                 this.requestParams.q = '';
                 this.requestParams.page = 1;
-                this.requestParams.count = this.pageSizeOptions[0];
+                this.requestParams.count = this.pageSizeOptions[3];
                 this.initApiCall();
             }
         });
@@ -200,6 +200,20 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      */
     public updateAccount(): void {
         this.resetFilter();
+    }
+
+    /**
+     * This will be use for send email
+     *
+     * @memberof SalesBifurcationDetailsComponent
+     */
+    public sendEmailSuccess(event: any): void {
+        if (event) {
+            this.requestParams.q = '';
+            this.requestParams.page = 1;
+            this.requestParams.count = this.pageSizeOptions[3];
+            this.initApiCall();
+        }
     }
 
     /**
