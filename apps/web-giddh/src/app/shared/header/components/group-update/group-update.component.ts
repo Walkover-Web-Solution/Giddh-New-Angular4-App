@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef, TemplateRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
@@ -51,6 +51,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupDetailForm: UntypedFormGroup;
     public moveGroupForm: UntypedFormGroup;
     public taxGroupForm: UntypedFormGroup;
+    /** Discount form group */
+    public discountGroupForm: FormGroup;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
     public isTaxableGroup$: Observable<boolean>;
@@ -65,13 +67,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showTaxes: boolean = false;
     @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
     public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
-    @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
     public showDiscount: boolean = false;
-    /** Selected discount list */
-    public selectedDiscounts: IOption = null;
     /** To check applied taxes modified  */
     public isTaxesSaveDisable$: Observable<boolean> = of(true);
     /** To check applied discounts modified  */
@@ -96,6 +95,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchedGroups: IOption[];
     /** Stores the list of selected tax labels to display in the UI. */
     public defaultTaxLabel: string[] = [];
+    /** Stores the list of selected discount labels to display in the UI. */
+    public defaultDiscountLabel: string[] = [];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -149,20 +150,21 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             taxes: ['']
         });
 
+        this.discountGroupForm = this._fb.group({
+            discounts: ['']
+        });
+
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
         });
 
         this.activeGroup$.subscribe((activeGroup) => {
             if (activeGroup) {
-                this.selectedDiscounts = null;
                 this.uniqueName = activeGroup.uniqueName;
                 if (activeGroup.applicableDiscounts && activeGroup.applicableDiscounts.length) {
-                    let list = activeGroup.applicableDiscounts;
-                    this.selectedDiscounts = {
-                        value: list[0].uniqueName,
-                        label: list[0].name
-                    };
+                    const applicableDiscounts = activeGroup.applicableDiscounts;
+                    this.defaultDiscountLabel = applicableDiscounts.map(p => p.name) || [];
+                    this.discountGroupForm.get('discounts').patchValue(applicableDiscounts.map(p => p.uniqueName) || []);
                 }
                 this.groupDetailForm?.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
                 if (activeGroup.fixed) {
@@ -365,14 +367,24 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-
-    public showDeleteGroupModal() {
+    /**
+     * Open delete group dialog
+     * @returns void
+     * @memberof GroupUpdateComponent
+     */
+    public openDeleteGroupDialog(): void {
         this.deleteGroupConfirmationDialogRef = this.dialog.open(this.deleteGroupConfirmationDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
         });
     }
 
-    public hideDeleteGroupModal() {
+    /**
+     * Close delete group dialog
+     * @returns void
+     * @memberof GroupUpdateComponent
+     */
+    public closeDeleteGroupDialog(): void {
         this.deleteGroupConfirmationDialogRef?.close();
     }
 
@@ -424,17 +436,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         grpObject.parentGroupUniqueName = this.moveGroupForm?.value.moveto;
         this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGroupUniqueName));
         this.moveGroupForm.reset();
-
-        if (this.moveToGroupDropDown) {
-            this.moveToGroupDropDown.clear();
-        }
     }
 
     public deleteGroup() {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
-        this.hideDeleteGroupModal();
+        this.closeDeleteGroupDialog();
     }
 
     public updateGroup() {
@@ -546,10 +554,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp?.uniqueName);
 
         if (activeGroupUniqueName) {
-            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.uniqueName;
-            assignDiscountObject.discounts = this.selectedDiscounts?.value ? [this.selectedDiscounts.value] : [];
+            assignDiscountObject.discounts = this.discountGroupForm.get('discounts')?.value;
             assignDiscountObject.isAccount = false;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
@@ -571,18 +578,14 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * To check discount list updated
      *
+     * @param {any} event - event object containing selected discounts
      * @memberof GroupUpdateComponent
      */
     public discountSelected(event: any): void {
         if (event) {
-            this.selectedDiscounts = {
-                value: event.value,
-                label: event.label
-            };
-        } else {
-            this.selectedDiscounts = null;
-        }
-        this.isDiscountSaveDisable$ = of(false);
+            this.discountGroupForm.get('discounts').patchValue(event);
+            this.isDiscountSaveDisable$ = of(false);
+        } 
     }
 
     /**

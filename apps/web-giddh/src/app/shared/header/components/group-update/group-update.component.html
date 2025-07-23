@@ -15,7 +15,8 @@
                     [label]="localeData?.group_name_label"
                     [name]="'name'"
                     formControlName="name"
-                    [disabled]="groupDetailForm.get('name').disabled"
+                    [disabled]="groupDetailForm.get('name')?.disabled"
+                    [autoFocus]="true"
                 >
                 </input-field>
 
@@ -29,7 +30,7 @@
                     [label]="commonLocaleData?.app_unique_name"
                     [name]="'uniqueName'"
                     formControlName="uniqueName"
-                    [disabled]="groupDetailForm.get('uniqueName').disabled"
+                    [disabled]="groupDetailForm.get('uniqueName')?.disabled"
                 >
                 </input-field>
             </div>
@@ -51,7 +52,7 @@
                         [cssClass]="'text-right'"
                         [ngClass]="{ 'w100 remove-right-border-radius': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                         [placeholder]="'0.00'"
-                        [allowDigitsOnly]="true"
+                        [allowDecimalDigitsOnly]="true"
                     >
                     </input-field>
                     <div
@@ -97,12 +98,9 @@
         <div class="text-right">
             <button
                 mat-stroked-button
-                color="primary"
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-                (click)="showDeleteGroupModal()"
+                (click)="openDeleteGroupDialog()"
                 aria-label="delete"
-                [matTooltip]="commonLocaleData?.app_delete"
-                matTooltipPosition="above"
             >
                 {{ commonLocaleData?.app_delete }}
             </button>
@@ -114,8 +112,6 @@
                 class="mr-l1"
                 type="submit"
                 aria-label="update"
-                [matTooltip]="commonLocaleData?.app_update"
-                matTooltipPosition="above"
                 [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid || (isUpdateGroupInProcess$ | async)"
             >
                 {{ commonLocaleData?.app_update }}
@@ -199,7 +195,7 @@
                         [selectedValues]="defaultTaxLabel"
                         [placeholder]="commonLocaleData?.app_select"
                         [options]="companyTaxDropDown"
-                        [chipListUniqueName]="taxGroupForm.get('taxes').value"
+                        [chipListUniqueName]="taxGroupForm.get('taxes')?.value"
                         (selectedOptionUniqueName)="taxesSelected($event)"
                         (selectedOption)="defaultTaxLabel = $event"
                         class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
@@ -253,15 +249,17 @@
         <div class="form-group">
             <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
             <div class="d-flex justify-content-between align-items-center pd-t1">
-                <reactive-dropdown-field
-                    class="adjusted-content-width"
+                <select-multiple-fields
                     [label]="localeData?.select_discounts"
+                    [commonLocaleData]="commonLocaleData"
+                    [selectedValues]="defaultDiscountLabel"
                     [placeholder]="commonLocaleData?.app_select"
                     [options]="discountList"
-                    [labelValue]="selectedDiscounts?.label ?? ''"
-                    (selectedOption)="discountSelected($event)"
-                    (onClear)="discountSelected()"
-                ></reactive-dropdown-field>
+                    [chipListUniqueName]="discountGroupForm.get('discounts')?.value"
+                    (selectedOptionUniqueName)="discountSelected($event)"
+                    (selectedOption)="defaultDiscountLabel = $event"
+                    class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                ></select-multiple-fields>
                 <button
                     mat-stroked-button
                     color="primary"
