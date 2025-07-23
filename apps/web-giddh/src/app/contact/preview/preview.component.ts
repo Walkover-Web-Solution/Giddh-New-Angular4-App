@@ -160,7 +160,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean> = this.componentStore.isAddAndManageOpenedFromOutside$;
     /** Holds true if master is open */
-    private isMasterOpen: boolean = false;
+    public isMasterOpen: boolean = false;
 
     constructor(
         private router: Router,
