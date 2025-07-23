@@ -421,6 +421,7 @@
                                             [labelValue]="invoiceForm.controls['salesPersonName']?.value"
                                             [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                                             [options]="salesPersonList$ | async"
+                                            (selectedOption)="invoiceForm?.get('salesPersonName')?.patchValue($event.label)"
                                             [showCreateNew]="true"
                                             [createNewText]="commonLocaleData?.app_create_new"
                                             (createOption)="openSalesPersonDialog()"
