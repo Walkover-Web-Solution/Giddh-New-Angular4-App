@@ -300,7 +300,11 @@
                             type="checkbox"
                             name="gstCompositionLabel"
                             [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null); 
+                                customTemplate.sections['header'].data['gstComposition'].display 
+                                && customTemplate.sections['header'].data['gstComposition'].label.length === 0 
+                                ? customTemplate.sections['header'].data['gstComposition'].label = 'Registered under Composition Scheme'
+                                : customTemplate.sections['header'].data['gstComposition'].label"
                             checked
                         />
                         <span>
@@ -312,6 +316,7 @@
                                 #gstComposition="hasFocus"
                                 type="text"
                                 name="gstComposition"
+                                placeholder="Registered under Composition Scheme"
                                 [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label"
                                 (ngModelChange)="onFieldChange(null, null, null)"
                                 [disabled]="!customTemplate.sections['header'].data['gstComposition'].display"
