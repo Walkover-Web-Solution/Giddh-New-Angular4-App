@@ -42,7 +42,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         sort: 'asc',
         sortBy: '',
         fromDate: null,
-        toDate: null
+        toDate: null,
+        salesFrom: null
     };
     /** Hold Sales Bifurcation Details Client List */
     public salesBifurcationDetailsClientList: any = [];
@@ -83,6 +84,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.requestParams.fromDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.fromDate ?? null;
         this.requestParams.toDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.toDate ?? null;
         this.requestParams.value = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.value;
+        this.requestParams.salesFrom = this.salesBifurcationDetailsData?.salesFrom;
 
         this.salesBifurcationDetailsList$.pipe(
             takeUntil(this.destroyed$)
@@ -105,13 +107,13 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.requestParams.q = searchedText;
                 this.requestParams.page = 1;
-                this.requestParams.count = this.pageSizeOptions[3];
+                this.requestParams.count = this.pageSizeOptions[2];
                 this.initApiCall();
             } else if (searchedText === '') {
                 this.showClearFilter = false;
                 this.requestParams.q = '';
                 this.requestParams.page = 1;
-                this.requestParams.count = this.pageSizeOptions[3];
+                this.requestParams.count = this.pageSizeOptions[2];
                 this.initApiCall();
             }
         });

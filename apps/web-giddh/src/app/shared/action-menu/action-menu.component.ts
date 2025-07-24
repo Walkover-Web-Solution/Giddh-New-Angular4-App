@@ -133,7 +133,7 @@ export class ActionMenuComponent {
                 if (event) {
                     event.stopPropagation();
                 }
-                this.openCustomEmailDialog(account, this.account?.accountType, false);
+                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType, false);
                 break;
             case 4: // edit account
                 if (event) {
