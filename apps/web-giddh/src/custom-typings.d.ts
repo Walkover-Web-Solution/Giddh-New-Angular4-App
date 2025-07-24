@@ -80,6 +80,7 @@ declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
 declare var FROALA_EDITOR_KEY: string;
+declare var TINYMCE_KEY: string;
 declare var OTP_WIDGET_ID: string;
 declare var OTP_TOKEN_AUTH: string;
 

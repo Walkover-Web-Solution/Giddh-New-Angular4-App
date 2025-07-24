@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, AfterViewInit, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
@@ -10,14 +10,14 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
 import { cloneDeep, isArray } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-
+declare var tinymce: any;
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
     styleUrls: ['./template-froala.component.scss'],
     providers: [CustomEmailComponentStore]
 })
-export class TemplateFroalaComponent implements OnInit {
+export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     /** Instance of select multiple fields*/
     @ViewChildren(SelectMultipleFieldsComponent) childComponents!: QueryList<SelectMultipleFieldsComponent>;
     /** Instance of subject input field */
@@ -136,7 +136,7 @@ export class TemplateFroalaComponent implements OnInit {
     /** Holds the maximum number of emails to display */
     public noOfMaximumEmailsShow: number = 2;
     /** Holds email type */
-    public emailType : any = EmailType;
+    public emailType: any = EmailType;
     /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
     public emailFocusStates: any = {
         isTo: true,
@@ -149,6 +149,31 @@ export class TemplateFroalaComponent implements OnInit {
     };
     /** Holds width of select-multiple-fields */
     public optionClass: string = '';
+    /** Hold tinymce editor config */
+    public tinymceConfig = {
+        selector: '#tinyEditor',
+        branding: false,
+        min_height: 300,
+        max_height: 300,
+        zindex: 2501,
+        toolbar_sticky: true,
+        menubar: false,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
+            'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
+            'table', 'help', 'wordcount', 'emoticons', 'pagebreak', 'nonbreaking',
+            'directionality'
+        ],
+        toolbar: [
+            'bold italic underline strikethrough forecolor backcolor | code help fullscreen emoticons | undo redo |',
+            'link image media table charmap  hr pagebreak nonbreaking |',
+            'alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist checklist | insertdatetime anchor | searchreplace visualblocks | ltr rtl | removeformat | blocks fontfamily fontsize '
+        ].join(' '),
+        codesample_languages: [
+            { text: 'HTML/XML', value: 'markup' }
+        ],
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -157,6 +182,19 @@ export class TemplateFroalaComponent implements OnInit {
         private dialog: MatDialog,
         public dialogRef: MatDialogRef<any>
     ) { }
+
+    /**
+     * Initializes the TinyMCE editor after the view is initialized.
+     *
+     * This function configures the TinyMCE editor with specific options for a rich text editor,
+     * including plugins, toolbar buttons, and content styles. It is called after the view is initialized.
+     *
+    * @returns {void}
+    * @memberof TemplateFroalaComponent
+     */
+    public ngAfterViewInit(): void {
+        tinymce.init(this.tinymceConfig);
+    }
 
     /**
      * Initializes the component and performs necessary operations.
@@ -395,7 +433,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         const model = {
             ...formValue,
-            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName)  ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
+            customerVendorUniqueNames: Array.isArray(this.inputData?.accountUniqueName) ? this.inputData?.accountUniqueName : [this.inputData?.accountUniqueName]
         };
 
         // Only add sendMail flag when type is 'send'

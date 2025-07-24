@@ -12,6 +12,7 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         MatDialogModule,
         ReactiveFormsModule,
         FormsModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        EditorModule
     ],
     exports: [
         TemplateFroalaComponent
