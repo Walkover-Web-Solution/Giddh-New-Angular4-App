@@ -887,8 +887,7 @@
                                     class="new-plan mt-4"
                                     *ngIf="
                                         filteredPaymentProviders?.length > 1 ||
-                                        (firstStepForm.get('duration')?.value === 'MONTHLY' &&
-                                            selectedPlan?.entityCode === 'IND')
+                                        (['MONTHLY', 'YEARLY'].includes(firstStepForm.get('duration')?.value) && selectedPlan?.entityCode === 'IND')
                                     "
                                 >
                                     <mat-card class="outline-card">
@@ -917,7 +916,7 @@
                                                 "
                                             >
                                                 <mat-radio-group
-                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY'"
+                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY"
                                                     class="d-flex flex-column"
                                                     formControlName="razorpayAuthType"
                                                 >

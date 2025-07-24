@@ -684,3 +684,11 @@ export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     },
     disableClose: true
 };
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
+};
