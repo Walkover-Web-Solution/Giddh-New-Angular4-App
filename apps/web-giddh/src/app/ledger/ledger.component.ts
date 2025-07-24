@@ -3955,7 +3955,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 transaction.inventory = inventory;
             }
         }
-        console.log(transaction.inventory);
         this.selectBlankTxn(transaction);
         this.lc.blankLedger.isOtherTaxesApplicable = res.isOtherTaxesApplicable;
         this.lc.blankLedger.otherTaxesSum = res.otherTaxesSum;
@@ -4079,9 +4078,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         txn.showOtherTax = this.showOtherTax(txn);
         this.handleRcmVisibility(txn);
-        this.handleTaxableAmountVisibility(txn); // check
+        this.handleTaxableAmountVisibility(txn);
         this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
         this.needToReCalculate.next(true);
-        this.getTransactionCountConvertToEntries(); // check
+        this.getTransactionCountConvertToEntries();
     }
 }
