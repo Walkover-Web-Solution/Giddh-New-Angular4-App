@@ -51,6 +51,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/mat-chip.scss";
 @import "../css/global/select-multiple-fields.scss";
 @import "../css/global/override-material-theme-variables";
+@import "../css/global/tribute-js.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -921,7 +922,7 @@ textarea {
     }
 }
 
-.voucher-preview-edit {
+.voucher-preview-edit, .giddh-mobile-wrapper {
     .flag-input {
         .mdc-floating-label {
             padding-left: 40px !important;
@@ -1215,9 +1216,11 @@ textarea {
 
 body {
     &.template-wrapper {
-        mat-tab-body {
-            &.mat-mdc-tab-body-active {
-                z-index: unset !important;
+        .invoice-list {
+            mat-tab-body {
+                &.mat-mdc-tab-body-active {
+                    z-index: unset !important;
+                }
             }
         }
     }
@@ -14049,6 +14052,19 @@ mat-list {
 
         .mat-select-search-clear {
             margin-right: 0 !important;
+        }
+    }
+}
+
+/** In mobile number field if multiple flag are visible,
+ use this class to fix the issue */
+.show-single-flag {
+    .iti--allow-dropdown {
+        &:has(.iti--allow-dropdown) {
+            margin-bottom: 0;
+            > .iti__flag-container {
+                display: none;
+            }
         }
     }
 }

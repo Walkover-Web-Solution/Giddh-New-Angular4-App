@@ -2067,7 +2067,7 @@ export class GeneralService {
         return window.open(
             url,
             title,
-            `width=${width},height=${height},top=${top},left=${left}`
+            `popup,width=${width},height=${height},top=${top},left=${left}`
         );
     }
 

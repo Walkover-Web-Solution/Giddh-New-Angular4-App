@@ -132,9 +132,18 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
 
         if (this.autoFocus) {
             setTimeout(() => {
-                this.textField?.nativeElement?.focus();
+                this.inputFocus();
             }, 20);
         }
+    }
+
+    /**
+     * Focus on input field
+     *
+     * @memberof InputFieldComponent
+     */
+    public inputFocus(): void {
+        this.textField?.nativeElement?.focus();
     }
 
     /**
