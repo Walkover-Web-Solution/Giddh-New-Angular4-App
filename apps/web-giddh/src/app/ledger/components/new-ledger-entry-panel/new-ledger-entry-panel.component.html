@@ -284,11 +284,11 @@
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"
                         [applicableTaxes]="
-                            taxListForStock?.length
+                            taxListForStock?.length && !currentTxn?.duplicateEntry
                                 ? taxListForStock
-                                : currentTxn?.selectedAccount?.applicableTaxes
+                                : currentTxn?.selectedAccount?.applicableTaxes?.length
                                 ? currentTxn?.selectedAccount?.applicableTaxes
-                                : currentAccountApplicableTaxes?.length
+                                : currentAccountApplicableTaxes?.length && !currentTxn?.duplicateEntry
                                 ? currentAccountApplicableTaxes
                                 : []
                         "
