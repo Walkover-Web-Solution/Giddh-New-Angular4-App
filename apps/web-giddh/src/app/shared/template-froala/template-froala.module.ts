@@ -17,6 +17,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
 import { A11yModule } from '@angular/cdk/a11y';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { A11yModule } from '@angular/cdk/a11y';
         MatCheckboxModule,
         ClickOutsideModule,
         ReplacePipeModule,
-        A11yModule
+        A11yModule,
+        EditorModule
     ],
     exports: [
         TemplateFroalaComponent

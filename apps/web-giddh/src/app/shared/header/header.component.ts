@@ -878,6 +878,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         /* TO SHOW NOTIFICATIONS */
 
+        // Dynamically load TinyMCE script if not already present
+        if (!(window as any).tinymce) {
+            const scriptTag = document.createElement('script');
+            scriptTag.src = `https://cdn.tiny.cloud/1/we80wi5vpgskqw6jst4ewz72f9d6kuqd0xnme2wbxktbjtiq/tinymce/6/tinymce.min.js`;
+            scriptTag.referrerPolicy = 'origin';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.async = true;
+            document.head.appendChild(scriptTag);
+        }
+
         if (this.selectedPlanStatus === 'expired') {// active expired
             if (!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
