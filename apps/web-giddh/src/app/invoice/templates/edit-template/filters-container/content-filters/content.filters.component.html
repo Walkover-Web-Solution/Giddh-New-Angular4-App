@@ -2533,7 +2533,7 @@
                                         [maxlength]="
                                             customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
                                                 ? null
-                                                : 500
+                                                : 200
                                         "
                                         hasFocus
                                         #message1="hasFocus"
@@ -2542,6 +2542,8 @@
                                         name="msg11"
                                         (ngModelChange)="onFieldChange(null, null, null)"
                                         [disabled]="!customTemplate.sections['footer'].data['message1'].display"
+                                        [appTributeMention]="{trigger: '{', suggestionPrefix: '{',suggestionSuffix: '}'}"
+                                        [appTributeMentionValues]="suggestionList"
                                     ></textarea>
                                     <ng-container
                                         *ngIf="
@@ -2552,7 +2554,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            500 - customTemplate.sections["footer"].data["message1"].label?.length
+                                            200 - customTemplate.sections["footer"].data["message1"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </div>

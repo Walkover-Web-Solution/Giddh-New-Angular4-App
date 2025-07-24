@@ -274,7 +274,7 @@ export class AccountService {
     public createPortalUser(model: any, accountUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         const contextPath = ACCOUNTS_API.CREATE_UPDATE_DELETE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        return this.http.patch(this.config.apiUrl + contextPath, model).pipe(
+        return this.http.put(this.config.apiUrl + contextPath, model).pipe(
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = model;

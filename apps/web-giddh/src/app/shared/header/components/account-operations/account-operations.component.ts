@@ -643,7 +643,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         } else {
             this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         }
-        this.accountUpdated.emit(true);
+        this.updateAccountIsSuccess$.pipe(take(1)).subscribe((isSuccess: boolean) => {
+            if (isSuccess) {
+                this.accountUpdated.emit(true);
+            }
+        });
     }
 
     public showDeleteAccountModal() {

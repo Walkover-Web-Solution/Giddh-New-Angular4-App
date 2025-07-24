@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -25,7 +25,7 @@ import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -42,12 +42,14 @@ import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-de
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
+import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
 
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore]
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -95,7 +97,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
     @Input() public includeSearchedGroup: boolean = false;
-    @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
+    @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2, salesPersonCreated: boolean }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
     @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
@@ -207,10 +209,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isValidForm: boolean = true;
     /** True if form value is assigned */
     private formValueAssigned: boolean = false;
-    /** Indicates whether the "Portal" tab is currently selected */
-    public isPortalSelectedTab: boolean = false;
-    /** Indicates whether the "Contact" tab is currently selected */
-    public isContactSelectedTab: boolean = false;
+    /** Indicates whether the "Custom" tab is currently selected */
+    public isCustomSelectedTab: boolean = false;
     /** Stores the index of the currently active mobile number field under the Portal tab */
     public isActivePortalMobileNumber: number = -1;
     /** Holds active selected Tab Index */
@@ -221,6 +221,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isParentSundrydebtors: boolean = false;
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** True if sales person is created */
+    public salesPersonCreated: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -239,7 +243,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         public dialog: MatDialog,
         private commonService: CommonService,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -268,6 +273,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getCallingCodes();
         this.getPartyTypes();
         this.getCompanyBranches();
+        this.getSalesPersonList();
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -306,7 +312,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.isParentSundrydebtors = this.checkParentGroup(parent, this.accountingGroupEnum.SundryDebtors);
                     this.showHideAddressTab();
                     this.selectedTabIndex = null;
-                    this.isContactSelectedTab = this.isHsnSacEnabledAcc;
                     this.changeDetectorRef.detectChanges();
 
                     setTimeout(() => {
@@ -411,11 +416,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     this.changeDetectorRef.detectChanges();
                 }
-                if (this.formValueAssigned && response) {
-                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
-                }
             });
 
+        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+            if (this.formValueAssigned && response) {
+                this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
+            }
+        });
 
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -516,7 +523,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addNewPortalUser();
         setTimeout(() => {
             this.formValueAssigned = true;
-        }, 4000);
+        }, 2500);
     }
 
     public isShowBankDetails(accountType: string) {
@@ -566,6 +573,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['', Validators.required]
@@ -602,7 +610,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     openingBalanceType: [''],
                     foreignOpeningBalance: ['']
                 }),
-            ])
+            ]),
+            salesPersonUniqueName: ['']
         });
 
         this.getInvoiceSettings();
@@ -944,16 +953,28 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.isParentSundrydebtors || this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors)) {
             delete accountRequest['portalDomain'];
         }
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
-            accountRequest
+            accountRequest,
+            salesPersonCreated: this.salesPersonCreated
         });
+        this.salesPersonCreated = false;
     }
 
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
+    }
+
+    /**
+     * Open confirm leave dialog
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public openConfirmLeaveDialog(): void {
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
     }
 
     /**
@@ -971,6 +992,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnDestroy() {
         this.resetAddAccountForm();
         this.store.dispatch(this.accountsAction.resetActiveAccount());
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+        this.salesPersonCreated = false;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1343,8 +1366,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTabIndex = event.index;
-            this.isPortalSelectedTab = event.tab.textLabel === this.localeData?.tabs?.portal;
-            this.isContactSelectedTab = event.tab.textLabel === this.localeData?.tabs?.contact;
+            this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
         }
     }
 
@@ -1924,6 +1946,25 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             calculateTotal = null;
         }
         this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
+    }
+
+    /**
+     * Open sales person dialog
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 }
 

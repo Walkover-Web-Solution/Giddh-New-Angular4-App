@@ -45,3 +45,9 @@ export enum DurationEnum {
     Quarterly = 'quarterly',
     Weekly = 'weekly'
 }
+
+/** Group by enum */
+export enum GroupBy {
+    Duration = 'duration',
+    SalesPerson = 'salesPerson'
+}

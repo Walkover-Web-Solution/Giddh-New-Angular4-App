@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -37,7 +37,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
 import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
 import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
@@ -49,6 +49,7 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
+import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 import { HomeComponentStore } from '../home/home.store';
@@ -87,6 +88,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public lc: LedgerVM;
     public selectedInvoiceList: string[] = [];
     public accountInprogress$: Observable<boolean>;
+    /** Holds the current blank ledger transaction */
+    public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
     public universalDate$: Observable<any>;
     public trxRequest: TransactionsRequest;
     public advanceSearchRequest: AdvanceSearchRequest;
@@ -107,6 +110,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Holds Bank Integration dailog template reference */
     @ViewChild('bankIntegrationPopup', { static: true }) public bankIntegrationPopup: TemplateRef<any>;
+    /** Holds update account dialog template reference */
+    @ViewChild('updateAccount', { static: true }) public updateAccount: TemplateRef<any>;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -145,6 +150,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public profileObj: any;
     public createAccountIsSuccess$: Observable<boolean>;
+    /** Observable to check if account is updated successfully */
+    public updateAccountIsSuccess$: Observable<boolean>;
     public companyTaxesList: TaxResponse[] = [];
     public selectedTxnAccUniqueName: string = '';
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
@@ -327,6 +334,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankTransactionsWithAccountName: any[] = [];
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Invoice Settings */
+    public invoiceSettings: any;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
+    /** Store ledger account response */
+    public ledgerAccountResponse: AccountResponse | AccountResponseV2;
     /** Hold reference number */
     public referenceNumber: string = null;
     /** True if api call in progress */
@@ -361,8 +374,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
     public ledgerGridColumnsValue: number[] = [1, 2, 1];
-    /** Observable for post balance success response */
-    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Hold Transaction Object */
     public entryTransactionData: any = {
         transaction: null,
@@ -377,14 +388,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ledgerView: TLedgerView | null = null;
     /** Holds ledger view enum */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
-    /** Hold ledger grid total columns static value */
-    public ledgerStatementViewGridTotalColumns: number = 11;
     /** Hold ledger grid total columns value */
-    public ledgerStatementViewGridColumnsValue: number[] = [2, 3, 2, 2, 2];
+    public ledgerStatementViewGridColumnsValue: number[] = [1, 3, 2, 2, 3];
+    /** Hold ledger grid total columns static value */
+    public ledgerStatementViewGridTotalColumns: number = this.getLedgerStatementViewGridTotalColumns();
     /** True if update account is bank account */
     public isUpdateAccount: boolean = false;
     /** Holds transaction type */
     public transactionType: typeof TransactionType = TransactionType;
+    /** Holds breakpoint screen size */
+    public breakpointScreenSize: { mediumDesktopScreen: boolean, smallDesktopScreen: boolean, tabScreen: boolean } = {
+        mediumDesktopScreen: false,
+        smallDesktopScreen: false,
+        tabScreen: false
+    };
+    /** Holds Update Account Dialog Ref */
+    public updateAccountDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -425,6 +444,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
         this.accountInprogress$ = this.store.pipe(select(p => p.ledger.accountInprogress), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
         this.isLedgerCreateSuccess$ = this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$));
         this.lc.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
@@ -435,6 +455,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
         this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
     }
     /** True if active account is bank account */
     public get isBankAccount(): boolean {
@@ -625,9 +646,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
-
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+                this.ledgerAccountResponse = ledgerAccount;
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
                     this.isSundryDebtorCreditor = true;
@@ -667,22 +688,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.arrangeLedgerTransactionsForMobile();
             }
         });
-        const mediumScreen: string = "(max-width: 1536px)";
-        const smallScreen: string = "(max-width: 1366px)";
+
         this.breakpointObserver.observe([
-            smallScreen, mediumScreen
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE,
+            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE,
+            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.matches) {
-                if (result.breakpoints[smallScreen]) {
+                // Reset all breakpoint screen size
+                Object.keys(this.breakpointScreenSize).forEach(key => {
+                    this.breakpointScreenSize[key] = false;
+                });
+                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE]) {
+                    this.breakpointScreenSize.smallDesktopScreen = true;
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
-                } else if (result.breakpoints[mediumScreen]) {
+                    this.getLedgerStatementViewGridColumnsValue();
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE]) {
+                    this.breakpointScreenSize.mediumDesktopScreen = true;
                     this.ledgerGridTotalColumns = 8;
                     this.ledgerGridColumnsValue = [2, 3, 3]
+                    this.getLedgerStatementViewGridColumnsValue();
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE]) {
+                    this.breakpointScreenSize.tabScreen = true;
+                    this.ledgerGridTotalColumns = 8;
+                    this.ledgerGridColumnsValue = [2, 3, 3];
+                    this.getLedgerStatementViewGridColumnsValue();
                 } else {
                     this.ledgerGridTotalColumns = 4
                     this.ledgerGridColumnsValue = [1, 2, 1]
+                    this.getLedgerStatementViewGridColumnsValue();
                 }
+                this.cdRf.detectChanges();
             }
         });
         this.store.pipe(
@@ -1183,6 +1220,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.updateAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            if (response) {
+                this.updateAccountDialogRef?.close();
+            }
+        });
+
+        this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.lc.activeAccount = response;
+                this.lc.getUnderstandingText(this.lc.activeAccount?.accountType, this.lc.activeAccount?.name, this.lc.activeAccount?.parentGroups, this.localeData);
+                this.cdRf.detectChanges();
+            }
+        });
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -1444,6 +1495,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     });
                 }
             });
+        }
+    }
+
+    /**
+     * Open E-Way Bill dialog for creating or editing an E-Way Bill.
+     * 
+     *  @returns {void}
+     * @memberof LedgerComponent
+     */
+    public openEwayBillDialog(): void {
+        this.dialog?.closeAll();
+        const dialogRef = this.dialog.open(EWayBillCreateComponent, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true,
+            data: { pincode: this.ledgerAccountResponse?.addresses?.[0]?.pincode, gstNumber: this.ledgerAccountResponse?.addresses?.[0]?.gstNumber }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.saveBlankTransaction(response);
+        });
+    }
+
+    /**
+     * Generates a ledger entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the blank transaction.
+     * @returns {void}
+     * 
+     * @memberof LedgerComponent
+     */
+    public generateLedger(): void {
+        if ((this.lc.blankLedger.transactions[1]?.selectedAccount?.uniqueName === "sales" || this.lc.blankLedger.transactions[0]?.selectedAccount?.uniqueName === "sales") && this.invoiceSettings?.invoiceSettings?.generateAutoEWayBill && this.invoiceSettings?.invoiceSettings?.gstEInvoiceEnable) {
+            this.openEwayBillDialog();
+        } else {
+            this.saveBlankTransaction();
         }
     }
 
@@ -1833,7 +1916,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public saveBlankTransaction() {
+    /**
+     * Handle save blank transaction
+     * 
+     * @param eWayBillResponse 
+     * @returns 
+     */
+    public saveBlankTransaction(eWayBillResponse?: any): void {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
@@ -1867,6 +1956,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (model.transactions[0]?.subVoucher === "ADVANCE_RECEIPT") {
                 /** Here key 'taxInclusiveAmount' represents the amount of the advance receipt, exclusive of tax (if tax is applied) */
                 model.transactions[0].amount = model.transactions[0].taxInclusiveAmount;
+            }
+            if (eWayBillResponse && Object.keys(eWayBillResponse).length > 0) {
+                model.ewayBillDetails = eWayBillResponse;
             }
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(model, this.lc.accountUnq));
         } else {
@@ -3286,14 +3378,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
-
-            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
-            if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
-                this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
-            } else {
-                this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+            if (response) {
+                this.invoiceSettings = response;
+                this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
+                if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                    this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
+                } else {
+                    this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+                }
+                this.cdRf.detectChanges();
             }
-            this.cdRf.detectChanges();
         });
     }
 
@@ -3444,6 +3538,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 if (rate > 0) {
                     txn.amount = rate;
+                }
+
+                if (data.body?.salesPerson && !this.isSundryDebtorCreditor) {
+                    this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || null;
+                    this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || '';
+                } else {
+                    this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse?.salesPerson?.uniqueName || null;
+                    this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse?.salesPerson?.name || '';
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
@@ -3630,15 +3732,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getLedgerStatementViewGridColumnsValue(): void {
+        if (this.ledgerView === LedgerViewEnum.TView) {
+            return;
+        }
         if (this.searchText || this.isAdvanceSearchImplemented) {
-            this.ledgerStatementViewGridTotalColumns = 9;
-            if (this.ledgerStatementViewGridColumnsValue.length > 4) {
+            if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
+                this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2];
+            } else if (this.ledgerStatementViewGridColumnsValue.length > 4) {
                 this.ledgerStatementViewGridColumnsValue.pop();
             }
         } else {
-            this.ledgerStatementViewGridTotalColumns = 11;
-            this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 2];
+            if (this.breakpointScreenSize.tabScreen || this.breakpointScreenSize.smallDesktopScreen) {
+                this.ledgerStatementViewGridColumnsValue = [2, 3, 2, 2, 3];
+            } else {
+                this.ledgerStatementViewGridColumnsValue = [2, 8, 2, 2, 3];
+            }
         }
+        this.ledgerStatementViewGridTotalColumns = this.getLedgerStatementViewGridTotalColumns();
+    }
+
+    /**
+     * Get ledger statement view grid total columns
+     *
+     * @returns {number}
+     * @memberof LedgerComponent
+     */
+    private getLedgerStatementViewGridTotalColumns(): number {
+        return this.ledgerStatementViewGridColumnsValue.reduce((a, b) => a + b, 0);
     }
 
     /**
@@ -3651,5 +3771,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event) {
             this.closeAllAccountDropdown();
         }
+    }
+
+    /**
+     * Open Create Account Aside Pane
+     *
+     * @memberof LedgerComponent
+     */
+    public openAccountAsidePane(): void {
+        this.updateAccountDialogRef = this.dialog.open(this.updateAccount, {
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '0',
+                top: '0'
+            },
+            disableClose: true
+        });
     }
 }

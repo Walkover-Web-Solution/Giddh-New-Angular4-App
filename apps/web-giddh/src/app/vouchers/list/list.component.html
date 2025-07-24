@@ -18,7 +18,7 @@
             <mat-tab [label]="localeData?.tabs?.estimates" *ngIf="activeTabGroup === 0">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.generateEstimate"
+                    *ngIf="voucherType === voucherTypeEnum.generateEstimate && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -468,7 +468,7 @@
             <mat-tab [label]="localeData?.tabs?.proformas" *ngIf="activeTabGroup === 0">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.generateProforma"
+                    *ngIf="voucherType === voucherTypeEnum.generateProforma && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -914,7 +914,7 @@
 
             <!-- invoice-content-start -->
             <mat-tab [label]="localeData?.tabs?.invoices" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4 overflow-visible" *ngIf="voucherType === voucherTypeEnum.sales">
+                <div class="vouchers-wrapper pt-3 px-4 overflow-visible" *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'">
                     <div
                         class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1"
                     >
@@ -1468,7 +1468,7 @@
             <mat-tab [label]="localeData?.tabs?.debit_note" *ngIf="activeTabGroup === 1">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.debitNote"
+                    *ngIf="voucherType === voucherTypeEnum.debitNote && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1932,7 +1932,7 @@
             <mat-tab [label]="localeData?.tabs?.credit_note" *ngIf="activeTabGroup === 1">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.creditNote"
+                    *ngIf="voucherType === voucherTypeEnum.creditNote && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -2625,7 +2625,7 @@
             <mat-tab [label]="localeData?.po_number" *ngIf="activeTabGroup === 2">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.purchaseOrder"
+                    *ngIf="voucherType === voucherTypeEnum.purchaseOrder && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -3058,7 +3058,7 @@
             <mat-tab [label]="localeData?.bill" *ngIf="activeTabGroup === 2">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.purchase"
+                    *ngIf="voucherType === voucherTypeEnum.purchase && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -3487,7 +3487,7 @@
             <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 3">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.receipt"
+                    *ngIf="voucherType === voucherTypeEnum.receipt && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -3681,7 +3681,13 @@
                                                 [matTooltip]="element.voucherNumber"
                                                 matTooltipPosition="above"
                                             >
+                                            <a
+                                                href="javascript:;"
+                                                class="btn-link-2"
+                                                (click)="showVoucherPreview(element?.uniqueName)"
+                                            >
                                                 {{ element?.voucherNumber }}
+                                            </a>
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3892,7 +3898,7 @@
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
                 <div
                     class="vouchers-wrapper pt-3 px-4 overflow-visible"
-                    *ngIf="voucherType === voucherTypeEnum.payment"
+                    *ngIf="voucherType === voucherTypeEnum.payment && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -4059,7 +4065,13 @@
                                                 </div>
                                             </th>
                                             <td mat-cell *matCellDef="let element" class="text-ellipsis">
-                                                {{ element?.voucherNumber }}
+                                                <a
+                                                    href="javascript:;"
+                                                    class="btn-link-2"
+                                                    (click)="showVoucherPreview(element?.uniqueName)"
+                                                >
+                                                    {{ element?.voucherNumber }}
+                                                </a>
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -5769,12 +5781,8 @@
                     <edit-invoice></edit-invoice>
                 </div>
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
-                    <dropdown-field
-                        [name]="'design'"
-                        [label]="'Select Design for'"
-                        [placeholder]="'Select'"
-                        class="w-50 template-design d-block"
-                    >
+                    <dropdown-field [name]="'design'" [label]="localeData?.select_design_for" [placeholder]="commonLocaleData?.app_select"
+                        class="w-50 template-design d-block">
                     </dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">

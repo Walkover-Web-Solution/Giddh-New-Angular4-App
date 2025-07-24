@@ -23,7 +23,7 @@
                             formControlName="activeGroupUniqueName"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('activeGroupUniqueName')?.value"
-                            (selectedOption)="selectGroup($event)"
+                            (selectedOption)="selectGroup($event); openConfirmLeaveDialog()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -38,6 +38,7 @@
                             [autoFocus]="true"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('name')?.value"
+                            (change)="openConfirmLeaveDialog()"
                         >
                         </input-field>
                     </div>
@@ -52,7 +53,7 @@
                             formControlName="countryCode"
                             [required]="true"
                             [showError]="!isValidForm && !addAccountForm.get('country').get('countryCode')?.value"
-                            (selectedOption)="selectCountry($event)"
+                            (selectedOption)="selectCountry($event); openConfirmLeaveDialog()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -63,6 +64,7 @@
                             [labelValue]="addAccountForm.get('currency').value ?? ''"
                             [options]="currencySource$ | async"
                             formControlName="currency"
+                            (change)="openConfirmLeaveDialog()"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -84,6 +86,7 @@
                                 [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
                             <div class="d-flex">
@@ -128,9 +131,21 @@
                 </div>
                 <div
                     class="row pd-b2"
-                    *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
                 >
+                    <!-- Sales Person -->
                     <div class="col-sm-4">
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                         <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                         >
                             <input-field
@@ -146,6 +161,7 @@
                                 [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
                             <div class="d-flex">
@@ -191,12 +207,14 @@
                                 <mat-radio-button
                                     color="primary"
                                     value="hsn"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                     {{ commonLocaleData?.app_hsn }}
                                 </mat-radio-button>
                                 <mat-radio-button
                                     color="primary"
                                     value="sac"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                     {{ commonLocaleData?.app_sac }}
                                 </mat-radio-button>
@@ -211,6 +229,7 @@
                             [maxlength]="10"
                             [allowDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
+                            (change)="openConfirmLeaveDialog()"
                         >
                         </input-field>
                         <input-field
@@ -222,6 +241,7 @@
                             [allowDigitsOnly]="true"
                             [maxlength]="10"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
+                            (change)="openConfirmLeaveDialog()"
                         >
                         </input-field>
                     </div>
@@ -294,6 +314,7 @@
                                         cols="5"
                                         maxlength="120"
                                         class="form-control"
+                                        (change)="openConfirmLeaveDialog()"
                                     ></textarea>
                                 </div>
                             </div>
@@ -309,7 +330,11 @@
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
-                                    (selectedOption)="selectedState(gst, $event)"
+                                    (selectedOption)="selectedState(gst, $event); openConfirmLeaveDialog()"
+                                    [disabled]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [readonly]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [matTooltip]="isGstValid && gst.value.gstNumber?.length >= 2 ? localeData?.change_gst_number_to_update_the_state : ''"
+                                    matTooltipPosition="above"
                                 >
                                 </reactive-dropdown-field>
                                 
@@ -321,7 +346,7 @@
                                     formControlName="countyCode"
                                     [required]="isStateRequired"
                                     [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
-                                    (selectedOption)="selectedCounty(gst, $event)"
+                                    (selectedOption)="selectedCounty(gst, $event); openConfirmLeaveDialog()"
                                 >
                                 </reactive-dropdown-field>
                             </div>
@@ -335,6 +360,8 @@
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
                                     (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                     [maxlength]="15"
+                                    (change)="openConfirmLeaveDialog()"
+                                    [showError]="!isValidForm && !isGstValid"
                                 >
                                 </input-field>
                             </div>
@@ -355,6 +382,7 @@
                                     [type]="'number'"
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
                                     [allowDigitsOnly]="true"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
                             </div>
@@ -369,6 +397,7 @@
                                         [labelValue]="partyTypeSource?.[0]?.label"
                                         [required]="true"
                                         [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('partyType')?.value"
+                                        (selectedOption)="openConfirmLeaveDialog()"
                                     >
                                     </reactive-dropdown-field>
                                 </div>
@@ -418,10 +447,11 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
+                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
                             </button>
+                            <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
                         </div>
                     </ng-container>
                 </div>
@@ -438,6 +468,7 @@
                                 [placeholder]="localeData?.attention_to"
                                 [type]="'text'"
                                 formControlName="attentionTo"
+                                (change)="openConfirmLeaveDialog()"
                             >
                             </input-field>
                         </div>
@@ -454,6 +485,7 @@
                                         [placeholder]="localeData?.mobile_no_placeholder"
                                         [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                         formControlName="mobileNo"
+                                        (change)="openConfirmLeaveDialog()"
                                     >
                                     </input-field>
                                 </div>
@@ -471,6 +503,7 @@
                                     [placeholder]="commonLocaleData?.app_email_id"
                                     [type]="'email'"
                                     formControlName="email"
+                                    (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
                                 <span
@@ -675,6 +708,7 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
                 </div>
             </mat-tab>
 
@@ -747,10 +781,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row pd-b2">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'duePeriod'"
+                                [label]="localeData?.default_expiry_days"
+                                [placeholder]="'00'"
+                                [type]="'text'"
+                                [maxlength]="3"
+                                [allowDigitsOnly]="true"
+                                formControlName="duePeriod"
+                                class="settings-field d-block"
+                                [matSuffix]="commonLocaleData?.app_days"
+                            ></input-field>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="description">{{ localeData?.description_label }}</label>
+                                <label>{{ commonLocaleData?.app_note }}</label>
                                 <textarea
                                     id="description"
                                     rows="3 "
@@ -762,6 +813,7 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
                 </div>
             </mat-tab>
 
@@ -855,7 +907,7 @@
                 >
             </mat-tab>
         </mat-tab-group>
-        <ng-container *ngIf="!isPortalSelectedTab && !isContactSelectedTab">
+        <ng-container *ngIf="isCustomSelectedTab">
             <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
         </ng-container>
     </form>

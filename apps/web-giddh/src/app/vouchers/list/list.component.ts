@@ -7,7 +7,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, skip, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -132,6 +132,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
+    /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -403,6 +404,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
+            
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -518,12 +520,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                // 'pending', 'settings', 'templates' These tabs are not voucher list
-                let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
-                if (this.universalDate && !tab.includes(this.activeModule)) {
-                    this.getVouchers(true);
-                    this.getVoucherBalances();
-                }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
@@ -572,7 +568,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
         /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (localStorage.getItem('universalSelectedDate')) {
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
@@ -2229,7 +2225,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private openUrl(url: string): void {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${url}`;
+            url = location.origin + location.pathname + `#.${url}`;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
@@ -3249,6 +3245,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             return;
         }
         this.getVouchersInProgress$.pipe(filter(inProgress => !inProgress), take(1)).subscribe(() => {
+            this.isColumnsLoading = true;
             this.dynamicCustomColumns = [];
             this.displayedColumns = [];
             this.dataSource = [];
@@ -3266,8 +3263,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
             this.setEInvoiceColumns();
             this.getVouchers(false);
+            this.getVoucherBalances();
         });
-        this.isColumnsLoading = false;
+       setTimeout(() => {
+            this.isColumnsLoading = false;
+       }, 400);
     }
 
     /**

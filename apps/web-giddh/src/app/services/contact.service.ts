@@ -6,7 +6,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { CONTACT_API } from './apiurls/contact.api';
+import { ACCOUNT_STATEMENT_API, CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
@@ -61,7 +61,6 @@ export class ContactService {
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
         query = (query) ? query : '';
-
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
             ?.replace(':count', count?.toString())
@@ -168,6 +167,75 @@ export class ContactService {
     */
     public sendBulkEmailTemplate(model: SendBulkEmailTemplateRequest): Observable<BaseResponse<any, string>> {
         return this.http.post(this.config.apiUrl + CONTACT_API.SEND_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.request = '';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
+    }
+
+    /**
+* Get Account Statement List API
+*
+* @param {*} model
+* @return {*}  {Observable<BaseResponse<any, any>>}
+* @memberof ContactService
+*/
+    /**
+     * Optimized: Get Account Statement List API
+     * - DRY URL construction
+     * - Unified response mapping & error handling
+     * - Improved readability
+     */
+    public getAccountStatementList(requestObj: any): Observable<BaseResponse<any, any>> {
+        const model = requestObj.model ? requestObj.model : requestObj;
+        const body = requestObj.body ? requestObj.body : null;
+        let requestObjCopy = { ...requestObj };
+        delete requestObj.branchUniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const branchUniqueName = requestObjCopy.branchUniqueName;
+        // Helper to build URL
+        const buildUrl = () => {
+            let url = this.config.apiUrl + ACCOUNT_STATEMENT_API.GET
+                .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                .replace(':count', encodeURIComponent(model.count))
+                .replace(':page', encodeURIComponent(model.page))
+                .replace(':from', encodeURIComponent(model.from))
+                .replace(':to', encodeURIComponent(model.to))
+                .replace(':sort', encodeURIComponent(model.sort))
+                .replace(':q', encodeURIComponent(model.q));
+            if (branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+            }
+            return url;
+        };
+
+        // Unified pipe logic
+        const handleResponse = map((res: BaseResponse<any, string>) => {
+            let data = res;
+            data.queryString = { data };
+            return data;
+        });
+        const handleError = (e: any) => this.errorHandler.HandleCatch<any, any>(e);
+
+        if (requestObj.method === 'POST') {
+            return this.http.post(buildUrl(), body).pipe(handleResponse, catchError(handleError));
+        } else {
+            return this.http.get(buildUrl()).pipe(handleResponse, catchError(handleError));
+        }
+    }
+
+    /**
+     * Export account statement API call
+     * 
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof ContactService
+     */
+    public exportAccountStatement(requestObj: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNT_STATEMENT_API.EXPORT_ACCOUNT_STATEMENT, requestObj)).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';

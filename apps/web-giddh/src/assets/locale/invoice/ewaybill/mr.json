@@ -91,12 +91,24 @@
 		"credit_notes": "क्रेडिट नोट्स",
 		"delivery_challan": "वितरण चलन"
 	},
+	"transaction_sub_type": {
+        "regular": "नियमित",
+        "bill_to_ship_to": "बिल करणारा - शिप करणारा",
+        "bill_from_dispatch_from": "बिल प्राप्तकर्ता - डिस्पॅच प्राप्तकर्ता",
+        "combination": "संयोजन"
+    },
 	"remove_invoice": "आपल्याला खात्री आहे की बीजक [VOUCHER_NUMBER] काढू इच्छित आहात?",
 	"tab_generated_bills": "व्युत्पन्न बिले",
 	"search_eway": "ई-वे शोधा",
 	"search_particular": "शोध खास",
 	"download_eway_bill": "ई-वे बिल डाउनलोड करा",
 	"mode_of_transportation": "वाहतुकीची पद्धत",
-	"pincode_required": "कृपया ई-वे बिल तयार करण्यापूर्वी व्हाउचरमध्ये पिनकोड अपडेट करा.",
-	"select_gstin": "जीएसटीआयएन निवडा"
+    "pincode_required": "कृपया ई-वे बिल तयार करण्यापूर्वी व्हाउचरमध्ये पिनकोड अपडेट करा.",
+    "select_gstin": "जीएसटीआयएन निवडा",
+	"create_e_way_bill": "ई-वे बिल तयार करा",
+	"eway_bill_logs": "ई-वे बिल नोंदी",
+    "generate_eway_bill": "ई-वे बिल तयार करा",
+	"reason": "कारण",
+	"transaction_sub_type_label": "लेन-देन उप प्रकार",
+	"transaction_type_placeholder": "लेन-देन प्रकार चुनें"
 }
