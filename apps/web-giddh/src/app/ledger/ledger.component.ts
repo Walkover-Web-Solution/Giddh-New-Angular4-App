@@ -3501,7 +3501,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
                     nameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
-                    stock: data.body.stock,
+                    stock: txn.duplicateEntry ? txn?.inventory?.stock : data.body.stock,
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
@@ -3513,56 +3513,84 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.lc.currentBlankTxn = txn;
                 }
                 let rate = 0;
+                let quantity = 1;
                 let unitCode = '';
                 let stockName = '';
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
+                let variantUniqueName = '';
+                let variantDiscount = '';
 
                 txn.isMrpDiscountApplied = false;
 
                 //#region unit rates logic
                 if (txn?.selectedAccount?.stock) {
-                    // const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
-                    const defaultUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
-                    const defaultUnit = {
-                        stockUnitCode: defaultUnitRates[0].stockUnitCode,
-                        code: defaultUnitRates[0].stockUnitCode,
-                        rate: defaultUnitRates[0].rate,
-                        name: txn.selectedAccount.stock.name
-                    };
-                    // const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
-                    const unitRates = defaultUnitRates;
-                    txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-                    stockName = defaultUnit.name;
-                    rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
-                    unitCode = defaultUnit.code;
-                    stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
-
-                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
-                    if (hasMrpDiscount?.length) {
-                        rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                    const stock = txn?.inventory?.stock;
+                    if (txn?.duplicateEntry) {
+                        const defaultUnit = {
+                            stockUnitCode: stock.unitRates[0].stockUnitCode,
+                            code: stock.unitRates[0].stockUnitCode,
+                            rate: stock.unitRates[0].rate,
+                            name: txn.selectedAccount.stock.name
+                        };
+                        txn.unitRate = stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                        stockName = defaultUnit.name;
+                        rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+                        unitCode = defaultUnit.code;
+                        stockUnitUniqueName = stock.unitRates[0].stockUnitUniqueName;
+    
+                        const hasMrpDiscount = stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                        if (hasMrpDiscount?.length) {
+                            rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        }
+                        variantUniqueName = stock.variant?.uniqueName;
+                        variantDiscount = stock.variant?.variantDiscount;
+                        quantity = txn?.inventory?.quantity || 1;
+                    } else {
+                        const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
+                        const defaultUnit = {
+                            stockUnitCode: defaultUnitRates[0].stockUnitCode,
+                            code: defaultUnitRates[0].stockUnitCode,
+                            rate: defaultUnitRates[0].rate,
+                            name: txn.selectedAccount.stock.name
+                        };
+                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
+                        txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                        stockName = defaultUnit.name;
+                        rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+                        unitCode = defaultUnit.code;
+                        stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
+    
+                        const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                        if (hasMrpDiscount?.length) {
+                            rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        }
+                        variantUniqueName = txn.selectedAccount.stock.variant?.uniqueName;
+                        variantDiscount = txn.selectedAccount.stock.variant?.variantDiscount;
                     }
                 }
-                if (!txn.duplicateEntry) {
-                    if (stockName && stockUniqueName) {
-                        txn.inventory = {
-                            stock: {
-                                name: stockName,
-                                uniqueName: stockUniqueName,
-                            },
-                            variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
-                            quantity: 1,
-                            unit: {
-                                stockUnitCode: unitCode,
-                                code: unitCode,
-                                rate: rate,
-                                stockUnitUniqueName: stockUnitUniqueName
-                            }
-                        };
-                    } else {
-                        delete txn.inventory;
-                    }
+                if (stockName && stockUniqueName) {
+                    txn.inventory = {
+                        stock: {
+                            name: stockName,
+                            uniqueName: stockUniqueName,
+                        },
+                        variant: { 
+                            uniqueName: variantUniqueName, 
+                            variantDiscount: variantDiscount
+                        },
+                        quantity: quantity,
+                        unit: {
+                            stockUnitCode: unitCode,
+                            code: unitCode,
+                            rate: rate,
+                            stockUnitUniqueName: stockUnitUniqueName
+                        }
+                    };
+                } else {
+                    delete txn.inventory;
                 }
                 if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
@@ -3836,17 +3864,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let sumOfTax = 0;
         if (res.transactions?.length) {
             res.transactions.forEach(item => {
-                // const uNameStr = item.particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', ')
                 if (Object.hasOwn(item.particular, 'category') && (['income','expenses','assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
                     transactionsParticular = item.particular;
-                    // if (item.particular.category === 'assets') {
-                    //     // window.alert('Fixed Assets');
-                    //     console.error('Fixed Assets !', uNameStr.includes('fixedassets'));
-                    //     // showDiscountAndTaxPopup = uNameStr.includes('fixedassets');
-                    // } else {
-                    //     particular = item.particular;
-                    // }
-                    
                     if (item.inventory) {
                         transactionsParticular['uniqueName'] = transactionsParticular?.uniqueName?.split('#')[0];
                         transactionsParticular = { ...transactionsParticular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
@@ -3880,18 +3899,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let selectedAccountName = "";
         let selectedAccountUniqueName = "";
 
-        // if ((transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) || isJournalVoucher) {
-        //     selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
-        //     selectedAccountUniqueName = res.particular?.uniqueName;
-        //     // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
-        // } 
         if (isActiveAccountAndParticularIsSame) {
             selectedAccountName = transactionsParticular?.name;
             selectedAccountUniqueName = transactionsParticular?.uniqueName;
-        } else { // if ((transactionsParticular?.uniqueName === this.lc?.activeAccount?.uniqueName) || isJournalVoucher) {
+        } else {
             selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
             selectedAccountUniqueName = res.particular?.uniqueName;
-            // selectedAccountUniqueName = `${res.particular?.uniqueName}#${particular?.stock?.uniqueName}`;
         }
 
         let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
@@ -3926,12 +3939,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
         transaction.particular = selectedAccountUniqueName;
         transaction.type = transactionType;
         let inventory;
-        // let warehouseUniqueName = null;
         if (res.transactions?.length) {
-            inventory = res.transactions.find(txn => txn.inventory !== null)?.inventory;
+            inventory = res.transactions.find(txn => Object.keys(txn?.inventory || {}).length > 0)?.inventory;
             if (inventory) {
+
+                if (inventory.stock && res.unitRates?.length) {
+                    inventory.stock['unitRates'] = res.unitRates;
+                }
+
+                if (inventory.stock && inventory.variant && res.unitRates?.length) {
+                    inventory.stock['variant'] = inventory.variant;
+                }
+
                 res['inventory'] = inventory;
-                // warehouseUniqueName = inventory?.warehouse?.uniqueName || null;
                 transaction.inventory = inventory;
             }
         }
@@ -3948,8 +3968,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.passportNumber = res.passportNumber;
         this.lc.blankLedger.salesPersonUniqueName = res.salesPerson?.uniqueName;
         this.lc.blankLedger.salesPersonName = res.salesPerson?.name;
-
-        // this.lc.blankLedger.transactions[0].particular = particular?.uniqueName; ref - 3810
 
         let txnIndex: number;
         
@@ -3990,23 +4008,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.blankLedger.transactions[txnIndex].creditTotal = res.total.amount;
         }
 
-        this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName; // UniqueName to select in  ledger particular Dropdown rishi2#stock11
-        const particular = isActiveAccountAndParticularIsSame ? transactionsParticular : res.particular;
+        this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName;
+        const particular = (isActiveAccountAndParticularIsSame || transactionsParticular?.stock) ? transactionsParticular : res.particular;
         this.lc.blankLedger.transactions[txnIndex].selectedAccount = {
                 label: selectedAccountName, 
                 value: selectedAccountUniqueName, 
                 name: selectedAccountName, 
                 uniqueName: selectedAccountUniqueName, 
                 category: particular?.category, 
-                parentGroups: particular?.parentGroups, // Check - https://app.clickup.com/t/86cznbfpd
+                parentGroups: particular?.parentGroups,
                 uNameStr : particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
                 additional: {
                     name: selectedAccountName, 
                     uniqueName: selectedAccountUniqueName, 
                     stock: particular?.stock || null
                 }
-            }; // Name to select in ledger particular Dropdown Divyanshu | Sales (delete stock)
-        
+            };
         this.lc.blankLedger.transactions[txnIndex].amount = transactionAmount;
         this.lc.blankLedger.transactions[txnIndex].convertedAmount = transactionAmount;
         this.lc.blankLedger.transactions[txnIndex].total = res?.total.amount;
@@ -4017,10 +4034,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // Other Tax Logic
         let tax: TaxResponse;
-        
         let otherTaxesModal = new SalesOtherTaxesModal();
         otherTaxesModal.itemLabel = res.particular?.name;
-
         if (res?.tcsTaxes && res?.tcsTaxes.length) {
             tax = this.companyTaxesList.find(item => item?.uniqueName === res?.tcsTaxes[0]);
             this.lc.blankLedger.otherTaxType = OtherTaxTypeEnum.TCS;
@@ -4028,7 +4043,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             tax = this.companyTaxesList.find(item => item?.uniqueName === res?.tdsTaxes[0]);
             this.lc.blankLedger.otherTaxType = OtherTaxTypeEnum.TDS;
         }
-
         if (tax) {
             otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
             otherTaxesModal.tcsCalculationMethod = res.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
@@ -4037,7 +4051,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         
         this.selectAccount(
-            this.lc.blankLedger.transactions[txnIndex].selectedAccount,// This value assigned above
+            this.lc.blankLedger.transactions[txnIndex].selectedAccount,
             this.lc.blankLedger.transactions[txnIndex],
             false,
             false,
@@ -4057,96 +4071,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 tax.isDisabled = false;
             });
         }
-        // txn.selectedAccount = {
-        //     ...txn.selectedAccount,
-        //     ...event.additional,
-        //     applicableTaxes: txn?.taxes,
-        //     accountApplicableDiscounts: txn?.discounts,
-        // }
-        // txn.selectedAccount = {
-        //     ...event.additional,
-        //     label: event.label,
-        //     name: event.label,
-        //     category: null,
-        //     value: null,
-        //     isHilighted: true,
-        //     applicableTaxes: txn.duplicateEntry,
-        //     currency: null,
-        //     currencySymbol: null,
-        //     email: null,
-        //     isFixed: null,
-        //     mergedAccounts: null,
-        //     mobileNo: null,
-        //     nameStr: event.additional?.stock ? event?.additional?.oppositeAccount?.parentGroups?.join(', ') : event?.additional?.parentGroups?.map(parent => parent?.name).join(', '),
-        //     stock: event?.additional?.stock,
-        //     uNameStr: event.additional?.stock ? event?.additional?.oppositeAccount?.parentGroups?.join(', ') : event?.additional?.parentGroups?.map(parent => parent?.uniqueName ?? parent).join(', '),
-        //     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : event?.additional?.applicableDiscounts,
-        //     parentGroups: event.additional?.stock ? event?.additional?.oppositeAccount?.parentGroups : event?.additional?.parentGroups, // added due to parentGroups is getting null in search API
-        // };
-        // if (txn?.selectedAccount && txn.selectedAccount.stock) {
-        //     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-        // }
         if (!this.isHideBankLedgerPopup) {
             this.lc.currentBlankTxn = txn;
         }
-        // let rate = 0;
-        // let unitCode = '';
-        // let stockName = '';
-        // let stockUniqueName = '';
-        // let stockUnitUniqueName = '';
-
         txn.isMrpDiscountApplied = false;
-
-        //#region unit rates logic
-        // if (txn?.selectedAccount?.stock) {
-        //     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
-        //     const defaultUnit = {
-        //         stockUnitCode: defaultUnitRates[0].stockUnitCode,
-        //         code: defaultUnitRates[0].stockUnitCode,
-        //         rate: defaultUnitRates[0].rate,
-        //         name: txn.selectedAccount.stock.name
-        //     };
-            // const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
-            // txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-            // stockName = defaultUnit.name;
-            // rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-            // stockUniqueName = txn.selectedAccount.stock?.uniqueName;
-            // unitCode = defaultUnit.code;
-            // stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
-
-            // const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
-            // if (hasMrpDiscount?.length) {
-            //     rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-            // }
-        // }
-        // if (stockName && stockUniqueName) {
-        //     txn.inventory = {
-        //         stock: {
-        //             name: stockName,
-        //             uniqueName: stockUniqueName,
-        //         },
-        //         variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
-        //         quantity: 1,
-        //         unit: {
-        //             stockUnitCode: unitCode,
-        //             code: unitCode,
-        //             rate: rate,
-        //             stockUnitUniqueName: stockUnitUniqueName
-        //         }
-        //     };
-        // } else {
-        //     delete txn.inventory;
-        // }
-        // if (rate > 0 && !txn.duplicateEntry) {
-        //     txn.amount = rate;
-        // }
-        // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         txn.showOtherTax = this.showOtherTax(txn);
         this.handleRcmVisibility(txn);
-        // this.handleTaxableAmountVisibility(txn);
+        this.handleTaxableAmountVisibility(txn);
         this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
         this.needToReCalculate.next(true);
-        // this.getTransactionCountConvertToEntries();
+        this.getTransactionCountConvertToEntries();
     }
 }
