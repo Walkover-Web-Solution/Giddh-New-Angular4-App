@@ -36,7 +36,8 @@ export class SalesBifurcationDetailsService {
             ?.replace(':sort', params?.sort?.toString())
             ?.replace(':sortBy', params?.sortBy?.toString())
             ?.replace(':fromDate', params?.fromDate?.toString() ?? '')
-            ?.replace(':toDate', params?.toDate?.toString() ?? ''))
+            ?.replace(':toDate', params?.toDate?.toString() ?? '')
+            ?.replace(':salesFrom', params?.salesFrom?.toString() ?? ''))
             .pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.queryString = params;
