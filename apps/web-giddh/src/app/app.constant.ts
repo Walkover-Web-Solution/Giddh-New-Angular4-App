@@ -658,3 +658,11 @@ export const KeyCodesEnum = {
     ARROW_RIGHT: 'ArrowRight',
     ARROW_LEFT: 'ArrowLeft' 
 };
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
+};
