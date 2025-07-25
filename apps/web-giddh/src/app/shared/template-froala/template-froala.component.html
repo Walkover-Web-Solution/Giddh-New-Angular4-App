@@ -54,7 +54,7 @@
                             [formControl]="customTriggerForm?.controls?.actions"
                         >
                             <mat-select-trigger>
-                                {{ (customTriggerForm?.controls?.actions?.value?.[0] | replace : '_' :
+                                {{ (customTriggerForm?.controls?.actions?.value?.[0] | replaceAll : '_' :
                             ' ') | titlecase }}
                                 <span
                                     *ngIf="(customTriggerForm?.controls?.actions?.value?.length || 0) > 1"

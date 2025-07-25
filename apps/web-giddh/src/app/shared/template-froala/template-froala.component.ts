@@ -306,7 +306,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 distinctUntilChanged()
             ).subscribe(triggerDetails => {
                 if (triggerDetails) {
-                    triggerDetails = { ...triggerDetails, ...triggerDetails?.emailTemplate };
+                    triggerDetails = {...triggerDetails, ...triggerDetails?.emailTemplate};
                     triggerDetails['conditions'] = triggerDetails?.conditionMap;
                     this.customTriggerForm.patchValue(triggerDetails, { emitEvent: false });
                     this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
@@ -751,10 +751,10 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 }
             });
         }
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-
+        
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -1100,7 +1100,6 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,

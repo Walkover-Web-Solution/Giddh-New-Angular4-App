@@ -2281,7 +2281,7 @@ export class GeneralService {
      *
      * @param commonLocaleData 
      * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
-     * @returns {IOption[]} An array of voucher type objects, each containing
+     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
     public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = []): IOption[] {

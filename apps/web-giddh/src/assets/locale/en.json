@@ -796,8 +796,8 @@
         "friday": "Friday",
         "saturday": "Saturday"
     },
-    "app_skip_and_next": "Skip and Next",
-    "app_save_and_next": "Save and Next",
     "app_sales_person": "Sales Person",
-    "app_sales_person_placeholder": "Select sales person"
+    "app_sales_person_placeholder": "Select sales person",
+    "app_skip_and_next": "Skip and Next",
+    "app_save_and_next": "Save and Next"
 }
