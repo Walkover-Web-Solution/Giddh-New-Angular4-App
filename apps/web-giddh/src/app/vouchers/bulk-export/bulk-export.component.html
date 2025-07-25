@@ -20,7 +20,7 @@
                 <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                     <div class="pd-b1 pd-t15 clearfix export-type d-flex column-gap15">
                         <div class="d-flex align-items-center">
-                            <label class="w150">{{ commonLocaleData?.app_attachment }}:</label>
+                            <label class="w150">{{ localeData?.attachment }}:</label>
                             <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">
                                 <span>{{
                                     exportForm.get("attachmentExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
