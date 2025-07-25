@@ -99,19 +99,47 @@
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.clients }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ commonLocaleData?.app_amount }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
-                        <div class="div-cell align-end" data-reference="month-totalSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -132,7 +160,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-totalSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.total"
@@ -142,7 +177,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-totalSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -150,7 +192,7 @@
                                     showClientList(
                                         newVsOldInvoicesData?.totalSales,
                                         'total',
-                                        'client',
+                                        'invoice',
                                         newVsOldInvoicesData?.totalSales.month
                                     )
                                 "
@@ -173,7 +215,14 @@
                     </div>
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -194,7 +243,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-newSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.total"
@@ -204,7 +260,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-newSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -228,7 +291,14 @@
                     </div>
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -249,7 +319,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
@@ -259,7 +336,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -283,7 +367,14 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-0-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -304,7 +395,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-0-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -314,7 +412,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-0-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -338,7 +443,14 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-1-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -359,7 +471,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-1-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -369,7 +488,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-1-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -393,7 +519,14 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-2-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -414,7 +547,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-2-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
@@ -424,7 +564,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-2-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -448,7 +595,14 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[3]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-3-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -469,7 +623,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-3-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.total"
@@ -479,7 +640,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-3-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -505,7 +673,14 @@
                         <div class="div-cell">
                             {{ newVsOldInvoicesData?.carriedSales[4]?.month }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-4-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -526,7 +701,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-4-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.total"
@@ -536,7 +718,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-4-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -564,19 +753,47 @@
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.clients }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ commonLocaleData?.app_amount }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-0-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -597,7 +814,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-0-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -607,7 +831,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-0-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -635,19 +866,54 @@
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.clients }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ commonLocaleData?.app_amount }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
-                    <div class="div-row" data-reference="month-carriedSales-1-month">
+                    <div
+                        class="div-row"
+                        [attr.data-reference]="
+                            selectedType === 'quater'
+                                ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                : 'newVsOldInvoicesData-carriedSales-1-month'
+                        "
+                    >
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-1-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -668,7 +934,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-1-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -678,7 +951,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-carriedSales-1-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -706,19 +986,54 @@
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.clients }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ commonLocaleData?.app_amount }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
-                    <div class="div-row" data-reference="quarter-totalSales-0-quarter">
+                    <div
+                        class="div-row"
+                        [attr.data-reference]="
+                            selectedType === 'quater'
+                                ? 'newVsOldInvoicesData-totalSales-quater'
+                                : 'newVsOldInvoicesData-totalSales-month'
+                        "
+                    >
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -739,7 +1054,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales?.total"
@@ -749,7 +1071,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -778,9 +1107,23 @@
                     <div>
                         <h3 class="h3-heading">{{ bifurcationClients }}</h3>
                     </div>
-                    <div class="div-row mr-t3 mr-b3" data-reference="quarter-new-clients">
+                    <div
+                        class="div-row mr-t3 mr-b3"
+                        [attr.data-reference]="
+                            selectedType === 'quater'
+                                ? 'newVsOldInvoicesData-newSales-quater'
+                                : 'newVsOldInvoicesData-newSales-month'
+                        "
+                    >
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -801,7 +1144,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.total"
@@ -811,7 +1161,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -833,9 +1190,16 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row mr-t3 mr-b3" data-reference="quarter-old-clients">
+                    <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -856,7 +1220,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="quarter-oldSales">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
@@ -866,7 +1237,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="quarter-oldSales">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -888,9 +1266,16 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row" data-reference="quarter-carriedSales-0-month">
+                    <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -911,7 +1296,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -921,7 +1313,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -943,9 +1342,16 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row" data-reference="quarter-carriedSales-1-month">
+                    <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -966,7 +1372,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -976,7 +1389,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -998,9 +1418,16 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row" data-reference="quarter-carriedSales-2-month">
+                    <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -1021,7 +1448,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
@@ -1031,7 +1465,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -1059,19 +1500,47 @@
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.clients }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ commonLocaleData?.app_amount }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
                     <div class="div-row quarter-carriedSales-0-quarter">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -1092,7 +1561,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -1102,7 +1578,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -1130,19 +1613,47 @@
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.clients }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ commonLocaleData?.app_amount }}
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
                     <div class="div-row quarter-carriedSales-1-quarter">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
@@ -1163,7 +1674,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -1173,7 +1691,14 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end" data-reference="month-oldSales-month">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"

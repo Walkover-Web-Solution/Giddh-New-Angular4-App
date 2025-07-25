@@ -15,6 +15,7 @@ export interface ContactState {
     getAccountStatementInProgress: boolean;
     contactsList: any;
     accountStatementList: any;
+    exportAccountStatementResponse:any;
 }
 
 export const DEFAULT_CONTACT_STATE: ContactState = {
@@ -22,7 +23,8 @@ export const DEFAULT_CONTACT_STATE: ContactState = {
     getLastAccountsInProgress: false,
     getAccountStatementInProgress: false,
     contactsList: null,
-    accountStatementList: null
+    accountStatementList: null,
+    exportAccountStatementResponse: null
 };
 
 @Injectable()
@@ -50,6 +52,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);
     public showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), (response) => response);
     public isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), (response) => response);
+    public exportAccountStatementResponse$ = this.select((state) => state.exportAccountStatementResponse);
 
     /**
      * Send email template
@@ -204,6 +207,43 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
         );
     });
 
+    /**
+     * Export account statement 
+     *
+     * @memberof ContactComponentStore
+     */
+    readonly exportAccountStatement = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    exportAccountStatementResponse: null
+                });
+                return this.contactService.exportAccountStatement(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    exportAccountStatementResponse: res.body
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res.message);
+                                this.patchState({
+                                    exportAccountStatementResponse: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            this.patchState({
+                                exportAccountStatementResponse: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     /**
      * Lifecycle hook for component destroy

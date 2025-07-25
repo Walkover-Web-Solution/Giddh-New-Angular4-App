@@ -662,6 +662,18 @@ export const KeyCodesEnum = {
     ARROW_LEFT: 'ArrowLeft' 
 };
 
+/** List of all the HTTP methods */
+export enum HttpMethod {
+    POST = 'post',
+    GET = 'get',
+    PUT = 'put',
+    DELETE = 'delete',
+    PATCH = 'patch'
+}
+
+/** Type of all HTTP methods */
+export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
+
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     height: '100dvh',
@@ -671,4 +683,12 @@ export const ASIDE_PANE_CONFIG: MatDialogConfig = {
         bottom: '0'
     },
     disableClose: true
+};
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
 };

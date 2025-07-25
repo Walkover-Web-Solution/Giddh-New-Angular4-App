@@ -182,6 +182,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      */
     public openInvoice(templateRef: TemplateRef<any>, transaction: any): void {
         transaction['voucherNumber'] = transaction?.invoiceNumber;
+        transaction['salesBifurcation'] = true;
         this.selectedItem = transaction;
 
         let dialogRef = this.dialog.open(templateRef, {
