@@ -769,8 +769,7 @@
     "app_password": "Password",
     "app_select_column": "Select Column",
     "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
-    "app_file_format": "File Format",
-    "app_select_file": "Select file",
+    "app_file_format": "File Name Format",
     "app_ledger_view": {
         "t_view": "T View",
         "statement_view": "Statement View"

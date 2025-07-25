@@ -18,8 +18,8 @@
     "ledger_view": "लेजर दृश्य",
     "statement_view": "विवरण दृश्य",
     "t_view": "टी दृश्य",
-    "export_attachment": "संलग्नक निर्यात करें",
-    "export_voucher": "वाउचर निर्यात करें",
+    "attachment": "संलग्नक",
+    "voucher": "वाउचर",
     "invoice_copy_options": {
         "original": "मूल",
         "customer": "ग्राहक",
