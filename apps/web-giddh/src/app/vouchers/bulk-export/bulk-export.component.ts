@@ -270,8 +270,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public getFileFormat() {
         let fileNameFormat = this.exportForm.get("selectedFormatList").value;
         this.fileFormatList.forEach((format) => {
-            if(this.exportForm.get("selectedFormatList").value.includes(`{${format.key}}`)) {
-                fileNameFormat = fileNameFormat.replaceAll(`{${format.key}}`, format.showValue);
+            if(this.exportForm.get("selectedFormatList").value.includes(`{${format.value}}`)) {
+                fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
         });
         this.exportForm.get("fileNameFormat").patchValue(fileNameFormat);
