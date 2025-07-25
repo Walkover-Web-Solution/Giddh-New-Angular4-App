@@ -107,6 +107,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** Holds GST return type */
+    public returnType: string = GstReport.Gstr3b;
 
     constructor(
         private store: Store<AppState>,
@@ -121,7 +123,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private componentStore: GstComponentStore
     ) {
-        this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+        this.gstAuthenticated$ = this.store.pipe(select(state => state.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
@@ -155,11 +157,13 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
-
+        
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.activeCompanyGstNumber = result;
+                // get session details
+                this.store.dispatch(this.gstAction.GetGSPSession(this.activeCompanyGstNumber));
             }
 
             let request: GstOverViewRequest = new GstOverViewRequest();
@@ -822,11 +826,36 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public fileGstr3B(): void {
         const monthYear = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MM-YYYY');
+        const currentDateTime = this.generalService.getCurrentDateTime();
         this.componentStore.fileGstr3B({ 
             period: this.currentPeriod, 
             gstNumber: this.activeCompanyGstNumber, 
             via: TaxServiceEnum.TAXPRO, 
-            monthYear 
+            monthYear,
+            currentDateTime
         });
+    }
+
+    /**
+     * Checks authentication status and either files GSTR3B or opens settings pane
+     *
+     * @memberof FileGstR3Component
+     */
+    public checkAuthenticationAndFileGstr3B(): void {
+        if (this.gstAuthenticated) {
+            this.fileGstr3B();
+        } else {
+            this.openSettingAsidePane();
+        }
+    }
+
+    /**
+    * Navigates to the page for buy plan.
+    * 
+    * @param subscriptionId
+    * @memberof FileGstR3Component
+    */
+    public buyPlan(subscriptionId: string): void {
+        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }

@@ -360,7 +360,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-                this.selectedWarehouse = String(this.defaultWarehouse);
+                if (!this.currentTxn?.duplicateEntry) {
+                    this.selectedWarehouse = String(this.defaultWarehouse);
+                }
             }
         });
 
@@ -495,6 +497,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn?.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
+            } else if (this.currentTxn?.duplicateEntry) {
+                this.selectedWarehouse = this.currentTxn.inventory?.warehouse?.uniqueName ?? this.blankLedger.transactions[0].inventory?.warehouse?.uniqueName;
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
@@ -586,11 +590,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.amountChanged();
                         this.calculateTax();
                     }
-                    document.getElementById("saveLedger")?.focus();
                     this.cdRef.markForCheck();
                 }, 10);
             }
         });
+        document.getElementById("saveLedger")?.focus();
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -685,8 +689,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.totalForTax = total;
                     const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
                     const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
-                    this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((total + (isNaN(taxApplied) ? 0 : taxApplied)), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + (isNaN(convertedTaxApplied) ? 0 : convertedTaxApplied)), this.giddhBalanceDecimalPlaces);
                 }
             } else {
                 // Amount is zero, set other parameters to zero
@@ -1846,7 +1850,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         return item;
                     });
                 });
-            } else {
+            } else if (!this.currentTxn?.duplicateEntry){
                 this.currentTxn?.discounts?.map(item => {
                     item.isActive = false;
                     return item;
@@ -2277,7 +2281,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public openSalesPersonDialog(): void {
         this.salesPersonDialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        this.salesPersonDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
+        this.salesPersonDialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {
             this.getSalesPersonList(); this.salesPersonDialogRef = undefined;
         })).subscribe();
     }

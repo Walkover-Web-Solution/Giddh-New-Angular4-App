@@ -57,6 +57,7 @@ export class AccountResponse implements IAccountCreate {
     public category?: string;
     public otherApplicableTaxes?: any[];
     public ledgerView?: TLedgerView;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
 }
 
 /**
@@ -259,6 +260,7 @@ export class AccountResponseV2 {
     public portalDomain?: any;
     public accountOpeningBalance?: AccountOpeningBalance[];
     public ledgerView?: TLedgerView;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
 }
 
 /*

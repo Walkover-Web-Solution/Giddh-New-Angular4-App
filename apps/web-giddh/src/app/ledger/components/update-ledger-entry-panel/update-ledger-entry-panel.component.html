@@ -1748,9 +1748,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <span class="font-12 pull-right pd-t05">{{ vm.selectedLedger?.otherTaxModal?.appliedOtherTax?.name }}</span>
                                 </div>
                             </div>
-                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0">
+                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0 pd-t05">
                                 <span class="in-words font-15">
                                     {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
                                 </span>
@@ -2482,7 +2483,7 @@
                                     >
                                         <div class="d-flex column-gap15 w-100">
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 id="update-ledger-update-button"
                                                 [disabled]="isFileUploading"
@@ -2492,9 +2493,9 @@
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
                                             <button
+                                                *ngIf="!isDaybook"
                                                 aria-label="Duplicate entry button"
                                                 mat-stroked-button
-                                                color="primary"
                                                 (click)="duplicateEntry()"
                                             >
                                                 {{ localeData?.duplicate }}

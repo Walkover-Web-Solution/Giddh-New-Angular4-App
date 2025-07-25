@@ -509,7 +509,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.onlyPhoneNumber('init-contact-add');
                 clearInterval(interval);
             }
-        }, 2000);
+        }, 500);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -573,6 +573,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             companyName: [''],
             attentionTo: [''],
             description: [''],
+            duePeriod: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
                 countryCode: ['', Validators.required]
@@ -1954,7 +1955,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
     }
 
     /**

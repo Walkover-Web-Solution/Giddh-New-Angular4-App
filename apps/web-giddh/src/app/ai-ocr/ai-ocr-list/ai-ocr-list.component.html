@@ -6,47 +6,8 @@
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="ocr-container mx-auto pd-15 overflow-visible">
-        <div class="button-wrapper d-flex w-100 align-items-baseline pd-t1">
-            <div class="custom-datepicker-wrapper">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
-                </div>
-            </div>
-            <div *ngIf="isCompany && activeCompany?.name" class="mr-l1">
-                <reactive-dropdown-field
-                    [label]="commonLocaleData?.app_branch"
-                    [options]="branches"
-                    (selectedOption)="
-                        ocrDocumentsRequestParams.branchUniqueName = $event?.value; getAllOcrDocuments(false)
-                    "
-                    (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; getAllOcrDocuments(false)"
-                    [labelValue]="activeCompany?.name"
-                    [placeholder]="commonLocaleData?.app_select_branch"
-                ></reactive-dropdown-field>
-            </div>
-            <button
-                *ngIf="
-                    showClearFilter ||
-                    ocrDocumentListForm?.controls['user']?.value ||
-                    ocrDocumentListForm?.controls['fileName']?.value ||
-                    ocrDocumentListForm?.controls['status']?.value ||
-                    ocrDocumentListForm?.controls['convertedStatus']?.value
-                "
-                mat-stroked-button
-                class="min160 mr-l1"
-                color="primary"
-                (click)="clearFilter()"
-            >
-                {{ commonLocaleData?.app_clear }}
-            </button>
-        </div>
         <giddh-page-loader *ngIf="ocrListInProgress$ | async"></giddh-page-loader>
-        <section [hidden]="!showData || (ocrListInProgress$ | async)" class="mt-4">
+        <section [hidden]="!showData || (ocrListInProgress$ | async)">
             <form
                 class="table-responsive table-header-sticky overflow-visible"
                 name="ocrDocumentListForm"
@@ -208,7 +169,7 @@
             <div
                 *ngIf="
                     isCompany &&
-                    !(  
+                    !(
                         showClearFilter ||
                         ocrDocumentListForm?.controls['user']?.value ||
                         ocrDocumentListForm?.controls['fileName']?.value ||
@@ -258,30 +219,6 @@
                 [formControl]="formControl"
                 [autoFocus]="show"
             ></text-field>
-        </div>
-    </div>
-</ng-template>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

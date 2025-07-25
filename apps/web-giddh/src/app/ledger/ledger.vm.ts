@@ -444,6 +444,7 @@ export class BlankLedgerVM {
     public referenceVoucher?: ReferenceVoucher;
     public generateEInvoice?: boolean;
     public salesPersonUniqueName?: string;
+    public salesPersonName?: string;
 }
 
 export class IInvoiceLinkingRequest {
@@ -504,6 +505,7 @@ export class TransactionVM {
     public oppositeAccountUniqueName?: string;
     public isMrpDiscountApplied?: boolean;
     public duplicateEntry?: boolean = false;
+    public subVoucher?: string;
 }
 
 export interface IInventory {

@@ -14,10 +14,28 @@ import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSortModule } from '@angular/material/sort';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
+import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
     declarations: [
-        NewVsOldInvoicesComponent
+        NewVsOldInvoicesComponent,
+        SalesBifurcationDetailsComponent
     ],
     imports: [
         CommonModule,
@@ -37,7 +55,23 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         SelectModule.forRoot(),
         ModalModule,
         PaginationModule.forRoot(),
-        CurrencyModule
+        CurrencyModule,
+        FormFieldsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatTableModule,
+        MatPaginatorModule,
+        KeyboardShortutModule,
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule,
+        MatMenuModule,
+        MatSortModule,
+        AttachmentsModule,
+        ActionMenuComponent,
+        FroalaTemplateEditorModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule
     ],
     providers: []
 })

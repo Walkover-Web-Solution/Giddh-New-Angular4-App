@@ -13,6 +13,7 @@ import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 
 @Component({
     selector: 'share-account-modal',
@@ -39,6 +40,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     @Output() public closeShareAccountModal: EventEmitter<any> = new EventEmitter();
+    /** All permissions role options */
+    public allPermissions: IOption[] = [];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -56,6 +59,15 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
                 this.isUserRestricted = !module?.remainingUsers;
+            }
+        });
+
+        this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
+            if (permissions?.length) {
+                this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
+                    label: permission.name,
+                    value: permission.uniqueName
+                }));
             }
         });
     }
@@ -107,7 +119,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
-        let newPermission = event.target?.value;
+        let newPermission = event.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));
     }

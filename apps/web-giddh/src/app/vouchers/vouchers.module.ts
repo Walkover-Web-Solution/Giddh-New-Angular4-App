@@ -94,6 +94,8 @@ import { ValidateSectionPermissionDirectiveModule } from "../shared/validate-sec
 import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-button/subscription-upgrade-button.module";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { SalesPersonService } from "../shared/sales-person/utility/sales-person.service";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
 
 @NgModule({
     declarations: [
@@ -192,7 +194,9 @@ import { SalesPersonService } from "../shared/sales-person/utility/sales-person.
         EWayBillModule,
         ValidateSectionPermissionDirectiveModule,
         SubscriptionUpgradeButtonModule,
-        SelectTableColumnModule
+        SelectTableColumnModule,
+        MatButtonToggleModule,
+        TributeMentionModule
     ],
     exports: [
 VoucherCreateComponent

@@ -48,9 +48,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
     public fileFormatList = [
-        { uniqueName: 'DATE', name: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
-        { uniqueName: 'ENTRY_NO', name: 'Entry No', showValue: "3824" },
-        { uniqueName: 'ACC_NAME', name: 'Account Name', showValue: "Walkover" }
+        { value: 'DATE', key: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'ENTRY_NO', key: 'Entry No', showValue: "3824" },
+        { value: 'ACC_NAME', key: 'Account Name', showValue: "Walkover" }
     ];
     /** List of copy type */
     public copyTypes: IOption[] = [];
@@ -88,7 +88,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
             attachmentExport: false,
             voucherExport: true,
-            selectedFormatList: [null],
+            selectedFormatList: [""],
             fileNameFormat: "",
             showAccountCustomFields: new FormControl<boolean>(false, { nonNullable: true }),
             showVoucherCustomFields: new FormControl<boolean>(false, { nonNullable: true }),
@@ -203,7 +203,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             uniqueNames: this.inputData?.voucherUniqueNames ?? [],
             attachmentExport: this.exportForm.get('attachmentExport').value,
             voucherExport: this.exportForm.get('voucherExport').value,
-            fileNameFormat: this.exportForm.get('fileNameFormat').value
+            fileNameFormat: this.exportForm.get('selectedFormatList').value.replaceAll("{", "${").trim(),
         };
 
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
@@ -254,33 +254,12 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             postRequest.copyTypes = ["ORIGINAL"];
         }
 
-        if (!this.exportForm.get('selectedFormatList').value?.length) {
-            postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}";
+        if (!this.exportForm.get('selectedFormatList').value.trim()?.length) {
+            postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
         }
 
         this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
     }
-
-    /**
-     * Returns a sorted list of file formats.The selected formats appear at the top in the order they were selected.
-     * 
-     * @returns {any []} A sorted array of file formats.
-     * @memberof BulkExportComponent
-     */
-    public getSortedFormatList(): any[] {
-        let selectedList = this.exportForm.get("selectedFormatList")?.value || [];
-
-        return [...this.fileFormatList].sort((a, b) => {
-            let indexA = selectedList.findIndex(item => item.uniqueName === a.uniqueName);
-            let indexB = selectedList.findIndex(item => item.uniqueName === b.uniqueName);
-
-            if (indexA === -1) indexA = Infinity;
-            if (indexB === -1) indexB = Infinity;
-
-            return indexA - indexB;
-        });
-    }
-
 
     /**
      * Generates a formatted file name based on selected file formats.
@@ -288,15 +267,14 @@ export class BulkExportComponent implements OnInit, OnDestroy {
      * @returns {string} The formatted file name string.
      * @memberof BulkExportComponent
      */
-    public getFileFormat(): string {
-        let fileFormat = this.fileFormatPrefix;
-        let fileNameFormat = this.fileFormatPrefix;
-        this.exportForm.get("selectedFormatList").value?.forEach((format) => {
-            fileFormat += `-${format.showValue}`
-            fileNameFormat += "-${" + format.uniqueName + "}";
+    public getFileFormat() {
+        let fileNameFormat = this.exportForm.get("selectedFormatList").value;
+        this.fileFormatList.forEach((format) => {
+            if(this.exportForm.get("selectedFormatList").value.includes(`{${format.value}}`)) {
+                fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
+            }
         });
         this.exportForm.get("fileNameFormat").patchValue(fileNameFormat);
-        return fileFormat;
     }
     /**
      * Callback for translation response complete

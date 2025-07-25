@@ -284,11 +284,11 @@
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"
                         [applicableTaxes]="
-                            taxListForStock?.length
+                            taxListForStock?.length && !currentTxn?.duplicateEntry
                                 ? taxListForStock
-                                : currentTxn?.selectedAccount?.applicableTaxes
+                                : currentTxn?.selectedAccount?.applicableTaxes?.length
                                 ? currentTxn?.selectedAccount?.applicableTaxes
-                                : currentAccountApplicableTaxes?.length
+                                : currentAccountApplicableTaxes?.length && !currentTxn?.duplicateEntry
                                 ? currentAccountApplicableTaxes
                                 : []
                         "
@@ -360,6 +360,7 @@
             <div class="col-5 pr-0">
                 <reactive-dropdown-field 
                     [(ngModel)]="blankLedger.salesPersonUniqueName"
+                    [labelValue]="blankLedger.salesPersonName || ''"
                     [name]="'sales-person'"
                     [label]="commonLocaleData?.app_sales_person"
                     [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
@@ -385,6 +386,7 @@
                         <div class="clearfix">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
                                 <span class="d-flex mr-b05">
+                                    <span class="align-item-center pd-r1">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
                                     <span class="d-flex align-item-center">
                                         <a
                                             href="javascript:void(0)"

@@ -72,7 +72,7 @@
                                 </div>
                             </mat-tab>
                             <!-- File Return -->
-                            <mat-tab [label]="localeData?.filing?.tabs?.file_return" *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling">
+                            <mat-tab [label]="localeData?.filing?.tabs?.push_to_portal" *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling">
                                 <div class="transactions-overview">
                                     <div class="gstr-transactions-summary mr-t4 mr-b4 text-center">
                                         <div class="gst-return-date">
@@ -84,7 +84,7 @@
                                                 (click)="fileReturn = { isAuthenticate: true }"
                                                 [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                             >
-                                                {{ localeData?.filing?.return_file }}
+                                                {{ localeData?.filing?.push_to_portal }}
                                             </button>
                                         </div>
             

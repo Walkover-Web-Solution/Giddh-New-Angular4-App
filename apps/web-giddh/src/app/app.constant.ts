@@ -683,11 +683,19 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100dvh',
+    height: '100vh',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',
         bottom: '0'
     },
     disableClose: true
+};
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
 };

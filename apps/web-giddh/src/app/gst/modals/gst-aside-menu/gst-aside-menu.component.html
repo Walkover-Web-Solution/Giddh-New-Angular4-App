@@ -14,7 +14,7 @@
     <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</h3>
     <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</h3>
     <h3 *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</h3>
-    <i (click)="closeAsidePane($event)" aria-label="close icon" class="icon-cross"></i>
+    <i (click)="toggleCancelModel()" aria-label="close icon" class="icon-cross"></i>
 </div>
 
 <mat-dialog-content>
@@ -100,7 +100,7 @@
                         <button
                             mat-stroked-button
                             class="btn btn-default"
-                            (click)="toggleCancelModel(); resetLocalFlags()"
+                            (click)="toggleCancelModel()"
                         >
                             {{ commonLocaleData?.app_cancel }}
                         </button>
@@ -172,7 +172,7 @@
                             {{ commonLocaleData?.app_submit }}
                         </button>
 
-                        <button mat-stroked-button (click)="toggleCancelModel(); resetLocalFlags()">
+                        <button mat-stroked-button (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -286,26 +286,13 @@
                                 <input matInput type="text" class="form-control" [(ngModel)]="submitGstForm.txtVal" />
                             </div>
                         </div>
-
-                        <div class="row mt-2">
-                            <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
-                                <span class="mr-1">
-                                    <mat-checkbox color="primary" class="font-15" [(ngModel)]="submitGstForm.isAccepted"
-                                        ><em>
-                                            {{ localeData?.aside_menu?.gst_form_acceptance }}
-                                        </em>
-                                    </mat-checkbox>
-                                </span>
-                            </div>
-                        </div>
                     </div>
-                    <div class="d-flex column-gap15">
+                    <div class="d-flex column-gap15 mt-2">
                         <button
                             mat-stroked-button
                             color="primary"
                             [ladda]="gstReturnInProcess"
                             (click)="submitGstReturn()"
-                            [disabled]="!submitGstForm.isAccepted"
                         >
                             {{ commonLocaleData?.app_proceed }}
                         </button>

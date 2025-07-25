@@ -10,7 +10,7 @@ import { createSelector } from "reselect";
 import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -123,7 +123,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
         accountUniqueNames: new FormControl<string[]>([]),
         salesPersonUniqueNames: new FormControl<string[]>([]),
-        interval: new FormControl<DurationEnum | null>(null),
+        interval: new FormControl<DurationEnum | null>(null)
     });
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
@@ -191,7 +191,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         this.salesRegisterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.purchaseRegisterTotal = new PurchaseReportsModel();
-                this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.purchaseRegisterTotal.particular = this.getCustomParticular();
                 this.reportRespone = this.filterReportResp(response);
             }
         });
@@ -271,12 +271,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         /** Handle group by change */
         this.reportForm.get('groupBy')?.valueChanges.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((response) => {
             if (response) {
+                this.reportForm?.get('groupBy')?.patchValue(response);
+                this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
                 if (response === GroupBy.SalesPerson) {
                     this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
                     this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-                    this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+                    this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
+                } else {
+                    this.populateRecords(this.interval, this.selectedMonth);
                 }
-                this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
             }
         });
 
@@ -313,11 +316,16 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             reportsModel.to = item.to;
             reportsModel.interval = this.interval;
             reportsModel.selectedMonth = this.selectedMonth;
+            reportsModel.salesPerson = item.salesPerson;
 
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
-            if (dateDiff <= 8) {
+            if (item?.salesPerson?.name) {
+                this.setPurchaseRegisterTotal(item);
+                reportsModel.particular = item.salesPerson.name
+                reportModelArray.push(reportsModel);
+            } else if (dateDiff <= 8) {
                 this.setPurchaseRegisterTotal(item);
                 this.purchaseRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
                 reportsModel.particular = this.commonLocaleData?.app_week + weekCount++;
@@ -418,7 +426,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
-                this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.purchaseRegisterTotal.particular = this.getCustomParticular();
                 this.changeDetectorRef.detectChanges();
             }
         });
@@ -482,7 +490,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                    this.purchaseRegisterTotal.particular = this.getCustomParticular();
                     this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
@@ -562,7 +570,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             this.purchaseRegisterTotal.interval = this.interval;
             this.purchaseRegisterTotal.selectedMonth = this.selectedMonth;
-            this.showColum();
+            this.showColum(item);
         }
     }
 
@@ -628,9 +636,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     /**
      * Updates the visibility of table columns based on specific conditions.
      *
+     * @param {any} item - The transaction item.
      * @memberof PurchaseRegisterComponent
      */
-    public showColum(): void {
+    public showColum(item: any): void {
         Object.keys(this.columnDefinitions).filter((key) => !['purchase', 'particular'].includes(key)).forEach((key) => {
             if (['tcsTotal', 'tdsTotal'].includes(key)) {
                 this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.purchaseRegisterTotal[key];
@@ -638,6 +647,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.columnDefinitions[key][1] = !!this.purchaseRegisterTotal[key];
             }
         });
+        if (item?.salesPerson?.name) {
+            this.columnDefinitions['particular'][3] = false;
+            this.columnDefinitions['cumulative'][1] = true;
+        } else {
+            this.columnDefinitions['particular'][3] = true;
+        }
     }
 
     /**
@@ -662,7 +677,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
     }
 
     /**
@@ -763,5 +778,21 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: false
         });
+    }
+
+    /**
+     * Get custom particular
+     *
+     * @returns {string}
+     * @memberof PurchaseRegisterComponent
+     */
+    public getCustomParticular(): string {
+        if (this.reportForm?.get('groupBy')?.value === GroupBy.Duration) {
+            return this.activeFinacialYr?.uniqueName;
+        } else {
+            const fromDate = dayjs(this.dateRange?.from, GIDDH_DATE_FORMAT);
+            const toDate = dayjs(this.dateRange?.to, GIDDH_DATE_FORMAT);
+            return `${fromDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}-${toDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}`;
+        }
     }
 }

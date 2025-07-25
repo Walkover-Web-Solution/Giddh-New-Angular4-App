@@ -107,7 +107,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+    /** Emits when update ledger modal is closed */
+    @Output() public closeUpdateLedgerModal: EventEmitter<any> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
     /** Emits when more detail is opened */
@@ -129,6 +130,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public carouselPrevious: boolean;
     /** Holds carousel next event*/
     @Input() public carouselNext: boolean;
+    /** Holds true if this component form daybook */
+    @Input() public isDaybook: boolean = false;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
@@ -348,8 +351,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public lastValidIndex: number;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    /** True if duplicate entry */
-    public isDuplicateEntry: boolean = false;
+    /** Holds transaction details */
+    private transactionDetails: LedgerResponse;
 
     constructor(
         private accountService: AccountService,
@@ -1018,10 +1021,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        if (!this.isDuplicateEntry) {
-            // Remove the transaction details for ledger once the component is destroyed
-            this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
-        }
+        this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
         document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
 
@@ -2221,6 +2221,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
+            this.transactionDetails = cloneDeep(resp[0]);
         }
 
         this.isEinvoiceGenerated = resp[0].einvoiceGenerated;
@@ -3021,13 +3022,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
+     * This will be use for duplicate entry
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public duplicateEntry(): void {
+        this.closeUpdateLedgerModal.emit({
+            transactionDetails: this.transactionDetails
+        });
+    }
+
+    /**
      * Open sales person dialog
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1), rxjsFilter(Boolean), tap(() => this.getSalesPersonList())).subscribe();
+        dialogRef.afterClosed().pipe(rxjsFilter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
     }
 
     /**
@@ -3037,16 +3049,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
-    }
-
-    /**
-     * This will be use for duplicate entry
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public duplicateEntry(): void {
-        this.isDuplicateEntry = true;
-        this.closeUpdateLedgerModal.emit();
     }
 
      /**
@@ -3093,5 +3095,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.vm.selectedLedger.salesPersonUniqueName = this.vm.selectedLedger.salesPersonUniqueName;
             }
         });
+    }
+
+    /**
+     * This will be use for duplicate entry
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public duplicateEntry(): void {
+        this.isDuplicateEntry = true;
+        this.closeUpdateLedgerModal.emit();
     }
 }
