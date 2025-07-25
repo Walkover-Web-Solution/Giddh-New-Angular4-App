@@ -459,8 +459,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                const duration = this.firstStepForm.get('duration')?.value;
-                                if ((duration === 'MONTHLY' || duration === 'DAILY') && response?.region?.code !== 'IND') {
+                                if (((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND')) {
                                     if (response?.status?.toLowerCase() === 'active') {
                                         this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                     } else {
@@ -468,7 +467,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                             planUniqueName: response?.planDetails?.uniqueName,
                                             paymentProvider: this.thirdStepForm.value.paymentProvider,
                                             subscriptionId: response.subscriptionId,
-                                            duration: duration,
+                                            duration: this.firstStepForm.get('duration')?.value,
                                             promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                                         };
                                         this.subscriptionComponentStore.buyPlan(model);

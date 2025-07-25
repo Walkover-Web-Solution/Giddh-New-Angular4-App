@@ -30,6 +30,7 @@ import { ActionMenuComponent } from '../shared/action-menu/action-menu.component
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
     declarations: [
@@ -69,7 +70,8 @@ import { MatInputModule } from '@angular/material/input';
         ActionMenuComponent,
         FroalaTemplateEditorModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatIconModule
     ],
     providers: []
 })
