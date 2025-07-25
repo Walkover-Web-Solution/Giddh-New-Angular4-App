@@ -19,7 +19,7 @@
     "statement_view": "विवरण दृश्य",
     "t_view": "टी दृश्य",
     "attachment": "संलग्नक",
-    "voucher": "वाउचर",
+    "export_attachment_info": "वाउचर पर मौजूद सभी संलग्न फ़ाइलें निर्यात करें",
     "invoice_copy_options": {
         "original": "मूल",
         "customer": "ग्राहक",

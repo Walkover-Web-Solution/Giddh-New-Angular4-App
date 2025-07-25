@@ -412,8 +412,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public getFileFormat() {
         let fileNameFormat = this.selectedFormatList;
         this.fileFormatList.forEach((format) => {
-            if(this.selectedFormatList.includes(`{${format.key}}`)) {
-                fileNameFormat = this.selectedFormatList.replaceAll(`{${format.key}}`, format.showValue);
+            if(this.selectedFormatList.includes(`{${format.value}}`)) {
+                fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
         });
         this.exportRequest.fileNameFormat = fileNameFormat;
