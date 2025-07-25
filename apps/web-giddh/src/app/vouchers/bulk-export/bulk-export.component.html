@@ -18,8 +18,8 @@
             <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async" class="pd-15">
                 <!-- Export attachment -->
                 <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
-                    <div class="pd-b2 pd-t15 clearfix export-type">
-                        <label class="w150">{{ localeData?.export_attachment }}:</label>
+                    <div class="pd-b1 pd-t15 clearfix export-type">
+                        <label class="w150">{{ localeData?.attachment }}:</label>
                         <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">
                             <span>{{
                                 exportForm.get("attachmentExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
@@ -27,39 +27,33 @@
                         </mat-slide-toggle>
                     </div>
                     <div
-                        class="pd-b2 d-flex align-items-center"
+                        class="d-flex align-items-center"
                         [hidden]="!exportForm.get('attachmentExport').value"
                     >
-                        <div class="w150">
+                        <div class="w150 mb-2">
                             {{ commonLocaleData?.app_file_format }}
                         </div>
-                        <div class="w-50 custom-mat-form-field">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
-                                <mat-select
-                                    name="fileFormat"
-                                    formControlName="selectedFormatList"
-                                    multiple
-                                    placeholder="{{ commonLocaleData?.app_select }}"
-                                >
-                                    <mat-option
-                                        *ngFor="let fileFormat of getSortedFormatList()"
-                                        [value]="{ uniqueName: fileFormat?.uniqueName, showValue: fileFormat?.showValue }"
-                                    >
-                                        {{ fileFormat?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <div class="d-flex flex-column w-50">
+                            <textarea
+                                formControlName="selectedFormatList"
+                                [placeholder]="commonLocaleData?.app_file_format"
+                                class="form-control "
+                                rows="2"
+                                (ngModelChange)="getFileFormat()"
+                                [appTributeMention]="{trigger: '{', suggestionPrefix: '{',suggestionSuffix: '}'}"
+                                [appTributeMentionValues]="fileFormatList"
+                            ></textarea>
                             <div class="font-12" *ngIf="exportForm.get('selectedFormatList').value?.length">
-                                {{ getFileFormat() }}
+                                {{ exportForm.get("fileNameFormat").value }}
                             </div>
                         </div>
                     </div>
+                    <mat-divider [ngClass]="{'mr-t1': !exportForm.get('selectedFormatList').value?.length}"></mat-divider>
                 </ng-container>
 
                 <!-- Export voucher -->
-                <div class="pd-b2 clearfix export-type" *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
-                    <label class="w150">{{ localeData?.export_voucher }}:</label>
+                <div class="pd-b2 pd-t1 clearfix export-type" *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
+                    <label class="w150">{{ localeData?.voucher }}:</label>
                     <mat-slide-toggle color="primary" name="voucherExport" formControlName="voucherExport" (change)="onVoucherExportChange($event)">
                         <span>{{
                             exportForm.get("voucherExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
@@ -68,7 +62,7 @@
                 </div>
                 <ng-container *ngIf="exportForm.get('voucherExport').value">
                     <div class="d-flex align-items-center mr-b15">
-                        <label class="w150">{{ localeData?.export_type }}:</label>
+                        <label class="w150">{{ localeData?.type }}:</label>
                         <mat-radio-group name="mergePdf" formControlName="exportType" (change)="onExportTypeChange($event)">
                             <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                                 <mat-radio-button
