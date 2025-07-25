@@ -25,7 +25,7 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { SharedModule } from '../shared.module';
 import { MatCardModule } from '@angular/material/card';
 import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
-import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
+import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 
 @NgModule({
   imports: [
@@ -52,9 +52,9 @@ import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
         SharedModule,
         MatCardModule,
         FroalaTemplateEditorModule,
-        ReplacePipeModule
+        ReplaceAllPipeModule
     ],
     exports: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent],
-    declarations: [TriggersComponent,BasicTriggerComponent, AdvanceTriggerComponent]
+    declarations: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent]
 })
 export class TriggersModule { }

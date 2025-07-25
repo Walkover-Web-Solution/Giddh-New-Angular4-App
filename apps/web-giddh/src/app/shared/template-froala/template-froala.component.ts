@@ -14,7 +14,7 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 declare var tinymce: any;
@@ -977,7 +977,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData, true, ['sunday']);
+            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData, true, [WeekdaysEnum.SUNDAY]);
             this.dayOfMonthOptions = this.generalService.getDaysOfMonth();
             this.triggerOptions = [
                 { label: this.localeData?.voucher_due, value: TriggerModuleEnum.VoucherDue }

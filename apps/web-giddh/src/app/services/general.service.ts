@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -2348,16 +2348,16 @@ export class GeneralService {
      */
     public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
         let days = [
-            { label: commonLocaleData?.app_weekdays.sunday, value: 'sunday' },
-            { label: commonLocaleData?.app_weekdays.monday, value: 'monday' },
-            { label: commonLocaleData?.app_weekdays.tuesday, value: 'tuesday' },
-            { label: commonLocaleData?.app_weekdays.wednesday, value: 'wednesday' },
-            { label: commonLocaleData?.app_weekdays.thursday, value: 'thursday' },
-            { label: commonLocaleData?.app_weekdays.friday, value: 'friday' },
-            { label: commonLocaleData?.app_weekdays.saturday, value: 'saturday' }
+            { label: commonLocaleData?.app_weekdays.sunday, value: WeekdaysEnum.SUNDAY },
+            { label: commonLocaleData?.app_weekdays.monday, value: WeekdaysEnum.MONDAY },
+            { label: commonLocaleData?.app_weekdays.tuesday, value: WeekdaysEnum.TUESDAY },
+            { label: commonLocaleData?.app_weekdays.wednesday, value: WeekdaysEnum.WEDNESDAY },
+            { label: commonLocaleData?.app_weekdays.thursday, value: WeekdaysEnum.THURSDAY },
+            { label: commonLocaleData?.app_weekdays.friday, value: WeekdaysEnum.FRIDAY },
+            { label: commonLocaleData?.app_weekdays.saturday, value: WeekdaysEnum.SATURDAY }
         ];
         if (isDaily) {
-            days = [{ label: commonLocaleData?.app_weekdays.daily, value: 'daily' }, ...days];
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: WeekdaysEnum.DAILY }, ...days];
         }
         return days.filter(day => !excludeDays.includes(day.value));
     }
