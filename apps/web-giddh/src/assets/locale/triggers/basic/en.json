@@ -6,5 +6,7 @@
     "trigger_module": "Trigger Module",
     "execution_time": "Execution Time",
     "conditions": "Conditions",
-    "disabled": "Disabled"
+    "disabled": "Disabled",
+    "due_by": "Due By",
+    "due_amount": "Due Amount"
 }

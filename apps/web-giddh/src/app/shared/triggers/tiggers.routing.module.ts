@@ -13,17 +13,17 @@ import { TriggersComponent } from './triggers.component';
                 path: '', 
                 pathMatch: 'full',
                 component: TriggersComponent, 
-                canActivate: [NeedsAuthentication, NeedsAuthorization],
+                canActivate: [NeedsAuthentication, NeedsAuthorization]
             },
             {
                 path: 'basic', 
                 component: BasicTriggerComponent,
-                canActivate: [NeedsAuthentication],
+                canActivate: [NeedsAuthentication]
             },
             {
                 path: 'advance', 
                 component: AdvanceTriggerComponent,
-                canActivate: [NeedsAuthentication],
+                canActivate: [NeedsAuthentication]
             }
         ])
     ],
