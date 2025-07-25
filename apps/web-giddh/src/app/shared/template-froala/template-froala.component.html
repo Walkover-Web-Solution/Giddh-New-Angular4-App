@@ -39,7 +39,7 @@
                         [placeholder]="localeData?.select_trigger_module"
                         [options]="triggerOptions"
                         [required]="true"
-                        [placeholder]="localeData?.enter_trigger_name"
+                        [showError]="isFormInvalid && customTriggerForm?.controls?.triggerModule?.invalid"
                     >
                     </reactive-dropdown-field>
                 </div>
