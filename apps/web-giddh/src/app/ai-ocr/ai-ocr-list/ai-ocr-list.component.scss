@@ -11,15 +11,3 @@
 }
 
 
-.button-wrapper {
-    position: fixed;
-    position-anchor: --wrapper;
-    left: anchor(right);
-    top: anchor(top);
-    margin-left: 5px !important;
-}
-
-.button-wrapper {
-    anchor-name: --wrapper;
-}
-
