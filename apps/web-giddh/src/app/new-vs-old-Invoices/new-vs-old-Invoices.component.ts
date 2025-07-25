@@ -161,7 +161,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 this.totalSalesAmount = this.newVsOldInvoicesData?.totalSales?.total;
                 this.newSalesInvCount = this.newVsOldInvoicesData?.newSales?.invoiceCount;
                 this.totalSalesInvCount = this.newVsOldInvoicesData?.totalSales?.invoiceCount;
-            } 
+            }
             this.isLoading = false;
 
             this.getBifurcationClientsString();
@@ -224,7 +224,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @param {string} salesFrom
      * @memberof NewVsOldInvoicesComponent
      */
-    public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom:string): void {
+    public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom: string): void {
         const reportType = this.NewVsOldInvoicesQueryRequest.type == 'quater' ? 'quarter' : 'month';
         const reportReq = {
             type: reportType,

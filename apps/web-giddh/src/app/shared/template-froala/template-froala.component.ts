@@ -249,7 +249,27 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     * @memberof TemplateFroalaComponent
      */
     public ngAfterViewInit(): void {
-        tinymce.init(this.tinymceConfig);
+        // Remove any existing TinyMCE script tag
+        const existingScript = document.querySelector('script[src*="tinymce.min.js"]');
+        if (existingScript) {
+            existingScript.remove();
+        }
+        // Remove any existing tinymce instance
+        if ((window as any).tinymce) {
+            delete (window as any).tinymce;
+        }
+    
+        // Always create and append a new TinyMCE script tag
+        const scriptTag = document.createElement('script');
+        scriptTag.src = `https://cdn.tiny.cloud/1/we80wi5vpgskqw6jst4ewz72f9d6kuqd0xnme2wbxktbjtiq/tinymce/6/tinymce.min.js`;
+        scriptTag.referrerPolicy = 'origin';
+        scriptTag.type = 'text/javascript';
+        scriptTag.defer = true;
+        scriptTag.async = true;
+        scriptTag.onload = () => {
+            tinymce.init(this.tinymceConfig);
+        };
+        document.head.appendChild(scriptTag);
     }
 
     /**
@@ -286,7 +306,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 distinctUntilChanged()
             ).subscribe(triggerDetails => {
                 if (triggerDetails) {
-                    triggerDetails = {...triggerDetails, ...triggerDetails?.emailTemplate};
+                    triggerDetails = { ...triggerDetails, ...triggerDetails?.emailTemplate };
                     triggerDetails['conditions'] = triggerDetails?.conditionMap;
                     this.customTriggerForm.patchValue(triggerDetails, { emitEvent: false });
                     this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
@@ -299,6 +319,12 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
 
+            this.customTriggerForm.get('html').valueChanges.subscribe(value => {
+                const editor = tinymce.get('tinyEditor');
+                if (editor && editor.getContent() !== value) {
+                    editor.setContent(value || '');
+                }
+            });
 
             /** Search for voucher list dropdown */
             this.voucherListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
@@ -369,7 +395,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
-                
+
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
                     to: response.to ?? null,
@@ -682,7 +708,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
 
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
-        
+
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
@@ -725,10 +751,10 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 }
             });
         }
-        
+
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-        
+
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -1015,7 +1041,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
      * @returns {string}
      * @memberof TemplateFroalaComponent
      */
-    public getDayActionLabelValue(): string {  
+    public getDayActionLabelValue(): string {
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return '';
 
@@ -1074,7 +1100,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-        
+
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,

@@ -101,7 +101,7 @@ import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sal
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, AiOcrStore, SalesPersonComponentStore],
+    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore],
     animations: [
         trigger("slideInOut", [
             state(
@@ -477,6 +477,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public calculateTaxInTaxDropdown: boolean;
     /** Enum for Other tax types */
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
@@ -487,8 +489,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public aiOcrToken: string = "";
     /** True if main create voucher module */
     public isMainVoucher: boolean = false;
-    /** Sales Person List */
-    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** Holds OCR voucher type */
     public ocrVoucherType: string = '';
 
@@ -1203,11 +1203,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
                     }
-
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-
-                    const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
+                    
+                    const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
                     voucherDetails.entries?.forEach((entry: any, index: number) => {
