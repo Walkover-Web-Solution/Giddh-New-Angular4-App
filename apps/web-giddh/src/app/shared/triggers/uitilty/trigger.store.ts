@@ -3,9 +3,11 @@ import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { ToasterService } from "../../../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { InvoiceService } from "../../../services/invoice.service";
+import { CampaignIntegrationService } from "../../../services/campaign.integration.service";
 
 export interface TriggerState {
     triggerList: any;
+    triggerAdvanceList: any;
     isLoading: boolean;
     createUpdateTriggerIsSuccess: boolean;
     triggerDetails: any;
@@ -14,6 +16,7 @@ export interface TriggerState {
 
 const DEFAULT_STATE: TriggerState = {
     triggerList: null,
+    triggerAdvanceList: null,
     isLoading: false,
     createUpdateTriggerIsSuccess: false,
     triggerDetails: null,
@@ -25,12 +28,14 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
 
     constructor(
         private toaster: ToasterService,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private campaignIntegrationService: CampaignIntegrationService
     ) {
         super(DEFAULT_STATE);
     }
 
     public triggerList$ = this.select((state) => state.triggerList);
+    public triggerAdvanceList$ = this.select((state) => state.triggerAdvanceList);
     public isLoading$ = this.select((state) => state.isLoading);
     public createUpdateTriggerIsSuccess$ = this.select((state) => state.createUpdateTriggerIsSuccess);
     public triggerDetails$ = this.select((state) => state.triggerDetails);
@@ -121,6 +126,36 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({ triggerList: null, isLoading: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+    *  Get trigger advance list
+    *
+    *  @memberof TriggerComponentStore
+    */
+    readonly getTriggerAdvanceList = this.effect((data: Observable<{page: number, count: number}>) => {
+        return data.pipe(
+            switchMap((request) => {
+                this.patchState({ triggerAdvanceList: null, isLoading: true });
+                return this.campaignIntegrationService.getTriggersList(request).pipe(
+                    tapResponse(
+                        (res: any) => {
+                            if (res?.status === "success" && res?.body) {
+                                return this.patchState({ triggerAdvanceList: res.body, isLoading: false });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ triggerAdvanceList: null, isLoading: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ triggerAdvanceList: null, isLoading: false });
                         }
                     ),
                     catchError((err) => EMPTY)
