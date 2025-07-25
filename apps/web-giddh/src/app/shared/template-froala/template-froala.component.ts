@@ -7,13 +7,8 @@ import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
-<<<<<<< HEAD
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
 import { cloneDeep, isEqual } from '../../lodash-optimized';
-=======
-import { EmailType } from './utility/template-froala.const';
-import { cloneDeep } from '../../lodash-optimized';
->>>>>>> 05fd0a578f4e05c536385632dbe82c60350029d8
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
