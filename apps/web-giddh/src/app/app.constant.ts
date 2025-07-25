@@ -676,7 +676,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100dvh',
+    height: '100vh',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',
