@@ -79,9 +79,7 @@
                             "node_modules/tinymce/plugins/pagebreak/plugin.min.js",
                             "node_modules/tinymce/plugins/nonbreaking/plugin.min.js",
                             "node_modules/tinymce/plugins/save/plugin.min.js",
-                            "node_modules/tinymce/plugins/directionality/plugin.min.js",
-                            "node_modules/tinymce/plugins/template/plugin.min.js",
-                            "node_modules/tinymce/plugins/print/plugin.min.js"
+                            "node_modules/tinymce/plugins/directionality/plugin.min.js"
                         ]
                     },
                     "configurations": {

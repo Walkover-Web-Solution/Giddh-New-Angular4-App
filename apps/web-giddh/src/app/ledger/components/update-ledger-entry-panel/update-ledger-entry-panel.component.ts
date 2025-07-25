@@ -3096,14 +3096,4 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
     }
-
-    /**
-     * This will be use for duplicate entry
-     *
-     * @memberof UpdateLedgerEntryPanelComponent
-     */
-    public duplicateEntry(): void {
-        this.isDuplicateEntry = true;
-        this.closeUpdateLedgerModal.emit();
-    }
 }
