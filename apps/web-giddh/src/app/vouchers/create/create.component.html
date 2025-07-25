@@ -34,12 +34,13 @@
                                 <watch-video [showIcon]="true" [iconCssClass]="'text-blue mr-r1 cursor-pointer'"
                                     [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
                             </div>
-                            <mat-button-toggle
+                            <button
+                                mat-stroked-button
                                 *ngIf="ocrDataEnabled"
-                                class="single-toggle-button"
-                                [checked]="!invoiceType.isCashInvoice"
+                                class="single-toggle-button mr-0"
                                 (click)="onSingleToggleChange()"
-                                [value]="!invoiceType.isCashInvoice ? 'cash' : 'voucherType'"
+                                [attr.aria-pressed]="!invoiceType.isCashInvoice ? 'false' : 'true'"
+                                type="button"
                             >
                                 <span>{{ !invoiceType.isCashInvoice && invoiceType.isSalesInvoice ?
                                     localeData?.invoice_types?.cash_invoice : !invoiceType.isCashInvoice &&
@@ -52,7 +53,7 @@
                                     invoiceType.isDebitNote ? localeData?.invoice_types?.debit_note :
                                     invoiceType.isCreditNote ? localeData?.invoice_types?.credit_note :
                                     (voucherType | voucherName: localeData | titlecase)) }}</span>
-                            </mat-button-toggle>
+                            </button>
                         </div>
                     </div>
                     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
@@ -420,6 +421,7 @@
                                             [labelValue]="invoiceForm.controls['salesPersonName']?.value"
                                             [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                                             [options]="salesPersonList$ | async"
+                                            (selectedOption)="invoiceForm?.get('salesPersonName')?.patchValue($event.label)"
                                             [showCreateNew]="true"
                                             [createNewText]="commonLocaleData?.app_create_new"
                                             (createOption)="openSalesPersonDialog()"

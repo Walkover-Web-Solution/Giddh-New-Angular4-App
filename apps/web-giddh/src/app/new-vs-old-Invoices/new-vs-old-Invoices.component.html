@@ -95,27 +95,79 @@
             </div>
         </div>
         <ng-container *ngIf="!isLoading">
-            <div class="d-flex" *ngIf="selectedType === 'month'">
+            <div class="d-flex month-wrapper" *ngIf="selectedType === 'month'">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
-                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
-                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.clients }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ commonLocaleData?.app_amount }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.no_invoices }}
+                        </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
-                        <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.totalSales,
+                                        'total',
+                                        'client',
+                                        newVsOldInvoicesData?.totalSales.month
+                                    )
+                                "
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.total"
@@ -125,31 +177,63 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
-                            <span class="d-inline-flex">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.totalSales,
+                                        'total',
+                                        'invoice',
+                                        newVsOldInvoicesData?.totalSales.month
+                                    )
+                                "
+                            >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex" *ngIf="selectedType === 'month'">
+            <div class="d-flex month-wrapper" *ngIf="selectedType === 'month'">
                 <div class="div-table bg-gray-color">
                     <div>
                         <h3 class="h3-heading">{{ bifurcationClients }}</h3>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        'new',
+                                        'client',
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
@@ -159,7 +243,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.total"
@@ -169,11 +260,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        'new',
+                                        'invoice',
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
@@ -186,11 +291,25 @@
                     </div>
                     <div class="div-row mr-t3 mr-b3">
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.oldSales, 'old', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        'old',
+                                        'client',
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
@@ -200,7 +319,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.total"
@@ -210,11 +336,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.oldSales, 'old', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        'old',
+                                        'invoice',
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
@@ -227,11 +367,25 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
@@ -241,7 +395,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -251,11 +412,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
@@ -268,11 +443,25 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
@@ -282,7 +471,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -292,11 +488,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
@@ -309,11 +519,25 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[2],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[2].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
@@ -323,7 +547,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
@@ -333,11 +564,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[2],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[2].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
@@ -350,11 +595,25 @@
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[3]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[3], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[3],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[3].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.uniqueCount"
@@ -364,7 +623,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.total"
@@ -374,11 +640,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[3], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[3],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[3].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[3]?.invoiceCount"
@@ -393,11 +673,25 @@
                         <div class="div-cell">
                             {{ newVsOldInvoicesData?.carriedSales[4]?.month }}
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[4], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[4],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[4].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.uniqueCount"
@@ -407,7 +701,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.total"
@@ -417,11 +718,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[4], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[4],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[4].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[4]?.invoiceCount"
@@ -434,21 +749,62 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType === 'month'">
+            <div class="d-flex mr-t3 month-wrapper" *ngIf="selectedType === 'month'">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
-                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
-                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.clients }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ commonLocaleData?.app_amount }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.no_invoices }}
+                        </div>
                     </div>
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
@@ -458,7 +814,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -468,11 +831,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
@@ -485,21 +862,69 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType === 'month'">
+            <div class="d-flex mr-t3 month-wrapper" *ngIf="selectedType === 'month'">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
-                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
-                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.clients }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ commonLocaleData?.app_amount }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.no_invoices }}
+                        </div>
                     </div>
-                    <div class="div-row">
+                    <div
+                        class="div-row"
+                        [attr.data-reference]="
+                            selectedType === 'quater'
+                                ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                : 'newVsOldInvoicesData-carriedSales-1-month'
+                        "
+                    >
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
@@ -509,7 +934,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -519,11 +951,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
@@ -536,53 +982,159 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex" *ngIf="selectedType === 'quater'">
+            <div class="d-flex quarter-wrapper" *ngIf="selectedType === 'quater'">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
-                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
-                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.clients }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ commonLocaleData?.app_amount }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.no_invoices }}
+                        </div>
                     </div>
-                    <div class="div-row">
+                    <div
+                        class="div-row"
+                        [attr.data-reference]="
+                            selectedType === 'quater'
+                                ? 'newVsOldInvoicesData-totalSales-quater'
+                                : 'newVsOldInvoicesData-totalSales-month'
+                        "
+                    >
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
-                        <div class="div-cell align-end">
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="clientAllTotal" [currencySymbol]="false" [currencyCode]="false">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.totalSales,
+                                        'total',
+                                        'client',
+                                        newVsOldInvoicesData?.totalSales.month
+                                    )
+                                "
+                            >
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales?.uniqueCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
                                 </amount-field>
-                            </span>
+                            </a>
                         </div>
-                        <div class="div-cell align-end">
-                            <span class="d-inline-flex">
-                                <amount-field [amount]="totalAmount" [currencySymbol]="false" [currencyCode]="false">
-                                </amount-field>
-                            </span>
-                        </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
-                                    [amount]="invoiceCountAll"
+                                    [amount]="newVsOldInvoicesData?.totalSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
                             </span>
                         </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-totalSales-quater'
+                                    : 'newVsOldInvoicesData-totalSales-month'
+                            "
+                        >
+                            <a
+                                class="d-inline-flex cursor-pointer"
+                                href="javascript:void(0)"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.totalSales,
+                                        'total',
+                                        'invoice',
+                                        newVsOldInvoicesData?.totalSales?.month
+                                    )
+                                "
+                            >
+                                <amount-field
+                                    [amount]="newVsOldInvoicesData?.totalSales?.invoiceCount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex" *ngIf="selectedType === 'quater'">
+            <div class="d-flex quarter-wrapper" *ngIf="selectedType === 'quater'">
                 <div class="div-table bg-gray-color">
                     <div>
                         <h3 class="h3-heading">{{ bifurcationClients }}</h3>
                     </div>
-                    <div class="div-row mr-t3 mr-b3">
+                    <div
+                        class="div-row mr-t3 mr-b3"
+                        [attr.data-reference]="
+                            selectedType === 'quater'
+                                ? 'newVsOldInvoicesData-newSales-quater'
+                                : 'newVsOldInvoicesData-newSales-month'
+                        "
+                    >
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        'new',
+                                        'client',
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.uniqueCount"
@@ -592,7 +1144,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.total"
@@ -602,11 +1161,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-newSales-quater'
+                                    : 'newVsOldInvoicesData-newSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.newSales, 'new', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.newSales,
+                                        'new',
+                                        'invoice',
+                                        newVsOldInvoicesData?.newSales.month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.newSales.invoiceCount"
@@ -617,40 +1190,75 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row mr-t3 mr-b3">
+                    <div class="div-row mr-t3 mr-b3" data-reference="quarter-old-clients">
                         <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.totalSales, 'total', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        'old',
+                                        'client',
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
+                                "
                             >
                                 <amount-field
-                                    [amount]="newVsOldInvoicesData?.totalSales.uniqueCount"
+                                    [amount]="newVsOldInvoicesData?.oldSales?.uniqueCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
-                                    [amount]="newVsOldInvoicesData?.totalSales.total"
+                                    [amount]="newVsOldInvoicesData?.oldSales?.total"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.totalSales, 'total', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.oldSales,
+                                        'old',
+                                        'invoice',
+                                        newVsOldInvoicesData?.oldSales.month
+                                    )
+                                "
                             >
                                 <amount-field
-                                    [amount]="newVsOldInvoicesData?.totalSales.invoiceCount"
+                                    [amount]="newVsOldInvoicesData?.oldSales?.invoiceCount"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
@@ -658,13 +1266,27 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row">
+                    <div class="div-row" data-reference="quarter-carriedSales-0-month">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
@@ -674,7 +1296,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -684,11 +1313,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
@@ -699,13 +1342,27 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row">
+                    <div class="div-row" data-reference="quarter-carriedSales-1-month">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
@@ -715,7 +1372,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -725,11 +1389,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"
@@ -740,13 +1418,27 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row">
+                    <div class="div-row" data-reference="quarter-carriedSales-2-month">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[2],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[2].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.uniqueCount"
@@ -756,7 +1448,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.total"
@@ -766,11 +1465,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[2], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[2],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[2].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[2]?.invoiceCount"
@@ -783,21 +1496,62 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType === 'quater'">
+            <div class="d-flex mr-t3 quarter-wrapper" *ngIf="selectedType === 'quater'">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
-                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
-                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.clients }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ commonLocaleData?.app_amount }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.no_invoices }}
+                        </div>
                     </div>
-                    <div class="div-row">
+                    <div class="div-row quarter-carriedSales-0-quarter">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.uniqueCount"
@@ -807,7 +1561,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.total"
@@ -817,11 +1578,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[0], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[0],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[0].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[0]?.invoiceCount"
@@ -834,21 +1609,62 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3" *ngIf="selectedType === 'quater'">
+            <div class="d-flex mr-t3 quarter-wrapper" *ngIf="selectedType === 'quater'">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
-                        <div class="div-cell align-end">{{ localeData?.clients }}</div>
-                        <div class="div-cell align-end">{{ commonLocaleData?.app_amount }}</div>
-                        <div class="div-cell align-end">{{ localeData?.no_invoices }}</div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.clients }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ commonLocaleData?.app_amount }}
+                        </div>
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-oldSales-quater'
+                                    : 'newVsOldInvoicesData-oldSales-month'
+                            "
+                        >
+                            {{ localeData?.no_invoices }}
+                        </div>
                     </div>
-                    <div class="div-row">
+                    <div class="div-row quarter-carriedSales-1-quarter">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'client')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'client',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.uniqueCount"
@@ -858,7 +1674,14 @@
                                 </amount-field>
                             </a>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.total"
@@ -868,11 +1691,25 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="div-cell align-end">
+                        <div
+                            class="div-cell align-end"
+                            [attr.data-reference]="
+                                selectedType === 'quater'
+                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
+                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                            "
+                        >
                             <a
                                 class="d-inline-flex cursor-pointer"
                                 href="javascript:void(0)"
-                                (click)="showClientList(newVsOldInvoicesData?.carriedSales[1], 'carried', 'invoice')"
+                                (click)="
+                                    showClientList(
+                                        newVsOldInvoicesData?.carriedSales[1],
+                                        'carried',
+                                        'invoice',
+                                        newVsOldInvoicesData?.carriedSales[1].month
+                                    )
+                                "
                             >
                                 <amount-field
                                     [amount]="newVsOldInvoicesData?.carriedSales[1]?.invoiceCount"

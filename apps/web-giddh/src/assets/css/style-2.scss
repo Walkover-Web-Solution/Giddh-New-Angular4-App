@@ -51,6 +51,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/mat-chip.scss";
 @import "../css/global/select-multiple-fields.scss";
 @import "../css/global/override-material-theme-variables";
+@import "../css/global/tribute-js.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -14069,19 +14070,6 @@ mat-list {
     }
 }
 
-.mention-item {
-    padding: 8px 12px;
-}
-
-.tribute-container li {
-    background: var(--color-white) !important;
-}
-
-.tribute-container .highlight {
-    background-color: var(--color-primary-filter-background) !important;
-    color: var(--color-giddh-blue);
-}
-
 /** In mobile number field if multiple flag are visible,
  use this class to fix the issue */
 .show-single-flag {
@@ -14093,4 +14081,9 @@ mat-list {
             }
         }
     }
+}
+
+.only-right-radius {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
 }

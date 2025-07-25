@@ -18,23 +18,34 @@
     <mat-dialog-content class="dialog-content">
         <div class="pd-2">
             <div class="d-flex mr-b15 p-0 align-items-center">
-                <input-field
-                    tabindex="1"
-                    #nameField
-                    [type]="'text'"
-                    [name]="'name'"
-                    [autofocus]="true"
-                    [label]="commonLocaleData?.app_search"
-                    [matSuffixIcon]="searchValue?.value ? 'icon-cross font-12' : 'icon-search'"
-                    (suffixClick)="searchValue?.setValue('')"
-                    [placeholder]="
-                        salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.client
-                            ? commonLocaleData?.app_search_by_name_and_unique_name
-                            : commonLocaleData?.app_search_by_invoice_number_customer_name_and_amount
-                    "
-                    [formControl]="searchValue"
-                    class="w-100"
-                ></input-field>
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>
+                        {{ commonLocaleData?.app_search }}
+                    </mat-label>
+                    <input
+                        matInput
+                        tabindex="1"
+                        #nameField
+                        type="text"
+                        name="name"
+                        [autofocus]="true"
+                        [formControl]="searchValue"
+                        [placeholder]="
+                            salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.client
+                                ? commonLocaleData?.app_search_by_name_and_unique_name
+                                : commonLocaleData?.app_search_by_invoice_number_customer_name_and_amount
+                        "
+                    />
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        tabindex="-1"
+                        aria-label="Search or Clear"
+                        (click)="searchValue?.value ? searchValue.setValue('') : null"
+                    >
+                        <i [ngClass]="searchValue?.value ? 'icon-cross font-16' : 'icon-search font-16'"></i>
+                    </button>
+                </mat-form-field>
                 <div *ngIf="showClearFilter">
                     <a
                         class="cursor-pointer refresh-button"
@@ -84,10 +95,13 @@
                                 [showGotoLedger]="true"
                                 [showGenerateInvoice]="true"
                                 [showSendEmail]="true"
+                                (sendEmail)="sendEmailSuccess($event)"
                                 [activeRowIndex]="activeRowIndex"
                                 [rowIndex]="i"
                                 [useRowIndexVisibility]="true"
                                 (editAccount)="updateAccount()"
+                                [fromDate]="requestParams.fromDate"
+                                [toDate]="requestParams.toDate"
                             >
                             </app-action-menu>
                         </td>

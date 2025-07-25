@@ -41,8 +41,9 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         q: '',
         sort: 'asc',
         sortBy: '',
-        fromDate: '',
-        toDate: ''
+        fromDate: null,
+        toDate: null,
+        salesFrom: null
     };
     /** Hold Sales Bifurcation Details Client List */
     public salesBifurcationDetailsClientList: any = [];
@@ -62,8 +63,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     public selectedItem: any;
     /** Holds Sales Bifurcation Details Action Enum */
     public salesBifurcationDetailsActionEnum: typeof SalesBifurcationDetailsActionEnum = SalesBifurcationDetailsActionEnum;
-   
-   
+
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesBifurcationDetailsData: any,
         public dialogRef: MatDialogRef<any>,
@@ -80,9 +81,10 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.requestParams.type = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.type;
         this.requestParams.dataType = this.salesBifurcationDetailsData?.subType;
-        this.requestParams.fromDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.fromDate;
-        this.requestParams.toDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.toDate;
+        this.requestParams.fromDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.fromDate ?? null;
+        this.requestParams.toDate = this.salesBifurcationDetailsData?.newVsOldInvoicesData?.toDate ?? null;
         this.requestParams.value = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.value;
+        this.requestParams.salesFrom = this.salesBifurcationDetailsData?.salesFrom;
 
         this.salesBifurcationDetailsList$.pipe(
             takeUntil(this.destroyed$)
@@ -104,10 +106,14 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
             if (searchedText) {
                 this.showClearFilter = true;
                 this.requestParams.q = searchedText;
+                this.requestParams.page = 1;
+                this.requestParams.count = this.pageSizeOptions[2];
                 this.initApiCall();
             } else if (searchedText === '') {
                 this.showClearFilter = false;
                 this.requestParams.q = '';
+                this.requestParams.page = 1;
+                this.requestParams.count = this.pageSizeOptions[2];
                 this.initApiCall();
             }
         });
@@ -176,6 +182,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      */
     public openInvoice(templateRef: TemplateRef<any>, transaction: any): void {
         transaction['voucherNumber'] = transaction?.invoiceNumber;
+        transaction['salesBifurcation'] = true;
         this.selectedItem = transaction;
 
         let dialogRef = this.dialog.open(templateRef, {
@@ -196,6 +203,20 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      */
     public updateAccount(): void {
         this.resetFilter();
+    }
+
+    /**
+     * This will be use for send email
+     *
+     * @memberof SalesBifurcationDetailsComponent
+     */
+    public sendEmailSuccess(event: any): void {
+        if (event) {
+            this.requestParams.q = '';
+            this.requestParams.page = 1;
+            this.requestParams.count = this.pageSizeOptions[3];
+            this.initApiCall();
+        }
     }
 
     /**

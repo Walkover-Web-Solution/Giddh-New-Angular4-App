@@ -282,14 +282,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public defaultTaxLabel: string[] = [];
     /** Store active parent group */
     public parentGroups: any[] = [];
-    /** Flag to determine if the parent group is "sundrycreditors". */
-    @Input() public showBankDetailPreview: boolean = false;
-    /** Flag to determine if the parent group is "sundrycreditors". */
-    @Input() public contactPreview: boolean = false;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** True if sales person is created */
     public salesPersonCreated: boolean = false;
+    /** Flag to determine if the parent group is "sundrycreditors". */
+    @Input() public showBankDetailPreview: boolean = false;
+    /** Flag to determine if the parent group is "sundrycreditors". */
+    @Input() public contactPreview: boolean = false;
 
     constructor(
         private _fb: FormBuilder,

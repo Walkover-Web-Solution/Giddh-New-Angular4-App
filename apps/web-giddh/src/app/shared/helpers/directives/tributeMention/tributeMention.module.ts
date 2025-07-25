@@ -4,7 +4,7 @@ import { TributeMentionDirective } from './tributeMention';
 @NgModule({
     imports: [],
     exports: [TributeMentionDirective],
-    declarations: [TributeMentionDirective],
+    declarations: [TributeMentionDirective]
 })
 export class TributeMentionModule {
 }

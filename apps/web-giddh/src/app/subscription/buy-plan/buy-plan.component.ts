@@ -25,6 +25,8 @@ import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ServiceConfig } from '../../services/service.config';
+import { PaymentProvider } from '../../app.constant';
+
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -226,6 +228,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     // Add retry count for Razorpay payment failures
     public razorpayRetryCount: number = 0;
     public maxRazorpayRetryCount: number = 3;
+    /** Hold payment provider */
+    public paymentProvider: typeof PaymentProvider = PaymentProvider;
 
     constructor(
         public dialog: MatDialog,
@@ -455,8 +459,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                const duration = this.firstStepForm.get('duration')?.value;
-                                if ((duration === 'MONTHLY' || duration === 'DAILY') && response?.region?.code !== 'IND') {
+                                if (((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND')) {
                                     if (response?.status?.toLowerCase() === 'active') {
                                         this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                     } else {
@@ -464,7 +467,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                             planUniqueName: response?.planDetails?.uniqueName,
                                             paymentProvider: this.thirdStepForm.value.paymentProvider,
                                             subscriptionId: response.subscriptionId,
-                                            duration: duration,
+                                            duration: this.firstStepForm.get('duration')?.value,
                                             promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                                         };
                                         this.subscriptionComponentStore.buyPlan(model);
@@ -530,7 +533,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
-                if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
+                if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1372,7 +1375,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const duration = this.firstStepForm.get('duration')?.value;
 
         const filterProviders = (providers: string[]) => {
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => providers.includes(p.value));
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
             if (this.filteredPaymentProviders?.length === 1) {
                 this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
             }
@@ -1381,25 +1384,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (entityCode === 'GBR') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Exclude Razorpay for monthly GBR
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(p => ["GOCARDLESS", "PAYPAL"].includes(p.value));
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
-                filterProviders(['RAZORPAY']);
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== 'IND') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Only PayPal for non-IND countries with monthly duration
-                filterProviders(['PAYPAL']);
+                filterProviders([PaymentProvider.PAYPAL]);
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for non-IND countries with yearly duration
-                filterProviders(['RAZORPAY']);
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders(duration === 'YEARLY' ? ['RAZORPAY', 'PAYU'] : ['RAZORPAY']);
+            filterProviders(duration === 'YEARLY' ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
         }
 
-        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && (duration === 'MONTHLY' || duration === 'DAILY')) {
+        if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
         } else {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
@@ -1758,19 +1761,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.allPaymentProviders = [
                 {
                     label: this.localeData?.razorpay,
-                    value: "RAZORPAY",
+                    value: PaymentProvider.RAZORPAY,
                 },
                 {
                     label: this.localeData?.gocardless,
-                    value: "GOCARDLESS"
+                    value: PaymentProvider.GOCARDLESS
                 },
                 {
                     label: this.localeData?.paypal,
-                    value: "PAYPAL"
+                    value: PaymentProvider.PAYPAL
                 },
                 {
                     label: this.localeData?.payu,
-                    value: "PAYU"
+                    value: PaymentProvider.PAYU
                 }
             ];
             this.changeDetection.detectChanges();

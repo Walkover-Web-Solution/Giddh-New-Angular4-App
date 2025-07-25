@@ -9,11 +9,14 @@ import { take } from 'rxjs';
 import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../aside-menu-account/aside.menu.account.module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OrganizationType } from '../../models/user-login-state';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'app-action-menu',
     standalone: true,
-    imports: [CommonModule, MatMenuModule, MatButtonModule,AccountUpdateNewDetailsModule,AsideMenuAccountModule],
+    imports: [CommonModule, MatMenuModule, MatButtonModule, AccountUpdateNewDetailsModule, AsideMenuAccountModule],
     templateUrl: './action-menu.component.html',
     styleUrls: ['./action-menu.component.scss'],
     animations: [
@@ -53,7 +56,7 @@ export class ActionMenuComponent {
     /** Event emitted when the 'Generate Invoice' action is triggered */
     @Output() generateInvoice: EventEmitter<void> = new EventEmitter<void>();
     /** Event emitted when the 'Send Email' action is triggered */
-    @Output() sendEmail: EventEmitter<void> = new EventEmitter<void>();
+    @Output() sendEmail: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Event emitted when the 'Edit Account' action is triggered */
     @Output() editAccount: EventEmitter<void> = new EventEmitter<void>();
     /** From date */
@@ -74,9 +77,16 @@ export class ActionMenuComponent {
     public isUpdateAccount: boolean = false;
     /** Selected group for create account */
     public selectedGroupForCreateAcc: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
-    constructor(private generalService: GeneralService, private dialog: MatDialog) {
+    constructor(private generalService: GeneralService, private dialog: MatDialog, private store: Store<AppState>) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+            }
+        });
     }
 
     /**
@@ -123,7 +133,7 @@ export class ActionMenuComponent {
                 if (event) {
                     event.stopPropagation();
                 }
-                this.openCustomEmailDialog(account, this.account?.accountType, false);
+                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType, false);
                 break;
             case 4: // edit account
                 if (event) {
@@ -169,7 +179,6 @@ export class ActionMenuComponent {
      * @memberof ActionMenuComponent
      */
     public updateCustomerAcc(accountType: "customer" | "vendor", account: any): void {
-        console.log(accountType, account);
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
         this.selectedGroupForCreateAcc = accountType === "customer" ? "sundrydebtors" : "sundrycreditors";
@@ -227,11 +236,17 @@ export class ActionMenuComponent {
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.sendEmail.emit();
+                this.sendEmail.emit(true);
             }
         });
     }
 
+    /**
+     * Get updated list
+     *
+     * @param {any} [grpName]
+     * @memberof ActionMenuComponent
+     */
     public getUpdatedList(grpName?: any): void {
         if (grpName) {
             this.editAccount.emit();
