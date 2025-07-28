@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FroalaViewModule, FroalaEditorModule } from 'angular-froala-wysiwyg';
 import { TemplateFroalaComponent } from './template-froala.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -11,12 +11,7 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { A11yModule } from '@angular/cdk/a11y';
-import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 
 @NgModule({
   imports: [
@@ -33,17 +28,11 @@ import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.mod
         MatDialogModule,
         ReactiveFormsModule,
         FormsModule,
-        NgxMatSelectSearchModule,
-        MatSelectModule,
-        MatCheckboxModule,
-        ClickOutsideModule,
-        ReplaceAllPipeModule,
-        A11yModule
+        ClickOutsideModule
     ],
     exports: [
         TemplateFroalaComponent
     ],
-    declarations: [TemplateFroalaComponent],
-    providers: [TitleCasePipe]
+    declarations: [TemplateFroalaComponent]
 })
 export class FroalaTemplateEditorModule { }

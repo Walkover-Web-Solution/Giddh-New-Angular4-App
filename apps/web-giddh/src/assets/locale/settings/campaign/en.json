@@ -52,7 +52,6 @@
         "invalid_to":"Invalid To",
         "invalid_title":"Invalid Title",
         "msg91":"MSG91",
-        "receiver":"Receiver",
-        "switch_to_basic_trigger": "Switch to Basic Trigger"
+        "receiver":"Receiver"
     }
 }

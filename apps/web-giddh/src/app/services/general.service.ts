@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -2262,99 +2262,38 @@ export class GeneralService {
      * Retrieves a list of available voucher types with localized labels.
      *
      * @param commonLocaleData 
-     * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
-    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = []): IOption[] {
-        const allVouchers = [{
+    public getVoucherTypeList(commonLocaleData: any): IOption[] {
+        return [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.purchase,
             value: 'purchase'
-        },
-        {
-            label: commonLocaleData?.app_voucher_types.purchase_order,
-            value: 'purchase order'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.receipt,
             value: 'receipt'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.payment,
             value: 'payment'
-        },
-        {
-            label: commonLocaleData?.app_voucher_types.estimate,
-            value: 'estimate'
-        },
-        {
-            label: commonLocaleData?.app_voucher_types.proforma,
-            value: 'proforma'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.journal,
             value: 'journal'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.contra,
             value: 'contra'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.debit_note,
             value: 'debit note'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.credit_note,
             value: 'credit note'
-        },
-        {
+        }, {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
-
-        return onlyVouchers.length > 0 ? allVouchers.filter(voucher => onlyVouchers.includes(voucher.value)) : allVouchers;
-    }
-
-    /**
-     * This will return the day of week options
-     *
-     * @param {any} commonLocaleData
-     * @param {boolean} [isDaily=false]
-     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-     * @returns {IOption[]}
-     * @memberof GeneralService
-     */
-    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
-        let days = [
-            { label: commonLocaleData?.app_weekdays.sunday, value: WeekdaysEnum.SUNDAY },
-            { label: commonLocaleData?.app_weekdays.monday, value: WeekdaysEnum.MONDAY },
-            { label: commonLocaleData?.app_weekdays.tuesday, value: WeekdaysEnum.TUESDAY },
-            { label: commonLocaleData?.app_weekdays.wednesday, value: WeekdaysEnum.WEDNESDAY },
-            { label: commonLocaleData?.app_weekdays.thursday, value: WeekdaysEnum.THURSDAY },
-            { label: commonLocaleData?.app_weekdays.friday, value: WeekdaysEnum.FRIDAY },
-            { label: commonLocaleData?.app_weekdays.saturday, value: WeekdaysEnum.SATURDAY }
-        ];
-        if (isDaily) {
-            days = [{ label: commonLocaleData?.app_weekdays.daily, value: WeekdaysEnum.DAILY }, ...days];
-        }
-        return days.filter(day => !excludeDays.includes(day.value));
-    }
-
-    /**
-     * This will return the day of week options
-     *
-     * @returns {IOption[]}
-     * @memberof GeneralService
-     */
-    public getDaysOfMonth(): IOption[] {
-        return Array.from({ length: 31 }, (_, i) => ({
-            label: (i + 1).toString(),
-            value: (i + 1).toString()
-        }));
     }
 }
 

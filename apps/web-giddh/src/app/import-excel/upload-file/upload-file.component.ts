@@ -128,7 +128,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
-        this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData, ['sales', 'purchase', 'receipt', 'payment', 'journal', 'contra', 'debit note', 'credit note', 'advance-receipt']);
+        this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData);
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
