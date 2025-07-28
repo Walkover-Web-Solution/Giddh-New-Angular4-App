@@ -2374,5 +2374,23 @@ export class GeneralService {
             value: (i + 1).toString()
         }));
     }
+
+    /**
+     * Returns the first and last date of a given month and year string (format: 'MM-YYYY').
+     * @param monthYear - The month and year string in 'MM-YYYY' format.
+     * @returns An object with fromDate and toDate in 'DD-MM-YYYY' format.
+     */
+    public getMonthDateRange(monthYear: string): { fromDate: string, toDate: string } {
+        if (!monthYear || !/^\d{2}-\d{4}$/.test(monthYear)) {
+            return { fromDate: '', toDate: '' };
+        }
+        const [month, year] = monthYear.split('-').map(Number);
+        // Get last day of month
+        const lastDay = new Date(year, month, 0).getDate();
+        const pad = (n: number) => n < 10 ? '0' + n : n.toString();
+        const fromDate = `01-${pad(month)}-${year}`;
+        const toDate = `${pad(lastDay)}-${pad(month)}-${year}`;
+        return { fromDate, toDate };
+    }
 }
 
