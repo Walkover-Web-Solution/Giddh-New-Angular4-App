@@ -368,9 +368,10 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
+        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
+            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -2227,6 +2228,23 @@ export class GeneralService {
     }
 
     /**
+     * Retrieves the decoded white label data from the local storage.
+     *
+     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
+     *
+     * @throws {Error} If there is an error parsing the white label data from the local storage.
+     */
+public getDecodedWhiteLabel(): any {
+    try {
+        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+        return whiteLabelData?.body || null;
+    } catch (error) {
+        console.error('Error parsing whiteLabel data from localStorage:', error);
+        return null;
+    }
+}
+
+    /**
      * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
      *
      * @param {string} text - The string containing placeholders.
@@ -2244,7 +2262,7 @@ export class GeneralService {
      * @param model - An object containing key-value pairs to replace in the URL.
      * @returns The formatted URL with placeholders replaced.
      * @memberof GeneralService
-     */
+    */
     public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
         if (!url) return url;
         const updatedModel = {

@@ -7,7 +7,7 @@ import { FinancialYearComponent } from './financial-year/financial-year.componen
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
@@ -21,7 +21,7 @@ import { HttpClient } from "@angular/common/http";
 import { LocaleService } from '../services/locale.service';
 import { GeneralService } from '../services/general.service';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
-
+import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
@@ -71,6 +71,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _permissionDataService: PermissionDataService,
         public _route: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _authenticationService: AuthenticationService,
         private _toast: ToasterService,
@@ -248,10 +249,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string) {
         const getAccessTokenData = {
             code: authCode,
-            client_secret: GOOGLE_CLIENT_SECRET,
-            client_id: GOOGLE_CLIENT_ID,
+            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
-            redirect_uri: this.getRedirectUrl(AppUrl)
+            redirect_uri: this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl))
         };
 
         let options = { headers: {} };

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -18,6 +18,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: "purchase-register-expand",
@@ -104,6 +105,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private activeRoute: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _cd: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
@@ -134,7 +136,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? "assets/icon/" : AppUrl + APP_FOLDER + "assets/icon/";
+        this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
         this.getDetailedPurchaseRequestFilter.q = "";
