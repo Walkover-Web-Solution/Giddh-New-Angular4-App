@@ -421,6 +421,7 @@
                                             [labelValue]="invoiceForm.controls['salesPersonName']?.value"
                                             [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                                             [options]="salesPersonList$ | async"
+                                            (selectedOption)="invoiceForm?.get('salesPersonName')?.patchValue($event.label)"
                                             [showCreateNew]="true"
                                             [createNewText]="commonLocaleData?.app_create_new"
                                             (createOption)="openSalesPersonDialog()"
@@ -641,6 +642,7 @@
                                                 <ngx-mat-select-search
                                                     [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                     [formControl]="linkPoDropdown"
+                                                    [clearSearchInput]="false"
                                                     [placeholderLabel]="localeData?.select_order_placeholder">
                                                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                 </ngx-mat-select-search>

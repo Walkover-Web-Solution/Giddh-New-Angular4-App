@@ -684,3 +684,23 @@ export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     },
     disableClose: true
 };
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
+};
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}

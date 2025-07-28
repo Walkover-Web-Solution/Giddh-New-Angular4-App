@@ -24,6 +24,8 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { PaymentProvider } from '../../app.constant';
+
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -220,6 +222,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public callBackEvent: boolean = false;
     /** Hold create subscription success event */
     public createSubscriptionSuccess: any;
+    /** Hold payment provider */
+    public paymentProvider: typeof PaymentProvider = PaymentProvider;
 
     constructor(
         public dialog: MatDialog,
@@ -427,6 +431,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         }
                         return;
                     }
+                } else if (response?.payuHtml) {      
+                    this.openPayUPayment(response.payuHtml);         
                 } else {
                     if (response?.paypalOrderId && this.payType === 'buy') {
                         this.openWindow(response.paypalApprovalLink);
@@ -445,19 +451,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             if (this.payType === 'trial') {
                                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                             } else {
-                                if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
-                                    const model = {
-                                        planUniqueName: response?.planDetails?.uniqueName,
-                                        paymentProvider: this.thirdStepForm.value.paymentProvider,
-                                        subscriptionId: response.subscriptionId,
-                                        duration: this.firstStepForm.get('duration')?.value,
-                                        promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
-                                    };
+                                if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND')) {
                                     if (response?.status?.toLowerCase() === 'active') {
                                         this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                     } else {
+                                        const model = {
+                                            planUniqueName: response?.planDetails?.uniqueName,
+                                            paymentProvider: this.thirdStepForm.value.paymentProvider,
+                                            subscriptionId: response.subscriptionId,
+                                            duration: this.firstStepForm.get('duration')?.value,
+                                            promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
+                                        };
                                         this.subscriptionComponentStore.buyPlan(model);
                                     }
+                                } else if (this.firstStepForm.get('duration')?.value === 'YEARLY' && response?.region?.code === 'IND' && response?.status?.toLowerCase() === 'active') {
+                                    this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                                 } else {
                                     const reqObj = {
                                         subscriptionId: response?.subscriptionId,
@@ -516,7 +524,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
-                if ((event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS")) {
+                if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -558,7 +566,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeSubscriptionId = response?.subscriptionId;
                 this.upgradeRegion = response?.region?.code;
             }
-            if (response && response.dueAmount > 0) {
+            if (response?.payuHtml) {      
+                this.openPayUPayment(response.payuHtml);  
+            } else if (response && response.dueAmount > 0) {
                 if (this.firstStepForm.get('duration')?.value === 'MONTHLY' && response?.region?.code !== 'IND') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
@@ -1349,33 +1359,35 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const entityCode = this.selectedPlan?.entityCode;
         const duration = this.firstStepForm.get('duration')?.value;
 
-        const filterProviders = (provider: string) => {
-            this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value === provider);
-            this.thirdStepForm.get('paymentProvider')?.patchValue(provider);
+        const filterProviders = (providers: string[]) => {
+            this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => providers.includes(provider.value));
+            if (this.filteredPaymentProviders?.length === 1) {
+                this.thirdStepForm.get('paymentProvider')?.patchValue(providers[0]);
+            }
         };
 
         if (entityCode === 'GBR') {
             if (duration === 'MONTHLY') {
                 // Exclude Razorpay for monthly GBR
-                this.filteredPaymentProviders = this.allPaymentProviders.filter(p => p.value !== 'RAZORPAY');
+                this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
-                filterProviders('RAZORPAY');
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== 'IND') {
             if (duration === 'MONTHLY') {
                 // Only PayPal for non-IND countries with monthly duration
-                filterProviders('PAYPAL');
+                filterProviders([PaymentProvider.PAYPAL]);
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for non-IND countries with yearly duration
-                filterProviders('RAZORPAY');
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'YEARLY')) {
-            // Only Razorpay for IND with any duration
-            filterProviders('RAZORPAY');
+            // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
+            filterProviders(duration === 'YEARLY' ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
         }
 
-        if (this.thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY' && duration === 'MONTHLY') {
+        if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && duration === 'MONTHLY') {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue('CARD');
         } else {
             this.thirdStepForm.get('razorpayAuthType')?.patchValue(null);
@@ -1693,18 +1705,55 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.allPaymentProviders = [
                 {
                     label: this.localeData?.razorpay,
-                    value: "RAZORPAY",
+                    value: PaymentProvider.RAZORPAY,
                 },
                 {
                     label: this.localeData?.gocardless,
-                    value: "GOCARDLESS"
+                    value: PaymentProvider.GOCARDLESS
                 },
                 {
                     label: this.localeData?.paypal,
-                    value: "PAYPAL"
+                    value: PaymentProvider.PAYPAL
+                },
+                {
+                    label: this.localeData?.payu,
+                    value: PaymentProvider.PAYU
                 }
             ];
             this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+     * Open PayU HTML in new window and listen for PayU response 
+     * then update subscription
+     * 
+     * @param {string} html - PayU HTML
+     */
+    private openPayUPayment(html: string): void {
+        // Open PayU HTML in new window
+        const blob = new Blob([html], { type: 'text/html' });
+        this.openWindow(URL.createObjectURL(blob));
+        
+        // Listen for PayU response from new window
+        const handlePayUMessage = (event: MessageEvent<{
+            status: string;
+            transactionId: string;
+            provider: string;
+          }>) => {
+            if (event.data?.status) {
+              const model = {
+                payuTransactionId: event.data.transactionId,
+                paymentProvider: event.data.provider,
+                subscriptionId: this.subscriptionId,
+                duration: this.firstStepForm.get('duration')?.value
+              };
+              this.componentStore.changePlan(model);
+          
+              // remove listener
+              window.removeEventListener("message", handlePayUMessage);
+            }
+          };
+          window.addEventListener("message", handlePayUMessage);
     }
 }
