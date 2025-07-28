@@ -989,6 +989,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             delete requestObj.referenceVoucher.voucherType;
         }
 
+        if (requestObj.salesPerson) {
+            delete requestObj.salesPerson;
+        }
+
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
