@@ -100,8 +100,8 @@
                                 [rowIndex]="i"
                                 [useRowIndexVisibility]="true"
                                 (editAccount)="updateAccount()"
-                                [fromDate]="requestParams.fromDate"
-                                [toDate]="requestParams.toDate"
+                                [fromDate]="goToLedgerDateRangeFrom"
+                                [toDate]="goToLedgerDateRangeTo"
                             >
                             </app-action-menu>
                         </td>
