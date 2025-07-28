@@ -418,7 +418,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.getAllDiscounts();
         this.getSalesPersonList();
         if (this.voucherApiVersion === 2) {
-            this.manualGenerateVoucherChecked = true;
+            if (this.blankLedger.transactions?.[0]?.duplicateEntry) {
+                this.manualGenerateVoucherChecked = this.blankLedger.generateInvoice;
+            } else {
+                this.manualGenerateVoucherChecked = true;
+            }
         } else {
             this.manualGenerateVoucherChecked = false;
         }
