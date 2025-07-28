@@ -692,3 +692,15 @@ export const PaymentProvider = {
     PAYPAL: 'PAYPAL',
     PAYU: 'PAYU'
 };
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}
