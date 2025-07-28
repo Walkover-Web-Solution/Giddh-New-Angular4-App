@@ -70,10 +70,5 @@ export const CUSTOM_EMAIL_TEMPLATE = {
     GET_EMAIL_CONDITIONS: COMMON_URL + 'communication/condition-suggestion?triggerModule=:triggerModule',
     CREATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template',
     UPDATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:voucherType',
-    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:voucherType',
-    CREATE_TRIGGERS: PART_A + 'trigger',
-    UPDATE_TRIGGERS: PART_A + 'trigger/:uniqueName',
-    GET_ALL_TRIGGERS: PART_A + 'trigger/all?page=:page&count=:count',
-    GET_TRIGGER_DETAILS: PART_A + 'trigger/:uniqueName',
-    DELETE_TRIGGER: PART_A + 'trigger/:uniqueName'
+    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:voucherType'
 }
