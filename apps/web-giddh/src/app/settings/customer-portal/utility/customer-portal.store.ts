@@ -5,6 +5,7 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
+import { HttpMethod, HttpMethodType } from "../../../app.constant";
 
 export interface CustomerPortalState {
     payuDetails: any;
@@ -35,7 +36,7 @@ export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalS
      * @memberof CustomerPortalComponentStore
      */
     readonly payuCrudOperation = this.effect((data$: Observable<{
-        method: 'GET' | 'POST' | 'DELETE',
+        method: HttpMethod,
         payload?: any
     }>) => {
         return data$.pipe(
@@ -45,10 +46,10 @@ export class CustomerPortalComponentStore extends ComponentStore<CustomerPortalS
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                if (method === 'POST' || method === 'DELETE') {
+                                if (method === HttpMethod.POST || method === HttpMethod.DELETE) {
                                     this.toasterService.showSnackBar('success', res?.body);
                                     // After POST or DELETE, fetch the latest PayU details
-                                    this.payuCrudOperation({ method: 'GET' });
+                                    this.payuCrudOperation({ method: HttpMethod.GET });
                                 } else {
                                     this.patchState({
                                         payuDetails: res?.body ?? null,

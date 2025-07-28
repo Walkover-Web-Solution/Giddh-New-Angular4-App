@@ -119,7 +119,14 @@ export class PurchaseInvoiceService {
 
     public FileGstr3B(reqObj: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + GST_RETURN_API.FILE_GSTR3B?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':company_gstin', reqObj.gstNumber)?.replace(':from', reqObj.period.from)?.replace(':to', reqObj.period.to)?.replace(':gsp', reqObj.via), {}).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + GST_RETURN_API.FILE_GSTR3B
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':company_gstin', reqObj.gstNumber)
+            ?.replace(':from', reqObj.period.from)
+            ?.replace(':to', reqObj.period.to)
+            ?.replace(':gsp', reqObj.via)
+            ?.replace(':monthYear', reqObj.monthYear)
+            ?.replace(':currentDateTime', reqObj.currentDateTime), {}).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = {};
             return data;

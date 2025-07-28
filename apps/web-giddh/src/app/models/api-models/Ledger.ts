@@ -132,6 +132,9 @@ export class LedgerResponse {
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
     public generateEInvoice?: boolean = null;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
+    public salesPersonUniqueName?: string;
+    public isPartOfMultiEntryVoucher?: boolean;
 }
 
 /** Model adjusted amounts for invoices */
@@ -246,6 +249,7 @@ export class TransactionsRequest {
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
     public paginationToken?: string = '';
+    public isTView?: boolean = false;
 }
 
 export interface ReconcileRequest {

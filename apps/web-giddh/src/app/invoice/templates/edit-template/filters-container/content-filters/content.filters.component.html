@@ -27,6 +27,27 @@
                             checked
                         />
                         Company Name
+                        <div 
+                            *ngIf="customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'tally_template'"
+                            class="ml-3" 
+                        >
+                            <input
+                                type="text"
+                                hasFocus
+                                #headerCompanyName="hasFocus"
+                                [maxlength]="50"
+                                class="form-control"
+                                name="headerCompanyName"
+                                [(ngModel)]="customTemplate.sections['header'].data['companyName'].label"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.sections['header'].data['companyName'].display"
+                            />
+                            <ng-container *ngIf="headerCompanyName?.isFocused">
+                                <span class="max-character-label">Characters left:&nbsp;</span>
+                                <span class="max-character-value">
+                                    {{ 50 - customTemplate.sections['header'].data['companyName'].label?.length }}</span>
+                            </ng-container>
+                        </div>
                     </div>
                     <div
                         *ngIf="
@@ -1888,21 +1909,48 @@
                                 </div>
                             </div>
                         </div>
+                        <tr *ngIf="customTemplate?.templateType === 'tally_template'">
+                            <td>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="bankQrCodeCheckbox"
+                                        [(ngModel)]="customTemplate.showBankQrCode"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    />
+                                    Show Bank QR Code
+                                </label>
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="bankQrCode"
+                                    placeholder="Enter UPI ID"
+                                    class="form-control"
+                                    [(ngModel)]="customTemplate.qrCodeId"
+                                    #bankQrCode="ngModel"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    [disabled]="!customTemplate.showBankQrCode"
+                                    pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                    [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
+                                />
+                            </td>
+                        </tr>
                         <div
                             class="form-group"
                             *ngIf="customTemplate?.templateType === 'tally_template'"
                         >
                             <div class="form-group">
                                 <label>
-                                <input
-                                    type="checkbox"
-                                    name="taxBifurcationCheckbox"
-                                    [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
-                                    (ngModelChange)="
-                                        onChangeFieldVisibility(null, null, null);
-                                    "
-                                />
-                                Tax Bifurcation
+                                    <input
+                                        type="checkbox"
+                                        name="taxBifurcationCheckbox"
+                                        [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
+                                        (ngModelChange)="
+                                            onChangeFieldVisibility(null, null, null);
+                                        "
+                                    />
+                                    Tax Bifurcation
                                 </label>
                             </div>
                         </div>
@@ -2036,6 +2084,27 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
                         Company Name
+                        <div 
+                            *ngIf="customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'tally_template'"
+                            class="ml-3" 
+                        >
+                            <input
+                                type="text"
+                                hasFocus
+                                #footerCompanyName="hasFocus"
+                                [maxlength]="50"
+                                class="form-control"
+                                name="footerCompanyName"
+                                [(ngModel)]="customTemplate.sections['footer'].data['companyName'].label"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.sections['footer'].data['companyName'].display"
+                            />
+                            <ng-container *ngIf="footerCompanyName?.isFocused">
+                                <span class="max-character-label">Characters left:&nbsp;</span>
+                                <span class="max-character-value">
+                                    {{ 50 - customTemplate.sections['footer'].data['companyName'].label?.length }}</span>
+                            </ng-container>
+                        </div>
                     </div>
                     <div *ngIf="customTemplate?.templateType === 'thermal_template'" class="form-group">
                         <input
@@ -2342,6 +2411,29 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a'">
+                        <input
+                            type="checkbox"
+                            name="bankQrCodeCheckbox"
+                            [(ngModel)]="customTemplate.showBankQrCode"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        />
+                        Show Bank QR Code
+                        <div class="ml-3">
+                            <input
+                                type="text"
+                                name="bankQrCode"
+                                placeholder="Enter UPI ID"
+                                class="form-control"
+                                [(ngModel)]="customTemplate.qrCodeId"
+                                #bankQrCode="ngModel"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.showBankQrCode"
+                                pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                [class.error-box]="bankQrCode.touched && bankQrCode.invalid"
+                            />
+                        </div>
+                    </ng-container>
                     <div
                         class="clearfix mr-t1 form-group"
                         *ngIf="
@@ -2441,7 +2533,7 @@
                                         [maxlength]="
                                             customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
                                                 ? null
-                                                : 500
+                                                : 200
                                         "
                                         hasFocus
                                         #message1="hasFocus"
@@ -2450,6 +2542,8 @@
                                         name="msg11"
                                         (ngModelChange)="onFieldChange(null, null, null)"
                                         [disabled]="!customTemplate.sections['footer'].data['message1'].display"
+                                        [appTributeMention]="{trigger: '{', suggestionPrefix: '{',suggestionSuffix: '}'}"
+                                        [appTributeMentionValues]="suggestionList"
                                     ></textarea>
                                     <ng-container
                                         *ngIf="
@@ -2460,7 +2554,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            500 - customTemplate.sections["footer"].data["message1"].label?.length
+                                            200 - customTemplate.sections["footer"].data["message1"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </div>

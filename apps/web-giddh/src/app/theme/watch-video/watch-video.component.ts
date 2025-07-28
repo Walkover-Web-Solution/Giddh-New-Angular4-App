@@ -18,6 +18,10 @@ export class WatchVideoComponent implements OnInit {
     @Input() public moduleName: string = null;
     /** Holds CSS class for custom code */
     @Input() public cssClass: string = null;
+    /** Holds CSS class for custom icon */
+    @Input() public iconCssClass: string = null;
+    /** Holds icon for custom code */
+    @Input() public showIcon: boolean = false;
     /** Holds final youtube video link  */
     public videoLink: string = '';
     /* This will hold local JSON data */

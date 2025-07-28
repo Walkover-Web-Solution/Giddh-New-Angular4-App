@@ -8,6 +8,7 @@ import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPa
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { HttpMethod } from '../app.constant';
 
 @Injectable()
 export class SettingsIntegrationService {
@@ -634,7 +635,7 @@ export class SettingsIntegrationService {
      * @memberof SettingsIntegrationService
      */
     public payuCrudOperation(
-        method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+        method: HttpMethod,
         payload?: any
     ): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
@@ -643,13 +644,13 @@ export class SettingsIntegrationService {
 
         let httpCall: Observable<any>;
 
-        if (method === 'GET') {
+        if (method === HttpMethod.GET) {
             httpCall = this.http.get(url);
-        } else if (method === 'POST') {
+        } else if (method === HttpMethod.POST) {
             httpCall = this.http.post(url, payload);
-        } else if (method === 'PUT') {
+        } else if (method === HttpMethod.PUT) {
             httpCall = this.http.put(url, payload);
-        } else if (method === 'DELETE') {
+        } else if (method === HttpMethod.DELETE) {
             httpCall = this.http.delete(url, { body: payload });
         } else {
             throw new Error('Unsupported HTTP method');

@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ToasterService } from '../../services/toaster.service';
-import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
+import { EMAIL_VALIDATION_REGEX, HttpMethod } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { ClipboardService } from 'ngx-clipboard';
@@ -185,7 +185,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         this.initProfileForm();
         this.initPayuForm();
         // For GET
-        this.componentStore.payuCrudOperation({ method: 'GET' });
+        this.componentStore.payuCrudOperation({ method: HttpMethod.GET });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -288,7 +288,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                 });
                 this.payuLinkedAccountLabel = response?.linkedAccount?.name;
                 this.updatePayu = true;
-            } else if (!response?.merchantKey) {
+            } else {
                 this.updatePayu = false;
                 this.payuForm.reset();
             }
@@ -940,7 +940,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             return;
         }
         this.componentStore.payuCrudOperation({
-            method: 'POST',
+            method: HttpMethod.POST,
             payload: this.payuForm.value
         });
     }
@@ -965,7 +965,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             if (response) {
                 // For DELETE
                 this.componentStore.payuCrudOperation({
-                    method: 'DELETE'
+                    method: HttpMethod.DELETE
                 });
                 this.payuLinkedAccountLabel = '';
             }
