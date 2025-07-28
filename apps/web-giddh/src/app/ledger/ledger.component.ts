@@ -3598,13 +3598,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
                 }
-
-                if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
-                    this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
-                    this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
-                } else {
-                    this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse?.salesPerson?.uniqueName || null;
-                    this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse?.salesPerson?.name || '';
+                if (!this.lc.blankLedger.transactions?.[0].duplicateEntry) {
+                    if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
+                        this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
+                        this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
+                    } else {
+                        this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse.salesPerson?.uniqueName || null;
+                        this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || '';
+                    }
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
@@ -3857,7 +3858,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private prepareDuplicateTransaction(res: any): void {
         if (!res) return;
         let isDebitTransaction: boolean;
-        const isJournalVoucher = res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher;
+        const isJournalVoucher = res?.voucher?.shortCode ? (res?.voucher?.shortCode === AdjustedVoucherType.Journal) : (res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher);
         const isActiveAccountAndParticularIsSame = res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName;
         const transaction: TransactionVM = new TransactionVM();
 
