@@ -164,6 +164,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.showClearFilter = false;
         this.requestParams.q = '';
         this.searchValue?.setValue(null);
+        this.initApiCall();
     }
 
     /**
