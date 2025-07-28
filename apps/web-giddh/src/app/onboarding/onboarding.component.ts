@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '../services/general.service';
 import { takeUntil } from 'rxjs/operators';
@@ -10,9 +10,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
-
-
-
+import { ServiceConfig } from '../services/service.config';
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
@@ -58,22 +56,25 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
     /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    public syncWithTallyHelpDocUrl: string = "";
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
         private componentStore: OnboardingComponentStore
     ) {
+        const whiteLabel = this._generalService.getDecodedWhiteLabel();
+        const whiteLabelDomain = `${whiteLabel?.giddhWhiteLabel?.domainName}/help/sync-with-tally-1591360375828781`;
+        this.syncWithTallyHelpDocUrl =  whiteLabelDomain ? whiteLabelDomain : SYNC_TALLY_HELP_DOC_URL;
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
-    }  
+    }
 
     public ngOnInit() {
         this.voucherApiVersion = this._generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
@@ -86,7 +87,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
-        
+
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.accountAsideMenuState === "in") {

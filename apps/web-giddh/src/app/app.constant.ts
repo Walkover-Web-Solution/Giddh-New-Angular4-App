@@ -7,9 +7,15 @@ import { MatDialogConfig } from '@angular/material/dialog';
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'PORTAL_URL': PORTAL_URL,
+    'OTP_WIDGET_ID': OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
     'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER
+    'APP_FOLDER': APP_FOLDER,
+    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY
 };
 
 /** Add Company business type*/
@@ -692,3 +698,15 @@ export const PaymentProvider = {
     PAYPAL: 'PAYPAL',
     PAYU: 'PAYU'
 };
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}

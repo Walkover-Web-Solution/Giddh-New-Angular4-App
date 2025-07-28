@@ -4,6 +4,7 @@ import {
     Component,
     ElementRef,
     HostListener,
+    Inject,
     OnDestroy,
     OnInit,
     TemplateRef,
@@ -99,6 +100,7 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
+import { ServiceConfig } from "../../services/service.config";
 import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
 import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
@@ -154,7 +156,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Hold url Voucher Type */
     public urlVoucherType: string = "";
     /** Holds images folder path */
-    public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+    public imgPath: string = '';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Discounts list Observable */
@@ -603,6 +605,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore,
         private aiOcrStore: AiOcrStore,
         private store: Store<AppState>,
@@ -631,7 +634,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesPersonStore: SalesPersonComponentStore,
         private aiOcrService: AiOcrService
     ) {
-
+       this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**

@@ -1,6 +1,6 @@
 import { BankIntegrationDialogComponent } from './../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -57,6 +57,7 @@ import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-lin
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { LedgerComponentStore } from './ledger.store';
+import { ServiceConfig } from '../services/service.config';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -407,6 +408,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private ledgerActions: LedgerActions,
         private route: ActivatedRoute,
         private ledgerService: LedgerService,
@@ -678,7 +680,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceAction.getInvoiceSetting());
         this.getPurchaseSettings();
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakpointObserver.observe([
             '(max-width: 991px)'
@@ -3540,9 +3542,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.amount = rate;
                 }
 
-                if (data.body?.salesPerson && !this.isSundryDebtorCreditor) {
-                    this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || null;
-                    this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || '';
+                if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
+                    this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
+                    this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
                 } else {
                     this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse?.salesPerson?.uniqueName || null;
                     this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse?.salesPerson?.name || '';

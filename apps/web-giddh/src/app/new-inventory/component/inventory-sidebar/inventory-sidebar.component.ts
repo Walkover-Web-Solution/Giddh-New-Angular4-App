@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { Location } from '@angular/common';
 import { BranchHierarchyType } from '../../../app.constant';
+import { ServiceConfig } from '../../../services/service.config';
 
 /**
  * Data with nested structure.
@@ -117,6 +118,7 @@ export class InventorySidebarComponent implements OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsBranchAction: SettingsBranchActions,
         private location: Location
     ) {
@@ -133,7 +135,7 @@ export class InventorySidebarComponent implements OnDestroy {
      * @memberof InventorySidebarComponent
     */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentUrl = this.router.url;
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
