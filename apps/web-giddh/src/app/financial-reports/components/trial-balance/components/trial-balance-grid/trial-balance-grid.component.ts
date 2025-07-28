@@ -18,8 +18,13 @@ import { UntypedFormControl } from '@angular/forms';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
+import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'trial-balance-grid',
@@ -38,6 +43,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
             transition("out => in", animate("400ms ease-in-out")),
         ]),
     ],
+    providers: [FinancialReportsComponentStore]
 })
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -54,6 +60,8 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public data$: AccountDetails;
     @Input() public expandAll: boolean;
     @Output() public searchChange = new EventEmitter<string>();
+    /** Refresh event emitter */
+    @Output() public refresh = new EventEmitter<string>();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -70,12 +78,24 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public activeGroupUniqueName: string = "";
     /** Holds account details */
     public accountDetails: any;
+    /** List of check groups accounts */
+    private listOfCheckGroupsAccounts: any[] = [];
+    /** Holds images folder path */
+    public imgPath: string = "";
 
-    constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
+
+    constructor(
+        private cd: ChangeDetectorRef,
+        private zone: NgZone,
+        private financialReportsComponentStore: FinancialReportsComponentStore,
+        private dialog: MatDialog,
+        private generalService: GeneralService
+    ) {
 
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -91,6 +111,15 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                     this.cd.detectChanges();
                 }, 10);
             });
+
+        this.financialReportsComponentStore.tailedReportIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.listOfCheckGroupsAccounts = [];
+                setTimeout(() => {
+                    this.refresh.emit();
+                }, 600);
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -212,7 +241,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof TrialBalanceGridComponent
      */
-     public toggleAccountAsidePane(): void {
+    public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
         this.toggleBodyClass();
     }
@@ -239,4 +268,75 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public getUpdatedList(event: any): void {
         this.toggleAccountAsidePane();
     }
+
+    /**
+     * Unchecks all the accounts/groups in the grid
+     *
+     * @param {'group' | 'account'} [entityType='group'] type of entity
+     * @private
+     * @memberof TrialBalanceGridComponent
+     */
+    private uncheckAll(entityType: 'group' | 'account' = 'group'): void {
+        this.extractCheckedAccountsGroups(this.data$.groupDetails, entityType);
+        setTimeout(() => {
+            if (this.listOfCheckGroupsAccounts?.length) {
+                const model = {
+                    request: {
+                        reportType: ReportType.TrialBalance,
+                        from: this.from,
+                        to: this.to,
+                        branchUniqueName: this.generalService.currentBranchUniqueName
+                    },
+                    payload: this.listOfCheckGroupsAccounts
+                };
+                this.financialReportsComponentStore.tailedReportAccountGroup(model);
+            }
+        }, 400);
+    }
+
+    /**
+     * Recursive function to extract checked accounts/groups and store it in listOfCheckGroupsAccounts.
+     * It loops through the groupAccountDetails array and checks if the account/group is checked.
+     * If checked, it adds the account/group to listOfCheckGroupsAccounts with checked set to false.
+     * Then it recursively calls itself on the childGroups and accounts of the group.
+     * @param groupAccountDetails array of account/group objects
+     * @param entityType type of entity, either 'group' or 'account'
+     * @memberof TrialBalanceGridComponent
+     */
+    private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
+        groupAccountDetails.forEach(groupAccount => {
+            if (groupAccount.checked) {
+                this.listOfCheckGroupsAccounts.push({
+                    uniqueName: groupAccount.uniqueName,
+                    entityType,
+                    checked: false
+                });
+            }
+            if (groupAccount.childGroups?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.childGroups, 'group');
+            }
+            if (groupAccount.accounts?.length) {
+                this.extractCheckedAccountsGroups(groupAccount.accounts, 'account');
+            }
+        });
+    }
+
+    /**
+     * Opens a confirmation dialog to confirm the uncheck all action.
+     *
+     * @memberof TrialBalanceGridComponent
+     */
+    public openConfirmDialog(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.commonLocaleData?.app_uncheck_all_item_message, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.uncheckAll();
+            }
+        });
+    } 
 }

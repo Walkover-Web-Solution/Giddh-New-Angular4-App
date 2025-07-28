@@ -132,6 +132,9 @@ export class LedgerResponse {
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
     public generateEInvoice?: boolean = null;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
+    public salesPersonUniqueName?: string;
+    public isPartOfMultiEntryVoucher?: boolean;
 }
 
 /** Model adjusted amounts for invoices */
@@ -212,6 +215,7 @@ export class TransactionsResponse implements ITransactions {
     public convertedClosingBalance?: IClosingBalance;
     public count: number;
     public creditTotal: number;
+    public debitCreditTransactions: ITransactionItem[];
     public convertedCreditTotal?: number;
     public creditTransactions: ITransactionItem[];
     public creditTransactionsCount: number;
@@ -245,6 +249,7 @@ export class TransactionsRequest {
     public accountCurrency: boolean = false;
     public branchUniqueName?: string;
     public paginationToken?: string = '';
+    public isTView?: boolean = false;
 }
 
 export interface ReconcileRequest {
@@ -440,4 +445,22 @@ export interface IUnpaidInvoiceListResponse {
 
 export interface IVariant extends IParticular {
     variantDiscount?: any;
+}
+
+/** Type for ledger type */
+export type LedgerType = 'cr' | 'dr';
+
+/** Type for ledger view */
+export type  TLedgerView  = 'STATEMENT_VIEW' | 'T_VIEW';
+
+/** Enum for ledger view */
+export enum LedgerViewEnum  {
+    StatementView = 'STATEMENT_VIEW',
+    TView = 'T_VIEW'
+}
+
+/** Enum for transaction type i.e  CREDIT or DEBIT */
+export enum TransactionType  {
+    Credit = 'CREDIT',
+    Debit = 'DEBIT'
 }

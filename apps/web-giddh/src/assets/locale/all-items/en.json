@@ -245,6 +245,17 @@
                     }
                 },
                 {
+                    "label": "New Receipt",
+                    "link": "/pages/vouchers/receipt/create",
+                    "icon": "icon-reciept-new",
+                    "description": "Generate receipt",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -477,6 +488,17 @@
                     "link": "/pages/vouchers/preview/payment/settings",
                     "icon": "icon-settings-cog",
                     "description": "Payment settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "New Payment",
+                    "link": "/pages/vouchers/payment/create",
+                    "icon": "icon-reciept-new",
+                    "description": "Generate payment",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
@@ -926,6 +948,18 @@
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",
                     "description": "Track, manage, and analyze financials for each project efficiently."
+                }
+            ]
+        },
+        {
+            "label": "AI",
+            "icon": "icon-audit-log",
+            "items": [
+                {
+                    "label": "OCR",
+                    "link": "/pages/ai-ocr",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
                 }
             ]
         },

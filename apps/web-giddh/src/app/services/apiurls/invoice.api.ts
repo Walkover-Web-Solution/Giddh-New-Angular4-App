@@ -20,7 +20,7 @@ export const INVOICE_API = {
     SAVE_INVOICE_WEBHOOK: COMMON_URL + 'settings/webhooks', // Save Webhook
     GET_RAZORPAY_DETAIL: COMMON_URL + 'razorpay', // Get RazorPay Detail
     SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B + 'mail', // POST
-    DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices?from=:from&to=:to&fileType=base64',
+    DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices?from=:from&to=:to&fileType=:fileType',
     REMOVE_IMAGE_SIGNATURE: COMMON_URL + '/delete-image?imgUniqueName=:imgUniqueName',
     CANCEL_E_INVOICE_API: COMMON_URL + 'invoice/:invoiceUniqueName/cancel-einvoice',
     CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice',
@@ -57,7 +57,8 @@ export const EWAYBILL_API = {
     ADD_TRANSPORTER: COMMON_URL + 'transporters',  // get all transporter
     GET_ALL_TRANSPORTER: COMMON_URL + 'transporters?page=:pageNo',
     UPDATE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId', // FOR DELETE TRANSPORTER ALSO
-    DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId'
+    DELETE_TRANSPORTER: COMMON_URL + 'transporters?transporterId=:transporterId',
+    EWAYBILL_FROM_PLACE:  'country/cities?pinCode=:pinCode' // Get city from pincode
 };
 
 export const BULK_UPDATE_VOUCHER = {
@@ -69,5 +70,10 @@ export const CUSTOM_EMAIL_TEMPLATE = {
     GET_EMAIL_CONDITIONS: COMMON_URL + 'communication/condition-suggestion?triggerModule=:triggerModule',
     CREATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template',
     UPDATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:voucherType',
-    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:voucherType'
+    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:voucherType',
+    CREATE_TRIGGERS: PART_A + 'trigger',
+    UPDATE_TRIGGERS: PART_A + 'trigger/:uniqueName',
+    GET_ALL_TRIGGERS: PART_A + 'trigger/all?page=:page&count=:count',
+    GET_TRIGGER_DETAILS: PART_A + 'trigger/:uniqueName',
+    DELETE_TRIGGER: PART_A + 'trigger/:uniqueName'
 }

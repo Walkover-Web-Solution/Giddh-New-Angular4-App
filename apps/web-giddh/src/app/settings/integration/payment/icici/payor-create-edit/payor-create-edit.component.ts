@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
-import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integraion.service";
+import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integration.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { AppState } from "apps/web-giddh/src/app/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";

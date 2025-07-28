@@ -1,4 +1,4 @@
-<div class="clearfix" appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div class="aside-pane flex-column" appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div class="form-header">
         <h3>
             {{ commonLocaleData?.app_add }}
@@ -9,12 +9,11 @@
         <button id="close" (click)="closeAsidePane()">
             <i class="icon-cross"></i>
         </button>
-        <button mat-stroked-button *ngIf="hideFirstStep" (click)="backButtonPressed()" id="back">
+        <button mat-stroked-button *ngIf="hideFirstStep" (click)="backButtonPressed()" id="back" class="d-flex align-items-center">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
-    <div class="aside-pane">
-        <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
+        <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger px-0" *ngIf="!hideFirstStep">
             <div class="pb-3 text-center">
                 <div class="buttons-wrapper">
                     <ng-container *ngIf="inputData !== 'receipt-note' && inputData !== 'delivery-challan'">
@@ -22,15 +21,15 @@
                             {{ commonLocaleData?.app_add_account }}
                         </button>
                     </ng-container>
-                    <button
+                    <!-- <button
                         mat-stroked-button
                         color="primary"
                         class="mb-2"
-                        *ngIf="voucherApiVersion !== 2"
+                        *ngIf="voucherApiVersion !== 2
                         (click)="toggleStockPane()"
                     >
                         {{ commonLocaleData?.app_add_product }}
-                    </button>
+                    </button> -->
                     <button
                         *ngIf="voucherApiVersion === 2"
                         mat-stroked-button
@@ -62,12 +61,12 @@
             </div>
         </div>
 
-        <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
+        <!-- <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
             <sales-create-stock
                 [autoFocusInChild]="autoFocusInChild"
                 (closeAsideEvent)="closeAsidePane($event)"
             ></sales-create-stock>
-        </div>
+        </div> -->
 
         <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion === 2">
             <div class="child-wrapper">
@@ -93,5 +92,4 @@
                 (addEvent)="addNewServiceAccount($event)"
             ></generic-aside-menu-account>
         </div>
-    </div>
 </div>

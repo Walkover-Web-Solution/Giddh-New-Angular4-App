@@ -342,27 +342,30 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleEditMode() {
-        if (this.voucherApiVersion === 1) {
-            if (!this.showEditMode) {
-                this.selectedItemVoucher = this.selectedItem;
-            } else {
-                this.selectedItem = this.selectedItemVoucher;
-            }
-            this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
-            this.showEditMode = !this.showEditMode;
+        // if (this.voucherApiVersion === 1) {
+        //     if (!this.showEditMode) {
+        //         this.selectedItemVoucher = this.selectedItem;
+        //     } else {
+        //         this.selectedItem = this.selectedItemVoucher;
+        //     }
+        //     this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
+        //     this.showEditMode = !this.showEditMode;
 
-            if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
-                this.filterVouchers(this.searchElement.nativeElement.value);
-            }
-        } else {
+        //     if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+        //         this.filterVouchers(this.searchElement.nativeElement.value);
+        //     }
+        // } else {
+        // only for voucher version 2
+        if (this.voucherApiVersion === 2) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate) {
                 this.router.navigate(['/pages/vouchers/estimates/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
-            } else if(this.voucherType === VoucherTypeEnum.generateProforma) {
+            } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.router.navigate(['/pages/vouchers/proformas/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
             } else {
                 this.router.navigate(['/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.uniqueName + '/edit']);
             }
         }
+        // }
     }
 
     public onCancel() {
@@ -742,19 +745,22 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public goToInvoice(type?: string) {
         // remove fixed class because we are navigating to invoice generate page where user can scroll the page
-        document.querySelector('body').classList.remove('fixed');
-        if (this.voucherApiVersion === 1) {
-            if (type === 'cash') {
-                this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
-            } else {
-                this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
-            }
-        } else {
+        // only for voucher version 2
+        if (this.voucherApiVersion === 2) {
+            document.querySelector('body').classList.remove('fixed');
+        // if (this.voucherApiVersion === 1) {
+        //     if (type === 'cash') {
+        //         this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
+        //     } else {
+        //         this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
+        //     }
+        // } else {
             if (type === 'cash') {
                 this.router.navigate(['/pages/vouchers/cash/create']);
             } else {
                 this.router.navigate(['/pages/vouchers/'+ this.voucherType.replace(/\s+/g, "-") +'/create']);
             }
+        // }
         }
     }
 

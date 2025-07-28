@@ -31,7 +31,7 @@ export const LEDGER_API = {
     MULTIPLE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/entries',
     CURRENCY_CONVERTER: 'company/:companyUniqueName/currency-converter/:fromCurrency/:toCurrency',
     DELETE_BANK_TRANSACTION: 'company/:companyUniqueName/yodlee/eledgers?transactionId=:transactionId',
-    NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to&accountCurrency=:accountCurrency',
+    NEW_GET_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to&accountCurrency=:accountCurrency&isTView=:isTView',
     GET_BALANCE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/balance?q=:q&from=:from&to=:to&accountCurrency=:accountCurrency',
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
@@ -54,5 +54,9 @@ export const LEDGER_API = {
     RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid',
 
     // Load stock variant
-    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants'
+    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants',
+
+    GET_DOWNLOAD_ATTACHMENT: "company/:companyUniqueName/imports/signed-url?fileName=:fileName",
+    IMPORT_VOUCHER: "company/:companyUniqueName/imports/v2/upload?subType=:subType&accountUniqueName=:accountUniqueName&type=:type&isHeaderProvided=:isHeaderProvided&voucherType=:voucherType",
+    BULK_EXPORT_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-export?from=:from&to=:to'
 };

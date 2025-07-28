@@ -23,7 +23,7 @@
     }
     .inline-multiple-input-width {
         width: 530px;
-        min-height: 48px;
+        min-height: var(--mat-form-field-height);
         .input-min-width {
             min-width: 50%; 
         }
@@ -82,10 +82,10 @@
     .create-group-page {
         .input-width {
             width: unset;
-            min-width: 426px;
+            min-width: 422px;
         }
         .inline-multiple-input-width {
-            width: 426px;
+            width: 422px;
         }
     }
 }

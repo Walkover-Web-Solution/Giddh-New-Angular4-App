@@ -61,6 +61,20 @@ import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
 import { CallBackPageComponent } from './call-back-page/call-back-page.component';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
+
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
+    }
+], false);
+
+export function provideConfig() {
+    return SOCIAL_CONFIG || { id: null, providers: [] };
+}
+
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -128,7 +142,9 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
         MatDialogModule,
         MatTooltipModule,
         CallBackPageComponent,
-        SubscriptionUpgradeButtonModule
+        SubscriptionUpgradeButtonModule,
+        FormFieldsModule,
+        MatMenuModule
     ],
     exports: [
         CommonModule,

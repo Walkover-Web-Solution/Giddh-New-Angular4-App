@@ -493,6 +493,18 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles changes to the GST e-Invoice enable setting.
+     *
+     * @memberof InvoiceSettingComponent
+     */
+    public gstEInvoiceEnableChange(): void {
+        if (!this.invoiceSetting.gstEInvoiceEnable) {
+            this.invoiceSetting.generateEinvoiceShowPopUp = false;
+            this.invoiceSetting.generateAutoEWayBill = false;
+        }
+    }
+    
+    /**
      * setInvoiceLockDate
      */
     public setInvoiceLockDate(date) {
@@ -628,7 +640,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {
-                right: '15px',
+                right: '0',
                 bottom: '0'
             },
             disableClose: true

@@ -1,8 +1,8 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <ng-container *ngIf="showLabel">
-        <div [ngClass]="{ 'readonly-field': readonly || disabled }">
+        <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel}">
             <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
-                <mat-label *ngIf="showMatLabelWithLabledField">{{ label ? label : placeholder }}</mat-label>
+                <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
                     [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
                     [required]="required" [attr.aria-expanded]="readonly ? false : true"
@@ -15,13 +15,13 @@
                             ? trigger.closePanel()
                             : null
                     " [value]="labelValue" />
-                <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
+                <mat-autocomplete (opened)="panelOpened()" (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
                     [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
                     [displayWith]="displayLabel" #auto="matAutocomplete">
                     <span class="position-relative">
                         <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
                             <mat-option [value]="option"
-                                [matTooltip]="option?.label" matTooltipPosition="right">
+                                [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()">
                                 <ng-template [ngTemplateOutletContext]="{ option: option }"
                                     [ngTemplateOutlet]="optionTemplate"></ng-template>
                                 <ng-container *ngIf="!optionTemplate">
@@ -42,9 +42,20 @@
                         </a>
                     </span>
                 </mat-autocomplete>
-                <div *ngIf="showCaretIcon" class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
-                    <span class="arrow-dropdown"></span>
+                <div *ngIf="showCaretIcon && !value" class="dropdown-bg position-absolute" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+                    <span class="arrow-dropdown position-absolute"></span>
                 </div>
+                <i
+                    matSuffix
+                    *ngIf="showClearIcon && value"
+                    [ngClass]="'icon-cross'"
+                    (click)="clearDropdownValue(); $event.stopPropagation()"
+                    [matTooltip]="'clear'"
+                    matTooltipPosition="above"
+                    role="button"
+                    [attr.aria-label]="'clear'"
+                >
+                </i>
             </mat-form-field>
         </div>
     </ng-container>
@@ -72,7 +83,7 @@
                 </div>
             </a>
             <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option"
-                [matTooltip]="option?.label" matTooltipPosition="right">
+                [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()">
                 {{option?.label}}
             </mat-option>
             <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">

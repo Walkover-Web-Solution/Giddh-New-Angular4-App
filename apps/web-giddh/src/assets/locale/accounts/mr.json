@@ -93,5 +93,8 @@
     "beneficiary_name": "लाभार्थीचे नाव",
     "branch_name": "शाखेचे नाव",
     "swift_code": "स्विफ्ट कोड",
-    "bulk_add": "मोठ्या प्रमाणात जोडा"
+    "bulk_add": "मोठ्या प्रमाणात जोडा",
+    "enter_value": "मूल्य प्रविष्ट करा",
+    "change_gst_number_to_update_the_state": "जीएसटी नंबर बदलणे राज्य अद्यतनित करण्यासाठी",
+    "default_expiry_days": "डीफॉल्ट कालबाह्यता दिवस सेट करा"
 }

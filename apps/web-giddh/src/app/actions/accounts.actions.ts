@@ -46,6 +46,8 @@ export class AccountsAction {
     public static UPDATE_ACCOUNT = 'UpdateAccount';
     public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
     public static UPDATE_ACCOUNTV2 = 'UpdateAccountV2';
+    /** Constant for update account v2 patch API */
+    public static UPDATE_ACCOUNTV2_PATCH = 'UpdateAccountV2Patch';
     public static UPDATE_ACCOUNT_RESPONSEV2 = 'UpdateAccountResponseV2';
     public static GET_ACCOUNT_DETAILS = 'AccountDetails';
     public static GET_ACCOUNT_DETAILS_RESPONSE = 'AccountDetailsResponse';
@@ -104,7 +106,7 @@ export class AccountsAction {
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 if (response.request.portalDomain) {
-                    this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                    this._accountService.createPortalUser(response.request.portalDomain, response.body?.uniqueName).pipe(take(1)).subscribe(data => {
                         if (data?.status === 'error') {
                             this._toasty.errorToast(data.message, data.code);
                         }
@@ -193,6 +195,37 @@ export class AccountsAction {
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * Update Account V2 Patch
+     * 
+     * @param {CustomActions} action
+     * @return {Observable<Action>}
+     * @memberof AccountsAction
+     */
+    public UpdateAccountV2Patch$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(AccountsAction.UPDATE_ACCOUNTV2_PATCH),
+            switchMap((action: CustomActions) => this._accountService.UpdateAccountWithoutGroupUniqueName(action.payload.account, action.payload?.value?.accountUniqueName, action.payload?.value?.isMasterOpen)),
+            map(response => {
+                if (response?.status === 'success') {
+                    this.store.dispatch(this.hasUnsavedChanges(false));
+                    this.store.dispatch(this.commonActions.accountUpdated(true));
+                    this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+                    
+                        const updateIndexDb: IUpdateDbRequest = {
+                            newUniqueName: response.body.uniqueName,
+                            oldUniqueName: response.queryString.accountUniqueName,
+                            latestName: response.request.name,
+                            uniqueName: this._generalServices.companyUniqueName,
+                            type: "accounts",
+                            isActive: false,
+                            name: response?.body?.name
+                        }
+                        this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
+                }
+                return this.updateAccountResponseV2(response);
+            })));
+
     public UpdateAccountV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNTV2),
@@ -200,21 +233,21 @@ export class AccountsAction {
             map(response => {
                 if (response?.status === 'success') {
                     this.store.dispatch(this.hasUnsavedChanges(false));
-                    this.store.dispatch(this.commonActions.accountUpdated(true));
-                    this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
-                    const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response?.body?.uniqueName,
-                        oldUniqueName: response.queryString.accountUniqueName,
-                        latestName: response.request.name,
-                        uniqueName: this._generalServices.companyUniqueName,
-                        type: "accounts",
-                        isActive: false,
-                        name: response?.body?.name
-                    }
-                    this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
-                }
-                return this.updateAccountResponseV2(response);
-            })));
+            this.store.dispatch(this.commonActions.accountUpdated(true));
+            this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+            const updateIndexDb: IUpdateDbRequest = {
+                newUniqueName: response?.body?.uniqueName,
+                oldUniqueName: response.queryString.accountUniqueName,
+                latestName: response.request.name,
+                uniqueName: this._generalServices.companyUniqueName,
+                type: "accounts",
+                isActive: false,
+                name: response?.body?.name
+            }
+            this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
+        }
+        return this.updateAccountResponseV2(response);
+    })));
 
     public UpdateAccountResponseV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -612,6 +645,21 @@ export class AccountsAction {
     public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, account: AccountRequestV2): CustomActions {
         return {
             type: AccountsAction.UPDATE_ACCOUNTV2,
+            payload: { account, value }
+        };
+    }
+
+    /**
+     * Update Account V2 Patch
+     *
+     * @param {{ groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }} value
+     * @param {AccountRequestV2} account
+     * @return {CustomActions}
+     * @memberof AccountsAction
+     */
+    public updateAccountV2Patch(value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, account: AccountRequestV2): CustomActions {
+        return {
+            type: AccountsAction.UPDATE_ACCOUNTV2_PATCH,
             payload: { account, value }
         };
     }

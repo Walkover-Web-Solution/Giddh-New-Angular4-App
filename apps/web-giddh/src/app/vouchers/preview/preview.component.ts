@@ -236,6 +236,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                     this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
                     this.getCreatedTemplates();
+                    this.getCreateNewVoucherText();
                     this.subscribeStoreObservable();
                 }
                 if (params?.page) {
@@ -346,6 +347,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             case VoucherTypeEnum.purchase:
                 this.createNewVoucher.text = this.localeData?.new_bill;
                 this.createNewVoucher.link = "/pages/vouchers/purchase/create";
+                break;
+            case VoucherTypeEnum.receipt:
+                this.createNewVoucher.text = this.localeData?.new_receipt;
+                this.createNewVoucher.link = "/pages/vouchers/receipt/create";
+                break;
+            case VoucherTypeEnum.payment:
+                this.createNewVoucher.text = this.localeData?.new_payment;
+                this.createNewVoucher.link = "/pages/vouchers/payment/create";
                 break;
         }
     }
@@ -531,7 +540,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     private handleDownloadVoucherPdf(response: any): void {
         if (typeof response === 'string' || (response?.hasOwnProperty('data') && response.data)) {
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 /** Creating voucher pdf start */
                 if (response) {
                     this.isPdfAvailable = true;
@@ -683,7 +692,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.selectedInvoice.hasAttachment = false;
             const fileType = "base64";
 
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 getRequest = {
                     voucherType: this.voucherType,
                     uniqueName: this.selectedInvoice?.uniqueName
@@ -704,7 +713,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 getRequest = {
                     accountUniqueName: this.selectedInvoice.account?.uniqueName,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
@@ -844,7 +853,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public sendEmail(response: any): void {
         if (response) {
-            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
+            if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote || this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
                 this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.selectedInvoice?.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
                     payload: {

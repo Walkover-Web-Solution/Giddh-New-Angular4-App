@@ -8,7 +8,7 @@
 .custom-datepicker {
     &.custom-new-datepicker {
         input {
-            height: 48px;
+            height: var(--mat-form-field-height);
             border-radius: 0.5rem;
         }
     }

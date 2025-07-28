@@ -8,6 +8,7 @@ import { SettingsProfileActions } from '../../../../../../actions/settings/profi
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 
 @Component({
     selector: 'gst-template-a',
@@ -44,7 +45,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public activeCompany: any;
     /** Holds images folder path */
     public imgPath: string = "";
-
+    /** Holds the value if company is Indian */
+    public isIndianCompany: boolean = false;
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
@@ -54,6 +56,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
+        this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(a => {
             if (a && a.address) {

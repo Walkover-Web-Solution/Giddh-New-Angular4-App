@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -7,10 +7,10 @@ import { CompanyService } from "../../../services/company.service";
 import { ReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter, take } from "rxjs/operators";
+import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
-import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -19,21 +19,36 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
+import { DurationEnum } from '../../constants/reports.constant';
+import { cloneDeep } from '../../../lodash-optimized';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ReportsComponentStore } from '../reports.store';
+import { GroupBy } from '../../constants/reports.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
-    styleUrls: ['./report.details.component.scss']
+    styleUrls: ['./report.details.component.scss'],
+    providers: [ReportsComponentStore, SalesPersonComponentStore]
 })
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     public reportRespone: ReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeFinacialYr: ActiveFinancialYear;
     public salesRegisterTotal: ReportsModel = new ReportsModel();
     public monthNames = [];
-    public selectedType = 'monthly';
+    /** Selected duration type */
+    public selectedType: DurationEnum = DurationEnum.Monthly;
     private selectedMonth: string;
-    public dateRange: Date[];
     public dayjs = dayjs;
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
@@ -57,6 +72,70 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+    /**
+     * Configuration for table columns.
+     * 
+     * Each key represents a column, and its value is an array with the following structure:
+     * 
+     * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
+     * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
+     * [2] Give Class (string): This class is applied to the header, footer, and secondary header.
+     * [3] Clickable (boolean): Defines whether the column data is clickable (true) or static (false).
+     */
+    public columnDefinitions: Record<string, ColumnDefinition> = {
+        particular: ["app_particular", true, "", true],
+        sales: ["app_sales", true, "text-right"],
+        returns: ["app_return", false, "text-right"],
+        taxTotal: ["net_tax", false, "text-right"],
+        discountTotal: ["net_discount", false, "text-right"],
+        tcsTotal: ["net_tcs", false, "text-right"],
+        tdsTotal: ["net_tds", false, "text-right"],
+        netSales: ["net_sales", false, "text-right"],
+        cumulative: ["app_cumulative", false, "text-right"]
+    }
+    /** Constant for duration */
+    public durationEnum: typeof DurationEnum = DurationEnum;
+    /** Group by options */
+    public groupByOptions: IOption[] = [];
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** This will use for instance of sales person Dropdown */
+    public salesPerson: FormControl = new FormControl();
+    /** This will use for instance of account Dropdown */
+    public account: FormControl = new FormControl();
+    /** Filtered Sales Person List */
+    public filteredSalesPersonList: IOption[] = [];
+    /** Group by enum */
+    public groupByEnum: typeof GroupBy = GroupBy;
+    /** Date range */
+    public dateRange: { from: any, to: any } = { from: null, to: null }; 
+    /** Account search response */
+    public accountSearchResponse: any[] = [];
+    /** Account list */
+    public accountList$: Observable<any[]> = this.componentStore.accountList$;
+    /** Sales Register List */
+    public salesRegisterList$: Observable<any[]> = this.componentStore.salesPurchaseList$;
+    /** Holds report form */
+    public reportForm: FormGroup = new FormGroup({
+        groupBy: new FormControl<GroupBy>(GroupBy.Duration, Validators.required),
+        accountUniqueNames: new FormControl<string[]>([]),
+        salesPersonUniqueNames: new FormControl<string[]>([]),
+        interval: new FormControl<DurationEnum | null>(null)
+    });
+    /** Hold Bootstrap Modal Reference */
+    public modalRef: BsModalRef;
+    /** Holds selected date range */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(
         private router: Router,
@@ -68,7 +147,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
-        private ledgerService: LedgerService) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private ledgerService: LedgerService,
+        private dialog: MatDialog,
+        private componentStore: ReportsComponentStore,
+        private salesPersonStore: SalesPersonComponentStore,
+        private modalService: BsModalService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -77,6 +161,12 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -95,6 +185,15 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
+
+        this.salesRegisterList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.salesRegisterTotal = new ReportsModel();
+                this.salesRegisterTotal.particular = this.getCustomParticular();
+                this.reportRespone = this.filterReportResp(response);                
+            }
+        });
+
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -120,7 +219,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -139,6 +238,55 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
+            }
+        });
+
+        this.getSalesPersonList();
+        this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
+            this.filteredSalesPersonList = res as IOption[];
+        });
+
+        /** Search for sales person dropdown */
+        this.salesPerson.valueChanges.pipe(debounceTime(700),
+        takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+            if (!search) {
+                this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                    this.filteredSalesPersonList = res as IOption[];
+                });
+            } else {
+                this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                    this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                });
+            }
+        });
+        this.getAccounts();
+
+        /** Search for account dropdown */
+        this.account.valueChanges.pipe(debounceTime(700),
+        takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+            this.getAccounts(search ? search : '');
+        });
+
+        /** Handle group by change */
+        this.reportForm.get('groupBy')?.valueChanges.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((response) => {
+           if (response) {
+               this.reportForm?.get('groupBy')?.patchValue(response);
+               this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+               if (response === GroupBy.SalesPerson) {
+                   this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+                   this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+                   this.getSalesRegister(this.dateRange.from, this.dateRange.to);
+               } else {
+                   this.populateRecords(this.interval, this.selectedMonth);
+               }
+           }
+        });
+
+        /** Universal date */
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
     }
@@ -167,11 +315,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             reportsModel.to = item.to;
             reportsModel.interval = this.interval;
             reportsModel.selectedMonth = this.selectedMonth;
+            reportsModel.salesPerson = item.salesPerson;
 
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
-            if (dateDiff <= 8) {
+            if (item?.salesPerson?.name) {
+                this.setSalesRegisterTotal(item);
+                reportsModel.particular = item.salesPerson.name
+                reportModelArray.push(reportsModel);
+            } else if (dateDiff <= 8) {
                 this.setSalesRegisterTotal(item);
                 this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
                 reportsModel.particular = this.commonLocaleData?.app_week + '' + weekCount++;
@@ -223,15 +376,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
-        let currentTimeFilter = '';
+        let currentTimeFilter: DurationEnum = this.selectedType;
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
                 this.selectedType = params.interval;
                 this.interval = params.interval;
+                this.reportForm.get('interval').patchValue(params.interval);
                 this.selectedMonth = params.selectedMonth;
 
-                this.router.navigate(['pages' ,'reports', 'sales-register']);
+                this.router.navigate(['pages', 'reports', 'sales-register']);
             }
         });
 
@@ -239,7 +393,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
+            currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -259,14 +413,20 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
-                if (selectedFinancialYear) {
-                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
+                    this.activeFinacialYr = this.selectedCompany.financialYears[0];
+                    selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
-                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
-                this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
-                this.activeFinacialYr = activeFinancialYear;
+                if (selectedFinancialYear) {
+                    this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
+                }
+                this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
+                const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
+                this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
+                this.selectedType = currentTimeFilter || this.selectedType;
                 this.populateRecords(this.selectedType, this.selectedMonth);
-                this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                this.salesRegisterTotal.particular = this.getCustomParticular();
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -280,9 +440,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
     public populateRecords(interval, month?) {
         this.interval = interval;
+        this.reportForm.get('interval').patchValue(interval);
+        if (interval === this.durationEnum.Weekly && !month) {
+            this.populateRecords(this.durationEnum.Monthly);
+            return;
+        }
         if (this.activeFinacialYr) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
+            this.dateRange.from = dayjs(startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             if (month) {
                 this.selectedMonth = month;
                 let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
@@ -299,25 +466,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
             }
-
-            let request: ReportsRequestModel = {
-                to: endDate,
-                from: startDate,
-                interval: interval,
-                branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
-            }
-            this.companyService.getSalesRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res?.status === 'error') {
-                    this._toaster.errorToast(res?.message);
-                } else {
-                    this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
-                    this.reportRespone = this.filterReportResp(res?.body);
-                }
-            });
+            this.getSalesRegister(startDate, endDate);
             this.savePreferences();
         }
     }
+
     public formatParticular(mdyTo, mdyFrom, index, monthNames) {
         return this.commonLocaleData?.app_quarter + ' ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
     }
@@ -327,7 +480,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             let request: ReportsRequestModel = {
                 to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
                 from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
-                interval: 'monthly',
+                interval: this.durationEnum.Monthly,
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
             this.companyService.getSalesRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -335,7 +488,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res?.message);
                 } else {
                     this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                    this.salesRegisterTotal.particular = this.getCustomParticular();
                     this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
@@ -413,6 +566,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.salesRegisterTotal.cumulative = (item.closingBalance.type === "DEBIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
         this.salesRegisterTotal.interval = this.interval;
         this.salesRegisterTotal.selectedMonth = this.selectedMonth;
+        this.showColum(item);
     }
 
     /**
@@ -426,6 +580,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.setCurrentFY();
             this.getSelectedDuration();
+            this.groupByOptions = [
+                { label: this.commonLocaleData?.app_duration?.duration, value: GroupBy.Duration },
+                { label: this.commonLocaleData?.app_sales_person, value: GroupBy.SalesPerson }
+            ];
         }
     }
 
@@ -484,5 +642,168 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this._toaster.errorToast(response?.message);
             }
         });
+    }
+
+    /**
+     * Updates the visibility of table columns based on specific conditions.
+     * 
+     * @param {any} item - The transaction item.
+     * @memberof ReportsDetailsComponent
+     */
+    public showColum(item: any): void {
+        Object.keys(this.columnDefinitions).filter((key) => !['sales', 'particular'].includes(key)).forEach((key) => {
+            if (['tcsTotal', 'tdsTotal'].includes(key)) {
+                this.columnDefinitions[key][1] = this.isTcsTdsApplicable && this.salesRegisterTotal[key];
+            } else {
+                this.columnDefinitions[key][1] = !!this.salesRegisterTotal[key];
+            }
+        });
+        if (item?.salesPerson?.name) {
+            this.columnDefinitions['particular'][3] = false;
+            this.columnDefinitions['cumulative'][1] = true;
+        } else {
+            this.columnDefinitions['particular'][3] = true;
+        }
+    }
+
+    /**
+     * Navigates to the detailed sales report page with query parameters.
+     *
+     * @param {ReportsModel} item - The report item containing date ranges and filters.
+     * @memberof ReportsDetailsComponent
+     */
+    public goToDetailedSales(item: ReportsModel) {
+        let from = item.from;
+        let to = item.to;
+
+        if (from != null && to != null) {
+            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth } });
+        }
+    }
+
+     /**
+     * Open sales person dialog
+     *
+     * @memberof ReportsDetailsComponent
+     */
+     public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+     * Get accounts
+     *
+     * @param {string} search
+     * @memberof ReportsDetailsComponent
+     */
+    public getAccounts(search: string = ''): void {
+        const params = {
+            page: 1,
+            count: 200,
+            withStocks: false,
+            group: 'revenuefromoperations,otherincome',
+            q: search
+        };
+        this.componentStore.getAccounts(params);
+    }
+
+    /**
+    * To show the datepicker
+    *
+    * @param {*} element
+    * @memberof ReportsDetailsComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof ReportsDetailsComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+            this.getSalesRegister(
+                dayjs(value.startDate).format(GIDDH_DATE_FORMAT), 
+                dayjs(value.endDate).format(GIDDH_DATE_FORMAT)
+            );
+        }
+    }
+
+    /**
+     * Get sales register
+     *
+     * @param {string} from
+     * @param {string} to
+     * @memberof ReportsDetailsComponent
+     */
+    public getSalesRegister(
+        from: string = dayjs(this.dateRange?.from).format(GIDDH_DATE_FORMAT),
+        to: string = dayjs(this.dateRange?.to).format(GIDDH_DATE_FORMAT)
+    ): void {
+        if (!from || !to) {
+            return;
+        }
+        this.componentStore.getSalesPurchaseList({
+            payload: this.reportForm.value,
+            params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
+            isSalesRegister: true
+        });
+    }
+
+    /**
+     * Get custom particular
+     *
+     * @returns {string}
+     * @memberof ReportsDetailsComponent
+     */
+    public getCustomParticular(): string {
+        if (this.reportForm?.get('groupBy')?.value === GroupBy.Duration) {
+            return this.activeFinacialYr?.uniqueName;
+        } else {
+            const fromDate = dayjs(this.dateRange?.from, GIDDH_DATE_FORMAT);
+            const toDate = dayjs(this.dateRange?.to, GIDDH_DATE_FORMAT);
+            return `${fromDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}-${toDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}`;
+        }
     }
 }

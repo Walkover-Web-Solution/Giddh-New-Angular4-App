@@ -17,14 +17,23 @@ export interface TrialBalanceRequest {
     filename?: string;
     view?: string;
 }
+export interface ComparedProfitLossRequest {
+    compareType?: 'month' |'year' |'quarter' |'period';
+    compareValue?: number;
+}
 
-export interface ProfitLossRequest extends TrialBalanceRequest {
+export interface ProfitLossRequest extends TrialBalanceRequest, ComparedProfitLossRequest {
     fy?: number;
+    projectUniqueName?: string;
 }
 
 export class GetCogsRequest {
     public from: string;
     public to: string;
+}
+
+export class ProfitLossDateRangeResponse<T> {
+    [dateRange: string]: T;
 }
 
 export class GetCogsResponse {
@@ -66,6 +75,7 @@ export interface ProfitLossData {
     dates?: ProfitLossRequest;
     incomeStatement?: any;
     message?: string;
+    headers?: string[];
 }
 
 export interface AccountDetails {

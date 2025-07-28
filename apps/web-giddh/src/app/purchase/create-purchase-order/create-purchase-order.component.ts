@@ -2249,16 +2249,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         }
     }
 
-    /**
-     * This will close the tax popup
-     *
-     * @memberof CreatePurchaseOrderComponent
-     */
-    public closeTaxControlPopup(): void {
-        if (this.taxControlComponent) {
-            this.taxControlComponent.showTaxPopup = false;
-        }
-    }
 
     /**
      * This will open the account edit aside pan

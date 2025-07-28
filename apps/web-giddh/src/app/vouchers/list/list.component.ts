@@ -7,19 +7,18 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, skip, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { MULTI_CURRENCY_MODULES, VoucherTypeEnum } from "../utility/vouchers.const";
+import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
-import { saveAs } from 'file-saver';
 import { ToasterService } from "../../services/toaster.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
@@ -40,12 +39,20 @@ import { TemplateFroalaComponent } from '../../shared/template-froala/template-f
 import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 export interface VoucherBalances {
     grandTotal: Number;
     totalDue?: Number;
     advanceReceiptTotal?: Number;
     normalReceiptTotal?: Number;
+}
+
+/** Interface for report filter table column */
+interface IReportFilterTableColumn {
+    value: string;
+    label?: string;
+    checked: boolean;
 }
 
 @Component({
@@ -69,24 +76,16 @@ export interface VoucherBalances {
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
     public dataSource: any[] = [];
-    /** Holds Table Display columns for Sales Voucher */
-    public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
-    /** Holds Table Display columns for Estimate Voucher */
-    public displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
-    /** Holds Table Display columns for Proforma Voucher */
-    public displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
+    /** This will use for displayed table columns */
+    public displayedColumns: string[] = [];
     /** Holds Table Display columns for Pending Voucher */
     public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
-    /** Holds Table Display columns for Credit Voucher */
-    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'einvoicestatus', 'status'];
-    /** Holds Table Display columns for Purchase Order Voucher */
-    public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
-    /** Holds Table Display columns for Purchase Bill Voucher */
-    public displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
-    /** Holds Table Display columns for Receipt Voucher */
-    public displayedColumnReceipt: string[] = ['index', 'receipt', 'voucherDate', 'type', 'customer', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
-    /** Holds Table Display columns for Payment Voucher */
-    public displayedColumnPayment: string[] = ['index', 'payment', 'voucherDate', 'vendor', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
+    /** This will use for dynamic customise column check values */
+    public dynamicCustomColumns: IReportFilterTableColumn[] = [];
+    /** Enum for voucher report filter module */
+    public voucherReportFilterModuleEnum: typeof VoucherReportFilterModuleEnum = VoucherReportFilterModuleEnum;
+    /** Holds module type for voucher report filter  */
+    public moduleType: string;
 
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
@@ -134,6 +133,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
+    /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -146,7 +146,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Last vouchers get in progress Observable */
-    public getVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
+    public getVouchersInProgress$: Observable<boolean> = this.componentStore.getLastVouchersInProgress$;
     /** Holds invoice Selected Date range  */
     public invoiceSelectedDate: any = {
         fromDates: '',
@@ -174,6 +174,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** Holds advance Filters keys */
     public advanceFilters: any = {};
+    /** Holds Sort Key Map */
+    public sortKeyMap: object = {};
     /** Holds Advance Filters Applied Status */
     public advanceFiltersApplied: boolean = false;
     /** Holds Voucher Balances */
@@ -336,6 +338,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public isRouteApplied: boolean = false;
     /** Holds true if update setting mode */
     public isSettingUpdateMode: boolean = false;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Enum for estimate table columns */
+    public estimateTableColumnsEnum: typeof EstimateTableColumnsEnum = EstimateTableColumnsEnum;
+    /** Enum for proforma table columns */
+    public proformaTableColumnsEnum: typeof ProformaTableColumnsEnum = ProformaTableColumnsEnum;
+    /** Enum for sales table columns */
+    public salesTableColumnsEnum: typeof SalesTableColumnsEnum = SalesTableColumnsEnum;
+    /** Enum for Debit Note table columns */
+    public creditDebitNoteTableColumnsEnum: typeof CreditDebitNoteTableColumnsEnum = CreditDebitNoteTableColumnsEnum;
+    /** Enum for purchase order table columns */
+    public purchaseOrderTableColumnsEnum: typeof PurchaseOrderTableColumnsEnum = PurchaseOrderTableColumnsEnum;
+    /** Enum for purchase bill table columns */
+    public purchaseBillTableColumnsEnum: typeof PurchaseBillTableColumnsEnum = PurchaseBillTableColumnsEnum;
+    /** Enum for receipt table columns */
+    public receiptTableColumnsEnum: typeof ReceiptTableColumnsEnum = ReceiptTableColumnsEnum;
+    /** Enum for payment table columns */
+    public paymentTableColumnsEnum: typeof PaymentTableColumnsEnum = PaymentTableColumnsEnum;
+    /** True if columns loading */
+    public isColumnsLoading: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -384,6 +406,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
+            
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -397,6 +420,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
+        this.currentUrl = this.router.url;
         this.settingForm.get('invoiceSettings.autoPaid')?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -451,12 +475,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.isColumnsLoading = true;
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+
+                if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
+                    this.setModuleType();
+                }
+
+                if (this.activeModule === 'templates') {
+                    document.querySelector('body').classList.add('template-wrapper');
+                } else {
+                    document.querySelector('body').classList.remove('template-wrapper');
+                }
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
+                this.sortKeyMap = {};
                 this.setInitialAdvanceFilter(true);
                 if (this.settingResponse?.invoiceSettings) {
                     this.settingForm.patchValue({
@@ -486,12 +522,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                // 'pending', 'settings', 'templates' These tabs are not voucher list
-                let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
-                if (this.universalDate && !tab.includes(this.activeModule)) {
-                    this.getVouchers(true);
-                    this.getVoucherBalances();
-                }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
@@ -540,7 +570,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
         /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (localStorage.getItem('universalSelectedDate')) {
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
@@ -620,16 +650,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.handleGetAllVoucherResponse(response);
             });
-
-        this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                const blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`;
-                this.selectedVouchers = [];
-                this.allVouchersSelected = false;
-                return saveAs(blob, fileName);
-            }
-        });
 
         this.componentStore.eInvoiceGenerated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -919,6 +939,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
+            this.isColumnsLoading = false;
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -1281,9 +1302,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} selectedTabIndex
      * @memberof VoucherListComponent
      */
-    public tabChanged(selectedTabIndex: any): void {
-        this.selectedTabIndex = selectedTabIndex;
-        this.redirectToSelectedTab(selectedTabIndex);
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
+        this.redirectToSelectedTab(event.index);
     }
 
     /**
@@ -1332,7 +1353,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public sortChange(event: any): void {
-        this.advanceFilters.sort = event?.direction ? event?.direction : 'asc';
+        if (this.sortKeyMap?.[event?.active]) {
+            const sortValue = this.sortKeyMap?.[event?.active] === 'asc' ? 'desc' : 'asc';
+            this.advanceFilters.sort = sortValue;
+            this.sortKeyMap[event?.active] = sortValue;
+        } else {
+            this.advanceFilters.sort = event?.direction ?? 'asc';
+            this.sortKeyMap = {
+                ...this.sortKeyMap,
+                [event?.active]: event?.direction
+            };
+        }
         this.advanceFilters.sortBy = event?.active;
         this.advanceFilters.page = 1;
         this.advanceFiltersApplied = true;
@@ -1421,24 +1452,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-
-    /**
-     * Export CSV File and Download
-     *
-     * @return {*}  {*}
-     * @memberof VoucherListComponent
-     */
-    public exportCsvDownload(): any {
-        let exportCsvRequest = { from: '', to: '', dataToSend: null };
-        exportCsvRequest.from = this.advanceFilters.from;
-        exportCsvRequest.to = this.advanceFilters.to;
-        let dataTosend = { uniqueNames: [], type: this.voucherType };
-        if (this.selectedVouchers?.length) {
-            dataTosend.uniqueNames = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
-            exportCsvRequest.dataToSend = dataTosend;
-            this.componentStore.exportVouchers(exportCsvRequest);
-        }
-    }
 
     /**
      * Generate E-Invoice API Call
@@ -1538,6 +1551,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             localStorage.removeItem('universalSelectedDate');
             localStorage.removeItem('invoiceSelectedDate');
         }
+        document.querySelector('body').classList.remove('template-wrapper');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1561,15 +1575,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showBulkExportDialog(): void {
-        this.dialog.open(BulkExportComponent, {
-            width: '600px',
+        let voucherType = this.voucherType;
+        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+            voucherType = this.voucherType === VoucherTypeEnum.generateEstimate ? VoucherTypeEnum.estimate : VoucherTypeEnum.proforma;
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            voucherType = "purchase order";
+        }
+        const dialogRef = this.dialog.open(BulkExportComponent, {
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                voucherType: this.voucherType,
+                voucherType: voucherType,
                 advanceFilters: this.advanceFilters,
-                totalItems: this.selectedVouchers?.length || this.totalResults
+                totalItems: this.selectedVouchers?.length || this.totalResults,
+                allVouchersSelected: this.allVouchersSelected,
+                localeData: this.localeData
             },
+            maxHeight: '80vh',
             disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+            }
         });
     }
 
@@ -1698,19 +1727,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.poBulkAction('delete');
                     }
                 } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                    const voucher = this.selectedVouchers[0];
+                    const selectedVoucher = voucher ?? this.selectedVouchers[0];
                     const payload = {
-                        accountUniqueName: voucher.customerUniqueName
+                        accountUniqueName: selectedVoucher.customerUniqueName
                     }
                     if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-                        payload['estimateNumber'] = voucher?.estimateNumber;
+                        payload['estimateNumber'] = selectedVoucher?.estimateNumber;
                     } else {
-                        payload['proformaNumber'] = voucher?.proformaNumber;
+                        payload['proformaNumber'] = selectedVoucher?.proformaNumber;
                     }
                     this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
                     const payload = {
-                        voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                        voucherUniqueNames: voucher?.uniqueName ? [voucher.uniqueName] : this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
                         voucherType: this.voucherType
                     };
                     this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
@@ -2000,6 +2029,27 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handle Cancel Voucher Dialog
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
+    public openCancelVoucherDialog(voucher: any): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.cancel_voucher_confirmation_message, this.commonLocaleData)
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                this.actionVoucher(voucher, 'cancel');
+            }
+        });
+    }
+
+    /**
      * Handle Voucher Actions API Call
      *
      * @param {*} voucher
@@ -2007,7 +2057,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public actionVoucher(voucher: any, action: string): void {
-        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
+        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType }});
     }
 
     /**
@@ -2134,7 +2184,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const accountUniqueName = voucher?.account?.uniqueName;
 
         if (accountUniqueName && fromDate && toDate) {
-            const url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            let url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
+            url = url + `?redirectUrl=${this.currentUrl}`;
             this.openUrl(url);
         }
     }
@@ -2176,7 +2227,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private openUrl(url: string): void {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${url}`;
+            url = location.origin + location.pathname + `#.${url}`;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
@@ -2253,6 +2304,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
         this.activeSearchField = null;
+        this.sortKeyMap = {};
         if (!onlyResetValue) {
             this.getVouchers(false);
         }
@@ -2262,10 +2314,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * Callback for update account
      *
      * @param {UpdateAccountRequest} item
+     * @param {boolean} [usePatchApi=false]
      * @memberof VoucherCreateComponent
      */
-    public updateAccount(item: UpdateAccountRequest): void {
-        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    public updateAccount(item: UpdateAccountRequest, usePatchApi: boolean = false): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item, usePatchApi));
     }
 
     /**
@@ -2525,10 +2578,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const voucher = this.selectedPendingVouchers[0];
         const uniqueNames = this.selectedPendingVouchers.map(voucher => voucher.uniqueName).join(',');
         if (voucher) {
-            this.router.navigate(
-                [`/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create`],
-                { queryParams: { entryUniqueNames: uniqueNames, voucherType: this.voucherType } }
-            );
+            let url = `/pages/vouchers/${voucher.voucherType}/${voucher.account?.uniqueName}/create?entryUniqueNames=${uniqueNames}&voucherType=${this.voucherType}`;
+            this.openUrl(url);
         }
     }
 
@@ -2807,7 +2858,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *Deletes an email by email ID
+     * Deletes email ID
      *
      * @param {string} emailId
      * @return {*}
@@ -2816,16 +2867,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public deleteEmail(emailId: string) {
         if (!emailId) {
             return false;
-        } else {
-            if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                this.updateSettingsEmail(null);
-                return true;
-            } else {
-                let emailTodelete = cloneDeep(emailId);
-                emailTodelete = null;
-                this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+        } 
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.delete_email_confirmation_message, this.commonLocaleData)
             }
-        }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    this.updateSettingsEmail(null);
+                    return true;
+                } else {
+                    this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(null)); // send null to delete email
+                }
+            }
+        });
     }
 
     /**
@@ -3051,17 +3111,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(setting => {
                 if (setting && setting.invoiceSettings) {
                     this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
-                    if (!this.isEInvoiceEnabled) {
-                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
-                        this.displayedColumnsCredit = this.displayedColumnsCredit?.filter(column => column !== "einvoicestatus");
-                    } else {
-                        if (!this.displayedColumns?.includes("einvoicestatus")) {
-                            this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "einvoicestatus");
-                        }
-                        if (!this.displayedColumnsCredit?.includes("einvoicestatus")) {
-                            this.displayedColumnsCredit.splice(this.displayedColumnsCredit.length - 1, 0, "einvoicestatus");
-                        }
-                    }
+                    this.setEInvoiceColumns();
                     this.settingResponse = setting;
                     this.settingForm.patchValue({
                         purchaseBillSettings: setting.purchaseBillSettings || {},
@@ -3118,7 +3168,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
+   /**
      * Submits the form
      *
      * @return {*}  {void}
@@ -3176,13 +3226,109 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-   *This will be use for validation for delete email
-   *
-   * @return {*}  {boolean}
-   * @memberof VoucherListComponent
-   */
+     * This will be use for validation for delete email
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
     public shouldDeleteEmail(voucherType?: string): boolean {
-        const email = voucherType === 'invoice ' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
+        const email = voucherType === 'invoice' ? this.settingForm.get('invoiceSettings.email')?.value : this.settingForm.get('purchaseBillSettings.email')?.value;
         return email && email.length >= 4;
+    }
+
+    /**
+    * This will use for show hide main table headers from dynamic columns with new columns
+    *
+    * @param {*} event
+    * @memberof VoucherListComponent
+    */
+    public getCustomiseDynamicHeaderColumns(event: any): void {
+        if (!event || !Array.isArray(event)) {
+            return;
+        }
+        this.getVouchersInProgress$.pipe(filter(inProgress => !inProgress), take(1)).subscribe(() => {
+            this.isColumnsLoading = true;
+            this.dynamicCustomColumns = [];
+            this.displayedColumns = [];
+            this.dataSource = [];
+            this.dynamicCustomColumns = event as IReportFilterTableColumn[];
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item.value);
+            if (!this.displayedColumns.includes('index')) {
+                this.displayedColumns.unshift('index'); 
+            }
+            if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
+                this.displayedColumns.push('more_options');
+            } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
+                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
+            }
+            this.setEInvoiceColumns();
+            this.getVouchers(false);
+            this.getVoucherBalances();
+        });
+       setTimeout(() => {
+            this.isColumnsLoading = false;
+       }, 400);
+    }
+
+    /**
+     * This will set module type for voucher report filter
+     * 
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private setModuleType(): void {
+        switch(this.voucherType) {
+            case VoucherTypeEnum.sales:
+                this.moduleType = VoucherReportFilterModuleEnum.Sales;
+                break;
+            case VoucherTypeEnum.debitNote:
+                this.moduleType = VoucherReportFilterModuleEnum.DebitNote;
+                break;
+            case VoucherTypeEnum.creditNote:
+                this.moduleType = VoucherReportFilterModuleEnum.CreditNote;
+                break;
+            case VoucherTypeEnum.generateEstimate:
+                this.moduleType = VoucherReportFilterModuleEnum.Estimate;
+                break;
+            case VoucherTypeEnum.generateProforma:
+                this.moduleType = VoucherReportFilterModuleEnum.Proforma;
+                break;
+            case VoucherTypeEnum.purchase:
+                this.moduleType = VoucherReportFilterModuleEnum.Purchase;
+                break;
+            case VoucherTypeEnum.purchaseOrder:
+                this.moduleType = VoucherReportFilterModuleEnum.PurchaseOrder;
+                break;
+            case VoucherTypeEnum.receipt:
+                this.moduleType = VoucherReportFilterModuleEnum.Receipt;
+                break;
+            case VoucherTypeEnum.payment:
+                this.moduleType = VoucherReportFilterModuleEnum.Payment;
+                break;
+            default:
+                this.moduleType = '';
+                break;
+        }
+    }
+
+    /**
+     * This will use for show hide e-invoice status column
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private setEInvoiceColumns(): void {
+        if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.sales].includes(this.voucherType)) {
+            return;
+        }
+        if (!this.isEInvoiceEnabled) {
+            this.displayedColumns = this.displayedColumns?.filter(column => column !== "e_invoice_status");
+        } else {
+            if (!this.displayedColumns?.includes("e_invoice_status")) {
+                this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "e_invoice_status");
+            }
+        }
     }
 }

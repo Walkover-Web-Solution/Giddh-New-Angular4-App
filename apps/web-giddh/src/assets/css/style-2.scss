@@ -49,6 +49,9 @@ $custom-typography: mat-typography-config(
 @import "../css/global/vouchers-preview.scss";
 @import "../css/global/custom-paginator.scss";
 @import "../css/global/mat-chip.scss";
+@import "../css/global/select-multiple-fields.scss";
+@import "../css/global/override-material-theme-variables";
+@import "../css/global/tribute-js.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -798,6 +801,7 @@ textarea {
             }
         }
     }
+
     .second-header-border {
         th {
             border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
@@ -918,7 +922,7 @@ textarea {
     }
 }
 
-.voucher-preview-edit {
+.voucher-preview-edit, .giddh-mobile-wrapper {
     .flag-input {
         .mdc-floating-label {
             padding-left: 40px !important;
@@ -1126,7 +1130,7 @@ textarea {
     }
 
     .filter-dropdown-branch {
-        max-width: 350px;
+        max-width: 300px;
     }
 
     .branch-options {
@@ -1178,8 +1182,45 @@ textarea {
     .mat-mdc-table {
         .mdc-data-table__row {
             height: 70px !important;
+
             &:hover {
                 background-color: var(--color-body-background) !important;
+            }
+        }
+    }
+}
+
+.update-entry-transaction-date {
+    giddh-datepicker {
+        .mat-mdc-text-field-wrapper {
+            padding-left: 5px !important;
+        }
+
+        .mdc-text-field--disabled {
+            &.mdc-text-field--filled {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+
+        .readonly-field {
+            .mat-mdc-form-field {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+    }
+}
+
+.border-top {
+    border-top: 1px solid var(--color-common-secondary-border) !important;
+}
+
+body {
+    &.template-wrapper {
+        .invoice-list {
+            mat-tab-body {
+                &.mat-mdc-tab-body-active {
+                    z-index: unset !important;
+                }
             }
         }
     }
@@ -1571,7 +1612,7 @@ input {
 }
 
 .v-align-middle {
-    vertical-align: middle;
+    vertical-align: middle !important;
 }
 
 // Mat Divider
@@ -2347,6 +2388,14 @@ ul.sub-list {
 .text-gray {
     color: var(--color-gray);
 }
+// This color will same in all theme
+.text-static-white {
+    color: var(--color-white-tertiary) !important;
+}
+
+.text-saffron {
+    color: var(--color-deep-saffron) !important;
+}
 
 .advance-search .input-group-addon {
     border: 1px solid var(--color-primary-button-border);
@@ -2508,6 +2557,14 @@ modal-container.modal.fade.show {
 
 .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
     z-index: 999999 !important;
+}
+
+body {
+    &.datepicker-confirmation-open {
+        .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
+            z-index: 999 !important;
+        }
+    }
 }
 
 modal-container.modal {
@@ -2809,7 +2866,7 @@ modal-container.modal {
 
     &.custom-new-datepicker {
         input {
-            height: 48px;
+            height: var(--mat-form-field-height);
             border-radius: 0.5rem;
         }
 
@@ -3081,10 +3138,6 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 /*btn end*/
-.ledger-main .form-control {
-    background: var(--color-table-input-background) !important;
-}
-
 .ledger-header thead th {
     background: var(--color-white);
     border-right: 1px solid var(--color-iron);
@@ -3342,6 +3395,10 @@ input[type="checkbox"]:checked:after {
 
 .lh-0 {
     line-height: 0 !important;
+}
+
+.lh-1 {
+    line-height: 1 !important;
 }
 
 .btn-success-green {
@@ -3639,6 +3696,10 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-24) !important;
 }
 
+.icon-font-48 {
+    font-size: var(--font-size-48) !important;
+}
+
 .word-wrap {
     word-break: normal;
     white-space: nowrap;
@@ -3899,6 +3960,10 @@ input[type="number"]::-webkit-inner-spin-button {
     pointer-events: none !important;
 }
 
+.pointer-event-all {
+    pointer-events: all !important;
+}
+
 .cursor-default {
     cursor: default !important;
 }
@@ -4141,7 +4206,13 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .w125 {
-    width: 125px;
+    width: 125px !important;
+}
+.w150 {
+    width: 150px !important;
+}
+.w200 {
+    width: 200px !important;
 }
 
 .multi-select {
@@ -4304,7 +4375,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: var(--color-primary-header-background) !important;
-    color: var(--color-white);
+    color: var(--color-white-tertiary);
     border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
@@ -4729,7 +4800,7 @@ label {
     color: var(--dark-blue01) !important;
 }
 
-.calc-width {
+.adjusted-content-width {
     width: calc(100% - 112px) !important;
 }
 
@@ -5189,6 +5260,22 @@ label {
 
 .d-inline-block {
     display: inline-block !important;
+}
+
+.d-grid {
+    display: grid !important;
+}
+.grid-column-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-column-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.grid-column-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.grid-child-column-full {
+    grid-column: 1 / -1;
 }
 
 .on-hover {
@@ -6059,16 +6146,31 @@ input[type="checkbox"][disabled]:after {
     border-left: 6px solid var(--color-table-primary-header-bar-border);
 }
 
-.table-container .account {
-    background: var(--color-table-primary-footer);
+.table-container {
+    .account {
+        background: var(--color-table-primary-footer);
+        overflow: visible;
+        min-height: 38px;
+
+        .pl-sticky-group {
+            background: var(--color-table-primary-footer);
+        }
+    }
+}
+
+.pl-sticky-group {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    background: var(--color-body-background);
+    max-width: 300px !important;
+    min-width: 300px !important;
+    padding-block: 10px !important;
+    padding-left: 15px !important;
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
-}
-
-.table-container .profit-loss section div > div {
-    border-right: 0;
 }
 
 .active-toggle-btn {
@@ -6312,6 +6414,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin: 0 !important;
     min-width: auto !important;
     background: transparent !important;
+    height: auto;
 }
 
 /**new modal design**/
@@ -6916,6 +7019,7 @@ GST filing
         .gstr-3b-report {
             tr {
                 height: auto;
+
                 > th,
                 td {
                     border: 1px solid var(--color-table-primary-content-bar-border) !important;
@@ -7276,6 +7380,7 @@ perfect-scrollbar > .ps > .ps-overlay {
                         & > td:nth-child(1) {
                             padding-left: 50px !important;
                         }
+
                         & > td {
                             border: none !important;
                             background-color: var(--color-white) !important;
@@ -7715,6 +7820,14 @@ app-header {
     height: 100vh;
 }
 
+.widthVW-100 {
+    width: 100vw;
+}
+
+.place-content-center {
+    place-content: center !important;
+}
+
 /* my css */
 .new-ledger-text-right .input-wrapper .form-control {
     text-align: right !important;
@@ -7800,7 +7913,7 @@ app-header {
 
 #middleBody .horizontal-form,
 .view-forms .horizontal-form {
-    max-width: 660px;
+    max-width: var(--aside-pane-width) !important;
     width: 100%;
 }
 
@@ -9286,6 +9399,9 @@ input.checkbox-custom[type="checkbox"] {
 
 .select2-parent.select2-ledger .update-ledger-account input {
     padding-left: 4px !important;
+    text-overflow: ellipsis;
+    border: none;
+    min-width: 100%;
 }
 
 .select2-parent.select2-ledger .update-ledger-account sh-select .header.open input:placeholder-shown {
@@ -9672,6 +9788,10 @@ span#HW_badge_cont:nth-child(3) {
     flex-wrap: wrap;
 }
 
+.flex-no-wrap {
+    flex-wrap: nowrap !important;
+}
+
 /*flex css start*/
 .select-border-bottom {
     .form-control {
@@ -9904,7 +10024,7 @@ span#HW_badge_cont:nth-child(3) {
 .linked-entities {
     sh-select {
         .menu {
-          min-width: 300px;
+            min-width: 300px;
         }
     }
 
@@ -10090,12 +10210,6 @@ button#more-btn-inventory,
     max-height: 250px;
 }
 
-.transaction-list-sh-select input {
-    min-height: 49px;
-    height: 49px;
-    border: 0 none !important;
-}
-
 .inventory-dashboard .box {
     border: 1px solid var(--color-iron);
     border-radius: 2px;
@@ -10254,17 +10368,6 @@ giddh-datepicker {
                                     .entry-modal {
                                         .ledger-panel {
                                             z-index: 9;
-                                        }
-                                    }
-                                }
-                            }
-
-                            #ledger-transaction-left-list,
-                            #ledger-transaction-right-list {
-                                .transaction-list-sh-select {
-                                    sh-select-menu {
-                                        .menu {
-                                            z-index: 10;
                                         }
                                     }
                                 }
@@ -11492,7 +11595,6 @@ body {
         flex: 1;
         max-width: 100%;
         height: 50px !important;
-        left: 4px;
         min-height: auto !important;
 
         .menu-list {
@@ -11563,16 +11665,6 @@ body {
         display: inline-block;
         border: 0px;
         position: relative;
-    }
-
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        position: absolute;
-        width: 104%;
-        top: -50px;
-        padding-top: 5px !important;
-        margin: 0;
-        left: -16px;
-        right: 0;
     }
 
     .sub-filter-nav-band .nav-tabs {
@@ -12102,6 +12194,13 @@ body.prevent-body-scroll {
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
+body {
+    &.datepicker-confirmation-open {
+        .modal.fade.giddh-calendar.show {
+            z-index: 999;
+        }
+    }
+}
 
 *::-webkit-scrollbar {
     width: 6px;
@@ -12118,7 +12217,7 @@ body.prevent-body-scroll {
     min-height: 60px;
 }
 
-.delete-icon-opacity {
+.opacity-5 {
     opacity: 0.5;
 }
 
@@ -12178,7 +12277,6 @@ body.prevent-body-scroll {
     fill: var(--color-toast-primary-text);
 }
 
-.mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: var(--color-toast-primary-text) !important;
@@ -12785,7 +12883,7 @@ hamburger-menu {
             }
 
             .customise-width {
-                width: 33%;
+                width: 39%;
             }
 
             .customise-filter-button {
@@ -13116,7 +13214,7 @@ body.hide-scroll-body.master-page {
     color: var(--color-secondary-input-bar-border);
 }
 
-.mat-datepicker-input:disabled {
+.mat-datepicker:disabled {
     color: var(--color-primary-input-bar-text) !important;
     background-color: var(--color-primary-input-bar-background) !important;
 }
@@ -13132,8 +13230,8 @@ body.hide-scroll-body.master-page {
 }
 
 .ledger-main {
-    input {
-        &:disabled {
+    .readonly-field {
+        .mat-mdc-form-field {
             background-color: var(--color-white) !important;
         }
     }
@@ -13368,6 +13466,24 @@ voucher-component {
     color: var(--color-black);
 }
 
+.dropdown-bg {
+    background-color: var(--color-white);
+    width: 20px;
+    height: 20px;
+    z-index: 8;
+    right: 0;
+    top: 15px;
+    .arrow-dropdown {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--color-popup-list-input-text) !important;
+        top: 8px;
+        right: 4px;
+    }
+}
+
 .readonly-field {
     .dropdown-bg {
         display: none !important;
@@ -13378,7 +13494,15 @@ voucher-component {
     }
 
     .dropdown-bg {
-        background-color: transparent !important;
+        background-color: var(--color-transparent-background) !important;
+    }
+
+    .mdc-text-field__input {
+        background-color: var(--color-transparent-background) !important;
+    }
+
+    .mat-mdc-form-field input {
+        background-color: var(--color-transparent-background) !important;
     }
 }
 
@@ -13394,7 +13518,7 @@ voucher-component {
         font-size: var(--font-size-16) !important;
         font-family: var(--font-semibold) !important;
         color: var(--color-toast-primary-text) !important;
-        padding: 0;
+        padding: 0 15px 0 15px;
         line-height: 55px !important;
     }
 
@@ -13564,7 +13688,12 @@ aside-menu-product-service {
 }
 
 .mat-dialog-md {
-    width: 700px;
+    width: 760px;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
 }
 
 // material-pagination
@@ -13609,11 +13738,15 @@ aside-menu-product-service {
     }
 }
 
+.text-color-white {
+    color: var(--white-color) !important;
+}
+
 .text-underline {
-    text-decoration: underline;
+    text-decoration: underline !important;
 
     &:hover {
-        text-decoration: underline;
+        text-decoration: underline !important;
     }
 }
 
@@ -13664,7 +13797,7 @@ aside-menu-product-service {
 // This Class will use globllay for border like mat input field
 .mat-form-field-border {
     &.mat-form-field-height {
-        height: 48px !important;
+        height: var(--mat-form-field-height) !important;
     }
 
     border-radius: 4px !important;
@@ -13716,7 +13849,7 @@ aside-menu-product-service {
 }
 
 .text-black {
-    color: var(--color-common-primary-text);
+    color: var(--color-common-primary-text) !important;
 }
 
 .bg-grey {
@@ -13756,6 +13889,12 @@ import-wizard {
     }
 }
 
+.rotate-icon-130deg {
+    .mdc-button__label {
+        transform: rotate(130deg);
+    }
+}
+
 .z-index-0 {
     z-index: 0;
 }
@@ -13774,6 +13913,7 @@ import-wizard {
     background: var(--color-denary-button-background) !important;
     height: 38px;
     border-radius: 18px;
+
     &::placeholder {
         color: var(--color-denary-button-text) !important;
     }
@@ -13786,6 +13926,7 @@ import-wizard {
         font-size: 17px;
         transition: 0.5s all ease;
     }
+
     &:hover {
         .icon-download1 {
             visibility: visible;
@@ -13816,5 +13957,114 @@ mat-list {
 [mat-sort-header].cdk-program-focused {
     .mat-sort-header-container {
         border-bottom: none !important;
+    }
+}
+
+.mdc-text-field--disabled {
+    .mdc-text-field--filled {
+        background-color: var(--color-transparent-background) !important;
+    }
+}
+
+//Common class to make dialog background transparent add this in panel class
+.dialog-bg-transparent {
+    .mat-mdc-dialog-surface {
+        background-color: var(--color-transparent-background) !important;
+    }
+}
+
+.select-multiple-chiplist {
+    mat-chip-grid {
+        mat-chip-row {
+            &.mat-mdc-chip {
+                &:not(.mdc-evolution-chip--disabled) {
+                    --mdc-chip-elevated-container-color: var(--color-filter-background) !important;
+                    border: 1px solid var(--color-primary-button-border);
+
+                    .mdc-evolution-chip__text-label {
+                        --mdc-chip-label-text-color: var(--color-tab-secondary-text) !important;
+                    }
+
+                    .mdc-evolution-chip__icon--trailing {
+                        --mdc-chip-with-trailing-icon-trailing-icon-color: var(--color-tab-secondary-text) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mat-mdc-checkbox {
+    &.mat-mdc-checkbox-disabled {
+        label {
+            color: var(--color-common-primary-text) !important;
+        }
+    }
+}
+
+// For CompareWithDateRangePickerComponent
+.compare-with-menu {
+    .mdc-list-item__start {
+        margin-right: 0px !important;
+    }
+}
+
+/** Use this class on black color image (icon)
+ to  change color in dark theme **/
+.image-as-icon-color {
+    filter: var(--color-image-filter-quaternary);
+}
+
+.advance-filter-button {
+    .mdc-button__label {
+        color: var(--color-common-primary-text) !important;
+    }
+}
+
+.w150 {
+    width: 150px !important;
+}
+
+.bg-white {
+    background: var(--color-white) !important;
+}
+
+.template-froala-wrapper {
+    .balance-options {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+    }
+}
+
+/** In mobile number field if multiple flag are visible,
+ use this class to fix the issue */
+.show-single-flag {
+    .iti--allow-dropdown {
+        &:has(.iti--allow-dropdown) {
+            margin-bottom: 0;
+            > .iti__flag-container {
+                display: none;
+            }
+        }
     }
 }

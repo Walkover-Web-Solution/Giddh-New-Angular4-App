@@ -41,6 +41,7 @@
     "invalid_email": "Invalid Email Address.",
     "gmail_account_added": "Gmail account added successfully.",
     "e_invoice_authentication_label": "E-invoicing Authentication",
+    "generate_e_way_bill": "Generate E-way bill with creation of E-invoice",
     "e_invoice_username_label": "Username",
     "e_invoice_password_label": "Password",
     "e_invoice_gstin_label": "GSTIN",

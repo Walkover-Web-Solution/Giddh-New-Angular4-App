@@ -81,6 +81,7 @@
     "add_stock": "Add Stock",
     "upload": "Upload",
     "import_error": "Only PDF/CSV/EXCEL files are supported for Import",
+    "voucher_error": "Only CSV/EXCEL files are supported for Import",
     "import_success": "File has been uploaded successfully.",
     "import_page_heading": "Import Statement (PDF/CSV/EXCEL only)",
     "file": "File",
@@ -98,7 +99,6 @@
     "adjustment_amount_error": "Adjustment amount is more than receipts.",
     "voucher_no": "Voucher No.",
     "compound_total": "Compound Total",
-    "toedit_switch_branch": "To edit, switch \"Branch\"",
     "confirm_delete_entry": "Are you sure you want to delete this entry?",
     "multiple_stock_entry_error": "you can't add multiple stock entry",
     "invalid_account_transaction_error": "Please select a valid account in transaction",
@@ -212,5 +212,14 @@
     "select_variant": "Select Variant",
     "uncheck_auto_generate_tooltip_message": "You cannot uncheck the checkbox as \"Automatically generate voucher for the entries\" setting is enabled. If you wish to disable it, <a href='/pages/vouchers/preview/sales/settings?tabIndex=4' target='_blank'>click here</a> to go to Invoice > Settings page.",
     "convert_to_entries": "Convert to entries",
-    "convert_entries_message": "Are you sure you want to convert selected bank entries into Giddh entities?"
+    "connect_bank": "Connect Bank",
+    "re_connect_bank": "Re-connect Bank",
+    "convert_entries_message": "Are you sure you want to convert selected bank entries into Giddh entities?",
+    "no_transaction_found_message":"No transactions found. Please change the page to get transactions.",
+    "import_voucher_heading": "Import Voucher (CSV/EXCEL only)",
+    "select_statement": "Select Statement",
+    "import_voucher": "Import Voucher",
+    "import_bank_statement": "Import Bank Statement",
+    "opening_closing_balance_filter_message": "We do not show Opening and Closing balance when filters applied.",
+    "change_salesperson_confirmation": "Are you sure you want to change the salesperson on this entry?<br />This will also update the salesperson on the linked voucher."
 }

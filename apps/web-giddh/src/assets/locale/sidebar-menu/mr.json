@@ -118,6 +118,10 @@
                     "icon": "icon-reciept-new",
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/receipt/create"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -257,6 +261,10 @@
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
                     "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/payment/create"
+                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -644,6 +652,12 @@
                     "icon": "icon-balance-sheet-new"
                 }
             ]
+        },
+        {
+            "label": "AI OCR",
+            "link": "/pages/ai-ocr",
+            "icon": "icon-audit-log",
+            "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
         }
     ],
     "switch_branch": "स्विच शाखा",

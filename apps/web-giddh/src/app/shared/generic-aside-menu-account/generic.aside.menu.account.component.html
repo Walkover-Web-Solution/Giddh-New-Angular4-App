@@ -1,5 +1,5 @@
 <div
-    class="aside-pane"
+    class="aside-pane position-fixed"
     appTranslate
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
@@ -46,6 +46,7 @@
                     [showDeleteButton]="false"
                     [showBankDetail]="showBankDetail"
                     (submitClicked)="updateAccount($event)"
+                    (updateViaPatchApi)="updateAccount($event, true)"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-update-new-details>

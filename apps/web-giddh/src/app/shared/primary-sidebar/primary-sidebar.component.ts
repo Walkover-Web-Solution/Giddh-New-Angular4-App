@@ -3,14 +3,14 @@ import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@ang
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { slice } from '../../lodash-optimized';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
-import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
+import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
 import { DEFAULT_AC } from '../../models/default-menus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
@@ -38,6 +38,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the active ledger account details */
     public activeAccount$: Observable<AccountResponse>;
+    /** Stores the active ledger account details */
+    public activeAccount: AccountResponse;
     /** Stores the active company details */
     public selectedCompanyDetails: CompanyResponse;
     /** Current organization type */
@@ -101,6 +103,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Holds generic aside menu account dialog Ref */
     public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Hold previous url */
+    private previousUrl: string = "";
+    /** Holds active company unique name */
+    public ledgerAccount$: Observable<AccountResponse | AccountResponseV2>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -116,6 +124,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         public dialog: MatDialog,
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
+        this.ledgerAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
@@ -204,6 +213,19 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Get clean current url
+     *
+     * @private
+     * @return {*}  {string}
+     * @memberof PrimarySidebarComponent
+     */
+    private getCleanCurrentUrl(): string {
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['redirectUrl']; // remove redirectUrl param
+        return this.router.serializeUrl(urlTree);
+    }
+
+    /**
      * Initializes the component
      *
      * @memberof PrimarySidebarComponent
@@ -285,9 +307,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
+                this.previousUrl = this.currentUrl; // store old before updating
+                this.currentUrl = this.getCleanCurrentUrl(); // always clean
                 const queryParamsIndex = this.router.url?.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
-                    this.router.url.slice(0, queryParamsIndex);
+                this.router.url.slice(0, queryParamsIndex);
                 this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
@@ -323,6 +347,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.router.url.includes("/ledger")) {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if (account) {
+                    this.activeAccount = account;
+                }
                 if (account && !this.isItemAdded) {
                     this.isItemAdded = true;
                     // save data to db
@@ -330,6 +357,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     item.time = +new Date();
                     item.route = this.router.url;
                     item.parentGroups = account.parentGroups;
+                    item.uniqueName = account?.uniqueName;
+                    item.name = account.name;
+                    this.doEntryInDb('accounts', item);
+                }
+            });
+
+            this.ledgerAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
+                if (account && account.uniqueName === this.activeAccount?.uniqueName) {
+                    let item: any = {};
                     item.uniqueName = account?.uniqueName;
                     item.name = account.name;
                     this.doEntryInDb('accounts', item);
@@ -469,9 +505,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
-                if (!isCtrlClicked) {
-                    this.router.navigate([url]); // added link in routerLink
-                }
+                this.router.navigate([url], {
+                    queryParams: { redirectUrl: encodeURIComponent(this.previousUrl) }
+                });
             }
             // save data to db
             item.time = +new Date();

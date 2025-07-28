@@ -29,6 +29,7 @@
                     [formControl]="branchesDropdown"
                     [placeholderLabel]="localeData?.header?.select_branch"
                     class="mat-select-search-inventory"
+                    [clearSearchInput]="false"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
@@ -54,6 +55,7 @@
                     [formControl]="warehousesDropdown"
                     [placeholderLabel]="localeData?.header?.select_warehouse"
                     class="mat-select-search-inventory"
+                    [clearSearchInput]="false"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
@@ -194,7 +196,7 @@
                 (selectedDynamicColumns)="setDisplayDynamicColumns($event)"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                [iconClass]="'icon-options mr-2'"
+                [iconClass]="'icon-options'"
                 [cssClass]="'customise-filter-button'"
                 [buttonText]="localeData?.header?.customise"
                 class="customise-width"

@@ -2,17 +2,16 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, 
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
-import { GetCogsResponse, ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
+import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
 import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
-import { prepareProfitLossData } from '../../../store/tl-pl/tl-pl.reducer';
+import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
     selector: 'profit-loss',
@@ -64,8 +63,16 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('plGrid', { static: true }) public plGrid: ProfitLossGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReconcileOption: boolean;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private toaster: ToasterService, private componentStore: ProjectWiseAccountingComponentStore) {
+    constructor(
+        private store: Store<AppState>, 
+        public tlPlActions: TBPlBsActions, 
+        private cd: ChangeDetectorRef, 
+        private toaster: ToasterService, 
+        private componentStore: ProjectWiseAccountingComponentStore,
+        private tlPlService: TlPlService) {
         this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
@@ -77,6 +84,8 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(([storeResponse, profitAndLossResponse]) => {
                 if (storeResponse || profitAndLossResponse) {
+                    this.tlPlService.isReportTailed$.next(true);
+                    this.expandAll = false;
                     this.modifyResponse(storeResponse || profitAndLossResponse);
                 } else {
                     this.data = null;
@@ -91,10 +100,10 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof ProfitLossComponent
      */
     public modifyResponse(response: ProfitLossData): void {
-        let data = this.projectUniqueName ? prepareProfitLossData(cloneDeep(response)) as ProfitLossData : cloneDeep(response) as ProfitLossData;
+        let data = cloneDeep(response) as ProfitLossData;
         let cogs;
         if (data?.incomeStatement?.costOfGoodsSold) {
-            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as GetCogsResponse;
+            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;;
         } else {
             cogs = null;
         }
@@ -110,37 +119,49 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             cogsGrp.isVisible = true;
             cogsGrp.isIncludedInSearch = true;
             cogsGrp.isOpen = false;
-            cogsGrp.level1 = false;
+            cogsGrp.level1 = true;
             cogsGrp.uniqueName = 'cogs';
             cogsGrp.groupName = 'Less: Cost of Goods Sold';
-            cogsGrp.closingBalance = {
-                amount: cogs.cogs,
-                type: 'DEBIT'
-            };
+            cogsGrp.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                acc[key] = {
+                    amount: cogs[key].cogs,
+                    type: 'DEBIT'
+                };
+                return acc;
+            }, {});
             cogsGrp.accounts = [];
             cogsGrp.childGroups = [];
 
-            Object.keys(cogs)?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(f => {
-                let childGroup = new ChildGroup();
-                childGroup.isCreated = false;
-                childGroup.isVisible = false;
-                childGroup.isIncludedInSearch = true;
-                childGroup.isOpen = false;
-                childGroup.uniqueName = f;
-                childGroup.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
-                childGroup.category = f === 'income';
-                childGroup.closingBalance = {
-                    amount: cogs[f],
-                    type: 'CREDIT'
-                };
-                childGroup.accounts = [];
-                childGroup.childGroups = [];
-                if (['purchasesStockAmount', 'manufacturingExpenses'].includes(f)) {
-                    childGroup.groupName = `+ ${childGroup.groupName}`;
-                } else if (['closingInventory', 'debitNoteStockAmount'].includes(f)) {
-                    childGroup.groupName = `- ${childGroup.groupName}`;
+            Object.keys(cogs).forEach((cogsKey, i) => {
+                if (i === 0) {
+                    Object.keys(cogs[cogsKey])?.filter(data => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(data)).forEach(item => {
+                        let childGroup = new ChildGroup();
+                        childGroup.isCreated = false;
+                        childGroup.isSelfCreatedGroup = true;
+                        childGroup.isVisible = false;
+                        childGroup.isIncludedInSearch = true;
+                        childGroup.isOpen = false;
+                        childGroup.uniqueName = item;
+                        childGroup.groupName = (item) ? item?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
+                        childGroup.category = item === 'income';
+                        childGroup.closingBalance = Object.keys(cogs).reduce((acc, key) => {
+                            acc[key] = {
+                                amount: cogs[key][item],
+                                type: 'CREDIT'
+                            };
+                            return acc;
+                        }, {});
+                        childGroup.accounts = [];
+                        childGroup.childGroups = [];
+
+                        if (['purchasesStockAmount', 'manufacturingExpenses'].includes(item)) {
+                            childGroup.groupName = `+ ${childGroup.groupName}`;
+                        } else if (['closingInventory', 'debitNoteStockAmount'].includes(item)) {
+                            childGroup.groupName = `- ${childGroup.groupName}`;
+                        }
+                        cogsGrp.childGroups.push(childGroup);
+                    });
                 }
-                cogsGrp.childGroups.push(childGroup);
             });
 
             this.cogsData = cogsGrp;
@@ -179,12 +200,12 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
 
-        if (data?.incomeStatement?.grossProfit?.type === "DEBIT" && data.incomeStatement.grossProfit.amount) {
-            data.incomeStatement.grossProfit.amount = "-" + data.incomeStatement.grossProfit.amount;
+        if (data?.incomeStatement?.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]]?.type === "DEBIT" && data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount) {
+            data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount = "-" + data.incomeStatement.grossProfit[Object.keys(data.incomeStatement.grossProfit)[0]].amount;
         }
 
-        if (data?.incomeStatement?.operatingProfit?.type === "DEBIT" && data.incomeStatement.operatingProfit.amount) {
-            data.incomeStatement.operatingProfit.amount = "-" + data.incomeStatement.operatingProfit.amount;
+        if (data?.incomeStatement?.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]]?.type === "DEBIT" && data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount) {
+            data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount = "-" + data.incomeStatement.operatingProfit[Object.keys(data.incomeStatement.operatingProfit)[0]].amount;
         }
 
         this.data = data;
@@ -219,7 +240,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cd.detectChanges();
     }
 
-    public filterData(request: ProfitLossRequest) {
+    /**
+     * This function is used to filter the profit and loss report data based on the given request object.
+     * 
+     * @param request The request object to filter the data with.
+     * @memberof ProfitLossComponent
+     */
+    public filterData(request: ProfitLossRequest): void {
+        this.request = request;
         this.from = request.from;
         this.to = request.to;
         this.isDateSelected = request && request.selectedDateOption === '1';
@@ -236,7 +264,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 from: this.from,
                 to: this.to
             }
-            this.componentStore.getProjectProfitAndLoss(requestObject);
+            this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(requestObject)));
         } else {
             this.store.dispatch(this.tlPlActions.GetProfitLoss(cloneDeep(request)));
         }
@@ -273,5 +301,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
             this.expandAll = false;
         }
         this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof ProfitLossComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
     }
 }

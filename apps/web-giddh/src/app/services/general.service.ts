@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -17,6 +17,10 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../shared/helpe
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { LedgerViewEnum } from '../models/api-models/Ledger';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
 @Injectable()
 export class GeneralService {
@@ -977,6 +981,21 @@ export class GeneralService {
     }
 
     /**
+     * This will return the account archived options
+     *
+     * @param {any} commonLocaleData
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getAccountArchivedOptions(commonLocaleData: any): IOption[] {
+        return [
+            { label: commonLocaleData?.app_unarchived, value: AccountArchivedStatusEnum.UNARCHIVED },
+            { label: commonLocaleData?.app_archived, value: AccountArchivedStatusEnum.ARCHIVED },
+            { label: commonLocaleData?.app_both, value: AccountArchivedStatusEnum.BOTH }
+        ];
+    }
+
+    /**
      * Determines if an element is child element to another element
      *
      * @param {*} child Element received as child
@@ -1081,6 +1100,19 @@ export class GeneralService {
         return [
             { label: 'Default', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
+        ];
+    }
+
+    /**
+     * This will return available ledger view
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableLedgerView(): IOption[] {
+        return [
+            { label: 'T View', value: LedgerViewEnum.TView },
+            { label: 'Statement View', value: LedgerViewEnum.StatementView }
         ];
     }
 
@@ -1232,6 +1264,9 @@ export class GeneralService {
                 //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
                 taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
             }
+        } else if (mainTaxPercentage) {
+            // This is for advance receipt without other taxes
+            taxableValue = giddhRoundOff(totalAmount / (1 + (mainTaxPercentage / 100)));
         }
         return taxableValue;
     }
@@ -2033,7 +2068,7 @@ export class GeneralService {
         return window.open(
             url,
             title,
-            `width=${width},height=${height},top=${top},left=${left}`
+            `popup,width=${width},height=${height},top=${top},left=${left}`
         );
     }
 
@@ -2199,20 +2234,32 @@ export class GeneralService {
      *
      * @throws {Error} If there is an error parsing the white label data from the local storage.
      */
-    public getDecodedWhiteLabel(): any {
-        try {
-            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-            return whiteLabelData?.body || null;
-        } catch (error) {
-            console.error('Error parsing whiteLabel data from localStorage:', error);
-            return null;
-        }
+public getDecodedWhiteLabel(): any {
+    try {
+        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+        return whiteLabelData?.body || null;
+    } catch (error) {
+        console.error('Error parsing whiteLabel data from localStorage:', error);
+        return null;
     }
+}
 
     /**
-    * Replaces placeholders in a URL with corresponding values from a model object.
-     * @param url - The URL containing placeholders like`:key`.
-     * @param model - An object containing key - value pairs to replace in the URL.
+     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     *
+     * @param {string} text - The string containing placeholders.
+     * @param {string[]} args - The list of values to replace the placeholders.
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof GeneralService
+     */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+    
+    /**
+     * Replaces placeholders in a URL with corresponding values from a model object.
+     * @param url - The URL containing placeholders like `:key`.
+     * @param model - An object containing key-value pairs to replace in the URL.
      * @returns The formatted URL with placeholders replaced.
      * @memberof GeneralService
     */
@@ -2229,6 +2276,103 @@ export class GeneralService {
         }, url);
     }
 
+    /**
+     * Retrieves a list of available voucher types with localized labels.
+     *
+     * @param commonLocaleData 
+     * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
+     * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
+     * @memberof GeneralService
+     */
+    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = []): IOption[] {
+        const allVouchers = [{
+            label: commonLocaleData?.app_voucher_types.sales,
+            value: 'sales'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.purchase,
+            value: 'purchase'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.purchase_order,
+            value: 'purchase order'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.receipt,
+            value: 'receipt'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.payment,
+            value: 'payment'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.estimate,
+            value: 'estimate'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.proforma,
+            value: 'proforma'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.journal,
+            value: 'journal'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.contra,
+            value: 'contra'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.debit_note,
+            value: 'debit note'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.credit_note,
+            value: 'credit note'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.advance_receipt,
+            value: 'advance-receipt'
+        }];
 
+        return onlyVouchers.length > 0 ? allVouchers.filter(voucher => onlyVouchers.includes(voucher.value)) : allVouchers;
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @param {any} commonLocaleData
+     * @param {boolean} [isDaily=false]
+     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
+        let days = [
+            { label: commonLocaleData?.app_weekdays.sunday, value: WeekdaysEnum.SUNDAY },
+            { label: commonLocaleData?.app_weekdays.monday, value: WeekdaysEnum.MONDAY },
+            { label: commonLocaleData?.app_weekdays.tuesday, value: WeekdaysEnum.TUESDAY },
+            { label: commonLocaleData?.app_weekdays.wednesday, value: WeekdaysEnum.WEDNESDAY },
+            { label: commonLocaleData?.app_weekdays.thursday, value: WeekdaysEnum.THURSDAY },
+            { label: commonLocaleData?.app_weekdays.friday, value: WeekdaysEnum.FRIDAY },
+            { label: commonLocaleData?.app_weekdays.saturday, value: WeekdaysEnum.SATURDAY }
+        ];
+        if (isDaily) {
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: WeekdaysEnum.DAILY }, ...days];
+        }
+        return days.filter(day => !excludeDays.includes(day.value));
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDaysOfMonth(): IOption[] {
+        return Array.from({ length: 31 }, (_, i) => ({
+            label: (i + 1).toString(),
+            value: (i + 1).toString()
+        }));
+    }
 }
 

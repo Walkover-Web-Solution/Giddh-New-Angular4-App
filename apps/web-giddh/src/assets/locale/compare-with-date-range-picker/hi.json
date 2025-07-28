@@ -1,0 +1,16 @@
+{
+    "compare_with": "सादृश्य बनाएं",    
+    "none": "कोई नहीं",
+    "periods": "अवधि/अवधियां",
+    "enter_a_different_number": "अलग संख्या दर्ज करें",
+    "previous": "पिछला",
+    "compare_types": {
+        "month": "माह",
+        "quarter": "तिमाही",
+        "year": "वर्ष",
+        "period": "अवधि",
+        "custom_date_range": "विशेष तिथि अवधि"
+    },
+    "options_are_disabled_message": "विकल्प अक्षम हैं क्योंकि रिपोर्ट तिथि अवधि लंबी है।",
+    "up_to_36_periods_can_be_compared": "36 अवधि को सादृश्य बनाया जा सकता है"
+}

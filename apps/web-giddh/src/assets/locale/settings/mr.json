@@ -1,6 +1,9 @@
 {
 	"setting_taxes": "सेटिंग > कर",
-	"setting_integration": "सेटिंग > एकत्रीकरण",
+	"setting_integration": "सेटिंग > बँक एकत्रीकरण",
+    "setting_shopify_integration": "सेटिंग > Shopify एकत्रीकरण",
+    "setting_tally_integration": "सेटिंग > टॅली इंटिग्रेशन",
+    "setting_customer_portal_integration": "सेटिंग > ग्राहक पोर्टल",
 	"setting_linked_accounts": "सेटिंग > लिंक्ड खाती",
 	"setting_financial_year": "सेटिंग > आर्थिक वर्ष",
 	"setting_permission": "सेटिंग > परवानगी",

@@ -60,6 +60,11 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 import { MatIconModule } from '@angular/material/icon';
 import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/giddh-ledger-paginator.module';
+import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { CarouselComponent } from '../shared/carousel/carousel.component';
+import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
+import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -76,9 +81,11 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
     ],
     exports: [
         LedgerComponent,
-        LedgerAsidePaneComponent
+        LedgerAsidePaneComponent,
+        AdvanceSearchModelComponent,
+        AttachmentsModule
     ],
-    providers: [],
+    providers: [SalesPersonService],
     imports: [
         CommonModule,
         FormsModule,
@@ -98,7 +105,9 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         DecimalDigitsModule,
         ClickOutsideModule,
         SelectModule.forRoot(),
-        NgxMaskModule.forRoot(),
+        NgxMaskModule.forRoot({
+            validation: false
+        }),
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot(),
         AmountFieldComponentModule,
@@ -134,7 +143,11 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         FormFieldsModule,
         StockCreateEditModule,
         MatIconModule,
-        GiddhLedgerPaginatorModule
+        GiddhLedgerPaginatorModule,
+        CarouselComponent,
+        AsideMenuCreateTaxModule,
+        BankIntegrationModule,
+        AsideMenuAccountModule
     ]
 })
 export class LedgerModule {

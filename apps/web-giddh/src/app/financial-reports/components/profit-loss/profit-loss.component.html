@@ -17,17 +17,20 @@
         [plBsExportXLS]="projectUniqueName ? false : true"
         [showLabels]="true"
         [isProjectWiseAccounting]="projectUniqueName ? true : false"
+        (showReportTally)="showReconcileOption = $event"
     ></financial-filter>
     <div *ngIf="(showLoader | async) || (isFetchingProfitAndLoss$ | async)">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <div *ngIf="!(showLoader | async) && !(isFetchingProfitAndLoss$ | async) && data">
         <profit-loss-grid
+            [ngClass]="{ 'show-tailed-checkbox': showReconcileOption }"
             #plGrid
             [search]="search"
             [from]="from"
             [to]="to"
             (searchChange)="searchChanged($event)"
+            (refresh)="handleRefresh()"
             [expandAll]="expandAll"
             [plData]="data"
             [cogsData]="cogsData"

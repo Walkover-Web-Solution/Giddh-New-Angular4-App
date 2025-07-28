@@ -1,4 +1,5 @@
 export const GIDDH_DATE_FORMAT = 'DD-MM-YYYY';
+export const GIDDH_DATE_FORMAT_DD_MMMM_YYYY = 'DD MMMM YYYY';
 export const GIDDH_DATE_FORMAT_MM_DD_YYYY = 'MM-DD-YYYY';
 export const GIDDH_DATE_FORMAT_YYYY_MM_DD = 'YYYY-MM-DD';
 export const GIDDH_DATE_FORMAT_DD_MM_YYYY = 'DD/MM/YYYY';
@@ -8,3 +9,4 @@ export const GIDDH_EMAIL_REGEX = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'
 export const GIDDH_DATE_FORMAT_TIME = "dd-MM-YYYY, hh:mm aa";
 export const GIDDH_DATE_FORMAT_MONTH_YEAR = 'MMMM YYYY';
 export const GIDDH_DATE_FORMAT_WITH_SPACE = 'DD MMM YYYY';
+export const GIDDH_DATE_FORMAT_MMM_YYYY = 'MMMYYYY';

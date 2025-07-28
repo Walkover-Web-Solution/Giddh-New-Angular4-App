@@ -1,4 +1,4 @@
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
@@ -43,8 +43,15 @@ export class SalesActions {
             ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.accountRequest, action.payload.activeGroupUniqueName)),
             map(response => {
+                if (response.request.portalDomain) {
+                    this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                        if (data?.status === 'error') {
+                            this._toasty.errorToast(data.message, data.code);
+                        }
+                    });
+                }
                 return this.addAccountDetailsForSalesResponse(response);
-            })));
+            })));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
     public CreateAccountResponseDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -65,7 +72,10 @@ export class SalesActions {
     public UpdateAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS),
-            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload?.value)),
+            switchMap((action: CustomActions) => 
+                action.payload?.usePatchApi 
+                ? this._accountService.UpdateAccountWithoutGroupUniqueName(action.payload.accountRequest, action.payload?.value.accountUniqueName) 
+                : this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload?.value)),
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
@@ -139,10 +149,10 @@ export class SalesActions {
         };
     }
 
-    public updateAccountDetailsForSales(value: UpdateAccountRequest): CustomActions {
+    public updateAccountDetailsForSales(value: UpdateAccountRequest, usePatchApi: boolean = false): CustomActions {
         return {
             type: SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS,
-            payload: value
+            payload: {...value, usePatchApi},
         };
     }
 

@@ -1,12 +1,40 @@
-.section-head {
-    white-space: normal;
-    word-break: break-word;
+table {
+    &.financial-year {
+        border-block: 1px solid var(--color-table-primary-content-bar-border) !important;
+
+        tr {
+            th,
+            td {
+                width: unset !important;
+
+                $table-padding-inline: 15px;
+                &:first-child {
+                    padding-left: $table-padding-inline !important;
+                }
+                &:last-child {
+                    padding-right: $table-padding-inline !important;
+                }
+            }
+        }
+    }
 }
-.financial-year-field {
-    flex-direction: column;
+.select-financial-year {
+    width: 210px;
 }
-@media (max-width: 767px) {
-    .financial-year-field .btn {
-        margin-top: 10px;
+
+@media screen and (max-width: 992px) {
+    .financial-year-header {
+        .border-left {
+            border-left: unset !important;
+        }
+        .pd-l4 {
+            padding-left: unset !important;
+        }
+
+        > div {
+            > :first-child {
+                min-width: 210px !important;
+            }
+        }
     }
 }

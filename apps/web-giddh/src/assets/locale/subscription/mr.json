@@ -144,5 +144,12 @@
         "submit": "सादर करा",
         "cancel": "रद्द करा",
         "razorpay": "RAZORPAY",
-        "paypal": "PAYPAL"
+        "paypal": "PAYPAL",
+        "razorpay_error_message": "रेझरपे मध्ये एक त्रुटी आहे. कृपया सपोर्टशी संपर्क साधा.",
+        "payu": "PAYU",
+        "active": "सक्रिय",
+        "trial": "चाचणी",
+        "cancelled": "रद्द",
+        "expired": "कालबाह्य",
+        "select_status": "स्थिती निवडा"
 	}

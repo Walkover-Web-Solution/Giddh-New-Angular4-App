@@ -2,6 +2,7 @@ import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 export const Configuration = {
     'AppUrl': AppUrl,
@@ -604,7 +605,8 @@ export enum BootstrapToggleSwitch {
     Size = 'mini'
 }
 
-export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
+export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
+export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
@@ -639,3 +641,72 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 };
 /** Gst utility download portal link */
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
+
+/** Break Point Screen Size*/
+export const BREAKPOINT_SCREEN_SIZE = {
+    MEDIUM_DESKTOP_SCREEN_SIZE: '(1536px > width > 1366px)',
+    SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
+    TAB_SCREEN_SIZE: '(1024px > width)'
+}
+
+/** HTML tag name  */
+export enum HtmlElementEnum {
+    Input = 'INPUT',
+    Textarea = 'TEXTAREA',
+    Button = 'BUTTON'
+}
+
+/** List of all the keyboard keys */
+export const KeyCodesEnum = {
+    ENTER: 'Enter',
+    SPACE: 'Space',
+    BACKSPACE: 'Backspace',
+    ESC: 'Escape',
+    ARROW_DOWN: 'ArrowDown',
+    ARROW_UP: 'ArrowUp',
+    ARROW_RIGHT: 'ArrowRight',
+    ARROW_LEFT: 'ArrowLeft' 
+};
+
+/** List of all the HTTP methods */
+export enum HttpMethod {
+    POST = 'post',
+    GET = 'get',
+    PUT = 'put',
+    DELETE = 'delete',
+    PATCH = 'patch'
+}
+
+/** Type of all HTTP methods */
+export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
+
+/** Config for aside pane */
+export const ASIDE_PANE_CONFIG: MatDialogConfig = {
+    height: '100dvh',
+    width: 'var(--aside-pane-width)',
+    position: {
+        right: '0',
+        bottom: '0'
+    },
+    disableClose: true
+};
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
+};
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}

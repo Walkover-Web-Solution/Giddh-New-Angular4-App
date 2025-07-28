@@ -7,10 +7,35 @@
     [file]="'accounts'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <!-- start header -->
     <div class="modal-header d-flex flex-row-reverse" role="dialog" id="alb" aria-labelledby="masterdialog" #header>
-        <span class="d-flex">
+        <span class="d-flex align-items-center">
+            <!-- Dropdown for Archive Accounts Filter -->
+            <a
+                href="javascript:void(0);"
+                aria-label="add financial year"
+                class="d-block position-relative mr-r1 modal-title bg underline"
+                (click)="archivedDropdownIsOpen = true"
+                *ngIf="!archivedDropdownIsOpen; else archivedDropdown"
+            >
+                {{ selectedArchivedLabel ?? commonLocaleData?.app_account_status }}
+            </a>
+            <ng-template #archivedDropdown>
+                <select-field
+                    class="d-block position-relative mr-r1"
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="commonLocaleData?.app_account_status"
+                    [options]="archivedOptions"
+                    (selectedOption)="onArchivedFilterSelected($event)"
+                    [allowValueReset]="true"
+                    [defaultValue]="selectedArchivedLabel"
+                    (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"
+                    [openDropdown]="true"
+                    [showDropdownIcon]="true"
+                ></select-field>
+            </ng-template>
             <div class="pull-right mr-r1 search-bar-wrapper">
                 <div class="form-inline">
                     <div class="form-group search-bar">
@@ -100,7 +125,7 @@
                 </div>
             </div>
             <!-- middle body -->
-            <div class="form-box form-bg height-in-vh">
+            <div class="form-box height-in-vh">
                     <account-operations
                         [topSharedGroups]="topSharedGroups"
                         [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
@@ -110,6 +135,7 @@
                         [commonLocaleData]="commonLocaleData"
                         [isMasterOpen]="true"
                         [activeGroupUniqueName]="activeGroupUniqueName"
+                        (accountUpdated)="handleUpdateAccount()"
                         #form
                         *ngIf="localeData?.page_heading"
                     >

@@ -18,6 +18,7 @@ import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ServiceConfig } from './services/service.config';
+import { PageLeaveUtilityService } from './services/page-leave-utility.service';
 
 /**
  * App Component
@@ -56,7 +57,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private commonActions: CommonActions,
         public dialog: MatDialog,
         private modalService: BsModalService,
-        @Inject(ServiceConfig) private serviceConfig
+        @Inject(ServiceConfig) private serviceConfig,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -108,6 +110,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 'PRODUCTION_ENV': PRODUCTION_ENV,
                 'AppUrl': (this.serviceConfig.AppUrl || AppUrl),
                 'APP_FOLDER': APP_FOLDER
+            });
+            ipcRenderer.on('app-close-requested', () => {
+                this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                    if (confirmed) {
+                        ipcRenderer.send('force-close');
+                    }
+                });
             });
         }
 

@@ -395,6 +395,14 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
     border-radius: 3px;
 }
 
+:host ::ng-deep button {
+    &.btn-success {
+        .mdc-button__label {
+            color: var(--color-white);
+        }
+    }
+}
+
 .btn-primary {
     color: var(--color-white);
     background-color: var(--color-red);
@@ -496,11 +504,6 @@ dropdown-menu-right {
 .file-your-return {
     font-size: var(--font-size-16);
 }
-
-.authenticate-btn {
-    font-size: var(--font-size-15);
-}
-
 ul#dropdown-menu {
     top: 30px !important;
 }
@@ -617,5 +620,10 @@ ul#dropdown-menu {
             margin-bottom: 10px;
             padding-right: 0;
         }
+    }
+}
+@media screen and (max-width: 1200px) {
+    .list-inline {
+        width: 130px;
     }
 }

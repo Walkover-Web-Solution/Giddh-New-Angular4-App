@@ -367,5 +367,13 @@
     "show_narration_ledger": "लेजरला कथन दर्शवा",
     "enable_voucher_download": "व्हाउचर डाउनलोड सक्षम करा",
     "apply_purchase_round_off": "खरेदी व्हाउचरवर राउंड ऑफ लागू करा",
-    "generate_auto_purchase_number":"बिल आणि डेबिट नोटसाठी सिस्टम जनरेट केलेल्या नंबरला अनुमती द्या"
+    "generate_auto_purchase_number":"बिल आणि डेबिट नोटसाठी सिस्टम जनरेट केलेल्या नंबरला अनुमती द्या",
+    "new_receipt": "+ नवीन पावती",
+    "new_payment": "+ नवीन भरणा",
+    "cancel_voucher_confirmation_message": "तुम्हाला खात्री आहे की तुम्ही हा व्हाउचर रद्द करू इच्छिता?",
+    "delete_email_confirmation_message": "तुम्हाला खात्री आहे की तुम्ही हा ईमेल रद्द करू इच्छिता?",
+    "custom_field_1": "सानुकूल फील्ड 1",
+    "custom_field_2": "सानुकूल फील्ड 2",
+    "custom_field_3": "सानुकूल फील्ड 3",
+    "select_design_for": "डिझाइनसाठी निवडा"
 }
