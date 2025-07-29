@@ -1100,7 +1100,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public closeSalePersonPanel(): void {
         if (this.salesPersonDropdownRef) {
-            this.salesPersonDropdownRef?.closeDropdownPanel();
+            this.salesPersonDropdownRef.closeDropdownPanel();
         }
     }
 
@@ -1111,7 +1111,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public closeVoucherPanel(): void {
         if (this.voucherDropdownRef) {
-            this.voucherDropdownRef?.closeDropdownPanel();
+            this.voucherDropdownRef.closeDropdownPanel();
         }
     }
 
