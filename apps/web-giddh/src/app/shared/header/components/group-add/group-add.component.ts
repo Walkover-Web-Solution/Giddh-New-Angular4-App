@@ -38,7 +38,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _fb: FormBuilder,
+        private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private accountsAction: AccountsAction
@@ -56,8 +56,8 @@ export class GroupAddComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
         });
 
-        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
-            if (a && (a === 0 || a > 0) && !this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (amount && (amount === 0 || amount > 0) && !this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
                 this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
             }
         });
@@ -93,11 +93,11 @@ export class GroupAddComponent implements OnInit, OnDestroy {
      * @memberof GroupAddComponent
      */
     public initForm(): void {
-        this.groupDetailForm = this._fb.group({
+        this.groupDetailForm = this.formBuilder.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
             description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [0, digitsOnly],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
     }

@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'share-group-modal',
@@ -54,7 +54,14 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction, private router: Router, private settingsProfileActions: SettingsProfileActions) {
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private accountActions: AccountsAction,
+        private router: Router,
+        private settingsProfileActions: SettingsProfileActions,
+        private formBuilder: FormBuilder
+    ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
@@ -63,9 +70,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.shareGroupForm = new FormGroup({
-            email: new FormControl('', [Validators.required, Validators.email]),
-            permission: new FormControl('', [Validators.required])
+        this.shareGroupForm = this.formBuilder.group({
+            email: ['', [Validators.required, Validators.email]],
+            permission: ['', [Validators.required]]
         });
 
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
