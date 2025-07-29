@@ -32,7 +32,7 @@ export class SalesBifurcationDetailsService {
             ?.replace(':dataType', params?.dataType?.toString())
             ?.replace(':page', params?.page?.toString())
             ?.replace(':count', params?.count?.toString())
-            ?.replace(':q', params?.q?.toString())
+            ?.replace(':q', encodeURIComponent(params?.q || ''))
             ?.replace(':sort', params?.sort?.toString())
             ?.replace(':sortBy', params?.sortBy?.toString())
             ?.replace(':fromDate', params?.fromDate?.toString() ?? '')

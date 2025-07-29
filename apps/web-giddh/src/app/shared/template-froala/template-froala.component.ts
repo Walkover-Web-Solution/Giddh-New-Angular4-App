@@ -4,7 +4,7 @@ import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
