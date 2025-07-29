@@ -8,15 +8,14 @@
             <h3 class="pd-b1">{{ localeData?.share_with }}</h3>
             <!--share account from-->
             <form
-                name="shareGroupForm"
-                #shareAccountForm="ngForm"
+                [formGroup]="shareAccountForm"
                 novalidate
                 autocomplete="off"
             >
                 <div class="row pd-b2">
                     <div class="col-md-6">
                         <input-field
-                            [(ngModel)]="email"
+                            formControlName="email"
                             [placeholder]="commonLocaleData?.app_email_id"
                             [name]="'userEmail'"
                             [required]="true"
@@ -35,7 +34,9 @@
                             [name]="'selectedPermission'"
                             [required]="true"
                             [inputReadonly]="true"
-                            (selectedOption)="$event && selectedPermission = $event.value"
+                            formControlName="permission"
+                            [labelValue]="selectedPermission"
+                            (selectedOption)="$event && selectedPermission = $event.label"
                         >
                         </reactive-dropdown-field>
                     </div>
