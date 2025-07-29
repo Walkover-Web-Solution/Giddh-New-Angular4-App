@@ -14,7 +14,7 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'share-account-modal',
@@ -54,7 +54,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         private accountActions: AccountsAction,
         private router: Router,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private settingsProfileActions: SettingsProfileActions
+        private settingsProfileActions: SettingsProfileActions,
+        private formBuilder: FormBuilder
     ) {
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
@@ -64,9 +65,9 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.shareAccountForm = new FormGroup({
-            email: new FormControl('', [Validators.required, Validators.email]),
-            permission: new FormControl('', [Validators.required])
+        this.shareAccountForm = this.formBuilder.group({
+            email: ['', [Validators.required, Validators.email]],
+            permission: ['', [Validators.required]]
         });
 
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
