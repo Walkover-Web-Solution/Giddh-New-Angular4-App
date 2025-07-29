@@ -140,7 +140,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
             description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [0, digitsOnly],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
         this.moveGroupForm = this._fb.group({
