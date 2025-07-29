@@ -360,7 +360,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-                this.selectedWarehouse = String(this.defaultWarehouse);
+                if (!this.currentTxn?.duplicateEntry) {
+                    this.selectedWarehouse = String(this.defaultWarehouse);
+                }
             }
         });
 
@@ -416,7 +418,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.getAllDiscounts();
         this.getSalesPersonList();
         if (this.voucherApiVersion === 2) {
-            this.manualGenerateVoucherChecked = true;
+            if (this.currentTxn?.duplicateEntry) {
+                this.manualGenerateVoucherChecked = this.blankLedger.generateInvoice;
+            } else {
+                this.manualGenerateVoucherChecked = true;
+            }
         } else {
             this.manualGenerateVoucherChecked = false;
         }
@@ -495,6 +501,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn?.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
+            } else if (this.currentTxn?.duplicateEntry) {
+                this.selectedWarehouse = this.currentTxn.inventory?.warehouse?.uniqueName ?? this.blankLedger.transactions[0].inventory?.warehouse?.uniqueName;
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
@@ -530,9 +538,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
         }
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length && !this.currentTxn.duplicateEntry) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length) {
+        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length && !this.currentTxn.duplicateEntry) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
         } else {
             this.taxListForStock = [];
@@ -590,6 +598,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 10);
             }
         });
+        if (this.currentTxn?.duplicateEntry) {
+            document.getElementById("saveLedger")?.focus();
+        }
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -612,7 +623,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discount = event.discountTotal;
         }
         const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (matchedUnit?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
+        if (matchedUnit?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length && !this.currentTxn?.duplicateEntry) {
             if (!this.currentTxn.isMrpDiscountApplied) {
                 this.currentTxn.discounts = this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
@@ -684,8 +695,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.totalForTax = total;
                     const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
                     const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
-                    this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((total + (isNaN(taxApplied) ? 0 : taxApplied)), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + (isNaN(convertedTaxApplied) ? 0 : convertedTaxApplied)), this.giddhBalanceDecimalPlaces);
                 }
             } else {
                 // Amount is zero, set other parameters to zero
@@ -1796,7 +1807,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public preparePreAppliedDiscounts(): void {
         const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (matchedUnit?.length) {
+        if (matchedUnit?.length && !this.currentTxn?.duplicateEntry) {
             if (!this.currentTxn.isMrpDiscountApplied) {
                 this.currentTxn.discounts = this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
@@ -1844,7 +1855,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         return item;
                     });
                 });
-            } else {
+            } else if (!this.currentTxn?.duplicateEntry){
                 this.currentTxn?.discounts?.map(item => {
                     item.isActive = false;
                     return item;
@@ -2266,6 +2277,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.transactions[this.blankLedgerIndex].creditAmount = this.currentTxn.amount;
             }
         }
+    }
+
+    /**
+     * Returns the voucher label based on the voucher type
+     *
+     * @param {IOption[]} voucherTypeList
+     * @returns {string}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getVoucherLabel(voucherTypeList: IOption[]): string {
+        return voucherTypeList.find(item => item.value === this.blankLedger.voucherType)?.label || '';
     }
 
     /**
