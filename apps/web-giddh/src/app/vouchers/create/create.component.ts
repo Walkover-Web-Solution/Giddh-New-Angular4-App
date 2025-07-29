@@ -3527,12 +3527,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
             this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-
-            if (this.invoiceForm.get("isRcmEntry")?.value) {
-                this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-            } else {
-                this.invoiceForm.get("subVoucher")?.patchValue("");
-            }
+            this.checkRcm();
         }
     }
 
@@ -4598,6 +4593,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Checks RCM
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public checkRcm(): void {
+        if (this.invoiceForm.get("isRcmEntry")?.value) {
+            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+        } else {
+            this.invoiceForm.get("subVoucher")?.patchValue("");
+        }
+    }
+
+    /**
      * Saves voucher
      *
      * @param {Function} [callback]
@@ -4608,7 +4616,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const entries = this.getEntries();
         const deposits = this.getDeposits();
-
+        this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
 
         invoiceForm.entries = entries;
