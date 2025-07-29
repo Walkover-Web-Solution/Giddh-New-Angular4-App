@@ -64,6 +64,13 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public exportTypeEnum = ExportTypeEnum;
     /** Holds the vouchers only support excel export */
     public vouchersOnlySupportExcelExport: string[] = [VoucherTypeEnum.estimate, VoucherTypeEnum.proforma, 'purchase order'];
+    /** Tribute config */
+    public tributeConfig: any = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+        requireLeadingSpace: false
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,

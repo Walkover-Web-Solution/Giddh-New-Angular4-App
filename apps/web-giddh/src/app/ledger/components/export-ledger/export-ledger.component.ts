@@ -114,6 +114,13 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public fileFormatPrefix: string = "AS";
     /* Will check if form is valid */
     public isValidForm: boolean = true;
+    /** Tribute config */
+    public tributeConfig: any = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+        requireLeadingSpace: false
+    };
 
     constructor(
         private ledgerService: LedgerService,
