@@ -1688,8 +1688,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         }
     }
-        
-    
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
@@ -4069,11 +4067,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }, 200);
     }
 
+    /**
+     * Handle load details for duplicate entry
+     * 
+     * @param event The event object
+     * @param txn The transaction object
+     * @memberof LedgerComponent
+     */
     private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
         txn.showTaxationDiscountBox = false;
         // Take taxes of parent group and stock's own taxes
         if (txn?.taxesVm?.length) {
-            txn?.taxesVm.forEach(tax => {
+            txn.taxesVm.forEach(tax => {
                 tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
                 tax.isDisabled = false;
             });
