@@ -418,7 +418,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.getAllDiscounts();
         this.getSalesPersonList();
         if (this.voucherApiVersion === 2) {
-            if (this.blankLedger.transactions?.[0]?.duplicateEntry) {
+            if (this.currentTxn?.duplicateEntry) {
                 this.manualGenerateVoucherChecked = this.blankLedger.generateInvoice;
             } else {
                 this.manualGenerateVoucherChecked = true;
@@ -598,7 +598,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 10);
             }
         });
-        document.getElementById("saveLedger")?.focus();
+        if (this.currentTxn?.duplicateEntry) {
+            document.getElementById("saveLedger")?.focus();
+        }
     }
 
     public addToDrOrCr(type: string, e: Event) {
