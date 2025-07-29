@@ -1078,7 +1078,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.closeAddTagDropdown();
         this.closeTaxDropdown();
         this.closeDiscountDropdown();
-        this.closeSalePersonPanel();
+        this.closeSalesPersonDropdown();
         this.closeVoucherPanel();
         this.closeOtherDialogMenu.emit(true);
     }
@@ -1099,7 +1099,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public closeSalePersonPanel(): void {
+    public closeSalesPersonDropdown(): void {
         if (this.salesPersonDropdownRef) {
             this.salesPersonDropdownRef.closeDropdownPanel();
         }
