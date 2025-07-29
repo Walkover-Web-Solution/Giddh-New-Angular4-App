@@ -151,7 +151,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.discountGroupForm = this._fb.group({
-            discounts: ['']
+            discounts: [[], Validators.required]
         });
 
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {

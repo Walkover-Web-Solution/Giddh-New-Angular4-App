@@ -101,6 +101,7 @@
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
                 (click)="openDeleteGroupDialog()"
                 aria-label="delete"
+                type="button"
             >
                 {{ commonLocaleData?.app_delete }}
             </button>
@@ -306,7 +307,7 @@
     <confirm-modal
         [title]="localeData?.delete_group_title"
         [body]="localeData?.delete_group_content"
-        (cancelCallBack)="hideDeleteGroupModal()"
+        (cancelCallBack)="closeDeleteGroupDialog()"
         (successCallBack)="deleteGroup()"
     >
     </confirm-modal>

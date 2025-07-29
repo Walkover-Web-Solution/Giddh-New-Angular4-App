@@ -14,6 +14,7 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'share-account-modal',
@@ -32,8 +33,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     public restrictedModules: any = RestrictedModules;
     /** True if user module is restricted */
     public isUserRestricted: boolean = false;
-    public email: string;
-    public selectedPermission: string;
+    /** Selected permission */
+    public selectedPermission: string = "";
     public activeAccount$: Observable<AccountResponseV2>;
     public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
     public allPermissions$: Observable<GetAllPermissionResponse[]>;
@@ -42,23 +43,52 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     @Output() public closeShareAccountModal: EventEmitter<any> = new EventEmitter();
     /** All permissions role options */
     public allPermissions: IOption[] = [];
-
+    /** Form group for share account */
+    public shareAccountForm: FormGroup;
+    /** Observable to observe create new permission is successfull */
+    public createPermissionSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private accountActions: AccountsAction, private router: Router, private groupWithAccountsAction: GroupWithAccountsAction, private settingsProfileActions: SettingsProfileActions) {
+    constructor(
+        private store: Store<AppState>,
+        private accountActions: AccountsAction,
+        private router: Router,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private settingsProfileActions: SettingsProfileActions
+    ) {
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
+        this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.shareAccountForm = new FormGroup({
+            email: new FormControl('', [Validators.required, Validators.email]),
+            permission: new FormControl('', [Validators.required])
+        });
+
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                 const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
                 this.isUserRestricted = !module?.remainingUsers;
+            }
+        });
+
+        this.activeAccountSharedWith$.pipe(takeUntil(this.destroyed$)).subscribe((sharedWith) => {
+            if (sharedWith) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            }
+        });
+
+        this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((permissionSuccess) => {
+            if (permissionSuccess) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                this.selectedPermission = "";
+                this.shareAccountForm.reset();
             }
         });
 
@@ -97,24 +127,16 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     public async shareAccount() {
         let activeAccount = await this.activeAccount$.pipe(first()).toPromise();
         let userRole = {
-            emailId: this.email,
+            emailId: this.shareAccountForm.get('email')?.value,
             entity: 'account',
             entityUniqueName: activeAccount?.uniqueName,
         };
-        let selectedPermission = clone(this.selectedPermission);
+        let selectedPermission = clone(this.shareAccountForm.get('permission')?.value);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
-        setTimeout(() => {
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        }, 500);
-        this.email = '';
-        this.selectedPermission = '';
     }
 
     public async unShareAccount(entryUniqueName: string, accountUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', accountUniqueName));
-        setTimeout(() => {
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        }, 500);
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
@@ -125,7 +147,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     }
 
     public closeModal() {
-        this.email = '';
+        this.shareAccountForm.reset();
         this.closeShareAccountModal.emit();
     }
 

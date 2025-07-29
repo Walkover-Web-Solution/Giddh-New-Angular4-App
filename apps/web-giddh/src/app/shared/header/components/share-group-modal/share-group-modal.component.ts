@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'share-group-modal',
@@ -26,8 +27,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public email: string;
-    public selectedPermission: string;
+    /** Selected permission */
+    public selectedPermission: string = "";
     public activeGroup$: Observable<GroupResponse>;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
@@ -43,6 +44,10 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public restrictedModules: any = RestrictedModules;
     /** All permissions role options */
     public allPermissions: IOption[] = [];
+    /** Observable to observe create new permission is successfull */
+    public createPermissionSuccess$: Observable<boolean>;
+    /** Form group for share group */
+    public shareGroupForm: FormGroup;
 
 
     @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
@@ -54,9 +59,15 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
+        this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.shareGroupForm = new FormGroup({
+            email: new FormControl('', [Validators.required, Validators.email]),
+            permission: new FormControl('', [Validators.required])
+        });
+
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -75,6 +86,20 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
                     label: permission.name,
                     value: permission.uniqueName
                 }));
+            }
+        });
+
+        this.activeGroupSharedWith$.pipe(takeUntil(this.destroyed$)).subscribe((sharedWith) => {
+            if (sharedWith) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            }
+        });
+
+        this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((permissionSuccess) => {
+            if (permissionSuccess) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                this.selectedPermission = "";
+                this.shareGroupForm.reset();
             }
         });
     }
@@ -104,24 +129,16 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public async shareGroup() {
         let activeGrp = await this.activeGroup$.pipe(first()).toPromise();
         let userRole = {
-            emailId: this.email,
+            emailId: this.shareGroupForm.get('email')?.value,
             entity: 'group',
             entityUniqueName: activeGrp?.uniqueName,
         };
-        let selectedPermission = clone(this.selectedPermission);
+        let selectedPermission = clone(this.shareGroupForm.get('permission')?.value);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
-        setTimeout(() => {
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        }, 500);
-        this.email = '';
-        this.selectedPermission = '';
     }
 
     public async unShareGroup(entryUniqueName: string, groupUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
-        setTimeout(() => {
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        }, 500);
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
@@ -132,7 +149,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     public closeModal() {
-        this.email = '';
+        this.shareGroupForm.reset();
         this.closeShareGroupModal.emit();
     }
 
