@@ -177,7 +177,10 @@
                         <th mat-header-cell *matHeaderCellDef width="20%" mat-sort-header>
                             {{ commonLocaleData?.app_amount }}
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+                        <td mat-cell *matCellDef="let element">
+                            <amount-field [amount]="element.amount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="invoiceDisplayedColumns; sticky: true"></tr>
                     <tr

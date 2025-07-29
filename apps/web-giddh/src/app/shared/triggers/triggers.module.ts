@@ -24,8 +24,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { SharedModule } from '../shared.module';
 import { MatCardModule } from '@angular/material/card';
-import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
 import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
+import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
 
 @NgModule({
   imports: [
@@ -51,8 +51,8 @@ import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.mod
         FormFieldsModule,
         SharedModule,
         MatCardModule,
-        FroalaTemplateEditorModule,
-        ReplaceAllPipeModule
+        ReplaceAllPipeModule,
+        FroalaTemplateEditorModule
     ],
     exports: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent],
     declarations: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent]
