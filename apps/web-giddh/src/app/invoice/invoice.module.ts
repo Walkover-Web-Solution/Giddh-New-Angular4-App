@@ -74,7 +74,6 @@ import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -85,6 +84,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 
 @NgModule({
