@@ -33,10 +33,9 @@
             </div>
         </div>
         <div class="row pd-b2">
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-sm-6">
                 <div
-                    class="input-group width-100"
-                    [ngClass]="{ 'clearfix': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
+                    [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                 >
                     <input-field
                         [type]="'number'"
@@ -51,7 +50,8 @@
                         [allowDigitsOnly]="true"
                     >
                     </input-field>
-                    <div
+                    <div class="d-flex">
+                        <div
                         class="input-group-addon d-flex align-item-center"
                         (click)="closingBalanceTypeChanged('DEBIT')"
                         [ngClass]="{
@@ -62,18 +62,19 @@
                         *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                     >
                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                    </div>
-                    <div
-                        class="input-group-addon only-right-radius d-flex align-item-center"
-                        (click)="closingBalanceTypeChanged('CREDIT')"
-                        [ngClass]="{
-                            'active-toggle-btn':
-                                groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                            'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
-                        }"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
-                    >
-                        {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                        </div>
+                        <div
+                            class="input-group-addon only-right-radius d-flex align-item-center"
+                            (click)="closingBalanceTypeChanged('CREDIT')"
+                            [ngClass]="{
+                                'active-toggle-btn':
+                                    groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                            }"
+                            *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
+                        >
+                            {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                        </div>
                     </div>
                 </div>
             </div>

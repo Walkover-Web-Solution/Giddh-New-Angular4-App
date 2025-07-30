@@ -158,6 +158,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
         });
 
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (amount && (amount === 0 || amount > 0) && !this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+                this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
+            }
+        });
+
         this.activeGroup$.subscribe((activeGroup) => {
             if (activeGroup) {
                 this.uniqueName = activeGroup.uniqueName;
