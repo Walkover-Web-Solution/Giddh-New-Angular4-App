@@ -169,6 +169,7 @@ export class LedgerVM {
         if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         }
+        delete requestObj['salesPersonName'];
         return requestObj;
     }
 

@@ -4,7 +4,7 @@ import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
@@ -14,7 +14,7 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 declare var tinymce: any;
@@ -306,7 +306,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 distinctUntilChanged()
             ).subscribe(triggerDetails => {
                 if (triggerDetails) {
-                    triggerDetails = { ...triggerDetails, ...triggerDetails?.emailTemplate };
+                    triggerDetails = {...triggerDetails, ...triggerDetails?.emailTemplate};
                     triggerDetails['conditions'] = triggerDetails?.conditionMap;
                     this.customTriggerForm.patchValue(triggerDetails, { emitEvent: false });
                     this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
@@ -751,10 +751,10 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 }
             });
         }
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-
+        
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -1003,7 +1003,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData, true, ['sunday']);
+            this.dayOfWeekOptions = this.generalService.getDayOfWeekOptions(this.commonLocaleData, true, [WeekdaysEnum.SUNDAY]);
             this.dayOfMonthOptions = this.generalService.getDaysOfMonth();
             this.triggerOptions = [
                 { label: this.localeData?.voucher_due, value: TriggerModuleEnum.VoucherDue }
@@ -1100,7 +1100,6 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,

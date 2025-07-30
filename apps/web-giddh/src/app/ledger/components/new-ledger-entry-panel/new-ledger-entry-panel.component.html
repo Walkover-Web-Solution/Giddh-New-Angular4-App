@@ -359,6 +359,8 @@
             <!-- Sales Person -->
             <div class="col-5 pr-0">
                 <reactive-dropdown-field 
+                    #salesPersonDropdownRef
+                    (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
                     [(ngModel)]="blankLedger.salesPersonUniqueName"
                     [labelValue]="blankLedger.salesPersonName || ''"
                     [name]="'sales-person'"
@@ -368,6 +370,7 @@
                     [showCreateNew]="true"
                     [createNewText]="commonLocaleData?.app_create_new"
                     (createOption)="openSalesPersonDialog()"
+                    (selectedOption)="blankLedger.salesPersonName = $event.label"
                 ></reactive-dropdown-field>
             </div>
             <div class="col-7">
@@ -464,6 +467,8 @@
                                     <td>
                                         <div class="form-group">
                                             <reactive-dropdown-field
+                                                #voucherDropdownRef
+                                                (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
                                                 id="ledger-voucher-type"
                                                 [name]="'variantDropdown'"
                                                 [label]="commonLocaleData?.app_voucher_type"

@@ -6,5 +6,7 @@
     "trigger_module": "ट्रिगर मॉड्यूल",
     "execution_time": "निष्पादन समय",
     "conditions": "शर्तें",
-    "disabled": "अक्षम"
+    "disabled": "अक्षम",
+    "due_by": "देय तिथि तक",
+    "due_amount": "देय राशि"
 }

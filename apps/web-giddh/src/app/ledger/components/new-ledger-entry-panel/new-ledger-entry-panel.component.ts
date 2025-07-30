@@ -46,6 +46,7 @@ import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.t
 import { CompanyActions } from '../../../actions/company.actions';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
+import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -139,6 +140,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     /** Holds select multiple fields component reference */
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
+    /** Holds sales person dropdown component reference */
+    @ViewChild('salesPersonDropdownRef', { static: false }) public salesPersonDropdownRef: ReactiveDropdownFieldComponent;
+    /** Holds voucher dropdown component reference */
+    @ViewChild('voucherDropdownRef', { static: false }) public voucherDropdownRef: ReactiveDropdownFieldComponent;
     /** Holds select tax control component reference */
     @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
@@ -418,7 +423,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.getAllDiscounts();
         this.getSalesPersonList();
         if (this.voucherApiVersion === 2) {
-            this.manualGenerateVoucherChecked = true;
+            if (this.currentTxn?.duplicateEntry) {
+                this.manualGenerateVoucherChecked = this.blankLedger.generateInvoice;
+            } else {
+                this.manualGenerateVoucherChecked = true;
+            }
         } else {
             this.manualGenerateVoucherChecked = false;
         }
@@ -594,7 +603,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 10);
             }
         });
-        document.getElementById("saveLedger")?.focus();
+        if (this.currentTxn?.duplicateEntry) {
+            document.getElementById("saveLedger")?.focus();
+        }
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -689,8 +700,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.totalForTax = total;
                     const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
                     const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
-                    this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((total + (isNaN(taxApplied) ? 0 : taxApplied)), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + (isNaN(convertedTaxApplied) ? 0 : convertedTaxApplied)), this.giddhBalanceDecimalPlaces);
                 }
             } else {
                 // Amount is zero, set other parameters to zero
@@ -1068,6 +1079,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.closeAddTagDropdown();
         this.closeTaxDropdown();
         this.closeDiscountDropdown();
+        this.closeSalesPersonDropdown();
+        this.closeVoucherPanel();
         this.closeOtherDialogMenu.emit(true);
     }
 
@@ -1079,6 +1092,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public closeAddTagDropdown(): void {
         if (this.selectMultipleFieldsRef) {
             this.selectMultipleFieldsRef?.closePanel();
+        }
+    }
+
+    /**
+     * Close sale person dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeSalesPersonDropdown(): void {
+        if (this.salesPersonDropdownRef) {
+            this.salesPersonDropdownRef.closeDropdownPanel();
+        }
+    }
+
+    /**
+     * Close voucher dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeVoucherPanel(): void {
+        if (this.voucherDropdownRef) {
+            this.voucherDropdownRef.closeDropdownPanel();
         }
     }
 

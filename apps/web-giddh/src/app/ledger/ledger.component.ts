@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap, filter as rxjsFilter } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -20,7 +20,7 @@ import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
 import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
@@ -1688,8 +1688,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         }
     }
-        
-    
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
@@ -1851,8 +1849,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public hideUpdateLedgerModal() {
-        this.updateLedgerModalDialogRef?.close();
+    /**
+     * Hide update ledger modal
+     *
+     * @param {any} event
+     * @memberof LedgerComponent
+     */
+    public hideUpdateLedgerModal(event: any): void {
+        this.updateLedgerModalDialogRef?.close(event);
     }
 
     /**
@@ -2120,17 +2124,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'update'
         })
 
-        this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+        this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             this.entryManipulated();
             if (this.isAdvanceSearchImplemented) {
                 this.createLedgerBalance();
             }
-            this.store.pipe(select(state => state.ledger.transactionDetails), take(1)).subscribe((res: LedgerResponse) => {
-                if (res) {
-                    this.prepareDuplicateTransaction(res);
-                    this.store.dispatch(this.ledgerActions.resetLedgerTrxDetails());
-                }
-            });
+
+            // For duplicate entry
+            if (response?.transactionDetails) {
+                this.prepareDuplicateTransaction(response?.transactionDetails);
+            }
         });
     }
 
@@ -3527,10 +3530,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (txn?.selectedAccount?.stock) {
                     const stock = txn?.inventory?.stock;
                     if (txn?.duplicateEntry) {
+                        const unitRate = stock.unitRates.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates[0];
                         const defaultUnit = {
-                            stockUnitCode: stock.unitRates[0].stockUnitCode,
-                            code: stock.unitRates[0].stockUnitCode,
-                            rate: stock.unitRates[0].rate,
+                            stockUnitCode: unitRate.stockUnitCode,
+                            code: unitRate.stockUnitCode,
+                            rate: unitRate.rate,
                             name: txn.selectedAccount.stock.name
                         };
                         txn.unitRate = stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
@@ -3538,7 +3542,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                         stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                         unitCode = defaultUnit.code;
-                        stockUnitUniqueName = stock.unitRates[0].stockUnitUniqueName;
+                        stockUnitUniqueName = unitRate.stockUnitUniqueName;
     
                         const hasMrpDiscount = stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
                         if (hasMrpDiscount?.length) {
@@ -3595,13 +3599,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
                 }
-
-                if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
-                    this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
-                    this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
-                } else {
-                    this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse?.salesPerson?.uniqueName || null;
-                    this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse?.salesPerson?.name || '';
+                if (!this.lc.blankLedger.transactions?.[0].duplicateEntry) {
+                    if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
+                        this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
+                        this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
+                    } else {
+                        this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse.salesPerson?.uniqueName || null;
+                        this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || '';
+                    }
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
@@ -3854,7 +3859,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private prepareDuplicateTransaction(res: any): void {
         if (!res) return;
         let isDebitTransaction: boolean;
-        const isJournalVoucher = res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher;
+        const isJournalVoucher = res?.voucher?.shortCode ? (res?.voucher?.shortCode === AdjustedVoucherType.Journal) : (res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher);
         const isActiveAccountAndParticularIsSame = res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName;
         const transaction: TransactionVM = new TransactionVM();
 
@@ -3872,7 +3877,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (item.isTax) {
+                if (item.isTax && res.transactions?.length !== 1) { // This temporary logic we will fix in future with journal entry
                     sumOfTax += item.amount;
                 }
             })
@@ -3900,7 +3905,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let selectedAccountUniqueName = "";
 
         if (isActiveAccountAndParticularIsSame) {
-            selectedAccountName = transactionsParticular?.name;
+            if (transactionsParticular?.stock) {
+                selectedAccountName = `${transactionsParticular?.name} (${transactionsParticular?.stock?.name})`;
+            } else {
+                selectedAccountName = transactionsParticular?.name;
+            }
             selectedAccountUniqueName = transactionsParticular?.uniqueName;
         } else {
             selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
@@ -4062,11 +4071,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }, 200);
     }
 
+    /**
+     * Handle load details for duplicate entry
+     * 
+     * @param event The event object
+     * @param txn The transaction object
+     * @memberof LedgerComponent
+     */
     private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
         txn.showTaxationDiscountBox = false;
         // Take taxes of parent group and stock's own taxes
         if (txn?.taxesVm?.length) {
-            txn?.taxesVm.forEach(tax => {
+            txn.taxesVm.forEach(tax => {
                 tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
                 tax.isDisabled = false;
             });

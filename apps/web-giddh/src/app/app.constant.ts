@@ -681,7 +681,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100dvh',
+    height: '100vh',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',
@@ -697,3 +697,15 @@ export const PaymentProvider = {
     PAYPAL: 'PAYPAL',
     PAYU: 'PAYU'
 };
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}

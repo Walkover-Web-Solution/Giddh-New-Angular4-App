@@ -34,7 +34,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     /** Holds advance Filters keys */
     public requestParams: any = {
         page: 1,
-        count: this.pageSizeOptions[0],
+        count: this.pageSizeOptions[2],
         value: '',
         type: '',
         dataType: '',
@@ -63,6 +63,10 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     public selectedItem: any;
     /** Holds Sales Bifurcation Details Action Enum */
     public salesBifurcationDetailsActionEnum: typeof SalesBifurcationDetailsActionEnum = SalesBifurcationDetailsActionEnum;
+    /** Sales Bifurcation Details Query Request */
+    public goToLedgerDateRangeFrom: any;
+    /** Sales Bifurcation Details Query Request */
+    public goToLedgerDateRangeTo: any;
 
 
     constructor(
@@ -78,6 +82,8 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      * @memberof SalesBifurcationDetailsComponent
      */
     public ngOnInit(): void {
+        this.goToLedgerDateRangeFrom = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.fromDate;
+        this.goToLedgerDateRangeTo = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.toDate;
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.requestParams.type = this.salesBifurcationDetailsData?.newVsOldInvoicesQueryRequest?.type;
         this.requestParams.dataType = this.salesBifurcationDetailsData?.subType;
@@ -158,6 +164,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.showClearFilter = false;
         this.requestParams.q = '';
         this.searchValue?.setValue(null);
+        this.initApiCall();
     }
 
     /**
@@ -214,7 +221,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         if (event) {
             this.requestParams.q = '';
             this.requestParams.page = 1;
-            this.requestParams.count = this.pageSizeOptions[3];
+            this.requestParams.count = this.pageSizeOptions[2];
             this.initApiCall();
         }
     }

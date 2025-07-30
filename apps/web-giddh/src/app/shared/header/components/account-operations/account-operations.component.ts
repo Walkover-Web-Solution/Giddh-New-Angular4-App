@@ -253,16 +253,19 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             enableFilterSelectAll: false
         };
 
-        this.activeAccount$.subscribe(a => {
-            if (a && a.parentGroups[0]?.uniqueName) {
-                let col = a.parentGroups[0]?.uniqueName;
+        this.activeAccount$.subscribe(account => {
+            if (account && account.parentGroups[0]?.uniqueName) {
+                let col = account.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
             }
 
-            if (a && this.breadcrumbUniquePath[1]) {
+            if (account && this.breadcrumbUniquePath[1]) {
                 this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
-                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0]?.uniqueName : undefined });
+                this.discountAccountForm?.patchValue({ discountUniqueName: account.discounts[0] ? account.discounts[0]?.uniqueName : undefined });
+            }
+            if(account) {
+                this.store.dispatch(this.accountsAction.sharedAccountWith(account.uniqueName));
             }
         });
         this.groupDetailForm = this._fb.group({
@@ -303,9 +306,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.activeGroup$.subscribe((a) => {
-            if (a) {
-                if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
+        this.activeGroup$.subscribe((group) => {
+            if (group) {
+                if (group.uniqueName === 'sundrycreditors' || group.uniqueName === 'sundrydebtors') {
                     this.showGroupLedgerExportButton$ = observableOf(true);
                     this.isDebtorCreditor = true;
                 } else {
@@ -333,6 +336,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                             this.showBankDetail = false;
                         }
                     }
+                }
+                if (group) {
+                    this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(group.uniqueName));
                 }
             }
         });
@@ -556,9 +562,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             panelClass: ['mat-dialog-md'],
             disableClose: true
         });
-        this.shareGroupRef.afterOpened().pipe(take(1)).subscribe(() => {
-            this.shareGroupModalComp.getGroupSharedWith();
-        });
     }
 
     /**
@@ -579,10 +582,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.shareAccountRef = this.dialog.open(this.shareAccountDialog, {
             panelClass: ['mat-dialog-md'],
             disableClose: true
-        });
-
-        this.shareAccountRef.afterOpened().pipe(take(1)).subscribe(() => {
-            this.shareAccountModalComp.getAccountSharedWith();
         });
     }
 

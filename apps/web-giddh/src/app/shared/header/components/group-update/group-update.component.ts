@@ -140,7 +140,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
             description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [0, digitsOnly],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
         this.moveGroupForm = this._fb.group({
@@ -151,11 +151,17 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.discountGroupForm = this._fb.group({
-            discounts: ['']
+            discounts: [[]]
         });
 
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
+        });
+
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+                this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
+            }
         });
 
         this.activeGroup$.subscribe((activeGroup) => {

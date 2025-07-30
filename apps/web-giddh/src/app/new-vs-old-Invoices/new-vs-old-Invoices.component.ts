@@ -14,6 +14,7 @@ import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
 import { ASIDE_PANE_CONFIG } from '../app.constant';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -61,7 +62,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private newVsOldInvoicesService: NewVsOldInvoicesService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private generalService: GeneralService
     ) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
     }
@@ -225,10 +227,13 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom: string): void {
+        const goToLedgerDateRange = this.generalService.getDateRange(this.NewVsOldInvoicesQueryRequest.type === 'quater' ? 'quarter' : 'month', this.NewVsOldInvoicesQueryRequest.value);
         const reportType = this.NewVsOldInvoicesQueryRequest.type == 'quater' ? 'quarter' : 'month';
         const reportReq = {
             type: reportType,
-            value: this.NewVsOldInvoicesQueryRequest.value
+            value: this.NewVsOldInvoicesQueryRequest.value,
+            fromDate: goToLedgerDateRange.fromDate,
+            toDate: goToLedgerDateRange.toDate
         }
         const data = {
             newVsOldInvoicesData,
