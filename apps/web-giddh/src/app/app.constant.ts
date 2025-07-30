@@ -710,3 +710,11 @@ export enum WeekdaysEnum {
     FRIDAY = 'friday',
     SATURDAY = 'saturday'
 }
+
+/** Get Bifurcation Type */
+export enum GetBifurcationType {
+    MONTH = 'month',
+    QUATER = 'quater',
+    QUARTER = 'quarter'
+}
+    
