@@ -11,6 +11,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
+
+
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
@@ -59,32 +61,34 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public syncWithTallyHelpDocUrl: string = "";
 
     constructor(
-        private _router: Router, private _generalService: GeneralService,
+        private router: Router,
+        private generalService: GeneralService,
         private store: Store<AppState>,
         @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
         private componentStore: OnboardingComponentStore
     ) {
-        const whiteLabel = this._generalService.getDecodedWhiteLabel();
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
         const whiteLabelDomain = `${whiteLabel?.giddhWhiteLabel?.domainName}/help/sync-with-tally-1591360375828781`;
-        this.syncWithTallyHelpDocUrl =  whiteLabelDomain ? whiteLabelDomain : SYNC_TALLY_HELP_DOC_URL;
+        this.syncWithTallyHelpDocUrl = whiteLabelDomain ? whiteLabelDomain : SYNC_TALLY_HELP_DOC_URL;
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.voucherApiVersion = this._generalService.voucherApiVersion;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
-                this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+                this.isGoCardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
 
@@ -100,7 +104,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        this._generalService.IAmLoaded.next(true);
+        this.generalService.IAmLoaded.next(true);
     }
 
     /**
@@ -134,12 +138,12 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectConfigureBank() {
         if (this.companyCountry) {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
-            this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
+            this.router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
 
 
         } else {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration'));
-            this._router.navigate(['pages/settings/integration'], { replaceUrl: true });
+            this.router.navigate(['pages/settings/integration'], { replaceUrl: true });
 
         }
     }
