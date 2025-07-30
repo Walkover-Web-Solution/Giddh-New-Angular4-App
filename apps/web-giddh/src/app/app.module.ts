@@ -40,6 +40,7 @@ import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
+console.log('whiteLabelString', whiteLabelString);
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
 
 // FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
@@ -104,13 +105,17 @@ if (whiteLabelConfig) {
 
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
+    if (whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId) {
+        whiteLabelConfig.body.razorpayPaymentDetails.keyId = 'rzp_live_hB6lP01KB6b0u1';
+        console.log('whiteLabelConfig', whiteLabelConfig);
+    }
     return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
             (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
             (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
+        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `https://books.giddh.com/` : Configuration.AppUrl,
+        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `https://books.giddh.com/` : Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
         OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
         OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
