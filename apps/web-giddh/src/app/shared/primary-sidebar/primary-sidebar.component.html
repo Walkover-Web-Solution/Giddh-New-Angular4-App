@@ -301,10 +301,8 @@
                                         <a 
                                             href="javascript:;" 
                                             aria-label="menu" 
-                                            [matTooltip]="node?.label" 
                                             (click)="toggleNode(node)" 
-                                            class="main-item" 
-                                            [class.active]="node?.isActive"
+                                            class="main-item"
                                         >
                                             <span class="item-label">
                                                 <i [ngClass]="node?.icon"></i>
@@ -318,9 +316,10 @@
                                 <!-- Child nodes (leaf nodes) -->
                                 <cdk-tree-node 
                                     *cdkTreeNodeDef="let node"
-                                    [style.display]="shouldRender(node) && isOpen ? 'flex' : 'none !important'"
+                                    [style.display]="shouldRender(node) && isSidebarExpanded ? 'flex' : 'none !important'"
                                     [style.padding-left.px]="node.level * 20"
                                     role="menu"
+                                    [ngClass]="{'active': isActiveRoute === node?.link && node?.additional?.queryParams?.tabIndex == queryParams}"
                                 >
                                     <!-- Parent menu without children -->
                                     <div class="main-item-wrapper" *ngIf="node?.link && node?.level === 0">
@@ -330,10 +329,6 @@
                                             [routerLink]="[node?.link]"
                                             [queryParams]="node?.additional?.queryParams"
                                             class="main-item"
-                                            routerLinkActive
-                                            #menu="routerLinkActive"
-                                            [routerLinkActiveOptions]="{ exact: true }"
-                                            [class.active]="menu.isActive"
                                         >
                                             <span class="item-label">
                                                 <i [ngClass]="node?.icon"></i>
@@ -359,15 +354,7 @@
                                         <div
                                             aria-label="menu"
                                             class="main-item"
-                                            [class.active]="
-                                                rla?.isActive ||
-                                                isRouteWithParamsActive(node?.link) ||
-                                                node?.additionalRoutes?.includes(isActiveRoute)
-                                            "
                                             [routerLink]="[node?.link]"
-                                            routerLinkActive
-                                            #rla="routerLinkActive"
-                                            [routerLinkActiveOptions]="{ exact: true }"
                                             [queryParams]="node?.additional?.queryParams"
                                         >
                                             <span class="item-label">
