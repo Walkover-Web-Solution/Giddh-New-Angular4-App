@@ -77,7 +77,7 @@
                                 <input
                                     matInput
                                     [(ngModel)]="selectedFormatList"
-                                    [placeholder]="'Write a file name and use { to mention variable...'"
+                                    [placeholder]="localeData?.variable_search_hint"
                                     class="form-control radius-none border-0 border-bottom"
                                     name="formatList"
                                     (ngModelChange)="getFileFormat()"
