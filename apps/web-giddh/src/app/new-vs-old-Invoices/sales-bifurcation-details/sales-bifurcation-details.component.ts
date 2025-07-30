@@ -191,11 +191,12 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         transaction['voucherNumber'] = transaction?.invoiceNumber;
         transaction['salesBifurcation'] = true;
         this.selectedItem = transaction;
-
+        
         let dialogRef = this.dialog.open(templateRef, {
-            panelClass: ['mat-dialog-md'],
+            width: '70%',
+            height: '790px',
             role: 'alertdialog',
-            ariaLabel: 'sales-bifurcation-details'
+            ariaLabel: 'template'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(() => {

@@ -212,17 +212,18 @@ export class ActionMenuComponent {
      * @memberof ContactComponent
      */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
-        ASIDE_PANE_CONFIG['data'] = {
-            activeTab: activeTab,
-            accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-        };
-        ASIDE_PANE_CONFIG['position'] = {
-            right: '15px',
-            bottom: '0'
-        };
-        ASIDE_PANE_CONFIG['height'] = '600px';
-        const dialogRef =  this.dialog.open(TemplateFroalaComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            data: {
+                activeTab: activeTab,
+                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+            },
+            width: 'var(--aside-pane-width)',
+            position: {
+                right: '15px',
+                bottom: '0'
+            },
+            disableClose: true
+        });dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
             }
