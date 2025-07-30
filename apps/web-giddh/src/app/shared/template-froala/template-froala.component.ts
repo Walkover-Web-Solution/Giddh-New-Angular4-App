@@ -346,7 +346,6 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.updateCustomEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.dialog.closeAll();
                 this.dialogRef.close(response);
             }
         });

@@ -2374,5 +2374,50 @@ public getDecodedWhiteLabel(): any {
             value: (i + 1).toString()
         }));
     }
+
+    /**
+     * Returns the first and last date of a given month or quarter and year.
+     * @param type - 'month' or 'quarter'
+     * @param value - For 'month': 'MM-YYYY', for 'quarter': 'Q-YYYY' where Q is 01-04
+     * @returns An object with fromDate and toDate in 'DD-MM-YYYY' format.
+     */
+    public getStartAndEndDateOfMonthOrQuater(type: 'month' | 'quarter', value: string): { fromDate: string, toDate: string } {
+        const pad = (n: number) => n < 10 ? '0' + n : n.toString();
+        if (type === 'month') {
+            if (!value || !/^\d{2}-\d{4}$/.test(value)) {
+                return { fromDate: '', toDate: '' };
+            }
+            const [month, year] = value.split('-').map(Number);
+            const lastDay = new Date(year, month, 0).getDate();
+            const fromDate = `01-${pad(month)}-${year}`;
+            const toDate = `${pad(lastDay)}-${pad(month)}-${year}`;
+            return { fromDate, toDate };
+        } else if (type === 'quarter') {
+            if (!value || !/^\d{2}-\d{4}$/.test(value)) {
+                return { fromDate: '', toDate: '' };
+            }
+            const [quarterStr, yearStr] = value.split('-');
+            const quarter = Number(quarterStr);
+            const year = Number(yearStr);
+            let fromMonth = 1, toMonth = 3;
+            switch (quarter) {
+                case 1:
+                    fromMonth = 1; toMonth = 3; break;
+                case 2:
+                    fromMonth = 4; toMonth = 6; break;
+                case 3:
+                    fromMonth = 7; toMonth = 9; break;
+                case 4:
+                    fromMonth = 10; toMonth = 12; break;
+                default:
+                    return { fromDate: '', toDate: '' };
+            }
+            const fromDate = `01-${pad(fromMonth)}-${year}`;
+            const lastDay = new Date(year, toMonth, 0).getDate();
+            const toDate = `${pad(lastDay)}-${pad(toMonth)}-${year}`;
+            return { fromDate, toDate };
+        }
+        return { fromDate: '', toDate: '' };
+    }
 }
 
