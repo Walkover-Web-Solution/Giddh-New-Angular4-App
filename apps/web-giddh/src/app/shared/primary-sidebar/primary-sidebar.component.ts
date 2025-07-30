@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
@@ -72,6 +72,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
+    /** True, if sidebar needs to be expanded */
+    @Input() public isSidebarExpanded: boolean = false;
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
@@ -109,6 +111,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private previousUrl: string = "";
     /** Holds active company unique name */
     public ledgerAccount$: Observable<AccountResponse | AccountResponseV2>;
+    /** Holds current url queryParams */
+    public queryParams: any = {};
     /** DataSource for the tree */
     public dataSource = new ArrayDataSource([]);
     /** Function to check if a node has children */
@@ -131,6 +135,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private localeService: LocaleService,
         private salesAction: SalesActions,
         public dialog: MatDialog,
+        private activateRoute: ActivatedRoute
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.ledgerAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
@@ -164,21 +169,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    /**
-     * Returns true, if route with query params is activated
-     *
-     * @param {string} routeUrl Route URL without params
-     * @returns {boolean} True, if passed route is activated
-     * @memberof PrimarySidebarComponent
-     */
-    public isRouteWithParamsActive(routeUrl: string): boolean {
-        const queryParamsIndex = this.router.url?.indexOf('?');
-        const baseUrl = queryParamsIndex === -1 ? this.router.url :
-            this.router.url.slice(0, queryParamsIndex);
-        // For Trial balance module, strict comparison should be done
-        return this.router.url.includes('trial-balance-and-profit-loss') ? false : decodeURI(baseUrl) === decodeURI(routeUrl);
-    }
-
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent) {
@@ -210,14 +200,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.getVisibleMenuItems();
-            this.allItems?.map(items => {
-                items?.items?.map(item => {
-                    if (item?.additional?.queryParams?.voucherVersion) {
-                        delete item?.additional?.queryParams?.voucherVersion;
-                    }
-                    return item;
-                });
-            });
         }
     }
 
@@ -239,7 +221,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof PrimarySidebarComponent
      */
-    public ngOnInit(): void {
+    public ngOnInit(): void {   
+
+        /**Subscribe to queryParams */
+        this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
+            this.queryParams = queryParams?.tabIndex;
+        })
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -631,12 +618,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             flattenedItems.push(menu);
 
             childMenus?.forEach(item => {
+                if (item?.additional?.queryParams?.voucherVersion) {
+                    delete item?.additional?.queryParams?.voucherVersion;
+                }
                 const childMenu = {
-                    label: item.label,
-                    icon: item.icon,
-                    items: [],
-                    link: item.link,
-                    isActive: false,
                     expandable: false, // Set static false due to only one level of menu
                     level: 1,
                     isExpanded: false,
@@ -647,10 +632,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
         
         this.allItems = flattenedItems;
-        this.dataSource = new ArrayDataSource(this.allItems);
-
-        console.log("this.allItems", this.allItems);
-        
+        this.dataSource = new ArrayDataSource(this.allItems);        
     }
 
     /**
