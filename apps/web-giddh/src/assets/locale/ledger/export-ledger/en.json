@@ -29,6 +29,5 @@
     "single_pdf": "Single PDF",
     "multiple_pdf": "Multiple PDF",
     "select_copy": "Select Copy",
-    "select_order": "Select Order",
-    "variable_search_hint": "Use '{' to search variable or write name manually."
+    "select_order": "Select Order"
 }
