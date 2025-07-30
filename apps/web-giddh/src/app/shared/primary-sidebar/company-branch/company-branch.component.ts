@@ -17,6 +17,7 @@ import { AppState } from '../../../store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { CommonActions } from '../../../actions/common.actions';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'company-branch',
@@ -25,8 +26,8 @@ import { CommonActions } from '../../../actions/common.actions';
 })
 
 export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
-    /** Instance of tabset */
-    @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
+    // /** Instance of tabset */
+    // @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -63,6 +64,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public currentCompanyBranches: Array<any>;
     /** This holds current branch unique name */
     public currentBranchUniqueName: string = "";
+     /** Holds active selected Tab Index  */
+     public selectedTabIndex: number;
 
     constructor(
         private store: Store<AppState>,
@@ -147,7 +150,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.isGoToBranch?.currentValue) {
             this.getCompanyBranches(this.companyBranches, false);
-            this.tabChanged('branch');
+            const event = new MatTabChangeEvent();
+            event.index = 1;
+            this.tabChanged(event, "branch");
             this.changeDetectorRef.detectChanges();
         }
     }
@@ -316,9 +321,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.companyBranches.branchCount = company?.branchCount;
         if (company?.branchCount > 1) {
             setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs[1]) {
-                    this.staticTabs.tabs[1].active = true;
-                }
+                this.selectedTabIndex = 1;
             }, 20);
         } else {
             if (company?.uniqueName !== this.activeCompany?.uniqueName) {
@@ -333,7 +336,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @param {string} tabName
      * @memberof CompanyBranchComponent
      */
-    public tabChanged(tabName: string): void {
+    public tabChanged(event: MatTabChangeEvent, tabName: "company" | "branch" = "company"): void {
+        console.log(event);
+        tabName = event.index === 0 ? "company" : "branch";
         this.activeTab = tabName;
         this.searchBranch = "";
         this.filterBranchList(this.searchBranch);
