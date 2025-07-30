@@ -780,6 +780,9 @@
     "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?",
     "app_account_status": "खाता स्थिति",
     "app_both": "दोनों",
+    "app_client": "ग्राहक",
+    "app_search_by_name_and_unique_name": "नाम और अद्वितीय नाम द्वारा खोजें",
+    "app_search_by_invoice_number_customer_name_and_amount": "चालान संंख्या, ग्राहक नाम और राशि द्वारा खोजें",
     "app_weekdays": {
         "daily": "दैनिक",
         "sunday": "रविवार",

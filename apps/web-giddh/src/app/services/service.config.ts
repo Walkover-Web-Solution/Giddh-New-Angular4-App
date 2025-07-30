@@ -10,6 +10,9 @@ export interface IServiceConfigArgs {
     GOOGLE_CLIENT_SECRET: string;
     OTP_WIDGET_ID: string;
     OTP_TOKEN_AUTH: string;
+    OTP_WIDGET_ID_NEW: string;
+    OTP_TOKEN_AUTH_NEW: string;
+    RAZORPAY_KEY: string;
     _: any;
 }
 

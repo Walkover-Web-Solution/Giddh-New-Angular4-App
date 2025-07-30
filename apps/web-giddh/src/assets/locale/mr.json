@@ -781,6 +781,9 @@
     "app_uncheck_all_item_message": "आपण खरोखर सर्व ओळी अनचेक करू इच्छिता का?",
     "app_account_status": "खाते स्थिती",
     "app_both": "दोन्ही",
+    "app_client": "ग्राहक",
+    "app_search_by_name_and_unique_name": "नाव आणि अद्वितीय नाव द्वारा खोजा",
+    "app_search_by_invoice_number_customer_name_and_amount": "चालान संंख्या, ग्राहक नाव आणि राशी द्वारा खोजा",
     "app_weekdays": {
         "daily": "दररोज",
         "sunday": "रविवार",
