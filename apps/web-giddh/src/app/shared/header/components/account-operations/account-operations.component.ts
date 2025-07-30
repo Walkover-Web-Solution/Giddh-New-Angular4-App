@@ -337,7 +337,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         }
                     }
                 }
-                if(group) {
+                if (group) {
                     this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(group.uniqueName));
                 }
             }

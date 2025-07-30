@@ -159,7 +159,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
-            if (amount && (amount === 0 || amount > 0) && !this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+            if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
                 this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
             }
         });
