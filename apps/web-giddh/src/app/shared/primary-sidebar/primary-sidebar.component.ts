@@ -3,7 +3,7 @@ import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@ang
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -21,6 +21,8 @@ import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ArrayDataSource } from '@angular/cdk/collections';
+import { FlatTreeControl } from '@angular/cdk/tree';
 
 @Component({
     selector: 'primary-sidebar',
@@ -74,8 +76,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
     @ViewChild('genericAsideMenuAccountTemplate', { static: true }) public genericAsideMenuAccountTemplate: TemplateRef<any>;
-    /** Stores the instance of company detail dropdown */
-    @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** Stores the dropdown instances as querylist */
     @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /* This will hold local JSON data */
@@ -109,6 +109,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private previousUrl: string = "";
     /** Holds active company unique name */
     public ledgerAccount$: Observable<AccountResponse | AccountResponseV2>;
+    /** DataSource for the tree */
+    public dataSource = new ArrayDataSource([]);
+    /** Function to check if a node has children */
+    public hasChild = (_: number, node: any) => node.expandable;
+    /** Handle cdk tree control */
+    public treeControl = new FlatTreeControl<any>(
+        node => node.level,
+        node => node.expandable,
+    );
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -200,7 +209,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.openCompanyBranchDropdown();
         }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
-            this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
+            this.getVisibleMenuItems();
             this.allItems?.map(items => {
                 items?.items?.map(item => {
                     if (item?.additional?.queryParams?.voucherVersion) {
@@ -318,14 +327,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                         return true;
                     }
                 })));
-                this.openActiveItem();
 
                 this.changeDetectorRef.detectChanges();
-            }
-            if (event instanceof NavigationStart) {
-                if (this.companyDetailsDropDownWeb.isOpen) {
-                    this.companyDetailsDropDownWeb.hide();
-                }
             }
         });
 
@@ -612,35 +615,42 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
+            this.getVisibleMenuItems();
         }
     }
 
-    /**
-     * Opens the active item and closes the rest
-     *
-     * @param {*} [itemIndex] Current item index
-     * @memberof PrimarySidebarComponent
-     */
-    public openActiveItem(itemIndex?: any): void {
-        if (itemIndex !== undefined) {
-            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                if (index !== itemIndex) {
-                    dropdown.hide();
-                }
+    private getVisibleMenuItems(): void {
+        this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
+        const flattenedItems: AllItems[] = [];
+        this.allItems.filter(item => !item.hide).forEach((menu, index) => {
+            menu['expandable'] = menu?.items?.length > 0;
+            menu['level'] = 0;
+            menu['isExpanded'] = index === 0;
+            const childMenus = menu?.items;
+            delete menu['items'];
+            flattenedItems.push(menu);
+
+            childMenus?.forEach(item => {
+                const childMenu = {
+                    label: item.label,
+                    icon: item.icon,
+                    items: [],
+                    link: item.link,
+                    isActive: false,
+                    expandable: false, // Set static false due to only one level of menu
+                    level: 1,
+                    isExpanded: false,
+                    ...item
+                } as unknown as AllItems;
+                flattenedItems.push(childMenu);
             });
-        } else {
-            if (this.isOpen) {
-                const activeItemIndex = this.allItems?.findIndex(item => item.isActive);
-                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                    if (index === activeItemIndex) {
-                        dropdown?.show();
-                    } else {
-                        dropdown?.hide();
-                    }
-                });
-            }
-        }
+        });
+        
+        this.allItems = flattenedItems;
+        this.dataSource = new ArrayDataSource(this.allItems);
+
+        console.log("this.allItems", this.allItems);
+        
     }
 
     /**
@@ -712,4 +722,75 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.commandkDialogRef.close();
         }, 600);
     }
+
+    /**
+     * Get parent node of given node
+     * 
+     * @param node Node to get parent of
+     * @returns Parent node of given node
+     * @memberof PrimarySidebarComponent
+     */
+    public getParentNode(node: any): any {
+        const nodeIndex = this.allItems.indexOf(node);
+    
+        for (let i = nodeIndex - 1; i >= 0; i--) {
+          if (this.allItems[i].level === node.level - 1) {
+            return this.allItems[i];
+          }
+        }
+    
+        return null;
+      }
+    
+    /**
+     * Check if node should be rendered based on parent expansion state
+     * 
+     * @param node Node to check
+     * @returns True if node should be rendered, false otherwise
+     * @memberof PrimarySidebarComponent
+     */
+    public shouldRender(node: any): boolean {
+        let parent = this.getParentNode(node);
+        while (parent) {
+            if (!parent.isExpanded) {
+                return false;
+            }
+            parent = this.getParentNode(parent);
+        }
+        return true;
+    }
+
+     /**
+      * Toggle node expansion with accordion behavior
+      * Only one parent node can be expanded at a time
+      * 
+      * @param node Node to toggle
+      * @memberof PrimarySidebarComponent
+      */
+      public toggleNode(node: any): void {
+        if (node.expandable) {
+          if (node.isExpanded) {
+            node.isExpanded = false;
+          } else {
+            this.allItems.forEach(item => {
+              if (item.level === 0 && item !== node) {
+                item.isExpanded = false;
+              }
+            });
+            node.isExpanded = true;
+          }
+          this.dataSource = new ArrayDataSource(this.allItems);
+        }
+      }
+
+      /**
+      * Check if node is expanded
+      * 
+      * @param node Node to check
+      * @returns True if node is expanded, false otherwise
+      * @memberof PrimarySidebarComponent
+      */
+      public isExpanded(node: any): boolean {
+        return node.isExpanded || false;
+      }
 }

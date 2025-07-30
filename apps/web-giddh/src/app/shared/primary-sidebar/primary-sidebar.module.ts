@@ -16,6 +16,12 @@ import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/gen
 import { CompanyBranchComponent } from "./company-branch/company-branch.component";
 import { PrimarySidebarComponent } from "./primary-sidebar.component";
 import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatButtonModule } from "@angular/material/button";
+import {CdkTreeModule} from '@angular/cdk/tree';
+
 
 @NgModule({
     declarations: [
@@ -28,15 +34,20 @@ import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
+        // BsDropdownModule.forRoot(),
+        // TooltipModule.forRoot(),
         RouterModule,
         CheckPermissionModule,
         CommandKModule,
-        TabsModule.forRoot(),
+        // TabsModule.forRoot(),
         SocialLoginModule,
         GenericAsideMenuAccountModule,
-        MatDialogModule
+        MatDialogModule,
+        MatTabsModule,
+        MatMenuModule,
+        MatTooltipModule,
+        MatButtonModule,
+        CdkTreeModule
     ],
     exports: [
         PrimarySidebarComponent

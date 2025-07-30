@@ -40,6 +40,7 @@ import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -107,6 +108,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Holds send email dailog template reference send email */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+
     /** Holds show Customer Search input visibility status */
     public showCustomerSearch: boolean = false;
     /** Holds show Invoice No Search input visibility status */
@@ -1497,7 +1501,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
 
     /**
@@ -1509,6 +1513,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1517,6 +1522,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
         this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -3329,6 +3335,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (!this.displayedColumns?.includes("e_invoice_status")) {
                 this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "e_invoice_status");
             }
+        }
+    }
+
+     /**
+     * This will show the datepicker
+     *
+     * @param {boolean} isOpen
+     * @memberof VoucherListComponent
+     */
+     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
     }
 }
