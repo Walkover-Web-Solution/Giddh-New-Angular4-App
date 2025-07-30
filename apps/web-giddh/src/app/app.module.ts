@@ -105,10 +105,6 @@ if (whiteLabelConfig) {
 
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
-    if (whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId) {
-        whiteLabelConfig.body.razorpayPaymentDetails.keyId = 'rzp_live_hB6lP01KB6b0u1';
-        console.log('whiteLabelConfig', whiteLabelConfig);
-    }
     return {
         apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
             (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
