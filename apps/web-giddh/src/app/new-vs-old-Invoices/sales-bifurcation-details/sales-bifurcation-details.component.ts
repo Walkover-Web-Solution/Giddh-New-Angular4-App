@@ -95,7 +95,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.salesBifurcationDetailsList$.pipe(
             takeUntil(this.destroyed$)
         ).subscribe(data => {
-            if (this.salesBifurcationDetailsData?.subType === this.salesBifurcationDetailsActionEnum.client) {
+            if (this.salesBifurcationDetailsData?.subType === this.salesBifurcationDetailsActionEnum.Client) {
                 this.salesBifurcationDetailsClientList = data?.clientDetails;
             } else {
                 this.salesBifurcationDetailsInvoiceList = data?.invoiceDetails;
@@ -193,7 +193,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
 
         let dialogRef = this.dialog.open(templateRef, {
-            width: '70%',
+            panelClass: ['mat-dialog-md'],
             role: 'alertdialog',
             ariaLabel: 'sales-bifurcation-details'
         });
@@ -235,5 +235,4 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }

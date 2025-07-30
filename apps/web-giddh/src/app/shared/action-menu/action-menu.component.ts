@@ -8,29 +8,17 @@ import { TemplateFroalaComponent } from '../template-froala/template-froala.comp
 import { take } from 'rxjs';
 import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../aside-menu-account/aside.menu.account.module';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OrganizationType } from '../../models/user-login-state';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'app-action-menu',
     standalone: true,
     imports: [CommonModule, MatMenuModule, MatButtonModule, AccountUpdateNewDetailsModule, AsideMenuAccountModule],
     templateUrl: './action-menu.component.html',
-    styleUrls: ['./action-menu.component.scss'],
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    styleUrls: ['./action-menu.component.scss']
 })
 export class ActionMenuComponent {
     /** Account object for which the action menu is displayed */
@@ -224,18 +212,16 @@ export class ActionMenuComponent {
      * @memberof ContactComponent
      */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
-        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
-            data: {
-                activeTab: activeTab,
-                accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
-        });
+        ASIDE_PANE_CONFIG['data'] = {
+            activeTab: activeTab,
+            accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
+        };
+        ASIDE_PANE_CONFIG['position'] = {
+            right: '15px',
+            bottom: '0'
+        };
+        ASIDE_PANE_CONFIG['height'] = '600px';
+        const dialogRef =  this.dialog.open(TemplateFroalaComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);

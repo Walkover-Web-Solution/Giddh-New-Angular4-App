@@ -2480,17 +2480,9 @@
                                         class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
                                        *ngIf="!isPettyCash && voucherApiVersion === 2"
                                     >
-                                        <div class="d-flex column-gap15">
+                                        <div class="d-flex column-gap15 w-100">
                                             <button
-                                                mat-stroked-button
-                                                color="warn"
-                                                id="update-ledger-delete-button"
-                                                (click)="showDeleteEntryModal()"
-                                            >
-                                                {{ commonLocaleData?.app_delete }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 id="update-ledger-update-button"
                                                 [disabled]="isFileUploading"
@@ -2498,6 +2490,24 @@
                                                 (click)="saveLedgerTransaction()"
                                             >
                                                 {{ commonLocaleData?.app_update }}
+                                            </button>
+                                            <button
+                                                *ngIf="!isDaybook"
+                                                aria-label="Duplicate entry button"
+                                                mat-stroked-button
+                                                (click)="duplicateEntry()"
+                                            >
+                                                {{ localeData?.duplicate }}
+                                            </button>
+
+                                            <button
+                                                class="ml-auto"
+                                                mat-stroked-button
+                                                color="warn"
+                                                id="update-ledger-delete-button"
+                                                (click)="showDeleteEntryModal()"
+                                            >
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </div>
                                     </div>

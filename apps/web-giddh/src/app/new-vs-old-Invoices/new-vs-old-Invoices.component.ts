@@ -229,7 +229,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom: string): void {
-        const goToLedgerDateRange = this.generalService.getDateRange(this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH, this.NewVsOldInvoicesQueryRequest.value);
+        const goToLedgerDateRange = this.generalService.getStartAndEndDateOfMonthOrQuater(this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH, this.NewVsOldInvoicesQueryRequest.value);
         const reportType = this.NewVsOldInvoicesQueryRequest.type == GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH;
         const reportReq = {
             type: reportType,
