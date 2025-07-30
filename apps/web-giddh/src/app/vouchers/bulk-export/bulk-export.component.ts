@@ -16,6 +16,7 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { VouchersUtilityService } from '../utility/vouchers.utility.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { TributeConfig } from '../../shared/helpers/directives/tributeMention/tributeType';
 
 type ExportType = 'SINGLE_PDF' | 'MULTIPLE_PDF' | 'EXCEL' | 'CSV';
 enum ExportTypeEnum {
@@ -64,6 +65,13 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public exportTypeEnum = ExportTypeEnum;
     /** Holds the vouchers only support excel export */
     public vouchersOnlySupportExcelExport: string[] = [VoucherTypeEnum.estimate, VoucherTypeEnum.proforma, 'purchase order'];
+    /** Tribute config */
+    public tributeConfig: TributeConfig = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+        requireLeadingSpace: false
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,

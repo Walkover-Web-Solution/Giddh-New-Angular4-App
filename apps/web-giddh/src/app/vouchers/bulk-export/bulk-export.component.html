@@ -37,16 +37,16 @@
                             {{ commonLocaleData?.app_file_format }}
                         </div>
                         <div class="d-flex flex-column w-50">
-                            <textarea
+                            <input
+                                matInput
                                 formControlName="selectedFormatList"
-                                [placeholder]="commonLocaleData?.app_file_format"
-                                class="form-control "
-                                rows="2"
+                                [placeholder]="commonLocaleData?.app_variable_search_hint"
+                                class="form-control radius-none border-0 border-bottom"
                                 (ngModelChange)="getFileFormat()"
-                                [appTributeMention]="{trigger: '{', suggestionPrefix: '{',suggestionSuffix: '}'}"
+                                [appTributeMention]="tributeConfig"
                                 [appTributeMentionValues]="fileFormatList"
-                            ></textarea>
-                            <div class="font-12" *ngIf="exportForm.get('selectedFormatList').value?.length">
+                            />
+                            <div class="font-12 word-break" *ngIf="exportForm.get('selectedFormatList').value?.length">
                                 {{ exportForm.get("fileNameFormat").value }}
                             </div>
                         </div>

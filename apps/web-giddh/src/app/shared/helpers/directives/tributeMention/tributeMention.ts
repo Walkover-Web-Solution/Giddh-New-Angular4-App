@@ -53,16 +53,15 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    */
   private initializeTribute(): void {
     const tributeOptions = {
-      ...this.tributeConfig,
       values: this.mentionList,
       requireLeadingSpace: true,
       positionMenu: true,
+      ...this.tributeConfig,
       menuItemTemplate: (item: any) =>
         `<div class="mention-item">${item.original.key}</div>`,
       selectTemplate: (item: any) =>
        item?.original?.value ? `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}` : '',
     };
-
     this.destroyTribute(); // Clean up any previous instance
 
     this.tributeInstance = new Tribute(tributeOptions);

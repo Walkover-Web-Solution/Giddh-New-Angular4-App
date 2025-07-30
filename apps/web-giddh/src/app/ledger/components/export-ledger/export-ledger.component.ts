@@ -20,6 +20,7 @@ import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store'
 import { saveAs } from 'file-saver';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { CopyType } from '../../../shared/Enums/common.enum';
+import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -114,6 +115,13 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public fileFormatPrefix: string = "AS";
     /* Will check if form is valid */
     public isValidForm: boolean = true;
+    /** Tribute config */
+    public tributeConfig: TributeConfig = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+        requireLeadingSpace: false
+    };
 
     constructor(
         private ledgerService: LedgerService,
