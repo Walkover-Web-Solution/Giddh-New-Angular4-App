@@ -2493,7 +2493,7 @@
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
                                             <button
-                                                *ngIf="!isDaybook"
+                                                *ngIf="!isDaybook && !(currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                                                 aria-label="Duplicate entry button"
                                                 mat-stroked-button
                                                 (click)="duplicateEntry()"
