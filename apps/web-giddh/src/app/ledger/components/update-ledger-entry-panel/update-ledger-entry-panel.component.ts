@@ -4,6 +4,7 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -70,6 +71,7 @@ import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/s
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatSelect } from '@angular/material/select';
+import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
@@ -105,7 +107,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+    /** Emits when update ledger modal is closed */
+    @Output() public closeUpdateLedgerModal: EventEmitter<any> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
     /** Emits when more detail is opened */
@@ -127,6 +130,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public carouselPrevious: boolean;
     /** Holds carousel next event*/
     @Input() public carouselNext: boolean;
+    /** Holds true if this component form daybook */
+    @Input() public isDaybook: boolean = false;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
@@ -346,6 +351,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public lastValidIndex: number;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transaction details */
+    private transactionDetails: LedgerResponse;
 
     constructor(
         private accountService: AccountService,
@@ -371,6 +378,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private ledgerUtilityService: LedgerUtilityService,
         private invoiceAction: InvoiceActions,
         private renderer: Renderer2,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsDiscountService: SettingsDiscountService,
         private salesPersonStore: SalesPersonComponentStore
     ) {
@@ -396,7 +404,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -431,7 +439,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
+        this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response;
             } else {
@@ -497,7 +505,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // check if delete entry is success
-        this.isDeleteTrxEntrySuccess$.subscribe(del => {
+        this.isDeleteTrxEntrySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(del => {
             if (del) {
                 this.store.dispatch(this.ledgerAction.resetDeleteTrxEntryModal());
                 this.closeUpdateLedgerModal.emit(true);
@@ -506,7 +514,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // check if update entry is success
-        this.isTxnUpdateSuccess$.subscribe(upd => {
+        this.isTxnUpdateSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(upd => {
             if (upd) {
                 this.store.dispatch(this.ledgerAction.ResetUpdateLedger());
                 this.resetPreviousSearchResults();
@@ -842,7 +850,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public deleteAttachedFile() {
-        this.ledgerService.removeAttachment(this.vm.selectedLedger?.attachedFile).subscribe((response) => {
+        this.ledgerService.removeAttachment(this.vm.selectedLedger?.attachedFile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === 'success') {
                 this.vm.selectedLedger.attachedFile = '';
                 this.vm.selectedLedger.attachedFileName = '';
@@ -981,6 +989,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             delete requestObj.referenceVoucher.voucherType;
         }
 
+        if (requestObj.salesPerson) {
+            delete requestObj.salesPerson;
+        }
+
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
@@ -1013,7 +1025,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        // Remove the transaction details for ledger once the component is destroyed
         this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
         document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
@@ -1093,10 +1104,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openBaseAccountModal() {
-        if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
-            this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-            return;
-        }
+        // if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
+        //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
+        //     return;
+        // }
         if (this.updateBaseAccount) {
             this.updateBaseAccount.show();
         }
@@ -1220,9 +1231,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
 
-        if (this.voucherApiVersion !== 2) {
-            this.invoiceList = [];
-        }
+        // if (this.voucherApiVersion !== 2) {
+        //     this.invoiceList = [];
+        // }
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
@@ -1418,14 +1429,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public hideDiscount(): void {
         if (this.discountComponent) {
-            this.discountComponent.change();
+            this.discountComponent?.change();
             this.discountComponent.discountMenu = false;
         }
     }
 
     public hideTax(): void {
         if (this.taxControll) {
-            this.taxControll.change();
+            this.taxControll?.change();
         }
     }
 
@@ -2214,6 +2225,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
+            this.transactionDetails = cloneDeep(resp[0]);
         }
 
         this.isEinvoiceGenerated = resp[0].einvoiceGenerated;
@@ -3014,6 +3026,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
+     * This will be use for duplicate entry
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public duplicateEntry(): void {
+        this.closeUpdateLedgerModal.emit({
+            transactionDetails: this.transactionDetails
+        });
+    }
+
+    /**
      * Open sales person dialog
      *
      * @memberof UpdateLedgerEntryPanelComponent
@@ -3032,7 +3055,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 
-    /**
+     /**
      * Handle sales person selection
      *
      * @param {IOption} event

@@ -46,6 +46,7 @@ import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.t
 import { CompanyActions } from '../../../actions/company.actions';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
+import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -139,6 +140,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     /** Holds select multiple fields component reference */
     @ViewChild('selectMultipleFieldsRef', { static: false }) public selectMultipleFieldsRef: SelectMultipleFieldsComponent;
+    /** Holds sales person dropdown component reference */
+    @ViewChild('salesPersonDropdownRef', { static: false }) public salesPersonDropdownRef: ReactiveDropdownFieldComponent;
+    /** Holds voucher dropdown component reference */
+    @ViewChild('voucherDropdownRef', { static: false }) public voucherDropdownRef: ReactiveDropdownFieldComponent;
     /** Holds select tax control component reference */
     @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
@@ -360,7 +365,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-                this.selectedWarehouse = String(this.defaultWarehouse);
+                if (!this.currentTxn?.duplicateEntry) {
+                    this.selectedWarehouse = String(this.defaultWarehouse);
+                }
             }
         });
 
@@ -416,7 +423,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.getAllDiscounts();
         this.getSalesPersonList();
         if (this.voucherApiVersion === 2) {
-            this.manualGenerateVoucherChecked = true;
+            if (this.currentTxn?.duplicateEntry) {
+                this.manualGenerateVoucherChecked = this.blankLedger.generateInvoice;
+            } else {
+                this.manualGenerateVoucherChecked = true;
+            }
         } else {
             this.manualGenerateVoucherChecked = false;
         }
@@ -495,6 +506,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn?.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
+            } else if (this.currentTxn?.duplicateEntry) {
+                this.selectedWarehouse = this.currentTxn.inventory?.warehouse?.uniqueName ?? this.blankLedger.transactions[0].inventory?.warehouse?.uniqueName;
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
@@ -530,9 +543,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
         }
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length && !this.currentTxn.duplicateEntry) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length) {
+        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length && !this.currentTxn.duplicateEntry) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
         } else {
             this.taxListForStock = [];
@@ -590,6 +603,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 10);
             }
         });
+        if (this.currentTxn?.duplicateEntry) {
+            document.getElementById("saveLedger")?.focus();
+        }
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -612,7 +628,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discount = event.discountTotal;
         }
         const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (matchedUnit?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
+        if (matchedUnit?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length && !this.currentTxn?.duplicateEntry) {
             if (!this.currentTxn.isMrpDiscountApplied) {
                 this.currentTxn.discounts = this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
@@ -684,8 +700,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.totalForTax = total;
                     const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
                     const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
-                    this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((total + (isNaN(taxApplied) ? 0 : taxApplied)), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + (isNaN(convertedTaxApplied) ? 0 : convertedTaxApplied)), this.giddhBalanceDecimalPlaces);
                 }
             } else {
                 // Amount is zero, set other parameters to zero
@@ -898,10 +914,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
             }
-            if (this.generalService.voucherApiVersion === 1) {
-                /** From API, for v1 companies, isStock key is creating issue in entry creation */
-                delete transaction?.isStock;
-            }
+            // if (this.generalService.voucherApiVersion === 1) {
+            //     /** From API, for v1 companies, isStock key is creating issue in entry creation */
+            //     delete transaction?.isStock;
+            // }
         });
         this.saveBlankLedger.emit(true);
     }
@@ -933,7 +949,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitUniqueName: string) {
         // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
-        const unitRates = this.generalService.voucherApiVersion === 1 ? this.currentTxn?.selectedAccount?.stock?.unitRates : this.currentTxn?.selectedAccount?.stock?.variant?.unitRates
+        // const unitRates = this.generalService.voucherApiVersion === 1 ? this.currentTxn?.selectedAccount?.stock?.unitRates : this.currentTxn?.selectedAccount?.stock?.variant?.unitRates
+        const unitRates = this.currentTxn?.selectedAccount?.stock?.variant?.unitRates
         let unit = unitRates?.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         if (this.currentTxn?.inventory?.unit) {
@@ -1062,6 +1079,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.closeAddTagDropdown();
         this.closeTaxDropdown();
         this.closeDiscountDropdown();
+        this.closeSalesPersonDropdown();
+        this.closeVoucherPanel();
         this.closeOtherDialogMenu.emit(true);
     }
 
@@ -1073,6 +1092,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public closeAddTagDropdown(): void {
         if (this.selectMultipleFieldsRef) {
             this.selectMultipleFieldsRef?.closePanel();
+        }
+    }
+
+    /**
+     * Close sale person dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeSalesPersonDropdown(): void {
+        if (this.salesPersonDropdownRef) {
+            this.salesPersonDropdownRef.closeDropdownPanel();
+        }
+    }
+
+    /**
+     * Close voucher dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeVoucherPanel(): void {
+        if (this.voucherDropdownRef) {
+            this.voucherDropdownRef.closeDropdownPanel();
         }
     }
 
@@ -1796,7 +1837,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public preparePreAppliedDiscounts(): void {
         const matchedUnit = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (matchedUnit?.length) {
+        if (matchedUnit?.length && !this.currentTxn?.duplicateEntry) {
             if (!this.currentTxn.isMrpDiscountApplied) {
                 this.currentTxn.discounts = this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
@@ -1844,7 +1885,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         return item;
                     });
                 });
-            } else {
+            } else if (!this.currentTxn?.duplicateEntry){
                 this.currentTxn?.discounts?.map(item => {
                     item.isActive = false;
                     return item;
@@ -2287,5 +2328,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+     * Returns the voucher label based on the voucher type
+     *
+     * @param {IOption[]} voucherTypeList
+     * @returns {string}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getVoucherLabel(voucherTypeList: IOption[]): string {
+        return voucherTypeList.find(item => item.value === this.blankLedger.voucherType)?.label || '';
     }
 }

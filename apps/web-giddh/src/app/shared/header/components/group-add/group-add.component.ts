@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -16,23 +16,30 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** Localized text data specific to this component */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** Common localized text data shared across components */
     @Input() public commonLocaleData: any = {};
+    /** Breadcrumb path array for navigation context */
     @Input() public path: string[] = [];
+    /** Observable stream of the currently active group's unique name */
     public activeGroupUniqueName$: Observable<string>;
-    public groupDetailForm: UntypedFormGroup;
+    /** Reactive form group for managing group creation form data */
+    public groupDetailForm: FormGroup;
+    /** Observable indicating whether the add new group form should be displayed */
     public showAddNewGroup$: Observable<boolean>;
+    /** Observable indicating whether group creation is currently in progress */
     public isCreateGroupInProcess$: Observable<boolean>;
+    /** Observable indicating whether group creation was successful */
     public isCreateGroupSuccess$: Observable<boolean>;
+    /** ViewChild reference to the auto-focused input element */
     @ViewChild('autoFocused', { static: true }) public autoFocus: ElementRef;
-
+    /** Subject for managing component destruction and unsubscribing from observables */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _fb: UntypedFormBuilder, 
-        private store: Store<AppState>, 
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private accountsAction: AccountsAction
     ) {
@@ -43,23 +50,25 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.groupDetailForm = this._fb.group({
-            name: ['', Validators.required],
-            uniqueName: ['', Validators.required],
-            description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT']
-        });
+        this.initForm();
 
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
         });
 
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (amount && (amount === 0 || amount > 0) && !this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+                this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
+            }
+        });
+
         this.isCreateGroupSuccess$.subscribe(a => {
             if (a) {
-                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
-                this.groupDetailForm.reset();
                 this.groupDetailForm?.markAsPristine();
+                this.groupDetailForm.reset();
+                setTimeout(() => {
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                }, 500);
             }
         });
 
@@ -75,6 +84,22 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.autoFocus?.nativeElement.focus();
         }, 50);
+    }
+
+    /**
+     * Initializes the reactive form group for adding or editing an account.
+     * 
+     * @returns FormGroup
+     * @memberof GroupAddComponent
+     */
+    public initForm(): void {
+        this.groupDetailForm = this.formBuilder.group({
+            name: ['', Validators.required],
+            uniqueName: ['', Validators.required],
+            description: [''],
+            closingBalanceTriggerAmount: [0, digitsOnly],
+            closingBalanceTriggerAmountType: ['CREDIT']
+        });
     }
 
     public addNewGroup() {

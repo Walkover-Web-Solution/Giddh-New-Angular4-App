@@ -15,7 +15,7 @@ export const Configuration = {
     'APP_FOLDER': APP_FOLDER,
     'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
     'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY
+    'RAZORPAY_KEY': RAZORPAY_KEY,
 };
 
 /** Add Company business type*/
@@ -648,7 +648,6 @@ export const BREAKPOINT_SCREEN_SIZE = {
     SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
     TAB_SCREEN_SIZE: '(1024px > width)'
 }
-
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',
@@ -682,7 +681,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100dvh',
+    height: '100vh',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',

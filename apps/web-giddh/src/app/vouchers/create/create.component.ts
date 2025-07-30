@@ -1,15 +1,4 @@
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    HostListener,
-    Inject,
-    OnDestroy,
-    OnInit,
-    TemplateRef,
-    ViewChild,
-} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -75,7 +64,6 @@ import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus"
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
 import {
     AdjustedVoucherType,
-    ASIDE_PANE_CONFIG,
     BranchHierarchyType,
     ENTRY_DESCRIPTION_LENGTH,
     FILE_ATTACHMENT_TYPE,
@@ -85,6 +73,7 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
+    ASIDE_PANE_CONFIG
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -100,13 +89,13 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
+import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ServiceConfig } from "../../services/service.config";
-import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
-import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
-import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
+import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 
 @Component({
     selector: "create",
@@ -631,10 +620,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
-        private salesPersonStore: SalesPersonComponentStore,
-        private aiOcrService: AiOcrService
+        private aiOcrService: AiOcrService,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
-       this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -1132,6 +1121,46 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm.controls["warehouse"]
                                 ?.get("uniqueName")
                                 .patchValue(voucherDetails.warehouse?.uniqueName);
+                        }
+
+                        this.invoiceForm
+                            .get("templateDetails.other.customField1")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField1);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField2);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField3")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField3);
+                        this.invoiceForm
+                            .get("templateDetails.other.message2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.message2);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippedVia")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippedVia);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippingDate")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippingDate);
+                        this.invoiceForm
+                            .get("templateDetails.other.trackingNumber")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+
+                        if (voucherDetails.attachedFiles) {
+                            this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
+                            this.selectedFileName = voucherDetails.attachedFileName;
+                        }
+
+                        this.invoiceForm
+                            .get("isRcmEntry")
+                            .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
+
+                        if (voucherDetails.adjustments?.length && !this.isCopyMode) {
+                            voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
+                                adjustment.adjustmentAmount = adjustment.amount;
+                                return adjustment;
+                            });
+                            this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
+                            this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
 
                         this.invoiceForm
@@ -2486,7 +2515,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
@@ -3499,12 +3527,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
             this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-
-            if (this.invoiceForm.get("isRcmEntry")?.value) {
-                this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-            } else {
-                this.invoiceForm.get("subVoucher")?.patchValue("");
-            }
+            this.checkRcm();
         }
     }
 
@@ -4354,7 +4377,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      * @param {any} event using for pinCode and gstNumber
      * @returns {void}
-     * 
+     *
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
@@ -4570,6 +4593,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Checks RCM
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public checkRcm(): void {
+        if (this.invoiceForm.get("isRcmEntry")?.value) {
+            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+        } else {
+            this.invoiceForm.get("subVoucher")?.patchValue("");
+        }
+    }
+
+    /**
      * Saves voucher
      *
      * @param {Function} [callback]
@@ -4580,7 +4616,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const entries = this.getEntries();
         const deposits = this.getDeposits();
-
+        this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
 
         invoiceForm.entries = entries;
@@ -4610,7 +4646,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
         if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, '') : '';
+            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
+                ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, "")
+                : "";
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
@@ -5166,7 +5204,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             roundOff: 0,
             tcsTotal: 0,
             tdsTotal: 0,
-            balanceDue: 0
+            balanceDue: 0,
         };
         this.hasStock = false;
 
@@ -5182,7 +5220,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             subTotal: 0,
             totalTaxableValue: 0,
             totalAdjustedAmount: 0,
-            convertedTotalAdjustedAmount: 0
+            convertedTotalAdjustedAmount: 0,
         };
 
         this.invoiceForm.get("type").patchValue(this.voucherType);

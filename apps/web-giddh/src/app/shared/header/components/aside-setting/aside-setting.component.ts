@@ -9,8 +9,8 @@ import { CompanyResponse, Organization } from 'apps/web-giddh/src/app/models/api
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'aside-setting',
@@ -53,7 +53,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
-
     }
 
     /**

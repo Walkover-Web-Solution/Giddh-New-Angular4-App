@@ -63,18 +63,7 @@ import { CallBackPageComponent } from './call-back-page/call-back-page.component
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
-
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
-    {
-        id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
-    }
-], false);
-
-export function provideConfig() {
-    return SOCIAL_CONFIG || { id: null, providers: [] };
-}
-
+import { MatListModule } from '@angular/material/list';
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -144,7 +133,8 @@ export function provideConfig() {
         CallBackPageComponent,
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatListModule
     ],
     exports: [
         CommonModule,

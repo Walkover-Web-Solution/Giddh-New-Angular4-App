@@ -218,7 +218,8 @@
         "yearly": "वार्षिक",
         "weekly": "साप्ताहिक",
         "month": "महिना",
-        "year": "वर्ष"
+        "year": "वर्ष",
+       "daily": "दैनिक"
     },
     "app_tax_subtypes": {
         "receivable": "प्राप्य",
@@ -753,9 +754,9 @@
     "app_select_year": "वर्ष चुनें",
     "app_select_month": "वर्ष निवडा",
     "app_user_settings": "उपयोगकर्ता सेटिंग",
-    "app_subscription": "सदस्यता",
     "app_custom_email": "कस्टम ईमेल",
     "app_custom_email_template": "कस्टम ईमेल टेम्पलेट",
+    "app_subscription": "सदस्यता",
     "app_send_voucher_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
     "app_send_payment_receipt_type_whatsapp": "व्हाट्सएप के माध्यम से [VOUCHER_TYPE] वाउचर भेजें",
     "app_no_access_limit_module": "वर्तमान में आपके पास इस मॉड्यूल तक पहुंच नहीं है. बिना किसी परेशानी के इसे अनलॉक करने के लिए अपनी योजना को अपग्रेड करें",
@@ -769,17 +770,20 @@
     "app_choose_file": "फ़ाइल चुनें",
     "app_password": "पासवर्ड",
     "app_select_column": "कॉलम चुनें",
-    "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें",
-    "app_file_format": "फाइल प्रारूप",
-    "app_select_file": "फाइल चुनें",
     "app_ledger_view": {
         "t_view": "टी दृश्य",
         "statement_view": "वक्तव्य दृश्य"
     },
+    "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें",
+    "app_file_format": "फाइल नाम प्रारूप",
+    "app_select_file": "फाइल चुनें",
     "app_closing_balance": "जमा शेष",
     "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?",
     "app_account_status": "खाता स्थिति",
     "app_both": "दोनों",
+    "app_client": "ग्राहक",
+    "app_search_by_name_and_unique_name": "नाम और अद्वितीय नाम द्वारा खोजें",
+    "app_search_by_invoice_number_customer_name_and_amount": "चालान संंख्या, ग्राहक नाम और राशि द्वारा खोजें",
     "app_weekdays": {
         "daily": "दैनिक",
         "sunday": "रविवार",

@@ -971,7 +971,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             customCreatedTemplates = ss.customCreatedTemplates;
             defaultTemplate = ss.defaultTemplate;
         });
-
+        customCreatedTemplates.forEach((template) => {
+            if (template.sections.header.data?.gstComposition?.label.length === 0) {
+                template.sections.header.data.gstComposition.label = 'Registered under Composition Scheme';
+            }
+        });
         this.transactionMode = 'update';
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;

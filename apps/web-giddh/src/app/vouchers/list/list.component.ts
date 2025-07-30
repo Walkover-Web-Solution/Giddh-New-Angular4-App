@@ -33,12 +33,12 @@ import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-
 import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
-import { ServiceConfig } from "../../services/service.config";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
+import { ServiceConfig } from "../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 
 export interface VoucherBalances {
@@ -194,7 +194,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True, if user has enable GST E-invoice */
     public isEInvoiceEnabled: boolean = null;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
@@ -334,10 +334,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public settingResponse: any;
     /** Hold request object for setting form to save */
     public formToSave: any;
-    /** Hold route params */
-    public isRouteApplied: boolean = false;
     /** Holds true if update setting mode */
     public isSettingUpdateMode: boolean = false;
+    /** Hold route params */
+    public isRouteApplied: boolean = false;
     /** Hold current url */
     private currentUrl: string = "";
     /** Enum for estimate table columns */
@@ -394,19 +394,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.activeCompany = response;
+            }
+        });
+
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
                 this.selectedInnerTabIndex = 4;
             }
 
-            this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.activeCompany = response;
-                }
-            });
-
-            
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -568,7 +567,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-
         /** Universal date */
         this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -633,7 +631,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     if (this.activeModule === 'list') {
                         this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
                     }
-                    this.advanceFilters.to = this.queryParams.to;
+                    this.advanceFilters.page = this.queryParams.page;
                 }
                 this.getVouchers(true);
                 this.getVoucherBalances();
@@ -863,7 +861,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
         const broadcast = new BroadcastChannel("settings");
         broadcast.onmessage = (event) => {
             if (event?.data?.form !== undefined && event?.data?.form !== null) {
@@ -995,7 +992,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.dataSource.push(item);
             });
-
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
@@ -2043,7 +2039,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response === this.commonLocaleData?.app_yes) {
+            if (response === this.commonLocaleData?.app_yes) {
                 this.actionVoucher(voucher, 'cancel');
             }
         });
@@ -2567,6 +2563,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private clearDateFilters(): void {
         this.universalDate = [];
         this.isUniversalDateApplicable = false;
+    }
+
+    /**
+     * This will be check account of same accouunt on selected pending vouchers
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public isSameAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
     }
 
     /**

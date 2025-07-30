@@ -1,5 +1,5 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, Input, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -225,15 +225,15 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
 
-                if (this.voucherApiVersion !== 2) {
-                    downloadVoucherRequestObject = {
-                        voucherNumber: [invoice.voucherNumber],
-                        voucherType: invoice.voucherType,
-                        accountUniqueName: invoice.account?.uniqueName
-                    };
+                // if (this.voucherApiVersion !== 2) {
+                //     downloadVoucherRequestObject = {
+                //         voucherNumber: [invoice.voucherNumber],
+                //         voucherType: invoice.voucherType,
+                //         accountUniqueName: invoice.account?.uniqueName
+                //     };
 
-                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                }
+                //     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                // }
             }
             this.openDownloadOrSendMailDialog();
         }

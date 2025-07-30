@@ -284,11 +284,11 @@
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"
                         [applicableTaxes]="
-                            taxListForStock?.length
+                            taxListForStock?.length && !currentTxn?.duplicateEntry
                                 ? taxListForStock
-                                : currentTxn?.selectedAccount?.applicableTaxes
+                                : currentTxn?.selectedAccount?.applicableTaxes?.length
                                 ? currentTxn?.selectedAccount?.applicableTaxes
-                                : currentAccountApplicableTaxes?.length
+                                : currentAccountApplicableTaxes?.length && !currentTxn?.duplicateEntry
                                 ? currentAccountApplicableTaxes
                                 : []
                         "
@@ -359,15 +359,18 @@
             <!-- Sales Person -->
             <div class="col-5 pr-0">
                 <reactive-dropdown-field 
+                    #salesPersonDropdownRef
+                    (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
                     [(ngModel)]="blankLedger.salesPersonUniqueName"
+                    [labelValue]="blankLedger.salesPersonName || ''"
                     [name]="'sales-person'"
                     [label]="commonLocaleData?.app_sales_person"
-                    [labelValue]="blankLedger.salesPersonName || ''"
                     [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                     [options]="salesPersonList$ | async"
                     [showCreateNew]="true"
                     [createNewText]="commonLocaleData?.app_create_new"
                     (createOption)="openSalesPersonDialog()"
+                    (selectedOption)="blankLedger.salesPersonName = $event.label"
                 ></reactive-dropdown-field>
             </div>
             <div class="col-7">
@@ -386,6 +389,7 @@
                         <div class="clearfix">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
                                 <span class="d-flex mr-b05">
+                                    <span class="align-item-center pd-r1">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
                                     <span class="d-flex align-item-center">
                                         <a
                                             href="javascript:void(0)"
@@ -463,12 +467,15 @@
                                     <td>
                                         <div class="form-group">
                                             <reactive-dropdown-field
+                                                #voucherDropdownRef
+                                                (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
                                                 id="ledger-voucher-type"
                                                 [name]="'variantDropdown'"
                                                 [label]="commonLocaleData?.app_voucher_type"
                                                 [placeholder]="localeData?.select_vouchers"
                                                 (selectedOption)="getInvoiceListsData($event)"
                                                 [options]="voucherTypeList | async"
+                                                [labelValue]="getVoucherLabel((voucherTypeList | async) || [])"
                                                 [(ngModel)]="blankLedger.voucherType"
                                                 [readonly]="isReadOnly"
                                             >
@@ -771,6 +778,7 @@
                                                 [disabled]="isReadOnly"
                                                 [appearance]="'outline'"
                                                 [(ngModel)]="blankLedger.tagNames"
+                                                [selectedValues]="blankLedger.tagNames"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [showMatLabel]="true"
                                                 [label]="localeData?.assign_tag"

@@ -398,7 +398,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(response => {
+                this.financialOptions = activeCompany.financialYears?.map(response => {
                     if (response) {
                         return { label: response.uniqueName, value: response.uniqueName };
                     }
@@ -410,8 +410,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
@@ -433,7 +433,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }

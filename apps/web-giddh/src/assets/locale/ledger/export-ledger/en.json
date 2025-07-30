@@ -18,8 +18,8 @@
     "ledger_view": "Ledger View",
     "statement_view": "Statement View",
     "t_view": "T View",
-    "export_attachment": "Export Attachment",
-    "export_voucher": "Export Voucher",
+    "attachment": "Attachment",
+    "export_attachment_info": "Export all attachments present on vouchers",
     "invoice_copy_options": {
         "original": "Original",
         "customer": "Customer",

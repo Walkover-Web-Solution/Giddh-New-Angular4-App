@@ -503,7 +503,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.invoiceSetting.generateAutoEWayBill = false;
         }
     }
-    
+
     /**
      * setInvoiceLockDate
      */

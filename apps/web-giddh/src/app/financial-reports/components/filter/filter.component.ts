@@ -20,12 +20,12 @@ import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { ServiceConfig } from '../../../services/service.config';
 import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'financial-filter',
@@ -133,10 +133,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private toaster: ToasterService,
-        @Inject(ServiceConfig) private serviceConfig,
         private componentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private tlPlService: TlPlService
+        private tlPlService: TlPlService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.filterForm = this.fb.group({
             from: [''],

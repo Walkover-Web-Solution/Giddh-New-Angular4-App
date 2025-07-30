@@ -428,6 +428,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     /**
      * * This is used when the user changes the template.
      */

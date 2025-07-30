@@ -39,7 +39,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public dataSource: ProjectDetails[] = [];
     /** Holds the request parameters from the URL */
     public projectListRequest: ProjectRequestType;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Hold active company */
     public activeCompany: any;

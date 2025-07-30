@@ -121,7 +121,30 @@
                         </p>
                     </div>
                 </div>
-                <form #adjustAdvancePaymentForm="ngForm" autocomplete="off" class="flex-grow-1 d-flex flex-column">
+                <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
+                    <div class="row voucher-form">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label for="name"
+                                        >{{ localeData?.adjustment_voucher }}<span class="text-danger">*</span></label
+                                    >
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
+                                </strong>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-2" *ngIf="voucherApiVersion !== 2">
+                            <div class="form-group">
+                                <label>{{ commonLocaleData?.app_tax }}</label>
+                            </div>
+                        </div> -->
+                    </div>
                     <ng-container
                         *ngFor="
                             let entry of adjustVoucherForm?.adjustments;
@@ -325,13 +348,11 @@
                             </div> -->
                             <div
                                 *ngIf="
-                                    (voucherApiVersion !== 2 &&
-                                        !entry.linkingAdjustment &&
-                                        !shouldDisableEdit(entry)) ||
                                     voucherApiVersion === 2
                                 "
                                 class="col-sm-3"
                             >
+                            <!-- voucherApiVersion !== 2 && !entry.linkingAdjustment && !shouldDisableEdit(entry) ||-->
                                 <a
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
@@ -371,9 +392,9 @@
                                     }}</label>
                                 </mat-radio-button>
                             </mat-radio-group>
-                        </div>
+                        </div> -->
 
-                        <ng-container *ngIf="isVoucherModule && isTaxDeducted && voucherApiVersion !== 2">
+                        <!-- <ng-container *ngIf="isVoucherModule && isTaxDeducted && voucherApiVersion !== 2">
                             <div>
                                 <div>
                                     <div class="form-group row clearfix">

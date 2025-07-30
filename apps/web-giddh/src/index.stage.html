@@ -57,11 +57,11 @@
             } catch (error) {
                 console.error(error);
             }
-           // Add preconnect for domainName extracted from cookie
+            // Add preconnect for domainName extracted from cookie
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 // Access domainName directly from the parsed object
-                const apiDomainName = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomainName || 'https://apitest.giddh.com';
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
 
                 if (whiteLabelConfig) {
@@ -77,7 +77,7 @@
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");
                 preconnectLink.rel = "preconnect";
-                preconnectLink.href = `${apiDomainName}`;
+                preconnectLink.href = apiDomain;
 
                 // Append the preconnect link to the head
                 document.head.appendChild(preconnectLink);

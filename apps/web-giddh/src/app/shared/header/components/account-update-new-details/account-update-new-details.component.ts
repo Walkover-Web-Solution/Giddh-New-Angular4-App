@@ -288,6 +288,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public salesPersonCreated: boolean = false;
     /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public showBankDetailPreview: boolean = false;
+    /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public contactPreview: boolean = false;
 
     constructor(
@@ -530,7 +531,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
             }
-        }, 2000);
+        }, 500);
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -2598,6 +2599,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
         }
         accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));  
         this.updateViaPatchApi.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
             accountRequest

@@ -13,7 +13,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
@@ -33,7 +33,7 @@ import { Router } from '@angular/router';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ExportMasterDialogComponent } from '../export-master-dialog/export-master-dialog.component';
 
 @Component({
@@ -67,14 +67,34 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public shareAccountForm: UntypedFormGroup;
     public moveAccountForm: UntypedFormGroup;
     public activeGroupSelected$: Observable<string[]>;
-    @ViewChild('shareGroupModal', { static: true }) public shareGroupModal: ModalDirective;
-    @ViewChild('shareAccountModal', { static: true }) public shareAccountModal: ModalDirective;
-    @ViewChild('shareAccountModalComp', { static: true }) public shareAccountModalComp: ShareAccountModalComponent;
-    @ViewChild('shareGroupModalComp', { static: true }) public shareGroupModalComp: ShareGroupModalComponent;
-    @ViewChild('deleteMergedAccountModal', { static: true }) public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal', { static: true }) public moveMergedAccountModal: ModalDirective;
-    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
-    @ViewChild('groupExportLedgerModal', { static: true }) public groupExportLedgerModal: ModalDirective;
+    /** Template reference for share group dialog content */
+    @ViewChild('shareGroupDialog', { static: true }) public shareGroupDialog: TemplateRef<any>;
+    /** Template reference for share account dialog content */
+    @ViewChild('shareAccountDialog', { static: true }) public shareAccountDialog: TemplateRef<any>;
+    /** Template reference for delete merged account dialog content */
+    @ViewChild('deleteMergedAccountDialog', { static: true }) public deleteMergedAccountDialog: TemplateRef<any>;
+    /** Template reference for move merged account dialog content */
+    @ViewChild('moveMergedAccountDialog', { static: true }) public moveMergedAccountDialog: TemplateRef<any>;
+    /** Template reference for delete account dialog content */
+    @ViewChild('deleteAccountDialog', { static: true }) public deleteAccountDialog: TemplateRef<any>;
+    /** Template reference for group export ledger dialog content */
+    @ViewChild('groupExportLedgerDialog', { static: true }) public groupExportLedgerDialog: TemplateRef<any>;
+    /** Reference to share group dialog */
+    public shareGroupRef: MatDialogRef<any>;
+    /** Reference to share account dialog */
+    public shareAccountRef: MatDialogRef<any>;
+    /** Reference to delete merged account dialog */
+    public deleteMergedAccountRef: MatDialogRef<any>;
+    /** Reference to move merged account dialog */
+    public moveMergedAccountRef: MatDialogRef<any>;
+    /** Reference to delete account dialog */
+    public deleteAccountRef: MatDialogRef<any>;
+    /** Reference to group export ledger dialog */
+    public groupExportLedgerRef: MatDialogRef<any>;
+    /** Reference to share account modal component */
+    @ViewChild('shareAccountModalComp', { static: false }) public shareAccountModalComp: ShareAccountModalComponent;
+    /** Reference to share group modal component */
+    @ViewChild('shareGroupModalComp', { static: false }) public shareGroupModalComp: ShareGroupModalComponent;
     @Input() public breadcrumbPath: string[] = [];
     @Input() public breadcrumbUniquePath: string[] = [];
     public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -526,22 +546,53 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     }
 
-    public showShareGroupModal() {
-        this.shareGroupModal?.show();
-        this.shareGroupModalComp.getGroupSharedWith();
+    /**
+     * Open share group dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public openShareGroupDialog(): void {
+        this.shareGroupRef = this.dialog.open(this.shareGroupDialog, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
+        this.shareGroupRef.afterOpened().pipe(take(1)).subscribe(() => {
+            this.shareGroupModalComp.getGroupSharedWith();
+        });
     }
 
-    public hideShareGroupModal() {
-        this.shareGroupModal?.hide();
+    /**
+     * Close share group dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public closeShareGroupDialog(): void {
+        this.shareGroupRef?.close();
     }
 
-    public showShareAccountModal() {
-        this.shareAccountModal?.show();
-        this.shareAccountModalComp.getAccountSharedWith();
+    /**
+     * Open share account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public openShareAccountDialog(): void {
+        this.shareAccountRef = this.dialog.open(this.shareAccountDialog, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
+
+        this.shareAccountRef.afterOpened().pipe(take(1)).subscribe(() => {
+            this.shareAccountModalComp.getAccountSharedWith();
+        });
     }
 
-    public hideShareAccountModal() {
-        this.shareAccountModal?.hide();
+    /**
+     * Close share account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public closeShareAccountDialog(): void {
+        this.shareAccountRef?.close();
     }
 
     public showAddGroupForm() {
@@ -553,25 +604,44 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
     }
 
-    public showDeleteMergedAccountModal(merge: string) {
+    /**
+     * Open delete merged account dialog
+     * @param merge string
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public openDeleteMergedAccountDialog(merge: string): void {
         merge = merge?.trim();
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
-        this.deleteMergedAccountModal?.show();
+        this.deleteMergedAccountRef = this.dialog.open(this.deleteMergedAccountDialog, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
     }
 
-    public hideDeleteMergedAccountModal() {
-        this.deleteMergedAccountModal?.hide();
+    /**
+     * Close delete merged account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public closeDeleteMergedAccountDialog(): void {
+        this.deleteMergedAccountRef?.close();
     }
 
-    public deleteMergedAccount() {
+    /**
+     * Deletes merged account
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public deleteMergedAccount(): void {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.selectedAccountForDelete];
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
-        this.hideDeleteMergedAccountModal();
+        this.closeDeleteMergedAccountDialog();
     }
 
     public selectAccount(v: IOption[]) {
@@ -609,15 +679,28 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         }
     }
 
-    public showMoveMergedAccountModal() {
+    /**
+     * Open move merged account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public openMoveMergedAccountDialog(): void {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
             ?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
             ?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
-        this.moveMergedAccountModal?.show();
+        this.moveMergedAccountRef = this.dialog.open(this.moveMergedAccountDialog, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
     }
 
-    public hideMoveMergedAccountModal() {
-        this.moveMergedAccountModal?.hide();
+    /**
+     * Close move merged account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public closeMoveMergedAccountDialog(): void {
+        this.moveMergedAccountRef?.close();
     }
 
     public moveMergeAccountTo() {
@@ -628,8 +711,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         obj.moveTo = this.selectedAccountForMove;
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
-        this.hideDeleteMergedAccountModal();
-        this.hideMoveMergedAccountModal();
+        this.closeDeleteMergedAccountDialog();
+        this.closeMoveMergedAccountDialog();
     }
 
     public addNewAccount(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
@@ -650,12 +733,25 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
     }
 
-    public showDeleteAccountModal() {
-        this.deleteAccountModal?.show();
+    /**
+     * Open delete account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public openDeleteAccountDialog(): void {
+        this.deleteAccountRef = this.dialog.open(this.deleteAccountDialog, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
     }
 
-    public hideDeleteAccountModal() {
-        this.deleteAccountModal?.hide();
+    /**
+     * Close delete account dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public closeDeleteAccountDialog(): void {
+        this.deleteAccountRef?.close();
     }
 
     public deleteAccount() {
@@ -664,15 +760,23 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
-        this.hideDeleteAccountModal();
+        this.closeDeleteAccountDialog();
     }
 
     public customMoveGroupFilter(term: string, item: IOption): boolean {
         return (item?.label?.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value?.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
-    public exportGroupLedger() {
-        this.groupExportLedgerModal?.show();
+    /**
+     * Open group export ledger dialog
+     * @returns void
+     * @memberof AccountOperationsComponent
+     */
+    public exportGroupLedger(): void {
+        this.groupExportLedgerRef = this.dialog.open(this.groupExportLedgerDialog, {
+            panelClass: ['mat-dialog-md'],
+            disableClose: true
+        });
     }
 
     /**
@@ -682,7 +786,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      * @memberof AccountOperationsComponent
      */
     public hideGroupExportModal(response: any) {
-        this.groupExportLedgerModal?.hide();
+        this.groupExportLedgerRef?.close();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
                 this.groupExportLedgerBodyRequest.from = response.body?.from;
@@ -715,7 +819,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      */
     public hideAccountGroupExportModal(event: boolean): void {
         if (event) {
-            this.groupExportLedgerModal?.hide();
+            this.groupExportLedgerRef?.close();
             this.router.navigate(['pages/downloads']);
         }
     }

@@ -10,7 +10,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <!-- start header -->
-    <div class="modal-header d-flex flex-row-reverse" role="dialog" id="alb" aria-labelledby="masterdialog" #header>
+    <div class="dialog-header d-flex flex-row-reverse" id="alb" aria-labelledby="masterdialog" #header>
         <span class="d-flex align-items-center">
             <!-- Dropdown for Archive Accounts Filter -->
             <a
@@ -40,6 +40,7 @@
                 <div class="form-inline">
                     <div class="form-group search-bar">
                         <input
+                            matInput
                             type="text"
                             name="grpSrch"
                             #grpSrch
@@ -64,10 +65,10 @@
                 </div>
                 <!-- form-inline -->
             </div>
-            <button aria-hidden="true" class="close m-0 p-0" data-dismiss="modal" (click)="closePopupEvent()">×</button>
+            <i aria-label="close icon" class="icon-cross cursor-pointer" (click)="closePopupEvent()"></i>
         </span>
         <span>
-            <h3 class="modal-title bg pd-t05">{{ localeData?.page_heading }}</h3>
+            <h3 mat-dialog-title class="bg pd-t05">{{ localeData?.page_heading }}</h3>
         </span>
     </div>
     <!-- end header -->
@@ -126,20 +127,20 @@
             </div>
             <!-- middle body -->
             <div class="form-box height-in-vh">
-                    <account-operations
-                        [topSharedGroups]="topSharedGroups"
-                        [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                        [breadcrumbPath]="breadcrumbPath"
-                        [breadcrumbUniquePath]="breadcrumbUniquePath"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                        [isMasterOpen]="true"
-                        [activeGroupUniqueName]="activeGroupUniqueName"
-                        (accountUpdated)="handleUpdateAccount()"
-                        #form
-                        *ngIf="localeData?.page_heading"
-                    >
-                    </account-operations>
+                <account-operations
+                    [topSharedGroups]="topSharedGroups"
+                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                    [breadcrumbPath]="breadcrumbPath"
+                    [breadcrumbUniquePath]="breadcrumbUniquePath"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [isMasterOpen]="true"
+                    [activeGroupUniqueName]="activeGroupUniqueName"
+                    (accountUpdated)="handleUpdateAccount()"
+                    #form
+                    *ngIf="localeData?.page_heading"
+                >
+                </account-operations>
             </div>
         </div>
     </div>

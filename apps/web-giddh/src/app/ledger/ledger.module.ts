@@ -64,6 +64,8 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
 import { CarouselComponent } from '../shared/carousel/carousel.component';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
+import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
+import { MatDividerModule } from '@angular/material/divider';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 @NgModule({
@@ -144,10 +146,12 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         StockCreateEditModule,
         MatIconModule,
         GiddhLedgerPaginatorModule,
+        BankIntegrationModule,
         CarouselComponent,
         AsideMenuCreateTaxModule,
-        BankIntegrationModule,
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        TributeMentionModule,
+        MatDividerModule
     ]
 })
 export class LedgerModule {

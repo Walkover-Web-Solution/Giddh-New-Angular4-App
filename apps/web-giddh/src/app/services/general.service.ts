@@ -1098,7 +1098,7 @@ export class GeneralService {
      */
     public getAvailableThemes(): any {
         return [
-            { label: 'Default', value: 'default-theme' },
+            { label: 'Light', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
         ];
     }
@@ -1148,9 +1148,9 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
-                if (this.voucherApiVersion !== 2) {
-                    item.exchangeRate = balanceDueAmountConversionRate;
-                }
+                // if (this.voucherApiVersion !== 2) {
+                //     item.exchangeRate = balanceDueAmountConversionRate;
+                // }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2234,28 +2234,16 @@ export class GeneralService {
      *
      * @throws {Error} If there is an error parsing the white label data from the local storage.
      */
-public getDecodedWhiteLabel(): any {
-    try {
-        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-        return whiteLabelData?.body || null;
-    } catch (error) {
-        console.error('Error parsing whiteLabel data from localStorage:', error);
-        return null;
+    public getDecodedWhiteLabel(): any {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            console.error('Error parsing whiteLabel data from localStorage:', error);
+            return null;
+        }
     }
-}
 
-    /**
-     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
-     *
-     * @param {string} text - The string containing placeholders.
-     * @param {string[]} args - The list of values to replace the placeholders.
-     * @returns {string} A string where placeholders are replaced with corresponding arguments.
-     * @memberof GeneralService
-     */
-    public replacePlaceholders(text: string, ...args: string[]): string {
-        return text.replace(/\[.*?\]/g, () => args.shift() || '');
-    }
-    
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
@@ -2274,6 +2262,18 @@ public getDecodedWhiteLabel(): any {
             const placeholder = `:${key}`;
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
+    }
+
+    /**
+    * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+    *
+    * @param {string} text - The string containing placeholders.
+    * @param {string[]} args - The list of values to replace the placeholders.
+    * @returns {string} A string where placeholders are replaced with corresponding arguments.
+    * @memberof GeneralService
+    */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
     }
 
     /**
@@ -2373,6 +2373,51 @@ public getDecodedWhiteLabel(): any {
             label: (i + 1).toString(),
             value: (i + 1).toString()
         }));
+    }
+
+    /**
+     * Returns the first and last date of a given month or quarter and year.
+     * @param type - 'month' or 'quarter'
+     * @param value - For 'month': 'MM-YYYY', for 'quarter': 'Q-YYYY' where Q is 01-04
+     * @returns An object with fromDate and toDate in 'DD-MM-YYYY' format.
+     */
+    public getDateRange(type: 'month' | 'quarter', value: string): { fromDate: string, toDate: string } {
+        const pad = (n: number) => n < 10 ? '0' + n : n.toString();
+        if (type === 'month') {
+            if (!value || !/^\d{2}-\d{4}$/.test(value)) {
+                return { fromDate: '', toDate: '' };
+            }
+            const [month, year] = value.split('-').map(Number);
+            const lastDay = new Date(year, month, 0).getDate();
+            const fromDate = `01-${pad(month)}-${year}`;
+            const toDate = `${pad(lastDay)}-${pad(month)}-${year}`;
+            return { fromDate, toDate };
+        } else if (type === 'quarter') {
+            if (!value || !/^\d{2}-\d{4}$/.test(value)) {
+                return { fromDate: '', toDate: '' };
+            }
+            const [quarterStr, yearStr] = value.split('-');
+            const quarter = Number(quarterStr);
+            const year = Number(yearStr);
+            let fromMonth = 1, toMonth = 3;
+            switch (quarter) {
+                case 1:
+                    fromMonth = 1; toMonth = 3; break;
+                case 2:
+                    fromMonth = 4; toMonth = 6; break;
+                case 3:
+                    fromMonth = 7; toMonth = 9; break;
+                case 4:
+                    fromMonth = 10; toMonth = 12; break;
+                default:
+                    return { fromDate: '', toDate: '' };
+            }
+            const fromDate = `01-${pad(fromMonth)}-${year}`;
+            const lastDay = new Date(year, toMonth, 0).getDate();
+            const toDate = `${pad(lastDay)}-${pad(toMonth)}-${year}`;
+            return { fromDate, toDate };
+        }
+        return { fromDate: '', toDate: '' };
     }
 }
 
