@@ -3905,7 +3905,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let selectedAccountUniqueName = "";
 
         if (isActiveAccountAndParticularIsSame) {
-            selectedAccountName = transactionsParticular?.name;
+            if (transactionsParticular?.stock) {
+                selectedAccountName = `${transactionsParticular?.name} (${transactionsParticular?.stock?.name})`;
+            } else {
+                selectedAccountName = transactionsParticular?.name;
+            }
             selectedAccountUniqueName = transactionsParticular?.uniqueName;
         } else {
             selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
