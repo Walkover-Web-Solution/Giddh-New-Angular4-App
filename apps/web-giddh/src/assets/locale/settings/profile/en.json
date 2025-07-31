@@ -91,5 +91,6 @@
     "company_sales_tax_list": "List of all the Sales Tax's created and linked in the company",
     "ledger_default_view": "Ledger Default View",
     "select_view": "Select View",
-    "set_as_default_address": "Set as Default Address"
+    "set_as_default_address": "Set as Default Address",
+    "default_address": "Default Address"
 }

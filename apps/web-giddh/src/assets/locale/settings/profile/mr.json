@@ -91,5 +91,6 @@
     "company_sales_tax_list": "कंपनीमध्ये तयार केलेल्या आणि लिंक केलेल्या सर्व विक्रीकरांची यादी",
     "ledger_default_view": "लेजर डीफॉल्ट दृश्य",
     "select_view": "वियु निवडा",
-    "set_as_default_address": "डीफॉल्ट पत्ता सेट करा"
+    "set_as_default_address": "डीफॉल्ट पत्ता सेट करा",
+    "default_address": "डीफॉल्ट पत्ता"
 }
