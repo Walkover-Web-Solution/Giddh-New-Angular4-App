@@ -21,9 +21,9 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { ServiceConfig } from '../../../services/service.config';
 import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
