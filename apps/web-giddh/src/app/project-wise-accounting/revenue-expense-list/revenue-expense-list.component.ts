@@ -16,6 +16,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { OrganizationType } from '../../models/user-login-state';
+import { AccountingGroupEnum } from '../../shared/Enums/common.enum';
 
 @Component({
     selector: 'revenue-expense-list',
@@ -76,9 +77,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Index of the currently selected tab */
     public selectedTabIndex: number = 0;
     /** Income group categories */
-    public incomeGroup: string = "revenuefromoperations,otherincome,fixedassets";
+    public incomeGroup: string = `${AccountingGroupEnum.RevenueFromOperations},${AccountingGroupEnum.OtherIncome},${AccountingGroupEnum.FixedAssets}`;
     /** Expense group categories */
-    public expenseGroup: string = "indirectexpenses,operatingcost,fixedassets";
+    public expenseGroup: string = `${AccountingGroupEnum.IndirectExpenses},${AccountingGroupEnum.OperatingCost},${AccountingGroupEnum.FixedAssets}`;
     /** Holds true, if form is valid */
     public isCreateAccountValidForm: boolean = true;
     /** Getter for the entry list form array */
