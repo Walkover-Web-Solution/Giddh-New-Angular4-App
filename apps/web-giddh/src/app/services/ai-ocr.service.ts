@@ -27,6 +27,14 @@ export class AiOcrService {
     public saveAndNextSuccess$: BehaviorSubject<any> = new BehaviorSubject(null);
     /** Indicates whether the "Skip and Next" action is active. */
     public skipAndNext$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the "Date Range" action is active. */
+    public dateRangeEmit$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the "Send List Data" action is active. */
+    public sendListData$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the "Reset Data" action is active. */
+    public resetData$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the "Select Branch" action is active. */
+    public selectBranch$: BehaviorSubject<any> = new BehaviorSubject(null);
 
     constructor(
         private errorHandler: GiddhErrorHandler,
