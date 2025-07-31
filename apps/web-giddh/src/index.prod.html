@@ -16,11 +16,12 @@
         </script>
         <!-- End Google Tag Manager -->
         <script type="text/javascript">
+            // Add preconnect for domainName extracted from cookie
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
-
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
-
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://api.giddh.com";
+                
                 if (whiteLabelConfig) {
                     // Remove the h1 tag containing the image
                     const logoContainer = document.querySelector("#main-giddh-loader h1");
@@ -31,6 +32,13 @@
                     // If no whiteLabel object, set the logo as usual
                     document.getElementById("dynamic-logo").src = logoUrl;
                 }
+                // Create a new preconnect link element
+                const preconnectLink = document.createElement("link");
+                preconnectLink.rel = "preconnect";
+                preconnectLink.href = apiDomain;
+
+                // Append the preconnect link to the head
+                document.head.appendChild(preconnectLink);
             };
         </script>
         <script defer src="./assets/js/lodash.min.js"></script>
@@ -82,7 +90,6 @@
         <link rel="preconnect" href="https://headway-widget.net" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://s3-ap-south-1.amazonaws.com" />
-        <link rel="preconnect" href="https://api.giddh.com" />
     </head>
     <body class="unresponsive">
         <!-- Google Tag Manager (noscript) -->

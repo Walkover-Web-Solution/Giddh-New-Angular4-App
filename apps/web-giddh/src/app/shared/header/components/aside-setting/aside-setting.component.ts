@@ -9,8 +9,8 @@ import { CompanyResponse, Organization } from 'apps/web-giddh/src/app/models/api
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
-import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'aside-setting',

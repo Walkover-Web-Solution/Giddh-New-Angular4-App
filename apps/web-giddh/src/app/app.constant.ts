@@ -15,7 +15,7 @@ export const Configuration = {
     'APP_FOLDER': APP_FOLDER,
     'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
     'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY,
+    'RAZORPAY_KEY': RAZORPAY_KEY
 };
 
 /** Add Company business type*/
@@ -709,3 +709,11 @@ export enum WeekdaysEnum {
     FRIDAY = 'friday',
     SATURDAY = 'saturday'
 }
+
+/** Get Bifurcation Type */
+export enum GetBifurcationType {
+    MONTH = 'month',
+    QUATER = 'quater',
+    QUARTER = 'quarter'
+}
+    

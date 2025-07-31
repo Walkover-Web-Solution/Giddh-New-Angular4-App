@@ -23,10 +23,10 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { ServiceConfig } from '../../services/service.config';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
-import { ServiceConfig } from '../../services/service.config';
 
 export enum DateType {
     start = 'start',
@@ -262,15 +262,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public commonLocaleData: any = {};
 
     constructor(
+        @Inject(ServiceConfig) private serviceConfig,
         private _ref: ChangeDetectorRef,
         private _localeService: NgxDaterangepickerLocaleService,
-        public settingsFinancialYearService: SettingsFinancialYearService, 
+        public settingsFinancialYearService: SettingsFinancialYearService,
         private router: Router, 
         private store: Store<AppState>, 
         private settingsFinancialYearActions: SettingsFinancialYearActions, 
         private dialog: MatDialog, 
-        private generalService: GeneralService,
-        @Inject(ServiceConfig) private serviceConfig
+        private generalService: GeneralService
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
