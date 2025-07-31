@@ -327,22 +327,10 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Callback for translation response complete
-   *
-   * @param {boolean} event
-   * @memberof ImportsComponent
-   */
-    public translationComplete(event: boolean): void {
-        if (event) {
-            this.getImports(true);
-        }
-    }
-
-    /**
-    * Branch change handler
-    *
-    * @memberof ImportsComponent
-    */
+     * Branch change handler
+     *
+     * @memberof EWayBillComponent
+     */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.importRequest.branchUniqueName = selectedEntity?.value;
