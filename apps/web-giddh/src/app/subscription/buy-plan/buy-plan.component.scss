@@ -23,11 +23,23 @@
     }
 
     .plan-content {
-        padding: 8px 8px 36px 8px;
+        padding: 8px 8px 10px 8px;
 
         .plan-title {
             min-height: 72px;
             font-weight: 400;
+
+            span {
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+            }
+
+            @media screen and (max-width: 1299px) {
+                font-size: var(--font-size-20) !important;
+                min-height: 30px;
+            }
         }
 
         h2,
@@ -39,6 +51,14 @@
         p {
             s {
                 color: var(--color-gray);
+            }
+
+            @media screen and (max-width: 1299px) {
+                margin-bottom: 6px !important;
+
+                .plan-price {
+                    font-size: var(--font-size-20) !important;
+                }
             }
         }
 
@@ -165,6 +185,11 @@
 
     .plan-summary-heading {
         height: 50px;
+
+        @media screen and (max-width: 1299px) {
+            height: 25px;
+            margin-bottom: 10px !important;
+        }
     }
 
     .plan-summary {
@@ -176,6 +201,11 @@
             min-width: 500px;
             .plan-header{
                 height: 50px;
+
+                @media screen and (max-width: 1299px) {
+                    height: 30px;
+                    margin-bottom: 15px !important;
+                }
             }
         }
     }
@@ -196,6 +226,12 @@
     amount-field {
         display: inline-block;
         text-decoration: inherit;
+    }
+
+    @media screen and (max-width: 1299px) {
+        form {
+            margin-top: 10px !important;
+        }
     }
 }
 
