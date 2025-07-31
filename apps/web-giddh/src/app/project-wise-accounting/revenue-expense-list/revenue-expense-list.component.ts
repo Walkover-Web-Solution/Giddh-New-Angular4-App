@@ -76,9 +76,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Index of the currently selected tab */
     public selectedTabIndex: number = 0;
     /** Income group categories */
-    public incomeGroup: string = "revenuefromoperations,otherincome";
+    public incomeGroup: string = "revenuefromoperations,otherincome,fixedassets";
     /** Expense group categories */
-    public expenseGroup: string = "indirectexpenses,operatingcost";
+    public expenseGroup: string = "indirectexpenses,operatingcost,fixedassets";
     /** Holds true, if form is valid */
     public isCreateAccountValidForm: boolean = true;
     /** Getter for the entry list form array */
