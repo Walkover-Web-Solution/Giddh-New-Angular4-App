@@ -25,6 +25,7 @@ import { AdvanceSearchRequest } from '../models/interfaces/advance-search-reques
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
+import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
@@ -56,7 +57,6 @@ import { SettingIntegrationComponentStore } from '../settings/integration/utilit
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { LedgerComponentStore } from './ledger.store';
-import { ToasterService } from '../services/toaster.service';
 import { ServiceConfig } from '../services/service.config';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -436,8 +436,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
         private ledgerComponentStore: LedgerComponentStore,
-        private breakpointObserver: BreakpointObserver,
-        private toasty: ToasterService
+        private breakpointObserver: BreakpointObserver
     ) {
         if (window.localStorage) {
             localStorage.setItem('refNo', null);

@@ -2250,7 +2250,7 @@ export class GeneralService {
      * @param model - An object containing key-value pairs to replace in the URL.
      * @returns The formatted URL with placeholders replaced.
      * @memberof GeneralService
-     */
+    */
     public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
         if (!url) return url;
         const updatedModel = {
@@ -2381,7 +2381,7 @@ export class GeneralService {
      * @param value - For 'month': 'MM-YYYY', for 'quarter': 'Q-YYYY' where Q is 01-04
      * @returns An object with fromDate and toDate in 'DD-MM-YYYY' format.
      */
-    public getDateRange(type: 'month' | 'quarter', value: string): { fromDate: string, toDate: string } {
+    public getStartAndEndDateOfMonthOrQuater(type: 'month' | 'quarter', value: string): { fromDate: string, toDate: string } {
         const pad = (n: number) => n < 10 ? '0' + n : n.toString();
         if (type === 'month') {
             if (!value || !/^\d{2}-\d{4}$/.test(value)) {

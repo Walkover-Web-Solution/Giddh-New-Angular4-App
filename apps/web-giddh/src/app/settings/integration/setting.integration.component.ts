@@ -30,7 +30,6 @@ import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ServiceConfig } from '../../services/service.config';
-
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
