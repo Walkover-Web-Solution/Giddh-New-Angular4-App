@@ -8,29 +8,17 @@ import { TemplateFroalaComponent } from '../template-froala/template-froala.comp
 import { take } from 'rxjs';
 import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../aside-menu-account/aside.menu.account.module';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OrganizationType } from '../../models/user-login-state';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'app-action-menu',
     standalone: true,
     imports: [CommonModule, MatMenuModule, MatButtonModule, AccountUpdateNewDetailsModule, AsideMenuAccountModule],
     templateUrl: './action-menu.component.html',
-    styleUrls: ['./action-menu.component.scss'],
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    styleUrls: ['./action-menu.component.scss']
 })
 export class ActionMenuComponent {
     /** Account object for which the action menu is displayed */
@@ -79,6 +67,8 @@ export class ActionMenuComponent {
     public selectedGroupForCreateAcc: string = '';
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** True if action menu is open */
+    public isActionMenu: boolean = true;
 
     constructor(private generalService: GeneralService, private dialog: MatDialog, private store: Store<AppState>) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -233,8 +223,7 @@ export class ActionMenuComponent {
                 bottom: '0'
             },
             disableClose: true
-        });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        });dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
             }

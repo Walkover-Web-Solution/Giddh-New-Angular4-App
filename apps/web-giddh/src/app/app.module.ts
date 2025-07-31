@@ -47,7 +47,7 @@ export function fetchWhiteLabel(): () => Promise<void> {
     return async () => {
         if (!whiteLabelConfig) {
             try {
-                const response = await fetch('https://apitest.giddh.com/white-label');
+                const response = await fetch(`${Configuration.ApiUrl}/white-label`);
                 const data = await response.json();
                 localStorage.setItem('whiteLabel', JSON.stringify(data));
                 whiteLabelConfig = data;
