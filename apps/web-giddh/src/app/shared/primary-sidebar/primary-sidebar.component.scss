@@ -509,8 +509,8 @@ cdk-tree {
                 }
             }
         }
-        &:hover {
-            &:has(.child-wrapper) {
+        &.has-no-child {
+            &:hover {
                 background-color: var(--color-giddh-common-background);
                 color: var(--color-white);
                 .main-item-wrapper {
@@ -525,13 +525,19 @@ cdk-tree {
                 }
             }
         }
-        &.active {
-            &:has(.child-wrapper) {
+        &.has-no-child {
+            &.active {
                 background-color: var(--color-giddh-common-background);
                 color: var(--color-white);
-
-                span {
-                    color: inherit;
+                .main-item-wrapper {
+                    .main-item {
+                        .create-new {
+                            visibility: visible;
+                        }
+                        span {
+                            color: inherit;
+                        }
+                    }
                 }
             }
         }
