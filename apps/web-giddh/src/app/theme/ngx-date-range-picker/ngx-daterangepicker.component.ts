@@ -2038,6 +2038,35 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
+     /**
+     * Once scrolling reaches to top, this will set calendar to 1st available month
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
+     public setCalendarToActiveMonth(position: string): void {
+        let index = 0;
+        if (position === "end") {
+            if (this.calendarMonths && this.calendarMonths.length > 0) {
+                index = this.calendarMonths.length - 1;
+            }
+        }
+
+        if (this.calendarMonths && this.calendarMonths[index]) {
+            let setMonth = dayjs();
+            setMonth.set('date', 1);
+
+            if (this.calendarMonths[index].start) {
+                setMonth.set('year', this.calendarMonths[index].start.year);
+                setMonth.set('month', this.calendarMonths[index].start.month);
+                this.startCalendar.month = setMonth;
+            } else if (this.calendarMonths[index].end) {
+                setMonth.set('year', this.calendarMonths[index].end.year);
+                setMonth.set('month', this.calendarMonths[index].end.month);
+                this.startCalendar.month = setMonth;
+            }
+        }
+    }
+
     /**
      * This will work in case of mouse wheel not used and manually dragged the scrollbar in top direction
      *

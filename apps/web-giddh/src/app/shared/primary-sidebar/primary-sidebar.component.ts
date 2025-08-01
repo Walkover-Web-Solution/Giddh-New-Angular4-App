@@ -120,7 +120,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Handle cdk tree control */
     public treeControl = new FlatTreeControl<any>(
         node => node.level,
-        node => node.expandable,
+        node => node.expandable
     );
 
     constructor(
@@ -606,6 +606,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Get visible menu items
+     *
+     * @private
+     * @memberof PrimarySidebarComponent
+     */
     private getVisibleMenuItems(): void {
         this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
         const flattenedItems: AllItems[] = [];
@@ -714,13 +720,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getParentNode(node: any): any {
         const nodeIndex = this.allItems.indexOf(node);
-    
         for (let i = nodeIndex - 1; i >= 0; i--) {
           if (this.allItems[i].level === node.level - 1) {
             return this.allItems[i];
           }
         }
-    
         return null;
       }
     
