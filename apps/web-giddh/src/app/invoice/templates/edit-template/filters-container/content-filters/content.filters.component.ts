@@ -1,10 +1,10 @@
 import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, DoCheck, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store';
 import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/company/company.reducer';
@@ -13,12 +13,15 @@ import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
+import { CustomEmailComponentStore } from 'apps/web-giddh/src/app/shared/template-froala/utility/template-froala.store';
 
 @Component({
     selector: 'content-selector',
     templateUrl: 'content.filters.component.html',
-    styleUrls: ['content.filters.component.scss']
+    styleUrls: ['content.filters.component.scss'],
+    providers: [CustomEmailComponentStore]
 })
 
 export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDestroy {
@@ -53,15 +56,21 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public voucherApiVersion: 1 | 2;
     /** Holds the value if company is Indian */
     public isIndianCompany: boolean = false;
+    /** Hold list of suggestion items for Tribute.js */
+    public suggestionList: any[] = [];
+    /** Holds Store get account content suggestions API success state as observable*/
+    public accountSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
 
     constructor(
         private store: Store<AppState>,
         private invoiceUiDataService: InvoiceUiDataService,
         private activatedRoute: ActivatedRoute,
         private toaster: ToasterService,
+        @Inject(ServiceConfig) private serviceConfig,
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private componentStore: CustomEmailComponentStore
     ) {
         let companies = null;
         let defaultTemplate = null;
@@ -119,11 +128,20 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                     this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
                     this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
                 } else {
-                        this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-                        this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+                    this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+                    this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
                 }
             }
             this.assignImageSignature();
+        });
+
+        this.accountSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.accountSuggestions) {
+                this.suggestionList = response.accountSuggestions.map(item => ({
+                    key: item,
+                    value: item
+                }));
+            }
         });
 
         this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -139,7 +157,10 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         });
 
         this.files = []; // local uploading files array
+
+        this.getAccountContents();
     }
+
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
@@ -148,6 +169,16 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.assignImageSignature();
             this.invoiceUiDataService.setContentForm(this.contentForm);
         }
+    }
+
+    /**
+     * Fetches account content suggestions 
+     *
+     * @returns {void}
+     * @memberof ContentFilterComponent
+     */
+    public getAccountContents(): void {
+        this.componentStore.getEmailContentSuggestions("account");
     }
 
     /**
@@ -242,7 +273,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                         if (this.invoiceUiDataService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
-                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
+                        this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
                         this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
                         this.invoiceUiDataService.unusedImageSignature = response.body?.uniqueName;
                         this.onChangeFieldVisibility(null, null, null);
@@ -349,7 +380,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
             this.signatureImgAttached = true;
         } else {
             this.signatureSrc = '';

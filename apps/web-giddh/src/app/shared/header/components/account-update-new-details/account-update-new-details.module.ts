@@ -13,6 +13,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NewConfirmModalModule } from "apps/web-giddh/src/app/theme/new-confirm-modal";
+import { SalesPersonService } from "../../../sales-person/utility/sales-person.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
@@ -40,7 +41,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         ModalModule,
         ConfirmModalModule,
         ConfirmationModalModule
-    ]
+    ],
+    providers: [SalesPersonService]
 })
 
 export class AccountUpdateNewDetailsModule {

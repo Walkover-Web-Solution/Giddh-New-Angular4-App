@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -60,6 +60,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
 import { CallBackPageComponent } from './call-back-page/call-back-page.component';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -191,11 +192,24 @@ export function provideConfig() {
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: provideConfig
+            useFactory: (injector: Injector) => {
+                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
+                return new AuthServiceConfig(
+                    [
+                        {
+                            id: GoogleLoginProvider.PROVIDER_ID,
+                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
+                        }
+                    ],
+                    false
+                );
+            },
+            deps: [Injector]
         }
     ]
 })
 export class SharedModule {
+    constructor(private injector: Injector){}
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,

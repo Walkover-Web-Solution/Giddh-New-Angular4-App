@@ -21,6 +21,9 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
                 path: 'create-warehouse', component: CreateWarehouseComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             },
             {
+                path: 'trigger', pathMatch: 'prefix', loadChildren: () => import('../shared/triggers/triggers.module').then(module => module.TriggersModule), canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
+            },
+            {
                 path: ':type', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             },
             {

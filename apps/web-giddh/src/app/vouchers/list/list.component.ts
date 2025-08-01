@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -7,7 +7,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, filter, merge, of as observableOf, skip, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -33,6 +33,7 @@ import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-
 import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
+import { ServiceConfig } from "../../services/service.config";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { RestrictedModules } from '../../app.constant';
@@ -132,6 +133,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
+    /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -362,6 +364,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private router: Router,
         public dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -459,7 +462,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
@@ -519,12 +522,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getSelectedTabIndex();
                 this.ledgerSearchRequest.page = 1;
                 this.ledgerSearchRequest.count = PAGINATION_LIMIT;
-                // 'pending', 'settings', 'templates' These tabs are not voucher list
-                let tab = (!this.isCompany && !this.isConsolidatedBranch) ? ['pending', 'templates'] : ['pending', 'settings', 'templates'];
-                if (this.universalDate && !tab.includes(this.activeModule)) {
-                    this.getVouchers(true);
-                    this.getVoucherBalances();
-                }
                 if (this.universalDate && !['list', 'settings', 'templates'].includes(this.activeModule)) {
                     this.customDateSelected = false;
                     this.getLedgersOfInvoice();
@@ -573,7 +570,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
 
         /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (localStorage.getItem('universalSelectedDate')) {
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
@@ -2230,7 +2227,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private openUrl(url: string): void {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${url}`;
+            url = location.origin + location.pathname + `#.${url}`;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
@@ -3268,6 +3265,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
             this.setEInvoiceColumns();
             this.getVouchers(false);
+            this.getVoucherBalances();
         });
        setTimeout(() => {
             this.isColumnsLoading = false;

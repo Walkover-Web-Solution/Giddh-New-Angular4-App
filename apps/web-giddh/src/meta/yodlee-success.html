@@ -35,7 +35,7 @@
 
     <div class="copy-right">
         <p>
-            All right are reserved &copy; 2020 Walkover <a href="https://books.giddh.com/" target="_Blank">Giddh.com</a>
+            All right are reserved &copy; 2020 Walkover <a [href]="giddhDomainUrl" target="_Blank">{{ domainName }}</a>
         </p>
     </div>
 </div>
@@ -43,6 +43,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     var companyUniqueName = getQueryStringValue("companyUniqueName");
+    const whiteLabel = this.generalService.getDecodedWhiteLabel();
+    var giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+    var domainName = whiteLabel?.giddhWhiteLabel?.domainName || "Giddh.com";
     var search = "";
     var status = getQueryStringValue("status");
     var JSONcallBackStatus = getQueryStringValue("JSONcallBackStatus");
@@ -51,22 +54,28 @@
     }
 
     function getApi() {
-        switch (window.location.hostname) {
-            case "localhost":
-            case "dev.giddh.com":
-                apiBaseUrl = "https://apidev.giddh.com/";
-                break;
-            case "test.giddh.com":
-                apiBaseUrl = "https://apitest.giddh.com/";
-                break;
-            case "stage.giddh.com":
-                apiBaseUrl = "https://apitest.giddh.com/";
-                break;
-            case "books.giddh.com":
-                apiBaseUrl = "https://api.giddh.com/";
-                break;
-            default:
-                apiBaseUrl = "https://api.giddh.com/";
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhDomainUrl = `${whiteLabel?.giddhWhiteLabel?.domainName}/` || "https://books.giddh.com/";
+        if (whiteLabel) {
+            apiBaseUrl = `${whiteLabel?.giddhWhiteLabel?.apiDomain}/`;
+        } else {
+            switch (window.location.hostname) {
+                case "localhost":
+                case "dev.giddh.com":
+                    apiBaseUrl = "https://apidev.giddh.com/";
+                    break;
+                case "test.giddh.com":
+                    apiBaseUrl = "https://apitest.giddh.com/";
+                    break;
+                case "stage.giddh.com":
+                    apiBaseUrl = "https://apitest.giddh.com/";
+                    break;
+                case "books.giddh.com":
+                    apiBaseUrl = "https://api.giddh.com/";
+                    break;
+                default:
+                    apiBaseUrl = "https://api.giddh.com/";
+            }
         }
         return apiBaseUrl;
     }
