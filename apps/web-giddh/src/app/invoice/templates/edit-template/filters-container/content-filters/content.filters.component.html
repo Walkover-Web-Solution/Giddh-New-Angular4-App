@@ -431,7 +431,7 @@
                                     class="form-control"
                                     name="invoiceDate"
                                     [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="handleInvoiceDateNumberChange(true);onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['voucherDate'].display"
                                 />
                                 <ng-container
@@ -466,7 +466,7 @@
                                     class="form-control"
                                     name="voucherNo"
                                     [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].label"
-                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    (ngModelChange)="handleInvoiceDateNumberChange(false);onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['voucherNumber'].display"
                                 />
                                 <ng-container
