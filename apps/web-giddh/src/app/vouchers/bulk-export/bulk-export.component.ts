@@ -211,8 +211,17 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             uniqueNames: this.inputData?.voucherUniqueNames ?? [],
             attachmentExport: this.exportForm.get('attachmentExport').value,
             voucherExport: this.exportForm.get('voucherExport').value,
-            fileNameFormat: this.exportForm.get('selectedFormatList').value.replaceAll("{", "${").trim(),
+            fileNameFormat: this.exportForm.get('selectedFormatList').value.trim(),
         };
+
+        if (postRequest.fileNameFormat.length) {
+            this.fileFormatList.forEach(format => {
+                const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
+                postRequest.fileNameFormat = postRequest.fileNameFormat.replace(pattern, `\${${format.value}}`);
+            });
+        } else {
+            postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+        }
 
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             postRequest.copyTypes = this.exportForm.value?.copyTypes;
@@ -262,9 +271,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             postRequest.copyTypes = ["ORIGINAL"];
         }
 
-        if (!this.exportForm.get('selectedFormatList').value.trim()?.length) {
-            postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
-        }
+        // if (!this.exportForm.get('selectedFormatList').value.trim()?.length) {
+        //     postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+        // }
 
         this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
     }
