@@ -119,6 +119,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -179,10 +181,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** True, if GST side menu is opened in responsive mode */
     public isGstSideMenuOpened: boolean = false;
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
-
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -195,8 +193,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will check if company is allowed to beta test new modules */
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
@@ -867,7 +863,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             scriptTag.async = true;
             document.body.appendChild(scriptTag);
         } else {
-            window['Headway'].init();
+            window['Headway']?.init();
         }
         /* TO SHOW NOTIFICATIONS */
 
@@ -1684,39 +1680,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /**
      * This will show the datepicker
      *
-     * @memberof ProfitLossComponent
+     * @param {boolean} isOpen
+     * @memberof HeaderComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-            if (!this.isMobileSite && this.dateFieldPosition) {
-                this.dateFieldPosition.x -= 150;
-            }
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof ProfitLossComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof ProfitLossComponent
+     * @memberof HeaderComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1725,7 +1708,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.selectedRangeLabel = value.name;
         }
         if (value && value.startDate && value.endDate) {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
@@ -1788,7 +1771,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @HostListener('window:orientationchange', ['$event'])
     onOrientationChange(event) {
         if (window['Headway'] !== undefined) {
-            window['Headway'].init();
+            window['Headway']?.init();
         }
     }
 
@@ -1801,7 +1784,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
         if (window['Headway'] !== undefined) {
-            window['Headway'].init();
+            window['Headway']?.init();
         }
     }
 

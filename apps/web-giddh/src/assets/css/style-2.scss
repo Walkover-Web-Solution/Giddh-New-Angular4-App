@@ -2555,18 +2555,6 @@ modal-container.modal.fade.show {
     opacity: 1;
 }
 
-.modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
-    z-index: 999999 !important;
-}
-
-body {
-    &.datepicker-confirmation-open {
-        .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
-            z-index: 999 !important;
-        }
-    }
-}
-
 modal-container.modal {
     .warehouse-welcome-modal {
         margin: 0;
@@ -9509,15 +9497,6 @@ input.checkbox-custom[type="checkbox"] {
     padding: 0 !important;
 }
 
-ngx-daterangepicker-material {
-    position: absolute;
-    z-index: 1000;
-    overflow: hidden;
-    box-shadow: 0 2px 4px 0 var(--color-primary-common-box-shadow), 0 2px 8px 0 var(--color-primary-common-box-shadow);
-    z-index: 1;
-    width: 100% !important;
-    max-width: 560px !important;
-}
 
 .edit-modal {
     max-width: 300px;
@@ -10113,10 +10092,6 @@ span#HW_badge_cont:nth-child(3) {
         padding-left: 10px;
         border-bottom: none !important;
     }
-}
-
-.giddh-calendar.show {
-    margin-top: 0;
 }
 
 .table-amount[disabled] {
@@ -10872,26 +10847,6 @@ body {
     z-index: 991 !important;
 }
 
-.primary-sidebar {
-    .giddh-primary-items {
-        .main-item {
-            .bs-tooltip-top {
-                display: none;
-            }
-        }
-    }
-
-    &.sidebar-collapse {
-        .giddh-primary-items {
-            .main-item {
-                .bs-tooltip-top {
-                    display: block;
-                }
-            }
-        }
-    }
-}
-
 .gst-sidebar-open {
     .nav-left-bar {
         -moz-transition: all 100ms linear;
@@ -11102,14 +11057,6 @@ body.update-scroll-hidden {
                         color: var(--color-nav-item-icon-company-icon-branch1-before);
                     }
                 }
-            }
-        }
-    }
-
-    .company-branch-opt-1 {
-        .branch-hide-tab {
-            ul.nav.nav-tabs {
-                display: none;
             }
         }
     }
@@ -12196,18 +12143,6 @@ body.prevent-body-scroll {
 @media (min-height: 300px) and (max-height: 730px) {
     .linked-address sh-select-menu .total-padding {
         height: 257px !important;
-    }
-}
-
-/*media query for height resolution end*/
-.modal.fade.giddh-calendar.show {
-    z-index: 999999;
-}
-body {
-    &.datepicker-confirmation-open {
-        .modal.fade.giddh-calendar.show {
-            z-index: 999;
-        }
     }
 }
 
@@ -14086,4 +14021,27 @@ mat-list {
 .only-right-radius {
     border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
+}
+
+.universal-datepicker-menu-panel {
+    max-width: 100% !important;
+
+    .mat-mdc-menu-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+.hide-mat-tab-header {
+    .mat-mdc-tab-header {
+        display: none !important;
+    }
+}
+
+.primary-sidebar {
+    .company-branch-nav {
+        .mat-mdc-tab-header {
+            --mdc-secondary-navigation-tab-container-height: 34px !important;
+        }
+    }
 }
