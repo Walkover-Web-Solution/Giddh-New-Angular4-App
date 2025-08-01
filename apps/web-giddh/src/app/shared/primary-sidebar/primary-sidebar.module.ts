@@ -21,6 +21,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import {CdkTreeModule} from '@angular/cdk/tree';
+import { MatInputModule } from "@angular/material/input";
 
 
 @NgModule({
@@ -34,12 +35,9 @@ import {CdkTreeModule} from '@angular/cdk/tree';
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ClickOutsideModule,
-        // BsDropdownModule.forRoot(),
-        // TooltipModule.forRoot(),
         RouterModule,
         CheckPermissionModule,
         CommandKModule,
-        // TabsModule.forRoot(),
         SocialLoginModule,
         GenericAsideMenuAccountModule,
         MatDialogModule,
@@ -47,7 +45,8 @@ import {CdkTreeModule} from '@angular/cdk/tree';
         MatMenuModule,
         MatTooltipModule,
         MatButtonModule,
-        CdkTreeModule
+        CdkTreeModule,
+        MatInputModule
     ],
     exports: [
         PrimarySidebarComponent

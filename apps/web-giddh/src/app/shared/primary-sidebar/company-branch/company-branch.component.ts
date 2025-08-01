@@ -153,7 +153,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             const event = new MatTabChangeEvent();
             event.index = 1;
             this.tabChanged(event, "branch");
-            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -333,13 +332,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * Callback for select tab event
      *
-     * @param {string} tabName
+     * @param {MatTabChangeEvent} event
+     * @param {"company" | "branch"} [tabName="company"]
      * @memberof CompanyBranchComponent
      */
     public tabChanged(event: MatTabChangeEvent, tabName: "company" | "branch" = "company"): void {
-        console.log(event);
         tabName = event.index === 0 ? "company" : "branch";
         this.activeTab = tabName;
+        this.selectedTabIndex = event.index;
         this.searchBranch = "";
         this.filterBranchList(this.searchBranch);
 
@@ -352,8 +352,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.companyBranches.unarchivedBranchCount = unarchivedBranchCount;
             this.companyBranches.branches = this.currentCompanyBranches;
             this.branchList = this.currentCompanyBranches;
-            this.changeDetectorRef.detectChanges();
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**

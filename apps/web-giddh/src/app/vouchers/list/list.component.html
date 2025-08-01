@@ -31,8 +31,14 @@
                                 <span>{{ localeData?.new_estimate }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" [matMenuTriggerFor]="universalDatepicker"
-                                #universalDatepickerTrigger="matMenuTrigger">
+                                <div 
+                                    class="input-group custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
                                         type="text"
                                         name="selectedDateRange"

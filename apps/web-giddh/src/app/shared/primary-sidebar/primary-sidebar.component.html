@@ -10,7 +10,6 @@
             class="company-branch-block pd-l2 pd-r2 position-relative"
             [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
             >
-            <!-- dropdownToggle -->
             <ul
                 class="list-style-none branch-connection dropdown-toggle"
                 id="button-company-branch"
@@ -22,7 +21,6 @@
                 <li
                     class="company-name position-relative"
                     >
-                    <!-- dropdownToggle -->
                     <h3
                     class="font-15 d-flex flex-column cursor-pointer"
                     [checkPermission]="['MENU', 'MANAGE']"
