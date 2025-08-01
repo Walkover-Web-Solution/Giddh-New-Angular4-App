@@ -288,6 +288,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             this.getPurchaseRegister(this.dateRange.from, this.dateRange.to);
         } else {
+            this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
             this.populateRecords(this.interval, this.selectedMonth);
         }
     }
