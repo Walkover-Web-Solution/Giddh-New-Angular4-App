@@ -5,7 +5,7 @@ import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.
 import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
@@ -156,14 +156,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.isDefaultLoaded = true;
             }
         });
-
-        this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
+        
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
                 this.getDetailedPurchaseRequestFilter.from = this.from;
                 this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);

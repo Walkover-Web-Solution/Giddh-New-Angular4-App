@@ -5,7 +5,7 @@ import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
@@ -135,13 +135,15 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
                 this.getDetailedsalesRequestFilter.from = this.from;
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
