@@ -952,6 +952,18 @@
             ]
         },
         {
+            "label": "AI",
+            "icon": "icon-audit-log",
+            "items": [
+                {
+                    "label": "OCR",
+                    "link": "/pages/ai-ocr",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                }
+            ]
+        },
+        {
             "label": "Group Name",
             "link": "/pages/group-name",
             "icon": "icon-daybook-new",
