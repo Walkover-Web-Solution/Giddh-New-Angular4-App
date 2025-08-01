@@ -171,8 +171,65 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-xs-12 col-sm-12">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-5 pl-0 d-flex align-items-center">
+                                <label>{{ commonLocaleData?.app_sales_person }}</label>
+                            </div>
+                            <div class="col-md-7 pr-0">
+                                <div class="row">
+                                    <div class="pr-0 col-sm-3 col-12 d-flex align-items-center">
+                                        <div class="checkbox mat-switch">
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                id="includeSalesPersons"
+                                                [formControl]="advanceSearchForm?.controls['includeSalesPersons']"
+                                            >
+                                                <span
+                                                    class="pull-left"
+                                                    *ngIf="advanceSearchForm.get('includeSalesPersons')?.value"
+                                                    >{{ commonLocaleData?.app_include }}</span
+                                                >
+                                                <span
+                                                    class="pull-right"
+                                                    *ngIf="!advanceSearchForm.get('includeSalesPersons')?.value"
+                                                    >{{ commonLocaleData?.app_exclude }}</span
+                                                >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9 col-8 col-12">
+                                        <div class="custom-mat-form-field mr-t15">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
+                                                <mat-select
+                                                    panelClass="py-0"
+                                                    name="salesPerson"
+                                                    [multiple]="true"
+                                                    [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
+                                                >
+                                                    <mat-option class="mt-0">
+                                                        <ngx-mat-select-search
+                                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                            [formControl]="salesPersonDropdown"
+                                                        >
+                                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                        </ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
+                                                        {{ salesPerson?.label }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 pd-t2">
                         <div class="row">
                             <div class="col-sm-5 col-xs-12">
                                 <label>{{ commonLocaleData?.app_amount }}</label>
