@@ -523,7 +523,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 itemValueEqualTo: true,
                 itemValueGreaterThan: false
             }),
-            includeSalesPersons: [false],
+            includeSalesPersons: [true],
             salesPersonUniqueNames: [[]],
         });
 
