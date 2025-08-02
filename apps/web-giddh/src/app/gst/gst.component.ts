@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, Inject } from '@angula
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { AlertConfig } from 'ngx-bootstrap/alert';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../actions/gst-reconcile/gst-reconcile.actions';
@@ -24,11 +23,6 @@ import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
-    providers: [
-        {
-            provide: AlertConfig, useValue: {}
-        }
-    ],
     animations: [
         trigger('slideInOut', [
             state('in', style({

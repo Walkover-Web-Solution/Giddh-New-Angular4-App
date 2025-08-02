@@ -21,7 +21,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -120,7 +119,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         PaginationModule.forRoot(),
         InvoiceTemplatesModule,
         KeyboardShortutModule,
-        CollapseModule.forRoot(),
         SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
