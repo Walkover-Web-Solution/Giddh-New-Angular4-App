@@ -5,7 +5,6 @@
 .tribute-container {
     box-shadow: var(--mat-menu-box-shadow);
     min-width: 150px;
-
     li {
         background: var(--color-white) !important;
     }
@@ -13,5 +12,11 @@
     .highlight {
         background-color: var(--color-primary-filter-background) !important;
         color: var(--color-giddh-blue);
+    }
+
+    ul {
+        &:not(:has(li[data-index])) {
+            display: none;
+        }
     }
 }
