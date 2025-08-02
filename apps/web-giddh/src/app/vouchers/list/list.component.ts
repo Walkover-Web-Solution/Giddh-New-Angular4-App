@@ -405,12 +405,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.activeCompany = response;
-            }
-        });
-
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params && ((params.page && params.from && params.to) || params.tabIndex)) {
                 this.queryParams = params;
