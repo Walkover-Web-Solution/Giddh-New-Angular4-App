@@ -18,7 +18,6 @@ export class SidebarAction {
     public GetInventoryGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetInventoryGroup),
-            tap(a => console.log('called')),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupsStock(action.payload?.groupUniqueName).pipe(shareReplay(), map(response => {
                     if (response?.status === 'error') {
