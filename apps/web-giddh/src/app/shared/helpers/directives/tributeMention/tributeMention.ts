@@ -2,7 +2,8 @@ import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, S
 import Tribute from 'tributejs';
 
 @Directive({
-  selector: '[appTributeMention]'
+  selector: '[appTributeMention]',
+  exportAs: 'appTributeMention'
 })
 export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
@@ -54,14 +55,16 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
   private initializeTribute(): void {
     const tributeOptions = {
       values: this.mentionList,
-      requireLeadingSpace: true,
+      requireLeadingSpace: false,
       positionMenu: true,
       ...this.tributeConfig,
       menuItemTemplate: (item: any) =>
-        `<div class="mention-item">${item.original.key}</div>`,
-      selectTemplate: (item: any) =>
-       item?.original?.value ? `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}` : '',
-      noMatchTemplate: () => '',
+        `<div class="mention-item">${item.original.label}</div>`,
+      selectTemplate: (item: any) =>{
+        setTimeout(() => {
+            this.hostElement.nativeElement.value = this.hostElement.nativeElement.value.trim();
+        }, 50);
+       return item?.original?.value ? `${this.tributeConfig.suggestionPrefix || ''}${item.original.value}${this.tributeConfig.suggestionSuffix || ''}` : ''},
     };
     this.destroyTribute(); // Clean up any previous instance
 
@@ -93,5 +96,27 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    */
   public ngOnDestroy(): void {
     this.destroyTribute();
+  }
+
+  /**
+   * Opens the tribute menu programmatically.
+   * 
+   * @returns {void}
+   * @memberof TributeMentionDirective
+   */
+  public open(): void {
+    if (!this.hostElement.nativeElement.value?.trim()) {
+      this.hostElement.nativeElement.value = this.tributeConfig.trigger;
+    }
+    
+    this.hostElement.nativeElement.dispatchEvent(new InputEvent('input', { bubbles: true }));
+
+    setTimeout(() => {
+        this.hostElement.nativeElement.focus();
+        const fileFormatPrefix = this.hostElement.nativeElement.value;
+        if (this.tributeInstance && fileFormatPrefix.lastIndexOf(this.tributeConfig.trigger) > fileFormatPrefix.lastIndexOf(this.tributeConfig.suggestionSuffix)) {
+            this.tributeInstance['showMenuFor'](this.hostElement.nativeElement);
+        }
+    }, 50);
   }
 }

@@ -49,9 +49,9 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
     public fileFormatList = [
-        { value: 'DATE', key: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
-        { value: 'ENTRY_NO', key: 'Entry No', showValue: "3824" },
-        { value: 'ACC_NAME', key: 'Account Name', showValue: "Walkover" }
+        { value: 'Voucher Date', label: 'Voucher Date', key: 'DATE', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'Entry No', label: 'Entry No', key: 'ENTRY_NO', showValue: "3824" },
+        { value: 'Account Name', label: 'Account Name', key: 'ACC_NAME', showValue: "Walkover" }
     ];
     /** List of copy type */
     public copyTypes: IOption[] = [];
@@ -69,8 +69,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
     public tributeConfig: TributeConfig = {
         trigger: '{',
         suggestionPrefix: '{',
-        suggestionSuffix: '}',
-        requireLeadingSpace: false
+        suggestionSuffix: '}'
     };
 
     constructor(
@@ -94,7 +93,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             recipients: [''],
             exportType: new FormControl<ExportType>(ExportTypeEnum.multiplePdf),
             mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
-            attachmentExport: false,
+            attachmentExport: true,
             voucherExport: true,
             selectedFormatList: [""],
             fileNameFormat: "",
@@ -217,7 +216,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         if (postRequest.fileNameFormat.length) {
             this.fileFormatList.forEach(format => {
                 const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
-                postRequest.fileNameFormat = postRequest.fileNameFormat.replace(pattern, `\${${format.value}}`);
+                postRequest.fileNameFormat = postRequest.fileNameFormat.replace(pattern, `\${${format.key}}`);
             });
         } else {
             postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";

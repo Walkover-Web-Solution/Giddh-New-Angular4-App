@@ -14,4 +14,10 @@
         background-color: var(--color-primary-filter-background) !important;
         color: var(--color-giddh-blue);
     }
+
+    ul {
+        &:not(:has(li[data-index])) {
+            display: none;
+        }
+    }
 }
