@@ -41,7 +41,8 @@
                 />
             </div>
             <div>
-                <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ totalRevenueAndExpense$ | async }}</span>&nbsp;&nbsp;
+                <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }}
+                : {{ (totalRevenueAndExpense$ | async)?.nonAssetsTotal }}&nbsp;&nbsp; | &nbsp;&nbsp;{{ localeData?.total_fixed_asset }} : {{ (totalRevenueAndExpense$ | async)?.assetsTotal }}</span>&nbsp;&nbsp;
                 <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
                     {{ commonLocaleData?.app_back }}
                 </button>
