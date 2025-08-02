@@ -7,7 +7,6 @@ import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-c
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
@@ -32,7 +31,6 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         ElementViewChildModule,
         TaxControlModule,
         ModalModule.forRoot(),
-        TooltipModule.forRoot(),
         SharedModule,
         LaddaModule.forRoot({
             style: 'slide-left',

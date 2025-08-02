@@ -254,7 +254,8 @@
                             <button
                                 class="btn btn-default desktop-view-btn"
                                 *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
-                                [tooltip]="commonLocaleData?.app_export"
+                                [matTooltip]="commonLocaleData?.app_export"
+                                matTooltipPosition="above"
                                 (click)="exportCsvDownload(selectedVoucher)"
                                 [ladda]="exportInvoiceRequestInProcess$ | async"
                                 data-spinner-size="20px"
@@ -345,7 +346,8 @@
                             <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                             <div
                                 class="advance-icon cursor-pointer align-items-center btn btn-primary"
-                                [tooltip]="commonLocaleData?.app_advance_search"
+                                [matTooltip]="commonLocaleData?.app_advance_search"
+                                matTooltipPosition="above"
                                 (click)="toggleAdvanceSearchPopup()"
                             >
                                 <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
@@ -573,7 +575,8 @@
                                 <button
                                     class="btn btn-default mr-r15"
                                     *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
-                                    [tooltip]="commonLocaleData?.app_export"
+                                    [matTooltip]="commonLocaleData?.app_export"
+                                matTooltipPosition="above"
                                     (click)="exportCsvDownload(selectedVoucher)"
                                     [ladda]="exportInvoiceRequestInProcess$ | async"
                                     data-spinner-size="20px"
@@ -1163,7 +1166,8 @@
                                 <td
                                     width="10%"
                                     [attr.data-title]="commonLocaleData?.app_total_amount"
-                                    [tooltip]="grandTotalPopupTemplate"
+                                    [matTooltip]="grandTotalPopupTemplate"
+                                    matTooltipPosition="above"
                                     container="body"
                                     containerClass="invoice-preview"
                                 >
@@ -1184,7 +1188,8 @@
                                     width="12%"
                                     [attr.data-title]="localeData?.balance_due"
                                     *ngIf="selectedVoucher !== 'purchase'"
-                                    [tooltip]="balanceDuePopupTemplate"
+                                    [matTooltip]="balanceDuePopupTemplate"
+                                    matTooltipPosition="above"
                                     container="body"
                                     containerClass="invoice-preview"
                                 >
@@ -1211,7 +1216,7 @@
                                     width="10%"
                                 >
                                     <div class="e-invoice-status font-15">
-                                        <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{
+                                        <strong class="d-flex" [matTooltip]="item.eInvoiceStatusTooltip" matTooltipPosition="above">{{
                                             item?.status || "-"
                                         }}</strong>
                                     </div>
@@ -1475,7 +1480,8 @@
                                     [attr.data-title]="commonLocaleData?.app_amount"
                                     *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'debit note'"
                                     class="text-right"
-                                    [tooltip]="grandTotalPopupTemplate"
+                                    [matTooltip]="grandTotalPopupTemplate"
+                                    matTooltipPosition="above"
                                 >
                                     <span class="d-flex justify-content-md-end justify-content-start">
                                         <amount-field
@@ -1516,7 +1522,7 @@
                                     width="10%"
                                 >
                                     <div class="e-invoice-status font-15">
-                                        <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{
+                                        <strong class="d-flex" [matTooltip]="item.eInvoiceStatusTooltip" matTooltipPosition="above">{{
                                             item?.status || "-"
                                         }}</strong>
                                     </div>

@@ -43,8 +43,8 @@
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
             <span
                 class="icon-bar"
-                [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
-                placement="right"
+                [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
+                matTooltipPosition="right"
             ></span>
         </div>
     </div>

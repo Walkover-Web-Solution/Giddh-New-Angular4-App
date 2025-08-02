@@ -119,7 +119,7 @@
                             type="button"
                             class="dropdown-toggle"
                         >
-                            <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
+                            <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
                             <i class="icon-right mr-l1 font-15"></i>
                         </a>
                         <ul
@@ -181,7 +181,7 @@
                                         <a
                                             href="javascript:void(0);"
                                             aria-label="menu"
-                                            tooltip="{{ menu?.label }}"
+                                            matTooltip="{{ menu?.label }}"
                                             *ngIf="menu?.items?.length"
                                             dropdownToggle
                                             class="dropdown-toggle"

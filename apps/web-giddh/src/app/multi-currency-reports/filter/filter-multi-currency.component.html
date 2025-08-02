@@ -68,8 +68,8 @@
                             <a
                                 class="expand-icon cursor-pointer d-flex font-16 bgWhiteMo bdr"
                                 (click)="emitExpand(true)"
-                                data-placement="top"
                                 [matTooltip]="commonLocaleData?.app_expand_all"
+                                matTooltipPosition="above"
                                 *ngIf="!expandAll"
                             >
                                 <span class="icon-expandIcon d-flex justify-content-center align-items-center">
@@ -78,8 +78,8 @@
                             <a
                                 class="expand-icon cursor-pointer d-flex font-16 bgWhiteMo bdr"
                                 (click)="emitExpand(false)"
-                                data-placement="top"
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
+                                matTooltipPosition="above"
                                 *ngIf="expandAll"
                             >
                                 <span class="icon-collapse d-flex justify-content-center align-items-center">

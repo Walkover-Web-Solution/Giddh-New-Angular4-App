@@ -43,7 +43,7 @@
                         >
                         <span
                             class="cursor-pointer"
-                            [tooltip]="localeData?.refresh_manually"
+                            [matTooltip]="localeData?.refresh_manually"
                             (click)="refreshCompanies($event)"
                             ><i class="icon-reload refresh-manually font-22"></i
                         ></span>
@@ -60,8 +60,8 @@
                             class="btn-group"
                             *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
-                            [tooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
-                            [placement]="i === 0 ? 'bottom' : 'top'"
+                            [matTooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
+                            [matTooltipPosition]="i === 0 ? 'below' : 'above'"
                             aria-hidden="true"
                         >
                             <span
@@ -102,7 +102,7 @@
                         >
                         <span
                             class="cursor-pointer"
-                            [tooltip]="localeData?.refresh_manually"
+                            [matTooltip]="localeData?.refresh_manually"
                             (click)="getCompanyBranches(companyBranches, true)"
                         >
                             <i class="icon-reload refresh-manually font-22"></i>
@@ -150,8 +150,8 @@
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
-                                    [tooltip]="branch?.name"
-                                    placement="top"
+                                    [matTooltip]="branch?.name"
+                                    matTooltipPosition="above"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">
@@ -168,8 +168,8 @@
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
-                                    [tooltip]="branch?.name"
-                                    placement="top"
+                                    [matTooltip]="branch?.name"
+                                    matTooltipPosition="above"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">

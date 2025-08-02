@@ -378,8 +378,8 @@
                                         href="javascript:void(0);"
                                         class="isAcc account-list"
                                         id="acc_{{ discount.label }}"
-                                        tooltip="{{ discount.label }}"
-                                        placement="bottom"
+                                        matTooltip="{{ discount.label }}"
+                                        matTooltipPosition="below"
                                         (click)="toggleDiscountSelected(discount)"
                                         (keydown.enter)="toggleDiscountSelected(discount)"
                                         cdkFocusInitial
@@ -433,8 +433,8 @@
                                         href="javascript:void(0);"
                                         class="isAcc account-list"
                                         id="acc_{{ tax.label }}"
-                                        tooltip="{{ tax.label }}"
-                                        placement="bottom"
+                                        matTooltip="{{ tax.label }}"
+                                        matTooltipPosition="below"
                                         (click)="toggleTaxSelected(tax)"
                                         (keydown.enter)="toggleTaxSelected(tax)"
                                         cdkFocusInitial

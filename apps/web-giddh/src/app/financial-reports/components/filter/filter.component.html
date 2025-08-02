@@ -49,12 +49,12 @@
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"
-                                                    [tooltip]="commonLocaleData?.app_branch"
+                                                    [matTooltip]="commonLocaleData?.app_branch"
                                                 ></i>
                                                 <i
                                                     class="icon-company-profile pull-right"
                                                     *ngIf="option.isCompany"
-                                                    [tooltip]="commonLocaleData?.app_company"
+                                                    [matTooltip]="commonLocaleData?.app_company"
                                                 ></i>
                                             </span>
                                             <span class="entity-details">
@@ -148,8 +148,8 @@
                             <a
                                 class="cp expand-icon"
                                 (click)="emitExpand(true)"
-                                data-placement="top"
-                                tooltip="{{ commonLocaleData?.app_expand_all }}"
+                                matTooltip="{{ commonLocaleData?.app_expand_all }}"
+                                matTooltipPosition="above"
                                 *ngIf="!expandAll"
                             >
                                 <span class="icon-expandIcon"></span>
@@ -157,8 +157,8 @@
                             <a
                                 class="cp expand-icon"
                                 (click)="emitExpand(false)"
-                                data-placement="top"
-                                tooltip="{{ commonLocaleData?.app_collapse_all }}"
+                                matTooltip="{{ commonLocaleData?.app_collapse_all }}"
+                                matTooltipPosition="above"
                                 *ngIf="expandAll"
                             >
                                 <span class="icon-collapse"></span>
@@ -205,7 +205,7 @@
                             <span class="d-inline-block nowrap">{{ localeData?.switch_back_to_reconcile_mode }}</span>
                         </button>
                     </ng-container>
-                    <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
+                    <a class="cursor-pointer" (click)="refreshData()" matTooltip="{{ localeData?.reload_data }}">
                         <span class="icon-refresh"></span>
                     </a>
                     <button
@@ -291,12 +291,12 @@
                                                 "
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"
-                                                [tooltip]="commonLocaleData?.app_branch"
+                                                [matTooltip]="commonLocaleData?.app_branch"
                                             ></i>
                                             <i
                                                 class="icon-company-profile pull-right"
                                                 *ngIf="option.isCompany"
-                                                [tooltip]="commonLocaleData?.app_company"
+                                                [matTooltip]="commonLocaleData?.app_company"
                                             ></i>
                                         </span>
                                         <span class="entity-details">
@@ -381,8 +381,8 @@
                     <a
                         class="cp expand-icon"
                         (click)="emitExpand(true)"
-                        data-placement="top"
-                        tooltip="{{ commonLocaleData?.app_expand_all }}"
+                        matTooltip="{{ commonLocaleData?.app_expand_all }}"
+                        matTooltipPosition="above"
                         *ngIf="!expandAll"
                     >
                         <span class="icon-expandIcon"></span>
@@ -390,13 +390,13 @@
                     <a
                         class="cp expand-icon"
                         (click)="emitExpand(false)"
-                        data-placement="top"
-                        tooltip="{{ commonLocaleData?.app_collapse_all }}"
+                        matTooltip="{{ commonLocaleData?.app_collapse_all }}"
+                        matTooltipPosition="above"
                         *ngIf="expandAll"
                     >
                         <span class="icon-collapse"></span>
                     </a>
-                    <a (click)="refreshData()" class="refresh-btn cp mr-l15" tooltip="{{ localeData?.reload_data }}">
+                    <a (click)="refreshData()" class="refresh-btn cp mr-l15" matTooltip="{{ localeData?.reload_data }}">
                         <span class="icon-refresh"></span>
                     </a>
                 </div>

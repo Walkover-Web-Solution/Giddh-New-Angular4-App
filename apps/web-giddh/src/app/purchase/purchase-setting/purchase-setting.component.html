@@ -41,13 +41,13 @@
                                                             *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
                                                             ><i
                                                                 class="fa fa-exclamation-circle"
-                                                                [tooltip]="localeData?.unverified"
+                                                                [matTooltip]="localeData?.unverified"
                                                             ></i
                                                         ></span>
                                                         <span
                                                             class="input-group-addon verify-tick-icon"
                                                             *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"
-                                                            ><i class="icon-tick" [tooltip]="localeData?.verified"></i
+                                                            ><i class="icon-tick" [matTooltip]="localeData?.verified"></i
                                                         ></span>
                                                     </div>
                                                 </div>

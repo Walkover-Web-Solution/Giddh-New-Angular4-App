@@ -42,12 +42,12 @@
                                                                 'icon-branch-icon': !option.consolidatedBranch
                                                             }"
                                                             *ngIf="!option.isCompany"
-                                                            tooltip="{{ commonLocaleData?.app_branch }}"
+                                                            matTooltip="{{ commonLocaleData?.app_branch }}"
                                                         ></i>
                                                         <i
                                                             class="icon-company-profile pull-right"
                                                             *ngIf="option.isCompany"
-                                                            tooltip="{{ commonLocaleData?.app_company }}"
+                                                            matTooltip="{{ commonLocaleData?.app_company }}"
                                                         ></i>
                                                     </span>
                                                     <span class="entity-details">

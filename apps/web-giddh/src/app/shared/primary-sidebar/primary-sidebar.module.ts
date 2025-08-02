@@ -6,7 +6,7 @@ import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { TabsModule } from "ngx-bootstrap/tabs";
-import { TooltipModule } from "ngx-bootstrap/tooltip";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { CheckPermissionModule } from "../../permissions/check-permission.module";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { AuthServiceConfig, GoogleLoginProvider } from "../../theme/ng-social-login-module";
@@ -29,7 +29,7 @@ import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config
         TranslateDirectiveModule,
         ClickOutsideModule,
         BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
+        MatTooltipModule,
         RouterModule,
         CheckPermissionModule,
         CommandKModule,

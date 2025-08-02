@@ -8,7 +8,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
@@ -105,7 +104,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ClickOutsideModule,
         BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,

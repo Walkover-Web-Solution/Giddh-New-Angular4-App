@@ -5,7 +5,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { SharedModule } from '../shared/shared.module';
@@ -56,7 +55,6 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         }),
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
-        TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
         SharedModule,
