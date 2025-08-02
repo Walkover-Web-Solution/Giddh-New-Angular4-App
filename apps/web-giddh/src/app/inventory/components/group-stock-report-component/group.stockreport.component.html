@@ -209,13 +209,12 @@
                 <button
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn"
-                    data-toggle="tooltip"
                     matTooltip="Alt+N"
                     (click)="toggleTransferAsidePane()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" matTooltip="Alt+i" (click)="toggleAsidePane()">
+                <button class="btn btn-sky-blue mr-0" matTooltip="Alt+i" (click)="toggleAsidePane()">
                     Create New
                 </button>
             </div>
