@@ -9,7 +9,6 @@ import {
 import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
