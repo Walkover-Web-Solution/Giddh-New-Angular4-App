@@ -93,7 +93,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             recipients: [''],
             exportType: new FormControl<ExportType>(ExportTypeEnum.multiplePdf),
             mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
-            attachmentExport: true,
+            attachmentExport: false,
             voucherExport: true,
             selectedFormatList: [""],
             fileNameFormat: "",
