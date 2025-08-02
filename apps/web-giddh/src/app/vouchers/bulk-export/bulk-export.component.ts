@@ -93,7 +93,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             recipients: [''],
             exportType: new FormControl<ExportType>(ExportTypeEnum.multiplePdf),
             mergePdf: new FormControl<boolean>(false, { nonNullable: true }),
-            attachmentExport: true,
+            attachmentExport: false,
             voucherExport: true,
             selectedFormatList: [""],
             fileNameFormat: "",
@@ -269,10 +269,6 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         if (!postRequest.copyTypes) {
             postRequest.copyTypes = ["ORIGINAL"];
         }
-
-        // if (!this.exportForm.get('selectedFormatList').value.trim()?.length) {
-        //     postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
-        // }
 
         this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
     }
