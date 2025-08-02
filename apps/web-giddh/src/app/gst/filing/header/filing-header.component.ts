@@ -5,7 +5,6 @@ import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -34,9 +33,6 @@ import { BreakpointObserver } from "@angular/cdk/layout";
         {
             provide: BsDropdownConfig, useValue: { autoClose: true },
         },
-        {
-            provide: AlertConfig, useValue: {}
-        }
     ],
     animations: [
         trigger('slideInOut', [

@@ -13,7 +13,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -86,7 +85,6 @@ import { MatListModule } from '@angular/material/list';
         FormsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        TypeaheadModule.forRoot(),
         TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
         PopoverModule.forRoot(),

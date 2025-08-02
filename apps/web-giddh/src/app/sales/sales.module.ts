@@ -5,11 +5,9 @@ import { LaddaModule } from 'angular2-ladda';
 import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
@@ -35,8 +33,6 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         TaxControlModule,
         ModalModule.forRoot(),
         TooltipModule.forRoot(),
-        TypeaheadModule.forRoot(),
-        CollapseModule.forRoot(),
         SharedModule,
         LaddaModule.forRoot({
             style: 'slide-left',

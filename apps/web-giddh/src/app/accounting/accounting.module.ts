@@ -10,7 +10,6 @@ import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.serv
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -70,7 +69,6 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
         SharedModule,
         ClickOutsideModule,
         TooltipModule.forRoot(),
-        TypeaheadModule.forRoot(),
         VirtualScrollModule,
         ElementViewChildModule,
         QuickAccountModule,
