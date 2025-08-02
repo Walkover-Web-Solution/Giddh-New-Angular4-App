@@ -77,7 +77,7 @@
                                 <input
                                     matInput
                                     #tribute="appTributeMention"
-                                    (click)="tribute.open()"
+                                    (click)="tribute?.open()"
                                     [(ngModel)]="selectedFormatList"
                                     [placeholder]="commonLocaleData?.app_variable_search_hint"
                                     class="form-control radius-none border-0 border-bottom"
