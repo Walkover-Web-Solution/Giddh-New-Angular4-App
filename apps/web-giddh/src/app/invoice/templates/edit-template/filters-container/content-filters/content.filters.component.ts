@@ -138,7 +138,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.accountSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.accountSuggestions) {
                 this.suggestionList = response.accountSuggestions.map(item => ({
-                    key: item,
+                    label: item,
                     value: item
                 }));
             }

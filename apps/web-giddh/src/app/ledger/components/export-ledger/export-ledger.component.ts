@@ -103,9 +103,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
     public fileFormatList = [
-        { value: 'DATE', key: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
-        { value: 'ENTRY_NO', key: 'Entry No', showValue: "3824" },
-        { value: 'ACC_NAME', key: 'Account Name', showValue: "Walkover" }
+        { value: 'Voucher Date', label: 'Voucher Date', key: 'DATE', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'Entry No', label: 'Entry No', key: 'ENTRY_NO', showValue: "3824" },
+        { value: 'Account Name', label: 'Account Name', key: 'ACC_NAME', showValue: "Walkover" }
     ];
     /** List of selected file formats */
     public selectedFormatList: string = "";
@@ -120,7 +120,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         trigger: '{',
         suggestionPrefix: '{',
         suggestionSuffix: '}',
-        requireLeadingSpace: false
     };
 
     constructor(
@@ -267,7 +266,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
                 if (this.exportRequest.attachmentExport) {
-                    postRequest.fileNameFormat = this.selectedFormatList.trim().length ? this.selectedFormatList.trim().replaceAll("{", "${") : ("-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}");
+                    let fileNameFormat = this.selectedFormatList?.trim();
+                    if (fileNameFormat?.length) {
+                        this.fileFormatList.forEach(format => {
+                            const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
+                            fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
+                        });
+                        postRequest.fileNameFormat = fileNameFormat;
+                    } else {
+                        postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+                    }
                 }
                 if (this.exportRequest.voucherExport) {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
@@ -420,7 +428,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public getFileFormat() {
         let fileNameFormat = this.selectedFormatList;
         this.fileFormatList.forEach((format) => {
-            if(this.selectedFormatList.includes(`{${format.value}}`)) {
+            if (this.selectedFormatList.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
         });

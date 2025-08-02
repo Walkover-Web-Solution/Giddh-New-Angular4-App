@@ -76,6 +76,8 @@
                             <div class="d-flex flex-column w-50">
                                 <input
                                     matInput
+                                    #tribute="appTributeMention"
+                                    (click)="tribute.open()"
                                     [(ngModel)]="selectedFormatList"
                                     [placeholder]="commonLocaleData?.app_variable_search_hint"
                                     class="form-control radius-none border-0 border-bottom"
@@ -84,7 +86,7 @@
                                     [appTributeMention]="tributeConfig"
                                     [appTributeMentionValues]="fileFormatList"
                                 />
-                                <div class="font-12 word-break">
+                                <div class="font-12 word-break pd-t05 pd-b05">
                                     {{ exportRequest.fileNameFormat }}
                                 </div>
                             </div>
