@@ -105,11 +105,11 @@
                                                             <span class="input-group-addon"
                                                                 *ngIf="!invoiceSetting.emailVerified"><i
                                                                     class="fa fa-exclamation-circle"
-                                                                    [tooltip]="localeData?.unverified"></i></span>
+                                                                    [matTooltip]="localeData?.unverified"></i></span>
                                                             <span class="input-group-addon verify-tick-icon"
                                                                 *ngIf="invoiceSetting.emailVerified"><i
                                                                     class="icon-tick"
-                                                                    [tooltip]="localeData?.verified"></i></span>
+                                                                    [matTooltip]="localeData?.verified"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>

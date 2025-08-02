@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
 import { AsideCustomStockComponent } from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
@@ -111,7 +110,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     providers: [ExceptionLogService],
     imports: [
         InventoryRoutingModule,
-        TooltipModule.forRoot(),
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,

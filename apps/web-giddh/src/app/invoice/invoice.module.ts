@@ -26,7 +26,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
@@ -114,7 +113,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        TooltipModule.forRoot(),
         PaginationModule.forRoot(),
         InvoiceTemplatesModule,
         KeyboardShortutModule,
@@ -180,7 +178,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
     ],
     exports: [
         InvoiceRoutingModule,
-        TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent
     ],

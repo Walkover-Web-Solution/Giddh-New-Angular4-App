@@ -5,7 +5,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from 'apps/web-giddh/src/app/shared/shared.module';
 import { QuickAccountComponent } from './quickAccount.component';
 import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { LaddaModule } from 'angular2-ladda';
         ClickOutsideModule,
         SharedModule,
         ShSelectModule,
-        TooltipModule.forRoot(),
+        MatTooltipModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

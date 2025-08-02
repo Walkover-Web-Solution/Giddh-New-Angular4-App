@@ -280,9 +280,9 @@
                                     <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                     <div class="inputRadio">
                                         <span
-                                            [tooltip]="localeData?.address_tooltip"
+                                            [matTooltip]="localeData?.address_tooltip"
                                             class="pull-right is-default-address"
-                                            placement="left"
+                                            matTooltipPosition="left"
                                         >
                                             <mat-slide-toggle
                                                 formControlName="isDefault"

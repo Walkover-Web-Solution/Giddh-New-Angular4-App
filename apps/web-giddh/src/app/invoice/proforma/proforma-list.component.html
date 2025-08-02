@@ -61,7 +61,7 @@
                                     advance-search-mobile
                                 "
                                 (click)="toggleAdvanceSearchPopup()"
-                                [tooltip]="commonLocaleData?.app_advance_search"
+                                [matTooltip]="commonLocaleData?.app_advance_search"
                             >
                                 <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
@@ -125,7 +125,7 @@
                     <div
                         class="advance-icon cursor-pointer align-items-center btn btn-primary mr-0"
                         (click)="toggleAdvanceSearchPopup()"
-                        [tooltip]="commonLocaleData?.app_advance_search"
+                        [matTooltip]="commonLocaleData?.app_advance_search"
                     >
                         <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                         <span class="icon-advance-filter"></span>
@@ -470,7 +470,7 @@
                                 <td
                                     width="12%"
                                     class="text-right"
-                                    [tooltip]="
+                                    [matTooltip]="
                                         voucherType === 'proformas' || voucherType === 'estimates'
                                             ? grandTotalPopupTemplate
                                             : ''

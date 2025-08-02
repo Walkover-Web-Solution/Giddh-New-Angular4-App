@@ -24,7 +24,7 @@
                     <span> {{ stockReport.stockName }}</span> (Stock)
                 </h2>
 
-                <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" tooltip="Advance Search">
+                <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" matTooltip="Advance Search">
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
@@ -36,7 +36,7 @@
 
             <div class="right-inventory">
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-r15" (click)="editStock()" tooltip="Edit Stock">
+                    <button class="btn-link icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
@@ -45,7 +45,7 @@
                         type="button"
                         class="btn-link cp mr-r15 dropdown-toggle icon-btn"
                         aria-controls="dropdown-alignment"
-                        tooltip="Download"
+                        matTooltip="Download"
                     >
                         <i class="icon-download-circle strong"></i>
                     </button>
@@ -68,12 +68,12 @@
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn"
                     data-toggle="tooltip"
-                    tooltip="Alt+N"
+                    matTooltip="Alt+N"
                     (click)="toggleTransferAsidePane()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i">
+                <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" data-toggle="tooltip" matTooltip="Alt+i">
                     Create New
                 </button>
             </div>

@@ -101,7 +101,8 @@
                 </div>
                 <div
                     class="d-flex align-items-center advance-icon btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search"
+                    [matTooltip]="commonLocaleData?.app_advance_search"
+                    matTooltipPosition="above"
                     (click)="openAdvanceSearchModal(purchaseAdvanceSearch)"
                 >
                     <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
@@ -357,8 +358,8 @@
                         </td>
                         <td
                             [attr.data-title]="localeData?.total_amount"
-                            [tooltip]="grandTotalPopupTemplate"
-                            container="body"
+                            [matTooltip]="grandTotalPopupTemplate"
+                            matTooltipPosition="above"
                         >
                             <span class="d-flex justify-content-end">
                                 <amount-field
@@ -395,7 +396,8 @@
                                 "
                             >
                                 <a
-                                    [tooltip]="localeData?.convert_tobill"
+                                    [matTooltip]="localeData?.convert_tobill"
+                                    matTooltipPosition="above"
                                     *ngIf="item?.status === 'open' && (!isCompany && !isConsolidatedBranch)"
                                     (click)="
                                         voucherApiVersion === 2
@@ -406,21 +408,24 @@
                                     <span class="icon-tick font-12"></span>
                                 </a>
                                 <a
-                                    [tooltip]="commonLocaleData?.app_send_email"
+                                    [matTooltip]="commonLocaleData?.app_send_email"
+                                    matTooltipPosition="above"
                                     (click)="openSendMailModal(item, sendEmailModal)"
                                 >
                                     <span class="icon-envelope font-12"></span>
                                 </a>
                                 <a
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    [tooltip]="commonLocaleData?.app_copy"
+                                    [matTooltip]="commonLocaleData?.app_copy"
+                                    matTooltipPosition="above"
                                     [routerLink]="['/pages/purchase-management/purchase-order/new/' + item?.uniqueName]"
                                 >
                                     <span class="icon-copy-small font-15"></span>
                                 </a>
                                 <a
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    [tooltip]="commonLocaleData?.app_delete"
+                                    [matTooltip]="commonLocaleData?.app_delete"
+                                    matTooltipPosition="above"
                                     (click)="confirmDelete(item)"
                                 >
                                     <i class="icon-trash"></i>

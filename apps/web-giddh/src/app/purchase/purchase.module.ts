@@ -6,7 +6,6 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -41,6 +40,7 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -68,7 +68,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
             style: 'slide-left',
             spinnerSize: 30
         }),
-        TooltipModule.forRoot(),
         ClickOutsideModule,
         TabsModule.forRoot(),
         ElementViewChildModule,
@@ -81,6 +80,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         DiscountControlModule,
         NoDataModule,
         MatSlideToggleModule,
+        MatTooltipModule,
         VoucherAddBulkItemsModule,
         TranslateDirectiveModule,
         KeyboardShortutModule,

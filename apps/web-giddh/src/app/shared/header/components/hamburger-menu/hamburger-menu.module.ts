@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { TooltipModule } from "ngx-bootstrap/tooltip";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { HamburgerMenuComponent } from "./hamburger-menu.component";
 
 /**
@@ -13,7 +13,7 @@ import { HamburgerMenuComponent } from "./hamburger-menu.component";
     declarations: [HamburgerMenuComponent],
     imports: [
         CommonModule,
-        TooltipModule.forRoot()
+        MatTooltipModule
     ],
     exports: [HamburgerMenuComponent]
 })
