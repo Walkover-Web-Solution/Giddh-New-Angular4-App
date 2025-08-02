@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -85,7 +84,6 @@ import { MatListModule } from '@angular/material/list';
         MatSelectModule,
         FinancialSearchPipe,
         MatInputModule,
-        TooltipModule,
         MatTabsModule,
         MatListModule,
         FormFieldsModule

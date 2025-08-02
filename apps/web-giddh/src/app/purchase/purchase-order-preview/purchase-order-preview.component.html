@@ -156,8 +156,8 @@
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <!-- <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_edit"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        matTooltipPosition="above"
                                                         [routerLink]="[
                                                             '/pages/purchase-management/purchase-order/edit/' +
                                                                 purchaseOrderUniqueName
@@ -167,8 +167,8 @@
                                                     ></a> -->
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_edit"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        matTooltipPosition="above"
                                                         [routerLink]="[
                                                             '/pages/vouchers/purchase-order/' + purchaseOrder?.account?.uniqueName + '/' + purchaseOrderUniqueName + '/edit']"
                                                         *ngIf="voucherApiVersion === 2"
@@ -179,8 +179,8 @@
                                                 <span>
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_send_email"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        matTooltipPosition="above"
                                                         (click)="openSendMailModal(sendEmailModal)"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
@@ -189,8 +189,8 @@
                                                 <span>
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_print"
+                                                        matTooltipPosition="above"
                                                         (click)="printVoucher()"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
@@ -199,8 +199,8 @@
                                                 <span>
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_download"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_download"
+                                                        matTooltipPosition="above"
                                                         (click)="downloadFile()"
                                                         ><i class="icon-file"></i
                                                     ></a>
@@ -209,8 +209,8 @@
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_delete"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_delete"
+                                                        matTooltipPosition="above"
                                                         (click)="confirmDelete()"
                                                         ><i class="icon-trash"></i
                                                     ></a>

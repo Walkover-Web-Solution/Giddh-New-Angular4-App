@@ -47,12 +47,12 @@
                                              [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"
-                                                tooltip="{{ commonLocaleData?.app_branch }}"
+                                                matTooltip="{{ commonLocaleData?.app_branch }}"
                                             ></i>
                                             <i
                                                 class="icon-company-profile pull-right"
                                                 *ngIf="option.isCompany"
-                                                tooltip="{{ commonLocaleData?.app_company }}"
+                                                matTooltip="{{ commonLocaleData?.app_company }}"
                                             ></i>
                                         </span>
                                         <span class="entity-details">
@@ -90,7 +90,8 @@
                 <div *ngIf="selectedPayments?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
                     <button
                         class="btn btn-default mr-r15"
-                        [tooltip]="commonLocaleData?.app_export"
+                        [matTooltip]="commonLocaleData?.app_export"
+                        matTooltipPosition="above"
                         (click)="exportCsvDownload()"
                     >
                         <span class="icon-export-icon"></span>
@@ -125,7 +126,8 @@
                 <div>
                     <div
                         class="advance-icon cursor-pointer btn btn-primary mr-0"
-                        [tooltip]="commonLocaleData?.app_advance_search"
+                        [matTooltip]="commonLocaleData?.app_advance_search"
+                        matTooltipPosition="above"
                         (click)="openModal()"
                     >
                         <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
@@ -422,8 +424,8 @@
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_total_amount"
-                                [tooltip]="grandTotalPopupTemplate"
-                                container="body"
+                                [matTooltip]="grandTotalPopupTemplate"
+                                matTooltipPosition="above"
                             >
                                 <span class="d-inline-flex">
                                     <amount-field
@@ -447,8 +449,8 @@
                             </td>
                             <td
                                 [attr.data-title]="localeData?.unused_amount"
-                                [tooltip]="balanceDuePopupTemplate"
-                                container="body"
+                                [matTooltip]="balanceDuePopupTemplate"
+                                matTooltipPosition="above"
                             >
                                 <span class="d-inline-flex">
                                     <amount-field

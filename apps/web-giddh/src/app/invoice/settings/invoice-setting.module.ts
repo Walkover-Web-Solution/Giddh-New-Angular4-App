@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -21,7 +20,6 @@ import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgra
         FormsModule,
         TabsModule.forRoot(),
         TranslateDirectiveModule,
-        TooltipModule.forRoot(),
         BsDatepickerModule.forRoot(),
         MatSlideToggleModule,
         ValidateSectionPermissionDirectiveModule,

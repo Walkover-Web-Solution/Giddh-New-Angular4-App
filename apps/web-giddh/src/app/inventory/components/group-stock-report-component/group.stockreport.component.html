@@ -167,7 +167,7 @@
                 <h2 class="mr-2 head-report" *ngIf="groupStockReport">
                     <span>{{ groupStockReport.stockGroupName }}</span> (Group)
                 </h2>
-                <div class="advance-icon cursor-pointer" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                <div class="advance-icon cursor-pointer" matTooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
@@ -178,7 +178,7 @@
             </div>
             <div class="clearfix right-inventory d-flex">
                 <div class="btn-group align-items-center" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-r15" (click)="editGroup()" tooltip="Edit group">
+                    <button class="btn-link icon-btn mr-r15" (click)="editGroup()" matTooltip="Edit group">
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
@@ -187,7 +187,7 @@
                         type="button"
                         class="btn-link cp mr-r15 dropdown-toggle icon-btn"
                         aria-controls="dropdown-alignment"
-                        tooltip="Download"
+                        matTooltip="Download"
                     >
                         <i class="icon-download-circle strong"></i>
                     </button>
@@ -210,12 +210,12 @@
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn"
                     data-toggle="tooltip"
-                    tooltip="Alt+N"
+                    matTooltip="Alt+N"
                     (click)="toggleTransferAsidePane()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">
+                <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" matTooltip="Alt+i" (click)="toggleAsidePane()">
                     Create New
                 </button>
             </div>

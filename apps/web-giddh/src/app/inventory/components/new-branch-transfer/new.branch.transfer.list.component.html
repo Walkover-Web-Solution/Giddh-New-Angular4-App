@@ -7,7 +7,7 @@
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
                         class="btn btn-sky-blue mr-r1 pull-right mobile-none"
                         data-toggle="tooltip"
-                        tooltip="Alt+N"
+                        matTooltip="Alt+N"
                         (click)="toggleTransferAsidePane()"
                     >
                         + New Transfer
@@ -40,12 +40,12 @@
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"
-                                                    tooltip="Branch"
+                                                    matTooltip="Branch"
                                                 ></i>
                                                 <i
                                                     class="icon-company-profile pull-right"
                                                     *ngIf="option.isCompany"
-                                                    tooltip="Company"
+                                                    matTooltip="Company"
                                                 ></i>
                                             </span>
                                             <span class="entity-details">
@@ -80,7 +80,7 @@
                 </div>
                 <div
                     class="advance-icon pointer mobile-none btn btn-primary mr-0"
-                    tooltip="Advance Search"
+                    matTooltip="Advance Search"
                     (click)="openSearchModal(template)"
                 >
                     <span class="pd-r05 d-sm-flex d-none">Filter</span>

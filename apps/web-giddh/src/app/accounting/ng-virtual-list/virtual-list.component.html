@@ -82,8 +82,8 @@
                                     href="javascript:void(0);"
                                     class="isAcc account-list"
                                     id="acc_{{ row.label }}"
-                                    tooltip="{{ row.label }}"
-                                    placement="bottom"
+                                    matTooltip="{{ row.label }}"
+                                    matTooltipPosition="below"
                                     (click)="toggleSelected(row)"
                                     (keydown.enter)="toggleSelected(row)"
                                 >
