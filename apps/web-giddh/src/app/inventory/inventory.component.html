@@ -2,11 +2,15 @@
     <div class="relative">
         <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
         <div class="inventory-control">
-            <tabset #inventoryStaticTabs>
-                <tab
-                    heading="Inventory"
-                    (selectTab)="redirectUrlToActiveTab('inventory', $event)"
-                    [active]="activeTabIndex === 0"
+            <mat-tab-group 
+                #inventoryStaticTabs
+                class="table-header-sticky"
+                mat-stretch-tabs="false" 
+                mat-align-tabs="start"
+                [selectedIndex]="activeTabIndex"
+                (selectedTabChange)="redirectUrlToActiveTab($event)">
+                <mat-tab
+                    label="Inventory"
                     [id]="activeTabIndex === 0 ? 'giddh-page-heading' : ''"
                 >
                     <!--sidebar-->
@@ -76,41 +80,35 @@
                             </section>
                         </section>
                     </ng-container>
-                </tab>
+                </mat-tab>
 
-                <tab
-                    heading="Job Work"
-                    (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
-                    [active]="activeTabIndex === 1"
+                <mat-tab
+                    label="Job Work"
                     [id]="activeTabIndex === 1 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 1">
                         <jobwork></jobwork>
                     </ng-container>
-                </tab>
+                </mat-tab>
 
-                <tab
-                    heading="Manufacturing"
-                    (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
-                    [active]="activeTabIndex === 2"
+                <mat-tab
+                    label="Manufacturing"
                     [id]="activeTabIndex === 2 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 2">
                         <manufacturing></manufacturing>
                     </ng-container>
-                </tab>
+                </mat-tab>
 
-                <tab
-                    heading="Report"
-                    (selectTab)="redirectUrlToActiveTab('report', $event)"
-                    [active]="activeTabIndex === 3"
+                <mat-tab
+                    label="Report"
                     [id]="activeTabIndex === 3 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 3">
                         <new-branch-transfer-list> </new-branch-transfer-list>
                     </ng-container>
-                </tab>
-            </tabset>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </div>
 </div>
