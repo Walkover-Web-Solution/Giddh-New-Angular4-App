@@ -3368,7 +3368,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.toasterService.showSnackBar('success', 'Template set as default successfully');
                 // Update the UI immediately
                 this.createdTemplatesList.forEach(template => {
-                    template.isDefault = (template.uniqueName === templateUniqueName);
+                    if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+                        template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
+                    } else {
+                        template.isDefault = (template.uniqueName === templateUniqueName);
+                    }
                 });
             } else {
                 this.toasterService.showSnackBar('error', 'Failed to set template as default');
