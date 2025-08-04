@@ -73,10 +73,6 @@ import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.ser
 import { CountryCodeService } from './country-code.service';
 import { AiOcrService } from "./ai-ocr.service";
 
-/**
- * Do not specify providers for modules that might be imported by a lazy loaded module.
- */
-
 @NgModule({
     imports: [CommonModule, RouterModule],
     exports: [CommonModule, FormsModule, RouterModule]
