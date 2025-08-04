@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     styleUrls: [`./purchase-record.component.scss`],
@@ -15,6 +16,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class PurchaseRecordComponent implements OnInit, OnDestroy {
     /* This will hold active tab */
     public activeTab: string = 'order';
+    /** Selected tab index for Material tabs */
+    public selectedTabIndex: number = 0;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if we need to refresh purchase bill list */
@@ -34,6 +37,9 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
+                // Update selectedTabIndex to match activeTab
+                const tabNames = ['order', 'bill', 'settings'];
+                this.selectedTabIndex = tabNames.indexOf(this.activeTab);
             }
         });
     }
@@ -72,6 +78,20 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public onTabChanged(tabName: string): void {
         this.router.navigate(['pages/purchase-management/purchase/', tabName], { replaceUrl: true });
+    }
+
+    /**
+     * Handles Material tab change events
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof PurchaseRecordComponent
+     */
+    public tabChanged(event: MatTabChangeEvent): void {
+        const tabNames = ['order', 'bill', 'settings'];
+        const tabName = tabNames[event.index];
+        if (tabName) {
+            this.onTabChanged(tabName);
+        }
     }
 
     /**

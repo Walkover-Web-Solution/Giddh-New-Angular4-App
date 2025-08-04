@@ -95,8 +95,15 @@
             </div>
         </div>
     </div>
-    <tabset class="custom-tabs product-service-page-tab">
-        <tab heading="About Item">
+    <mat-tab-group 
+        class="custom-tabs product-service-page-tab"
+        mat-stretch-tabs="false"
+        mat-align-tabs="start">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>About Item</span>
+            </ng-template>
+            <div class="pd-t15 pd-b15">
             <div >
                 <div class="select-physical-product">
                     <p class="text-gray font-15">
@@ -2114,11 +2121,17 @@
                 </div>
                 <!-- combo content end -->
             </div>
-        </tab>
-        <tab heading="Transaction">
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>Transaction</span>
+            </ng-template>
+            <div class="pd-t15 pd-b15">
             <div class="d-flex w-100">
                 <stock-group-list class="w-100"></stock-group-list>
             </div>
-        </tab>
-    </tabset>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 </div>

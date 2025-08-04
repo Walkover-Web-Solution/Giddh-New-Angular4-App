@@ -18,7 +18,7 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../../services/service.config';
@@ -31,7 +31,9 @@ import { ServiceConfig } from '../../services/service.config';
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
-    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: MatTabGroup;
+    /** Selected tab index for Material tabs */
+    public selectedTabIndex: number = 0;
     /* This will hold selected voucher type */
     @Input() public selectedVoucher: string;
     public invoiceSetting: InvoiceSettings = new InvoiceSettings();
@@ -83,8 +85,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /** Index of selected tab */
-    public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
     /** Active company details */
@@ -613,8 +613,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public selectTab(id: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
-            this.staticTabs.tabs[id].active = true;
+        if (this.staticTabs) {
+            this.staticTabs.selectedIndex = id;
         }
     }
 

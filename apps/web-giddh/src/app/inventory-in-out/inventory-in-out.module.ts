@@ -19,7 +19,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
@@ -54,7 +54,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         }),
         BsDropdownModule.forRoot(),
         InventoryModule,
-        TabsModule.forRoot(),
+        MatTabsModule,
         DecimalDigitsModule
     ],
 })

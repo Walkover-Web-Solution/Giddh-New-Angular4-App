@@ -3,7 +3,7 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
-import { TabsModule } from "ngx-bootstrap/tabs";
+import { MatTabsModule } from "@angular/material/tabs";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { CreateNewGroupComponent } from "./component/create-new-group/create-new-group.component";
 import { CreateNewItemComponent } from "./component/create-new-item/create-new-item.component";
@@ -45,7 +45,6 @@ import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { MatRadioModule } from "@angular/material/radio";
-import { MatTabsModule } from "@angular/material/tabs";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
@@ -147,7 +146,7 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
     imports: [
         NewInventoryRoutingModule,
         SharedModule,
-        TabsModule.forRoot(),
+
         BsDropdownModule.forRoot(),
         CommonModule,
         ModalModule.forRoot(),

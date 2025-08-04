@@ -4,14 +4,21 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <section id="setting-tab-wrapper" class="setting-tab-data">
-        <div id="invoice-setting" class="invoice-control">
-            <tabset class="tab-integration purchase-setting-tab">
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-mail"></span> {{ localeData?.integration }}
+    <section class="setting-tab-data">
+        <div class="invoice-control">
+            <mat-tab-group 
+                class="tab-integration"
+                mat-stretch-tabs="false"
+                mat-align-tabs="start"
+                [selectedIndex]="selectedTabIndex"
+                (selectedTabChange)="tabChanged($event)">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <i class="icon-mail mr-r1"></i>
+                        <span>{{ localeData?.integration }}</span>
                     </ng-template>
-                    <div class="single-tab-block">
+                    <div class="pd-t15 pd-b15">
+                        <div class="single-tab-block">
                         <div class="box clearfix mb-2">
                             <h4 class="clearfix bd-rb">
                                 {{ localeData?.integration }}<span> {{ localeData?.settings_note }}</span>
@@ -140,12 +147,15 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-sales-order"></span> {{ localeData?.pur_order }}
+                    </div>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <i class="icon-sales-order mr-r1"></i>
+                        <span>{{ localeData?.pur_order }}</span>
                     </ng-template>
-                    <div class="sales-order-tab single-tab-block">
+                    <div class="pd-t15 pd-b15">
+                        <div class="sales-order-tab single-tab-block">
                         <div class="box clearfix mb-2">
                             <h4 class="clearfix bd-rb">{{ localeData?.purchase_order }}</h4>
                             <div class="clearfix">
@@ -330,12 +340,15 @@
                             <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                         </div>
                     </div>
-                </tab>
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-invoice-icon"></span>{{ localeData?.pur_bill }}
+                    </div>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <i class="icon-invoice-icon mr-r1"></i>
+                        <span>{{ localeData?.pur_bill }}</span>
                     </ng-template>
-                    <div class="single-tab-block">
+                    <div class="pd-t15 pd-b15">
+                        <div class="single-tab-block">
                         <div class="box clearfix mb-2">
                             <h4 class="clearfix bd-rb">{{ localeData?.purchase_bill }}</h4>
                             <div class="clearfix">
@@ -523,8 +536,9 @@
                             </div>
                         </div>
                     </div>
-                </tab>
-            </tabset>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </section>
     <ng-template #buttonsSection>
