@@ -8,6 +8,7 @@ import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPa
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { HttpMethod } from '../app.constant';
 
 @Injectable()
 export class SettingsIntegrationService {
@@ -600,12 +601,12 @@ export class SettingsIntegrationService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISITION
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':requisitionId', encodeURIComponent(requisitionId ?? '')),''
+            ?.replace(':requisitionId', encodeURIComponent(requisitionId ?? '')), ''
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = '';
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e,'')));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
     /**
@@ -624,5 +625,43 @@ export class SettingsIntegrationService {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Multi-purpose CRUD method for PayU integration.
+     * @param method HTTP method type ('GET' | 'POST' | 'PUT' | 'DELETE')
+     * @param payload Optional payload for POST/PUT/DELETE
+     * @returns Observable<BaseResponse<any, any>>
+     * @memberof SettingsIntegrationService
+     */
+    public payuCrudOperation(
+        method: HttpMethod,
+        payload?: any
+    ): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const url = this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYU_CRUD
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+
+        let httpCall: Observable<any>;
+
+        if (method === HttpMethod.GET) {
+            httpCall = this.http.get(url);
+        } else if (method === HttpMethod.POST) {
+            httpCall = this.http.post(url, payload);
+        } else if (method === HttpMethod.PUT) {
+            httpCall = this.http.put(url, payload);
+        } else if (method === HttpMethod.DELETE) {
+            httpCall = this.http.delete(url, { body: payload });
+        } else {
+            throw new Error('Unsupported HTTP method');
+        }
+
+        return httpCall.pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e))
+        );
     }
 }

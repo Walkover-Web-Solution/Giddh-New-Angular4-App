@@ -1810,5 +1810,4 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public ngOnDestroy(): void {
         super.ngOnDestroy();
     }
-
 }
