@@ -37,7 +37,7 @@
         </div>
 
         <div class="row pd-b2">
-            <div class="col-sm-6" *ngIf="!(activeGroup$ | async)?.fixed">
+            <div class="col-sm-6 closing-balance-width" *ngIf="!(activeGroup$ | async)?.fixed">
                 <div
                     [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                 >
