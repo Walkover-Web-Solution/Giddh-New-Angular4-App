@@ -253,8 +253,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public selectAttachment(event: any, attachment: any): void {
-        console.log("event", event);
-        console.log("attachment", attachment);
         attachment.isChecked = event?.checked;
 
         let allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
@@ -404,7 +402,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public selectAllAttachments(event: any): void {
-        console.log("event", event);
         this.attachments = this.attachments?.map(attachment => {
             attachment.isChecked = event?.checked;
             return attachment;
