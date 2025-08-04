@@ -6,11 +6,11 @@ import { select, Store } from '@ngrx/store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, startWith, Subject, take, takeUntil } from 'rxjs';
 import { AppState } from '../../store';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ToasterService } from '../../services/toaster.service';
-import { EMAIL_VALIDATION_REGEX, HttpMethod } from '../../app.constant';
+import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { ClipboardService } from 'ngx-clipboard';
@@ -18,13 +18,11 @@ import { Organization } from '../../models/api-models/Company';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-import { CustomerPortalComponentStore } from './utility/customer-portal.store';
 
 @Component({
     selector: 'customer-portal',
     templateUrl: './customer.portal.component.html',
-    styleUrls: ['./customer.portal.component.scss'],
-    providers: [CustomerPortalComponentStore]
+    styleUrls: ['./customer.portal.component.scss']
 })
 export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /* This will hold local JSON data */
@@ -134,40 +132,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     private previousPaypalSearchQuery: string = null;
     /** Hold previous account search value */
     private previousAccountSearchQuery: string = null;
-    /** Hold previous payu search value */
-    private previousPayuSearchQuery: string = null;
-    /** Holds Payu linked account label for selected value */
-    public payuLinkedAccountLabel: string = '';
-    /** True if default payu accounts api call in progress */
-    public isDefaultPayuAccountsLoading: boolean = true;
-    /**True if payu is update */
-    public updatePayu: boolean = false;
-    /** Form Group for payu form */
-    public payuForm: FormGroup;
-    /** Holds Store payu  API response state as observable*/
-    public payuDetails$: Observable<any> = this.componentStore.select(state => state.payuDetails);
-    /** Default search suggestion list to be shown for search */
-    public payuDefaultAccountSuggestions: Array<IOption> = [];
-    /** True, if API call should be prevented on default scroll caused by scroll in list */
-    public payuPreventDefaultScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details */
-    public payuDefaultAccountPaginationData: any = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /** Stores the search results pagination details */
-    public payuAccountsSearchResultsPaginationData: any = {
-        page: 0,
-        totalPages: 0,
-        query: ''
-    };
-    /**Observable for payu accounts */
-    public payuAccounts$: Observable<IOption[]>;
-    /** Stores the list of accounts */
-    public payuAccounts: IOption[];
-    /** True if form is submitted to show error if available */
-    public isFormSubmitted: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -179,13 +143,9 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private clipboardService: ClipboardService,
         public dialog: MatDialog,
-        private settingsProfileActions: SettingsProfileActions,
-        private componentStore: CustomerPortalComponentStore
+        private settingsProfileActions: SettingsProfileActions
     ) {
         this.initProfileForm();
-        this.initPayuForm();
-        // For GET
-        this.componentStore.payuCrudOperation({ method: HttpMethod.GET });
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -249,7 +209,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                 this.setPaypalDummyData();
                 this.updatePaypal = false;
             }
-
         });
 
         this.store.pipe(
@@ -279,20 +238,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             });
         }
 
-        this.payuDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.merchantKey) {
-                this.payuForm.patchValue({
-                    merchantKey: response?.merchantKey,
-                    merchantSalt: response?.merchantSalt,
-                    accountUniqueName: response?.linkedAccount?.uniqueName
-                });
-                this.payuLinkedAccountLabel = response?.linkedAccount?.name;
-                this.updatePayu = true;
-            } else {
-                this.updatePayu = false;
-                this.payuForm.reset();
-            }
-        });
     }
 
     /**
@@ -328,7 +273,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public ngAfterViewInit(): void {
         this.loadDefaultAccountsSuggestions();
         this.paypalLoadDefaultAccountsSuggestions();
-        this.payuLoadDefaultAccountsSuggestions();
         this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
         this.store.dispatch(this.settingsIntegrationActions.getPaypalDetails());
 
@@ -373,6 +317,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             this.paypalObj.account = { name: null, uniqueName: null };
         }
     }
+
     /**
      * This will be use for scroll end handler
      *
@@ -398,6 +343,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
                 });
         }
     }
+
 
     /**
     * Search query change handler
@@ -470,12 +416,13 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         }
     }
 
+
     /**
-     * Scroll end handler
-     *
-     * @returns null
-     * @memberof CustomerPortalComponent
-     */
+ * Scroll end handler
+ *
+ * @returns null
+ * @memberof CustomerPortalComponent
+ */
     public handleScrollEnd(): void {
         if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
             this.onAccountSearchQueryChanged(
@@ -510,7 +457,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
 
         query = query?.trim() || "";
 
-        if (query === this.previousAccountSearchQuery) {
+        if (query === this.previousAccountSearchQuery ) {
             return;
         }
 
@@ -617,11 +564,11 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will be use for save paypal details
-     *
-     * @return {*}
-     * @memberof CustomerPortalComponent
-     */
+ * This will be use for save paypal details
+ *
+ * @return {*}
+ * @memberof CustomerPortalComponent
+ */
     public savePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
         if (!(this.validateEmail(data?.email))) {
@@ -679,7 +626,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             width: '585px',
             data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.collection?.delete_credentials_message,
+                body: 'Are you sure you want to delete the credentials?',
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
             }
@@ -784,224 +731,5 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
-    }
-
-    /**
-     * This will be use for init
-     *
-     * @memberof CustomerPortalComponent
-     */
-    public initPayuForm(): void {
-        this.payuForm = this.formBuilder.group({
-            merchantKey: [null, [Validators.required]],
-            merchantSalt: [null, [Validators.required]],
-            accountUniqueName: [null, [Validators.required]]
-        });
-    }
-
-    /**
-     * This will be use for unlink account from payu
-     *
-     * @memberof CustomerPortalComponent
-     */
-    public unlinkAccountFromPayu(): void {
-        if (this.payuForm.get('accountUniqueName')?.value) {
-            this.payuForm.get('accountUniqueName').setValue(null);
-            this.payuForm.get('accountUniqueName').markAsPristine();
-            this.savePayuDetails();
-        } else {
-            this.toasty.warningToast(this.localeData?.collection?.unlink_payu_message);
-        }
-    }
-
-    /**
-     * This will be use for select linked account
-     *
-     * @param {IOption} event
-     * @memberof CustomerPortalComponent
-     */
-    public selectPayuLinkedAccount(event: IOption): void {
-        if (event?.value) {
-            this.payuLinkedAccountLabel = event.label;
-            this.payuAccounts$.pipe(take(1)).subscribe((arr: IOption[]) => {
-                let res = find(arr, (account) => account?.value === event.value);
-                if (res) {
-                    this.payuForm.get('accountUniqueName').patchValue(event.value);
-                }
-            });
-        }
-    }
-
-    /**
-     * This will be use for payu scroll end handler
-     *
-     * @memberof CustomerPortalComponent
-     */
-    public payuHandleScrollEnd(): void {
-        if (this.payuAccountsSearchResultsPaginationData.page < this.payuAccountsSearchResultsPaginationData.totalPages) {
-            this.payuOnAccountSearchQueryChanged(
-                this.payuAccountsSearchResultsPaginationData.query,
-                this.payuAccountsSearchResultsPaginationData.page + 1,
-                (response) => {
-                    if (!this.payuAccountsSearchResultsPaginationData.query) {
-                        const results = response.map(result => {
-                            return {
-                                value: result?.uniqueName,
-                                label: result.name
-                            }
-                        }) || [];
-                        this.payuDefaultAccountSuggestions = this.payuDefaultAccountSuggestions.concat(...results);
-                        this.payuDefaultAccountPaginationData.page = this.payuAccountsSearchResultsPaginationData.page;
-                        this.payuDefaultAccountPaginationData.totalPages = this.payuAccountsSearchResultsPaginationData.totalPages;
-                    }
-                });
-        }
-    }
-
-    /**
-    * Search query change handler
-    *
-    * @param {string} query Search query
-    * @param {number} [page=1] Page to request
-    * @param {Function} successCallback Callback to carry out further operation
-    * @memberof CustomerPortalComponent
-    */
-    public payuOnAccountSearchQueryChanged(query: string = "", page: number = 1, successCallback?: Function): void {
-
-        query = query?.trim() || "";
-
-        if (query === this.previousPayuSearchQuery) {
-            return;
-        }
-
-        this.previousPayuSearchQuery = query;
-        this.payuAccountsSearchResultsPaginationData.query = query;
-
-        if (!this.payuPreventDefaultScrollApiCall &&
-            (query || (this.payuDefaultAccountSuggestions && this.payuDefaultAccountSuggestions.length === 0) || successCallback)) {
-
-            const requestObject: any = {
-                q: encodeURIComponent(query),
-                page
-            };
-
-            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data?.body?.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result?.uniqueName,
-                            label: result.name
-                        }
-                    }) || [];
-
-                    if (page === 1) {
-                        this.payuAccounts = searchResults;
-                    } else {
-                        this.payuAccounts = [...this.payuAccounts, ...searchResults];
-                    }
-
-                    this.payuAccounts$ = observableOf(this.payuAccounts);
-                    this.payuAccountsSearchResultsPaginationData.page = data.body.page;
-                    this.payuAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
-
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.payuAccountsSearchResultsPaginationData.page = data.body.page;
-                        this.payuAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
-                    }
-                } else {
-                    this.isDefaultPayuAccountsLoading = false;
-                }
-            });
-
-        } else {
-            this.payuAccounts = [...this.payuDefaultAccountSuggestions];
-            this.payuAccountsSearchResultsPaginationData.page = this.payuDefaultAccountPaginationData.page;
-            this.payuAccountsSearchResultsPaginationData.totalPages = this.payuDefaultAccountPaginationData.totalPages;
-
-            this.payuPreventDefaultScrollApiCall = true;
-            setTimeout(() => {
-                this.payuPreventDefaultScrollApiCall = false;
-            }, 500);
-        }
-    }
-
-    /**
-     * This will be use for save payu details
-     *
-     * @return {*}
-     * @memberof CustomerPortalComponent
-     */
-    public savePayuDetails(): void {
-        this.isFormSubmitted = false;
-        if (this.payuForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
-        }
-        this.componentStore.payuCrudOperation({
-            method: HttpMethod.POST,
-            payload: this.payuForm.value
-        });
-    }
-
-    /**
-     * This will be use for delete paypal details
-     *
-     * @memberof CustomerPortalComponent
-     */
-    public deletePayuDetails(): void {
-        let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
-                title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.collection?.delete_credentials_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
-        });
-
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                // For DELETE
-                this.componentStore.payuCrudOperation({
-                    method: HttpMethod.DELETE
-                });
-                this.payuLinkedAccountLabel = '';
-            }
-        });
-    }
-
-    /**
-     * This will be use for clear payu account
-     *
-     * @memberof CustomerPortalComponent
-     */
-    public onPayuAccountClear(): void {
-        this.payuLinkedAccountLabel = '';
-        this.payuForm.get('accountUniqueName').setValue(null);
-        this.payuForm.get('accountUniqueName').markAsPristine();
-    }
-
-    /**
-    * Loads the default account search suggestion when module is loaded
-    *
-    * @private
-    * @memberof CustomerPortalComponent
-    */
-    private payuLoadDefaultAccountsSuggestions(): void {
-        this.payuOnAccountSearchQueryChanged('', 1, (response) => {
-            this.payuDefaultAccountSuggestions = response.map(result => {
-                return {
-                    value: result?.uniqueName,
-                    label: result?.name
-                }
-            }) || [];
-            this.payuDefaultAccountPaginationData.page = this.payuAccountsSearchResultsPaginationData.page;
-            this.payuDefaultAccountPaginationData.totalPages = this.payuAccountsSearchResultsPaginationData.totalPages;
-            this.payuAccounts = [...this.payuDefaultAccountSuggestions];
-            this.isDefaultPayuAccountsLoading = false;
-            this.changeDetectionRef.detectChanges();
-        });
     }
 }

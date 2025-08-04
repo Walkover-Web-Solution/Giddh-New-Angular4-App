@@ -8,8 +8,7 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    TemplateRef,
-    Inject
+    TemplateRef
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -48,7 +47,6 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
 import { DomSanitizer } from "@angular/platform-browser";
-import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "aging-report",
@@ -157,7 +155,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
-        @Inject(ServiceConfig) private serviceConfig,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private sanitizer: DomSanitizer) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
@@ -208,7 +205,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.agingReportActions.GetDueRange());
@@ -739,10 +736,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
 
     /**
      * Redirect to invoice preview by unique name
-     *
-     * @param voucherUniqueName
-     * @param voucherDate
-     * @returns
+     * 
+     * @param voucherUniqueName 
+     * @param voucherDate 
+     * @returns 
      */
     public getInvoicePreviewUrl(invoice: any): string {
         if (invoice) {

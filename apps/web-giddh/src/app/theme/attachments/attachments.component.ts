@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
@@ -20,7 +20,6 @@ import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.serv
 import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
-import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "attachments",
@@ -71,7 +70,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     constructor(
         private commonService: CommonService,
         private generalService: GeneralService,
-        @Inject(ServiceConfig) private serviceConfig,
         private domSanitizer: DomSanitizer,
         private toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
@@ -96,7 +94,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

@@ -1,5 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { ServiceConfig } from '../../../services/service.config';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'inventory-combo-list',
@@ -11,9 +10,9 @@ import { ServiceConfig } from '../../../services/service.config';
 export class InventoryComboListComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = '';
-    constructor(@Inject(ServiceConfig) private serviceConfig ){}
+
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

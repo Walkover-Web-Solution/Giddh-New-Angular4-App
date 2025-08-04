@@ -102,11 +102,6 @@
                                                 <mat-button-toggle value="YEARLY">{{
                                                     commonLocaleData?.app_duration?.year
                                                 }}</mat-button-toggle>
-                                                <ng-container *ngIf="!isProdMode">
-                                                    <mat-button-toggle value="DAILY">{{
-                                                        commonLocaleData?.app_duration?.daily
-                                                    }}</mat-button-toggle>
-                                                </ng-container>
                                             </mat-button-toggle-group>
                                         </div>
                                     </div>
@@ -254,10 +249,7 @@
                                                             </p>
                                                         </ng-container>
                                                         <ng-container
-                                                            *ngIf="
-                                                                firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                                                firstStepForm.get('duration')?.value === 'DAILY'
-                                                            "
+                                                            *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
                                                         >
                                                             <ng-container
                                                                 *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount"
@@ -895,7 +887,8 @@
                                     class="new-plan mt-4"
                                     *ngIf="
                                         filteredPaymentProviders?.length > 1 ||
-                                        (['DAILY', 'MONTHLY', 'YEARLY'].includes(firstStepForm.get('duration')?.value) && selectedPlan?.entityCode === 'IND')
+                                        (firstStepForm.get('duration')?.value === 'MONTHLY' &&
+                                            selectedPlan?.entityCode === 'IND')
                                     "
                                 >
                                     <mat-card class="outline-card">
@@ -919,13 +912,12 @@
                                             </div>
                                             <ng-container
                                                 *ngIf="
-                                                    (firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                                        firstStepForm.get('duration')?.value === 'DAILY') &&
+                                                    firstStepForm.get('duration')?.value === 'MONTHLY' &&
                                                     selectedPlan?.entityCode === 'IND'
                                                 "
                                             >
                                                 <mat-radio-group
-                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY"
+                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === 'RAZORPAY'"
                                                     class="d-flex flex-column"
                                                     formControlName="razorpayAuthType"
                                                 >
@@ -976,12 +968,7 @@
                                 >
                                 </amount-field>
                             </span>
-                            <span
-                                *ngIf="
-                                    firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                    firstStepForm.get('duration')?.value === 'DAILY'
-                                "
-                            >
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
                                 <amount-field
                                     [amount]="selectedPlan?.monthlyAmount"
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
@@ -996,13 +983,9 @@
                                     <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">{{
                                         commonLocaleData?.app_duration?.year
                                     }}</span>
-                                    <span
-                                        *ngIf="
-                                            firstStepForm.get('duration')?.value === 'MONTHLY' ||
-                                            firstStepForm.get('duration')?.value === 'DAILY'
-                                        "
-                                        >{{ commonLocaleData?.app_duration?.month }}</span
-                                    >
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">{{
+                                        commonLocaleData?.app_duration?.month
+                                    }}</span>
                                     {{ commonLocaleData?.app_amount }}</span
                                 >
                                 <amount-field

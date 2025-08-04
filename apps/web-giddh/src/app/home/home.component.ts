@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.companyUniqueName = this.generalService.companyUniqueName;
-
+        
         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
             if (result) {
                 this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {

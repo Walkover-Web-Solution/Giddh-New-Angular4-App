@@ -1,9 +1,8 @@
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
 import { orderBy } from '../../../../../../lodash-optimized';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -24,12 +23,12 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     public itemsPerPage: number = 10;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig ) {
+    constructor() {
 
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     /**

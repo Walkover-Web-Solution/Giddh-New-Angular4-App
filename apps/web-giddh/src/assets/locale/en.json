@@ -87,12 +87,9 @@
     "app_voucher_types": {
         "sales": "Sales",
         "purchase": "Purchase",
-        "purchase_order": "Purchase Order",
         "purchases": "Purchases",
         "receipt": "Receipt",
         "payment": "Payment",
-        "estimate": "Estimate",
-        "proforma": "Proforma",
         "journal": "Journal",
         "contra": "Contra",
         "debit_note": "Debit Note",
@@ -218,8 +215,7 @@
         "yearly": "Yearly",
         "month": "Month",
         "year": "Year",
-        "weekly": "Weekly",
-        "daily": "Daily"
+        "weekly": "Weekly"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",
@@ -783,19 +779,6 @@
     "app_uncheck_all_item_message": "Are you sure you want to uncheck all rows?",
     "app_account_status": "Account Status",
     "app_both": "Both",
-    "app_client": "Client",
-    "app_search_by_name_and_unique_name": "Search by name and unique name",
-    "app_search_by_invoice_number_customer_name_and_amount": "Search by invoice number, customer name and amount.",
-    "app_weekdays": {
-        "daily": "Daily",
-        "sunday": "Sunday",
-        "monday": "Monday",
-        "tuesday": "Tuesday",
-        "wednesday": "Wednesday",
-        "thursday": "Thursday",
-        "friday": "Friday",
-        "saturday": "Saturday"
-    },
     "app_sales_person": "Sales Person",
     "app_sales_person_placeholder": "Select sales person",
     "app_skip_and_next": "Skip and Next",

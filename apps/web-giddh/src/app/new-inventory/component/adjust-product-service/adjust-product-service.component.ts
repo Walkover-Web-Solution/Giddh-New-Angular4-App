@@ -1,7 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InventoryAdjustmentReasonAside } from '../inventory-adjustment-aside/inventory-adjustment-aside.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ServiceConfig } from '../../../services/service.config';
 @Component({
     selector: 'adjust-product-service',
     templateUrl: './adjust-product-service.component.html',
@@ -24,11 +23,11 @@ export class AdjustProductServiceComponent implements OnInit {
     public mode: boolean = true;
     public closingQty: Number = 23;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private dialog: MatDialog) { }
+    constructor(private dialog: MatDialog) { }
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     /**

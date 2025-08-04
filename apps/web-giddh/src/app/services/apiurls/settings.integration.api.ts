@@ -29,8 +29,7 @@ export const SETTINGS_INTEGRATION_API = {
         CREATE_END_USER_AGREEMENT: COMMON + 'gocardless/agreement-requisitions?institutionId=:institutionId',
         DELETE_END_USER_AGREEMENT: COMMON + 'gocardless/:agreementId',
         GET_REQUISITION: COMMON + 'gocardless/requisitions/:requisitionId'
-    },
-    PAYU_CRUD: COMMON + 'payu'
+    }
 };
 
 export const SETTINGS_INTEGRATION_COMMUNICATION_API = {

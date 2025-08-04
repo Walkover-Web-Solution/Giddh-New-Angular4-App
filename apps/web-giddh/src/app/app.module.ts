@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,99 +38,40 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
-// Get white label configuration from localStorage
-const whiteLabelString = localStorage.getItem('whiteLabel');
-let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
 
-// FetchWhiteLabel returns an async function that fetches white-label data from an API, stores it in localStorage, and caches it in whiteLabelConfig.
-export function fetchWhiteLabel(): () => Promise<void> {
-    return async () => {
-        if (!whiteLabelConfig) {
-            try {
-                const response = await fetch(`${Configuration.ApiUrl}/white-label`);
-                const data = await response.json();
-                localStorage.setItem('whiteLabel', JSON.stringify(data));
-                whiteLabelConfig = data;
-            } catch (error) {
-                console.error('Failed to fetch white label data:', error);
-            }
-        }
-    };
-}
-
+// Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    {
-        provide: APP_BASE_HREF,
-        useValue: IS_ELECTRON_WA
-            ? './'
-            : whiteLabelConfig?.body?.giddhWhiteLabel?.domainName
-                ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
-                : AppUrl + APP_FOLDER
-    }
+    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
 ];
 
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
+
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-    return localStorageSync({ keys: ['session', 'permission', 'branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
+    return localStorageSync({ keys: ['session', 'permission','branchConsolidated'], rehydrate: true, storage: localStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
-
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 
-// Determine giddh region from cookie and set Country-Region in localStorage
 let giddhRegion = document.cookie
     .split('; ')
     .find(cookie => cookie.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
-if (whiteLabelConfig) {
+
+if (giddhRegion === "UK") {
+    localStorage.setItem("Country-Region", "GB");
+} else if (giddhRegion === "AE") {
+    localStorage.setItem("Country-Region", "AE");
+} else if (giddhRegion === "IN") {
     localStorage.setItem("Country-Region", "IN");
 } else {
-    if (giddhRegion === "UK") {
-        localStorage.setItem("Country-Region", "GB");
-    } else if (giddhRegion === "AE") {
-        localStorage.setItem("Country-Region", "AE");
-    } else if (giddhRegion === "IN") {
-        localStorage.setItem("Country-Region", "IN");
-    } else {
-        localStorage.setItem("Country-Region", "GL");
-    }
+    localStorage.setItem("Country-Region", "GL");
 }
-
-// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
-export function getServiceConfig(): any {
-    return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
-        OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
-        OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
-        GOOGLE_CLIENT_ID: whiteLabelConfig?.body?.googleClientId || Configuration.GOOGLE_CLIENT_ID,
-        GOOGLE_CLIENT_SECRET: whiteLabelConfig?.body?.googleClientSecret || Configuration.GOOGLE_CLIENT_SECRET,
-        OTP_WIDGET_ID_NEW: whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
-        OTP_TOKEN_AUTH_NEW: whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1',
-        RAZORPAY_KEY: whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId || Configuration.RAZORPAY_KEY,
-        _
-    };
-}
-
-// GetServiceConfigAfterInit returns an async function that first fetches white-label data and then retrieves the service configuration.
-export function getServiceConfigAfterInit(): () => Promise<any> {
-    return async () => {
-        await fetchWhiteLabel()();
-        return getServiceConfig();
-    };
-}
-
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -142,6 +83,9 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         AppLoginSuccessComponent,
         MobileRestrictedComponent,
     ],
+    /**
+     * Import Angular's modules.
+     */
     imports: [
         BrowserModule,
         isElectron ? NoopAnimationsModule : BrowserAnimationsModule,
@@ -172,31 +116,28 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         PageModule,
         ...CONDITIONAL_IMPORTS
     ],
+    /**
+     * Expose our Services and Providers into Angular's dependency injection.
+     * enableTracing: true,
+     */
     providers: [
-        {
-            provide: APP_INITIALIZER,
-            useFactory: getServiceConfigAfterInit,
-            multi: true,
-            deps: [HttpClient]
-        },
-
-        {
-            provide: ServiceConfig,
-            useFactory: getServiceConfig
-        },
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
         WindowRef,
         {
+            provide: ServiceConfig,
+            useValue: { apiUrl: localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+        },
+        {
             provide: HTTP_INTERCEPTORS,
             useClass: GiddhHttpInterceptor,
             multi: true
-        },
-        {
+        }, {
             provide: ErrorHandler,
             useClass: ExceptionLogService
         },
         CustomPreloadingStrategy
     ]
 })
-export class AppModule { }
+export class AppModule {
+}

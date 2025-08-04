@@ -1748,7 +1748,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <span class="font-12 pull-right pd-t05">{{ vm.selectedLedger?.otherTaxModal?.appliedOtherTax?.name }}</span>
                                 </div>
                             </div>
                             <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0">
@@ -2481,9 +2480,17 @@
                                         class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
                                        *ngIf="!isPettyCash && voucherApiVersion === 2"
                                     >
-                                        <div class="d-flex column-gap15 w-100">
+                                        <div class="d-flex column-gap15">
                                             <button
-                                                mat-raised-button
+                                                mat-stroked-button
+                                                color="warn"
+                                                id="update-ledger-delete-button"
+                                                (click)="showDeleteEntryModal()"
+                                            >
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                            <button
+                                                mat-stroked-button
                                                 color="primary"
                                                 id="update-ledger-update-button"
                                                 [disabled]="isFileUploading"
@@ -2491,27 +2498,6 @@
                                                 (click)="saveLedgerTransaction()"
                                             >
                                                 {{ commonLocaleData?.app_update }}
-                                            </button>
-                                            <button
-                                                *ngIf="
-                                                    !isDaybook &&
-                                                    !((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1)
-                                                "
-                                                aria-label="Duplicate entry button"
-                                                mat-stroked-button
-                                                (click)="duplicateEntry()"
-                                            >
-                                                {{ localeData?.duplicate }}
-                                            </button>
-
-                                            <button
-                                                class="ml-auto"
-                                                mat-stroked-button
-                                                color="warn"
-                                                id="update-ledger-delete-button"
-                                                (click)="showDeleteEntryModal()"
-                                            >
-                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </div>
                                     </div>

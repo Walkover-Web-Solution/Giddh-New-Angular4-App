@@ -1,13 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, Injector, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject, Observable } from 'rxjs';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-import { IServiceConfigArgs, ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'invoice-template',
@@ -40,7 +39,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(
         private store: Store<AppState>,
-        private injector: Injector,
         private _invoiceUiDataService: InvoiceUiDataService,
         private _activatedRoute: ActivatedRoute) {
         let companyUniqueName = null;
@@ -62,7 +60,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        const config: IServiceConfigArgs = this.injector.get(ServiceConfig) as IServiceConfigArgs;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.activeCompany = cloneDeep(activeCompany);
@@ -97,14 +94,14 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
             if (template && template.logoUniqueName) {
                 this.showLogo = true;
                 if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
-                    this.logoSrc = (config.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+                    this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
                 }
             }
             if (template && template.sections) {
                 if (template.sections.footer.data.imageSignature?.display) {
                     this.showImageSignature = true;
                     if (template.sections.footer.data.imageSignature.label) {
-                        this.imageSignatureSrc = (config.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
+                        this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
                     } else {
                         this.imageSignatureSrc = '';
                     }

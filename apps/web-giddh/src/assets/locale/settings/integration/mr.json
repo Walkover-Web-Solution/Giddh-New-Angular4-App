@@ -50,11 +50,7 @@
         "unlinked_account_successfully": "पेपाल खात्याची माहिती सफलतापूर्वक अनलिंक केली गेली आहे.",
         "paypal_tab_heading": "पेपाल",
         "razorpay_tab_heading": "रेजरपे",
-        "delete_credentials_message": "तुम्हाला खात्री आहे की तुम्हाला क्रेडेन्शियल्स हटवायची आहेत?",
-		"payu_form_heading": "पेयू तपशील",
-		"unlink_payu_message": "तुमचे कोणतेही खाते PayU शी लिंक केलेले नाही.",
-		"payu_merchant_key_placeholder": "मर्चंट की",
-		"payu_merchant_salt_placeholder": "मर्चंट सॉल्ट"
+        "delete_credentials_message": "तुम्हाला खात्री आहे की तुम्हाला क्रेडेन्शियल्स हटवायची आहेत?"
 	},
 	"ecommerce": {
 		"tab_heading": "ई-कॉम",

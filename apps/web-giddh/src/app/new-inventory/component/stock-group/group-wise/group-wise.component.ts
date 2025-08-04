@@ -1,8 +1,7 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export interface PeriodicElement {
     name: string;
@@ -37,7 +36,7 @@ export class GroupwiseComponent implements OnInit,AfterViewInit {
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'customTab'];
     dataSource = new MatTableDataSource(ELEMENT_DATA);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private liveAnnouncer: LiveAnnouncer) {}
+    constructor(private liveAnnouncer: LiveAnnouncer) {}
 
     @ViewChild(MatSort) sort: MatSort;
 
@@ -47,12 +46,12 @@ export class GroupwiseComponent implements OnInit,AfterViewInit {
      * @memberof GroupwiseComponent
      */
     ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     /**
      * after init
-     *
+     * 
      * @memberof GroupwiseComponent
      */
     ngAfterViewInit() {
@@ -71,5 +70,5 @@ export class GroupwiseComponent implements OnInit,AfterViewInit {
         } else {
             this.liveAnnouncer.announce('Sorting cleared');
         }
-    }
+    }    
 }

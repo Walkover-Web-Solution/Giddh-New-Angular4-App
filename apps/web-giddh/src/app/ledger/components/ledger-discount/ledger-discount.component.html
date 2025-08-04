@@ -64,7 +64,6 @@
                                     [id]="'discount-checkbox-' + idx"
                                     class="pull-left"
                                     name="tax_{{ idx }}"
-                                    [checked]="discount.isActive"
                                     [(ngModel)]="discount.isActive"
                                     (change)="change($event, discount)"
                                     (click)="$event.stopPropagation()"

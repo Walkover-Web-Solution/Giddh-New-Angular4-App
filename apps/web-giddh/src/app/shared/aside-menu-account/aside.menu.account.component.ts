@@ -50,8 +50,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
     public deleteAccountmodalRef: any;
-    /** True if action menu is open */
-    @Input() public isActionMenu: boolean = false;
 
     constructor(
         private accountService: AccountService,
