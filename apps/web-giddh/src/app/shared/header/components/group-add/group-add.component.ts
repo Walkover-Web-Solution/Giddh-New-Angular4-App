@@ -12,7 +12,8 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 
 @Component({
     selector: 'group-add',
-    templateUrl: 'group-add.component.html'
+    templateUrl: 'group-add.component.html',
+    styleUrls: ['group-add.component.scss']
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
