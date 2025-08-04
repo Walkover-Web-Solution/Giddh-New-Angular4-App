@@ -1,10 +1,9 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { ServiceConfig } from "../../../services/service.config";
 
 export interface Category {
     name: string;
@@ -48,7 +47,7 @@ export class CreateNewInventoryComponent implements OnInit {
     public isExpense: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private fb: UntypedFormBuilder,
+    constructor(private fb: UntypedFormBuilder,
     ) {
     }
 
@@ -82,7 +81,7 @@ export class CreateNewInventoryComponent implements OnInit {
             }
         });
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     public selectCode(isHSN: any): void {

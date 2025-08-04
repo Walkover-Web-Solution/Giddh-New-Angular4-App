@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, ReplaySubject, takeUntil } from 'rxjs';
@@ -6,7 +6,6 @@ import { SubscriptionComponentStore } from '../subscription/utility/subscription
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { COUNTRY_REGION_MAP } from '../app.constant';
 import { GeneralService } from '../services/general.service';
-import { ServiceConfig } from '../services/service.config';
 
 @Component({
     selector: 'verify-subscription-transfer-ownership',
@@ -51,7 +50,6 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         public dialog: MatDialog,
         private componentStore: SubscriptionComponentStore,
         private formBuilder: FormBuilder,
-        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
         this.loginUrl = this.generalService.getGiddhRegionUrl();
@@ -64,7 +62,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.requestId) {

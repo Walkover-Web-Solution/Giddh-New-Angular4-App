@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
@@ -9,7 +9,6 @@ import { ClipboardService } from 'ngx-clipboard';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
@@ -59,7 +58,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
-    public portalUrl: string = '';
+    public portalUrl: any = PORTAL_URL;
     /** Holds Profile Form */
     public profileForm: FormGroup;
     /** This will hold region */
@@ -69,9 +68,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
         this.initProfileForm();
-        this.portalUrl = (this.serviceConfig.PORTAL_URL || PORTAL_URL);
     }
 
     /**

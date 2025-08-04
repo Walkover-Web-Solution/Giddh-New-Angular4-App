@@ -57,7 +57,7 @@
         {
           "label": "Triggers",
           "link": "/pages/settings/trigger",
-          "icon": "<i class='icon-trigger'></i>"
+          "icon": "<i class='icon-permission1'></i>"
         },
         {
           "label": "Tags",
@@ -154,8 +154,8 @@
         },
         {
           "label": "Triggers",
-          "link": "/pages/settings/trigger",
-          "icon": "<i class='icon-trigger'></i>"
+         "link": "/pages/settings/trigger",
+          "icon": "<i class='icon-permission1'></i>"
         },
         {
           "label": "Tags",

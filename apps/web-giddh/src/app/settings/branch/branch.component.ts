@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -27,7 +27,6 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
 import { BranchHierarchyType } from '../../app.constant';
-import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -125,7 +124,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsBranchActions: SettingsBranchActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
-        @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private settingsProfileService: SettingsProfileService,
         private commonActions: CommonActions,
@@ -218,7 +216,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**

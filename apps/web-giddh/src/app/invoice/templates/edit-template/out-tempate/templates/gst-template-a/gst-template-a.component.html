@@ -51,7 +51,7 @@
                                                     [hidden]="!showLogo"
                                                     [src]="logoSrc"
                                                     class="pull-left"
-                                                    alt="brand-logo"
+                                                    alt="logo"
                                                     [ngStyle]="{ 'height': inputTemplate.logoSize + 'px' }"
                                                 />
                                             </div>
@@ -93,11 +93,12 @@
                                             fieldsAndVisibility.header.gstComposition?.display
                                         "
                                     >
-                                    {{
-                                        fieldsAndVisibility.header.gstComposition?.label
-                                            ? fieldsAndVisibility.header.gstComposition?.label
-                                            : "Registered under Composition Scheme"
-                                    }}
+                                        {{
+                                            fieldsAndVisibility.header.gstComposition?.label
+                                                ? fieldsAndVisibility.header.gstComposition?.label
+                                                : "Registered under Composition
+                                    Scheme"
+                                        }}
                                     </p>
                                 </td>
 

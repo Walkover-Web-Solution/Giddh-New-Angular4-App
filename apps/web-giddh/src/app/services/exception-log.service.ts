@@ -70,7 +70,7 @@ export class ExceptionLogService implements ErrorHandler {
 
         const url = `${config.apiUrl}${EXCEPTION_API}`;
 
-        if (!(config.AppUrl || AppUrl).includes('localhost')) {
+        if (!AppUrl.includes('localhost')) {
             return http.post(url, payloadJson).pipe(
                 catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
         } else {

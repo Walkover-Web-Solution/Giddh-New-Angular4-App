@@ -1,7 +1,7 @@
 import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, DoCheck, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -13,10 +13,8 @@ import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 import { CustomEmailComponentStore } from 'apps/web-giddh/src/app/shared/template-froala/utility/template-froala.store';
-import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 
 @Component({
     selector: 'content-selector',
@@ -67,7 +65,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         private invoiceUiDataService: InvoiceUiDataService,
         private activatedRoute: ActivatedRoute,
         private toaster: ToasterService,
-        @Inject(ServiceConfig) private serviceConfig,
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
         private commonService: CommonService,
@@ -274,7 +271,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                         if (this.invoiceUiDataService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
-                        this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
+                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
                         this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
                         this.invoiceUiDataService.unusedImageSignature = response.body?.uniqueName;
                         this.onChangeFieldVisibility(null, null, null);
@@ -381,7 +378,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public assignImageSignature(): void {
         if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-            this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
             this.signatureImgAttached = true;
         } else {
             this.signatureSrc = '';
@@ -396,22 +393,12 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
-        if (this.voucherType === VoucherTypeEnum.sales) {
-            if (isDate) {
-                this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-                this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
-            } else {
-                this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
-                this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
-            }
+        if (isDate) {
+            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
         } else {
-            if (isDate) {
-                this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
-                this.customTemplate.sections['header'].data['invoiceDate'].display = this.customTemplate.sections['header'].data['voucherDate'].display;
-            } else {
-                this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
-                this.customTemplate.sections['header'].data['invoiceNumber'].display = this.customTemplate.sections['header'].data['voucherNumber'].display;
-            }
+            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
         }
     }
 }

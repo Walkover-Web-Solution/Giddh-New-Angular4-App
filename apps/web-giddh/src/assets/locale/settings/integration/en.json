@@ -50,11 +50,7 @@
         "unlinked_account_successfully":"Paypal account details have been unlink successfully.",
         "paypal_tab_heading": "Paypal",
         "razorpay_tab_heading": "Razorpay",
-        "delete_credentials_message": "Are you sure you want to delete the credentials?",
-        "payu_form_heading": "Payu Details",
-        "unlink_payu_message": "You don't have any account linked with Payu.",
-        "payu_merchant_key_placeholder": "Merchant key",
-        "payu_merchant_salt_placeholder": "Merchant salt"
+        "delete_credentials_message": "Are you sure you want to delete the credentials?"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",

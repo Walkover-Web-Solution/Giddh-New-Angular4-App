@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -7,7 +7,6 @@ import { takeUntil } from 'rxjs/operators';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 
 @Component({
@@ -49,7 +48,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     public isIndianCompany: boolean = false;
 
     constructor(
-        @Inject(ServiceConfig) private serviceConfig,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
         this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
@@ -57,7 +55,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit() {
         this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);

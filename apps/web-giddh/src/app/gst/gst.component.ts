@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -20,7 +20,7 @@ import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { ServiceConfig } from '../services/service.config';
+
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],
@@ -109,7 +109,6 @@ export class GstComponent implements OnInit, OnDestroy {
         private invoicePurchaseActions: InvoicePurchaseActions,
         private toasty: ToasterService,
         private cdRf: ChangeDetectorRef,
-        @Inject(ServiceConfig) private serviceConfig,
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService
     ) {
@@ -167,7 +166,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
     }
 
     /**

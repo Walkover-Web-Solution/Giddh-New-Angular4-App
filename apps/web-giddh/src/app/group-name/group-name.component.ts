@@ -1,9 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { cloneDeep } from '../lodash-optimized';
 import { GeneralService } from '../services/general.service';
-import { ServiceConfig } from '../services/service.config';
 
 @Component({
   selector: 'app-group-name',
@@ -40,13 +39,12 @@ export class GroupNameComponent implements OnInit {
   /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
   public isCompany: boolean;
 
-    constructor(
-    @Inject(ServiceConfig) private serviceConfig,
+  constructor(
     private generalService: GeneralService
   ) { }
 
   public ngOnInit(): void {
-    this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
     // get branches
     this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {

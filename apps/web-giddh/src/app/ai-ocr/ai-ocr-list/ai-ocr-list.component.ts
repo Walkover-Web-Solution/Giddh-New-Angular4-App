@@ -4,6 +4,7 @@ import {
     Component,
     OnDestroy,
     OnInit,
+    TemplateRef,
     ViewChild,
 } from "@angular/core";
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from "rxjs";
@@ -11,7 +12,10 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
-import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import * as dayjs from "dayjs";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { MatSort, Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -30,6 +34,8 @@ import { GeneralActions } from "../../actions/general/general.actions";
 export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
+    /** Directive to get reference of element */
+    @ViewChild("datepickerTemplate") public datepickerTemplate: TemplateRef<any>;
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     /** This will hold local JSON data */
@@ -68,6 +74,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public inlineSearch: any = "";
     /** Form Group for ocr document list form */
     public ocrDocumentListForm: FormGroup;
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
     /* True if status show */
     public showStatus = false;
     /* True if converted status show */
@@ -80,18 +88,35 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public showData: boolean = true;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /** This will store modal reference */
+    public modalRef: BsModalRef;
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will store universalDate */
+    public universalDate: any;
+    /** Selected range label */
+    public selectedRangeLabel: any = "";
+    /** This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Holds company branches */
+    public branches: Array<any>;
     /** True if is company */
     public isCompany: boolean = true;
     /** Hold broadcast event */
     public broadcast: any;
-    /** True if show clear filter */
-    public showClearFilter : boolean = false;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private componentStore: AiOcrStore,
         private aiOcrService: AiOcrService,
+        private modalService: BsModalService,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private generalActions: GeneralActions
@@ -105,6 +130,21 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initForm();
+
+        /** Universal date observer */
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
+                this.universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi =
+                    dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                    " - " +
+                    dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getAllOcrDocuments(false);
+            }
+        });
 
         /** Get Ocr List */
         this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -149,6 +189,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 if (!this.isCompany) {
                     this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
                 }
+                this.branches = [];
+                branchList.forEach((branch) => {
+                    this.branches.push({
+                        label: branch?.name,
+                        value: branch?.uniqueName
+                    });
+                });
             }
         });
 
@@ -156,11 +203,11 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = true;
                     this.getAllOcrDocuments(true);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = false;
                     this.showStatus = false;
                 }
             });
@@ -169,11 +216,11 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = true;
                     this.getAllOcrDocuments(true);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = false;
                     this.showconvertedStatus = false;
                 }
             });
@@ -182,11 +229,11 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = true;
                     this.getAllOcrDocuments(true);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = false;
                     this.showUploadedBy = false;
                 }
             });
@@ -195,36 +242,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = true;
                     this.getAllOcrDocuments(true);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                    this.showClearFilter = false;
                     this.showFileName = false;
                 }
             });
-
-        this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.dateSelectedCallback(res);
-            }
-        });
-
-        this.aiOcrService.resetData$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.resetFilter(res);
-            }
-        });
-
-        this.aiOcrService.selectBranch$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.ocrDocumentsRequestParams.branchUniqueName = res.branchUniqueName;
-                this.ocrDocumentsRequestParams.from = res.from;
-                this.ocrDocumentsRequestParams.to = res.to;
-                this.showClearFilter = false;
-                this.getAllOcrDocuments(false);
-            }
-        });
     }
 
     /**
@@ -244,6 +269,62 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         return shouldShow;
     }
 
+    /**
+     * This will hide the datepicker.
+     *
+     * @memberof AiOcrListComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef?.hide();
+    }
+
+    /**
+     * Callback for date/range selection in datepicker.
+     *
+     * @param {*} [value]
+     * @param {*} [from]
+     * @return {*} {void}
+     * @memberof AiOcrListComponent
+     */
+    public dateSelectedCallback(value?: any, from?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.showClearFilter = true;
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi =
+                dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                " - " +
+                dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.ocrDocumentsRequestParams.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ocrDocumentsRequestParams.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.getAllOcrDocuments(true);
+        }
+    }
+
+    /**
+     * To show the datepicker.
+     *
+     * @param {*} element
+     * @memberof AiOcrListComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: "modal-lg giddh-datepicker-modal", backdrop: false, ignoreBackdropClick: false })
+        );
+    }
 
     /**
      * This will be used to check null or undefined values.
@@ -392,11 +473,11 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      *
      * @memberof AiOcrListComponent
      */
-    public resetFilter(res: any): void {
+    public clearFilter(): void {
+        this.showClearFilter = false;
         this.showStatus = false;
         this.showUploadedBy = false;
         this.showFileName = false;
-        this.showClearFilter = false;
         this.ocrDocumentListForm.patchValue({
             status: null,
             fileName: null,
@@ -404,9 +485,20 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             convertedStatus: null,
         });
         this.inlineSearch = "";
-        this.ocrDocumentsRequestParams.from = res.from;
-        this.ocrDocumentsRequestParams.to = res.to;
-        this.getAllOcrDocuments(true);
+        /** Universal date observer */
+        this.componentStore.universalDate$.subscribe((dateObj) => {
+            if (dateObj) {
+                this.universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi =
+                    dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                    " - " +
+                    dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getAllOcrDocuments(true);
+            }
+        });
         this.changeDetection.detectChanges();
     }
 
@@ -440,32 +532,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             this.ocrDocumentsRequestParams.page = 1;
             this.getAllOcrDocuments(false);
         }
-    }
-
-    /**
-     * Callback for date/range selection in datepicker.
-     *
-     * @param {*} [value]
-     * @param {*} [from]
-     * @return {*} {void}
-     * @memberof AiOcrListComponent
-     */
-    public dateSelectedCallback(event: any): void {
-        this.showClearFilter = true;
-        this.ocrDocumentsRequestParams.from = event.from;
-        this.ocrDocumentsRequestParams.to = event.to;
-        this.getAllOcrDocuments(true);
-    }
-
-    /**
-     * This will be used to reset the date range.
-     *
-     * @memberof AiOcrListComponent
-     */
-    public resetDateRange(): void {
-        this.ocrDocumentsRequestParams.from = "";
-        this.ocrDocumentsRequestParams.to = "";
-        this.getAllOcrDocuments(true);
     }
 
     /**

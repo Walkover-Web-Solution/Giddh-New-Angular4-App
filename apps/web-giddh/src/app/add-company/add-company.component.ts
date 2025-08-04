@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -29,7 +29,6 @@ import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
 import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
-import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -247,7 +246,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalActions: GeneralActions,
         private companyActions: CompanyActions,
-        @Inject(ServiceConfig) private serviceConfig,
         private route: Router,
         private loginAction: LoginActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
@@ -373,7 +371,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 const module = response.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === RestrictedModules.Users
                 );
-                this.remainingUsers = module?.remainingUsers;
+                this.remainingUsers = module.remainingUsers;
             }
         });
         this.changeDetection.detectChanges();
@@ -453,8 +451,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 500);
 
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW) ,
-            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
+            widgetId: OTP_WIDGET_ID_NEW,
+            tokenAuth: OTP_WIDGET_TOKEN_NEW,
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {

@@ -1,5 +1,4 @@
-import { Component, Inject } from "@angular/core";
-import { ServiceConfig } from "../../../services/service.config";
+import { Component } from "@angular/core";
 
 @Component({
     selector: 'add-ons',
@@ -8,12 +7,12 @@ import { ServiceConfig } from "../../../services/service.config";
 })
 
 export class AddOnsComponent{
-
+    
     /**  Image path variable */
     public imgPath: string = '';
-    constructor(@Inject(ServiceConfig) private serviceConfig ){}
+
     public ngOnInit(): void{
         /** This will use for image format */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

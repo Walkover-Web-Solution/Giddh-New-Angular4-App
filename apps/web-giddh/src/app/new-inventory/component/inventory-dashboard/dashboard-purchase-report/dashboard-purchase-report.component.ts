@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { GeneralService } from '../../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'dashboard-purchase-report',
@@ -39,7 +38,6 @@ export class DashboardPurchaseReport implements OnInit {
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
 
     constructor(
-        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService, private modalService: BsModalService,
         private _breakPointObservar: BreakpointObserver,) {
     }
@@ -88,7 +86,7 @@ export class DashboardPurchaseReport implements OnInit {
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
 }

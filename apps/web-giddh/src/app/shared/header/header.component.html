@@ -87,10 +87,10 @@
                 </div>
                 <div class="logo-wrapper pd-l4">
                     <img
-                        [src]="giddhLogoSrc"
+                        src="{{ imgPath }}giddh-white-logo.svg"
                         width="127"
                         height="25"
-                        alt="brand-logo"
+                        [alt]="localeData?.giddh_logo"
                     />
                 </div>
                 <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">

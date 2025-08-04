@@ -1,5 +1,5 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, Input, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service'
 import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
-import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+
 export const filterTransaction = {
     entityType: '',
     type: '',
@@ -112,7 +112,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private receiptService: ReceiptService,
-        @Inject(ServiceConfig) private serviceConfig,
         private dialog: MatDialog) {
         this.viewTransaction$ = this.store.pipe(select(p => p.gstR.viewTransactionData), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -156,7 +155,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.localeData?.unregistered, value: 'unregistered' }
         ];
 
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.count = this.pageSizeOptions[2];
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
@@ -199,7 +198,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle page change
+     * Handle page change   
      *
      * @param {*} event
      * @memberof SubscriptionComponent

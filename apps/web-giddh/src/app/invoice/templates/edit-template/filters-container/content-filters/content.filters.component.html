@@ -300,11 +300,7 @@
                             type="checkbox"
                             name="gstCompositionLabel"
                             [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null); 
-                                customTemplate.sections['header'].data['gstComposition'].display 
-                                && customTemplate.sections['header'].data['gstComposition'].label.length === 0 
-                                ? customTemplate.sections['header'].data['gstComposition'].label = 'Registered under Composition Scheme'
-                                : customTemplate.sections['header'].data['gstComposition'].label"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
                         <span>
@@ -319,7 +315,6 @@
                                 placeholder="Registered under Composition Scheme"
                                 [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label"
                                 (ngModelChange)="onFieldChange(null, null, null)"
-                                [disabled]="!customTemplate.sections['header'].data['gstComposition'].display"
                             />
                             <ng-container
                                 *ngIf="
@@ -431,7 +426,7 @@
                                     class="form-control"
                                     name="invoiceDate"
                                     [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].label"
-                                    (ngModelChange)="handleInvoiceDateNumberChange(true);onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['voucherDate'].display"
                                 />
                                 <ng-container
@@ -466,7 +461,7 @@
                                     class="form-control"
                                     name="voucherNo"
                                     [(ngModel)]="customTemplate.sections['header'].data['voucherNumber'].label"
-                                    (ngModelChange)="handleInvoiceDateNumberChange(false);onFieldChange(null, null, null)"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
                                     [disabled]="!customTemplate.sections['header'].data['voucherNumber'].display"
                                 />
                                 <ng-container
