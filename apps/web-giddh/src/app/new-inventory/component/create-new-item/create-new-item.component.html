@@ -78,8 +78,15 @@
                                     </div>
                                 </div>
                             </form>
-                            <tabset class="custom-tabs create-item-tab">
-                                <tab heading="Account *">
+                            <mat-tab-group 
+                                class="custom-tabs create-item-tab"
+                                mat-stretch-tabs="false"
+                                mat-align-tabs="start">
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Account *</span>
+                                    </ng-template>
+                                    <div class="pd-t15 pd-b15">
                                     <div class="account-tab-content">
                                         <form>
                                             <div class="row">
@@ -287,8 +294,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                </tab>
-                                <tab heading="Inventory">
+                                    </div>
+                                </mat-tab>
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Inventory</span>
+                                    </ng-template>
+                                    <div class="pd-t15 pd-b15">
                                     <div>
                                         <p class="mr-b15">
                                             <span>
@@ -450,8 +462,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                </tab>
-                                <tab heading="Other">
+                                    </div>
+                                </mat-tab>
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <span>Other</span>
+                                    </ng-template>
+                                    <div class="pd-t15 pd-b15">
                                     <form>
                                         <div class="row">
                                             <div class="col-sm-4 mr-b15">
@@ -532,8 +549,9 @@
                                             </div>
                                         </div>
                                     </form>
-                                </tab>
-                            </tabset>
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
                             <div class="button-group mt-5">
                                 <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">
                                     Clear

@@ -101,10 +101,10 @@ const routes: Routes = [
         component: AboutGroupDetailComponent,
 
     },
-    {
-        path: "about-product-service-detail",
-        component: AboutProductServiceDetailComponent,
-    },
+    // {
+    //     path: "about-product-service-detail",
+    //     component: AboutProductServiceDetailComponent,
+    // },
     {
         path: "inventory-combo-list",
         component: InventoryComboListComponent,

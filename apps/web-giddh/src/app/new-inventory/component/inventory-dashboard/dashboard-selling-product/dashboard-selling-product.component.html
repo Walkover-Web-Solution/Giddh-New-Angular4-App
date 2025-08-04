@@ -50,8 +50,15 @@
             </div>
         </div>
         <div class="selling-container">
-            <tabset class="custom-tabs location-data-tabs">
-                <tab heading="Location">
+            <mat-tab-group 
+                class="custom-tabs location-data-tabs"
+                mat-stretch-tabs="false"
+                mat-align-tabs="start">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <span>Location</span>
+                    </ng-template>
+                    <div class="pd-t15 pd-b15">
                     <!-- div will show if no any data on list -->
                     <div class="no-data-contain" hidden>
                         <img src="{{ imgPath }}error.svg" />
@@ -79,8 +86,13 @@
                             <span class="progress-bar"></span> ₹7,20,000
                         </div>
                     </div>
-                </tab>
-                <tab heading="Product">
+                    </div>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <span>Product</span>
+                    </ng-template>
+                    <div class="pd-t15 pd-b15">
                     <div class="location-data">
                         <div class="state-location-data d-flex">
                             <label>Madhya Pradesh</label>
@@ -103,8 +115,13 @@
                             <span class="progress-bar"></span> ₹7,20,000
                         </div>
                     </div>
-                </tab>
-                <tab heading="Serive">
+                    </div>
+                </mat-tab>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <span>Service</span>
+                    </ng-template>
+                    <div class="pd-t15 pd-b15">
                     <div class="location-data">
                         <div class="state-location-data d-flex">
                             <label>Madhya Pradesh</label>
@@ -127,8 +144,9 @@
                             <span class="progress-bar"></span> ₹7,20,000
                         </div>
                     </div>
-                </tab>
-            </tabset>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
         </div>
     </div>
 </div>

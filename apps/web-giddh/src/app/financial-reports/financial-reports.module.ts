@@ -7,7 +7,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
@@ -93,7 +93,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ReactiveFormsModule,
         Daterangepicker,
         FinancialReportsRoutingModule,
-        TabsModule.forRoot(),
+        MatTabsModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

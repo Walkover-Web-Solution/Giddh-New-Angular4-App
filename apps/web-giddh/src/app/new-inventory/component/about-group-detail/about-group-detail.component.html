@@ -63,8 +63,15 @@
             </div>
         </div>
     </div>
-    <tabset class="custom-tabs about-group-tab">
-        <tab heading="About Group">
+    <mat-tab-group 
+        class="custom-tabs about-group-tab"
+        mat-stretch-tabs="false"
+        mat-align-tabs="start">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>About Group</span>
+            </ng-template>
+            <div class="pd-t15 pd-b15">
             <div class="row">
                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                     <p class="text-gray font-15 mr-b15">Lorem Ipsum dummy text will come here about create stock.</p>
@@ -139,8 +146,15 @@
                 </div>
             </div>
             <div class="other-group mt-3">
-                <tabset class="custom-tabs about-group-tab">
-                    <tab heading="Other">
+                <mat-tab-group 
+                    class="custom-tabs about-group-tab"
+                    mat-stretch-tabs="false"
+                    mat-align-tabs="start">
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <span>Other</span>
+                        </ng-template>
+                        <div class="pd-t15 pd-b15">
                         <div class="other-tab-content d-flex">
                             <input type="checkbox" id="out-of-stock" />
                             <span class="font-15 ml-1"
@@ -148,11 +162,17 @@
                                 group/stock)</span
                             >
                         </div>
-                    </tab>
-                </tabset>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
             </div>
-        </tab>
-        <tab heading="Report">
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span>Report</span>
+            </ng-template>
+            <div class="pd-t15 pd-b15">
             <div class="d-flex">
                 <inventory-group-list-sidebar></inventory-group-list-sidebar>
                 <div class="right-side-content w-100 d-flex flex-column">
@@ -219,8 +239,9 @@
                     <stock-group-list></stock-group-list>
                 </div>
             </div>
-        </tab>
-    </tabset>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 </div>
 <!-- foote will shown on about group tab only -->
 <div class="sticky-footer create-group-footer">

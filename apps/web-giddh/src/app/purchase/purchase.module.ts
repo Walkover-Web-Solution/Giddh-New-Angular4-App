@@ -41,6 +41,7 @@ import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/asid
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -81,6 +82,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         NoDataModule,
         MatSlideToggleModule,
         MatTooltipModule,
+        MatTabsModule,
         VoucherAddBulkItemsModule,
         TranslateDirectiveModule,
         KeyboardShortutModule,
