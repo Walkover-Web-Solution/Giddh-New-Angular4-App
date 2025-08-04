@@ -4,16 +4,18 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../services/general.service';
+
 @Component({
     templateUrl: './invoice.component.html',
     styleUrls: [`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    /** Angular Material tab group reference for invoice navigation tabs */
+    @ViewChild('staticTabs', { static: true }) public staticTabs: MatTabGroup;
 
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
@@ -63,13 +65,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                 }
                 if (queryParams && queryParams.tab) {
                     if (queryParams.tab && queryParams.tabIndex) {
-                        if (this.staticTabs && this.staticTabs.tabs) {
-                            /*
-                              set active tab to null because we want to reload the tab component
-                              case :-
-                                      when invoice preview details is on then if someone clicks on sidemenu or navigate using cmd + g then we need to
-                                      reload the component
-                             */
+                        if (this.staticTabs) {
                             this.activeTab = null;
                             setTimeout(() => {
                                 this.tabChanged(queryParams.tab, null);
@@ -102,6 +98,114 @@ export class InvoiceComponent implements OnInit, OnDestroy {
      * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
      * @memberof InvoiceComponent
      */
+    /**
+     * Handles tab change events from Angular Material tabs
+     *
+     * @public
+     * @param {MatTabChangeEvent} event - Tab change event containing selected index
+     * @param {string} tabsetType - Type of tabset ('debitCredit' or 'main')
+     * @memberof InvoiceComponent
+     */
+    public onTabChange(event: MatTabChangeEvent, tabsetType: string): void {
+        const tabIndex = event.index;
+        let tabName: string;
+        let type: string;
+        
+        if (tabsetType === 'debitCredit') {
+            switch (tabIndex) {
+                case 0:
+                    tabName = 'debit note';
+                    this.voucherChanged('debitNote');
+                    break;
+                case 1:
+                    tabName = 'credit note';
+                    this.voucherChanged('creditNote');
+                    break;
+                case 2:
+                    tabName = 'pending';
+                    type = 'debit note';
+                    break;
+                case 3:
+                    tabName = 'templates';
+                    type = 'debit note';
+                    break;
+                case 4:
+                    tabName = 'settings';
+                    type = 'debit note';
+                    break;
+                default:
+                    tabName = 'debit note';
+            }
+        } else {
+            switch (tabIndex) {
+                case 0:
+                    tabName = 'estimates';
+                    this.voucherChanged('generateEstimate');
+                    break;
+                case 1:
+                    tabName = 'proformas';
+                    this.voucherChanged('generateProforma');
+                    break;
+                case 2:
+                    tabName = 'sales';
+                    this.voucherChanged('sales');
+                    break;
+                case 3:
+                    tabName = 'recurring';
+                    break;
+                case 4:
+                    tabName = 'pending';
+                    type = 'sales';
+                    break;
+                case 5:
+                    tabName = 'templates';
+                    type = 'sales';
+                    break;
+                case 6:
+                    tabName = 'settings';
+                    type = 'sales';
+                    break;
+                default:
+                    tabName = 'estimates';
+            }
+        }
+        
+        this.tabChanged(tabName, null, type);
+    }
+    
+    /**
+     * Gets the tab index based on active tab name and mat-tab-group type
+     *
+     * @public
+     * @param {string} activeTab - Current active tab name
+     * @param {string} matTabType - Type of mat-tab-group ('debitCredit' or 'main')
+     * @returns {number} Tab index for Angular Material tabs
+     * @memberof InvoiceComponent
+     */
+    public getTabIndex(activeTab: string, matTabType: string): number {
+        if (matTabType === 'debitCredit') {
+            switch (activeTab) {
+                case 'debit note': return 0;
+                case 'credit note': return 1;
+                case 'pending': return 2;
+                case 'templates': return 3;
+                case 'settings': return 4;
+                default: return 0;
+            }
+        } else {
+            switch (activeTab) {
+                case 'estimates': return 0;
+                case 'proformas': return 1;
+                case 'sales': return 2;
+                case 'recurring': return 3;
+                case 'pending': return 4;
+                case 'templates': return 5;
+                case 'settings': return 6;
+                default: return 0;
+            }
+        }
+    }
+    
     public tabChanged(tab: string, e, type?: string) {
         this.activeTab = tab;
         if (type && tab) {
