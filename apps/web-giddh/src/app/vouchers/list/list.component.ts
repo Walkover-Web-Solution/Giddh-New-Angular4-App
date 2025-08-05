@@ -368,6 +368,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public templatesList: any[] = [];
     /** List of all created templates for a given type */
     public createdTemplatesList: any[] = [];
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
