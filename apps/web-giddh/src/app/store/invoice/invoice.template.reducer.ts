@@ -44,7 +44,7 @@ export const initialState: CustomTemplateState = {
                         width: null
                     },
                     thanks: {
-                        label: '',
+                        label: 'Thank You for your business.',
                         display: true,
                         width: null
                     },
@@ -193,7 +193,7 @@ export const initialState: CustomTemplateState = {
                         width: null
                     },
                     gstComposition: {
-                        label: '',
+                        label: 'Registered under Composition Scheme',
                         display: true,
                         width: null
                     },
@@ -410,10 +410,10 @@ export const initialState: CustomTemplateState = {
             }
         },
         font: 'Inter',
-        topMargin: 10,
-        leftMargin: 10,
-        rightMargin: 10,
-        bottomMargin: 10,
+        topMargin: 25,
+        leftMargin: 25,
+        rightMargin: 25,
+        bottomMargin: 25,
         logoPosition: 'center/left/right',
         logoSize: 'small/medium/large',
         logoUniqueName: null,

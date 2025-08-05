@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { Injector, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
@@ -15,17 +15,7 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { CompanyBranchComponent } from "./company-branch/company-branch.component";
 import { PrimarySidebarComponent } from "./primary-sidebar.component";
-
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
-    {
-        id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
-    }
-], false);
-
-export function provideConfig() {
-    return SOCIAL_CONFIG || { id: null, providers: [] };
-}
+import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config";
 
 @NgModule({
     declarations: [
@@ -54,11 +44,23 @@ export function provideConfig() {
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: provideConfig
+            useFactory: (injector: Injector) => {
+                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
+                return new AuthServiceConfig(
+                    [
+                        {
+                            id: GoogleLoginProvider.PROVIDER_ID,
+                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
+                        }
+                    ],
+                    false
+                );
+            },
+            deps: [Injector]
         }
     ]
 })
 
 export class PrimarySidebarModule {
-    
+
 }

@@ -7,9 +7,15 @@ import { MatDialogConfig } from '@angular/material/dialog';
 export const Configuration = {
     'AppUrl': AppUrl,
     'ApiUrl': ApiUrl,
+    'PORTAL_URL': PORTAL_URL,
+    'OTP_WIDGET_ID': OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
     'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER
+    'APP_FOLDER': APP_FOLDER,
+    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY
 };
 
 /** Add Company business type*/
@@ -676,7 +682,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100dvh',
+    height: '100vh',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',
@@ -684,3 +690,31 @@ export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     },
     disableClose: true
 };
+
+/** Payment provider */
+export const PaymentProvider = {
+    RAZORPAY: 'RAZORPAY',
+    GOCARDLESS: 'GOCARDLESS',
+    PAYPAL: 'PAYPAL',
+    PAYU: 'PAYU'
+};
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}
+
+/** Get Bifurcation Type */
+export enum GetBifurcationType {
+    MONTH = 'month',
+    QUATER = 'quater',
+    QUARTER = 'quarter'
+}
+    

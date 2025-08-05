@@ -1,5 +1,5 @@
 .bulk-stock {
-    min-height: calc(100dvh - 100px);
+    min-height: calc(100vh - 100px);
     height: 100%;
     &-warpper {
         height: inherit;
@@ -18,7 +18,7 @@
         }
     }
     &-body {
-        min-height: calc(100dvh - 185px);
+        min-height: calc(100vh - 185px);
         height: 100%;
         .bulk-stock-table {
             height: 100%;

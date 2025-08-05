@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TBPlBsActions } from 'apps/web-giddh/src/app/actions/tl-pl.actions';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
@@ -18,6 +19,7 @@ export class ProfitLossExportXlsComponent implements OnInit {
 
     constructor(
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private tbPlActions: TBPlBsActions) {
 
     }
@@ -28,6 +30,6 @@ export class ProfitLossExportXlsComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.svg';
+        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/xls-icon.svg';
     }
 }
