@@ -3,8 +3,8 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
@@ -19,6 +19,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: "purchase-register-expand",
@@ -111,7 +112,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
         private dialog: MatDialog,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private companyActions: CompanyActions
     ) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(
             select((appState) => appState.receipt.PurchaseRegisteDetailedResponse),
@@ -165,7 +167,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
-                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters.accountUniqueNames;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
@@ -317,6 +319,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {
