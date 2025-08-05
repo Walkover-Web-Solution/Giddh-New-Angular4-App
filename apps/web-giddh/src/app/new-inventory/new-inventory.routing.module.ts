@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
-import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
@@ -101,10 +100,6 @@ const routes: Routes = [
         component: AboutGroupDetailComponent,
 
     },
-    // {
-    //     path: "about-product-service-detail",
-    //     component: AboutProductServiceDetailComponent,
-    // },
     {
         path: "inventory-combo-list",
         component: InventoryComboListComponent,
