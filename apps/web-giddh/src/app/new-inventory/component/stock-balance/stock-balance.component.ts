@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
@@ -14,6 +14,7 @@ import { SettingsFinancialYearActions } from "../../../actions/settings/financia
 import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SelectFieldComponent } from "../../../theme/form-fields/select-field/select-field.component";
+import { ServiceConfig } from "../../../services/service.config";
 @Component({
     selector: 'stock-balance',
     templateUrl: './stock-balance.component.html',
@@ -90,6 +91,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private toaster: ToasterService
     ) {
@@ -113,7 +115,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.getStockUnits();
         this.getStockGroups();
         this.getWarehouses();

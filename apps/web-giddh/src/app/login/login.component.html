@@ -20,8 +20,8 @@
                         <div class="giddh-login-inner">
                             <!-- dynamic content inserted -->
                             <div class="logo-login">
-                                <a href="https://giddh.com" aria-label="giddh logo">
-                                    <img src="./assets/images/giddh-white-logo.svg" alt="giddh logo" width="141px" />
+                                <a [href]="giddhDomainUrl" aria-label="brand-logo">
+                                    <img [src]="giddhLogoSrc" alt="brand-logo" height="30" />
                                 </a>
                             </div>
                             <div class="accounting-space bg-white">
@@ -110,7 +110,7 @@
 
                                     <div class="mb-3" *ngIf="loginUsing === 'forgot'">
                                         <form
-                                            
+
                                             id="forgotPassword"
                                             name="forgotPassword"
                                             novalidate
@@ -137,7 +137,7 @@
                                             </button>
                                         </form>
                                         <form
-                                            
+
                                             id="resetPassword"
                                             name="resetPassword"
                                             novalidate
