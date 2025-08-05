@@ -66,7 +66,7 @@
                             *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
                             [matTooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
-                            [matTooltipPosition]="i === 0 ? 'below' : 'above'"
+                            matTooltipPosition="right"
                             aria-hidden="true"
                         >
                             <span
@@ -157,7 +157,7 @@
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
                                     [matTooltip]="branch?.name"
-                                    matTooltipPosition="above"
+                                    matTooltipPosition="right"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">
@@ -175,7 +175,7 @@
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
                                     [matTooltip]="branch?.name"
-                                    matTooltipPosition="above"
+                                    matTooltipPosition="right"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">
