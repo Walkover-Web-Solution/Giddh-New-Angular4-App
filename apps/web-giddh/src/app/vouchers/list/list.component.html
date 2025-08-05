@@ -35,6 +35,8 @@
                                     class="input-group custom-datepicker" 
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
+                                    (menuOpened)="isDatepickerMenuOpen = true"
+                                    (menuClosed)="isDatepickerMenuOpen = false"
                                     role="button"
                                     aria-haspopup="true"
                                     aria-controls="universalDatepicker"
@@ -48,6 +50,7 @@
                                 </div>
                                 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
                                     <app-datepicker-wrapper
+                                        *ngIf="isDatepickerMenuOpen"
                                         [inputStartDate]="selectedDateRange?.startDate"
                                         [inputEndDate]="selectedDateRange?.endDate"
                                         [alwaysShowCalendars]="true"

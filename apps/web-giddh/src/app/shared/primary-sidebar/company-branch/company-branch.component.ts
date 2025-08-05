@@ -150,9 +150,11 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.isGoToBranch?.currentValue) {
             this.getCompanyBranches(this.companyBranches, false);
-            const event = new MatTabChangeEvent();
-            event.index = 1;
-            this.tabChanged(event, "branch");
+            setTimeout(() => {
+                const event = new MatTabChangeEvent();
+                event.index = 1;
+                this.tabChanged(event, "branch");
+            }, 50);
         }
     }
 
