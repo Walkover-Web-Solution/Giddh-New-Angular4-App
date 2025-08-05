@@ -3,7 +3,7 @@ import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@ang
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -70,6 +70,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
+    /** True if command dialog is open */
+    @Input() public showCommandDialog: boolean = false;
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
@@ -180,10 +182,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)) {
                     this.commandkDialogRef.close()
                 }
-                this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-                    width: '630px',
-                    height: '600'
-                });
+                this.showNavigationModal()
             }
         }
     }
@@ -209,6 +208,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     return item;
                 });
             });
+        }
+
+        if ('showCommandDialog' in changes && changes.showCommandDialog.previousValue !== changes.showCommandDialog.currentValue && changes.showCommandDialog.currentValue) {
+            this.showNavigationModal();
         }
     }
 
@@ -391,7 +394,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-    * Displays the CMD+K modal
+    * Opens the CMD+K dialog
     *
     * @memberof PrimarySidebarComponent
     */
@@ -408,7 +411,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} e Create new group event
      * @memberof PrimarySidebarComponent
      */
-    public handleNewTeamCreationEmitter(e: any): void {
+    public handleNewTeamCreationEmitter(e: any): void {        
         if (e[0] === "group") {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
@@ -557,19 +560,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public trackItems(index: number, item: AllItem): string {
         return item.link;
-    }
-
-    /**
-     * Unsubscribes from all the listeners
-     *
-     * @private
-     * @memberof PrimarySidebarComponent
-     */
-    private unsubscribe(): void {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            subscription.unsubscribe();
-        });
-        this.subscriptions = [];
     }
 
     /**

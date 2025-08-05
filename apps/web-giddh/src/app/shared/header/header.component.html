@@ -37,7 +37,7 @@
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
-            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch">
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch" [showCommandDialog]="showCommandDialog">
             </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
@@ -45,6 +45,7 @@
                 class="icon-bar"
                 [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
                 matTooltipPosition="right"
+                matTooltipClass="tooltip-black"
             ></span>
         </div>
     </div>
@@ -662,36 +663,6 @@
             </div>
         </div>
     </div>
-    <!--add company modal  -->
-    <div
-        bsModal
-        #addCompanyModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-        (onHidden)="onHide()"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companyadd="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
-    <!--add company new modal  -->
-    <div
-        bsModal
-        #addCompanyNewModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-        (onHidden)="onHide()"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companynewadd="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
@@ -829,38 +800,3 @@
     </div>
 </div>
 <connect-plaid></connect-plaid>
-<!--CMD + G modal  -->
-<ng-template #navigationModal>
-    <command-k
-        (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-        (groupEmitter)="makeGroupEntryInDB($event)"
-        (selectedItemEmitter)="onItemSelected($event)"
-        (closeDailogEmitter)="closeEvent()"
-        [parentEle]="mdl"
-        [isOpen]="true"
-        [setParentWidth]="true"
-    ></command-k>
-    <div class="shortcuts">
-        <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-        {{ localeData?.to_select }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{ commonLocaleData?.app_esc }}</strong
-        >&nbsp;
-        {{ commonLocaleData?.app_to_dismiss }}
-    </div>
-</ng-template>
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div *ngIf="accountAsideMenuState === 'in'">
-    <generic-aside-menu-account
-        [class]="accountAsideMenuState"
-        [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)"
-        (closeAccountModal)="closeAccountModal($event)"
-        [selectedGrpUniqueName]="selectedGroupForCreateAccount"
-        [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
-        (addEvent)="addNewAccount($event)"
-        *ngIf="accountAsideMenuState === 'in'"
-    >
-    </generic-aside-menu-account>
-</div>
