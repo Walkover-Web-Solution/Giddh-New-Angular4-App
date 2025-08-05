@@ -10,11 +10,10 @@
                 aria-hidden="true"
                 class="cursor-pointer font-15 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
-                #close
                 disableRipple
                 type="button"
                 mat-button
-                [mat-dialog-close]="refreshAfterClose"
+                (click)="closeAttachmentDialog()"
             >
                 <i class="icon-left"></i> {{ commonLocaleData?.app_back }}
             </button>

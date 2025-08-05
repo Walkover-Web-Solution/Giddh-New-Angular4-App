@@ -3381,6 +3381,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @param {TemplateRef<any>} templateRef
      * @param {*} transaction
+     * @param {boolean} [isAttachment=false]
      * @memberof LedgerComponent
      */
     public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any, isAttachment: boolean = false): void {
