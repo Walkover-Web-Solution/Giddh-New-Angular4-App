@@ -13,7 +13,7 @@ import { AboutGroupDetailComponent } from "./component/about-group-detail/about-
 import { InventoryGroupListSidebar } from "./component/inventory-group-list-sidebar/inventory-group-list-sidebar.component";
 import { StockGroupListComponent } from "./component/stock-group-list/stock-group-list.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
-import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
+
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
@@ -101,7 +101,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         InventoryGroupListSidebar,
         StockGroupListComponent,
         ProductServiceListComponent,
-        AboutProductServiceDetailComponent,
         InventoryComboListComponent,
         AboutComboDetailComponent,
         CreateComboComponent,
@@ -199,7 +198,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         InventoryGroupListSidebar,
         StockGroupListComponent,
         ProductServiceListComponent,
-        AboutProductServiceDetailComponent,
         InventoryComboListComponent,
         AboutComboDetailComponent,
         CreateComboComponent,
