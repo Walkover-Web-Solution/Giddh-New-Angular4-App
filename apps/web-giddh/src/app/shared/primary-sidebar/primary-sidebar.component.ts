@@ -618,7 +618,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.allItems.filter(item => !item.hide).forEach((menu, index) => {
             menu['expandable'] = menu?.items?.length > 0;
             menu['level'] = 0;
-            menu['isExpanded'] = index === 0;
+            menu['isExpanded'] = false;
             const childMenus = menu?.items;
             delete menu['items'];
             flattenedItems.push(menu);
@@ -754,7 +754,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
       * @memberof PrimarySidebarComponent
       */
       public toggleNode(node: any): void {
-        if (node.expandable) {
+        if (node.expandable || (node?.level === 0)) {
           if (node.isExpanded) {
             node.isExpanded = false;
           } else {
@@ -763,7 +763,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 item.isExpanded = false;
               }
             });
-            node.isExpanded = true;
+            node.isExpanded = node.expandable;
           }
           this.dataSource = new ArrayDataSource(this.allItems);
         }

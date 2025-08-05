@@ -468,11 +468,14 @@
                                     class="giddh-datepicker form-control date-range-picker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
+                                    (menuOpened)="isDatepickerMenuOpen = true"
+                                    (menuClosed)="isDatepickerMenuOpen = false"
                                 />
                             </div>
 
                             <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="before">
                                 <app-datepicker-wrapper
+                                    *ngIf="isDatepickerMenuOpen"
                                     [inputStartDate]="selectedDateRange?.startDate"
                                     [inputEndDate]="selectedDateRange?.endDate"
                                     [alwaysShowCalendars]="true"

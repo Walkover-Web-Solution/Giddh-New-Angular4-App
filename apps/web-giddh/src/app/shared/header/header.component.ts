@@ -287,6 +287,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not

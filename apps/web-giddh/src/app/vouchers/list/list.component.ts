@@ -362,6 +362,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public paymentTableColumnsEnum: typeof PaymentTableColumnsEnum = PaymentTableColumnsEnum;
     /** True if columns loading */
     public isColumnsLoading: boolean = true;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
