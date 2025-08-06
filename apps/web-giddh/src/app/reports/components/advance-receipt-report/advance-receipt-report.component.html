@@ -630,25 +630,20 @@
             </div>
 
             <div
-                [hidden]="isLoading"
                 *ngIf="pageConfiguration.totalItems > paginationLimit"
-                class="pagination-wrapper mt-2"
+                class="mt-4"
             >
-                <pagination
-                    [totalItems]="pageConfiguration.totalItems"
-                    [(ngModel)]="pageConfiguration.currentPage"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    (pageChanged)="onPageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                >
-                </pagination>
+                <ng-container>
+                    <mat-paginator
+                        [length]="pageConfiguration.totalItems"
+                        [pageSize]="paginationLimit"
+                        [pageIndex]="pageConfiguration.currentPage - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
             <div class="no-data" *ngIf="!allReceipts?.length && !isLoading">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>

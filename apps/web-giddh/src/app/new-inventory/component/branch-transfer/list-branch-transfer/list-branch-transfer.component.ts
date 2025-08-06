@@ -2,7 +2,8 @@ import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@a
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
@@ -86,6 +87,10 @@ export class ListBranchTransferComponent implements OnInit {
         sortBy: '',
         branchUniqueName: ''
     };
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for branch transer pagination logs object */
     public branchTransferPaginationObject = {
         page: 1,
@@ -542,6 +547,26 @@ export class ListBranchTransferComponent implements OnInit {
      *
      * @param {*} event
      * @memberof ListBranchTransfer
+     */
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ListBranchTransferComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.branchTransferPaginationObject.count !== event.pageSize) {
+            this.branchTransferPaginationObject.page = 1;
+        } else {
+            this.branchTransferPaginationObject.page = event.pageIndex + 1;
+        }
+        this.branchTransferPaginationObject.count = event.pageSize;
+        this.getBranchTransferList(false);
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
      */
     public pageChanged(event: any): void {
         if (this.branchTransferPaginationObject.page !== event.page) {

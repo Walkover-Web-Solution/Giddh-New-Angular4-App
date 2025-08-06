@@ -12,7 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
 import { FormsModule } from '@angular/forms';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
@@ -34,7 +34,7 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
         MatDialogModule,
         MatTooltipModule,
         DatepickerWrapperModule,
-        PaginationModule.forRoot(),
+
         GiddhDatepickerModule,
         FormsModule,
         TranslateDirectiveModule,

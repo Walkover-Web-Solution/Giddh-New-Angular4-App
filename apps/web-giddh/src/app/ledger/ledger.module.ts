@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { ClipboardModule } from 'ngx-clipboard';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
@@ -93,7 +93,7 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         TaxControlModule,
         LedgerRoutingModule,
         ModalModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         ClipboardModule,
         LaddaModule.forRoot({
             style: 'slide-left',

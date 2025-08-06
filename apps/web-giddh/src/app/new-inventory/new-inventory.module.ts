@@ -56,7 +56,7 @@ import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.c
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
-import { PaginationModule } from "ngx-bootstrap/pagination";
+
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -168,7 +168,7 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         StockCreateEditModule,
         NgxMatSelectSearchModule,
         GiddhPageLoaderModule,
-        PaginationModule.forRoot(),
+
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,

@@ -23,6 +23,8 @@ import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -161,8 +163,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
     public lastListingFilters: any;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
+    public paginationLimit: number = this.pageSizeOptions[2]; // 50
     public purchaseRecord: any = {};
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
@@ -702,12 +706,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.invoiceSearchRequest.page) {
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InvoicePreviewComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        
+        if (this.invoiceSearchRequest.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        if (newPage === this.invoiceSearchRequest.page && this.invoiceSearchRequest.count === event.pageSize) {
             return;
         }
+        
         this.toggleAllItems(false);
-        this.invoiceSearchRequest.page = ev.page;
+        this.invoiceSearchRequest.page = newPage;
+        this.invoiceSearchRequest.count = event.pageSize;
         this.getVoucher(this.isUniversalDateApplicable);
     }
 

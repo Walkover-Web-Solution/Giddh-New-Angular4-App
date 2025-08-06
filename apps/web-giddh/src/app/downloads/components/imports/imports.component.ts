@@ -9,7 +9,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -68,8 +69,11 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** Hold the data of imports */
     public dataSource = ELEMENT_DATA;
     /** This will use for import object */
+    /** This will use for page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** This will use for import object */
     public importRequest: ImportsRequest = {
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[1],
         page: 1,
         totalItems: 0,
         from: "",
@@ -228,14 +232,17 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /**
     * This function will change the page of activity logs
     *
-    * @param {*} event
+    * @param {PageEvent} event
     * @memberof ImportsComponent
     */
-    public pageChanged(event: any): void {
-        if (this.importRequest.page !== event.page) {
-            this.importRequest.page = event.page;
-            this.getImports();
+    public handlePageEvent(event: PageEvent): void {
+        if (this.importRequest.count !== event.pageSize) {
+            this.importRequest.page = 1;
+        } else {
+            this.importRequest.page = event.pageIndex + 1;
         }
+        this.importRequest.count = event.pageSize;
+        this.getImports();
     }
 
     /**

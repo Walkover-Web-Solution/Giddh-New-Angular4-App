@@ -1824,25 +1824,18 @@
                         </table>
                     </div>
                 </ng-container>
-                <div
-                    *ngIf="voucherData && voucherData?.totalItems > paginationLimit"
-                    [hidden]="isGetAllRequestInProcess$ | async"
-                    class="pagination-wrapper mt-4"
-                >
-                    <pagination
-                        [totalItems]="voucherData.totalItems"
-                        [(ngModel)]="voucherData.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="paginationLimit"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    ></pagination>
+                <div class="mt-4">
+                    <ng-container *ngIf="voucherData && voucherData?.totalItems > paginationLimit && !(isGetAllRequestInProcess$ | async)">
+                        <mat-paginator
+                            [length]="voucherData.totalItems"
+                            [pageSize]="invoiceSearchRequest.count || paginationLimit"
+                            [pageIndex]="invoiceSearchRequest.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)">
+                        </mat-paginator>
+                    </ng-container>
                 </div>
                 <!--no data-->
                 <div class="no-data" *ngIf="!voucherData?.items?.length && !(isGetAllRequestInProcess$ | async)">

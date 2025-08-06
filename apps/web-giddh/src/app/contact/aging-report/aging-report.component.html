@@ -592,14 +592,18 @@
 
     <div
         *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
-        class="pagination-wrapper mt-4"
+        class="mt-4"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
-        <div class="xs-pl-0">
-            <div class="text-center unbold pagination-sm">
-                <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
-            </div>
-        </div>
+        <mat-paginator
+            [length]="(dueAmountReportData$ | async)?.totalItems"
+            [pageSize]="dueAmountReportRequest.count"
+            [pageSizeOptions]="pageSizeOptions"
+            [pageIndex]="dueAmountReportRequest.page - 1"
+            [showFirstLastButtons]="true"
+            (page)="handlePageEvent($event)"
+            aria-label="Select page of aging report results">
+        </mat-paginator>
     </div>
 </ng-template>
 <ng-template

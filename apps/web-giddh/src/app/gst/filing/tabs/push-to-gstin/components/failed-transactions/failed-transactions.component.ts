@@ -2,7 +2,8 @@ import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges }
 import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
 import { orderBy } from '../../../../../../lodash-optimized';
-import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../../../../app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
@@ -22,6 +23,8 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     public imgPath: string = '';
 
     public itemsPerPage: number = 10;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(@Inject(ServiceConfig) private serviceConfig ) {
@@ -37,7 +40,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
      */
     public ngOnChanges(s: SimpleChanges) {
         if (s['failedTransactions']?.currentValue && s['failedTransactions']?.currentValue !== s['failedTransactions']?.previousValue) {
-            this.pageChanged({ page: 1, itemsPerPage: this.itemsPerPage });
+            this.handlePageEvent({ pageIndex: 0, pageSize: this.itemsPerPage, length: this.failedTransactions?.length });
         }
     }
 
@@ -46,8 +49,15 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     }
 
 
-    public pageChanged(event: PageChangedEvent) {
-        let startIndex = (event.page - 1) * this.itemsPerPage;
+    /**
+     * Handles pagination events for failed transactions
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof FailedTransactionsComponent
+     */
+    public handlePageEvent(event: PageEvent) {
+        this.itemsPerPage = event.pageSize;
+        let startIndex = event.pageIndex * this.itemsPerPage;
         let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions?.length - 1);
         this.filteredTransactions = this.failedTransactions?.slice(startIndex, endIndex + 1);
     }

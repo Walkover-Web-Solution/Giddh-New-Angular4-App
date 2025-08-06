@@ -112,7 +112,6 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                     <div
-                        class="pagination-wrapper justify-content-end"
                         *ngIf="(triggerList$ | async)?.totalItems > pageSizeOptions[0]"
                     >
                         <mat-paginator

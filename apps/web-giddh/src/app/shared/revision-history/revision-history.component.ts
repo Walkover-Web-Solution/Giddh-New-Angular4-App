@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { takeUntil } from 'rxjs/operators';
@@ -47,6 +48,8 @@ export class RevisionHistoryComponent implements OnDestroy {
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private purchaseOrderService: PurchaseOrderService,
@@ -146,6 +149,31 @@ export class RevisionHistoryComponent implements OnDestroy {
      *
      * @param {*} event
      * @memberof RevisionHistoryComponent
+     */
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof RevisionHistoryComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.purchaseVersionsGetRequest.count !== event.pageSize) {
+            this.purchaseVersionsGetRequest.page = 1;
+            this.purchaseVersionsGetRequest.count = event.pageSize;
+        } else {
+            this.purchaseVersionsGetRequest.page = event.pageIndex + 1;
+        }
+
+        if (this.selectedVoucher) {
+            this.getVoucherVersions(false);
+        } else {
+            this.getPurchaseOrderVersions(false);
+        }
+    }
+
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
      */
     public pageChanged(event: any): void {
         if (this.purchaseVersionsGetRequest.page !== event.page) {

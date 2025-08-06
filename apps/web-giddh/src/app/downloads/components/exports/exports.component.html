@@ -102,21 +102,18 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="pagination-wrapper mt-4" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
-    <pagination
-        [totalItems]="downloadRequest?.totalItems"
-        [(ngModel)]="downloadRequest.page"
-        [maxSize]="5"
-        class="pagination-sm"
-        [boundaryLinks]="true"
-        [itemsPerPage]="downloadRequest.count"
-        [rotate]="false"
-        (pageChanged)="pageChanged($event)"
-        [firstText]="commonLocaleData?.app_first"
-        [previousText]="commonLocaleData?.app_previous"
-        [nextText]="commonLocaleData?.app_next"
-        [lastText]="commonLocaleData?.app_last"
-    ></pagination>
+<div class="mt-4" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
+    <ng-container>
+        <mat-paginator
+            [length]="downloadRequest?.totalItems"
+            [pageSize]="downloadRequest.count"
+            [pageIndex]="downloadRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)">
+        </mat-paginator>
+    </ng-container>
 </div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

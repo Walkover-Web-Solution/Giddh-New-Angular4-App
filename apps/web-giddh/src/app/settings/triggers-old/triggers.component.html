@@ -205,7 +205,7 @@
             </section>
         </div>
         <div
-            class="pagination-wrapper mt-3"
+            class="mt-3"
             *ngIf="
                 triggerObj?.totalPages > 1 &&
                 !isActiveTriggersLoading &&
@@ -214,20 +214,15 @@
                 communicationPlatforms?.MSG91?.isConnected
             "
         >
-            <pagination
-                [totalItems]="triggerObj?.totalItems"
-                [(ngModel)]="triggerObj.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="triggerObj?.count"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+            <mat-paginator
+                [length]="triggerObj?.totalItems"
+                [pageSize]="triggerObj?.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="triggerObj.page - 1"
+                [showFirstLastButtons]="true"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of triggers"
+            ></mat-paginator>
         </div>
     </ng-container>
     <!-- Page-6 to Page-9 -->

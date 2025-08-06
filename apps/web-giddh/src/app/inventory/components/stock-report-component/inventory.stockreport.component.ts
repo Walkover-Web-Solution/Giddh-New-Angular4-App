@@ -33,6 +33,8 @@ import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -270,6 +272,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** True if stock report API is in progress */
     public stockReportInProcess: boolean = false;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     /**
      * TypeScript public modifiers
@@ -571,6 +575,26 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InventoryStockReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.stockReportRequest.count !== event.pageSize) {
+            this.stockReportRequest.page = 1;
+        } else {
+            this.stockReportRequest.page = event.pageIndex + 1;
+        }
+        this.stockReportRequest.count = event.pageSize;
+        this.getStockReport(false);
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
+     */
     public pageChanged(event: any): void {
         this.stockReportRequest.page = event.page;
         this.getStockReport(false);

@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -27,6 +28,10 @@ export class AsideManageTransportComponent implements OnInit {
     public displayedColumns: string[] = ['name', 'transporterId', 'action'];
     /** Hold  transporter id*/
     public currentTransporterId: string;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Hold table data*/
     public dataSource: any[] = ELEMENT_DATA;
     /* Aside pane state*/
@@ -95,6 +100,27 @@ export class AsideManageTransportComponent implements OnInit {
     * @param {*} event
     * @memberof AsideManageTransportComponent
     */
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof AsideManageTransportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.transporterObj.count !== event.pageSize) {
+            this.transporterObj.page = 1;
+        } else {
+            this.transporterObj.page = event.pageIndex + 1;
+        }
+        this.transporterObj.count = event.pageSize;
+        this.getTransportersList();
+        this.detectChanges();
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
+     */
     public pageChanged(event: any): void {
         if (this.transporterObj.page !== event.page) {
             this.transporterObj.page = event.page;

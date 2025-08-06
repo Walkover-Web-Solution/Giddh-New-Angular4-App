@@ -1168,24 +1168,16 @@
                                     <span class="black"
                                         >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
                                     >
-                                    <pagination
-                                        *ngIf="bankTransactionsResponse?.totalPages > 1"
-                                        [totalItems]="
-                                            bankTransactionsResponse?.countPerPage *
-                                            bankTransactionsResponse?.totalPages
-                                        "
-                                        [itemsPerPage]="bankTransactionsResponse?.countPerPage"
-                                        [maxSize]="5"
-                                        class="pagination-sm"
-                                        [(ngModel)]="bankTransactionsResponse.page"
-                                        (pageChanged)="bankTransactionPageChanged($event)"
-                                        [boundaryLinks]="true"
-                                        [firstText]="commonLocaleData?.app_first"
-                                        [previousText]="commonLocaleData?.app_previous"
-                                        [nextText]="commonLocaleData?.app_next"
-                                        [lastText]="commonLocaleData?.app_last"
-                                    >
-                                    </pagination>
+                                    <ng-container *ngIf="bankTransactionsResponse?.totalPages > 1">
+                                        <mat-paginator 
+                                            [length]="bankTransactionsResponse?.totalItems" 
+                                            [pageSize]="bankTransactionsResponse.countPerPage" 
+                                            [pageSizeOptions]="pageSizeOptions" 
+                                            [pageIndex]="bankTransactionsResponse.page - 1" 
+                                            (page)="handlePageEvent($event)" 
+                                            [showFirstLastButtons]="true">
+                                        </mat-paginator>
+                                    </ng-container>
                                 </div>
                                 <table class="w-100">
                                     <tr>

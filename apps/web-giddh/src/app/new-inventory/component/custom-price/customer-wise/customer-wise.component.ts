@@ -2,12 +2,14 @@ import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { CreateDiscount } from "apps/web-giddh/src/app/models/api-models/Inventory";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { SettingsDiscountService } from "apps/web-giddh/src/app/services/settings.discount.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
+import { ActivatedRoute } from "@angular/router";
 import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component";
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -38,8 +40,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Pagination limit, items per page */
-    public paginationLimit: number = 100;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Pagination Information of (Account & Group) and Stocks  */
     public pagination: any;
     /** Holds Mat Dailog Reference*/
@@ -896,6 +900,26 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      *
      * @param {*} event
      * @memberof CustomerWiseComponent
+     */
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof CustomerWiseComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.paginationLimit !== event.pageSize) {
+            this.pagination.stock.page = 1;
+        } else {
+            this.pagination.stock.page = event.pageIndex + 1;
+        }
+        this.paginationLimit = event.pageSize;
+        this.getAllDiscount(this.currentUser, this.stockSearchQuery);
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
      */
     public pageChanged(event: any): void {
         if (event && this.pagination.stock.page !== event.page) {

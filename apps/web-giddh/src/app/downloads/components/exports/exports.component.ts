@@ -13,7 +13,8 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
 import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
@@ -67,9 +68,11 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
     /** Hold the data of downloads */
     public dataSource = ELEMENT_DATA;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for download object */
     public downloadRequest: DownloadsRequest = {
-        count: PAGINATION_LIMIT,
+        count: PAGE_SIZE_OPTIONS[1],
         page: 1,
         totalItems: 0,
         from: "",
@@ -167,16 +170,26 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will change the page of activity logs
-    *
-    * @param {*} event
-    * @memberof ExportsComponent
-    */
-    public pageChanged(event: any): void {
-        if (this.downloadRequest.page !== event.page) {
-            this.downloadRequest.page = event.page;
-            this.getDownloads();
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ExportsComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        if (this.downloadRequest.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
         }
+        
+        if (newPage === this.downloadRequest.page && this.downloadRequest.count === event.pageSize) {
+            return;
+        }
+        
+        this.downloadRequest.page = newPage;
+        this.downloadRequest.count = event.pageSize;
+        this.getDownloads();
     }
 
     /**

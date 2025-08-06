@@ -8,7 +8,6 @@ import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -80,7 +79,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         SelectModule.forRoot(),
         TabsModule.forRoot(),
         ModalModule.forRoot(),
-        PaginationModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
