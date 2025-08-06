@@ -73,4 +73,23 @@ export class InvoiceTemplatesService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)));
     }
+
+    /**
+     * Get template preview according to template type
+     *
+     * @param {*} templateType
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof InvoiceTemplatesService
+     */
+    public getTemplatePreview(templateType: any, templateUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':templateUniqueName', encodeURIComponent(templateUniqueName))
+            ?.replace(':voucherType', encodeURIComponent(templateType))
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+    }
 }

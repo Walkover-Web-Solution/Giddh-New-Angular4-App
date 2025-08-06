@@ -1,12 +1,6 @@
 import { PurchaseModule } from '../purchase/purchase.module';
 import { PushToGstInComponent } from './filing/tabs/push-to-gstin/push-to-gstin.component';
 import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/components/transaction-summary/transaction-summary.component';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FilingComponent } from './filing/filing.component';
 import { NgModule } from '@angular/core';
 import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
@@ -68,7 +62,6 @@ import { MatListModule } from '@angular/material/list';
         DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent, GstSettingComponent],
     imports: [
         GstRoutingModule,
-        CollapseModule,
         Daterangepicker,
         LaddaModule.forRoot({
             style: 'slide-left',

@@ -1361,18 +1361,27 @@
                                                             <i class="icon-download-circle pull-left"></i>
                                                         </span>
                                                         <span
-                                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                                            class="d-flex cursor-pointer"
+                                                            *ngIf="voucherApiVersion === 2 && transactions.attachedFileUniqueName"
+                                                            (click)="openAttachmentsDialog(attachments, transactions, true)"
+                                                            [matTooltip]="transactions.attachedFileName"
+                                                            [matTooltipPosition]="'right'"
+                                                            matTooltipClass="tooltip-black"
+                                                        >
+                                                            <i class="icon-attachment pull-left"></i>
+                                                        </span>
+                                                        <span
+                                                            class="d-flex cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
-                                                                (transactions.attachedFileUniqueName ||
-                                                                    (transactions.voucherGenerated &&
-                                                                        !restrictedVouchersForDownload.includes(
-                                                                            transactions.voucherGeneratedType
-                                                                        )))
+                                                                (transactions.voucherGenerated &&
+                                                                    !restrictedVouchersForDownload.includes(
+                                                                        transactions.voucherGeneratedType
+                                                                    ))
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
-                                                            <i class="icon-download-circle pull-left"></i>
+                                                            <i class="icon-eye pull-left"></i>
                                                         </span>
                                                     </span>
                                                 </div>
@@ -1618,34 +1627,43 @@
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
                                         <span
-                                            class="download-invoice-ledger d-flex cursor-pointer"
-                                            *ngIf="
-                                                voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName ||
-                                                    (txn.voucherGenerated &&
-                                                        !restrictedVouchersForDownload.includes(
-                                                            txn.voucherGeneratedType
-                                                        )))
-                                            "
-                                            (click)="openAttachmentsDialog(attachments, txn)"
-                                            [matTooltip]="
-                                                txn.attachedFileUniqueName &&
-                                                txn.voucherGenerated &&
-                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
-                                                    ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
-                                                      ', ' +
-                                                      txn.attachedFileName
-                                                    : txn.attachedFileUniqueName
-                                                    ? txn.attachedFileName
-                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
-                                            "
+                                            class="d-flex cursor-pointer"
+                                            *ngIf="voucherApiVersion === 2 && txn.attachedFileUniqueName"
+                                            (click)="openAttachmentsDialog(attachments, txn, true)"
+                                            [matTooltip]="txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
-                                    </div>
-                                </mat-grid-tile>
+                                            <span
+                                                class="d-flex cursor-pointer"
+                                                *ngIf="
+                                                    voucherApiVersion === 2 &&
+                                                    txn.voucherGenerated &&
+                                                    !restrictedVouchersForDownload.includes(
+                                                        txn.voucherGeneratedType
+                                                    )
+                                                "
+                                                (click)="openAttachmentsDialog(attachments, txn)"
+                                                [matTooltip]="
+                                                    txn.attachedFileUniqueName &&
+                                                    txn.voucherGenerated &&
+                                                    !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
+                                                        ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
+                                                        ', ' +
+                                                        txn.attachedFileName
+                                                        : txn.attachedFileUniqueName
+                                                        ? txn.attachedFileName
+                                                        : txn.voucherNumber || commonLocaleData?.app_not_available
+                                                "
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-eye pull-left"></i>
+                                            </span>
+                                        </div>
+                                    </mat-grid-tile>
 
                                 <mat-grid-tile
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
@@ -2014,14 +2032,23 @@
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
                                             <span
-                                                class="download-invoice-ledger d-flex cursor-pointer"
+                                                class="d-flex cursor-pointer"
+                                                *ngIf="voucherApiVersion === 2 && txn.attachedFileUniqueName"
+                                                (click)="openAttachmentsDialog(attachments, txn, true)"
+                                                [matTooltip]="txn.attachedFileName"
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-attachment pull-left"></i>
+                                            </span>
+                                            <span
+                                                class="d-flex cursor-pointer"
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (txn.attachedFileUniqueName ||
                                                         (txn.voucherGenerated &&
                                                             !restrictedVouchersForDownload.includes(
                                                                 txn.voucherGeneratedType
-                                                            )))
+                                                            ))
                                                 "
                                                 (click)="openAttachmentsDialog(attachments, txn)"
                                                 [matTooltip]="
@@ -2038,7 +2065,7 @@
                                                 [matTooltipPosition]="'right'"
                                                 matTooltipClass="tooltip-black"
                                             >
-                                                <i class="icon-download-circle pull-left"></i>
+                                                <i class="icon-eye pull-left"></i>
                                             </span>
                                         </div>
                                     </mat-grid-tile>
@@ -3166,32 +3193,43 @@
                                                 : localeData?.to_particular
                                     }}
                                 </div>
-                                <span
-                                    class="d-flex cursor-pointer"
-                                    *ngIf="
-                                        (txn.attachedFileUniqueName ||
-                                            (txn.voucherGenerated &&
-                                                !restrictedVouchersForDownload.includes(
-                                                    txn.voucherGeneratedType
-                                                )))
-                                    "
-                                    (click)="openAttachmentsDialog(attachments, txn)"
-                                    [matTooltip]="
-                                        txn.attachedFileUniqueName &&
-                                        txn.voucherGenerated &&
-                                        !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
-                                            ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
-                                                ', ' +
-                                                txn.attachedFileName
-                                            : txn.attachedFileUniqueName
-                                            ? txn.attachedFileName
-                                            : txn.voucherNumber || commonLocaleData?.app_not_available
-                                    "
-                                    [matTooltipPosition]="'right'"
-                                    [matTooltipClass]="tooltip-black"
-                                >
-                                    <i class="icon-download-circle"></i>
-                                </span>
+                                <div class="d-flex column-gap1">
+                                    <span
+                                        class="d-flex cursor-pointer"
+                                        *ngIf="voucherApiVersion === 2 && txn.attachedFileUniqueName"
+                                        (click)="openAttachmentsDialog(attachments, txn, true)"
+                                        [matTooltip]="txn.attachedFileName"
+                                        [matTooltipPosition]="'right'"
+                                        matTooltipClass="tooltip-black"
+                                    >
+                                        <i class="icon-attachment pull-left"></i>
+                                    </span>
+                                    <span
+                                        class="d-flex cursor-pointer"
+                                        *ngIf="
+                                            txn.voucherGenerated &&
+                                            !restrictedVouchersForDownload.includes(
+                                                txn.voucherGeneratedType
+                                            )
+                                        "
+                                        (click)="openAttachmentsDialog(attachments, txn)"
+                                        [matTooltip]="
+                                            txn.attachedFileUniqueName &&
+                                            txn.voucherGenerated &&
+                                            !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
+                                                ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
+                                                    ', ' +
+                                                    txn.attachedFileName
+                                                : txn.attachedFileUniqueName
+                                                ? txn.attachedFileName
+                                                : txn.voucherNumber || commonLocaleData?.app_not_available
+                                        "
+                                        [matTooltipPosition]="'right'"
+                                        [matTooltipClass]="tooltip-black"
+                                    >
+                                        <i class="icon-eye"></i>
+                                    </span>
+                                </div>
                             </div>
                         </mat-grid-tile>
 

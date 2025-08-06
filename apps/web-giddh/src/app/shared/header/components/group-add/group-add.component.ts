@@ -12,7 +12,8 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 
 @Component({
     selector: 'group-add',
-    templateUrl: 'group-add.component.html'
+    templateUrl: 'group-add.component.html',
+    styleUrls: ['group-add.component.scss']
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
@@ -57,7 +58,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         });
 
         this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
-            if (amount && (amount === 0 || amount > 0) && !this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+            if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
                 this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
             }
         });

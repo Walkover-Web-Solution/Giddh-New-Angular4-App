@@ -16,6 +16,7 @@ import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 import { CustomEmailComponentStore } from 'apps/web-giddh/src/app/shared/template-froala/utility/template-froala.store';
+import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 
 @Component({
     selector: 'content-selector',
@@ -138,7 +139,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.accountSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.accountSuggestions) {
                 this.suggestionList = response.accountSuggestions.map(item => ({
-                    key: item,
+                    label: item,
                     value: item
                 }));
             }
@@ -395,12 +396,22 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
-        if (isDate) {
-            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+        if (this.voucherType === VoucherTypeEnum.sales) {
+            if (isDate) {
+                this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+                this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+            } else {
+                this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+                this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
+            }
         } else {
-            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
-            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
+            if (isDate) {
+                this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
+                this.customTemplate.sections['header'].data['invoiceDate'].display = this.customTemplate.sections['header'].data['voucherDate'].display;
+            } else {
+                this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+                this.customTemplate.sections['header'].data['invoiceNumber'].display = this.customTemplate.sections['header'].data['voucherNumber'].display;
+            }
         }
     }
 }

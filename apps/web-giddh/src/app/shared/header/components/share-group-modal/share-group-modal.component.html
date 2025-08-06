@@ -19,9 +19,9 @@
                             [pattern]="giddhEmailRegex"
                         ></input-field>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 d-flex align-items-center justify-content-between">
                         <reactive-dropdown-field
-                            class="pull-left w-100"
+                            class="pull-left w-75"
                             [label]="localeData?.permission_role_name"
                             [placeholder]="commonLocaleData?.app_select"
                             [disabled]="isUserRestricted"
@@ -30,22 +30,18 @@
                             formControlName="permission"
                             [name]="'selectedPermission'"
                             [required]="true"
-                            [inputReadonly]="true"
                             (selectedOption)="$event && (selectedPermission = $event.label)"
                             [labelValue]="selectedPermission"
                         >
                         </reactive-dropdown-field>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [disabled]="shareGroupForm.invalid || isUserRestricted" 
+                            (click)="shareGroup()">
+                            {{ commonLocaleData?.app_share }}
+                        </button>
                     </div>
-                </div>
-                <!-- /btn-group -->
-                <div class="pull-right">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        [disabled]="shareGroupForm.invalid || isUserRestricted" 
-                        (click)="shareGroup()">
-                        {{ commonLocaleData?.app_share }}
-                    </button>
                 </div>
             </form>
         </div>
@@ -72,12 +68,10 @@
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="allPermissions"
                                     [name]="'selectedPermission' + i"
-                                    [inputReadonly]="true"
                                     [labelValue]="val?.roleName"
                                     (selectedOption)="$event && updatePermission(val, $event)"
                                 >
                                 </reactive-dropdown-field>
-
                                 <button
                                     mat-stroked-button
                                     color="primary"

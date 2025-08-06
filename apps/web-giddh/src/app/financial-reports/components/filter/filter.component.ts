@@ -25,7 +25,6 @@ import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TlPlService } from '../../../services/tl-pl.service';
-import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'financial-filter',
@@ -135,8 +134,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private componentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private tlPlService: TlPlService,
-        @Inject(ServiceConfig) private serviceConfig
+        private tlPlService: TlPlService
     ) {
         this.filterForm = this.fb.group({
             from: [''],

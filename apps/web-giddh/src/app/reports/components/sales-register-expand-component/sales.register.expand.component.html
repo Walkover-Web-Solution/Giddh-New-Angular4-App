@@ -55,9 +55,8 @@
                         <a
                             class="cp"
                             (click)="emitExpand()"
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="{{ commonLocaleData?.app_expand_all }}"
+                            matTooltip="{{ commonLocaleData?.app_expand_all }}"
+                            matTooltipPosition="above"
                             *ngIf="!expand"
                         >
                             <span class="icon-expandIcon"></span>
@@ -65,9 +64,8 @@
                         <a
                             class="cp"
                             (click)="emitExpand()"
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="{{ commonLocaleData?.app_collapse_all }}"
+                            matTooltip="{{ commonLocaleData?.app_collapse_all }}"
+                            matTooltipPosition="above"
                             *ngIf="expand"
                         >
                             <span class="icon-collapse"></span>

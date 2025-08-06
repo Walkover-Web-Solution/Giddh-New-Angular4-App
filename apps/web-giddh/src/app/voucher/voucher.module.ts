@@ -11,7 +11,6 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { LaddaModule } from "angular2-ladda";
-import { CollapseModule } from "ngx-bootstrap/collapse";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
@@ -52,7 +51,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        CollapseModule.forRoot(),
         BsDropdownModule.forRoot(),
         DigitsOnlyModule,
         SharedModule,

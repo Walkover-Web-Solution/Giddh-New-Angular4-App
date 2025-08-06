@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -25,7 +24,6 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         ReactiveFormsModule,
         ClickOutsideModule,
         TranslateDirectiveModule,
-        TooltipModule.forRoot(),
         BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
         PaginationModule.forRoot(),

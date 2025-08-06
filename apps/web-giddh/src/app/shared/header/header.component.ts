@@ -103,8 +103,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('addmanage', { static: true }) public addmanage: ElementViewContainerRef;
     /* This will hold the manage groups accounts dialog ref */
     public manageGroupsAccountsDialogRef: MatDialogRef<any>;
-    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
-    @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
     /** Switch branch dropdown */
@@ -121,6 +119,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -145,7 +145,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
     public userAvatar: string;
-    public navigationModalVisible: boolean = false;
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     public selectedPage: any = '';
     public selectedLedgerName: string;
@@ -182,10 +181,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** True, if GST side menu is opened in responsive mode */
     public isGstSideMenuOpened: boolean = false;
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
-
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -198,8 +193,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will check if company is allowed to beta test new modules */
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
@@ -248,12 +241,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
-    /** This will show/hide account sidepan */
-    public accountAsideMenuState: string = 'out'
-    /** This will hold group unique name from CMD+k for creating account */
-    public selectedGroupForCreateAccount: any = '';
-    /** Cmd + k Dailog Reference */
-    public commandkDialogRef: MatDialogRef<any>;
     /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
@@ -294,6 +281,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
+    /** True if command dialog is open */
+    public showCommandDialog: boolean = false;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -874,7 +865,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             scriptTag.async = true;
             document.body.appendChild(scriptTag);
         } else {
-            window['Headway'].init();
+            window['Headway']?.init();
         }
         /* TO SHOW NOTIFICATIONS */
 
@@ -1470,9 +1461,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
         if (entity === 'menus') {
             this.isLedgerAccSelected = false;
-        } else if (entity === 'accounts') {
-            this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item?.uniqueName;
         }
 
         if (this.activeCompanyForDb?.uniqueName) {
@@ -1488,13 +1476,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
                 });
         }
-    }
-
-    private unsubscribe() {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            subscription.unsubscribe();
-        });
-        this.subscriptions = [];
     }
 
     private adjustNavigationBar() {
@@ -1701,39 +1682,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /**
      * This will show the datepicker
      *
-     * @memberof ProfitLossComponent
+     * @param {boolean} isOpen
+     * @memberof HeaderComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-            if (!this.isMobileSite && this.dateFieldPosition) {
-                this.dateFieldPosition.x -= 150;
-            }
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof ProfitLossComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof ProfitLossComponent
+     * @memberof HeaderComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1742,7 +1710,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.selectedRangeLabel = value.name;
         }
         if (value && value.startDate && value.endDate) {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
@@ -1805,7 +1773,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @HostListener('window:orientationchange', ['$event'])
     onOrientationChange(event) {
         if (window['Headway'] !== undefined) {
-            window['Headway'].init();
+            window['Headway']?.init();
         }
     }
 
@@ -1818,7 +1786,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
         if (window['Headway'] !== undefined) {
-            window['Headway'].init();
+            window['Headway']?.init();
         }
     }
 
@@ -2036,80 +2004,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-    * Displays the CMD+K modal
+    * Trigger event to open the CMD+K dialog
     *
     * @memberof HeaderComponent
     */
     public showNavigationModal(): void {
-        this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-            width: '630px',
-            height: '600'
-        });
-    }
-
-    /**
-    * Close the Cmd + K Dialog on close Event
-    *
-    * @memberof HeaderComponent
-    */
-    public closeEvent(): void {
+        this.showCommandDialog = true;
         setTimeout(() => {
-            this.commandkDialogRef?.close();
+            this.showCommandDialog = false;
         }, 600);
-    }
-
-    /**
-     * Item selection handler for CMD+K
-     *
-     * @param {IUlist} item Selected item
-     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
-     * @param {boolean} [isCtrlClicked] True, if CTRL is clicked
-     * @memberof HeaderComponent
-     */
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean): void {
-        if (this.modelRef) {
-            this.modelRef.hide();
-        }
-
-        setTimeout(() => {
-            if (item && item.type === 'MENU') {
-                if (item.additional && item.additional.tab) {
-                    if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName?.split('?')[0];
-                    }
-                    this.router.navigate([item.uniqueName], {
-                        queryParams: {
-                            tab: item.additional.tab,
-                            tabIndex: item.additional.tabIndex
-                        }
-                    });
-                } else {
-                    this.router.navigate([item.uniqueName]);
-                }
-            } else {
-                // direct account scenario
-                let url = `ledger/${item.uniqueName}`;
-                if (!isCtrlClicked) {
-                    this.router.navigate([url]); // added link in routerLink
-                }
-            }
-            // save data to db
-            item.time = +new Date();
-            let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
-            this.doEntryInDb(entity, item, fromInvalidState);
-        }, 200);
-    }
-
-    /**
-    * Creates a new group entry
-    *
-    * @param {IUlist} item
-    * @memberof HeaderComponent
-    */
-    public makeGroupEntryInDB(item: IUlist): void {
-        // save data to db
-        item.time = +new Date();
-        this.doEntryInDb('groups', item);
     }
 
     /**
@@ -2165,91 +2068,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
-
-    /**
-     * New group creation handler for CMD+K
-     *
-     * @param {*} e Create new group event
-     * @memberof HeaderComponent
-     */
-    public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef?.hide();
-        if (e[0] === "group") {
-            if (this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
-            }
-            this.showManageGroupsModal(e[1]?.name);
-        } else if (e[0] === "account") {
-            this.selectedGroupForCreateAccount = e[1]?.uniqueName;
-            if (this.accountAsideMenuState === "out") {
-                this.toggleAccountAsidePane();
-            } else {
-                this.toggleAccountAsidePane();
-                setTimeout(() => {
-                    this.toggleAccountAsidePane();
-                    this.changeDetection.detectChanges();
-                }, 50);
-            }
-        }
-    }
-
-    /**
-     * This will toggle create account sidepan
-     *
-     * @param {*} [event]
-     * @memberof HeaderComponent
-     */
-    public toggleAccountAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-
-        this.toggleBodyClass();
-    }
-
-    /**
-     * This will toggle fixed class on body
-     *
-     * @memberof HeaderComponent
-     */
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
-                document.querySelector(".nav-left-bar").classList.add("create-account");
-            }
-            document.querySelector(".sidebar-slide-right")?.classList?.add("z-index-990");
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-            document.querySelector(".nav-left-bar").classList.remove("create-account");
-            document.querySelector(".sidebar-slide-right")?.classList?.remove("z-index-990");
-        }
-    }
-
-    /**
-     * Closes account modal
-     *
-     * @param {*} event
-     * @memberof HeaderComponent
-     */
-    public closeAccountModal(event: any): void {
-        if (event) {
-            this.accountAsideMenuState = 'out';
-            this.toggleBodyClass();
-        }
-    }
-
-    /**
-     * This will save new account
-     *
-     * @param {AddAccountRequest} item
-     * @memberof HeaderComponent
-     */
-    public addNewAccount(item: AddAccountRequest) {
-        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
-    }
-
 
     /**
      *

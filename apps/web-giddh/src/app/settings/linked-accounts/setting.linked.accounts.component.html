@@ -60,8 +60,8 @@
                         {{ acc.siteName }}
                         <button
                             class="btn btn-link mr-l1"
-                            [tooltip]="commonLocaleData?.app_refresh"
-                            placement="top"
+                            [matTooltip]="commonLocaleData?.app_refresh"
+                            matTooltipPosition="above"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
                             *ngIf="acc?.status !== 'FAILED'"
                         >
@@ -69,8 +69,8 @@
                         </button>
                         <button
                             class="btn btn-link mr-l1"
-                            [tooltip]="commonLocaleData?.app_refresh"
-                            placement="top"
+                            [matTooltip]="commonLocaleData?.app_refresh"
+                            matTooltipPosition="above"
                             (click)="
                                 connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)
                             "
@@ -169,8 +169,8 @@
                                 >
                                     <i
                                         class="icon-trash text-gray"
-                                        [tooltip]="localeData?.delete_bank"
-                                        placement="top"
+                                        [matTooltip]="localeData?.delete_bank"
+                                        matTooltipPosition="above"
                                     ></i>
                                 </button>
                             </ng-container>
@@ -193,7 +193,7 @@
                                     class="no-btn font-16 pos-abs bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
-                                    <i class="icon-trash" [tooltip]="localeData?.delete_bank" placement="top"></i>
+                                    <i class="icon-trash" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
                                 </button>
                             </ng-container>
 

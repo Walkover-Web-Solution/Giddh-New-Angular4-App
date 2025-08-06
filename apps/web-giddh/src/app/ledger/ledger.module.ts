@@ -67,6 +67,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
     declarations: [
@@ -151,7 +152,8 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         AsideMenuCreateTaxModule,
         AsideMenuAccountModule,
         TributeMentionModule,
-        MatDividerModule
+        MatDividerModule,
+        NgxMatSelectSearchModule
     ]
 })
 export class LedgerModule {

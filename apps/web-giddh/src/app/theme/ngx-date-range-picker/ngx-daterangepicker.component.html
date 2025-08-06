@@ -19,10 +19,6 @@
             <div class="ranges" *ngIf="ranges?.length">
                 <!-- loop over ranges -->
                 <div class="range-container">
-                    <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeMobileDatePicker()">
-                        <img src="{{ imgPath }}close-icon.svg" alt="close icon" />
-                        <span class="pl-2">{{ commonLocaleData?.app_date_range }}</span>
-                    </div>
                     <ul class="range-list">
                         <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
                             <button aria-label="custom">{{ commonLocaleData?.app_custom }}</button>
@@ -115,7 +111,7 @@
         </app-cdk-scroll>
         <!-- ranges container -->
         <!-- calender container -->
-        <div class="calender-container" *ngIf="!isMobileScreen || (isMobileScreen && openMobileDatepickerPopup)">
+        <div class="calender-container">
             <div class="close-calender" *ngIf="openMobileDatepickerPopup">
                 <div class="close-save-btn">
                     <img
@@ -510,20 +506,9 @@
                                                 <button
                                                     mat-stroked-button
                                                     color="primary"
-                                                    *ngIf="!isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
                                                     (click)="handleDateChange('apply', $event)"
-                                                >
-                                                    {{ commonLocaleData?.app_datepicker?.done }}
-                                                </button>
-                                                <button
-                                                    mat-stroked-button
-                                                    color="primary"
-                                                    *ngIf="isMobileScreen"
-                                                    [disabled]="applyBtn.disabled"
-                                                    type="button"
-                                                    (click)="handleDateChange('apply', $event); closeCalender()"
                                                 >
                                                     {{ commonLocaleData?.app_datepicker?.done }}
                                                 </button>

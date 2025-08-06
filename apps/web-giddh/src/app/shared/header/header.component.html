@@ -37,14 +37,15 @@
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
-            <primary-sidebar [isOpen]="sideMenu?.isopen" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch">
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [isSidebarExpanded]="isSidebarExpanded" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch" [showCommandDialog]="showCommandDialog">
             </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
             <span
                 class="icon-bar"
-                [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
-                placement="right"
+                [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
+                matTooltipPosition="right"
+                matTooltipClass="tooltip-black"
             ></span>
         </div>
     </div>
@@ -462,16 +463,40 @@
                             </button>
                         </li>
                         <li class="not-today cursor-pointer" [ngClass]="{ 'if-today': isTodaysDateSelected }">
-                            <span class="icon-calender-new calendar-addon" (click)="showGiddhDatepicker($event)"></span>
+                            <span class="icon-calender-new calendar-addon" (click)="toggleGiddhDatepicker(true)"></span>
                             <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                                 <input
                                     type="text"
                                     name="selectedDateRange"
-                                    (click)="showGiddhDatepicker($event)"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker form-control date-range-picker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    (menuOpened)="isDatepickerMenuOpen = true"
+                                    (menuClosed)="isDatepickerMenuOpen = false"
                                 />
                             </div>
+
+                            <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="before">
+                                <app-datepicker-wrapper
+                                    *ngIf="isDatepickerMenuOpen"
+                                    [inputStartDate]="selectedDateRange?.startDate"
+                                    [inputEndDate]="selectedDateRange?.endDate"
+                                    [alwaysShowCalendars]="true"
+                                    [ranges]="datePickerOptions"
+                                    [selectedRangeLabel]="selectedRangeLabel"
+                                    [showCustomRangeLabel]="true"
+                                    [showClearButton]="false"
+                                    [showCancel]="true"
+                                    [linkedCalendars]="true"
+                                    [showDropdowns]="true"
+                                    (rangeClicked)="dateSelectedCallback($event)"
+                                    (datesUpdated)="dateSelectedCallback($event)"
+                                    (closeCalender)="toggleGiddhDatepicker(false)"
+                                    [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false"
+                                ></app-datepicker-wrapper>
+                            </mat-menu>
                         </li>
                         <li>
                             <a
@@ -651,37 +676,6 @@
             <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isLiabilitiesExpired = false"></i>
         </div>
     </div>
-
-    <!--add company modal  -->
-    <div
-        bsModal
-        #addCompanyModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-        (onHidden)="onHide()"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companyadd="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
-    <!--add company new modal  -->
-    <div
-        bsModal
-        #addCompanyNewModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-        (onHidden)="onHide()"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companynewadd="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
@@ -780,31 +774,6 @@
             (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>
     </div>
-
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                    [updatePosition]="false"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
 </ng-container>
 <div class="overlay-cal" *ngIf="isCalendlyModelActivate">
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
@@ -819,38 +788,3 @@
     </div>
 </div>
 <connect-plaid></connect-plaid>
-<!--CMD + G modal  -->
-<ng-template #navigationModal>
-    <command-k
-        (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-        (groupEmitter)="makeGroupEntryInDB($event)"
-        (selectedItemEmitter)="onItemSelected($event)"
-        (closeDailogEmitter)="closeEvent()"
-        [parentEle]="mdl"
-        [isOpen]="true"
-        [setParentWidth]="true"
-    ></command-k>
-    <div class="shortcuts">
-        <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-        {{ localeData?.to_select }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{ commonLocaleData?.app_esc }}</strong
-        >&nbsp;
-        {{ commonLocaleData?.app_to_dismiss }}
-    </div>
-</ng-template>
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div *ngIf="accountAsideMenuState === 'in'">
-    <generic-aside-menu-account
-        [class]="accountAsideMenuState"
-        [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)"
-        (closeAccountModal)="closeAccountModal($event)"
-        [selectedGrpUniqueName]="selectedGroupForCreateAccount"
-        [createAccountFromCommandK]="true"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
-        (addEvent)="addNewAccount($event)"
-        *ngIf="accountAsideMenuState === 'in'"
-    >
-    </generic-aside-menu-account>
-</div>

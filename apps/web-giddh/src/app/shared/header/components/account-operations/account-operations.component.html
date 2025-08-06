@@ -18,7 +18,7 @@
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
-                        class="mr-r1"
+                        class="mr-r1 mr-b1"
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
@@ -28,11 +28,12 @@
                         class="pull-right" 
                         (click)="openShareGroupDialog()"
                         color="primary"
+                        class="mr-r1 mr-b1"
                     >
                         {{ commonLocaleData?.app_share }}
                     </button>
                     <div
-                        class="primary-color text-right pull-right mr-t1 clearfix"
+                        class="primary-color text-right mr-r1 clearfix"
                         *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
                     >
                         {{ groupSharedWith }}
@@ -51,7 +52,7 @@
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
-                    class="primary-color text-right pull-right mr-t1 clearfix"
+                    class="primary-color text-right mr-r1 clearfix"
                     *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
                 >
                     {{ accountSharedWith }}

@@ -25,6 +25,7 @@ import { AdvanceSearchRequest } from '../models/interfaces/advance-search-reques
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
+import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
@@ -56,7 +57,6 @@ import { SettingIntegrationComponentStore } from '../settings/integration/utilit
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { LedgerComponentStore } from './ledger.store';
-import { ToasterService } from '../services/toaster.service';
 import { ServiceConfig } from '../services/service.config';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -436,8 +436,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
         private ledgerComponentStore: LedgerComponentStore,
-        private breakpointObserver: BreakpointObserver,
-        private toasty: ToasterService
+        private breakpointObserver: BreakpointObserver
     ) {
         if (window.localStorage) {
             localStorage.setItem('refNo', null);
@@ -2720,12 +2719,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
         this.getLedgerStatementViewGridColumnsValue();
@@ -2789,7 +2788,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
-        this.getTransactionData();
+        if (this.isAdvanceSearchImplemented) {
+            this.getAdvanceSearchTxn();
+        } else {
+            this.getTransactionData();
+        }
     }
 
     /**
@@ -3382,9 +3385,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @param {TemplateRef<any>} templateRef
      * @param {*} transaction
+     * @param {boolean} [isAttachment=false]
      * @memberof LedgerComponent
      */
-    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
+    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any, isAttachment: boolean = false): void {
+        transaction['isAttachment'] = isAttachment;
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
@@ -3905,7 +3910,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let selectedAccountUniqueName = "";
 
         if (isActiveAccountAndParticularIsSame) {
-            selectedAccountName = transactionsParticular?.name;
+            if (transactionsParticular?.stock) {
+                selectedAccountName = `${transactionsParticular?.name} (${transactionsParticular?.stock?.name})`;
+            } else {
+                selectedAccountName = transactionsParticular?.name;
+            }
             selectedAccountUniqueName = transactionsParticular?.uniqueName;
         } else {
             selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;

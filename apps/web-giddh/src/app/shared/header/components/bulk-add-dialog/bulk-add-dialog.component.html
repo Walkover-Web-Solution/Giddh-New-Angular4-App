@@ -25,7 +25,7 @@
                         [formGroupName]="bulkIndex"
                     >
                         <div class="d-grid column-gap1" [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'">
-                            <p tooltip="{{ branches[bulkIndex]?.name }}" class="word-wrap-dots text-ellipsis w100">
+                            <p matTooltip="{{ branches[bulkIndex]?.name }}" class="word-wrap-dots text-ellipsis w100">
                                 {{ branches[bulkIndex]?.name }}
                             </p>
                             <div *ngIf="data?.foreignCurrency" class="bulk-input-width">

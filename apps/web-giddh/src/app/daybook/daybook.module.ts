@@ -10,7 +10,6 @@ import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/s
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -31,6 +30,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LedgerModule } from '../ledger/ledger.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -46,7 +47,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         Daterangepicker,
         DaybookRoutingModule,
         ShSelectModule,
-        TooltipModule.forRoot(),
         ElementViewChildModule,
         CurrencyModule,
         SharedModule,
@@ -65,7 +65,9 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         MatExpansionModule,
         MatSlideToggleModule,
         LedgerModule,
-        WatchVideoModule
+        WatchVideoModule,
+        NgxMatSelectSearchModule,
+        MatSelectModule
     ]
 })
 export class DaybookModule {

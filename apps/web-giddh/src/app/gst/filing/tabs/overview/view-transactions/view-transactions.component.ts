@@ -1,5 +1,5 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, Inject, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';

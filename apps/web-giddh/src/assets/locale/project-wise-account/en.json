@@ -21,5 +21,6 @@
     "go_to_branch": " Go to branch",
     "no_entries_found":"No entries linked in the project. Switch branch to link entries.",
     "entry": "Entry",
-    "method": "Method"
+    "method": "Method",
+    "total_fixed_asset": "Total Fixed Asset"
 }

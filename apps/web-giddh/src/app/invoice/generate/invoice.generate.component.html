@@ -89,8 +89,8 @@
                                     <button
                                         type="button"
                                         *ngIf="(!isCompany && !isConsolidatedBranch) && !isMobileView"
-                                        placement="top"
-                                        [tooltip]="localeData?.works_for_single_entry"
+                                        [matTooltip]="localeData?.works_for_single_entry"
+                                        matTooltipPosition="above"
                                         [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"
                                         class="btn btn-primary"
                                         (click)="previewInvoice()"
@@ -236,7 +236,7 @@
                                         />
                                     </div>
                                     <div *ngIf="item.hasGenerationErr">
-                                        <i class="fa fa-info-circle" placement="right" [tooltip]="item.errMsg"></i>
+                                        <i class="fa fa-info-circle" [matTooltip]="item.errMsg" matTooltipPosition="right"></i>
                                     </div>
                                 </td>
 
@@ -332,7 +332,8 @@
                                 <td
                                     class="text-right"
                                     [attr.data-title]="commonLocaleData?.app_total"
-                                    [tooltip]="totalPopupTemplate"
+                                    [matTooltip]="totalPopupTemplate"
+                                    matTooltipPosition="above"
                                 >
                                     <span class="d-inline-flex">
                                         <amount-field

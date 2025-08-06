@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostListener,
+    Inject,
+    OnDestroy,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -91,11 +102,11 @@ import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ServiceConfig } from "../../services/service.config";
+import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
+import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
-import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
-import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 
 @Component({
     selector: "create",
@@ -1205,7 +1216,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-                    
+
                     const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
@@ -1838,13 +1849,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm
-                            .get("salesPurchaseAsReceiptPayment")
-                            .patchValue(
-                                this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
-                                    ? profile.purchaseAsPayment
-                                    : profile.salesAsReceipt
-                            );
+                        const isCashSalesPurchaseInvoice =
+                            this.invoiceType.isCashInvoice &&
+                            ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) ||
+                                this.invoiceType.isPurchaseInvoice);
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm
+                                .get("salesPurchaseAsReceiptPayment")
+                                .patchValue(
+                                    this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+                                        ? profile.purchaseAsPayment
+                                        : profile.salesAsReceipt
+                                );
+                        }
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -5096,7 +5114,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.changeDetection.detectChanges();
     }
 
-    
+
 
     /**
      * Toggles between create and list

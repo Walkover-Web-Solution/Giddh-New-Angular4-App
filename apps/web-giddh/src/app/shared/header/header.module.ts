@@ -10,7 +10,6 @@ import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
-import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { ConfirmModalModule } from "../../theme/confirm-modal/confirm-modal.module";
 import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
@@ -45,7 +44,6 @@ import { TagsModule } from "../../settings/tags/tags.module";
         ElementViewChildModule,
         ScrollingModule,
         PrimarySidebarModule,
-        TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
         DatepickerWrapperModule,
         ShSelectModule,
