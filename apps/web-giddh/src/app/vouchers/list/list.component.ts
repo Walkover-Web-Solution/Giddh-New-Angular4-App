@@ -42,6 +42,7 @@ import { SettingsIntegrationActions } from "../../actions/settings/settings.inte
 import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
+import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -380,6 +381,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private invoiceTemplatesService: InvoiceTemplatesService,
+        private invoiceUiDataService: InvoiceUiDataService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
@@ -1757,32 +1759,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Open template dialog
-     *
-     * @memberof VoucherListComponent
-     */
-    public templateDialog(template: any): void {
-        this.dialog.open(TemplatePreviewDialogComponent, {
-            width: '980px',
-            height: '90vh',
-            data: template
-        });
-    }
-
-    /**
-     * Open template edit dialog
-     *
-     * @memberof VoucherListComponent
-     */
-    public templateEdit(template: any): void {
-        this.dialog.open(TemplateEditDialogComponent, {
-            width: '100%',
-            height: '90vh',
-            data: template,
-            disableClose: true
-        });
-    }
 
     /**
      * Toggle between table header title and search input field
@@ -3375,7 +3351,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
-                this.toasterService.showSnackBar('error', 'Failed to set template as default');
+                this.toasterService.showSnackBar('error', res?.message);
             }
         });
     }
@@ -3411,10 +3387,73 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.fetchTemplates();
                         }
                     } else {
-                        this.toasterService.showSnackBar('error', 'Failed to delete template');
+                        this.toasterService.showSnackBar('error', res?.message);
                     }
                 });
             }
+        });
+    }
+
+      /**
+     * Open template dialog
+     *
+     * @memberof VoucherListComponent
+     */
+      public templateDialog(template: any): void {
+        this.dialog.open(TemplatePreviewDialogComponent, {
+            width: '980px',
+            height: '90vh',
+            data: template
+        });
+    }
+
+    /**
+     * Open template edit dialog
+     *
+     * @memberof VoucherListComponent
+     */
+    public templateEdit(template: any, type: string): void {
+        console.log(template, type, this.createdTemplatesList);
+                    // const fieldsAndVisibility = {
+        //     header : template.sections.header.data,
+        //     table : template.sections.table.data,
+        //     footer : template.sections.footer.data
+        // }
+        // const isPreviewMode = true;
+        // const voucherType= voucherType
+        let companyUniqueName = null;
+        let companies = null;
+        let defaultTemplate = null;
+        let customCreatedTemplates = null;
+
+        const templateType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'invoice';
+        defaultTemplate = this.createdTemplatesList.find(template => templateType === 'voucher'? template?.isDefaultForVoucher : template?.isDefault);
+        defaultTemplate.type = templateType;
+        if(type === 'create'){
+            this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
+                companyUniqueName = ss.companyUniqueName;
+                companies = ss.companies;
+            });
+            if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
+                defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
+                defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
+            }
+            this.invoiceUiDataService.setLogoPath('');
+            this.invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
+        } else {
+            customCreatedTemplates = this.createdTemplatesList;
+            customCreatedTemplates.forEach((template) => {
+                if (template.sections.header.data?.gstComposition?.label.length === 0) {
+                    template.sections.header.data.gstComposition.label = 'Registered under Composition Scheme';
+                }
+            });
+            this.invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
+            
+        }
+        this.dialog.open(TemplateEditDialogComponent, {
+            width: '100%',
+            height: '90vh',
+            data: template,
         });
     }
 

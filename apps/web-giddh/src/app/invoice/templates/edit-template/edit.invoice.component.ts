@@ -782,6 +782,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
         }
         this._invoiceUiDataService.setLogoPath('');
+        console.log('response', companyUniqueName, companies, defaultTemplate, this.templateType);
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
         this.showtemplateModal = true;
         this.templateModal?.show();
