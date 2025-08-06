@@ -1,4 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../../app.constant';
 import { ServiceConfig } from "apps/web-giddh/src/app/services/service.config";
 
 export interface PeriodicElement {
@@ -32,6 +34,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ItemWiseComponent implements OnInit, OnDestroy {
     /* It will store image path */
     public imgPath: string = '';
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Holds total items count */
+    public totalItems: number = 500;
 
     constructor(@Inject(ServiceConfig) private serviceConfig ) {}
 
@@ -55,5 +61,17 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("item-wise-page");
+    }
+
+    /**
+     * Handles pagination events for item-wise inventory
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ItemWiseComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // In a real implementation, this would update API request parameters
+        // and fetch new data based on the page index and page size
+        console.log('Page event', event);
     }
 }

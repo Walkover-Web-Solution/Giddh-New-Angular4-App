@@ -45,6 +45,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -127,7 +128,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         VoucherModule,
         FormFieldsModule,
         MatSlideToggleModule,
-        MatDialogModule
+        MatDialogModule,
+        MatPaginatorModule
     ]
 })
 export class InventoryModule { }

@@ -14,6 +14,8 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -21,6 +23,8 @@ import { GeneralService } from '../../../services/general.service';
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
@@ -319,8 +323,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageChanged(event: any): void {
-        this.transporterFilterRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof EWayBillCreateComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
+        this.transporterFilterRequest.page = event.pageIndex + 1;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }

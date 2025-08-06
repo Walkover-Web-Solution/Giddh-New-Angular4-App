@@ -339,21 +339,18 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="activityObj?.totalItems > activityObj.count && !isLoading">
-            <pagination
-                [totalItems]="activityObj?.totalItems"
-                [(ngModel)]="activityObj.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="activityObj.count"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+        <div class="mt-4" *ngIf="activityObj?.totalItems > activityObj.count && !isLoading">
+            <ng-container>
+                <mat-paginator
+                    [length]="activityObj?.totalItems"
+                    [pageSize]="activityObj.count"
+                    [pageIndex]="activityObj.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)">
+                </mat-paginator>
+            </ng-container>
         </div>
     </div>
 </ng-container>

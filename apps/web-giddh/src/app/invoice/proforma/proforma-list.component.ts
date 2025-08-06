@@ -23,6 +23,8 @@ import { ProformaActions } from '../../actions/proforma/proforma.actions';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -48,6 +50,8 @@ const VOUCHER_TYPES = ['proformas', 'estimates'];
 })
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     /** Confirmation popup for delete operation */
     @ViewChild('deleteConfirmationModel', { static: true }) public deleteConfirmationModel: ModalDirective;
@@ -199,7 +203,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = 20;
+        this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
         this.advanceSearchFilter.from = dayjs(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
         this.advanceSearchFilter.to = dayjs(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
@@ -643,7 +647,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
         this.advanceSearchFilter = new ProformaFilter();
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = 20;
+        this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
 
         // set date picker date as application date
         if (universalDate?.length > 1) {
@@ -665,11 +669,27 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.getAll();
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.advanceSearchFilter.page) {
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ProformaListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        
+        if (this.advanceSearchFilter.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        if (newPage === this.advanceSearchFilter.page && this.advanceSearchFilter.count === event.pageSize) {
             return;
         }
-        this.advanceSearchFilter.page = ev.page;
+        
+        this.advanceSearchFilter.page = newPage;
+        this.advanceSearchFilter.count = event.pageSize;
         this.getAll();
     }
 

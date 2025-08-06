@@ -7,7 +7,6 @@ import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directiv
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -62,6 +61,19 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
+    }
+], false);
+
+export function provideConfig() {
+    return SOCIAL_CONFIG || { id: null, providers: [] };
+}
+
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -99,7 +111,7 @@ import { MatListModule } from '@angular/material/list';
         DecimalDigitsModule,
         DigitsOnlyModule,
         BsDatepickerModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
         HighlightModule,
@@ -144,7 +156,6 @@ import { MatListModule } from '@angular/material/list';
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
         SelectModule,
-        PaginationModule,
         ClickOutsideModule,
         ScrollingModule,
         ConfirmModalModule,

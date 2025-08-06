@@ -8,7 +8,8 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
-import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import * as dayjs from 'dayjs';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
@@ -63,12 +64,15 @@ export class PurchaseOrderComponent implements OnDestroy {
     /* This will hold the response object*/
     public purchaseOrders: any = {};
     /* This will hold the query params of get all PO api */
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /* This will hold the query params of get all PO api */
     public purchaseOrderGetRequest: any = {
         companyUniqueName: '',
         from: '',
         to: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[2],
         sort: 'DESC',
         sortBy: 'purchaseDate'
     };
@@ -413,11 +417,20 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @param {*} event
      * @memberof PurchaseOrderComponent
      */
-    public pageChanged(event: any): void {
-        if (this.purchaseOrderGetRequest.page !== event.page) {
-            this.purchaseOrderGetRequest.page = event.page;
-            this.getAllPurchaseOrders(false);
+    /**
+     * Handles pagination events
+     *
+     * @param {PageEvent} event
+     * @memberof PurchaseOrderComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.purchaseOrderGetRequest.count !== event.pageSize) {
+            this.purchaseOrderGetRequest.page = 1;
+        } else {
+            this.purchaseOrderGetRequest.page = event.pageIndex + 1;
         }
+        this.purchaseOrderGetRequest.count = event.pageSize;
+        this.getAllPurchaseOrders(false);
     }
 
     /**

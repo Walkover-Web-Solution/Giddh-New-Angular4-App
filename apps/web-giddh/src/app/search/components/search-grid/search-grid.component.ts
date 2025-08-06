@@ -12,6 +12,8 @@ import { GeneralService } from '../../../services/general.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 export interface SearchTable {
     name: string;
@@ -100,6 +102,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public isAllChecked: boolean = false;
     /** pagination related  */
     public page: number;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public totalPages: number;
     public selectedItems: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -409,6 +413,32 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.mailSmsDialogRef.close();
     }
 
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof SearchGridComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // For search-grid, we're using a special case where pageSize is always 1
+        // because each "page" is a complete set of results
+        const newPage = event.pageIndex + 1;
+        this.checkboxInfo.selectedPage = newPage;
+        
+        // Create an event object compatible with the legacy pageChanged event
+        const legacyEvent = {
+            page: newPage,
+            itemsPerPage: 1
+        };
+        
+        this.pageChangeEvent.emit(legacyEvent);
+        this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
+     */
     public pageChanged(ev) {
         this.checkboxInfo.selectedPage = ev.page;
         this.pageChangeEvent.emit(ev);

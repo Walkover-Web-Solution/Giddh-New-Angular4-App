@@ -293,16 +293,15 @@
                                 <tr>
                                     <td colspan="7">
                                         <div class="text-center">
-                                            <pagination
-                                                [maxSize]="6"
-                                                [totalItems]="inventoryReport.totalItems"
-                                                [(ngModel)]="inventoryReport.page"
-                                                [itemsPerPage]="6"
-                                                (pageChanged)="applyFilters($event.page)"
-                                                class="pagination-sm"
-                                                [boundaryLinks]="true"
-                                                [rotate]="false"
-                                            ></pagination>
+                                            <mat-paginator
+                                                [length]="inventoryReport.totalItems"
+                                                [pageSize]="6"
+                                                [pageIndex]="inventoryReport.page - 1"
+                                                [pageSizeOptions]="pageSizeOptions"
+                                                [showFirstLastButtons]="true"
+                                                [hidePageSize]="false"
+                                                (page)="handlePageEvent($event)"
+                                            ></mat-paginator>
                                         </div>
                                     </td>
                                 </tr>

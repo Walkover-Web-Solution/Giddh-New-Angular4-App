@@ -6,7 +6,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { BranchFilterRequest } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
@@ -45,6 +46,8 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public addresses: Array<any>;
     /** Stores the pagination count */
     @Input() public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the pagination configuration */
     @Input() public paginationConfig: any;
     /** True if API is in progress */
@@ -348,6 +351,31 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * Pagination change handler
      *
      * @param {*} event Pagination event
+     * @memberof AddressSettingsComponent
+     */
+    /**
+     * Handles the page change event from mat-paginator
+     *
+     * @param {PageEvent} event Page event
+     * @memberof AddressSettingsComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (event.pageSize !== this.paginationLimit) {
+            this.paginationLimit = event.pageSize;
+            this.paginationConfig.count = event.pageSize;
+            this.paginationConfig.page = 1;
+            this.pageChanged.emit({ page: 1, count: event.pageSize, ...this.addressSearchRequest });
+        } else {
+            this.paginationConfig.page = event.pageIndex + 1;
+            this.pageChanged.emit({ page: event.pageIndex + 1, count: this.paginationLimit, ...this.addressSearchRequest });
+        }
+    }
+
+    /**
+     * @deprecated Use handlePageEvent instead
+     * Legacy method for handling page changes
+     *
+     * @param {*} event Page event
      * @memberof AddressSettingsComponent
      */
     public handlePageChange(event: any): void {

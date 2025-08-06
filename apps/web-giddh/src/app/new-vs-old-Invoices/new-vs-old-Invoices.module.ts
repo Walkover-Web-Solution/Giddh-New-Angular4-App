@@ -5,7 +5,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -53,7 +53,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         SharedModule,
         SelectModule.forRoot(),
         ModalModule,
-        PaginationModule.forRoot(),
+
         CurrencyModule,
         FormFieldsModule,
         MatButtonModule,

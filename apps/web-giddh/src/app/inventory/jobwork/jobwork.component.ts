@@ -17,8 +17,11 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'jobwork',
@@ -294,6 +297,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
         });
     }
 
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+
     /**
      * updateDescription
      */
@@ -411,6 +419,29 @@ export class JobworkComponent implements OnInit, OnDestroy {
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
+    }
+
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof JobworkComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (!this.uniqueName) {
+            return;
+        }
+        
+        let page: number;
+        let pageSize: number = event.pageSize;
+        
+        if (pageSize !== 6) { // Current itemsPerPage is 6
+            page = 1;
+        } else {
+            page = event.pageIndex + 1;
+        }
+        
+        this.applyFilters(page, true);
     }
 
     public applyFilters(page: number, applyFilter: boolean = true) {

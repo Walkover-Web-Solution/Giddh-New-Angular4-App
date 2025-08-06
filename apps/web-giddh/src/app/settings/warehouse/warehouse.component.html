@@ -128,20 +128,16 @@
             </div>
         </div>
         <div class="warehouse-pagination mt-4">
-            <pagination
-                #warehousePagination
+            <mat-paginator
                 *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
-                [totalItems]="paginationConfig?.totalItems"
-                [maxSize]="5"
-                [itemsPerPage]="paginationConfig?.count"
-                [boundaryLinks]="true"
-                [rotate]="true"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+                [length]="paginationConfig?.totalItems"
+                [pageSize]="paginationConfig?.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="currentPage - 1"
+                [showFirstLastButtons]="true"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of warehouses"
+            ></mat-paginator>
         </div>
         <br />
         <br />

@@ -191,21 +191,16 @@
                     <tr mat-row *matRowDef="let row; columns: tableHeadingColumns"></tr>
                 </table>
             </div>
-            <div class="pagination-wrapper mt-4" *ngIf="reportResponse && reportResponse?.totalPages > 1">
-                <pagination
-                    [totalItems]="reportResponse.totalItems"
-                    [(ngModel)]="reportResponse.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+            <div class="mt-4" *ngIf="reportResponse && reportResponse?.totalPages > 1">
+                <mat-paginator
+                    [length]="reportResponse.totalItems"
+                    [pageSize]="paginationLimit"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageIndex]="reportResponse.page - 1"
+                    [showFirstLastButtons]="true"
+                    (page)="handlePageEvent($event)"
+                    aria-label="Select page of columnar report"
+                ></mat-paginator>
             </div>
             <div class="no-data" *ngIf="reportResponse && reportResponse?.totalItems === 0">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>

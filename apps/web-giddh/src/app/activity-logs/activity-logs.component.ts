@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
 import * as dayjs from 'dayjs';
@@ -49,9 +50,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation', 'history'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for activity logs object */
     public activityObj = {
-        count: PAGINATION_LIMIT,
+        count: PAGE_SIZE_OPTIONS[1],
         page: 1,
         totalPages: 0,
         totalItems: 0,
@@ -70,7 +73,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
     /** This will use for activity fields object */
     public activityFieldsObj = {
-        count: PAGINATION_LIMIT,
+        count: PAGE_SIZE_OPTIONS[1],
         page: 1,
         entity: undefined,
         operation: undefined,
@@ -361,16 +364,21 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
 
 
     /**
-    * This function will change the page of activity logs
+    * Handles pagination events and updates API parameters
     *
-    * @param {*} event
+    * @param {PageEvent} event - Contains pagination details
     * @memberof ActivityLogsComponent
     */
-    public pageChanged(event: any): void {
-        if (this.activityObj.page !== event.page) {
-            this.activityObj.page = event.page;
-            this.getActivityLogs();
+    public handlePageEvent(event: PageEvent): void {
+        let newPage = this.activityObj.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        
+        if (newPage === this.activityObj.page && this.activityObj.count === event.pageSize) {
+            return;
         }
+        
+        this.activityObj.page = newPage;
+        this.activityObj.count = event.pageSize;
+        this.getActivityLogs();
     }
 
     /**

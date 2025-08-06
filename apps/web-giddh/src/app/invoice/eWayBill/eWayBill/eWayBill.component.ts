@@ -827,8 +827,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public handlePageChange(event: PageEvent): void {
+        let isPageSizeChanged = this.EwayBillfilterRequest.count !== event.pageSize;
+        this.EwayBillfilterRequest.page = isPageSizeChanged ? 1 : event.pageIndex + 1;
         this.EwayBillfilterRequest.count = event.pageSize;
-        this.EwayBillfilterRequest.page = event.pageIndex + 1;
         this.getAllFilteredInvoice();
     }
 }

@@ -22,6 +22,8 @@ import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 
 @Component({
     selector: 'app-invoice-generate',
@@ -30,6 +32,8 @@ import { Router } from '@angular/router';
 })
 
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild(DaterangePickerComponent, { static: true }) public dp: DaterangePickerComponent;
     @ViewChild('particularSearch', { static: true }) public particularSearch: ElementRef;
@@ -386,8 +390,23 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public pageChanged(event: any): void {
-        this.ledgerSearchRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InvoiceGenerateComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        
+        if (this.ledgerSearchRequest.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        this.ledgerSearchRequest.page = newPage;
+        this.ledgerSearchRequest.count = event.pageSize;
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
         this.togglePrevGenBtn = false;

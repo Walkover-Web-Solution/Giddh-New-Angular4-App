@@ -23,6 +23,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { InvoiceService } from '../../../services/invoice.service';
 import { saveAs } from 'file-saver';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'payment-report',
@@ -30,6 +32,8 @@ import { saveAs } from 'file-saver';
     styleUrls: ['./payment-report.component.scss']
 })
 export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Vendor name search bar */
     @ViewChild('vendorName', { static: false }) public vendorName: ElementRef;
     /** Parent of vendor name search bar */
@@ -346,13 +350,23 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     }
 
     /**
-     * Pagination change handler
-     *
-     * @param {*} event Selected page details
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
      * @memberof PaymentReportComponent
      */
-    public onPageChanged(event: any): void {
-        this.fetchAllPayments({ page: event.page, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        
+        if (this.searchQueryParams.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        this.searchQueryParams.page = newPage;
+        this.searchQueryParams.count = event.pageSize;
+        this.fetchAllPayments({ page: newPage, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
     }
 
     /**

@@ -1,4 +1,4 @@
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -24,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         SearchSidebarComponent
     ],
     imports: [
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,

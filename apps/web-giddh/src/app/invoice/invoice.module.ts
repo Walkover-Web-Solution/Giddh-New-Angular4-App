@@ -24,7 +24,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
@@ -112,7 +111,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatTabsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        PaginationModule.forRoot(),
         InvoiceTemplatesModule,
         KeyboardShortutModule,
         SelectModule,

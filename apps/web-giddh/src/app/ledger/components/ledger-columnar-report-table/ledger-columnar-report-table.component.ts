@@ -8,7 +8,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'ledger-columnar-report-table',
@@ -38,6 +39,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public isLoading: boolean = true;
     /** pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -176,6 +179,32 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      *
      * @param {*} event Pagination page change event
      * @returns {void}
+     * @memberof LedgerColumnarReportTableComponent
+     */
+    /**
+     * Handles the page change event from mat-paginator
+     *
+     * @param {PageEvent} event Page event
+     * @memberof LedgerColumnarReportTableComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.columnarReportExportRequest) {
+            if (event.pageSize !== this.paginationLimit) {
+                this.paginationLimit = event.pageSize;
+                this.getColumnarRequestModel.count = event.pageSize;
+                this.getColumnarRequestModel.page = 1;
+            } else {
+                this.getColumnarRequestModel.page = event.pageIndex + 1;
+            }
+            this.getColumnarReportTable(this.columnarReportExportRequest);
+        }
+    }
+
+    /**
+     * @deprecated Use handlePageEvent instead
+     * Legacy method for handling page changes
+     *
+     * @param {*} event Page event
      * @memberof LedgerColumnarReportTableComponent
      */
     public pageChanged(event: any): void {

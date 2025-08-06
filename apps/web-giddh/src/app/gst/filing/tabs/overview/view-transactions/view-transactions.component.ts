@@ -206,9 +206,10 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public pageChanged(event: any): void {
         if (event) {
+            this.pageIndex = this.filterParam.count !== event.pageSize ? 0 : event.pageIndex;
+            let page = this.filterParam.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.filterParam.count = event.pageSize;
-            this.pageIndex = event.pageIndex;
-            this.viewFilteredTxn('page', event.pageIndex + 1);
+            this.viewFilteredTxn('page', page);
         }
     }
 

@@ -282,14 +282,16 @@
                                         </ng-container>
                                     </ng-container>
                                 </div>
-                                <div class="pagination-wrapper" *ngIf="pagination.stock.totalPages > 1">
-                                    <pagination [totalItems]="pagination.stock.totalItems" [maxSize]="3"
-                                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
-                                        (pageChanged)="pageChanged($event)" [(ngModel)]="pagination.stock.page"
-                                        [rotate]="false" [firstText]="commonLocaleData?.app_first"
-                                        [previousText]="commonLocaleData?.app_previous"
-                                        [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
-                                    </pagination>
+                                <div *ngIf="pagination.stock.totalPages > 1">
+                                    <mat-paginator
+                                        [length]="pagination.stock.totalItems"
+                                        [pageSize]="paginationLimit"
+                                        [pageIndex]="pagination.stock.page - 1"
+                                        [pageSizeOptions]="pageSizeOptions"
+                                        [showFirstLastButtons]="true"
+                                        [hidePageSize]="false"
+                                        (page)="handlePageEvent($event)">
+                                    </mat-paginator>
                                 </div>
                             </ng-container>
                             <div class="text-center mt-5 text-gray font-24"

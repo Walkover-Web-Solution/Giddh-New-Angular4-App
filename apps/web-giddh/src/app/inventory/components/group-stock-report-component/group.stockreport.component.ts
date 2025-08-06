@@ -26,6 +26,8 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
@@ -216,6 +218,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public branchTransferMode: string = '';
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Date format type */
@@ -523,6 +527,26 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.GroupStockReportRequest.count !== event.pageSize) {
+            this.GroupStockReportRequest.page = 1;
+        } else {
+            this.GroupStockReportRequest.page = event.pageIndex + 1;
+        }
+        this.GroupStockReportRequest.count = event.pageSize;
+        this.getGroupReport(false);
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
+     */
     public pageChanged(event: any): void {
         this.GroupStockReportRequest.page = event.page;
         this.getGroupReport(false);
