@@ -5781,11 +5781,11 @@
             <!-- template-content-start -->
             <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
-                    <edit-invoice></edit-invoice>
+                    <!-- <edit-invoice></edit-invoice>
                     <br>
                     <br>
                     <br>
-                    <br>
+                    <br> -->
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
@@ -5851,7 +5851,7 @@
                                         <button
                                             mat-stroked-button
                                             color="primary"
-                                            class="mat-icon-md-btn"
+                                            class="mat-icon-md-btn cursor-pointer"
                                             [disabled]="template.isDefault"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
@@ -5920,7 +5920,7 @@
                                             mat-stroked-button
                                             color="primary"
                                             [disabled]="template.isDefaultForVoucher"
-                                            class="mat-icon-md-btn"
+                                            class="mat-icon-md-btn cursor-pointer"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
                                             (click)="template.isDefaultForVoucher ? null : deleteTemplate(template, 'voucher')"

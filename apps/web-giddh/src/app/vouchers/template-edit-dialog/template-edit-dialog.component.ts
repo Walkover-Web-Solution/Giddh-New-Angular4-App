@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { ConfirmationModalConfiguration } from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { GeneralService } from '../../services/general.service';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
@@ -21,7 +21,8 @@ export class TemplateEditDialogComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private generalService: GeneralService
+    private generalService: GeneralService,
+    @Inject(MAT_DIALOG_DATA) public inputData: any
   ) { }
     // delete confirmation dialog
     public deleteVoucherDialog():void {

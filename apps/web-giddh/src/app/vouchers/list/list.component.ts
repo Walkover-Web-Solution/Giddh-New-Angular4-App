@@ -3414,13 +3414,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public templateEdit(template: any, type: string): void {
         console.log(template, type, this.createdTemplatesList);
-                    // const fieldsAndVisibility = {
-        //     header : template.sections.header.data,
-        //     table : template.sections.table.data,
-        //     footer : template.sections.footer.data
-        // }
-        // const isPreviewMode = true;
-        // const voucherType= voucherType
         let companyUniqueName = null;
         let companies = null;
         let defaultTemplate = null;
@@ -3448,12 +3441,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
             this.invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
-            
         }
+        const dataToSend = {
+            templateList: this.templatesList,
+            voucherType: templateType
+        };
         this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
             height: '90vh',
-            data: template,
+            data: dataToSend
         });
     }
 
