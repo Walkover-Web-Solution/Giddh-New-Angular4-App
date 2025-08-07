@@ -277,10 +277,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public handlePageEvent(event: PageEvent): void {
         if ((event.pageIndex + 1) !== this.lastPage || this.mfStockSearchRequest.count !== event.pageSize) {
             let data = cloneDeep(this.mfStockSearchRequest);
-            
             data.page = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.lastPage = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
-            
             data.count = event.pageSize;
             this.mfStockSearchRequest.count = event.pageSize;
             this.store.dispatch(this.manufacturingActions.GetMfReport(data));

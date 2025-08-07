@@ -309,22 +309,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      */
     public handlePageEvent(event: PageEvent): void {
         this.branchTransferResponse.items = [];
-        if (this.branchTransferGetRequestParams.count !== event.pageSize) {
-            this.branchTransferGetRequestParams.page = 1;
-        } else {
-            this.branchTransferGetRequestParams.page = event.pageIndex + 1;
-        }
+        this.branchTransferGetRequestParams.page = this.branchTransferGetRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.branchTransferGetRequestParams.count = event.pageSize;
-        this.getBranchTransferList(false);
-    }
-    
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        this.branchTransferResponse.items = [];
-        this.branchTransferGetRequestParams.page = event.page;
         this.getBranchTransferList(false);
     }
 

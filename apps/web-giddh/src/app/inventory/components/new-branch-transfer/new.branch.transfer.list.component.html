@@ -419,13 +419,7 @@
 
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">{{ branchTransferMode }} Branch Transfer</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal(true)">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div mat-dialog-content class="modal-body p-0">
+    <div mat-dialog-content>
         <new-branch-transfer
             (hideModal)="hideModal(true)"
             [editBranchTransferUniqueName]="editBranchTransferUniqueName"
@@ -437,13 +431,7 @@
 
 <!--delete modal  -->
 <ng-template #deleteBranchTransferDialog>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">Delete {{ selectedBranchTransferType }}</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideBranchTransferModal()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div mat-dialog-content class="modal-body">
+    <div mat-dialog-content>
         <confirm-modal
             [title]="'Delete ' + selectedBranchTransferType"
             [body]="'Are you sure you want to delete this ' + selectedBranchTransferType + '?'"
@@ -454,29 +442,21 @@
     </div>
 </ng-template>
 <ng-template #datepickerTemplate>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">Select Date Range</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeDatepickerDialog()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div mat-dialog-content class="modal-body">
-        <app-datepicker-wrapper
-            [inputStartDate]="selectedDateRange?.startDate"
-            [inputEndDate]="selectedDateRange?.endDate"
-            [alwaysShowCalendars]="true"
-            [ranges]="datePickerOption"
-            [selectedRangeLabel]="selectedRangeLabel"
-            [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
+    <app-datepicker-wrapper
+        [inputStartDate]="selectedDateRange?.startDate"
+        [inputEndDate]="selectedDateRange?.endDate"
+        [alwaysShowCalendars]="true"
+        [ranges]="datePickerOption"
+        [selectedRangeLabel]="selectedRangeLabel"
+        [showCustomRangeLabel]="true"
+        [showClearButton]="false"
+        [showCancel]="true"
+        [linkedCalendars]="true"
+        [showDropdowns]="true"
+        (rangeClicked)="dateSelectedCallback($event)"
+        (datesUpdated)="dateSelectedCallback($event)"
+        [keepCalendarOpeningWithRange]="false"
+        [showRangeLabelOnInput]="false"
+        [dateFieldPosition]="dateFieldPosition"
+    ></app-datepicker-wrapper>
 </ng-template>

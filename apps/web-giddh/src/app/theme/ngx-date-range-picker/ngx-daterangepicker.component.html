@@ -20,9 +20,6 @@
                 <!-- loop over ranges -->
                 <div class="range-container">
                     <ul class="range-list">
-                        <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
-                            <button aria-label="custom">{{ commonLocaleData?.app_custom }}</button>
-                        </li>
                         <li *ngFor="let range of ranges; let i = index" class="menu-li">
                             <button
                                 type="button"
@@ -112,86 +109,6 @@
         <!-- ranges container -->
         <!-- calender container -->
         <div class="calender-container">
-            <div class="close-calender" *ngIf="openMobileDatepickerPopup">
-                <div class="close-save-btn">
-                    <img
-                        (click)="closeCalender()"
-                        class="close-custom-btn"
-                        src="{{ imgPath }}close-icon.svg"
-                        alt="close-btn"
-                    />
-                </div>
-
-                <div class="custom-date">
-                    <span class="custom-label">{{ commonLocaleData?.app_custom }}</span>
-                    <div class="custom-edit-block">
-                        <span class="custom-date-range"
-                            >{{ startDate.format("MMM DD YYYY") }} - {{ endDate.format("MMM DD YYYY") }}</span
-                        >
-                        <span class="edit-dates" (click)="openModalWithClass(template)"
-                            ><img src="{{ imgPath }}edit-pencilicon.svg" alt="edit icon"
-                        /></span>
-                    </div>
-                </div>
-            </div>
-            <ng-template #template>
-                <div class="modal-body edit-date-modal">
-                    <h5 class="modal-outside-heading">{{ commonLocaleData?.app_custom }}</h5>
-
-                    <div class="edit-date-container">
-                        <div class="modal-date-range">
-                            <h5 class="modal-inside-heading">{{ commonLocaleData?.app_custom }}</h5>
-                            <p>
-                                {{ inlineStartDate.format("MMM DD YYYY") }} - {{ inlineEndDate.format("MMM DD YYYY") }}
-                            </p>
-                            <span (click)="modalRef.hide()">
-                                <span class="fa fa-calendar"></span>
-                            </span>
-                        </div>
-                        <div class="start-end-date">
-                            <div class="start-end-date-d-flex">
-                                <div class="relative mr-1 d-flex date-field">
-                                    <label>{{ commonLocaleData?.app_start_date }}</label>
-                                    <input
-                                        matInput
-                                        type="tel"
-                                        name="inlineStartDate"
-                                        [value]="viewOnlyStartDate"
-                                        mask="00-00-0000"
-                                        (blur)="saveInlineDates($event)"
-                                    />
-                                    <span class="error-msg" *ngIf="invalidInlineStartDate">{{
-                                        invalidInlineStartDate
-                                    }}</span>
-                                </div>
-                                <div class="relative d-flex date-field">
-                                    <label>{{ commonLocaleData?.app_end_date }}</label>
-                                    <input
-                                        matInput
-                                        type="tel"
-                                        name="inlineEndDate"
-                                        [value]="viewOnlyEndDate"
-                                        mask="00-00-0000"
-                                        (blur)="saveInlineDates($event)"
-                                    />
-                                    <span class="error-msg" *ngIf="invalidInlineEndDate">{{
-                                        invalidInlineEndDate
-                                    }}</span>
-                                </div>
-                            </div>
-                            <span class="error-msg" *ngIf="invalidInlineDate">{{ invalidInlineDate }}</span>
-                            <div class="button-wrapper">
-                                <a href="javascript:void(0);" (click)="modalRef.hide()" class="mr-2 cursor-pointer">{{
-                                    commonLocaleData?.app_cancel
-                                }}</a>
-                                <a href="javascript:void(0);" (click)="applyInlineDates()" class="cursor-pointer">{{
-                                    commonLocaleData?.app_ok
-                                }}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
             <div class="calender-container-wrapper">
                 <div class="calender-body" (mouseout)="hoveredDate = null">
                     <div class="upper-part">

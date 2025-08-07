@@ -76,7 +76,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public order: string = "asc";
     public filter: string = "";
     public searchStr$ = new Subject<string>();
-    public breakPointObservar: BreakpointObserver;
+    public searchStr: string = "";
     public isMobileScreen: boolean = false;
     /** Page size options for mat-paginator */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
@@ -360,7 +360,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             this.agingReportAdvanceSearch.reset();
         }
         this.searchStr$.next('');
-        this.filter = "";
+        this.searchedName?.reset();
+        this.searchStr = "";
         this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';

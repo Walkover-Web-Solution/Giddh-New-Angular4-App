@@ -19,7 +19,6 @@
         >
             <mat-tab
                 [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
-                [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index">
@@ -357,7 +356,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab [label]="localeData?.aging_report" [id]="activeTab === 'aging-report' ? 'giddh-page-heading' : ''">
+            <mat-tab [label]="localeData?.aging_report">
                 <aging-report
                     *ngIf="activeTab === 'aging-report'"
                     [localeData]="localeData"

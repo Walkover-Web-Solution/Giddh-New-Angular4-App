@@ -695,19 +695,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ProformaListComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        
-        if (this.advanceSearchFilter.count !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        if (newPage === this.advanceSearchFilter.page && this.advanceSearchFilter.count === event.pageSize) {
-            return;
-        }
-        
-        this.advanceSearchFilter.page = newPage;
+        this.advanceSearchFilter.page = this.advanceSearchFilter.count !== event.pageSize? 1 : event.pageIndex + 1;
         this.advanceSearchFilter.count = event.pageSize;
         this.getAll();
     }

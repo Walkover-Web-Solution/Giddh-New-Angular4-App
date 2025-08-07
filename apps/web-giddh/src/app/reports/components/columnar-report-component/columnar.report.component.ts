@@ -369,13 +369,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public handlePageEvent(event: PageEvent): void {
         if (this.getColumnarRequestModel) {
-            let newPage = this.getColumnarRequestModel.count !== event.pageSize ? 1 : event.pageIndex + 1;
-            
-            if (newPage === this.getColumnarRequestModel.page && this.getColumnarRequestModel.count === event.pageSize) {
-                return;
-            }
-            
-            this.getColumnarRequestModel.page = newPage;
+            this.getColumnarRequestModel.page = this.getColumnarRequestModel.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getColumnarRequestModel.count = event.pageSize;
             this.exportReport(true);
         }

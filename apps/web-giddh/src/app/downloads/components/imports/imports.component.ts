@@ -236,11 +236,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     * @memberof ImportsComponent
     */
     public handlePageEvent(event: PageEvent): void {
-        if (this.importRequest.count !== event.pageSize) {
-            this.importRequest.page = 1;
-        } else {
-            this.importRequest.page = event.pageIndex + 1;
-        }
+        this.importRequest.page = this.importRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.importRequest.count = event.pageSize;
         this.getImports();
     }

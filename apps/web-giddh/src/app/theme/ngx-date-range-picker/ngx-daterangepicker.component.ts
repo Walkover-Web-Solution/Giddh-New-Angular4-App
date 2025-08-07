@@ -220,7 +220,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public numberOfScrolls: number = 0;
     public isPreviousMonth: boolean = false;
     public allowedYears: any[] = [];
-    public openMobileDatepickerPopup: boolean = false;
     public viewOnlyStartDate: any;
     public viewOnlyEndDate: any;
     public inlineStartDate: any;
@@ -429,18 +428,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public closeMobileDatePicker(): void {
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
-        this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
         document.querySelector("body").style.overflowY = null;
         this.hide();
-    }
-
-    public openModalWithClass(template: TemplateRef<any>): void {
-        this.inlineStartDate = _.cloneDeep(this.startDate);
-        this.inlineEndDate = _.cloneDeep(this.endDate);
-
-        this.viewOnlyStartDate = this.inlineStartDate.format(GIDDH_DATE_FORMAT);
-        this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
     }
 
     /**
@@ -1974,17 +1964,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         } else {
             this.invalidInlineDate = this.commonLocaleData?.app_datepicker?.date_error;
         }
-    }
-
-    /**
-     * This is used to mobile datepicker in mobile
-     *
-     * @memberof NgxDaterangepickerComponent
-     */
-    public openMobileDatepicker(): void {
-        this.allowMouseScroll = true;
-        this.openMobileDatepickerPopup = true;
-        document.querySelector('body').classList.add('hide-scroll-body');
     }
 
     /**

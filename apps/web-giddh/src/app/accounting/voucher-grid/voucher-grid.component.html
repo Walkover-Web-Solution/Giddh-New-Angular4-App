@@ -363,9 +363,8 @@
         </form>
     </div>
     <div mat-dialog-actions class="modal-footer">
-        <!-- [disabled]="chequeDetailForm.invalid" -->
-        <button #chqFormSubmitBtn type="submit" class="btn btn-success" (click)="onSubmitChequeDetail()">Create</button>
-        <button type="button" class="btn btn-default" (click)="closeChequeDetailForm()">Cancel</button>
+        <button #chqFormSubmitBtn type="submit" mat-raised-button color="primary" (click)="onSubmitChequeDetail()">Create</button>
+        <button type="button" mat-stroked-button (click)="closeChequeDetailForm()">Cancel</button>
     </div>
 </ng-template>
 

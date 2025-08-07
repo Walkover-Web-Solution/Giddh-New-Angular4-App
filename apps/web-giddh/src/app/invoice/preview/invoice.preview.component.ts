@@ -797,20 +797,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        
-        if (this.invoiceSearchRequest.count !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        if (newPage === this.invoiceSearchRequest.page && this.invoiceSearchRequest.count === event.pageSize) {
-            return;
-        }
-        
         this.toggleAllItems(false);
-        this.invoiceSearchRequest.page = newPage;
+        this.invoiceSearchRequest.page = this.invoiceSearchRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
         this.invoiceSearchRequest.count = event.pageSize;
         this.getVoucher(this.isUniversalDateApplicable);
     }

@@ -3,7 +3,7 @@
         <nav class="navbar">
             <div class="invoice-control w-100 white-bg">
                 <div class="row mr-0 ml-0">
-                    <div id="setting-tab" class="w-100">
+                    <div class="w-100">
                         <div class="video-link position-absolute" *ngIf="['sales', 'settings', 'templates'].includes(activeTab)">
                             <watch-video
                                 *ngIf="activeTab === 'sales'"
@@ -34,7 +34,6 @@
                                 (selectedTabChange)="onTabChange($event, 'debitCredit')">
                                 <mat-tab
                                     [label]="localeData?.tabs?.debit_note"
-                                    [id]="activeTab === 'debit note' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'debit note'" class="debit-note">
@@ -47,7 +46,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.credit_note"
-                                    [id]="activeTab === 'credit note' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'credit note'">
@@ -60,7 +58,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.pending"
-                                    [id]="activeTab === 'pending' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'pending'">
@@ -73,7 +70,6 @@
                                 <mat-tab
                                     *ngIf="!isMobileView"
                                     [label]="localeData?.tabs?.templates"
-                                    [id]="activeTab === 'templates' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'templates'">
@@ -83,7 +79,6 @@
                                 </mat-tab>
                                 <mat-tab
                                     [label]="localeData?.tabs?.settings"
-                                    [id]="activeTab === 'settings' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'settings'">
@@ -108,7 +103,6 @@
                                 (selectedTabChange)="onTabChange($event, 'main')">
                                 <mat-tab
                                     [label]="localeData?.tabs?.estimates"
-                                    [id]="activeTab === 'estimates' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'estimates'">
@@ -120,7 +114,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.proformas"
-                                    [id]="activeTab === 'proformas' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'proformas'">
@@ -132,7 +125,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.invoices"
-                                    [id]="activeTab === 'sales' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'sales'">
@@ -145,7 +137,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.recurring"
-                                    [id]="activeTab === 'recurring' ? 'giddh-page-heading' : ''"
                                     [ngClass]="voucherApiVersion === 2 ? 'd-none' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
@@ -157,7 +148,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.pending"
-                                    [id]="activeTab === 'pending' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'pending'">
@@ -170,7 +160,6 @@
                                 <mat-tab
                                     [label]="localeData?.tabs?.templates"
                                     *ngIf="!isMobileView"
-                                    [id]="activeTab === 'templates' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'templates'">
@@ -181,7 +170,6 @@
 
                                 <mat-tab
                                     [label]="localeData?.tabs?.settings"
-                                    [id]="activeTab === 'settings' ? 'giddh-page-heading' : ''"
                                 >
                                     <div class="pd-t15 pd-b15">
                                         <div *ngIf="activeTab === 'settings'">

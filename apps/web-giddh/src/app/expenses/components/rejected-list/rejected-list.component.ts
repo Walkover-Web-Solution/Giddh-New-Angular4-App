@@ -201,11 +201,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
      * @memberof RejectedListComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.pettycashRequest.count !== event.pageSize) {
-            this.pettycashRequest.page = 1;
-        } else {
-            this.pettycashRequest.page = event.pageIndex + 1;
-        }
+        this.pettycashRequest.page = this.pettycashRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.pettycashRequest.count = event.pageSize;
         this.getPettyCashRejectedReports(this.pettycashRequest);
     }

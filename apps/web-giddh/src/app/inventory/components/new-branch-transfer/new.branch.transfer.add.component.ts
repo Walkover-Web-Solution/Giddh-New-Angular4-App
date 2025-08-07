@@ -1445,11 +1445,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
      * @memberof NewBranchTransferAddComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.transporterFilterRequest.count !== event.pageSize) {
-            this.transporterFilterRequest.page = 1;
-        } else {
-            this.transporterFilterRequest.page = event.pageIndex + 1;
-        }
+        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.transporterFilterRequest.count = event.pageSize;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();

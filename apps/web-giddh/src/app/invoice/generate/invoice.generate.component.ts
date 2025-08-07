@@ -397,15 +397,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoiceGenerateComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        
-        if (this.ledgerSearchRequest.count !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        this.ledgerSearchRequest.page = newPage;
+        this.ledgerSearchRequest.page = this.ledgerSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.ledgerSearchRequest.count = event.pageSize;
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];

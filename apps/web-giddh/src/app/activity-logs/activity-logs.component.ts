@@ -371,11 +371,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     */
     public handlePageEvent(event: PageEvent): void {
         let newPage = this.activityObj.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        
-        if (newPage === this.activityObj.page && this.activityObj.count === event.pageSize) {
-            return;
-        }
-        
         this.activityObj.page = newPage;
         this.activityObj.count = event.pageSize;
         this.getActivityLogs();

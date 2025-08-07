@@ -586,11 +586,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.stockReportRequest.count !== event.pageSize) {
-            this.stockReportRequest.page = 1;
-        } else {
-            this.stockReportRequest.page = event.pageIndex + 1;
-        }
+        this.stockReportRequest.page = this.stockReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.stockReportRequest.count = event.pageSize;
         this.getStockReport(false);
     }

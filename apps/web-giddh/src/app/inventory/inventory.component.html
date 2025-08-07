@@ -11,7 +11,6 @@
                 (selectedTabChange)="redirectUrlToActiveTab($event)">
                 <mat-tab
                     label="Inventory"
-                    [id]="activeTabIndex === 0 ? 'giddh-page-heading' : ''"
                 >
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
@@ -84,7 +83,6 @@
 
                 <mat-tab
                     label="Job Work"
-                    [id]="activeTabIndex === 1 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 1">
                         <jobwork></jobwork>
@@ -93,7 +91,6 @@
 
                 <mat-tab
                     label="Manufacturing"
-                    [id]="activeTabIndex === 2 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 2">
                         <manufacturing></manufacturing>
@@ -102,7 +99,6 @@
 
                 <mat-tab
                     label="Report"
-                    [id]="activeTabIndex === 3 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 3">
                         <new-branch-transfer-list> </new-branch-transfer-list>

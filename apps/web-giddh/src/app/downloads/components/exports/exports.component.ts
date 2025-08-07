@@ -176,18 +176,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        if (this.downloadRequest.count !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        if (newPage === this.downloadRequest.page && this.downloadRequest.count === event.pageSize) {
-            return;
-        }
-        
-        this.downloadRequest.page = newPage;
+        this.downloadRequest.page = this.downloadRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
         this.downloadRequest.count = event.pageSize;
         this.getDownloads();
     }

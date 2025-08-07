@@ -107,25 +107,9 @@ export class AsideManageTransportComponent implements OnInit {
      * @memberof AsideManageTransportComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.transporterObj.count !== event.pageSize) {
-            this.transporterObj.page = 1;
-        } else {
-            this.transporterObj.page = event.pageIndex + 1;
-        }
+        this.transporterObj.page = this.transporterObj.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.transporterObj.count = event.pageSize;
         this.getTransportersList();
-        this.detectChanges();
-    }
-    
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.transporterObj.page !== event.page) {
-            this.transporterObj.page = event.page;
-            this.getTransportersList();
-        }
         this.detectChanges();
     }
 
