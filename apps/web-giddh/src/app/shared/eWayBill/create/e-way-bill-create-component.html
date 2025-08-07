@@ -226,7 +226,7 @@
                         >
                             {{ localeData?.save_generate }}
                         </button>
-                        <button mat-stroked-button color="primary" (click)="onResetGenerateBillForm()">
+                        <button mat-raised-button color="primary" (click)="onResetGenerateBillForm()">
                             {{ commonLocaleData?.app_reset }}
                         </button>
                     </div>
@@ -293,7 +293,7 @@
                         >
                             {{ commonLocaleData?.app_save }}
                         </button>
-                        <button mat-stroked-button color="primary" (click)="clearTransportForm()" type="submit">
+                        <button mat-raised-button color="primary" (click)="clearTransportForm()" type="submit">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
@@ -307,7 +307,7 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-stroked-button color="primary" (click)="clearTransportForm()">
+                        <button mat-raised-button color="primary" (click)="clearTransportForm()">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
@@ -372,10 +372,10 @@
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
                     <td class="nowrap d-flex column-gap15 border-top-0">
-                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
+                        <button mat-raised-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
                             <i class="icon-edit"></i>
                         </button>
-                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
+                        <button mat-raised-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>

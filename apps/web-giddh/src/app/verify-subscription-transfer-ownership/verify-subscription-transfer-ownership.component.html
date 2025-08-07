@@ -43,7 +43,7 @@
                     <p class="font-15 mr-t05">{{ localeData?.accepting_will_make_you_subscriber }}</p>
                 </div>
                 <div class="modal-footer">
-                    <button aria-label="yes" mat-stroked-button color="primary" (click)="onSubmit($event)">
+                    <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event)">
                         {{ localeData?.accept_subscription }}
                     </button>
                     <button aria-label="no" mat-stroked-button (click)="onReject($event)">
@@ -85,7 +85,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button aria-label="yes" mat-stroked-button color="primary" (click)="onSubmit($event, true)">
+                    <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event, true)">
                         {{ localeData?.submit }}
                     </button>
                     <button aria-label="no" mat-stroked-button (click)="closeReject($event)">

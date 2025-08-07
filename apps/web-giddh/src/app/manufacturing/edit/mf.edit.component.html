@@ -1,7 +1,7 @@
 <section id="manufacture" class="clearfix" *ngIf="!(isGetManufactureStockInProgress$ | async)">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Manufacture of Product'"></hamburger-menu>
     <div class="col-sm-12 mr-t15 clearfix">
-        <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
+        <button mat-stroked-button class="pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div>
     <!-- form -->
     <div class="col-xl-10 col-lg-12 col-md-12">
@@ -458,8 +458,8 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button type="submit" class="btn btn-sm btn-success" (click)="createEntry()">Save</button>
-                            <button type="button" class="btn btn-sm btn-primary" (click)="goBackToListPage()">
+                            <button mat-raised-button color="primary" type="submit" (click)="createEntry()">Save</button>
+                            <button mat-stroked-button type="button" (click)="goBackToListPage()">
                                 Cancel
                             </button>
                         </div>
@@ -472,8 +472,8 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button type="submit" class="btn btn-sm btn-success" (click)="updateEntry()">Update</button>
-                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteEntry()">Delete</button>
+                            <button mat-raised-button color="primary" type="submit" (click)="updateEntry()">Update</button>
+                            <button mat-stroked-button type="button" (click)="deleteEntry()">Delete</button>
                         </div>
                     </form>
                 </div>

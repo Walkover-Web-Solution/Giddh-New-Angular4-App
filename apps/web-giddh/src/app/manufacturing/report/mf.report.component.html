@@ -3,11 +3,11 @@
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
-            <button type="button" class="no-btn clear-filter" (click)="clearFilters()">Clear Filter</button>
+            <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
-            <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">
+            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-raised-button color="primary" class="pull-right mr-0" (click)="goToCreateNewPage()" type="button">
                 Create Manufacture
             </button>
         </div>
@@ -104,7 +104,7 @@
                         >
                             <div *ngIf="showClearFilter()">
                                 <label class="d-block">&nbsp;</label>
-                                <button type="button" class="no-btn clear-filter" (click)="clearFilters()">
+                                <button mat-stroked-button type="button" (click)="clearFilters()">
                                     Clear Filter
                                 </button>
                             </div>
@@ -112,7 +112,9 @@
                                 <label class="d-block">&nbsp;</label>
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    class="btn isActive pull-right mr-0 mobile-none"
+                                    mat-raised-button
+                                    color="primary"
+                                    class="pull-right mr-0 mobile-none"
                                     (click)="goToCreateNewPage()"
                                     type="button"
                                 >

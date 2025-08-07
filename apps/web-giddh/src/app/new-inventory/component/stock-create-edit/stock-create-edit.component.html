@@ -20,7 +20,6 @@
                             (click)="backClicked()"
                             class="btn-position-left mr-0"
                             mat-stroked-button
-                            color="primary"
                             aria-label="back btn"
                         >
                             <i class="icon-left back-left"></i>
@@ -1643,7 +1642,7 @@
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
                                     <div class="pd-l15 pt-3" *ngIf="!queryParams?.stockUniqueName">
-                                        <button aria-label="recipe btn" mat-stroked-button color="primary" (click)="createStock(true)">
+                                        <button aria-label="recipe btn" mat-raised-button color="primary" (click)="createStock(true)">
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
                                     </div>
@@ -3907,7 +3906,7 @@
                 <button
                     aria-label="create"
                     *ngIf="!queryParams?.stockUniqueName"
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     (click)="createStock()"
                 >
@@ -3925,7 +3924,7 @@
                 <button
                     aria-label="update"
                     *ngIf="queryParams?.stockUniqueName"
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"

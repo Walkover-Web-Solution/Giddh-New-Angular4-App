@@ -1106,10 +1106,10 @@
 
         <ng-template #buttonsSection>
             <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-                <button aria-label="save" type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
+                <button mat-raised-button color="primary" aria-label="save" type="button" class="mr-r1" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button aria-label="cancel" type="button" class="btn btn-cancel" (click)="resetForm()">
+                <button mat-stroked-button aria-label="cancel" type="button" (click)="resetForm()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

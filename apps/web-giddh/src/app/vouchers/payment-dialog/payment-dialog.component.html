@@ -143,7 +143,7 @@
         ></textarea>
     </mat-form-field>
     <div class="d-flex column-gap1 justify-content-end">
-        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress">
+        <button mat-raised-button color="primary" (click)="savePayment()" [disabled]="saveInProgress">
             {{ commonLocaleData?.app_save }}
         </button>
         <button cdkFocusInitial mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">

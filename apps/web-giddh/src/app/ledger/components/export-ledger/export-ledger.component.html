@@ -313,7 +313,7 @@
         </mat-dialog-content>
         <mat-dialog-actions align="end">
             <div class="pd-b15">
-                <button mat-stroked-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()"
+                <button mat-raised-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()"
                     [disabled]="
             isLoading ||
             (emailTypeSelected === 'voucher' &&
@@ -322,7 +322,7 @@
         ">
                     {{ commonLocaleData?.app_download }}
                 </button>
-                <button mat-stroked-button color="primary" class="show-columnar-button unbold mr-l1"
+                <button mat-raised-button color="primary" class="show-columnar-button unbold mr-l1"
                     [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">
                     {{ commonLocaleData?.app_show }}
                 </button>

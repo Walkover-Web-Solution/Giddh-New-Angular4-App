@@ -95,7 +95,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button class="btn btn-success" [disabled]="!isValidForm" (click)="emitEntries()">
+                <button mat-raised-button color="primary" [disabled]="!isValidForm" (click)="emitEntries()">
                     {{ commonLocaleData?.app_save }}
                 </button>
             </div>

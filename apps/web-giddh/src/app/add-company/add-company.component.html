@@ -103,7 +103,8 @@
                                 </button>
 
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
+                                    color="primary"
                                     (click)="sendOtp()"
                                     [disabled]="sendOtpInProgress"
                                     *ngIf="!showOtpField && !isMobileNumberVerified"
@@ -137,7 +138,8 @@
                                 <div class="col-6 mobile-no-action-buttons">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            mat-stroked-button
+                                            mat-raised-button
+                                            color="primary"
                                             (click)="verifyOtp()"
                                             [disabled]="verifyOtpInProgress || resendOtpInProgress"
                                             class="btn-min-width"
@@ -175,7 +177,6 @@
                         <div class="d-flex justify-content-between mr-t15">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 *ngIf="isCreateBySubscription"
                                 (click)="back()"
                                 aria-label="back"
@@ -190,7 +191,7 @@
                             >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
-                            <button mat-stroked-button color="primary" (click)="nextStepForm()" aria-label="next">
+                            <button mat-raised-button color="primary" (click)="nextStepForm()" aria-label="next">
                                 {{ commonLocaleData?.app_next }}
                             </button>
                         </div>
@@ -427,7 +428,7 @@
                         </div>
                         <ng-container *ngIf="isNewUserLoggedIn">
                             <div class="d-flex column-gap15 mr-t15">
-                                <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                                <button mat-raised-button color="primary" (click)="nextStepForm()">
                                     {{ commonLocaleData?.app_next }}
                                 </button>
                             </div>
@@ -446,7 +447,7 @@
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </div>
-                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                <button mat-raised-button color="primary" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                             </div>
@@ -558,7 +559,7 @@
                                 <button mat-stroked-button matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
-                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                <button mat-raised-button color="primary" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                                 <button

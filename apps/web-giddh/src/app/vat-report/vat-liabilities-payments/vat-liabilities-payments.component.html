@@ -45,7 +45,7 @@
                     ></dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <button mat-stroked-button color="primary" (click)="getLiabilitiesPayment()">
+                    <button mat-raised-button color="primary" (click)="getLiabilitiesPayment()">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </div>
@@ -151,7 +151,7 @@
                     <div *ngIf="!dataSource.length && hasTaxNumber">
                         <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
                             <div class="text-center">
-                                <a [disabled]="isTaxRestrictedModule" mat-stroked-button color="primary" [href]="connectToHMRCUrl">
+                                <a [disabled]="isTaxRestrictedModule" mat-raised-button color="primary" [href]="connectToHMRCUrl">
                                     {{ localeData?.connect_to_hmrc }}
                                 </a>
                             </div>
