@@ -7,6 +7,17 @@
     border: 4px dashed var(--color-gray);
 }
 
+.template-view {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.beta-img {
+    top: 0;
+    right: 0;
+}
+
 .upload-button input[type="file"] {
     display: none;
 }

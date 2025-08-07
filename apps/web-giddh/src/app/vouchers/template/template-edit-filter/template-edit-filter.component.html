@@ -12,6 +12,8 @@
                             [name]="'name'"
                             [maxlength]="'18'"
                             [cssClass]="'form-control'"
+                            [autocomplete]="'off'"
+                            *ngIf="templateForm.get('name')"
                         ></text-field>
                     </div>
                     <div class="template-scroll">
@@ -24,7 +26,7 @@
                                         Change up to template
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <div class="d-flex column-gap15 px-3 pb-3">
+                                <div class="template-view px-3 pb-3">
                                     <ng-container *ngFor="let template of sampleTemplates">
                                         <div
                                             class="template-view-design bdr position-relative cursor-pointer"
@@ -74,7 +76,7 @@
                             <!-- upload-expansion -->
                             <mat-expansion-panel
                                 class="mb-2"
-                                *ngIf="customTemplate.templateType !== 'thermal_template'"
+                                *ngIf="templateForm.get('templateType').value !== 'thermal_template'"
                             >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
@@ -155,7 +157,14 @@
                                 </div>
                             </mat-expansion-panel>
                             <!-- colour-expansion -->
-                            <mat-expansion-panel class="mb-2">
+                            <mat-expansion-panel
+                                class="mb-2"
+                                [hidden]="!templateUISectionVisibility.color"
+                                *ngIf="
+                                    templateType !== 'thermal_template' &&
+                                    templateForm.get('templateType').value !== 'tally_template'
+                                "
+                            >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="ico-swatch mr-2"></i>
@@ -194,7 +203,13 @@
                                 </div>
                             </mat-expansion-panel>
                             <!-- font-family-expansion -->
-                            <mat-expansion-panel class="mb-2">
+                            <mat-expansion-panel
+                                class="mb-2"
+                                *ngIf="
+                                    !templateUISectionVisibility.font &&
+                                    templateForm.get('templateType').value !== 'thermal_template'
+                                "
+                            >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-font mr-2"></i>
@@ -202,11 +217,25 @@
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="px-3 pb-3">
-                                    <dropdown-field [placeholder]="'Choose font'"></dropdown-field>
+                                    <reactive-dropdown-field
+                                        [label]="'Choose font'"
+                                        [options]="presetFonts"
+                                        formControlName="font"
+                                        (selectedOption)="onFontSelect($event)"
+                                        (onClear)="templateForm.get('font').patchValue(null)"
+                                        [labelValue]="templateForm.get('font').value"
+                                        [placeholder]="'Choose font'"
+                                    ></reactive-dropdown-field>
                                 </div>
                             </mat-expansion-panel>
                             <!-- font-size-expansion -->
-                            <mat-expansion-panel class="mb-2">
+                            <mat-expansion-panel
+                                class="mb-2"
+                                *ngIf="
+                                    !templateUISectionVisibility.fontSize &&
+                                    templateForm.get('templateType').value !== 'thermal_template'
+                                "
+                            >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-font mr-2"></i>
@@ -214,11 +243,26 @@
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="px-3 pb-3">
-                                    <dropdown-field [placeholder]="'Choose font size'"></dropdown-field>
+                                    <reactive-dropdown-field
+                                        [label]="'Choose font'"
+                                        [options]="presetFontsSize"
+                                        formControlName="fontSize"
+                                        (selectedOption)="onFontSizeSelect($event)"
+                                        (onClear)="templateForm.get('fontSize').patchValue(null)"
+                                        [labelValue]="templateForm.get('fontSize').value"
+                                        [placeholder]="'Choose font size'"
+                                    ></reactive-dropdown-field>
                                 </div>
                             </mat-expansion-panel>
                             <!-- page-margin-expansion -->
-                            <mat-expansion-panel class="mb-2">
+                            <mat-expansion-panel
+                                class="mb-2"
+                                *ngIf="
+                                    templateForm.get('templateType').value !== 'thermal_template' &&
+                                    templateForm.get('templateType').value !== 'tally_template'
+                                "
+                                [hidden]="templateUISectionVisibility.print"
+                            >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-print_settings mr-2"></i>
@@ -226,11 +270,111 @@
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="px-3 pb-3 d-flex align-items-center column-gap1 print-field">
-                                    <input-field [type]="'text'" [name]="'top'" [label]="'Top'"></input-field>
-                                    <input-field [type]="'text'" [name]="'left'" [label]="'Left'"></input-field>
-                                    <input-field [type]="'text'" [name]="'bottom'" [label]="'Bottom'"></input-field>
-                                    <input-field [type]="'text'" [name]="'right'" [label]="'Right'"></input-field>
-                                    <a href="javascript:;" class="">Reset</a>
+                                    <div class="w125">
+                                        <input-field
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
+                                            (keyup)="
+                                                onValueChange(null, null);
+                                                validatePrintSetting(
+                                                    templateForm.get('topMargin').value,
+                                                    0,
+                                                    'topMargin'
+                                                )
+                                            "
+                                            formControlName="topMargin"
+                                            [type]="'number'"
+                                            [name]="'topMargin'"
+                                            [label]="'Top'"
+                                            [cssClass]="'text-right'"
+                                        ></input-field>
+                                    </div>
+                                    <div class="w125">
+                                        <input-field
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
+                                            (keyup)="
+                                                onValueChange(null, null);
+                                                validatePrintSetting(
+                                                    templateForm.get('leftMargin').value,
+                                                    0,
+                                                    'leftMargin'
+                                                )
+                                            "
+                                            formControlName="leftMargin"
+                                            [type]="'number'"
+                                            [name]="'leftMargin'"
+                                            [label]="'Left'"
+                                            [cssClass]="'text-right'"
+                                        ></input-field>
+                                    </div>
+                                    <div class="w125">
+                                        <input-field
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
+                                            (keyup)="
+                                                onValueChange(null, null);
+                                                validatePrintSetting(
+                                                    templateForm.get('bottomMargin').value,
+                                                    0,
+                                                    'bottomMargin'
+                                                )
+                                            "
+                                            formControlName="bottomMargin"
+                                            [type]="'text'"
+                                            [name]="'bottomMargin'"
+                                            [label]="'Bottom'"
+                                            [cssClass]="'text-right'"
+                                        ></input-field>
+                                    </div>
+                                    <div class="w125">
+                                        <input-field
+                                            [allowDecimalDigitsOnly]="true"
+                                            [customDecimalPlaces]="1"
+                                            (keyup)="
+                                                onValueChange(null, null);
+                                                validatePrintSetting(
+                                                    templateForm.get('rightMargin').value,
+                                                    0,
+                                                    'rightMargin'
+                                                )
+                                            "
+                                            formControlName="rightMargin"
+                                            [type]="'number'"
+                                            [name]="'rightMargin'"
+                                            [label]="'Right'"
+                                            [cssClass]="'text-right'"
+                                        ></input-field>
+                                    </div>
+
+                                    <a href="javascript:;" (click)="resetPrintSetting()" class="mr-l1">Reset</a>
+                                </div>
+                            </mat-expansion-panel>
+                            <!-- Show sections inline settings -->
+                            <mat-expansion-panel
+                                class="mb-2"
+                                *ngIf="templateForm.get('templateType').value !== 'thermal_template'"
+                            >
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <i class="icon-font mr-2"></i>
+                                        Show sections inline
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="px-3 pb-3">
+                                    <mat-checkbox
+                                        color="primary"
+                                        id="select-all-entries"
+                                        formControlName="showSectionsInline"
+                                        (change)="
+                                            onChangeFieldVisibility(
+                                                'showSectionsInline',
+                                                templateForm.get('showSectionsInline').value
+                                            )
+                                        "
+                                    >
+                                        Show Header/Footer on first and last page
+                                    </mat-checkbox>
                                 </div>
                             </mat-expansion-panel>
                         </mat-accordion>
