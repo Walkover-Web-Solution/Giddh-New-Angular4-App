@@ -6,7 +6,8 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -62,7 +63,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showEditTaxSection: boolean = false;
     public accountList: any[];
     public showTaxes: boolean = false;
-    @ViewChild('deleteGroupModal', { static: true }) public deleteGroupModal: ModalDirective;
+    @ViewChild('deleteGroupTemplate', { static: true }) public deleteGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for delete group modal */
+    private deleteGroupDialogRef: MatDialogRef<any>;
     @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
@@ -100,7 +103,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions,
         private accountsAction: AccountsAction,
-        private groupService: GroupService
+        private groupService: GroupService,
+        private dialog: MatDialog
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
@@ -356,12 +360,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
 
+    /**
+     * Shows the delete group modal dialog
+     *
+     * @memberof GroupUpdateComponent
+     */
     public showDeleteGroupModal() {
-        this.deleteGroupModal?.show();
+        this.deleteGroupDialogRef = this.dialog.open(this.deleteGroupTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
+    /**
+     * Hides the delete group modal dialog
+     *
+     * @memberof GroupUpdateComponent
+     */
     public hideDeleteGroupModal() {
-        this.deleteGroupModal?.hide();
+        this.deleteGroupDialogRef?.close();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {

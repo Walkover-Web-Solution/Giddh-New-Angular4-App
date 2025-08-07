@@ -660,30 +660,28 @@
 <!-- aside menu section -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header theme-bg">
-                <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
-                    ×
-                </button>
-            </div>
-            <div class="modal-body advance-search clearfix" *ngIf="advanceSearchModalShow">
-                <form action="" [formGroup]="advanceSearchForm">
-                    <div class="row">
-                        <div class="col-sm-4">Date Range</div>
-                        <div class="col-sm-8">
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
-                                />
-                            </div>
-                        </div>
+<ng-template #advanceSearchTemplate>
+    <div mat-dialog-title class="theme-bg">
+        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
+            ×
+        </button>
+    </div>
+    <div mat-dialog-content class="advance-search clearfix" *ngIf="advanceSearchModalShow">
+        <form action="" [formGroup]="advanceSearchForm">
+            <div class="row">
+                <div class="col-sm-4">Date Range</div>
+                <div class="col-sm-8">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
                     </div>
+                </div>
+            </div>
                     <div class="row mr-t2">
                         <div class="col-sm-4">Select Category</div>
                         <div class="col-sm-4">
@@ -773,9 +771,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
 <!-- Advance  search popup -->
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>

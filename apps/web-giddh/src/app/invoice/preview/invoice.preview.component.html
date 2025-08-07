@@ -1843,137 +1843,90 @@
                 </div>
 
                 <!-- Delete invoice confirmation model -->
-                <div
-                    bsModal
-                    #invoiceConfirmationModel="bs-modal"
-                    class="modal fade"
-                    role="dialog"
-                    [config]="{ keyboard: true }"
-                    tabindex="-1"
-                >
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <delete-voucher-confirmation-modal
-                                [module]="selectedVoucher !== 'purchase' ? selectedVoucher : 'purchaselist'"
-                                [selectedInvoiceForDelete]="selectedInvoice"
-                                (confirmDeleteEvent)="deleteConfirmedInvoice()"
-                                (closeModelEvent)="closeConfirmationPopup()"
-                            >
-                            </delete-voucher-confirmation-modal>
-                        </div>
+                <ng-template #invoiceConfirmationDialog>
+                    <div class="mat-dialog-container">
+                        <delete-voucher-confirmation-modal
+                            [module]="selectedVoucher !== 'purchase' ? selectedVoucher : 'purchaselist'"
+                            [selectedInvoiceForDelete]="selectedInvoice"
+                            (confirmDeleteEvent)="deleteConfirmedInvoice()"
+                            (closeModelEvent)="closeConfirmationPopup()"
+                        >
+                        </delete-voucher-confirmation-modal>
                     </div>
-                </div>
+                </ng-template>
 
                 <!-- Perform action on invoice model -->
-                <div
-                    bsModal
-                    #performActionOnInvoiceModel="bs-modal"
-                    class="modal fade"
-                    role="dialog"
-                    [config]="{ keyboard: true }"
-                    tabindex="-1"
-                >
-                    <div class="modal-dialog modal-md perform-payment">
-                        <div class="modal-content">
-                            <invoice-payment-model
-                                *ngIf="performActionOnInvoiceModel.isShown"
-                                [selectedInvoiceForPayment]="selectedInvoice"
-                                [localeData]="localeData"
-                                [commonLocaleData]="commonLocaleData"
-                                (performActionPopup)="performActionPopup($event)"
-                                (closeModelEvent)="closePerformActionPopup()"
-                            >
-                            </invoice-payment-model>
-                        </div>
+                <!-- Perform action on invoice dialog -->
+                <ng-template #performActionOnInvoiceDialog>
+                    <div class="mat-dialog-container perform-payment">
+                        <invoice-payment-model
+                            [selectedInvoiceForPayment]="selectedInvoice"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                            (performActionPopup)="performActionPopup($event)"
+                            (closeModelEvent)="closePerformActionPopup()"
+                        >
+                        </invoice-payment-model>
                     </div>
-                </div>
+                </ng-template>
                 <!-- Download or Send Invoice on mail -->
-                <div
-                    bsModal
-                    #downloadOrSendMailModel="bs-modal"
-                    class="modal fade"
-                    role="dialog"
-                    [config]="modalConfig"
-                    tabindex="-1"
-                >
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div
-                                element-view-container-ref
-                                #downloadOrSendMailComponent="elementviewcontainerref"
-                            ></div>
-                        </div>
+                <ng-template #downloadOrSendMailDialog>
+                    <div class="mat-dialog-container">
+                        <div
+                            element-view-container-ref
+                            #downloadOrSendMailComponent="elementviewcontainerref"
+                        ></div>
                     </div>
-                </div>
+                </ng-template>
                 <!--advance_seearch Modal-->
-                <div
-                    bsModal
-                    #advanceSearch="bs-modal"
-                    class="modal fade"
-                    role="dialog"
-                    [config]="modalConfig"
-                    tabindex="-1"
-                >
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <invoice-advance-search-component
-                                #advanceSearchComponent
-                                [type]="
-                                    selectedVoucher === 'debit note' || selectedVoucher === 'credit note'
-                                        ? 'drcr'
-                                        : selectedVoucher === 'purchase'
-                                        ? selectedVoucher
-                                        : 'invoice'
-                                "
-                                [request]="advanceSearchFilter"
-                                [localeData]="localeData"
-                                [isEInvoiceEnabled]="gstEInvoiceEnable"
-                                [commonLocaleData]="commonLocaleData"
-                                (applyFilterEvent)="applyAdvanceSearch($event)"
-                                (closeModelEvent)="toggleAdvanceSearchPopup()"
-                            >
-                            </invoice-advance-search-component>
-                        </div>
+                <ng-template #advanceSearchDialog>
+                    <div class="mat-dialog-container">
+                        <invoice-advance-search-component
+                            #advanceSearchComponent
+                            [type]="
+                                selectedVoucher === 'debit note' || selectedVoucher === 'credit note'
+                                    ? 'drcr'
+                                    : selectedVoucher === 'purchase'
+                                    ? selectedVoucher
+                                    : 'invoice'
+                            "
+                            [request]="advanceSearchFilter"
+                            [localeData]="localeData"
+                            [isEInvoiceEnabled]="gstEInvoiceEnable"
+                            [commonLocaleData]="commonLocaleData"
+                            (applyFilterEvent)="applyAdvanceSearch($event)"
+                            (closeModelEvent)="closeAdvanceSearchDialog()"
+                        >
+                        </invoice-advance-search-component>
                     </div>
-                </div>
+                </ng-template>
 
                 <!--bulk update modal-->
-                <div
-                    bsModal
-                    #bulkUpdate="bs-modal"
-                    class="modal fade"
-                    role="dialog"
-                    [config]="modalConfig"
-                    tabindex="-1"
-                >
-                    <div *ngIf="bulkUpdate?.isShown" class="modal-dialog">
-                        <div class="modal-content">
-                            <invoice-bulk-update-modal-component
-                                (closeModelEvent)="toggleBulkUpdatePopup(true, $event)"
-                                [voucherType]="selectedVoucher"
-                                [selectedInvoices]="selectedInvoicesList"
-                                [localeData]="localeData"
-                                [commonLocaleData]="commonLocaleData"
-                            >
-                            </invoice-bulk-update-modal-component>
-                        </div>
+                <ng-template #bulkUpdateDialog>
+                    <div class="mat-dialog-container">
+                        <invoice-bulk-update-modal-component
+                            (closeModelEvent)="closeBulkUpdateDialog($event)"
+                            [voucherType]="selectedVoucher"
+                            [selectedInvoices]="selectedInvoicesList"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                        >
+                        </invoice-bulk-update-modal-component>
                     </div>
-                </div>
+                </ng-template>
 
                 <!--EwayBill-->
-                <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <app-generate-ewaybill-dialog
-                                [localeData]="localeData"
-                                [commonLocaleData]="commonLocaleData"
-                                (closeModelEvent)="toggleEwayBillPopup()"
-                                (createEWayBillEvent)="createEWayBill()"
-                            >
-                            </app-generate-ewaybill-dialog>
-                        </div>
+                <ng-template #eWayBillDialog>
+                    <div class="mat-dialog-container">
+                        <app-generate-ewaybill-dialog
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                            (closeModelEvent)="closeEwayBillDialog()"
+                            (createEWayBillEvent)="createEWayBill()"
+                        >
+                        </app-generate-ewaybill-dialog>
                     </div>
-                </div>
+                </ng-template>
 
                 <!-- region invoice-preview-details -->
                 <div *ngIf="selectedInvoiceForDetails">
@@ -2051,17 +2004,8 @@
         <!-- endregion -->
 
         <!-- Advance receipt adjust modal start -->
-        <div
-            class="modal fade purchase-record-confirmation-modal"
-            tabindex="-1"
-            #adjustPaymentModal="bs-modal"
-            [config]="{ animated: true, ignoreBackdropClick: true }"
-            bsModal
-            role="dialog"
-            (onHidden)="closeAdvanceReceiptModal()"
-        >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
+        <ng-template #adjustPaymentDialog>
+            <div class="mat-dialog-container purchase-record-confirmation-modal">
                 <advance-receipt-adjustment-component
                     *ngIf="showAdvanceReceiptAdjust"
                     #advanceReceiptComponent
@@ -2077,8 +2021,7 @@
                 >
                 </advance-receipt-adjustment-component>
             </div>
-        </div>
-        </div>
+        </ng-template>
         <!-- end -->
         <ng-template #sendEmailModal>
             <purchase-send-email-modal

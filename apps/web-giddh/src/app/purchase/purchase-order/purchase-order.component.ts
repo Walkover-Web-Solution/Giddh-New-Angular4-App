@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -32,15 +32,19 @@ export class PurchaseOrderComponent implements OnDestroy {
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* Input element for column search */
     @ViewChild('searchBox') public searchBox: ElementRef;
-    /* Confirm box */
-    @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* Confirm box template */
+    @ViewChild('poConfirmationTemplate') public poConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for confirmation modal */
+    private poConfirmationDialogRef: MatDialogRef<any>;
     /* This will emit if purchase bill lists needs to be refreshed */
     @Output() public refreshPurchaseBill: EventEmitter<any> = new EventEmitter();
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
-    public modalRef: BsModalRef;
+    public modalRef: any;
+    /** Modal service reference */
+    public modalService: any;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -147,7 +151,7 @@ export class PurchaseOrderComponent implements OnDestroy {
     /** This will hold po for bulk convert */
     public selectedPurchaseOrders: any[] = [];
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
+    constructor(private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions, private dialog: MatDialog) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
@@ -573,7 +577,7 @@ export class PurchaseOrderComponent implements OnDestroy {
     }
 
     /**
-     * This will show the confirmation popup for delete
+     * This will show the confirmation dialog for delete
      *
      * @param {*} item
      * @memberof PurchaseOrderComponent
@@ -581,7 +585,10 @@ export class PurchaseOrderComponent implements OnDestroy {
     public confirmDelete(item: any): void {
         this.deleteModule = 'purchaseorder';
         this.selectedItem = item?.uniqueName;
-        this.poConfirmationModel?.show();
+        this.poConfirmationDialogRef = this.dialog.open(this.poConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
@@ -607,13 +614,16 @@ export class PurchaseOrderComponent implements OnDestroy {
     }
 
     /**
-     * This will close the confirmation popup
+     * This will close the confirmation dialog
      *
      * @memberof PurchaseOrderComponent
      */
     public closeConfirmationPopup(): void {
         this.selectedItem = '';
-        this.poConfirmationModel.hide();
+        if (this.poConfirmationDialogRef) {
+            this.poConfirmationDialogRef.close();
+            this.poConfirmationDialogRef = null;
+        }
     }
 
     /**
@@ -694,7 +704,10 @@ export class PurchaseOrderComponent implements OnDestroy {
         let purchaseNumbers = this.getSelectedItems();
         if (purchaseNumbers?.length > 0) {
             this.deleteModule = 'purchaseorderlist';
-            this.poConfirmationModel?.show();
+            this.poConfirmationDialogRef = this.dialog.open(this.poConfirmationTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
         } else {
             this.toaster.errorToast(this.localeData?.po_selection_error);
         }

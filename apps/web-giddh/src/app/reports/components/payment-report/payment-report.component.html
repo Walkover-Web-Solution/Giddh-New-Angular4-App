@@ -503,21 +503,10 @@
         </div>
     </div>
 
-    <div
-        bsModal
-        #paymentSearchModalContainer="bs-modal"
-        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
-        tabindex="-1"
-        class="modal fade open-popup"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #paymentSearchFilterModal="elementviewcontainerref">
-                </ng-template>
-            </div>
-        </div>
-    </div>
+    <ng-template #paymentSearchModalTemplate>
+        <ng-template element-view-container-ref #paymentSearchFilterModal="elementviewcontainerref">
+        </ng-template>
+    </ng-template>
 
     <!-- region sort icon template -->
     <ng-template #sortTemplate let-column="column">
@@ -566,25 +555,14 @@
         </div>
     </ng-template>
     <!-- Delete confirmation model -->
-    <div
-        bsModal
-        #paymentConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content" *ngIf="paymentConfirmationModel?.isShown">
-                <confirm-modal
-                    [body]="localeData?.delete_vouchers"
-                    (successCallBack)="deletePayments()"
-                    (cancelCallBack)="closeConfirmationPopup()"
-                >
-                </confirm-modal>
-            </div>
-        </div>
-    </div>
+    <ng-template #paymentConfirmationTemplate>
+        <confirm-modal
+            [body]="localeData?.delete_vouchers"
+            (successCallBack)="deletePayments()"
+            (cancelCallBack)="closeConfirmationPopup()"
+        >
+        </confirm-modal>
+    </ng-template>
 </ng-container>
 <preview
     *ngIf="previewVoucherParams?.uniqueName"

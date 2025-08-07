@@ -285,16 +285,14 @@
     </div>
 </div>
 <!--delete Group modal  -->
-<div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="localeData?.delete_group_title"
-                [body]="localeData?.delete_group_content"
-                (cancelCallBack)="hideDeleteGroupModal()"
-                (successCallBack)="deleteGroup()"
-            >
-            </confirm-modal>
-        </div>
+<ng-template #deleteGroupTemplate>
+    <div mat-dialog-content>
+        <confirm-modal
+            [title]="localeData?.delete_group_title"
+            [body]="localeData?.delete_group_content"
+            (cancelCallBack)="hideDeleteGroupModal()"
+            (successCallBack)="deleteGroup()"
+        >
+        </confirm-modal>
     </div>
-</div>
+</ng-template>

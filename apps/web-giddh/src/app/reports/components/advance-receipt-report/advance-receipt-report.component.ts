@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
@@ -49,18 +49,24 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
     @ViewChild('receiptAdvanceSearchFilterModal', { static: false }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
-    /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer', { static: false }) public receiptAdvanceSearchModalContainer: ModalDirective;
-    /** Instance of receipt confirmation modal */
-    @ViewChild('receiptConfirmationModel', { static: false }) public receiptConfirmationModel: ModalDirective;
+    /** Receipt advance search modal template */
+    @ViewChild('receiptAdvanceSearchTemplate', { static: false }) public receiptAdvanceSearchTemplate: TemplateRef<any>;
+    /** Receipt confirmation modal template */
+    @ViewChild('receiptConfirmationTemplate', { static: false }) public receiptConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for receipt advance search modal */
+    private receiptAdvanceSearchDialogRef: MatDialogRef<any>;
+    /** Dialog reference for receipt confirmation modal */
+    private receiptConfirmationDialogRef: MatDialogRef<any>;
     /** dayjs method */
     public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
     /** Modal reference */
-    public modalRef: BsModalRef;
+    public modalRef: any;
     /** Modal bulk export reference */
-    public bulkExportModalRef: BsModalRef;
+    public bulkExportModalRef: any;
+    /** Modal service reference */
+    public modalService: any;
     /** Stores the list of all receipts */
     public allReceipts: Array<any>;
     /** Stores summary data of all receipts based on filters applied */
@@ -195,11 +201,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private toastService: ToasterService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private invoiceService: InvoiceService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -321,7 +327,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             (componentRef.instance as ReceiptAdvanceSearchComponent).closeModal,
             (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                 // Listener for close and cancel event of modal
-                this.receiptAdvanceSearchModalContainer.hide();
+                if (this.receiptAdvanceSearchDialogRef) {
+                    this.receiptAdvanceSearchDialogRef.close();
+                    this.receiptAdvanceSearchDialogRef = null;
+                }
             });
         (componentRef.instance as ReceiptAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: ReceiptAdvanceSearchModel) => {
             // Listener for confirm event of modal
@@ -338,9 +347,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 unUsedAmount: data.unusedAmountFilter.amount,
                 unUsedAmountOperation: data.unusedAmountFilter.selectedValue
             }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-            this.receiptAdvanceSearchModalContainer.hide();
+            if (this.receiptAdvanceSearchDialogRef) {
+                this.receiptAdvanceSearchDialogRef.close();
+                this.receiptAdvanceSearchDialogRef = null;
+            }
         });
-        this.receiptAdvanceSearchModalContainer.show();
+        this.receiptAdvanceSearchDialogRef = this.dialog.open(this.receiptAdvanceSearchTemplate, {
+            panelClass: 'mat-dialog-xl',
+            disableClose: true
+        });
     }
     /**
      * Opens/Closes the respective search bar based on parameters provided
@@ -885,21 +900,27 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-     * This will open delete confirmation modal
+     * This will open delete confirmation dialog
      *
      * @memberof AdvanceReceiptReportComponent
      */
-    public openConfirmationPopup() {
-        this.receiptConfirmationModel?.show();
+    public openConfirmationPopup(): void {
+        this.receiptConfirmationDialogRef = this.dialog.open(this.receiptConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
-     * This will close delete confirmation modal
+     * This will close delete confirmation dialog
      *
      * @memberof AdvanceReceiptReportComponent
      */
-    public closeConfirmationPopup() {
-        this.receiptConfirmationModel?.hide();
+    public closeConfirmationPopup(): void {
+        if (this.receiptConfirmationDialogRef) {
+            this.receiptConfirmationDialogRef.close();
+            this.receiptConfirmationDialogRef = null;
+        }
     }
 
     /**

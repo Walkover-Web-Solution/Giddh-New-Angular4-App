@@ -591,26 +591,16 @@
             }"
         ></div>
     </ng-template>
-    <div
-        bsModal
-        #poConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-voucher-confirmation-modal
-                    *ngIf="poConfirmationModel.isShown"
-                    [module]="deleteModule"
-                    (confirmDeleteEvent)="processDelete()"
-                    (closeModelEvent)="closeConfirmationPopup()"
-                >
-                </delete-voucher-confirmation-modal>
-            </div>
+    <ng-template #poConfirmationTemplate>
+        <div class="modal-content">
+            <delete-voucher-confirmation-modal
+                [module]="deleteModule"
+                (confirmDeleteEvent)="processDelete()"
+                (closeModelEvent)="closeConfirmationPopup()"
+            >
+            </delete-voucher-confirmation-modal>
         </div>
-    </div>
+    </ng-template>
     <purchase-order-preview
         *ngIf="purchaseOrderUniqueName && translationLoaded"
         [purchaseOrders]="purchaseOrders"

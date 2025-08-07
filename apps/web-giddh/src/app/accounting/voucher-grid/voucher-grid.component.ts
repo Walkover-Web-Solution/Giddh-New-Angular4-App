@@ -15,7 +15,8 @@ import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findI
 import * as dayjs from 'dayjs';
 import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
@@ -60,8 +61,12 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
-    @ViewChild('chequeEntryModal', { static: true }) public chequeEntryModal: ModalDirective;
+    @ViewChild('quickAccountTemplate', { static: true }) public quickAccountTemplate: TemplateRef<any>;
+    @ViewChild('chequeEntryTemplate', { static: true }) public chequeEntryTemplate: TemplateRef<any>;
+    /** Dialog reference for quick account modal */
+    private quickAccountDialogRef: MatDialogRef<any>;
+    /** Dialog reference for cheque entry modal */
+    private chequeEntryDialogRef: MatDialogRef<any>;
     @ViewChild('particular', { static: true }) public accountField: any;
     @ViewChild('dateField', { static: true }) public dateField: ElementRef;
     @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
@@ -70,7 +75,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: any;
     @ViewChild('byAmountField', { static: true }) public byAmountField: ElementRef;
     @ViewChild('toAmountField', { static: true }) public toAmountField: ElementRef;
 
@@ -140,7 +145,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private inventoryService: InventoryService,
         private fb: UntypedFormBuilder,
         public bsConfig: BsDatepickerConfig,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private dialog: MatDialog) {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -390,12 +396,25 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         }, 10);
     }
 
+    /**
+     * Closes the cheque detail form dialog
+     *
+     * @memberof VoucherGridComponent
+     */
     public closeChequeDetailForm() {
-        this.chequeEntryModal.hide();
+        this.chequeEntryDialogRef?.close();
     }
 
+    /**
+     * Opens the cheque detail form dialog
+     *
+     * @memberof VoucherGridComponent
+     */
     public openChequeDetailForm() {
-        this.chequeEntryModal?.show();
+        this.chequeEntryDialogRef = this.dialog.open(this.chequeEntryTemplate, {
+            panelClass: 'mat-dialog-sm',
+            disableClose: true
+        });
         setTimeout(() => {
             this.chequeNumberInput?.nativeElement.focus();
         }, 200);
@@ -930,10 +949,12 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.inputForList = cloneDeep(this.stockList);
     }
 
+    /**
+     * Loads the quick account component into the dialog
+     *
+     * @memberof VoucherGridComponent
+     */
     public loadQuickAccountComponent() {
-        if (this.quickAccountModal && this.quickAccountModal.config) {
-            this.quickAccountModal.config.backdrop = false;
-        }
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
@@ -955,20 +976,33 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         });
     }
 
+    /**
+     * Shows the quick account modal dialog
+     *
+     * @memberof VoucherGridComponent
+     */
     public showQuickAccountModal() {
         // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
         // this.selectedAccountInputField = selectedField;
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal?.show();
+            this.quickAccountDialogRef = this.dialog.open(this.quickAccountTemplate, {
+                panelClass: 'mat-dialog-sm',
+                disableClose: true
+            });
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
         }
     }
 
+    /**
+     * Hides the quick account modal dialog
+     *
+     * @memberof VoucherGridComponent
+     */
     public hideQuickAccountModal() {
-        this.quickAccountModal.hide();
+        this.quickAccountDialogRef?.close();
         this.dateField?.nativeElement.focus();
         return setTimeout(() => {
             this.selectedAccountInputField.value = '';
