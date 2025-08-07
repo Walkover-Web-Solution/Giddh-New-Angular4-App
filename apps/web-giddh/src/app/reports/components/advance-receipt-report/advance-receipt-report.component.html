@@ -657,21 +657,12 @@
     </div>
 
     <!-- Adjust Payment modal start -->
-    <div
-        bsModal
-        #receiptAdvanceSearchModalContainer="bs-modal"
-        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
-        tabindex="-1"
-        class="modal fade open-popup"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
-                </ng-template>
-            </div>
+    <ng-template #receiptAdvanceSearchTemplate>
+        <div class="modal-content">
+            <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
+            </ng-template>
         </div>
-    </div>
+    </ng-template>
     <!-- Adjust Payment modal End-->
 
     <!-- region sort icon template -->
@@ -721,25 +712,16 @@
         </div>
     </ng-template>
     <!-- Delete confirmation model -->
-    <div
-        bsModal
-        #receiptConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content" *ngIf="receiptConfirmationModel?.isShown">
-                <confirm-modal
-                    [body]="localeData?.delete_vouchers"
-                    (successCallBack)="deleteReceipts()"
-                    (cancelCallBack)="closeConfirmationPopup()"
-                >
-                </confirm-modal>
-            </div>
+    <ng-template #receiptConfirmationTemplate>
+        <div class="modal-content">
+            <confirm-modal
+                [body]="localeData?.delete_vouchers"
+                (successCallBack)="deleteReceipts()"
+                (cancelCallBack)="closeConfirmationPopup()"
+            >
+            </confirm-modal>
         </div>
-    </div>
+    </ng-template>
 </ng-container>
 <preview
     *ngIf="previewVoucherParams?.uniqueName"

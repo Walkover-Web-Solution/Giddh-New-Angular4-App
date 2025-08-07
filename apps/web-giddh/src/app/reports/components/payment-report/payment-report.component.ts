@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
@@ -41,15 +41,15 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Advance search modal instance */
     @ViewChild('paymentSearchFilterModal', { static: false }) public paymentSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('paymentSearchModalContainer', { static: false }) public paymentSearchModalContainer: ModalDirective;
+    @ViewChild('paymentSearchModalTemplate', { static: false }) public paymentSearchModalTemplate: TemplateRef<any>;
     /** Instance of receipt confirmation modal */
-    @ViewChild('paymentConfirmationModel', { static: false }) public paymentConfirmationModel: ModalDirective;
+    @ViewChild('paymentConfirmationTemplate', { static: false }) public paymentConfirmationTemplate: TemplateRef<any>;
     /** dayjs method */
     public dayjs = dayjs;
-    /** Modal reference */
-    public modalRef: BsModalRef;
-    /** Modal bulk export reference */
-    public bulkExportModalRef: BsModalRef;
+    /** Dialog reference for payment search modal */
+    private paymentSearchDialogRef: MatDialogRef<any>;
+    /** Dialog reference for payment confirmation modal */
+    private paymentConfirmationDialogRef: MatDialogRef<any>;
     /** Stores the list of all payments */
     public allPayments: Array<any>;
     /** Stores summary data of all payments based on filters applied */
@@ -109,6 +109,12 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     private universalDate: Array<Date>;
     /** Subject to unsubscribe all the observables when the component destroys */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Modal reference */
+    public modalRef: any;
+    /** Modal service reference */
+    public modalService: any;
+    /** Bulk export modal reference */
+    public bulkExportModalRef: any;
     /** Company unique name for API calls */
     private activeCompanyUniqueName: string;
     /** Date format type */
@@ -174,7 +180,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private toastService: ToasterService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
+        private dialog: MatDialog,
         private router: Router,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
@@ -302,7 +308,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             (componentRef.instance as PaymentAdvanceSearchComponent).closeModal,
             (componentRef.instance as PaymentAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                 // Listener for close and cancel event of modal
-                this.paymentSearchModalContainer.hide();
+                this.closePaymentSearchModal();
             });
         (componentRef.instance as PaymentAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: PaymentAdvanceSearchModel) => {
             // Listener for confirm event of modal
@@ -316,10 +322,35 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 unUsedAmount: data.unusedAmountFilter.amount,
                 unUsedAmountOperation: data.unusedAmountFilter.selectedValue
             }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
-            this.paymentSearchModalContainer.hide();
+            this.closePaymentSearchModal();
         });
-        this.paymentSearchModalContainer.show();
+        this.openPaymentSearchModal();
     }
+
+    /**
+     * Opens the payment search modal dialog
+     *
+     * @memberof PaymentReportComponent
+     */
+    public openPaymentSearchModal(): void {
+        this.paymentSearchDialogRef = this.dialog.open(this.paymentSearchModalTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the payment search modal dialog
+     *
+     * @memberof PaymentReportComponent
+     */
+    public closePaymentSearchModal(): void {
+        if (this.paymentSearchDialogRef) {
+            this.paymentSearchDialogRef.close();
+            this.paymentSearchDialogRef = null;
+        }
+    }
+
     /**
      * Opens/Closes the respective search bar based on parameters provided
      *
@@ -775,8 +806,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      *
      * @memberof PaymentReportComponent
      */
-    public openConfirmationPopup() {
-        this.paymentConfirmationModel?.show();
+    public openConfirmationPopup(): void {
+        this.paymentConfirmationDialogRef = this.dialog.open(this.paymentConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
@@ -784,8 +818,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      *
      * @memberof PaymentReportComponent
      */
-    public closeConfirmationPopup() {
-        this.paymentConfirmationModel?.hide();
+    public closeConfirmationPopup(): void {
+        if (this.paymentConfirmationDialogRef) {
+            this.paymentConfirmationDialogRef.close();
+            this.paymentConfirmationDialogRef = null;
+        }
     }
 
     /**

@@ -959,16 +959,16 @@
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header theme-bg">
-                <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
-                    ×
-                </button>
-            </div>
-            <div class="modal-body clearfix" [hidden]="!showAdvanceSearchModal">
+<ng-template #advanceSearchDialog>
+    <div>
+        <div mat-dialog-title class="theme-bg">
+            <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+            <button mat-dialog-close class="close" (click)="advanceSearchAction('cancel')">
+                ×
+            </button>
+        </div>
+        <div mat-dialog-content>
+            <div class="clearfix" [hidden]="!showAdvanceSearchModal">
                 <form action="" [formGroup]="advanceSearchForm">
                     <div class="row">
                         <div class="col-sm-4">Date Range</div>
@@ -1068,8 +1068,8 @@
             </div>
         </div>
     </div>
-</div>
-<!-- Advance  search popup -->
+</ng-template>
+<!-- Advance search popup -->
 
 <!-- branch transfer modal -->
 <ng-template #template>

@@ -707,49 +707,29 @@
             <!-- endregion -->
 
             <!--advance_search Modal-->
-            <div
-                bsModal
-                #advanceSearch="bs-modal"
-                class="modal fade"
-                role="dialog"
-                [config]="modalConfig"
-                tabindex="-1"
-            >
-                <div class="modal-dialog" *ngIf="showAdvanceSearchModal">
-                    <div class="modal-content">
-                        <invoice-advance-search-component
-                            [type]="'proforma'"
-                            [request]="advanceSearchFilter"
-                            [localeData]="localeData"
-                            [commonLocaleData]="commonLocaleData"
-                            (applyFilterEvent)="applyAdvanceSearch($event)"
-                            (closeModelEvent)="toggleAdvanceSearchPopup()"
-                        >
-                        </invoice-advance-search-component>
-                    </div>
+            <ng-template #advanceSearchTemplate>
+                <div *ngIf="showAdvanceSearchModal">
+                    <invoice-advance-search-component
+                        [type]="'proforma'"
+                        [request]="advanceSearchFilter"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        (applyFilterEvent)="applyAdvanceSearch($event)"
+                        (closeModelEvent)="toggleAdvanceSearchPopup()"
+                    >
+                    </invoice-advance-search-component>
                 </div>
-            </div>
+            </ng-template>
 
             <!-- Delete Proforma/Estimate confirmation model -->
-            <div
-                bsModal
-                #deleteConfirmationModel="bs-modal"
-                class="modal fade"
-                role="dialog"
-                [config]="{ keyboard: true }"
-                tabindex="-1"
-            >
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <delete-voucher-confirmation-modal
-                            [module]="voucherType + 'list'"
-                            (confirmDeleteEvent)="deleteVoucher()"
-                            (closeModelEvent)="toggleConfirmationModel()"
-                        >
-                        </delete-voucher-confirmation-modal>
-                    </div>
-                </div>
-            </div>
+            <ng-template #deleteConfirmationTemplate>
+                <delete-voucher-confirmation-modal
+                    [module]="voucherType + 'list'"
+                    (confirmDeleteEvent)="deleteVoucher()"
+                    (closeModelEvent)="toggleConfirmationModel()"
+                >
+                </delete-voucher-confirmation-modal>
+            </ng-template>
             <ng-template #datepickerTemplate>
                 <div class="datepicker-modal">
                     <div class="modal-body">

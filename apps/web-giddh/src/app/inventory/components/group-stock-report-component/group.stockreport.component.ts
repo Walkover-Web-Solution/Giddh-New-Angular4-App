@@ -5,7 +5,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
@@ -51,7 +51,9 @@ import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
-    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('advanceSearchDialog', { static: true }) public advanceSearchDialog: TemplateRef<any>;
+    /** Reference to advance search dialog */
+    private advanceSearchDialogRef: MatDialogRef<any>;
     @ViewChild("productName", { static: true }) productName: ElementRef;
     @ViewChild("sourceName", { static: true }) sourceName: ElementRef;
     @ViewChild('advanceSearchForm', { static: true }) formValues;
@@ -243,7 +245,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private inventoryAction: InventoryAction,
         private invViewService: InvViewService,
         private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -661,16 +664,36 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.getGroupReport(true);
     }
 
+    /**
+     * Opens the advance search dialog using Angular Material
+     *
+     * @memberof InventoryGroupStockReportComponent
+     */
     public onOpenAdvanceSearch() {
         this.showAdvanceSearchModal = true;
-        this.advanceSearchModel?.show();
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchDialog, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+
+        this.advanceSearchDialogRef.afterClosed().subscribe(() => {
+            this.showAdvanceSearchModal = false;
+        });
     }
 
+    /**
+     * Handles advance search actions (search, cancel, clear)
+     *
+     * @param {string} [type] - Action type: 'search', 'cancel', or 'clear'
+     * @memberof InventoryGroupStockReportComponent
+     */
     public advanceSearchAction(type?: string) {
         if (type === 'cancel') {
             this.clearModal();
             this.showAdvanceSearchModal = false;
-            this.advanceSearchModel.hide(); // change request : to only reset fields
+            if (this.advanceSearchDialogRef) {
+                this.advanceSearchDialogRef.close();
+            }
             return;
         } else if (type === 'clear') {
             this.clearModal();
@@ -684,7 +707,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 endDate: dayjs(this.pickerSelectedToDate).toDate()
             };
             this.showAdvanceSearchModal = false;
-            this.advanceSearchModel.hide(); // change request : to only reset fields
+            if (this.advanceSearchDialogRef) {
+                this.advanceSearchDialogRef.close();
+            }
             this.getGroupReport(true);
         }
 

@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
@@ -41,12 +42,14 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
     /** Emits when modal needs to be opened */
-    @Output() public modalOpened: EventEmitter<ModalDirective> = new EventEmitter<ModalDirective>();
+    @Output() public modalOpened: EventEmitter<MatDialogRef<any>> = new EventEmitter<MatDialogRef<any>>();
     /** Emits when modal needs to be closed */
     @Output() public modalClosed: EventEmitter<boolean> = new EventEmitter();
     /** Emits when modal needs to be closed temporary */
     @Output() public modalClosedTemporary: EventEmitter<any> = new EventEmitter();
-    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
+    @ViewChild('mailTemplate', { static: true }) public mailTemplate: TemplateRef<any>;
+    /** Dialog reference for mail modal */
+    private mailDialogRef: MatDialogRef<any>;
     @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
 
     public messageBody = {
@@ -88,7 +91,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) {
         this.currentUrl = this.router.url;
     }
@@ -165,37 +169,66 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     event.stopPropagation();
                 }
                 this.openSmsDialog();
-                this.modalOpened.emit(this.mailModal);
+                this.modalOpened.emit(null);
                 break;
             case 4: // send email
                 if (event) {
                     event.stopPropagation();
                 }
                 this.openEmailDialog();
-                this.modalOpened.emit(this.mailModal);
+                this.modalOpened.emit(null);
                 break;
             default:
                 break;
         }
     }
 
-    // Open Modal for Email
+    /**
+     * Opens the email dialog
+     *
+     * @memberof AccountDetailModalComponent
+     */
     public openEmailDialog() {
         this.messageBody.msg = '';
-        this.messageBody.subject = '';
         this.messageBody.type = 'Email';
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        this.mailModal?.show();
+        this.openMailDialog();
     }
 
-    // Open Modal for SMS
+    /**
+     * Opens the SMS dialog
+     *
+     * @memberof AccountDetailModalComponent
+     */
     public openSmsDialog() {
         this.messageBody.msg = '';
         this.messageBody.type = 'sms';
         this.messageBody.btn.set = this.messageBody.btn.sms;
         this.messageBody.header.set = this.messageBody.header.sms;
-        this.mailModal?.show();
+        this.openMailDialog();
+    }
+
+    /**
+     * Opens the mail dialog using MatDialog
+     *
+     * @memberof AccountDetailModalComponent
+     */
+    private openMailDialog() {
+        this.mailDialogRef = this.dialog.open(this.mailTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+        this.modalOpened.emit(this.mailDialogRef);
+    }
+
+    /**
+     * Closes the mail dialog
+     *
+     * @memberof AccountDetailModalComponent
+     */
+    public closeMailModal() {
+        this.mailDialogRef?.close();
     }
 
     // Add Selected Value to Message Body
@@ -251,7 +284,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 });
         }
 
-        this.mailModal.hide();
+        this.mailDialogRef?.close();
     }
 
     /**
