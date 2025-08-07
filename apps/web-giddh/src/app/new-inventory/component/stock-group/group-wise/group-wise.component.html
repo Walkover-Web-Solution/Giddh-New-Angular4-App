@@ -59,13 +59,13 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div class="text-center mb-5">
-        <pagination
-            [totalItems]="500"
-            [itemsPerPage]="50"
-            [firstText]="'First'"
-            [previousText]="'Previous'"
-            [nextText]="'Next'"
-            [lastText]="'Last'"
-        ></pagination>
+        <mat-paginator
+            [length]="totalItems"
+            [pageSize]="50"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
     </div>
 </div>

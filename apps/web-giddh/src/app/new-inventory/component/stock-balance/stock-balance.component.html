@@ -318,23 +318,18 @@
             </div>
         </div>
         <div
-            class="pagination-wrapper mt-4"
+            class="mt-4"
             *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
         >
-            <pagination
-                [totalItems]="GroupStockReportRequest?.totalItems"
-                [(ngModel)]="GroupStockReportRequest.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="GroupStockReportRequest.count"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+            <mat-paginator
+                [length]="GroupStockReportRequest?.totalItems"
+                [pageSize]="GroupStockReportRequest.count"
+                [pageIndex]="GroupStockReportRequest.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
         </div>
     </div>
 </ng-container>

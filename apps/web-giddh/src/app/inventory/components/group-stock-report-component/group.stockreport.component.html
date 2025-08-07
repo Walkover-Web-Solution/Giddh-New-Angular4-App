@@ -786,16 +786,15 @@
                 <tfoot *ngIf="groupStockReport && groupStockReport.totalPages > 1">
                     <tr>
                         <td colspan="10" class="text-center">
-                            <pagination
-                                [totalItems]="groupStockReport.totalPages"
-                                [(ngModel)]="groupStockReport.page"
-                                [maxSize]="6"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="1"
-                                [rotate]="false"
-                                (pageChanged)="pageChanged($event)"
-                            ></pagination>
+                            <mat-paginator
+                                [length]="groupStockReport.totalPages"
+                                [pageSize]="GroupStockReportRequest.count || 10"
+                                [pageIndex]="groupStockReport.page - 1"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [showFirstLastButtons]="true"
+                                [hidePageSize]="false"
+                                (page)="handlePageEvent($event)"
+                            ></mat-paginator>
                         </td>
                     </tr>
                 </tfoot>

@@ -1,6 +1,5 @@
 import {
     Component,
-    ComponentFactoryResolver,
     EventEmitter,
     OnInit,
     Output,
@@ -37,7 +36,8 @@ import { FormControl } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
+import { PageEvent } from "@angular/material/paginator";
+import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -76,13 +76,14 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public order: string = "asc";
     public filter: string = "";
     public searchStr$ = new Subject<string>();
-    public searchStr: string = "";
+    public breakPointObservar: BreakpointObserver;
     public isMobileScreen: boolean = false;
+    /** Page size options for mat-paginator */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public isAdvanceSearchApplied: boolean = false;
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
     @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
-    @ViewChild("paginationChild", { static: false }) public paginationChild: ElementViewContainerRef;
     @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Holds Template Reference for Unpaid Invoice Asidepane */
     @ViewChild("unpaidInvoice") public unpaidInvoice: TemplateRef<any>;
@@ -150,7 +151,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportActions: AgingReportActions,
         private cdr: ChangeDetectorRef,
         private breakpointObserver: BreakpointObserver,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
@@ -323,35 +323,34 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.filterDropDownList.hide();
     }
 
+    /**
+     * Handles mat-paginator page events
+     *
+     * @param {PageEvent} event Page event object from mat-paginator
+     * @memberof AgingReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.dueAmountReportRequest.page = this.dueAmountReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.dueAmountReportRequest.count = event.pageSize;
+        this.getDueReport();
+    }
+
+    /**
+     * Legacy method for pagination
+     * @deprecated Use handlePageEvent instead
+     */
     public pageChangedDueReport(event: any): void {
         this.dueAmountReportRequest.page = event.page;
         this.getDueReport();
     }
 
+    /**
+     * Legacy method for dynamic pagination component
+     * @deprecated No longer used with mat-paginator
+     */
     public loadPaginationComponent(s) {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-        if (this.paginationChild && this.paginationChild.viewContainerRef) {
-            let viewContainerRef = this.paginationChild.viewContainerRef;
-            viewContainerRef.remove();
-
-            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-            viewContainerRef.insert(componentInstanceView.hostView);
-
-            let componentInstance = componentInstanceView.instance as PaginationComponent;
-            componentInstance.totalPages = s.totalPages;
-            componentInstance.totalItems = s.count * s.totalPages;
-            componentInstance.itemsPerPage = s.count;
-            componentInstance.maxSize = 5;
-            componentInstance.writeValue(s.page);
-            componentInstance.boundaryLinks = true;
-            componentInstance.firstText = this.commonLocaleData?.app_first;
-            componentInstance.previousText = this.commonLocaleData?.app_previous;
-            componentInstance.nextText = this.commonLocaleData?.app_next;
-            componentInstance.lastText = this.commonLocaleData?.app_last;
-            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-                this.pageChangedDueReport(e);
-            });
-        }
+        // This method is no longer used with mat-paginator
+        // Kept for reference during migration
     }
 
     public resetAdvanceSearch() {
@@ -361,8 +360,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             this.agingReportAdvanceSearch.reset();
         }
         this.searchStr$.next('');
-        this.searchedName?.reset();
-        this.searchStr = "";
+        this.filter = "";
         this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';

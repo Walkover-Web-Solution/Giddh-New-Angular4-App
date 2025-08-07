@@ -4,7 +4,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -63,7 +63,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         PurchaseRoutingModule,
         InvoiceModule,
         CollapseModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         BsDropdownModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',

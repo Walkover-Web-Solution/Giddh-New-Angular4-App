@@ -325,17 +325,16 @@
                 </tbody>
             </table>
         </div>
-        <div class="pagination-wrapper mt-4" *ngIf="branchTransferResponse.totalPages > 1">
-            <pagination
-                [totalItems]="branchTransferResponse.totalPages"
-                [(ngModel)]="branchTransferResponse.page"
-                [maxSize]="6"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="1"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-            ></pagination>
+        <div class="mt-4" *ngIf="branchTransferResponse.totalPages > 1">
+            <mat-paginator
+                [length]="branchTransferResponse.totalPages"
+                [pageSize]="branchTransferGetRequestParams.count || 10"
+                [pageIndex]="branchTransferResponse.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
         </div>
         <div
             class="no-data"

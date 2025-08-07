@@ -170,8 +170,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
     public lastListingFilters: any;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
+    public paginationLimit: number = this.pageSizeOptions[2]; // 50
     public purchaseRecord: any = {};
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
@@ -788,12 +790,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.invoiceSearchRequest.page) {
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InvoicePreviewComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        
+        if (this.invoiceSearchRequest.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        if (newPage === this.invoiceSearchRequest.page && this.invoiceSearchRequest.count === event.pageSize) {
             return;
         }
+        
         this.toggleAllItems(false);
-        this.invoiceSearchRequest.page = ev.page;
+        this.invoiceSearchRequest.page = newPage;
+        this.invoiceSearchRequest.count = event.pageSize;
         this.getVoucher(this.isUniversalDateApplicable);
     }
 

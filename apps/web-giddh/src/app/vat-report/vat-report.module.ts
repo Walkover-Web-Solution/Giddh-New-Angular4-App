@@ -34,7 +34,7 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/confirmation-modal.module";
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { PaginationModule } from "ngx-bootstrap/pagination";
+
 import { ModalModule } from "ngx-bootstrap/modal";
 
 @NgModule({
@@ -60,7 +60,7 @@ import { ModalModule } from "ngx-bootstrap/modal";
         ClickOutsideModule,
         FormsModule,
         Daterangepicker,
-        PaginationModule.forRoot(),
+
         ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,

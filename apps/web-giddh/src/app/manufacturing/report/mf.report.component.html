@@ -276,18 +276,17 @@
                         </tr>
                     </tbody>
                 </table>
-                <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper mt-4">
+                <div *ngIf="reportData?.totalPages > 1" class="mt-4">
                     <div class="text-center">
-                        <pagination
-                            [totalItems]="reportData.totalItems"
-                            [(ngModel)]="reportData.page"
-                            [maxSize]="5"
-                            class="pagination-sm"
-                            [boundaryLinks]="true"
-                            [itemsPerPage]="20"
-                            [rotate]="false"
-                            (pageChanged)="pageChanged($event)"
-                        ></pagination>
+                        <mat-paginator
+                            [length]="reportData.totalItems"
+                            [pageSize]="mfStockSearchRequest.count || 20"
+                            [pageIndex]="reportData.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
                     </div>
                 </div>
             </div>

@@ -15,6 +15,8 @@ import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 
 @Component({
     selector: 'app-recurring',
@@ -36,6 +38,8 @@ import { OrganizationType } from '../../models/user-login-state';
 
 export class RecurringComponent implements OnInit, OnDestroy {
     public currentPage = 1;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public modalRef: BsModalRef;
     public asideMenuStateForRecurringEntry: string = 'out';
     public invoiceTypeOptions: IOption[];
@@ -167,10 +171,17 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.toggleRecurringAsidePane();
     }
 
-    public pageChanged({ page }) {
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof RecurringComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
         this.isLoading = true;
-        this.currentPage = page;
-        this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, page));
+        // For recurring invoices, we always use event.pageIndex + 1 since page size is fixed at 20
+        this.currentPage = event.pageIndex + 1;
+        this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, this.currentPage));
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {

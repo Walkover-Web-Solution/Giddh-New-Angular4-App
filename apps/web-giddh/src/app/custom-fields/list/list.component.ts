@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { PageChangedEvent } from "ngx-bootstrap/pagination";
+import { PageEvent } from '@angular/material/paginator';
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { PAGINATION_LIMIT } from "../../app.constant";
+import { PAGE_SIZE_OPTIONS } from "../../app.constant";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
@@ -34,10 +34,12 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Loader for API request */
     public isLoading: boolean = true;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Custom fields request */
     public customFieldsRequest: any = {
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: PAGE_SIZE_OPTIONS[1],
         moduleUniqueName: ''
     };
     /** Holds get all custom fields api response */
@@ -138,13 +140,25 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Page change event handler
+     * Handles pagination events and updates API parameters
      *
-     * @param {PageChangedEvent} event Page changed event
+     * @param {PageEvent} event - Contains pagination details
      * @memberof CustomFieldsListComponent
      */
-    public pageChanged(event: PageChangedEvent): void {
-        this.customFieldsRequest.page = event.page;
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        if (this.customFieldsRequest.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        if (newPage === this.customFieldsRequest.page && this.customFieldsRequest.count === event.pageSize) {
+            return;
+        }
+        
+        this.customFieldsRequest.page = newPage;
+        this.customFieldsRequest.count = event.pageSize;
         this.getCustomFields();
     }
 

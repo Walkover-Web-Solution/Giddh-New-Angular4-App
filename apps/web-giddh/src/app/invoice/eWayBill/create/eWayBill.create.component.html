@@ -591,21 +591,18 @@
                     </tr>
                 </table>
             </div>
-            <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
-                <pagination
-                    [totalItems]="transporterListDetails.totalPages"
-                    [(ngModel)]="transporterListDetails.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="1"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+            <div class="mt-4 mb-5">
+                <ng-container *ngIf="transporterListDetails?.totalPages > 1">
+                    <mat-paginator
+                        [length]="transporterListDetails.totalPages"
+                        [pageSize]="1"
+                        [pageIndex]="transporterListDetails.page - 1"
+                        [pageSizeOptions]="[1]"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="true"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
         </div>
     </div>

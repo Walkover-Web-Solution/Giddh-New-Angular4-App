@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, forEach } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MfStockSearchRequestClass } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { LinkedStocksResponse } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
@@ -56,6 +58,8 @@ export class ListManufacturingComponent implements OnInit {
     public modalRef: BsModalRef;
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Manufacturing search request */
     public manufacturingSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
     /** Instance of dayjs */
@@ -574,6 +578,29 @@ export class ListManufacturingComponent implements OnInit {
      *
      * @param {*} event
      * @memberof ListManufacturingComponent
+     */
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ListManufacturingComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.paginationLimit !== event.pageSize) {
+            this.currentPage = 1;
+            this.manufacturingSearchRequest.page = 1;
+        } else {
+            this.currentPage = event.pageIndex + 1;
+            this.manufacturingSearchRequest.page = event.pageIndex + 1;
+        }
+        this.paginationLimit = event.pageSize;
+        this.manufacturingSearchRequest.count = event.pageSize;
+        this.getReport();
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
      */
     public pageChanged(event: any): void {
         if (this.currentPage !== event.page) {

@@ -18,7 +18,8 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
+import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SettingsWarehouseService } from '../../services/settings.warehouse.service';
@@ -63,6 +64,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public paginationConfig: any;
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the list of warehouses */
     public warehouses: Array<any> = [];
     /** Warehouse search query */
@@ -309,6 +312,31 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * Page change event handler
      *
      * @param {PageChangedEvent} event Page changed event
+     * @memberof WarehouseComponent
+     */
+    /**
+     * Handles the page change event from mat-paginator
+     *
+     * @param {PageEvent} event Page event
+     * @memberof WarehouseComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.showLoader = true;
+        if (event.pageSize !== this.paginationLimit) {
+            this.paginationLimit = event.pageSize;
+            this.currentPage = 1;
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: event.pageSize }));
+        } else {
+            this.currentPage = event.pageIndex + 1;
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.pageIndex + 1, count: this.paginationLimit }));
+        }
+    }
+
+    /**
+     * @deprecated Use handlePageEvent instead
+     * Legacy method for handling page changes
+     *
+     * @param {PageChangedEvent} event Page event
      * @memberof WarehouseComponent
      */
     public pageChanged(event: PageChangedEvent): void {

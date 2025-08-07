@@ -4,7 +4,8 @@ import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -101,6 +102,8 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     public showVariableMapping: boolean = false;
     /** Hold instance of destroyed   */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** True if valid form */
@@ -436,6 +439,29 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof AdvanceTriggerComponent
     */
+    /**
+     * Handles the page change event from mat-paginator
+     *
+     * @param {PageEvent} event Page event
+     * @memberof AdvanceTriggerComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (event.pageSize !== this.triggerObj.count) {
+            this.triggerObj.count = event.pageSize;
+            this.triggerObj.page = 1;
+        } else {
+            this.triggerObj.page = event.pageIndex + 1;
+        }
+        this.getTriggers();
+    }
+
+    /**
+     * @deprecated Use handlePageEvent instead
+     * Legacy method for handling page changes
+     *
+     * @param {*} event Page event
+     * @memberof AdvanceTriggerComponent
+     */
     public pageChanged(event: any): void {
         if (this.triggerObj.page !== event?.page) {
             this.triggerObj.page = event?.page;

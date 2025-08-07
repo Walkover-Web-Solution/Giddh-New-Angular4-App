@@ -1,4 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 export interface PeriodicElement {
     variantName: any;
@@ -29,6 +31,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class VariantWiseComponent implements OnInit, OnDestroy {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Holds total items count */
+    public totalItems: number = 500;
 
     constructor() { }
 
@@ -50,5 +56,17 @@ export class VariantWiseComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('variant-wise-page');
+    }
+
+    /**
+     * Handles pagination events for variant-wise inventory
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof VariantWiseComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // In a real implementation, this would update API request parameters
+        // and fetch new data based on the page index and page size
+        console.log('Page event', event);
     }
 }

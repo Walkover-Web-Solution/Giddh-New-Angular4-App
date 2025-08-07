@@ -17,6 +17,8 @@ import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../..
 import { IOption } from '../../../theme/ng-select/ng-select';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
@@ -134,6 +136,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private _generalService: GeneralService,
@@ -297,6 +301,27 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof NewBranchTransferListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.branchTransferResponse.items = [];
+        if (this.branchTransferGetRequestParams.count !== event.pageSize) {
+            this.branchTransferGetRequestParams.page = 1;
+        } else {
+            this.branchTransferGetRequestParams.page = event.pageIndex + 1;
+        }
+        this.branchTransferGetRequestParams.count = event.pageSize;
+        this.getBranchTransferList(false);
+    }
+    
+    /**
+     * Legacy method - will be removed after migration
+     * @deprecated Use handlePageEvent instead
+     */
     public pageChanged(event: any): void {
         this.branchTransferResponse.items = [];
         this.branchTransferGetRequestParams.page = event.page;

@@ -215,21 +215,15 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="pagination-wrapper mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
-    <pagination
-        [totalItems]="importRequest?.totalItems"
-        [(ngModel)]="importRequest.page"
-        [maxSize]="5"
-        class="pagination-sm"
-        [boundaryLinks]="true"
-        [itemsPerPage]="importRequest.count"
-        [rotate]="false"
-        (pageChanged)="pageChanged($event)"
-        [firstText]="commonLocaleData?.app_first"
-        [previousText]="commonLocaleData?.app_previous"
-        [nextText]="commonLocaleData?.app_next"
-        [lastText]="commonLocaleData?.app_last"
-    ></pagination>
+<div class="mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
+    <mat-paginator
+        [length]="importRequest?.totalItems"
+        [pageSize]="importRequest.count"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="importRequest.page - 1"
+        (page)="handlePageEvent($event)"
+        [showFirstLastButtons]="true">
+    </mat-paginator>
 </div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

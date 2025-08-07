@@ -1,6 +1,8 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../../app.constant';
 import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
@@ -33,6 +35,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class GroupwiseComponent implements OnInit,AfterViewInit {
     /** Holds images folder path */
     public imgPath: string = "";
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Holds total items count */
+    public totalItems: number = 500;
 
     displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'customTab'];
     dataSource = new MatTableDataSource(ELEMENT_DATA);
@@ -40,6 +46,7 @@ export class GroupwiseComponent implements OnInit,AfterViewInit {
     constructor(@Inject(ServiceConfig) private serviceConfig,  private liveAnnouncer: LiveAnnouncer) {}
 
     @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     /**
      * Lifecycle hook for initialization
@@ -57,6 +64,19 @@ export class GroupwiseComponent implements OnInit,AfterViewInit {
      */
     ngAfterViewInit() {
         this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+    }
+
+    /**
+     * Handles pagination events for group-wise inventory
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof GroupwiseComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // In a real implementation, this would update API request parameters
+        // and fetch new data based on the page index and page size
+        console.log('Page event', event);
     }
 
     /**

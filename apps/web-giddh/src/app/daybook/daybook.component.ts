@@ -11,7 +11,8 @@ import { TaxResponse } from '../models/api-models/Company';
 import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
@@ -54,6 +55,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isAllExpanded: boolean = false;
     public daybookQueryRequest: DaybookQueryRequest;
     public daybookExportRequestType: 'get' | 'post';
+    /** Page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
@@ -369,11 +372,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
     }
 
-    public pageChanged(event: any): void {
-        if (this.daybookQueryRequest.page !== event.page) {
-            this.daybookQueryRequest.page = event.page;
-            this.getDaybook(this.searchFilterData);
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof DaybookComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.daybookData.count !== event.pageSize) {
+            this.daybookQueryRequest.page = 1;
+        } else {
+            this.daybookQueryRequest.page = event.pageIndex + 1;
         }
+        this.daybookQueryRequest.count = event.pageSize;
+        this.getDaybook(this.searchFilterData);
     }
 
     public exportDaybook() {

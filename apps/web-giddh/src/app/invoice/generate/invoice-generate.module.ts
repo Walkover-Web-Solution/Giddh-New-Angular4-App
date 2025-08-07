@@ -8,7 +8,7 @@ import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { NoDataModule } from '../../shared/no-data/no-data.module';
 import { VoucherModule } from '../../voucher/voucher.module';
 import { DatepickerWrapperModule } from '../../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -26,7 +26,7 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         TranslateDirectiveModule,
         BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
-        PaginationModule.forRoot(),
+
         NoDataModule,
         VoucherModule,
         DatepickerWrapperModule,
