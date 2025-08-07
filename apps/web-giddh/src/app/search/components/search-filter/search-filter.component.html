@@ -161,7 +161,7 @@
                  <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button>
             </mat-menu>
         </div> -->
-        <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
+        <button type="button" mat-raised-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
             {{ commonLocaleData?.app_download_csv }}
         </button>
     </div>

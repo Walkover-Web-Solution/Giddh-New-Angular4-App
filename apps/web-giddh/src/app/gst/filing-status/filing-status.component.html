@@ -52,7 +52,7 @@
                             <th mat-header-cell *matHeaderCellDef width="10%" class="text-center"> {{
                                 commonLocaleData?.app_status }} </th>
                             <td mat-cell *matCellDef="let element" width="10%" class="text-center"> <button
-                                    mat-stroked-button color="primary"
+                                    mat-raised-button color="primary"
                                     (click)="getGstFilingStatus(element.referenceId)">{{ localeData?.filing?.get_status
                                     }}</button> </td>
                         </ng-container>

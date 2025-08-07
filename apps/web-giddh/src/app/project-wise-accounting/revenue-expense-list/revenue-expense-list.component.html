@@ -279,7 +279,7 @@
                                     </td>
                                     <td *ngIf="!isCompany" class="position-relative">
                                         <span class="editable-table-hide-element">
-                                            <button mat-stroked-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
+                                            <button mat-raised-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
                                         </span>
                                     </td>

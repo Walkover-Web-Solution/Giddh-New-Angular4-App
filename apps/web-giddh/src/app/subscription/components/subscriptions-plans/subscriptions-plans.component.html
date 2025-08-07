@@ -10,12 +10,12 @@
     </div>
     <ng-container *ngIf="!isSwitchPlanInProcess">
         <div class="scroll-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'left-icon': showLoader }">
-            <button mat-stroked-button color="primary" (click)="scrollLeft()" *ngIf="!showLoader">
+            <button mat-raised-button color="primary" (click)="scrollLeft()" *ngIf="!showLoader">
                 <i class="icon-left"></i>
             </button>
         </div>
         <div class="scroll-right" [ngClass]="{ 'skeleton-common-class': showLoader, 'right-icon': showLoader }">
-            <button mat-stroked-button color="primary" (click)="scrollRight()" *ngIf="!showLoader">
+            <button mat-raised-button color="primary" (click)="scrollRight()" *ngIf="!showLoader">
                 <i class="icon-right"></i>
             </button>
         </div>

@@ -24,7 +24,8 @@
                                     id="ddl-newinv"
                                     dropdownToggle
                                     type="button"
-                                    class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
+                                    mat-raised-button color="primary"
+                                    class="dropdown-toggle dropdown-btn-new"
                                     aria-controls="dropdown-ddl-newinv"
                                 >
                                     {{ localeData?.new_invoice }}
@@ -93,14 +94,16 @@
                             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                 <!-- <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                    class="btn btn-sky-blue desktop-view-btn"
+                                    mat-raised-button color="primary"
+                                    class="desktop-view-btn"
                                     (click)="goToInvoice('credit note')"
                                 >
                                     {{ localeData?.new_cr_note }}
                                 </button> -->
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                    class="btn btn-sky-blue desktop-view-btn"
+                                    mat-raised-button color="primary"
+                                    class="desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/credit-note/create']"
                                 >
                                     {{ localeData?.new_cr_note }}
@@ -109,14 +112,16 @@
                             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                 <!-- <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                    class="btn btn-sky-blue desktop-view-btn"
+                                    mat-raised-button color="primary"
+                                    class="desktop-view-btn"
                                     (click)="goToInvoice('debit note')"
                                 >
                                     {{ localeData?.new_dr_note }}
                                 </button> -->
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                    class="btn btn-sky-blue desktop-view-btn"
+                                    mat-raised-button color="primary"
+                                    class="desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/debit-note/create']"
                                 >
                                     {{ localeData?.new_dr_note }}
@@ -392,7 +397,7 @@
                             <div class="d-flex">
                                 <div class="export-button-wrap">
                                     <button
-                                        class="btn btn-primary"
+                                        mat-raised-button color="primary"
                                         *ngIf="selectedInvoices?.length || voucherData?.totalItems"
                                         (click)="openModal(bulkExport)"
                                     >
@@ -411,7 +416,8 @@
                                             id="ddl-newinv-invoice"
                                             dropdownToggle
                                             type="button"
-                                            class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
+                                            mat-raised-button color="primary"
+                                            class="dropdown-toggle dropdown-btn-new"
                                             aria-controls="dropdown-ddl-newinv"
                                         >
                                             {{ localeData?.new_invoice }}

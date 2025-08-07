@@ -51,14 +51,14 @@
             </div>
         </ng-container>
         <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">
-            <button mat-stroked-button color="primary" (click)="downloadVatReport()">
+            <button mat-raised-button color="primary" (click)="downloadVatReport()">
                 <i class="icon-download1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
         </div>
         <div *ngIf="isUKCompany">
             <div class="text-right">
-                <a mat-stroked-button color="primary" [href]="connectToHMRCUrl"
+                <a mat-raised-button color="primary" [href]="connectToHMRCUrl"
                     [disabled]="!connectToHMRCUrl || isTaxRestrictedModule">
                     <ng-container *ngIf="connectToHMRCUrl || isTaxRestrictedModule">
                         {{ localeData?.connect_to_hmrc }}

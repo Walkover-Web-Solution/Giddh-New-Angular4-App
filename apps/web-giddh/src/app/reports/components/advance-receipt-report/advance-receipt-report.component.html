@@ -17,7 +17,9 @@
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
                     <button
                         type="button"
-                        class="btn btn-sky-blue dropdown-btn-new"
+                        mat-raised-button
+                        color="primary"
+                        class="dropdown-btn-new"
                         [routerLink]="'/pages/vouchers/receipt/create'"
                         *ngIf="(voucherApiVersion === 2) && !isProdMode"
                     >

@@ -69,18 +69,18 @@
                                 </div>
                                 <span>
                                     <button
+                                        mat-raised-button color="primary"
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
-                                        class="btn btn-primary"
                                         (click)="generateBulkInvoice(false)"
                                         type="button"
                                     >
                                         {{ localeData?.generate_multiple }}
                                     </button>
                                     <button
+                                        mat-raised-button color="primary"
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
-                                        class="btn btn-primary"
                                         (click)="generateBulkInvoice(true)"
                                         type="button"
                                     >
@@ -107,7 +107,7 @@
                                 *ngIf="customDateSelected && !isMobileView"
                                 (click)="resetDateSearch()"
                             >
-                                <button class="btn btn-filter mr-0">
+                                <button mat-stroked-button class="mr-0">
                                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                 </button>
                             </div>
