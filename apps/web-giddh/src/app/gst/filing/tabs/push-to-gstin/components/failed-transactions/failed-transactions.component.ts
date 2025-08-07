@@ -24,7 +24,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
 
     public itemsPerPage: number = 10;
     /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;;
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(@Inject(ServiceConfig) private serviceConfig ) {

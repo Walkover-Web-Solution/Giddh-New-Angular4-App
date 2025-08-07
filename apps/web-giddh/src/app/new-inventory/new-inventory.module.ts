@@ -51,9 +51,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-sidebar.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
-import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
-import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
-import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 
@@ -125,9 +122,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         DashboardSellingReport,
         ListGroupComponent,
         StockBalanceComponent,
-        GroupwiseComponent,
-        ItemWiseComponent,
-        VariantWiseComponent,
         ReportFiltersComponent,
         ReportsComponent,
         AsideCreateNewUnitComponent,
