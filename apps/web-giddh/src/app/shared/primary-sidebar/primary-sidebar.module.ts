@@ -5,7 +5,6 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { TabsModule } from "ngx-bootstrap/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { CheckPermissionModule } from "../../permissions/check-permission.module";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
@@ -16,6 +15,12 @@ import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/gen
 import { CompanyBranchComponent } from "./company-branch/company-branch.component";
 import { PrimarySidebarComponent } from "./primary-sidebar.component";
 import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import {CdkTreeModule} from '@angular/cdk/tree';
+import { MatInputModule } from "@angular/material/input";
+
 
 @NgModule({
     declarations: [
@@ -33,10 +38,14 @@ import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config
         RouterModule,
         CheckPermissionModule,
         CommandKModule,
-        TabsModule.forRoot(),
         SocialLoginModule,
         GenericAsideMenuAccountModule,
-        MatDialogModule
+        MatDialogModule,
+        MatTabsModule,
+        MatMenuModule,
+        MatButtonModule,
+        CdkTreeModule,
+        MatInputModule
     ],
     exports: [
         PrimarySidebarComponent

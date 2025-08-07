@@ -75,7 +75,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** True if field is autocomplete */
     @Input() public autocomplete: string = 'off';
     /** Appearance of mat form field */
-    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'outline';
+    @Input() public appearance: 'legacy' | 'outline' | 'fill' = 'fill';
     /** Label of mat form field */
     @Input() public floatLabel: any = 'auto';
     /** Holds Mat Input Label */
