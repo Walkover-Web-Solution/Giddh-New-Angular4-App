@@ -9420,10 +9420,6 @@ input.checkbox-custom[type="checkbox"] {
     }
 }
 
-#setting-tab > .tab-container > .tab-content {
-    padding-top: 55px;
-}
-
 /*datepicker common css*/
 .giddh-datepicker-modal .modal-content {
     background: none !important;
@@ -9802,30 +9798,6 @@ span#HW_badge_cont:nth-child(3) {
     color: var(--color-gray);
     border: 1px solid var(--color-iron);
     z-index: 9999 !important;
-}
-
-.manage-group-account-form .button-group .btn {
-    margin-right: 15px;
-}
-
-.inventory-page {
-    .daterangepicker {
-        z-index: 9992 !important;
-    }
-
-    .inventory-main {
-        #giddh-page-heading {
-            aside-inventory-stock-group {
-                .aside-pane-form {
-                    .btn-danger {
-                        .ladda-label {
-                            color: var(--color-danger);
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 .item-wise-page,
@@ -11320,15 +11292,6 @@ body {
 
     .auto-save {
         top: 96px;
-    }
-
-    #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 4px;
-        padding: 10px 0px 0;
-        white-space: nowrap;
-        display: inline-block;
-        width: 100%;
-        overflow-y: hidden;
     }
 
     .right-bar {

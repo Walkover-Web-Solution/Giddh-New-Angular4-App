@@ -415,20 +415,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        if (this.paginationLimit !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        if (newPage === this.pageConfiguration.currentPage && this.paginationLimit === event.pageSize) {
-            return;
-        }
-        
-        this.pageConfiguration.currentPage = newPage;
+        this.pageConfiguration.currentPage = this.paginationLimit !== event.pageSize ? 1 : event.pageIndex + 1;
         this.paginationLimit = event.pageSize;
-        this.fetchAllReceipts({ page: newPage, count: event.pageSize, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({ page: this.pageConfiguration.currentPage, count: event.pageSize, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     /**

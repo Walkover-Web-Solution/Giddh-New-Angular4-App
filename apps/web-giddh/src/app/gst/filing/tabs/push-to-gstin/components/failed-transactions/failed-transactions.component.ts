@@ -13,7 +13,6 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
     styleUrls: ['failed-transactions.component.scss'],
 })
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {
-
     @Input() public failedTransactions: Gstr1SummaryErrors[] = [];
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -55,7 +54,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
      * @param {PageEvent} event - Contains pagination details
      * @memberof FailedTransactionsComponent
      */
-    public handlePageEvent(event: PageEvent) {
+    public handlePageEvent(event: PageEvent): void {
         this.itemsPerPage = event.pageSize;
         let startIndex = event.pageIndex * this.itemsPerPage;
         let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions?.length - 1);

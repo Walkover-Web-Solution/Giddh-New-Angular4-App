@@ -2057,14 +2057,6 @@ ul.pills li {
 .box {
     padding: 15px;
 }
-#setting-tab .nav > li > a {
-    color: var(--color-tab-secondary-text);
-    border: 0;
-}
-#setting-tab .nav-tabs > li.active > a {
-    background: transparent;
-    border: 0;
-}
 .select2-parent .select2-container--default .select2-selection--single {
     border-radius: 0;
     background-color: var(--color-white);
@@ -2101,10 +2093,6 @@ ul.pills li {
 .dropdown-menu > li > a > a:hover {
     color: var(--color-nero);
     background-color: var(--color-white);
-}
-#setting-tab .nav > li > a:focus,
-#setting-tab .nav > li > a:hover {
-    background: transparent;
 }
 .navbar-inverse .navbar-nav > .open > a {
     background-color: var(--color-nero);
@@ -2464,78 +2452,6 @@ form#groupDetailForm {
         .row {
             flex-wrap: nowrap;
         }
-    }
-}
-@media only screen and (max-width: 767px) {
-    .contact-body {
-        .all-table {
-            td {
-                &:last-child {
-                    padding: 5px 10px 5px 50% !important;
-                }
-            }
-        }
-        .mat-table {
-            tbody {
-                tr:not(.plan-row-columns) {
-                    &:hover {
-                        td {
-                            background: transparent !important;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .mobile-header {
-        display: block;
-        position: fixed !important;
-        top: 0;
-        z-index: 101;
-    }
-    .desktop-header {
-        display: none;
-    }
-    .ledger-book .h-table tbody .ledger-row td {
-        position: relative;
-        display: block;
-        width: 100%;
-        max-width: 100% !important;
-        border: 0px;
-        text-align: left;
-    }
-    .ledger-book .h-table tbody .ledger-row td:after {
-        content: attr(data-title);
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        font-weight: bold;
-    }
-    .transactions-page .left-col-new,
-    .transactions-page .right-col-new {
-        padding-bottom: 20px;
-    }
-    .ledger-book .h-table tbody .ledger-row {
-        width: 100%;
-        border-bottom: 1px solid var(--color-iron);
-    }
-    bs-daterangepicker-container,
-    bs-datepicker-container {
-        overflow-y: auto;
-        height: auto;
-        box-shadow: 0 0 10px 0 var(--color-primary-common-box-shadow);
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-    }
-    .no-data {
-        font-size: var(--font-size-24);
-    }
-    #setting-tab .nav > li > a:hover {
-        color: inherit !important;
-    }
-    .cdk-overlay-pane {
-        max-width: 95vw !important;
     }
 }
 @media (min-width: 768px) and (max-width: 1019px) {

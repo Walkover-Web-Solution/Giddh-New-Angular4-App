@@ -68,15 +68,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
      * @memberof ImportReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        
-        if (this.importPaginatedRequest.count !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        this.importPaginatedRequest.page = newPage;
+        this.importPaginatedRequest.page = this.importPaginatedRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.importPaginatedRequest.count = event.pageSize;
         this.getStatus();
     }

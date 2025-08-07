@@ -146,18 +146,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsListComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        let newPage: number;
-        if (this.customFieldsRequest.count !== event.pageSize) {
-            newPage = 1;
-        } else {
-            newPage = event.pageIndex + 1;
-        }
-        
-        if (newPage === this.customFieldsRequest.page && this.customFieldsRequest.count === event.pageSize) {
-            return;
-        }
-        
-        this.customFieldsRequest.page = newPage;
+        this.customFieldsRequest.page = this.customFieldsRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
         this.customFieldsRequest.count = event.pageSize;
         this.getCustomFields();
     }

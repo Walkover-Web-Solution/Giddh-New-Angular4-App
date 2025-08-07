@@ -537,11 +537,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.GroupStockReportRequest.count !== event.pageSize) {
-            this.GroupStockReportRequest.page = 1;
-        } else {
-            this.GroupStockReportRequest.page = event.pageIndex + 1;
-        }
+        this.GroupStockReportRequest.page = this.GroupStockReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.GroupStockReportRequest.count = event.pageSize;
         this.getGroupReport(false);
     }

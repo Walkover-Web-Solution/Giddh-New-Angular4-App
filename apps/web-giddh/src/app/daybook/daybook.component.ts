@@ -379,11 +379,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.daybookData.count !== event.pageSize) {
-            this.daybookQueryRequest.page = 1;
-        } else {
-            this.daybookQueryRequest.page = event.pageIndex + 1;
-        }
+        this.daybookQueryRequest.page = this.daybookData.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.daybookQueryRequest.count = event.pageSize;
         this.getDaybook(this.searchFilterData);
     }
