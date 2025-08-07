@@ -16,7 +16,7 @@
                     </div>
                     <div class="template-scroll">
                         <mat-accordion class="template-design-wrap">
-                          <!-- expanded="true" -->
+                            <!-- expanded="true" -->
                             <mat-expansion-panel class="mb-2">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
@@ -83,46 +83,75 @@
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="d-flex align-items-center column-gap15 px-3 pb-3">
-                                    <div>
-                                        <div class="upload-logo-wrap">
-                                            <label for="logo-upload" class="upload-button" [hidden]="logoAttached">
+                                    <div class="float-left">
+                                        <span class="logo-preview">
+                                            <label
+                                                class="upload-button text-center cursor-pointer"
+                                                for="logo-edit"
+                                                [hidden]="logoAttached"
+                                            >
                                                 <input
                                                     type="file"
                                                     #fileInput
+                                                    name="logo-edit"
+                                                    id="logo-edit"
                                                     accept="image/png, image/jpeg"
-                                                    id="logo-upload"
                                                     (change)="uploadLogo()"
                                                 />
-                                                <small>Upload Logo</small>
+                                                <small>Upload Your Logo</small>
                                             </label>
                                             <label for="logo-edit">
                                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
                                             </label>
-                                        </div>
-                                        <span *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
-                                    </div>
-                                    <div class="d-block">
-                                      <p>Size</p>
-                                      <div class="d-flex column-gap1">
+                                        </span>
+                                        <span
+                                            class="start-upload-btn floar-right mr-l2 position-relative"
+                                            *ngIf="isFileUploadInProgress"
+                                            ><b>Uploading...</b></span
+                                        >
                                         <button
-                                          *ngFor="let size of imageSizes"
-                                          mat-mini-fab
-                                          [color]="templateForm.get('defaultImageSize').value === size.value ? 'primary' : ''"
-                                          (click)="templateForm.get('defaultImageSize').setValue(size.value); onValueChange('logoSize', size.px)">
-                                          <span>{{ size.label }}</span>
+                                            *ngIf="showDeleteButton"
+                                            type="button"
+                                            class="start-upload-btn mr-l2"
+                                            (click)="deleteLogo()"
+                                            mat-stroked-button
+                                            color="warn"
+                                            matTooltip="Clicking on this, will delete image from server"
+                                        >
+                                            Delete
                                         </button>
-                                      </div>
+                                        <div class="pull-left mr-l1 mr-t1 choose-size">
+                                            <div class="d-block">
+                                                <p>Size</p>
+                                                <div class="d-flex column-gap1">
+                                                    <button
+                                                        *ngFor="let size of imageSizes"
+                                                        mat-mini-fab
+                                                        [color]="
+                                                            templateForm.get('defaultImageSize').value === size.value
+                                                                ? 'primary'
+                                                                : ''
+                                                        "
+                                                        (click)="
+                                                            templateForm.get('defaultImageSize').setValue(size.value);
+                                                            onValueChange('logoSize', size.px)
+                                                        "
+                                                    >
+                                                        <span>{{ size.label }}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="d-block mr-t1">
+                                                <a
+                                                    class="primary-color cursor-pointer"
+                                                    [hidden]="!logoAttached"
+                                                    (click)="toogleLogoVisibility()"
+                                                    ><span [hidden]="showLogo">Show</span
+                                                    ><span [hidden]="!showLogo">Hide</span> logo</a
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button
-                                        *ngIf="showDeleteButton"
-                                        (click)="deleteLogo()"
-                                        mat-stroked-button
-                                        color="warn"
-                                    >
-                                    <!-- [matTooltip]="'Clicking on this, will delete image from server'"
-                                    [matTooltipPosition]="'top'" -->
-                                        Delete
-                                    </button>
                                 </div>
                             </mat-expansion-panel>
                             <!-- colour-expansion -->
@@ -133,34 +162,34 @@
                                         Try other colour
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <div class="px-3 pb-3">
-                                    <div class="colour-wrap">
-                                        <div class="colour-box-wrap">
-                                            <span class="colour-box d-block mb-1"></span>
-                                            <span class="d-block text-center">#bdbdbd</span>
-                                        </div>
-                                        <div class="colour-picker mt-3">
-                                            <ul class="list-unstyled">
-                                                <li style="background-color: #bdbdbd"></li>
-                                                <li style="background-color: #636363"></li>
-                                                <li style="background-color: #000000"></li>
-                                                <li style="background-color: #e34818"></li>
-                                                <li style="background-color: #7889a1"></li>
-                                                <li style="background-color: #48565f"></li>
-                                                <li style="background-color: #79bd58"></li>
-                                                <li style="background-color: #0e909a"></li>
-                                                <li style="background-color: #202e5a"></li>
-                                                <li style="background-color: #96bc2d"></li>
-                                                <li style="background-color: #2a651d"></li>
-                                                <li style="background-color: #004254"></li>
-                                                <li style="background-color: #ff8c00"></li>
-                                                <li style="background-color: #82001d"></li>
-                                                <li style="background-color: #6b1438"></li>
-                                                <li style="background-color: #f4749b"></li>
-                                                <li style="background-color: #950069"></li>
-                                                <li style="background-color: #542852"></li>
-                                            </ul>
-                                        </div>
+                                <div class="swatch text-center">
+                                    <span class="swatch-preview mr-b3"
+                                        ><span
+                                            [ngStyle]="{ 'background-color': templateForm.get('templateColor').value }"
+                                        ></span>
+                                        <span class="mr-t05">{{ templateForm.get("templateColor").value }}</span>
+                                    </span>
+                                    <div class="mr-l1 pull-left">
+                                        <ul>
+                                            <li (click)="changeColor('#bdbdbd', '#fcfcfc')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#636363', '#f7f7f7')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#000000', '#f2f2f2')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#e34818', '#f2f3f4')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#7889a1', '#f8f9fa')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#48565f', '#f6f6f7')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#79bd58', '#f8fcf6')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#0e909a', '#f3f9fa')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#202e5a', '#f4f4f7')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#96bc2d', '#fafcf4')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#2a651d', '#f4f7f3')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#004254', '#f2f5f6')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#ff8c00', '#fffaf3')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#82001d', '#f9f2f3')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#6b1438', '#f7f3f5')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#f4749b', '#fef8fa')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#950069', '#faf2f7')" class="cursor-pointer"></li>
+                                            <li (click)="changeColor('#542852', '#f6f4f6')" class="cursor-pointer"></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </mat-expansion-panel>

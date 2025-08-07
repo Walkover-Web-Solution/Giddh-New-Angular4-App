@@ -339,6 +339,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     }
 
     public toogleLogoVisibility(show?: boolean): void {
+        console.log(show, this.isFileUploaded);
         if (!this.isFileUploaded) {
             this.showLogo = show ? show : !this.showLogo;
             this._invoiceUiDataService.setLogoVisibility(this.showLogo);

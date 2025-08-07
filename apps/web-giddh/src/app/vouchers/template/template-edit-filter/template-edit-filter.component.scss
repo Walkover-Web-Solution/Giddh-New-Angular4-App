@@ -1,0 +1,98 @@
+.upload-button {
+    width: 100px !important;
+    background: var(--color-white);
+    display: table-cell;
+    height: 100px;
+    vertical-align: middle;
+    border: 4px dashed var(--color-gray);
+}
+
+.upload-button input[type="file"] {
+    display: none;
+}
+
+.start-upload-btn {
+    transform: translateY(100%);
+}
+
+.swatch ul {
+    max-width: 260px;
+    padding: 20px 0;
+}
+
+.swatch ul li,
+.template-view li {
+    cursor: pointer;
+}
+
+.swatch ul li:nth-child(1) {
+    background: var(--color-gray);
+}
+
+.swatch ul li:nth-child(2) {
+    background: var(--color-abbey);
+}
+
+.swatch ul li:nth-child(3) {
+    background: var(--color-nero);
+}
+
+.swatch ul li:nth-child(4) {
+    background: var(--color-red);
+}
+
+.swatch ul li:nth-child(5) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child5-background);
+}
+
+.swatch ul li:nth-child(6) {
+    background: var(--color-nero);
+}
+
+.swatch ul li:nth-child(7) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child7-background);
+}
+
+.swatch ul li:nth-child(8) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child8-background);
+}
+
+.swatch ul li:nth-child(9) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child9-background);
+}
+
+.swatch ul li:nth-child(10) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child10-background);
+}
+
+.swatch ul li:nth-child(11) {
+    background: var(--color-secondary-success);
+}
+
+.swatch ul li:nth-child(12) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child12-background);
+}
+
+.swatch ul li:nth-child(13) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child13-background);
+}
+
+.swatch ul li:nth-child(14) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child14-background);
+}
+
+.swatch ul li:nth-child(15) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child15-background);
+}
+
+.swatch ul li:nth-child(16) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child16-background);
+}
+
+.swatch ul li:nth-child(17) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child17-background);
+}
+
+.swatch ul li:nth-child(18) {
+    background: var(--color-design-filters-swatch-ul-li-nth-child18-background);
+}

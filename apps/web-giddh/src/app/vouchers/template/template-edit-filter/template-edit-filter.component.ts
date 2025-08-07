@@ -1,18 +1,21 @@
-import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { TemplateDesignUISectionVisibility } from '../../../invoice/templates/edit-template/filters-container/design-filters/design.filters.component';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../store';
 
 @Component({
   selector: 'app-template-edit-filter',
   templateUrl: './template-edit-filter.component.html',
-  styleUrls: ['./template-edit-filter.component.scss']
+  styleUrls: ['./template-edit-filter.component.scss'],
+
 })
 export class TemplateEditFilterComponent implements OnInit {
   @Input() public design: boolean;
@@ -48,7 +51,8 @@ export class TemplateEditFilterComponent implements OnInit {
   public templateType: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showDeleteButton: boolean = false;
-  @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
+  /** fileinput element ref for clear value after remove attachment **/
+  @ViewChild('fileInput', { static: false }) public logoFile: ElementRef;
   public selectedFont: string = "";
   public selectedFontSize: string = "";
   /** Default image size */
@@ -64,19 +68,32 @@ export class TemplateEditFilterComponent implements OnInit {
   ];
 
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
     private generalService: GeneralService,
     private toasty: ToasterService,
+    private store: Store<AppState>,
     private commonService: CommonService,
-    private invoiceUiDataService: InvoiceUiDataService) { }
+    private invoiceUiDataService: InvoiceUiDataService) {
+
+  }
 
   ngOnInit() {
     this.templateType = this.inputData?.voucherType;
     this.sampleTemplates = this.inputData?.templateList;
     this.getAccountContents();
     this.initForm();
+    let companyUniqueName = null;
+    let companies = null;
+    this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
+      companyUniqueName = session.companyUniqueName;
+      companies = session.companies;
+      this.companyUniqueName = session.companyUniqueName;
+      this.companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name ?? '';
+    });
     console.log(this.inputData, this.customTemplate, this.templateForm.value);
+    this.invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, this.inputData.defaultTemplate);
 
+    this.files = []; // local uploading files array
     this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = cloneDeep(template);
       this.setFontAndFontSize();
@@ -104,7 +121,7 @@ export class TemplateEditFilterComponent implements OnInit {
           if (!this.invoiceUiDataService.isLogoUpdateInProgress) {
             this.showDeleteButton = true;
             let preview: any = document.getElementById('logoImage');
-            preview?.setAttribute('src', (ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+            preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
           }
         }
       }
@@ -130,7 +147,7 @@ export class TemplateEditFilterComponent implements OnInit {
   }
 
 
-  public initForm() {
+  public initForm(): void {
     this.templateForm = this.fb.group({
       createdBy: this.fb.group({
         name: [''],
@@ -153,8 +170,8 @@ export class TemplateEditFilterComponent implements OnInit {
         mobileNo: ['']
       }),
       sample: [''],
-      templateColor: [''],
-      tableColor: [''],
+      templateColor: ['#AB1F00'],
+      tableColor: ['#AB1F00'],
       font: [''],
       topMargin: [0],
       leftMargin: [0],
@@ -182,7 +199,6 @@ export class TemplateEditFilterComponent implements OnInit {
    * onDesignChange
    */
   public onDesignChange(fieldName: string, value: string) {
-    console.log(fieldName, value);
     let template: CustomTemplateResponse;
     if (fieldName === 'uniqueName') { // change whole template
       const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
@@ -238,9 +254,11 @@ export class TemplateEditFilterComponent implements OnInit {
    * @memberof DesignFiltersContainerComponent
    */
   public uploadLogo(): void {
-    const selectedFile: any = document.getElementById("logo-edit");
+    let file = null;
+    let selectedFile: any = null;
+    selectedFile = document.getElementById("logo-edit");
     if (selectedFile?.files?.length) {
-      const file = selectedFile?.files[0];
+      file = selectedFile?.files[0];
 
       this.generalService.getSelectedFile(file, (blob, file) => {
         this.isFileUploadInProgress = true;
@@ -268,29 +286,60 @@ export class TemplateEditFilterComponent implements OnInit {
     let reader = new FileReader();
 
     reader.onloadend = () => {
-        preview.src = reader.result;
-        this.invoiceUiDataService.setLogoPath(preview.src);
+      preview.src = reader.result;
+      this.invoiceUiDataService.setLogoPath(preview.src);
     };
 
     if (file) {
-        reader.readAsDataURL(file);
-        this.logoAttached = true;
+      reader.readAsDataURL(file);
+      this.logoAttached = true;
     } else {
-        preview.src = '';
-        this.logoAttached = false;
-        this.invoiceUiDataService.setLogoPath('');
+      preview.src = '';
+      this.logoAttached = false;
+      this.invoiceUiDataService.setLogoPath('');
     }
-}
+  }
 
   /**
      * onValueChange
      */
-  public onValueChange(fieldName: string, value: string) {
+  public onValueChange(fieldName: string, value: string): void {
     let template = cloneDeep(this.customTemplate);
     if (fieldName) {
-        template[fieldName] = value;
+      template[fieldName] = value;
     }
     this.invoiceUiDataService.setCustomTemplate(template);
+  }
+
+  public toogleLogoVisibility(show?: boolean): void {
+    if (!this.isFileUploaded) {
+      this.showLogo = show ? show : !this.showLogo;
+      this.invoiceUiDataService.setLogoVisibility(this.showLogo);
+    }
+  }
+
+  public deleteLogo(): void {
+    this.onValueChange('logoUniqueName', null);
+    this.invoiceUiDataService.setLogoPath('');
+    this.files = []; // local uploading files array
+    this.logoAttached = false;
+    this.isFileUploaded = false;
+    this.isFileUploadInProgress = false;
+    this.showDeleteButton = false;
+    if (this.logoFile && this.logoFile.nativeElement) {
+      this.logoFile.nativeElement.value = "";
+    }
+  }
+
+  public changeColor(primaryColor: string, secondaryColor: string): void {
+    let template = cloneDeep(this.customTemplate);
+    this.templateForm.get('templateColor').setValue(primaryColor);
+    this.templateForm.get('tableColor').setValue(secondaryColor);
+    template.templateColor = primaryColor;
+    template.tableColor = secondaryColor;
+    this.invoiceUiDataService.setCustomTemplate(template);
 }
+
+
 
 }

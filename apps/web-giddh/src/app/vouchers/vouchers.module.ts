@@ -190,7 +190,8 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
         ValidateSectionPermissionDirectiveModule,
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        MatProgressSpinnerModule
     ],
     exports: [
 VoucherCreateComponent

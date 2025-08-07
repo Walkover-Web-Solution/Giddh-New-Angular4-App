@@ -18,12 +18,15 @@ export class TemplateEditDialogComponent implements OnInit {
     public commonLocaleData: any = {};
     /* Hold invoice  type*/
     public selectedInvoiceType: any = '';
+    public templateData: any;
 
   constructor(
     public dialog: MatDialog,
     private generalService: GeneralService,
     @Inject(MAT_DIALOG_DATA) public inputData: any
-  ) { }
+  ) {
+    this.templateData = this.inputData;
+   }
     // delete confirmation dialog
     public deleteVoucherDialog():void {
       this.InvoiceConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.selectedInvoiceType,);

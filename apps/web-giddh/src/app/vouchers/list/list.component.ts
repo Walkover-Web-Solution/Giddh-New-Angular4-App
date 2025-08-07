@@ -3444,7 +3444,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
         const dataToSend = {
             templateList: this.templatesList,
-            voucherType: templateType
+            voucherType: templateType,
+            createTemplateList: this.createdTemplatesList,
+            defaultTemplate: defaultTemplate
         };
         this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
