@@ -14,6 +14,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'app-e-way-bill-create',

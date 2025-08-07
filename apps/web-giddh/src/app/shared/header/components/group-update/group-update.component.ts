@@ -7,7 +7,6 @@ import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { TemplateRef } from '@angular/core';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -22,7 +21,6 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'group-update',

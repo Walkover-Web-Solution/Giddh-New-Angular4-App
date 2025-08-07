@@ -946,7 +946,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
 
-        // }
+        }
     }
 
     /**
