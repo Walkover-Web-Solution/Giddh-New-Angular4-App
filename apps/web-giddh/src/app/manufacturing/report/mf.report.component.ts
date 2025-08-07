@@ -83,9 +83,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* To check page is not inventory page */
-    public isLoading: boolean = false;
-    public isFirstLoad: boolean = true;
-    /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
     public activeStockGroup: string;
     /** Holds available page size options */

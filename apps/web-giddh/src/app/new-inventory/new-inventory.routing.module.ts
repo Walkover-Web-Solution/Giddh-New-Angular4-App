@@ -13,8 +13,6 @@ import { ProductServiceListComponent } from "./component/inventory-product-servi
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
-import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
-import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
@@ -85,15 +83,6 @@ const routes: Routes = [
                 component: AdjustInventoryComponent
             },
         ],
-    },
-
-    {
-        path: "item-wise",
-        component: ItemWiseComponent,
-    },
-    {
-        path: "variant-wise",
-        component: VariantWiseComponent,
     },
     {
         path: "about-group-detail",

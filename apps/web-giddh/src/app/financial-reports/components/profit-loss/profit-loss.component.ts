@@ -103,7 +103,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         let data = cloneDeep(response) as ProfitLossData;
         let cogs;
         if (data?.incomeStatement?.costOfGoodsSold) {
-            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;;
+            cogs = cloneDeep(data.incomeStatement.costOfGoodsSold) as ProfitLossDateRangeResponse<GetCogsResponse>;
         } else {
             cogs = null;
         }
