@@ -283,6 +283,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isErrorMessageListenerAdded: boolean = false;
     /** True if command dialog is open */
     public showCommandDialog: boolean = false;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not

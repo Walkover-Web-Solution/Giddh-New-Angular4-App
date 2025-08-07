@@ -187,6 +187,7 @@
                                     <a
                                         href="javascript:;"
                                         aria-label="menu"
+                                        (click)="toggleNode(node)" 
                                         [routerLink]="[node?.link]"
                                         [queryParams]="node?.additional?.queryParams"
                                         class="main-item"

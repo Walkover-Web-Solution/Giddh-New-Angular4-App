@@ -58,6 +58,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       requireLeadingSpace: false,
       positionMenu: true,
       ...this.tributeConfig,
+      lookup: (item: any) => item.label,
       menuItemTemplate: (item: any) =>
         `<div class="mention-item">${item.original.label}</div>`,
       selectTemplate: (item: any) =>{

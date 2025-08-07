@@ -455,7 +455,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             this.populateRecords(this.durationEnum.Monthly);
             return;
         }
-        if (this.activeFinacialYr) {
+        if (this.activeFinacialYr && this.reportForm.get('groupBy')?.value === GroupBy.Duration) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             this.dateRange.from = dayjs(startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -477,6 +477,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
             }
             this.getSalesRegister(startDate, endDate);
+        } else if (this.reportForm.get('groupBy')?.value === GroupBy.SalesPerson) {
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
         }
     }
 
@@ -791,8 +795,13 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         if (!from || !to) {
             return;
         }
+
+        let requestObject = this.reportForm.value;
+        if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
+            requestObject.interval = undefined;
+        }
         this.componentStore.getSalesPurchaseList({
-            payload: this.reportForm.value,
+            payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: true
         });
