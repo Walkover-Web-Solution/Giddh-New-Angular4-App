@@ -564,16 +564,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.getBranchTransferList(false);
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.branchTransferPaginationObject.page !== event.page) {
-            this.branchTransferPaginationObject.page = event?.page;
-            this.getBranchTransferList(false);
-        }
-    }
+
 
     /**
      * This will use for open advance filter dialog

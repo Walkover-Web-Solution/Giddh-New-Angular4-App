@@ -315,17 +315,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Handles pagination for the transporter list
-     *
-     * @param {*} event The pagination event
-     * @memberof EWayBillCreateComponent
-     */
-    public pageChanged(event: any): void {
-        this.transporterFilterRequest.page = event.page;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.detectChanges();
-    }
+
 
     /**
      * Sorts the transporter list based on column and order

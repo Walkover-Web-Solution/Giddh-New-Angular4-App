@@ -5,7 +5,6 @@ import { TemplateRef } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { BulkEmailRequest } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/company.service';
@@ -47,27 +46,6 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     @Output() public modalClosed: EventEmitter<boolean> = new EventEmitter();
     /** Emits when modal needs to be closed temporary */
     @Output() public modalClosedTemporary: EventEmitter<any> = new EventEmitter();
-    @ViewChild('mailTemplate', { static: true }) public mailTemplate: TemplateRef<any>;
-    /** Dialog reference for mail modal */
-    private mailDialogRef: MatDialogRef<any>;
-    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
-
-    public messageBody = {
-        header: {
-            email: '',
-            sms: '',
-            set: ''
-        },
-        btn: {
-            email: '',
-            sms: '',
-            set: '',
-        },
-        type: '',
-        msg: '',
-        subject: ''
-    };
-    public dataVariables = [];
     @Input() public accInfo: IFlattenAccountsResultItem;
     /** This will close modal on edit account icon click */
     @Input() public closeOnEdit: boolean = false;
@@ -86,13 +64,11 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     private currentUrl: string = "";
 
     constructor(
-        private _companyServices: CompanyService,
         private _toaster: ToasterService,
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private router: Router,
-        private dialog: MatDialog
+        private router: Router
     ) {
         this.currentUrl = this.router.url;
     }
@@ -164,127 +140,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     }
                 }
                 break;
-            case 3: // send sms
-                if (event) {
-                    event.stopPropagation();
-                }
-                this.openSmsDialog();
-                this.modalOpened.emit(null);
-                break;
-            case 4: // send email
-                if (event) {
-                    event.stopPropagation();
-                }
-                this.openEmailDialog();
-                this.modalOpened.emit(null);
-                break;
             default:
                 break;
         }
-    }
-
-    /**
-     * Opens the email dialog
-     *
-     * @memberof AccountDetailModalComponent
-     */
-    public openEmailDialog() {
-        this.messageBody.msg = '';
-        this.messageBody.type = 'Email';
-        this.messageBody.btn.set = this.messageBody.btn.email;
-        this.messageBody.header.set = this.messageBody.header.email;
-        this.openMailDialog();
-    }
-
-    /**
-     * Opens the SMS dialog
-     *
-     * @memberof AccountDetailModalComponent
-     */
-    public openSmsDialog() {
-        this.messageBody.msg = '';
-        this.messageBody.type = 'sms';
-        this.messageBody.btn.set = this.messageBody.btn.sms;
-        this.messageBody.header.set = this.messageBody.header.sms;
-        this.openMailDialog();
-    }
-
-    /**
-     * Opens the mail dialog using MatDialog
-     *
-     * @memberof AccountDetailModalComponent
-     */
-    private openMailDialog() {
-        this.mailDialogRef = this.dialog.open(this.mailTemplate, {
-            panelClass: 'mat-dialog-md',
-            disableClose: true
-        });
-        this.modalOpened.emit(this.mailDialogRef);
-    }
-
-    /**
-     * Closes the mail dialog
-     *
-     * @memberof AccountDetailModalComponent
-     */
-    public closeMailModal() {
-        this.mailDialogRef?.close();
-    }
-
-    // Add Selected Value to Message Body
-    public addValueToMsg(val: any) {
-        this.typeInTextarea(val?.value);
-    }
-
-    /**
-     * Prepare message body
-     *
-     * @param {*} newText Shortcut tags
-     * @memberof AccountDetailModalComponent
-     */
-    public typeInTextarea(newText) {
-        let el: HTMLInputElement = this.messageBox?.nativeElement;
-        let start = el.selectionStart;
-        let end = el.selectionEnd;
-        let text = el?.value;
-        let before = text?.substring(0, start);
-        let after = text?.substring(end, text?.length);
-        el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText?.length;
-        el.focus();
-        this.messageBody.msg = el?.value;
-    }
-
-    // Send Email/Sms for Accounts
-    public send() {
-        let request: BulkEmailRequest = {
-            data: {
-                subject: this.messageBody.subject,
-                message: this.messageBody.msg,
-                accounts: [this.accInfo?.uniqueName],
-            },
-            params: {
-                from: this.from,
-                to: this.to,
-                groupUniqueName: this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName || this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]
-            }
-        };
-
-        if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
-            return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
-                .subscribe((r) => {
-                    r?.status === 'success' ? this._toaster.successToast(r?.body) : this._toaster.errorToast(r?.message);
-                });
-        } else if (this.messageBody.btn.set === this.localeData?.send_sms) {
-            let temp = request;
-            delete temp.data['subject'];
-            return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
-                .subscribe((r) => {
-                    r?.status === 'success' ? this._toaster.successToast(r?.body) : this._toaster.errorToast(r?.message);
-                });
-        }
-
-        this.mailDialogRef?.close();
     }
 
     /**
@@ -324,57 +182,6 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * Callback for translation response complete
-     *
-     * @param {*} event
-     * @memberof AccountDetailModalComponent
-     */
-    public translationComplete(event: any): void {
-        if(event) {
-            this.messageBody.header.email = this.commonLocaleData?.app_send_email;
-            this.messageBody.header.sms = this.localeData?.send_sms;
-
-            this.messageBody.btn.email = this.commonLocaleData?.app_send_email;
-            this.messageBody.btn.sms = this.localeData?.send_sms;
-
-            this.dataVariables = [
-                {
-                    name: this.localeData?.opening_balance,
-                    value: '%s_OB',
-                },
-                {
-                    name: this.localeData?.closing_balance,
-                    value: '%s_CB',
-                },
-                {
-                    name: this.localeData?.credit_total,
-                    value: '%s_CT',
-                },
-                {
-                    name: this.localeData?.debit_total,
-                    value: '%s_DT',
-                },
-                {
-                    name: this.localeData?.from_date,
-                    value: '%s_FD',
-                },
-                {
-                    name: this.localeData?.to_date,
-                    value: '%s_TD',
-                },
-                {
-                    name: this.localeData?.magic_link,
-                    value: '%s_ML',
-                },
-                {
-                    name: this.commonLocaleData?.app_account_name,
-                    value: '%s_AN',
-                }
-            ];
-        }
     }
 
     /**

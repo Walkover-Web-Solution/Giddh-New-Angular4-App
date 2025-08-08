@@ -456,20 +456,6 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
-     * @deprecated Use handlePageEvent instead
-     * Legacy method for handling page changes
-     *
-     * @param {*} event Page event
-     * @memberof SettingCampaignComponent
-     */
-    public pageChanged(event: any): void {
-        if (this.triggerObj.page !== event?.page) {
-            this.triggerObj.page = event?.page;
-            this.getTriggers();
-        }
-    }
-
-    /**
      * This will use for reset communication form
      *
      * @memberof SettingCampaignComponent

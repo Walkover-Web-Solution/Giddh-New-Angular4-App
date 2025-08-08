@@ -371,18 +371,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    /**
-     * @deprecated Use handlePageEvent instead
-     * Legacy method for handling page changes
-     *
-     * @param {*} event Page event
-     * @memberof AddressSettingsComponent
-     */
-    public handlePageChange(event: any): void {
-        if (event.page !== this.paginationConfig.page) {
-            this.pageChanged.emit({ ...event, ...this.addressSearchRequest });
-        }
-    }
+
 
     /**
      * Update address handler

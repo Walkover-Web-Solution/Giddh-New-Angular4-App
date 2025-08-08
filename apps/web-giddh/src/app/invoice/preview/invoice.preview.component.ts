@@ -214,6 +214,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Reference to bulk export template ref */
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
+    /** Reference to bulk export dialog */
+    private bulkExportDialogRef: MatDialogRef<any>;
+    /** Reference to cancel E-invoice dialog */
+    private cancelEInvoiceDialogRef: MatDialogRef<any>;
+    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
+    /** Reference to search template dialog */
+    private searchTemplateDialogRef: MatDialogRef<any>;
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: TemplateRef<any>;
+    /** Reference to send email dialog */
+    private sendEmailDialogRef: MatDialogRef<any>;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */
@@ -308,13 +320,36 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will open the search modal
+     * Opens dialogs using Angular Material
      *
-     * @param {TemplateRef<any>} template
+     * @param {TemplateRef<any>} template - Template reference for the dialog
      * @memberof InvoicePreviewComponent
      */
     public openModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+        if (template === this.bulkExport) {
+            this.bulkExportDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else if (template === this.cancelEInvoiceTemplate) {
+            this.cancelEInvoiceDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else if (template === this.template) {
+            this.searchTemplateDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else if (template === this.sendEmailModal) {
+            this.sendEmailDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else {
+            // Fallback for any remaining modals that haven't been migrated yet
+            this.modalRef = this.modalService.show(template);
+        }
     }
 
     public ngOnInit() {
@@ -1407,7 +1442,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public resetAdvanceSearch() {
+    public resetAdvanceSearch(): void {
         this.showAdvanceSearchIcon = false;
         if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
             this.advanceSearchComponent.allShSelect.forEach(f => {
@@ -1872,9 +1907,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will open the send email modal
+     * Opens the send email modal using Angular Material
      *
-     * @param {TemplateRef<any>} template
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @param {any} item - Item data for email request
      * @memberof InvoicePreviewComponent
      */
     public openSendMailModal(template: TemplateRef<any>, item: any): void {
@@ -1882,19 +1918,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.sendEmailRequest.uniqueName = item?.uniqueName;
         this.sendEmailRequest.accountUniqueName = item.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
-        this.modalRef = this.modalService.show(template);
+        this.openModal(template);
     }
 
     /**
-     * This will close the send email popup
+     * Closes the send email dialog
      *
-     * @param {*} event
+     * @param {any} event - Event from the email modal component
      * @memberof InvoicePreviewComponent
      */
-    public closeSendMailPopup(event: any): void {
-        if (event) {
-            this.modalRef.hide();
-        }
+    public closeSendMailPopup(): void {
+        this.sendEmailDialogRef?.close();
     }
 
     /**
@@ -1920,6 +1954,51 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
+    }
+
+    /**
+     * Closes the bulk export dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeBulkExportDialog(): void {
+        if (this.bulkExportDialogRef) {
+            this.bulkExportDialogRef.close();
+        }
+    }
+
+    /**
+     * Closes the cancel E-invoice dialog and resets form data
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeCancelEInvoiceDialog(): void {
+        if (this.cancelEInvoiceDialogRef) {
+            this.cancelEInvoiceDialogRef.close();
+            this.resetCancelEInvoice();
+        }
+    }
+
+    /**
+     * Closes the search template dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeSearchTemplateDialog(): void {
+        if (this.searchTemplateDialogRef) {
+            this.searchTemplateDialogRef.close();
+        }
+    }
+
+    /**
+     * Closes the send email dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeSendEmailDialog(): void {
+        if (this.sendEmailDialogRef) {
+            this.sendEmailDialogRef.close();
+        }
     }
 
     /**

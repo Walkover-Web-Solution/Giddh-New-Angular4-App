@@ -999,9 +999,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageChangedDueReport(event: any): void {
-        this.dueAmountReportRequest.page = event.page;
-    }
+
 
     public selectedDate(value?: any): void {
         if (value && value.event === "cancel") {

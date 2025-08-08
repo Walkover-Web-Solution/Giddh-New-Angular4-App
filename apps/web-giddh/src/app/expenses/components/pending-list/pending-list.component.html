@@ -173,7 +173,7 @@
 >
     <mat-paginator
         [length]="pettyCashPendingReportResponse?.totalItems"
-        [pageSize]="pettycashRequest.count || 20"
+        [pageSize]="pettycashRequest.count"
         [pageIndex]="pettycashRequest.page - 1"
         [pageSizeOptions]="pageSizeOptions"
         [showFirstLastButtons]="true"

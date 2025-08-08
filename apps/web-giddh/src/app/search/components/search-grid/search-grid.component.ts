@@ -435,15 +435,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(ev) {
-        this.checkboxInfo.selectedPage = ev.page;
-        this.pageChangeEvent.emit(ev);
-        this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-    }
+
 
     private createSearchQueryReqObj() {
         return {

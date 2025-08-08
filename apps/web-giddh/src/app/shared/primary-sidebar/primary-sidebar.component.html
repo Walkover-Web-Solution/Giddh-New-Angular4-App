@@ -118,7 +118,7 @@
                                     href="javascript:void(0);"
                                     aria-label="account item"
                                     routerLink="ledger/{{ acc?.uniqueName }}"
-                                    (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
+                                    (click)="analyzeAccounts($event, acc)"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>

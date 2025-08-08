@@ -632,7 +632,7 @@
             </div>
 
             <div
-                *ngIf="pageConfiguration.totalItems > paginationLimit"
+                *ngIf="pageConfiguration.totalItems > paginationLimit && !isLoading"
                 class="mt-4"
             >
                 <ng-container>
@@ -729,17 +729,19 @@
 
 <!-- Bulk export modal -->
 <ng-template #bulkExport>
-    <bulk-export-voucher
-        [type]="'receipt'"
-        [dateRange]="{ from: fromDate, to: toDate }"
-        [advanceSearch]="lastListingFilters"
-        [voucherUniqueNames]="selectedReceipts"
-        [totalItems]="
-            selectedReceipts && selectedReceipts.length > 0
-                ? selectedReceipts.length
-                : allReceipts && allReceipts.length
-        "
-        (closeModelEvent)="bulkExportModalRef.hide()"
-    >
-    </bulk-export-voucher>
+    <div mat-dialog-content>
+        <bulk-export-voucher
+            [type]="'receipt'"
+            [dateRange]="{ from: fromDate, to: toDate }"
+            [advanceSearch]="lastListingFilters"
+            [voucherUniqueNames]="selectedReceipts"
+            [totalItems]="
+                selectedReceipts && selectedReceipts.length > 0
+                    ? selectedReceipts.length
+                    : allReceipts && allReceipts.length
+            "
+            (closeModelEvent)="closeBulkExportDialog()"
+        >
+        </bulk-export-voucher>
+    </div>
 </ng-template>

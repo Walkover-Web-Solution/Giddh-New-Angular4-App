@@ -1451,15 +1451,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.detectChanges();
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        this.transporterFilterRequest.page = event.page;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.detectChanges();
-    }
+
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string): void {
         this.transporterFilterRequest.sort = type;

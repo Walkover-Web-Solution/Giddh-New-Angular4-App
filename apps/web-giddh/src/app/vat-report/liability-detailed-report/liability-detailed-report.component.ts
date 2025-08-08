@@ -99,20 +99,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * This function will change the page of vat report
-     *
-     * @param {*} event
-     * @memberof LiabilityDetailedReportComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.vatLiabilityReportRequest.page = event.pageIndex + 1;
-            this.vatLiabilityReportRequest.count = event.pageSize;
-            this.vatLiabilityDetailedReport.results = [];
-            this.getVatLiabilityReport();
-        }
-    }
+
 
     /**
      * Back to liability report report page with same query params

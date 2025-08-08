@@ -260,6 +260,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
         this.groupStockReport$ = this.store.pipe(select(p => p.inventory.groupStockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
+        this.GroupStockReportRequest.count = this.pageSizeOptions[2];
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -542,14 +543,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.getGroupReport(false);
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        this.GroupStockReportRequest.page = event.page;
-        this.getGroupReport(false);
-    }
+
 
     public DownloadGroupReports(type: string) {
         this.GroupStockReportRequest.reportDownloadType = type;

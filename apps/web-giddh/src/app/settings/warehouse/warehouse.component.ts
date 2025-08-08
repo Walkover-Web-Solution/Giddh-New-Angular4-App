@@ -332,18 +332,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    /**
-     * @deprecated Use handlePageEvent instead
-     * Legacy method for handling page changes
-     *
-     * @param {PageChangedEvent} event Page event
-     * @memberof WarehouseComponent
-     */
-    public pageChanged(event: PageChangedEvent): void {
-        this.showLoader = true;
-        this.currentPage = event.page;
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page, count: PAGINATION_LIMIT }));
-    }
+
 
     /**
      * Resets the on boarding form

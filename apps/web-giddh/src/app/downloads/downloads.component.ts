@@ -44,6 +44,21 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Callback for tab change event
+     * @param {any} event - Tab change event
+     * @memberof DownloadsComponent
+     */
+    public tabChanged(event: any): void {
+        if (event?.index === 0) {
+            this.activeTab = 'exports';
+            this.router.navigate(['/pages/downloads/exports']);
+        } else if (event?.index === 1) {
+            this.activeTab = 'imports';
+            this.router.navigate(['/pages/downloads/imports']);
+        }
+    }
+
+    /**
      * Releases all the observables to avoid memory leaks
      *
      * @memberof DownloadsComponent
@@ -53,13 +68,5 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    /**
-     * Handles tab change
-     *
-     * @param {*} event
-     * @memberof DownloadsComponent
-     */
-    public tabChanged(event: any): void {
-        this.router.navigate(['pages', 'downloads', ((event?.index === 1) ? "imports" : "exports")]);
-    }
+
 }

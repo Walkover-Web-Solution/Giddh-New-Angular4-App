@@ -24,6 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -62,11 +63,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Receipt type for filter */
     public receiptType: Array<any>;
     /** Modal reference */
-    public modalRef: any;
-    /** Modal bulk export reference */
-    public bulkExportModalRef: any;
-    /** Modal service reference */
-    public modalService: any;
+    public modalRef: BsModalRef;
+    /** Reference to bulk export dialog */
+    private bulkExportDialogRef: MatDialogRef<any>;
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Stores the list of all receipts */
     public allReceipts: Array<any>;
     /** Stores summary data of all receipts based on filters applied */
@@ -205,7 +205,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private invoiceService: InvoiceService,
         private router: Router,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private modalService: BsModalService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -353,7 +354,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
         });
         this.receiptAdvanceSearchDialogRef = this.dialog.open(this.receiptAdvanceSearchTemplate, {
-            panelClass: 'mat-dialog-xl',
+            panelClass: 'mat-dialog-lg',
             disableClose: true
         });
     }
@@ -951,12 +952,26 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-    * This will open the bulk export modal
-    *
-    * @param {TemplateRef<any>} template
-    * @memberof AdvanceReceiptReportComponent
-    */
+     * Opens the bulk export dialog using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof AdvanceReceiptReportComponent
+     */
     public openBulkExport(template: TemplateRef<any>): void {
-        this.bulkExportModalRef = this.modalService.show(template);
+        this.bulkExportDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the bulk export dialog
+     *
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public closeBulkExportDialog(): void {
+        if (this.bulkExportDialogRef) {
+            this.bulkExportDialogRef.close();
+        }
     }
 }

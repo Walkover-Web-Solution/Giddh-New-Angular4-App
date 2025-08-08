@@ -23,8 +23,6 @@ import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
@@ -172,7 +170,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             if (data && data.results) {
                 this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
-                setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
                 this.totalDueAmounts = data.overAllDueAmount;
                 this.totalFutureDueAmounts = data.overAllFutureDueAmount;
             }
@@ -336,24 +333,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Legacy method for pagination
-     * @deprecated Use handlePageEvent instead
+     * Resets all advance search filters and parameters to default values
+     *
+     * @memberof AgingReportComponent
      */
-    public pageChangedDueReport(event: any): void {
-        this.dueAmountReportRequest.page = event.page;
-        this.getDueReport();
-    }
-
-    /**
-     * Legacy method for dynamic pagination component
-     * @deprecated No longer used with mat-paginator
-     */
-    public loadPaginationComponent(s) {
-        // This method is no longer used with mat-paginator
-        // Kept for reference during migration
-    }
-
-    public resetAdvanceSearch() {
+    public resetAdvanceSearch(): void {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {

@@ -488,7 +488,7 @@
                 <ng-container *ngIf="pageConfiguration.totalItems > paginationLimit">
                     <mat-paginator
                         [length]="pageConfiguration.totalItems"
-                        [pageSize]="searchQueryParams.count || paginationLimit"
+                        [pageSize]="searchQueryParams.count"
                         [pageIndex]="searchQueryParams.page - 1"
                         [pageSizeOptions]="pageSizeOptions"
                         [showFirstLastButtons]="true"
@@ -573,17 +573,19 @@
 
 <!-- Bulk export modal -->
 <ng-template #bulkExport>
-    <bulk-export-voucher
-        [type]="'payment'"
-        [dateRange]="{ from: fromDate, to: toDate }"
-        [advanceSearch]="lastListingFilters"
-        [voucherUniqueNames]="selectedPayments"
-        [totalItems]="
-            selectedPayments && selectedPayments.length > 0
-                ? selectedPayments.length
-                : allPayments && allPayments.length
-        "
-        (closeModelEvent)="bulkExportModalRef.hide()"
-    >
-    </bulk-export-voucher>
+    <div mat-dialog-content>
+        <bulk-export-voucher
+            [type]="'payment'"
+            [dateRange]="{ from: fromDate, to: toDate }"
+            [advanceSearch]="lastListingFilters"
+            [voucherUniqueNames]="selectedPayments"
+            [totalItems]="
+                selectedPayments && selectedPayments.length > 0
+                    ? selectedPayments.length
+                    : allPayments && allPayments.length
+            "
+            (closeModelEvent)="closeBulkExportDialog()"
+        >
+        </bulk-export-voucher>
+    </div>
 </ng-template>

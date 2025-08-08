@@ -377,27 +377,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             }
         }));
     }
-    
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.pagination.currentPage !== event?.page) {
-            this.isLoading = true;
-            this.store.dispatch(this.inventoryAction.getBulkStockList({
-                inventoryType: this.inventoryType, page: event.page, count: this.pageCount, body: {
-                    "search": this.searchString !== null ? this.searchString : "",
-                    "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
-                    "filterBy": this.advanceSearchData !== null ? this.advanceSearchData?.filterBy?.value : "",
-                    "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
-                    "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "asc",
-                    "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression?.value : "",
-                    "rate": this.advanceSearchData !== null ? this.advanceSearchData?.amount : ""
-                }
-            }));
-        }
-    }
+
 
     /**
      *toggleInput(key) is used to change boolean value of tableHeadInput

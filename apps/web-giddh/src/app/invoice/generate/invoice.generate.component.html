@@ -385,7 +385,7 @@
                     <ng-container *ngIf="ledgersData.totalItems > pageSizeOptions[1]">
                         <mat-paginator
                             [length]="ledgersData.totalItems"
-                            [pageSize]="ledgerSearchRequest.count || pageSizeOptions[1]"
+                            [pageSize]="ledgerSearchRequest.count"
                             [pageIndex]="ledgerSearchRequest.page - 1"
                             [pageSizeOptions]="pageSizeOptions"
                             [showFirstLastButtons]="true"

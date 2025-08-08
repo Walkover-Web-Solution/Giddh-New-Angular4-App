@@ -4,7 +4,7 @@ import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from '../../../store';
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
@@ -58,7 +58,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /* This will hold active company data */
     public activeCompany: any = {};
     /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
+
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Image path variable */
@@ -307,16 +307,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.getStockTransactionalReport(false);
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.stockReportRequest.page !== event?.page) {
-            this.stockReportRequest.page = event?.page;
-            this.getStockTransactionalReport(false);
-        }
-    }
+
 
     /**
      * This will use for sorting filters
@@ -456,6 +447,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public translationComplete(event: any): void {
         if (event) {
+            this.stockReportRequest.count = this.pageSizeOptions[2];
             this.translationLoaded = true;
             this.voucherTypes = [
                 {

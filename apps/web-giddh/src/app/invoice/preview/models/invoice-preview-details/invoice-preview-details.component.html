@@ -237,7 +237,7 @@
                                                     *ngIf="voucherType === 'sales' || voucherType === 'debit note' || voucherType === 'credit note'"
                                                     class="cursor-pointer"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                                    (click)="invokeLoadPaymentModes(); openReceivePaymentDialog()"
                                                 >
                                                     <a class="dropdown-item">{{
                                                         commonLocaleData?.app_payment_status?.paid
@@ -314,7 +314,7 @@
                                                 <li
                                                     class="cursor-pointer"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                                    (click)="invokeLoadPaymentModes(); openReceivePaymentDialog()"
                                                 >
                                                     <a class="dropdown-item">
                                                         {{ commonLocaleData?.app_payment_status?.paid }}
@@ -528,7 +528,7 @@
                                         <p class="payment-content">{{ localeData?.record_payment }}</p>
                                         <a
                                             href="javascript:;"
-                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                            (click)="invokeLoadPaymentModes(); openReceivePaymentDialog()"
                                             >{{ localeData?.receipt_payment }}</a
                                         >
                                     </div>
@@ -538,7 +538,7 @@
                                     <div class="single-payment-detail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg" alt="send-icon" /></div>
                                         <p class="payment-content">{{ localeData?.email_invoice }}</p>
-                                        <a href="javascript:;" (click)="showEmailSendModal?.show()">
+                                        <a href="javascript:;" (click)="openEmailSendDialog()">
                                             {{
                                                 selectedItem?.voucherType === "credit note" ||
                                                 selectedItem?.voucherType === "debit note"
@@ -820,12 +820,6 @@
 
 <!-- region send email dialog-->
 <ng-template #showEmailSendDialog>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">Send Email</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeEmailSendDialog()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div mat-dialog-content class="modal-body send-mail-modal">
         <app-send-email-invoice-component
             [voucherType]="voucherType"
@@ -840,12 +834,6 @@
 
 <!-- region download dialog-->
 <ng-template #downloadVoucherDialog>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">Download Voucher</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeDownloadVoucherDialog()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div mat-dialog-content class="modal-body send-mail-modal">
         <download-voucher
             [selectedItem]="selectedItem"
@@ -860,12 +848,6 @@
 
 <!-- region delete confirmation model -->
 <ng-template #deleteConfirmationDialog>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">{{ commonLocaleData?.app_delete }}</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeDeleteConfirmationDialog()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div mat-dialog-content class="modal-body">
         <confirm-modal
             [body]="
@@ -886,22 +868,14 @@
 
 <!-- region receive payment popup -->
 <ng-template #receivePaymentDialog>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">Receive Payment</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeReceivePaymentDialog()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div mat-dialog-content class="modal-body">
-        <invoice-payment-model
-            [selectedInvoiceForPayment]="selectedItem"
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            (performActionPopup)="processPaymentEvent.emit($event)"
-            (closeModelEvent)="closePerformActionPopup(); closeReceivePaymentDialog()"
-        >
-        </invoice-payment-model>
-    </div>
+    <invoice-payment-model
+        [selectedInvoiceForPayment]="selectedItem"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (performActionPopup)="processPaymentEvent.emit($event)"
+        (closeModelEvent)="closePerformActionPopup(); closeReceivePaymentDialog()"
+    >
+    </invoice-payment-model>
 </ng-template>
 <!-- endregion -->
 
@@ -911,7 +885,7 @@
             [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"
             [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName"
             [purchaseOrderCompanyUniqueName]="companyUniqueName"
-            (closeModelEvent)="closePurchaseOrderPreviewDialog($event)"
+            (closeModelEvent)="closePurchaseOrderPreviewDialog()"
         >
         </purchase-order-preview-modal>
     </div>
@@ -922,7 +896,7 @@
         <purchase-send-email-modal
             [module]="'purchase-bill'"
             [sendEmailRequest]="sendEmailRequest"
-            (closeModelEvent)="closeSendMailDialog($event)"
+            (closeModelEvent)="closeSendMailDialog()"
         ></purchase-send-email-modal>
     </div>
 </ng-template>

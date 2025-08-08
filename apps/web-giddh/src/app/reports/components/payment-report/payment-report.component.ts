@@ -7,7 +7,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PaymentSummaryRequest } from '../../../models/api-models/Reports';
@@ -58,8 +58,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public allPayments: Array<any>;
     /** Stores summary data of all payments based on filters applied */
     public paymentsSummaryData: any;
-    /** Stores the value of pagination limit for template use */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** Stores the current page number */
     public pageConfiguration: { currentPage: number, totalPages: number, totalItems: number } = {
         currentPage: 1,
@@ -71,6 +69,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         receiptNumber: '',  // Receipt Number
         baseAccountName: '',  // Vendor Name
         sortBy: '',  // Sort by
+        count: this.pageSizeOptions[2],
+        page: 1,
         sort: '',
         q: ''
     };
@@ -118,7 +118,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Modal service reference */
     public modalService: any;
     /** Bulk export modal reference */
-    public bulkExportModalRef: any;
+    /** Reference to bulk export dialog */
+    private bulkExportDialogRef: MatDialogRef<any>;
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Company unique name for API calls */
     private activeCompanyUniqueName: string;
     /** Date format type */
@@ -512,7 +514,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
             to: this.toDate,
-            count: this.paginationLimit,
+            count: this.searchQueryParams.count,
             q: this.searchQueryParams.q,
             total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
             balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
@@ -876,12 +878,26 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     }
 
     /**
-    * This will open the bulk export modal
-    *
-    * @param {TemplateRef<any>} template
-    * @memberof PaymentReportComponent
-    */
+     * Opens the bulk export dialog using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof PaymentReportComponent
+     */
     public openBulkExport(template: TemplateRef<any>): void {
-        this.bulkExportModalRef = this.modalService.show(template);
+        this.bulkExportDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the bulk export dialog
+     *
+     * @memberof PaymentReportComponent
+     */
+    public closeBulkExportDialog(): void {
+        if (this.bulkExportDialogRef) {
+            this.bulkExportDialogRef.close();
+        }
     }
 }
