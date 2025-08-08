@@ -943,9 +943,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     this.allReceipts.forEach((item) => {
                         item.isSelected = false;
                     });
-                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName = `${isAllItemsSelected ? this.localeData?.all_receipts : this.localeData?.receipts}.xls`;
-                    return saveAs(blob, fileName);
+                    let blob = this.generalService.base64ToBlob(response.body.data, 'application/xls', 512);
+                    return saveAs(blob, response.body.name);
                 } else {
                     this.toastService.errorToast(response.message);
                 }

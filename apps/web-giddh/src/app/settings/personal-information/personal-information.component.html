@@ -103,6 +103,13 @@
                     </div>
                 </div>
             </div>
+
+            <other-settings
+                [organizationType]="organizationType"
+                (saveProfile)="updateOtherSettings($event)"
+                [profileData]="profileData"
+                [localeData]="localeData"
+            ></other-settings>
         </div>
     </form>
 </ng-container>
