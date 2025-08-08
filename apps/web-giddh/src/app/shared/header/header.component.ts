@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } 
 import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -50,6 +50,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesActions } from '../../actions/sales/sales.action';
+import { ServiceConfig } from '../../services/service.config';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -92,6 +93,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -330,10 +333,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public dialog: MatDialog,
         private socialAuthService: AuthService,
         private salesAction: SalesActions,
+        @Inject(ServiceConfig) private serviceConfig,
         private elementRef: ElementRef,
         private renderer: Renderer2
     ) {
-        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -703,8 +711,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // endregion
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
             .observe(['(min-width: 1280px)'])
@@ -884,7 +890,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : `https://test.giddh.com/login`;
+                    const whiteLabel = this.generalService.getDecodedWhiteLabel();
+                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 

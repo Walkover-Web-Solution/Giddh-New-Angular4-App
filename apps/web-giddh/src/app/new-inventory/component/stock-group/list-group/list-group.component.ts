@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
+import { ServiceConfig } from "apps/web-giddh/src/app/services/service.config";
 
 
 export interface PeriodicElement {
@@ -86,7 +87,7 @@ export class ListGroupComponent implements OnInit {
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     selection = new SelectionModel<PeriodicElement>(true, []);
 
-
+    constructor(@Inject(ServiceConfig) private serviceConfig ){}
     // @ViewChild(MatSort) sort: MatSort;
     //
     // // tslint:disable-next-line:use-life-cycle-interface
@@ -126,6 +127,6 @@ export class ListGroupComponent implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 }

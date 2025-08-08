@@ -1,9 +1,31 @@
 {
-    "to": "To",
-    "cc": "Cc",
-    "bcc": "Bcc",
+    "to": "प्रति",
+    "cc": "सीसी",
+    "bcc": "बीसीसी",
     "email_content_suggestions": "सूचना पाहण्यासाठी '@' टाइप करा",
-    "recipients": "प्राप्तकर्ता",
+    "recipients": "प्राप्तकर्ते",
     "subject": "विषय",
-    "save_and_send":"जतन करा आणि पाठवा"
+    "save_and_send": "जतन करा आणि पाठवा",
+    "voucher_due": "व्हाउचर देय",
+    "attach_voucher_pdf": "व्हाउचर PDF संलग्न करा",
+    "day_of_week": "आठवड्याचा दिवस",
+    "date_of_month": "महिन्याची तारीख",
+    "other": "इतर",
+    "others": "इतर",
+    "trigger_name": "ट्रिगर नाव",
+    "enter_trigger_name": "ट्रिगर नाव प्रविष्ट करा",
+    "trigger_module": "ट्रिगर मॉड्यूल",
+    "select_trigger_module": "ट्रिगर मॉड्यूल निवडा",
+    "actions": "क्रिया",
+    "select_action": "क्रिया निवडा",
+    "enter_time": "वेळ प्रविष्ट करा",
+    "day_action": "दिवसाची क्रिया",
+    "select_time_action": "वेळ क्रिया निवडा",
+    "select_day_of_week": "आठवड्याचा दिवस निवडा",
+    "select_date_of_month": "महिन्याची तारीख निवडा",
+    "disabled_trigger": "अक्षम ट्रिगर",
+    "validation_error_message": {
+        "email_content_required": "ईमेल मजकूर आवश्यक आहे",
+        "email_subject_required": "ईमेल विषय आवश्यक आहे"
+    }
 }

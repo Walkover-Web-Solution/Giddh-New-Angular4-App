@@ -1,0 +1,17 @@
+.account-detail-custom-title {
+    font-family: var(--font-semibold) !important;
+    word-break: break-word !important;
+}
+.account-detail-padding {
+    padding: 1px;
+    text-transform: none !important;
+}
+
+.account-detail-custom-header {
+    border-right: 0;
+    padding: 11px 10px 10px;
+    color: var(--color-dropdown-list);
+    background: var(--color-dropdown-secondary-background);
+    width: 260px;
+    margin-top: -8px;
+}
