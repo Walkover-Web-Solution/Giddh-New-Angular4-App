@@ -110,7 +110,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     /** Group by enum */
     public groupByEnum: typeof GroupBy = GroupBy;
     /** Date range */
-    public dateRange: { from: any, to: any } = { from: null, to: null }; 
+    public dateRange: { from: any, to: any } = { from: null, to: null };
     /** Account search response */
     public accountSearchResponse: any[] = [];
     /** Account list */
@@ -190,7 +190,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.salesRegisterTotal = new ReportsModel();
                 this.salesRegisterTotal.particular = this.getCustomParticular();
-                this.reportRespone = this.filterReportResp(response);                
+                this.reportRespone = this.filterReportResp(response);
             }
         });
 
@@ -248,39 +248,24 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
 
         /** Search for sales person dropdown */
         this.salesPerson.valueChanges.pipe(debounceTime(700),
-        takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-            if (!search) {
-                this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                    this.filteredSalesPersonList = res as IOption[];
-                });
-            } else {
-                this.salesPersonList$.pipe(take(1)).subscribe(res => {
-                    this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
-                });
-            }
-        });
+            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+                if (!search) {
+                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                        this.filteredSalesPersonList = res as IOption[];
+                    });
+                } else {
+                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                        this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                    });
+                }
+            });
         this.getAccounts();
 
         /** Search for account dropdown */
         this.account.valueChanges.pipe(debounceTime(700),
-        takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
-            this.getAccounts(search ? search : '');
-        });
-
-        /** Handle group by change */
-        this.reportForm.get('groupBy')?.valueChanges.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((response) => {
-           if (response) {
-               this.reportForm?.get('groupBy')?.patchValue(response);
-               this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
-               if (response === GroupBy.SalesPerson) {
-                   this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
-                   this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-                   this.getSalesRegister(this.dateRange.from, this.dateRange.to);
-               } else {
-                   this.populateRecords(this.interval, this.selectedMonth);
-               }
-           }
-        });
+            takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
+                this.getAccounts(search ? search : '');
+            });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -289,6 +274,22 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
+    }
+
+    /**
+     * Handle group by change
+     * 
+     * @param response 
+     */
+    public handleGroupByChange(response: IOption): void {
+        if (response?.value === GroupBy.SalesPerson) {
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
+        } else {
+            this.reportForm.get('salesPersonUniqueNames')?.setValue([]);
+            this.populateRecords(this.interval, this.selectedMonth);
+        }
     }
 
     public goToDashboard() {
@@ -377,6 +378,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
         let currentTimeFilter: DurationEnum = this.selectedType;
+        let currentGroupBy = '';
+        let currentSalesPersonUniqueNames = [];
+        let currentAccountUniqueNames = [];
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params?.interval || params?.selectedMonth) {
@@ -394,11 +398,14 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
             currentTimeFilter = registerReportFilters?.timeFilter?.toLowerCase() ?? '';
+            currentSalesPersonUniqueNames = registerReportFilters?.salesPersonUniqueNames ?? [];
+            currentAccountUniqueNames = registerReportFilters?.accountUniqueNames ?? [];
+            currentGroupBy = registerReportFilters?.groupBy || GroupBy.Duration;
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(response => {
+                this.financialOptions = activeCompany.financialYears?.map(response => {
                     if (response) {
                         return { label: response.uniqueName, value: response.uniqueName };
                     }
@@ -410,8 +417,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
                     this.activeFinacialYr = this.selectedCompany.financialYears[0];
@@ -424,6 +431,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
                 this.currentBranch.name = foundBranch ? foundBranch.name : this.currentBranch?.name;
                 this.selectedType = currentTimeFilter || this.selectedType;
+                this.reportForm.get('groupBy').patchValue(currentGroupBy);
+                this.reportForm.get('salesPersonUniqueNames').patchValue(currentSalesPersonUniqueNames);
+                this.reportForm.get('accountUniqueNames').patchValue(currentAccountUniqueNames);
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.getCustomParticular();
                 this.changeDetectorRef.detectChanges();
@@ -433,7 +443,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -445,7 +455,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             this.populateRecords(this.durationEnum.Monthly);
             return;
         }
-        if (this.activeFinacialYr) {
+        if (this.activeFinacialYr && this.reportForm.get('groupBy')?.value === GroupBy.Duration) {
             let startDate = this.activeFinacialYr.financialYearStarts?.toString();
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             this.dateRange.from = dayjs(startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -467,7 +477,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
             }
             this.getSalesRegister(startDate, endDate);
-            this.savePreferences();
+        } else if (this.reportForm.get('groupBy')?.value === GroupBy.SalesPerson) {
+            this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+            this.getSalesRegister(this.dateRange.from, this.dateRange.to);
         }
     }
 
@@ -543,7 +556,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), timeFilter: this.selectedType, salesPersonUniqueNames: this.reportForm?.get('salesPersonUniqueNames')?.value, accountUniqueNames: this.reportForm?.get('accountUniqueNames')?.value, groupBy: this.reportForm?.get('groupBy')?.value
         }));
     }
 
@@ -658,11 +671,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.columnDefinitions[key][1] = !!this.salesRegisterTotal[key];
             }
         });
+
         if (item?.salesPerson?.name) {
-            this.columnDefinitions['particular'][3] = false;
             this.columnDefinitions['cumulative'][1] = true;
-        } else {
-            this.columnDefinitions['particular'][3] = true;
         }
     }
 
@@ -677,16 +688,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         let to = item.to;
 
         if (from != null && to != null) {
-            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth } });
+            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranch?.uniqueName, interval: item.interval, selectedMonth: item.selectedMonth, salesPersonUniqueName: item.salesPerson?.uniqueName } });
         }
     }
 
-     /**
-     * Open sales person dialog
-     *
-     * @memberof ReportsDetailsComponent
-     */
-     public openSalesPersonDialog(): void {
+    /**
+    * Open sales person dialog
+    *
+    * @memberof ReportsDetailsComponent
+    */
+    public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
         dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
     }
@@ -764,7 +775,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             this.dateRange.from = dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT);
             this.dateRange.to = dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT);
             this.getSalesRegister(
-                dayjs(value.startDate).format(GIDDH_DATE_FORMAT), 
+                dayjs(value.startDate).format(GIDDH_DATE_FORMAT),
                 dayjs(value.endDate).format(GIDDH_DATE_FORMAT)
             );
         }
@@ -784,11 +795,17 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         if (!from || !to) {
             return;
         }
+
+        let requestObject = this.reportForm.value;
+        if (this.reportForm?.get('groupBy')?.value === GroupBy.SalesPerson) {
+            requestObject.interval = undefined;
+        }
         this.componentStore.getSalesPurchaseList({
-            payload: this.reportForm.value,
+            payload: requestObject,
             params: { branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), from, to },
             isSalesRegister: true
         });
+        this.savePreferences();
     }
 
     /**

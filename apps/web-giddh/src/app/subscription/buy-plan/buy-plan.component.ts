@@ -1404,7 +1404,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders(duration === 'YEARLY' ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
+            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
         }
 
         if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {

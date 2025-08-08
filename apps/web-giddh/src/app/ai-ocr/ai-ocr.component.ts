@@ -413,7 +413,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /**
      * This will use for go to branch mode
      *
-     * @memberof ProjectWiseAccountingListComponent
+     * @memberof AiOcrComponent
      */
     public gotToBranchTab(): void {
         this.broadcast = new BroadcastChannel("ai-ocr");

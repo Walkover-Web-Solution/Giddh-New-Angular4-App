@@ -1,19 +1,17 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef, TemplateRef } from '@angular/core';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { TemplateRef } from '@angular/core';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
@@ -51,6 +49,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupDetailForm: UntypedFormGroup;
     public moveGroupForm: UntypedFormGroup;
     public taxGroupForm: UntypedFormGroup;
+    /** Discount form group */
+    public discountGroupForm: FormGroup;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
     public isTaxableGroup$: Observable<boolean>;
@@ -63,16 +63,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showEditTaxSection: boolean = false;
     public accountList: any[];
     public showTaxes: boolean = false;
-    @ViewChild('deleteGroupTemplate', { static: true }) public deleteGroupTemplate: TemplateRef<any>;
+    @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
     /** Dialog reference for delete group modal */
-    private deleteGroupDialogRef: MatDialogRef<any>;
-    @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
+    public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
     public showDiscount: boolean = false;
-    /** Selected discount list */
-    public selectedDiscounts: any[] = [];
     /** To check applied taxes modified  */
     public isTaxesSaveDisable$: Observable<boolean> = of(true);
     /** To check applied discounts modified  */
@@ -95,6 +92,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** Stores the list of selected tax labels to display in the UI. */
+    public defaultTaxLabel: string[] = [];
+    /** Stores the list of selected discount labels to display in the UI. */
+    public defaultDiscountLabel: string[] = [];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -138,7 +139,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
             description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [0, digitsOnly],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
         this.moveGroupForm = this._fb.group({
@@ -148,18 +149,27 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             taxes: ['']
         });
 
+        this.discountGroupForm = this._fb.group({
+            discounts: [[]]
+        });
+
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
         });
 
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+                this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
+            }
+        });
+
         this.activeGroup$.subscribe((activeGroup) => {
             if (activeGroup) {
-                this.selectedDiscounts = [];
                 this.uniqueName = activeGroup.uniqueName;
                 if (activeGroup.applicableDiscounts && activeGroup.applicableDiscounts.length) {
-                    activeGroup.applicableDiscounts.forEach(element => {
-                        this.selectedDiscounts.push(element?.uniqueName)
-                    });
+                    const applicableDiscounts = activeGroup.applicableDiscounts;
+                    this.defaultDiscountLabel = applicableDiscounts.map(p => p.name) || [];
+                    this.discountGroupForm.get('discounts').patchValue(applicableDiscounts.map(p => p.uniqueName) || []);
                 }
                 this.groupDetailForm?.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
                 if (activeGroup.fixed) {
@@ -230,7 +240,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     this.companyTaxDropDown = arr;
                 }
-                this.filterTaxesForDebtorCreditor();
+
+                setTimeout(() => {
+                    this.filterTaxesForDebtorCreditor();
+                }, 200);
             }
         });
     }
@@ -359,26 +372,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-
     /**
-     * Shows the delete group modal dialog
-     *
+     * Open delete group dialog
+     * @returns void
      * @memberof GroupUpdateComponent
      */
-    public showDeleteGroupModal() {
-        this.deleteGroupDialogRef = this.dialog.open(this.deleteGroupTemplate, {
-            panelClass: 'mat-dialog-md',
+    public openDeleteGroupDialog(): void {
+        this.deleteGroupConfirmationDialogRef = this.dialog.open(this.deleteGroupConfirmationDialog, {
+            panelClass: ['mat-dialog-md'],
             disableClose: true
         });
     }
 
     /**
-     * Hides the delete group modal dialog
-     *
+     * Close delete group dialog
+     * @returns void
      * @memberof GroupUpdateComponent
      */
-    public hideDeleteGroupModal() {
-        this.deleteGroupDialogRef?.close();
+    public closeDeleteGroupDialog(): void {
+        this.deleteGroupConfirmationDialogRef?.close();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -429,17 +441,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         grpObject.parentGroupUniqueName = this.moveGroupForm?.value.moveto;
         this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGroupUniqueName));
         this.moveGroupForm.reset();
-
-        if (this.moveToGroupDropDown) {
-            this.moveToGroupDropDown.clear();
-        }
     }
 
     public deleteGroup() {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
-        this.hideDeleteGroupModal();
+        this.closeDeleteGroupDialog();
     }
 
     public updateGroup() {
@@ -551,10 +559,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp?.uniqueName);
 
         if (activeGroupUniqueName) {
-            uniq(this.selectedDiscounts);
             let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.uniqueName;
-            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.discounts = this.discountGroupForm.get('discounts')?.value;
             assignDiscountObject.isAccount = false;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
@@ -569,16 +576,21 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public taxesSelected(event: any): void {
         if (event) {
             this.isTaxesSaveDisable$ = of(false);
+            this.taxGroupForm.get('taxes').patchValue(event);
         }
     }
 
     /**
      * To check discount list updated
      *
+     * @param {any} event - event object containing selected discounts
      * @memberof GroupUpdateComponent
      */
-    public discountSelected(): void {
-        this.isDiscountSaveDisable$ = of(false);
+    public discountSelected(event: any): void {
+        if (event) {
+            this.discountGroupForm.get('discounts').patchValue(event);
+            this.isDiscountSaveDisable$ = of(false);
+        } 
     }
 
     /**
@@ -706,6 +718,14 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             // Only normal (non-other) taxes
             this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => TCS_TDS_TAXES_TYPES?.indexOf(tax?.additional?.taxType) === -1);
+        }
+        if (this.companyTaxDropDown?.length) {
+            const selectedTaxes = this.taxGroupForm?.get("taxes")?.value || [];
+            this.defaultTaxLabel = selectedTaxes.map((selectTax: any) => {
+                return this.companyTaxDropDown.find(tax => tax.value === selectTax)?.label;
+            });
+        } else {
+            this.defaultTaxLabel = [];
         }
     }
 }

@@ -348,7 +348,7 @@
                                 <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.date }}
                                 </th>
-                                <td data-title="Date" mat-cell *matCellDef="let element">
+                                <td data-title="Date" mat-cell *matCellDef="let element" class="common-column-width">
                                     {{ element?.entryDate ?? "-" }}
                                 </td>
                             </ng-container>

@@ -53,6 +53,7 @@
                         <ng-container *ngFor="let grp of list">
                             <section
                                 profit-loss-report-grid-row
+                                *ngIf="grp.isVisible"
                                 [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                                 [expandAll]="expandAll"
                                 [groupDetail]="grp"
@@ -133,6 +134,7 @@
                     <ng-container *ngFor="let grp of list">
                         <section
                             profit-loss-report-grid-row
+                            *ngIf="grp.isVisible"
                             [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
                             [groupDetail]="grp"
                             [padding]="padding"

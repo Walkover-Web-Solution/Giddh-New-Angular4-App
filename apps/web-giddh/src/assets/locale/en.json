@@ -757,13 +757,14 @@
     "app_select_year": "Select Year",
     "app_select_month": "Select Month",
     "app_user_settings": "User Settings",
-    "app_subscription": "Subscription",
     "app_custom_email": "Custom Email",
-    "app_custom_email_template": "Custom Email Template",
+    "app_custom_email_template":"Custom Email Template",
+    "app_subscription": "Subscription",
     "app_send_voucher_type_whatsapp": "Send [VOUCHER_TYPE] via whatsapp",
     "app_send_payment_receipt_type_whatsapp": "Send [VOUCHER_TYPE] voucher via whatsapp",
     "app_no_access_limit_module": "You currently don't have access to this module. Upgrade your plan to unlock it without any hassle",
     "app_upgrade": "Upgrade",
+    "app_link_account":"Link Account",
     "app_click_here": "Click here",
     "go_to_company_mode": "To edit, go to company mode.",
     "app_bank_accounts":"Bank Accounts",
@@ -773,8 +774,7 @@
     "app_password": "Password",
     "app_select_column": "Select Column",
     "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
-    "app_file_format": "File Format",
-    "app_select_file": "Select file",
+    "app_file_format": "File Name Format",
     "app_ledger_view": {
         "t_view": "T View",
         "statement_view": "Statement View"
@@ -798,6 +798,7 @@
     },
     "app_sales_person": "Sales Person",
     "app_sales_person_placeholder": "Select sales person",
+    "app_variable_search_hint": "Use '{' to search variable or write name manually.",
     "app_skip_and_next": "Skip and Next",
     "app_save_and_next": "Save and Next"
 }

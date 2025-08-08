@@ -269,7 +269,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         private store: Store<AppState>, 
         private settingsFinancialYearActions: SettingsFinancialYearActions, 
         private dialog: MatDialog, 
-        private generalService: GeneralService 
+        private generalService: GeneralService
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();

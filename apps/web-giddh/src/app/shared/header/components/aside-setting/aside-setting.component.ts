@@ -53,7 +53,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
-
     }
 
     /**

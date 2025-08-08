@@ -163,7 +163,6 @@ export class GstComponent implements OnInit, OnDestroy {
         });
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
     }
-
     /**
      * Unsubscribes from subscription
      *

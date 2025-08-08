@@ -82,7 +82,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
-
 @NgModule({
     declarations: [
         InvoiceComponent,
@@ -130,8 +129,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         AccountDetailModalModule,
         CurrencyModule,
         ScrollingModule,
-        VoucherModule,
-        DigitsOnlyModule,
         UniqueNameModule,
         ConfirmModalModule,
         VoucherTypeToNamePipeModule,
@@ -161,16 +158,16 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatTabsModule,
         BulkExportVoucherModule,
         FroalaTemplateEditorModule,
+        GenerateEWayBillModule,
+        InvoiceSettingModule,
+        InvoiceGenerateModule,
+        DeleteTemplateConfirmationModalModule,
         MatTableModule,
         MatFormFieldModule,
         FormFieldsModule,
         MatInputModule,
         MatRadioModule,
         MatButtonModule,
-        GenerateEWayBillModule,
-        InvoiceSettingModule,
-        InvoiceGenerateModule,
-        DeleteTemplateConfirmationModalModule,
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,

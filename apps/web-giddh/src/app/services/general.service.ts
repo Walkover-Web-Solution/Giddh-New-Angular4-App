@@ -1148,9 +1148,9 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
-                if (this.voucherApiVersion !== 2) {
-                    item.exchangeRate = balanceDueAmountConversionRate;
-                }
+                // if (this.voucherApiVersion !== 2) {
+                //     item.exchangeRate = balanceDueAmountConversionRate;
+                // }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2234,28 +2234,16 @@ export class GeneralService {
      *
      * @throws {Error} If there is an error parsing the white label data from the local storage.
      */
-public getDecodedWhiteLabel(): any {
-    try {
-        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-        return whiteLabelData?.body || null;
-    } catch (error) {
-        console.error('Error parsing whiteLabel data from localStorage:', error);
-        return null;
+    public getDecodedWhiteLabel(): any {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            console.error('Error parsing whiteLabel data from localStorage:', error);
+            return null;
+        }
     }
-}
 
-    /**
-     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
-     *
-     * @param {string} text - The string containing placeholders.
-     * @param {string[]} args - The list of values to replace the placeholders.
-     * @returns {string} A string where placeholders are replaced with corresponding arguments.
-     * @memberof GeneralService
-     */
-    public replacePlaceholders(text: string, ...args: string[]): string {
-        return text.replace(/\[.*?\]/g, () => args.shift() || '');
-    }
-    
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
@@ -2274,6 +2262,18 @@ public getDecodedWhiteLabel(): any {
             const placeholder = `:${key}`;
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
+    }
+
+    /**
+    * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+    *
+    * @param {string} text - The string containing placeholders.
+    * @param {string[]} args - The list of values to replace the placeholders.
+    * @returns {string} A string where placeholders are replaced with corresponding arguments.
+    * @memberof GeneralService
+    */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
     }
 
     /**

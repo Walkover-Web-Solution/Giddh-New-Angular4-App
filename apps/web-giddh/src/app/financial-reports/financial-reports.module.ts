@@ -8,7 +8,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MatTabsModule } from '@angular/material/tabs';
-
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -48,11 +47,11 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
-import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 
 @NgModule({
     declarations: [
@@ -74,6 +73,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         FinancialAccordionDirective,
         AccountsFilterPipe
     ],
+    providers: [ProjectAccountingService],
     exports: [
         FinancialReportsComponent, 
         CurrencyModule,
@@ -85,7 +85,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ProfitLossExportXlsComponent,
         FinancialReportsFilterComponent
     ],
-    providers: [ProjectAccountingService],
+
     imports: [
         CommonModule,
         ModalModule.forRoot(),

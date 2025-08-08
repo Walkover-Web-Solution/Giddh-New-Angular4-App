@@ -986,7 +986,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 let account = (selectedVoucher) ? selectedVoucher.account?.uniqueName : this.selectedInvoice.account?.uniqueName;
                 this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
-
         }
     }
 
@@ -1815,19 +1814,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (customerUniqueName && voucherDate) {
             this.isAccountHaveAdvanceReceipts = false;
             let apiCallObservable: Observable<any>;
-            if (this.voucherApiVersion !== 2) {
-                const requestObject = {
-                    accountUniqueName: customerUniqueName,
-                    invoiceDate: voucherDate
-                };
-                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
-            } else {
+            // if (this.voucherApiVersion !== 2) {
+            //     const requestObject = {
+            //         accountUniqueName: customerUniqueName,
+            //         invoiceDate: voucherDate
+            //     };
+            //     apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            // } else {
                 const requestObject = {
                     accountUniqueName: customerUniqueName,
                     voucherType: this.selectedVoucher
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
-            }
+            // }
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && (res.body.length || res.body.results?.length || res.body.items?.length)) {
@@ -1838,11 +1837,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
-                        if (this.voucherApiVersion !== 2) {
-                            this._toaster.warningToast(this.localeData?.no_advance_receipt);
-                        } else {
+                        // if (this.voucherApiVersion !== 2) {
+                        //     this._toaster.warningToast(this.localeData?.no_advance_receipt);
+                        // } else {
                             this._toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
-                        }
+                        // }
                     }
                 }
             });

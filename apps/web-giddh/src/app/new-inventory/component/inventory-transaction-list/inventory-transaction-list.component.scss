@@ -68,6 +68,9 @@
     .mat-table-sticky {
         top: 60px !important;
     }
+    .common-column-width{
+        min-width: 110px;
+    }
 }
 
 ::ng-deep {
@@ -208,6 +211,13 @@
             .total-stock-value {
                 padding-left: 0;
             }
+        }
+    }
+}
+@media screen and (max-width: 1200px) {
+    .inventory-transaction-list{
+        .total-details-box {
+            min-width: 188px;
         }
     }
 }

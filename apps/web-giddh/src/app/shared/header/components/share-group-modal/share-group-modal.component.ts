@@ -13,6 +13,8 @@ import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'share-group-modal',
@@ -25,8 +27,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public email: string;
-    public selectedPermission: string;
+    /** Selected permission */
+    public selectedPermission: string = "";
     public activeGroup$: Observable<GroupResponse>;
     /** Stores the active company information observable*/
     public activeCompany$: Observable<any>;
@@ -40,29 +42,71 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** All permissions role options */
+    public allPermissions: IOption[] = [];
+    /** Observable to observe create new permission is successfull */
+    public createPermissionSuccess$: Observable<boolean>;
+    /** Form group for share group */
+    public shareGroupForm: FormGroup;
 
 
     @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction, private router: Router, private settingsProfileActions: SettingsProfileActions) {
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private accountActions: AccountsAction,
+        private router: Router,
+        private settingsProfileActions: SettingsProfileActions,
+        private formBuilder: FormBuilder
+    ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
+        this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.shareGroupForm = this.formBuilder.group({
+            email: ['', [Validators.required, Validators.email]],
+            permission: ['', [Validators.required]]
+        });
+
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                if (Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
+                if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                     const module = activeCompany.moduleRestrictionStatus.find(
                         (module) => module?.moduleName === this.restrictedModules.Users
                     );
                     this.isUserRestricted = !module?.remainingUsers;
                 }
+            }
+        });
+
+        this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
+            if (permissions?.length) {
+                this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
+                    label: permission.name,
+                    value: permission.uniqueName
+                }));
+            }
+        });
+
+        this.activeGroupSharedWith$.pipe(takeUntil(this.destroyed$)).subscribe((sharedWith) => {
+            if (sharedWith) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            }
+        });
+
+        this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((permissionSuccess) => {
+            if (permissionSuccess) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                this.selectedPermission = "";
+                this.shareGroupForm.reset();
             }
         });
     }
@@ -92,35 +136,27 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     public async shareGroup() {
         let activeGrp = await this.activeGroup$.pipe(first()).toPromise();
         let userRole = {
-            emailId: this.email,
+            emailId: this.shareGroupForm.get('email')?.value,
             entity: 'group',
             entityUniqueName: activeGrp?.uniqueName,
         };
-        let selectedPermission = clone(this.selectedPermission);
+        let selectedPermission = clone(this.shareGroupForm.get('permission')?.value);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
-        setTimeout(() => {
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        }, 500);
-        this.email = '';
-        this.selectedPermission = '';
     }
 
     public async unShareGroup(entryUniqueName: string, groupUniqueName: string) {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
-        setTimeout(() => {
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        }, 500);
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
-        let newPermission = event.target?.value;
+        let newPermission = event.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }
 
     public closeModal() {
-        this.email = '';
+        this.shareGroupForm.reset();
         this.closeShareGroupModal.emit();
     }
 

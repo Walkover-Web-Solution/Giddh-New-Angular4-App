@@ -1701,12 +1701,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.translationComplete(true);
     }
 
-    /**
-    * This function will use for send email for template
-    *
-    * @memberof ContactComponent
-    */
-    public sendBulkEmail(type: string): void {
+     /**
+     * This function will use for send email for template
+     *
+     * @memberof ContactComponent
+     */
+     public sendBulkEmail(type: string): void {
         const accountUniqueNames = this.selectedAccountsList.map(account => account.uniqueName);
         this.sendBulkEmailRequest = {
             customerVendorUniqueNames: accountUniqueNames,
@@ -1716,11 +1716,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Open custom email dialog
-   *
-   * @param {any} account
-   * @memberof ContactComponent
-   */
+    * Open custom email dialog
+    *
+    * @param {any} account
+    * @memberof ContactComponent
+    */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
             data: {

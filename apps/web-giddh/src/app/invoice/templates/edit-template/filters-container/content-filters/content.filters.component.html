@@ -202,7 +202,7 @@
                         class="form-group"
                         *ngIf="
                             (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e' || 
+                                customTemplate?.templateType === 'gst_template_e' ||
                                 customTemplate?.templateType === 'tally_template') &&
                             showGstComposition &&
                             customTemplate.sections['header'].data['showEInvoiceDetails']
@@ -484,7 +484,7 @@
                     </ng-container>
                     <div
                         *ngIf="
-                            fieldsAndVisibility.header.dueDate && 
+                            fieldsAndVisibility.header.dueDate &&
                             customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate?.templateType !== 'tally_template'
                         "
@@ -2336,7 +2336,7 @@
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
                             customTemplate?.templateType !== 'gst_template_e' &&
-                            customTemplate?.templateType !== 'thermal_template' && 
+                            customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate?.templateType !== 'tally_template'
                         "
                         class="form-group"
@@ -2547,7 +2547,7 @@
                                         name="msg11"
                                         (ngModelChange)="onFieldChange(null, null, null)"
                                         [disabled]="!customTemplate.sections['footer'].data['message1'].display"
-                                        [appTributeMention]="{trigger: '{', suggestionPrefix: '{',suggestionSuffix: '}'}"
+                                        [appTributeMention]="{ trigger: '{', suggestionPrefix: '{', suggestionSuffix: '}' }"
                                         [appTributeMentionValues]="suggestionList"
                                     ></textarea>
                                     <ng-container

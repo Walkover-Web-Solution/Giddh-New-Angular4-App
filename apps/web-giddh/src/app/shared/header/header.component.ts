@@ -101,7 +101,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
     @ViewChild('companynewadd', { static: true }) public companynewadd: ElementViewContainerRef;
     @ViewChild('addmanage', { static: true }) public addmanage: ElementViewContainerRef;
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
+    /* This will hold the manage groups accounts dialog ref */
+    public manageGroupsAccountsDialogRef: MatDialogRef<any>;
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
     /** Switch branch dropdown */
@@ -254,6 +255,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public planVersion: number;
     /** Hold broadcast event */
     public broadcast: any;
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
     /** Hold broadcast event for project wise accounting */
     public projectBroadcast: any;
     /** Hold broadcast event for AI OCR */
@@ -262,7 +265,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCurrentSubscriptionTrialOrCancelled: boolean = null;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Tracks the visibility of alert messages related to subscription and plan. */
+    /** Tracks the visibility of error messages related to subscription and plan. */
     public showAlertMessage: SubscriptionErrorFlags = {
         isObligationExpired: true,
         isLiabilitiesExpired: true,
@@ -495,17 +498,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
-                if (this.voucherApiVersion === 1) {
-                    this.showDepreciationMessage = true;
-                    document.querySelector("body")?.classList?.add("depreciation-message");
-                } else {
-                    this.showDepreciationMessage = false;
-                    document.querySelector("body")?.classList?.remove("depreciation-message");
-                }
+                // if (this.voucherApiVersion === 1) {
+                //     this.showDepreciationMessage = true;
+                //     document.querySelector("body")?.classList?.add("depreciation-message");
+                // } else {
+                //     this.showDepreciationMessage = false;
+                //     document.querySelector("body")?.classList?.remove("depreciation-message");
+                // }
                 if (this.voucherApiVersion === 2) {
                     this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");
-                } 
+                }
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -654,9 +657,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
-        this.manageGroupsAccountsModal?.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-            this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-        });
 
         // region subscribe to last state for showing title of page this.selectedPage
         this.store.pipe(select(s => s.session.lastState), takeUntil(this.destroyed$)).subscribe(s => {
@@ -716,12 +716,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             });
 
-        this.isAddAndManageOpenedFromOutside$.subscribe(s => {
-            if (s) {
-                this.loadAddManageComponent();
-                this.manageGroupsAccountsModal?.show();
+        this.isAddAndManageOpenedFromOutside$.subscribe(isMasterOpen => {
+            if (isMasterOpen) {
+                this.openDialogManageGroupsAccounts();
             } else {
-                this.manageGroupsAccountsModal?.hide();
+                this.manageGroupsAccountsDialogRef?.close();
             }
         });
 
@@ -1139,8 +1138,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
             }
         });
-
-        this.manageGroupsAccountsModal.hide();
+        this.manageGroupsAccountsDialogRef?.close();
     }
 
 
@@ -1150,19 +1148,35 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
 
-    public loadAddManageComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
-        let viewContainerRef = this.addmanage.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideManageGroupsModal();
-            viewContainerRef.remove();
+    /**
+    * This function is used to open manage groups accounts dialog
+    * 
+    * @returns {void}
+    * @memberof HeaderComponent
+    */
+    public openDialogManageGroupsAccounts(): void {
+        this.manageGroupsAccountsDialogRef = this.dialog.open(ManageGroupsAccountsComponent, {
+            width: '100%',
+            height: '100%',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
         });
-        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
-            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header?.nativeElement.getBoundingClientRect();
-            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel?.nativeElement.getBoundingClientRect();
-        }));
+
+        this.manageGroupsAccountsDialogRef.afterOpened().pipe(take(1)).subscribe(() => {
+            const instance = this.manageGroupsAccountsDialogRef.componentInstance;
+            setTimeout(() => {
+                if (instance.header?.nativeElement) {
+                    instance.headerRect = instance.header.nativeElement.getBoundingClientRect();
+                }
+                if (instance.myModel?.nativeElement) {
+                    instance.myModelRect = instance.myModel.nativeElement.getBoundingClientRect();
+                }
+            });
+        });
+
+        this.manageGroupsAccountsDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+            this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+        });
     }
 
     /**

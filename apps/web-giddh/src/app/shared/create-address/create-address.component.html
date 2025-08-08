@@ -541,7 +541,16 @@
                                         {{ getBranchOfText(companyName) }}
                                     </div>
                                 </section>
-
+                                <div class="row m-0" *ngIf="(addressConfiguration?.type === addressConfigurationType.CreateAddress || addressConfiguration?.type === addressConfigurationType.CreateBranchAddress || addressConfiguration?.type === addressConfigurationType.EditAddress) && isAddress">
+                                    <label>
+                                        <mat-checkbox
+                                            color="primary"
+                                            formControlName="isDefault"
+                                        >
+                                            {{ localeData?.set_as_default_address }}</mat-checkbox
+                                        >
+                                    </label>
+                                </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 text-left">
                                         <div>

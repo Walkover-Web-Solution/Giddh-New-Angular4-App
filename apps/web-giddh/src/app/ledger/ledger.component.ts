@@ -50,13 +50,13 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { CommonActions } from '../actions/common.actions';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { saveAs } from 'file-saver';
-import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { InstitutionsListComponent } from '../shared/bank-integration/institutions-list/institutions-list.component';
 import { BankIntegrationComponentStore } from '../shared/bank-integration/utility/bank-integration.store';
 import { HomeComponentStore } from '../home/home.store';
 import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-link.component';
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { EWayBillCreateComponent } from '../shared/eWayBill/create/e-way-bill-create-component';
 import { LedgerComponentStore } from './ledger.store';
 import { ServiceConfig } from '../services/service.config';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
@@ -340,12 +340,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private bankTransactionsWithAccountName: any[] = [];
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Invoice Settings */
-    public invoiceSettings: any;
-    /** Observable for post balance success response */
-    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
-    /** Store ledger account response */
-    public ledgerAccountResponse: AccountResponse | AccountResponseV2;
     /** Hold reference number */
     public referenceNumber: string = null;
     /** True if api call in progress */
@@ -370,16 +364,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public unlinkBankList: any[] = [];
     /** Holds list of connected banks */
     private bankList: any[] = [];
+    /** Invoice Settings */
+    public invoiceSettings: any;
+    /** Hold ledger grid total columns static value */
+    public ledgerGridTotalColumns: number = 4;
+    /** Hold ledger grid total columns value */
+    public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    /** Store ledger account response */
+    public ledgerAccountResponse: AccountResponse | AccountResponseV2;
+    /** Observable for post balance success response */
+    public ledgerBalanceSuccess$: Observable<boolean> = this.ledgerComponentStore.select(state => state.ledgerBalance);
     /** Hold callback broadcast event */
     public callBackBroadcast: any;
     /** Holds Bank Integration Dialog Ref */
     public bankIntegrationDialogRef: any;
     /** Holds if use directly integrated bank account*/
     public isDirectlyIntegrated: boolean = false;
-    /** Hold ledger grid total columns static value */
-    public ledgerGridTotalColumns: number = 4;
-    /** Hold ledger grid total columns value */
-    public ledgerGridColumnsValue: number[] = [1, 2, 1];
     /** Hold Transaction Object */
     public entryTransactionData: any = {
         transaction: null,
@@ -438,9 +438,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingIntegrationComponentStore: SettingIntegrationComponentStore,
         private componentStore: BankIntegrationComponentStore,
         private homeComponentStore: HomeComponentStore,
-        private toasty: ToasterService,
-        private breakpointObserver: BreakpointObserver,
-        private ledgerComponentStore: LedgerComponentStore
+        private ledgerComponentStore: LedgerComponentStore,
+        private breakpointObserver: BreakpointObserver
     ) {
         if (window.localStorage) {
             localStorage.setItem('refNo', null);
@@ -1166,17 +1165,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         };
 
-        this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
-                    this.getAdvanceSearchTxn();
-                } else {
-                    this.getTransactionData();
-                }
-                this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
-            }
-        });
-
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.getBankTransactions();
@@ -1211,6 +1199,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.getLinkBankAccount();
                     }
                 }
+            }
+        });
+
+        this.ledgerComponentStore.isLedgerViewChange$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
+                    this.getAdvanceSearchTxn();
+                } else {
+                    this.getTransactionData();
+                }
+                this.getTransactionData();
+                this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
 
@@ -2706,12 +2706,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
         this.getLedgerStatementViewGridColumnsValue();
@@ -2775,7 +2775,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
-        this.getTransactionData();
+        if (this.isAdvanceSearchImplemented) {
+            this.getAdvanceSearchTxn();
+        } else {
+            this.getTransactionData();
+        }
     }
 
     /**
@@ -3119,6 +3123,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (data[0] && data[1]) {
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
+                    if (this.isBankAccount) {
+                        this.getAllBankAccounts();
+                    }
                     if (data[0]?.ledgerView) {
                         this.ledgerView = data[0].ledgerView;
                         if (this.currentOrganizationType === OrganizationType.Branch ||
@@ -3127,9 +3134,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         }
                     }
 
-                    if (this.isBankAccount) {
-                        this.getAllBankAccounts();
-                    }
                     this.loadDefaultSearchSuggestions();
                     this.profileObj = profile;
                     this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -3377,9 +3381,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @param {TemplateRef<any>} templateRef
      * @param {*} transaction
+     * @param {boolean} [isAttachment=false]
      * @memberof LedgerComponent
      */
-    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
+    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any, isAttachment: boolean = false): void {
+        transaction['isAttachment'] = isAttachment;
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',

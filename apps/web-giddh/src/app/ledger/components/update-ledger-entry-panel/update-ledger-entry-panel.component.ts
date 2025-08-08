@@ -4,6 +4,7 @@ import {
     ChangeDetectorRef,
     Component, ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnDestroy,
@@ -70,6 +71,7 @@ import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/s
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatSelect } from '@angular/material/select';
+import { ServiceConfig } from '../../../services/service.config';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
@@ -376,6 +378,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private ledgerUtilityService: LedgerUtilityService,
         private invoiceAction: InvoiceActions,
         private renderer: Renderer2,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsDiscountService: SettingsDiscountService,
         private salesPersonStore: SalesPersonComponentStore
     ) {
@@ -401,7 +404,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1101,10 +1104,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openBaseAccountModal() {
-        if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
-            this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-            return;
-        }
+        // if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
+        //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
+        //     return;
+        // }
         if (this.updateBaseAccount) {
             this.updateBaseAccount.show();
         }
@@ -1228,9 +1231,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
 
-        if (this.voucherApiVersion !== 2) {
-            this.invoiceList = [];
-        }
+        // if (this.voucherApiVersion !== 2) {
+        //     this.invoiceList = [];
+        // }
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
@@ -3052,7 +3055,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 
-    /**
+     /**
      * Handle sales person selection
      *
      * @param {IOption} event

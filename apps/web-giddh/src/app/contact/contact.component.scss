@@ -999,4 +999,8 @@ td.mat-cell {
     white-space: normal !important;
     word-break: keep-all !important;
 }
-
+@media screen and (max-width: 1200px) {
+    .min-width-230 {
+        min-width: 170px !important;
+    }
+}

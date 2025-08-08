@@ -636,7 +636,6 @@ export const BREAKPOINT_SCREEN_SIZE = {
     SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
     TAB_SCREEN_SIZE: '(1024px > width)'
 }
-
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',

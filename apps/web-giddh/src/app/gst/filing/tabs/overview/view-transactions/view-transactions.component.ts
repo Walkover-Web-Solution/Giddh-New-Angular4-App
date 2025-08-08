@@ -213,15 +213,15 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
 
-                if (this.voucherApiVersion !== 2) {
-                    downloadVoucherRequestObject = {
-                        voucherNumber: [invoice.voucherNumber],
-                        voucherType: invoice.voucherType,
-                        accountUniqueName: invoice.account?.uniqueName
-                    };
+                // if (this.voucherApiVersion !== 2) {
+                //     downloadVoucherRequestObject = {
+                //         voucherNumber: [invoice.voucherNumber],
+                //         voucherType: invoice.voucherType,
+                //         accountUniqueName: invoice.account?.uniqueName
+                //     };
 
-                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                }
+                //     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                // }
             }
             this.openDownloadOrSendMailDialog();
         }

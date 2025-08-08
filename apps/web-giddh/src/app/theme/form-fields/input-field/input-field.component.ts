@@ -88,6 +88,17 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public labelIconClass: string = "fa fa-info-circle";
     /** Label icon tooltip */
     @Input() public labelIconTooltip: string = null;
+    /** Emits on change event */
+    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits on suffix icon click */
+    @Output() public clickOnSuffix: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** ngModel of input */
+    public ngModel: any;
+    /** Used for change detection */
+    public stateChanges = new Subject<void>();
+    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
+    private onTouchedCallback: () => void = noop;
+    private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
     /** It will show tooltip text in suffix icon */
@@ -98,17 +109,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
     /** Emits event when content is focus */
     @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
-    /** Emits on change event */
-    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** Emits on suffix icon click */
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** ngModel of input */
-    public ngModel: any;
-    /** Used for change detection */
-    public stateChanges = new Subject<void>();
-    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
-    private onTouchedCallback: () => void = noop;
-    private onChangeCallback: (_: any) => void = noop;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -280,6 +282,15 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public handleFocus(event: Clipboard): void {
         this.onFocus.emit(event);
+    }
+
+    /**
+     * Emits click on suffix icon
+     *
+     * @memberof InputFieldComponent
+     */
+    public clickOnSuffixIcon(): void {
+        this.clickOnSuffix.emit(true);
     }
 
     /**

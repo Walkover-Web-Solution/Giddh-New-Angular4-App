@@ -75,7 +75,6 @@ import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus"
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
 import {
     AdjustedVoucherType,
-    ASIDE_PANE_CONFIG,
     BranchHierarchyType,
     ENTRY_DESCRIPTION_LENGTH,
     FILE_ATTACHMENT_TYPE,
@@ -85,6 +84,7 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
+    ASIDE_PANE_CONFIG
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -631,10 +631,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
-        private salesPersonStore: SalesPersonComponentStore,
-        private aiOcrService: AiOcrService
+        private aiOcrService: AiOcrService,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
-       this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -1173,10 +1173,50 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
                             this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
+
+                        this.invoiceForm
+                            .get("templateDetails.other.customField1")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField1);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField2);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField3")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField3);
+                        this.invoiceForm
+                            .get("templateDetails.other.message2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.message2);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippedVia")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippedVia);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippingDate")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippingDate);
+                        this.invoiceForm
+                            .get("templateDetails.other.trackingNumber")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+
+                        if (voucherDetails.attachedFiles) {
+                            this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
+                            this.selectedFileName = voucherDetails.attachedFileName;
+                        }
+
+                        this.invoiceForm
+                            .get("isRcmEntry")
+                            .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
+
+                        if (voucherDetails.adjustments?.length && !this.isCopyMode) {
+                            voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
+                                adjustment.adjustmentAmount = adjustment.amount;
+                                return adjustment;
+                            });
+                            this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
+                            this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
+                        }
                     }
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-                    
+
                     const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
@@ -1809,13 +1849,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm
-                            .get("salesPurchaseAsReceiptPayment")
-                            .patchValue(
-                                this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
-                                    ? profile.purchaseAsPayment
-                                    : profile.salesAsReceipt
-                            );
+                        const isCashSalesPurchaseInvoice =
+                            this.invoiceType.isCashInvoice &&
+                            ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) ||
+                                this.invoiceType.isPurchaseInvoice);
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm
+                                .get("salesPurchaseAsReceiptPayment")
+                                .patchValue(
+                                    this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+                                        ? profile.purchaseAsPayment
+                                        : profile.salesAsReceipt
+                                );
+                        }
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -2486,7 +2533,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
@@ -4349,7 +4395,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      * @param {any} event using for pinCode and gstNumber
      * @returns {void}
-     * 
+     *
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
@@ -4618,7 +4664,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
         if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, '') : '';
+            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
+                ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, "")
+                : "";
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
@@ -5066,7 +5114,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.changeDetection.detectChanges();
     }
 
-    
+
 
     /**
      * Toggles between create and list
@@ -5174,7 +5222,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             roundOff: 0,
             tcsTotal: 0,
             tdsTotal: 0,
-            balanceDue: 0
+            balanceDue: 0,
         };
         this.hasStock = false;
 
@@ -5190,7 +5238,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             subTotal: 0,
             totalTaxableValue: 0,
             totalAdjustedAmount: 0,
-            convertedTotalAdjustedAmount: 0
+            convertedTotalAdjustedAmount: 0,
         };
 
         this.invoiceForm.get("type").patchValue(this.voucherType);
