@@ -788,7 +788,7 @@
                         <td colspan="10" class="text-center">
                             <mat-paginator
                                 [length]="groupStockReport.totalPages"
-                                [pageSize]="GroupStockReportRequest.count || 10"
+                                [pageSize]="GroupStockReportRequest.count"
                                 [pageIndex]="groupStockReport.page - 1"
                                 [pageSizeOptions]="pageSizeOptions"
                                 [showFirstLastButtons]="true"

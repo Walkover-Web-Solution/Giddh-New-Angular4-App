@@ -929,7 +929,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      *
      * @memberof InvoiceComponent
      */
-    public showQuickAccountModal() {
+    public showQuickAccountModal(): void {
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
             this.quickAccountDialogRef = this.dialog.open(this.quickAccountTemplate, {

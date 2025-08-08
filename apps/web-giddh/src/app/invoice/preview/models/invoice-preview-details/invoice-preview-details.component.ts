@@ -11,7 +11,6 @@ import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
 import { saveAs } from 'file-saver';
-// BsModalRef and BsModalService imports removed as part of Angular Material dialog migration
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
@@ -100,7 +99,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
     /** Event emmiter when advance receipt action selected */
     @Output() public onOpenAdvanceReceiptModal: EventEmitter<any> = new EventEmitter();
-    // modalRef removed as part of Angular Material dialog migration
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
     public isSendSmsEnabled: boolean = false;
@@ -181,12 +179,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
         private router: Router,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
-        private generalActions: GeneralActions,
         private generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
         private sanitizer: DomSanitizer,
         private salesService: SalesService,
-        // modalService removed as part of Angular Material dialog migration
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
         private thermalService: ThermalService,
@@ -338,21 +334,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
                 takeUntil(this.destroyed$)
             )
             .subscribe((term => {
-                
-        // Find all elements with click handlers for receivePaymentPopup.show()
-        setTimeout(() => {
-            const elements = document.querySelectorAll('[click*="receivePaymentPopup.show()"]');
-            if (elements && elements.length > 0) {
-                elements.forEach(element => {
-                    element.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        this.openReceivePaymentDialog();
-                        return false;
-                    });
-                });
-            }
-        }, 1000);
                 this.filterVouchers(term);
             }))
 
@@ -376,7 +357,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
         this.toggleBodyClass();
     }
 
-    public toggleEditMode() {
+    public toggleEditMode(): void {
         // if (this.voucherApiVersion === 1) {
         //     if (!this.showEditMode) {
         //         this.selectedItemVoucher = this.selectedItem;
@@ -403,7 +384,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
         // }
     }
 
-    public onCancel() {
+    public onCancel(): void {
         this.performActionAfterClose();
         this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
@@ -1052,55 +1033,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
     /**
      * Closes the purchase order preview dialog
      *
-     * @param {*} event - Event from the dialog
      * @memberof InvoicePreviewDetailsComponent
      */
-    public closePurchaseOrderPreviewDialog(event: any): void {
-        if (event) {
-            this.purchaseOrderPreviewDialogRef?.close();
-        }
+    public closePurchaseOrderPreviewDialog(): void {
+        this.purchaseOrderPreviewDialogRef?.close();
     }
 
-    /**
-     * This will open the send email modal
-     *
-     * @param {TemplateRef<any>} template
-     * @memberof InvoicePreviewDetailsComponent
-     */
-    /**
-     * Opens the send email modal dialog
-     * 
-     * @deprecated Use openSendEmailModalDialog instead
-     * @param {TemplateRef<any>} template - Template reference
-     * @memberof InvoicePreviewDetailsComponent
-     */
-    public openSendMailModal(template: TemplateRef<any>): void {
-        // Prepare email request data
-        this.sendEmailRequest.email = this.selectedItem?.account?.email;
-        this.sendEmailRequest.uniqueName = this.selectedItem?.uniqueName;
-        this.sendEmailRequest.accountUniqueName = this.selectedItem?.account?.uniqueName;
-        this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
-        
-        // Use the new dialog method instead
-        this.openSendEmailModalDialog();
-    }
-
-    /**
-     * This will close the send email popup
-     *
-     * @param {*} event
-     * @memberof InvoicePreviewDetailsComponent
-     */
     /**
      * Closes the send mail dialog
      *
-     * @param {*} event - Event from the dialog
      * @memberof InvoicePreviewDetailsComponent
      */
-    public closeSendMailDialog(event: any): void {
-        if (event) {
-            this.sendEmailModalDialogRef?.close();
-        }
+    public closeSendMailDialog(): void {
+        this.sendEmailModalDialogRef?.close();
     }
 
     /**
@@ -1245,8 +1190,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
             }
         );
     }
-    
-    // Duplicate ngAfterViewInit method removed - implementation merged with existing method
 
     /**
      * Closes the receive payment dialog

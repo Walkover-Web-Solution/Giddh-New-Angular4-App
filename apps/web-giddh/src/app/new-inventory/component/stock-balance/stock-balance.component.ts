@@ -225,16 +225,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         this.getStocks();
     }
 
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.GroupStockReportRequest.page !== event.page) {
-            this.GroupStockReportRequest.page = event.page;
-            this.getStocks();
-        }
-    }
+
 
     /**
     * Get stock details

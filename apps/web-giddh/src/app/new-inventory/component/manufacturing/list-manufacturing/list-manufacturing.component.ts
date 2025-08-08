@@ -598,15 +598,5 @@ export class ListManufacturingComponent implements OnInit {
         this.getReport();
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.currentPage !== event.page) {
-            this.currentPage = event.page
-            this.manufacturingSearchRequest.page = event.page;
-            this.getReport();
-        }
-    }
+
 }

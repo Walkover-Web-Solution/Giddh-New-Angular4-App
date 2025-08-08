@@ -294,6 +294,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     ) {
         this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
+        this.stockReportRequest.count = this.pageSizeOptions[2];
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.entityAndInventoryTypeForm = this.fb.group({
             selectedEntity: ['allEntity'],
@@ -591,14 +592,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.getStockReport(false);
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        this.stockReportRequest.page = event.page;
-        this.getStockReport(false);
-    }
+
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
         if (this.stockReportRequest.sort !== type || this.stockReportRequest.sortBy !== columnName) {

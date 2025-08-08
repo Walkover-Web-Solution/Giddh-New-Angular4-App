@@ -290,23 +290,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @public
      * @param {MatTabChangeEvent | any} event - Tab change event containing selected index
-     * @param {number} activeTabIndex - Optional specific tab index to activate
-     * @param {string} currentUrl - Optional custom URL to navigate to
      * @memberof InventoryComponent
      */
-    public redirectUrlToActiveTab(event: MatTabChangeEvent | any, activeTabIndex?: number, currentUrl?: string) {
+    public redirectUrlToActiveTab(event: MatTabChangeEvent | any) {
         let tabIndex: number;
         let type: string;
-        
-        if (event && event.index !== undefined) {
-            tabIndex = event.index;
-            this.activeTabIndex = tabIndex;
-        } else if (activeTabIndex !== undefined) {
-            tabIndex = activeTabIndex;
-            this.activeTabIndex = tabIndex;
-        } else {
-            tabIndex = this.activeTabIndex;
-        }
+        tabIndex = event.index;
+        this.activeTabIndex = tabIndex;
         
         switch (tabIndex) {
             case 0:
@@ -324,53 +314,23 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             default:
                 type = 'inventory';
         }
-        
-        if (currentUrl) {
-            this.router.navigateByUrl(currentUrl);
-        } else {
-            if (this.voucherApiVersion === 2) {
-                switch (type) {
-                    case 'inventory':
-                        this.navigateToInventoryTab();
-                        break;
-                    case 'jobwork':
-                        this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
-                        break;
-                    case 'manufacturing':
-                        this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
-                        break;
-                    case 'report':
-                        this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
-                        break;
-                }
-            } else {
-                switch (type) {
-                    case 'inventory':
-                        this.navigateToInventoryTab();
-                        break;
-                    case 'jobwork':
-                        this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
-                        break;
-                    case 'manufacturing':
-                        this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
-                        break;
-                    case 'report':
-                        this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
-                        break;
-                }
-            }
+        switch (type) {
+            case 'inventory':
+                this.navigateToInventoryTab();
+                break;
+            case 'jobwork':
+                this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
+                break;
+            case 'manufacturing':
+                this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
+                break;
+            case 'report':
+                this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
+                break;
         }
-
         setTimeout(() => {
-            if (activeTabIndex !== undefined) {
-                this.activeTabIndex = activeTabIndex;
-                if (this.inventoryStaticTabs) {
-                    this.inventoryStaticTabs.selectedIndex = activeTabIndex;
-                }
-            } else {
-                if (this.inventoryStaticTabs) {
-                    this.inventoryStaticTabs.selectedIndex = this.activeTabIndex;
-                }
+            if (this.inventoryStaticTabs) {
+                this.inventoryStaticTabs.selectedIndex = this.activeTabIndex;
             }
         });
     }

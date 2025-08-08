@@ -253,7 +253,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.mfStockSearchRequest.searchBy = '';
         this.mfStockSearchRequest.searchOperation = '';
         this.mfStockSearchRequest.page = 1;
-        this.mfStockSearchRequest.count = 20;
+        this.mfStockSearchRequest.count = this.pageSizeOptions[2];
     }
 
     public goToCreateNewPage() {
@@ -285,18 +285,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         }
     }
     
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (event.page !== this.lastPage) {
-            this.lastPage = event.page;
-            let data = cloneDeep(this.mfStockSearchRequest);
-            data.page = event.page;
-            this.store.dispatch(this.manufacturingActions.GetMfReport(data));
-        }
-    }
+
 
     public editMFItem(item) {
         if (item?.uniqueName) {

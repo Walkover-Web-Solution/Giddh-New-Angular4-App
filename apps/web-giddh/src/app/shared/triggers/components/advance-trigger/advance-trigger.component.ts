@@ -451,20 +451,6 @@ export class AdvanceTriggerComponent implements OnInit, OnDestroy {
             this.triggerObj.page = 1;
         } else {
             this.triggerObj.page = event.pageIndex + 1;
-        }
-        this.getTriggers();
-    }
-
-    /**
-     * @deprecated Use handlePageEvent instead
-     * Legacy method for handling page changes
-     *
-     * @param {*} event Page event
-     * @memberof AdvanceTriggerComponent
-     */
-    public pageChanged(event: any): void {
-        if (this.triggerObj.page !== event?.page) {
-            this.triggerObj.page = event?.page;
             this.getTriggers();
         }
     }

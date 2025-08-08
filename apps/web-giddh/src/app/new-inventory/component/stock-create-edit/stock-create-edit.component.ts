@@ -2059,15 +2059,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This will use for on tab changes
-     *
-     * @param {*} event
-     * @memberof StockCreateEditComponent
-     */
-    public onTabChange(event: any): void {
-        this.activeTabIndex = event?.index;
-    }
+
 
     /**
      * This will use for validation in name space

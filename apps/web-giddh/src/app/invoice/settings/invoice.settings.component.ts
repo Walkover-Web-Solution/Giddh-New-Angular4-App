@@ -618,15 +618,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Handles tab change
-     *
-     * @param {*} event
-     * @memberof InvoiceSettingComponent
-     */
-    public tabChanged(event: any): void {
-        this.selectedTabIndex = event?.index;
-    }
+
 
     /**
      * Open custom email dialog
@@ -656,5 +648,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public getWhatsappSettingLabel(voucherType: string): string {
         return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+    }
+
+    /**
+     * Callback for tab change event
+     * @param {any} event - Tab change event
+     * @memberof InvoiceSettingComponent
+     */
+    public tabChanged(event: any): void {
+        this.selectedTabIndex = event?.index || 0;
+        this.cdr.detectChanges();
     }
 }

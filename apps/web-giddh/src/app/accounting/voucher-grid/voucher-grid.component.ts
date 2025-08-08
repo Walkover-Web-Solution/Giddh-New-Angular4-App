@@ -410,7 +410,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      *
      * @memberof VoucherGridComponent
      */
-    public openChequeDetailForm() {
+    public openChequeDetailForm(): void {
         this.chequeEntryDialogRef = this.dialog.open(this.chequeEntryTemplate, {
             panelClass: 'mat-dialog-sm',
             disableClose: true
@@ -981,7 +981,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      *
      * @memberof VoucherGridComponent
      */
-    public showQuickAccountModal() {
+    public showQuickAccountModal(): void {
         // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
         // this.selectedAccountInputField = selectedField;
         if (this.selectedField === 'account') {

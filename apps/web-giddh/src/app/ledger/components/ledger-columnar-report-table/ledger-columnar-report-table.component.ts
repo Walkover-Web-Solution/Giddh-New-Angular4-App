@@ -8,7 +8,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -37,8 +37,6 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public columnarTableColumn: string[] = [];
     /** Loader for API request */
     public isLoading: boolean = true;
-    /** pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Subject to destroy all observers  */
@@ -75,7 +73,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = this.paginationLimit;
+        this.getColumnarRequestModel.count = this.pageSizeOptions[2];
         this.getColumnarReportTable(this.columnarReportExportRequest);
     }
 
@@ -189,8 +187,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      */
     public handlePageEvent(event: PageEvent): void {
         if (this.columnarReportExportRequest) {
-            if (event.pageSize !== this.paginationLimit) {
-                this.paginationLimit = event.pageSize;
+            if (this.getColumnarRequestModel.count !== event.pageSize) {
                 this.getColumnarRequestModel.count = event.pageSize;
                 this.getColumnarRequestModel.page = 1;
             } else {
@@ -198,24 +195,6 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
             }
             this.getColumnarReportTable(this.columnarReportExportRequest);
         }
-    }
-
-    /**
-     * @deprecated Use handlePageEvent instead
-     * Legacy method for handling page changes
-     *
-     * @param {*} event Page event
-     * @memberof LedgerColumnarReportTableComponent
-     */
-    public pageChanged(event: any): void {
-        if (event && this.columnarReportExportRequest) {
-            if (event && event.page === this.getColumnarRequestModel.page) {
-                return;
-            }
-            this.getColumnarRequestModel.page = event.page;
-            this.getColumnarReportTable(this.columnarReportExportRequest);
-        }
-
     }
 
     /**

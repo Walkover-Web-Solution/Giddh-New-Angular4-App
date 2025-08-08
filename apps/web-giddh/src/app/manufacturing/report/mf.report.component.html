@@ -282,7 +282,7 @@
                     <div class="text-center">
                         <mat-paginator
                             [length]="reportData.totalItems"
-                            [pageSize]="mfStockSearchRequest.count || 20"
+                            [pageSize]="mfStockSearchRequest.count"
                             [pageIndex]="reportData.page - 1"
                             [pageSizeOptions]="pageSizeOptions"
                             [showFirstLastButtons]="true"

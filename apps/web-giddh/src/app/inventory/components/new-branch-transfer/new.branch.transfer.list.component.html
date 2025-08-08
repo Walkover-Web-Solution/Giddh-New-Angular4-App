@@ -328,7 +328,7 @@
         <div class="mt-4" *ngIf="branchTransferResponse.totalPages > 1">
             <mat-paginator
                 [length]="branchTransferResponse.totalPages"
-                [pageSize]="branchTransferGetRequestParams.count || 10"
+                [pageSize]="branchTransferGetRequestParams.count"
                 [pageIndex]="branchTransferResponse.page - 1"
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"

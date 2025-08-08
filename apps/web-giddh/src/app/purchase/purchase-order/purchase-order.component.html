@@ -455,7 +455,7 @@
         <div class="purchase-order-bulk-update">
             <div class="modal-header">
                 <h4 class="modal-title pull-left">{{ localeData?.bulk_update }}</h4>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="bulkUpdateDialogRef?.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -523,7 +523,7 @@
                             <button class="btn btn-success" (click)="validateBulkUpdateFields()">
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button class="btn btn-cancel" (click)="modalRef.hide()">
+                            <button class="btn btn-cancel" (click)="bulkUpdateDialogRef?.close()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>

@@ -234,7 +234,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
         } else {
-            this.eWayBillCredentialsDialogRef?.close();
+            this.toggleEwayBillCredentialsPopup();
         }
         this.detectChanges();
     }

@@ -171,21 +171,7 @@ export class RevisionHistoryComponent implements OnDestroy {
         }
     }
 
-    /**
-     * Legacy method - will be removed after migration
-     * @deprecated Use handlePageEvent instead
-     */
-    public pageChanged(event: any): void {
-        if (this.purchaseVersionsGetRequest.page !== event.page) {
-            this.purchaseVersionsGetRequest.page = event.page;
 
-            if (this.selectedVoucher) {
-                this.getVoucherVersions(false);
-            } else {
-                this.getPurchaseOrderVersions(false);
-            }
-        }
-    }
 
     /**
      * This will get the revision history

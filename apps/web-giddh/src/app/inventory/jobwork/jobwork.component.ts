@@ -508,7 +508,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
      *
      * @memberof JobworkComponent
      */
-    public onOpenAdvanceSearch() {
+    public onOpenAdvanceSearch(): void {
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchTemplate, {
             panelClass: 'mat-dialog-md',
             disableClose: true
