@@ -163,8 +163,8 @@ export class TlPlService {
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
                 map((res) => {
-                    let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
-                    saveAs(data, request.filename);
+                    let data = this.generalService.base64ToBlob(res.body.data, 'application/xml', 512);
+                    saveAs(data, res.body.name);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -182,8 +182,8 @@ export class TlPlService {
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
-                    saveAs(data, request.filename);
+                    let data = this.generalService.base64ToBlob(res.body.data, 'application/xml', 512);
+                    saveAs(data, res.body.name);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -201,8 +201,8 @@ export class TlPlService {
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
-                    let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
-                    saveAs(data, request.filename);
+                    let data = this.generalService.base64ToBlob(res.body.data, 'application/xml', 512);
+                    saveAs(data, res.body.name);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));

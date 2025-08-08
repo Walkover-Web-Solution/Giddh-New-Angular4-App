@@ -92,5 +92,7 @@
     "ledger_default_view": "लेजर डिफ़ॉल्ट दृश्य",
     "select_view": "वियु चुनें",
     "set_as_default_address": "डिफ़ॉल्ट पता सेट करें",
-    "default_address": "डिफ़ॉल्ट पता"
+    "default_address": "डिफ़ॉल्ट पता",
+    "module_file_format": "यह [module_name] मॉड्यूल फ़ाइल नाम को [file_format] की तरह एक्सपोर्ट करने के लिए उपयोग किया जाएगा",
+    "file_name_export_setting": "फाइल नाव एक्सपोर्ट सेटिंग"
 }
