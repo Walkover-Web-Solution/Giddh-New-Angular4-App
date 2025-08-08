@@ -6,7 +6,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -21,7 +21,6 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'group-update',
@@ -65,8 +64,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showEditTaxSection: boolean = false;
     public accountList: any[];
     public showTaxes: boolean = false;
-    @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
-    public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
+    @ViewChild('deleteGroupTemplate', { static: true }) public deleteGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for delete group modal */
+    private deleteGroupDialogRef: MatDialogRef<any>;
+    @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
@@ -374,24 +375,24 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Open delete group dialog
-     * @returns void
+     * Shows the delete group modal dialog
+     *
      * @memberof GroupUpdateComponent
      */
-    public openDeleteGroupDialog(): void {
-        this.deleteGroupConfirmationDialogRef = this.dialog.open(this.deleteGroupConfirmationDialog, {
-            panelClass: ['mat-dialog-md'],
+    public showDeleteGroupModal() {
+        this.deleteGroupDialogRef = this.dialog.open(this.deleteGroupTemplate, {
+            panelClass: 'mat-dialog-md',
             disableClose: true
         });
     }
 
     /**
-     * Close delete group dialog
-     * @returns void
+     * Hides the delete group modal dialog
+     *
      * @memberof GroupUpdateComponent
      */
-    public closeDeleteGroupDialog(): void {
-        this.deleteGroupConfirmationDialogRef?.close();
+    public hideDeleteGroupModal() {
+        this.deleteGroupDialogRef?.close();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -448,7 +449,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
-        this.closeDeleteGroupDialog();
+        this.hideDeleteGroupModal();
     }
 
     public updateGroup() {

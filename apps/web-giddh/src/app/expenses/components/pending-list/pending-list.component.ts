@@ -12,6 +12,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { ServiceConfig } from '../../../services/service.config';
@@ -76,6 +78,8 @@ export class PendingListComponent implements OnInit, OnChanges {
     public accountEntryPettyCash: any = { particular: { name: "" } };
     /** Table columns for pending report */
     public pendingTableColumns: string[] = ['s_no', 'entry_date', 'submitted_by', 'account', 'amount', 'receipt', 'file', 'description', 'action'];
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds company uniquename */
     public companyUniqueName: string;
 
@@ -267,11 +271,15 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @returns {void}
      * @memberof PendingListComponent
      */
-    public pageChanged(event: any): void {
-        if (event.page === this.pettycashRequest.page) {
-            return;
-        }
-        this.pettycashRequest.page = event.page;
+    /**
+     * Handles pagination events for petty cash pending reports
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof PendingListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.pettycashRequest.page = this.pettycashRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.pettycashRequest.count = event.pageSize;
         this.getPettyCashPendingReports(this.pettycashRequest);
     }
 

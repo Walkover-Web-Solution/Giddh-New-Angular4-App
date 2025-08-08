@@ -108,21 +108,9 @@
         </div>
     </div>
     <!-- Template modal -->
-    <div
-        bsModal
-        #templateModal="bs-modal"
-        class="modal fade template-preview-container"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="0"
-    >
-        <div class="modal-dialog full-modal">
-            <!-- modal-liq-90 class is removed for now-->
-            <div class="modal-content border-radius-none">
-                <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
-                    (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
-            </div>
-        </div>
+    <ng-template #templateModalTemplate>
+        <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
+            (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
         <div class="sticky-footer pd-2">
             <!--<button class="btn btn-default">Preview</button>-->
             <div class="pull-right mr-r4" *ngIf="voucherType === 'sales' && voucherApiVersion === 2">
@@ -149,30 +137,18 @@
                 <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
         </div>
-    </div>
+    </ng-template>
 
     <!--delete custom template confirmation modal -->
-    <div bsModal #customTemplateConfirmationModal="bs-modal" class="modal fade" role="dialog"
-        [config]="{ keyboard: true }" tabindex="0">
-        <div class="modal-dialog modal-md">
-            <!-- modal-liq-90 class is removed for now-->
-            <div class="modal-content">
-                <delete-template-confirmation-modal [message]="deleteTemplateConfirmationMessage"
-                    [flag]="confirmationFlag"
-                    (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
-            </div>
-        </div>
-    </div>
+    <ng-template #customTemplateConfirmationTemplate>
+        <delete-template-confirmation-modal [message]="deleteTemplateConfirmationMessage"
+            [flag]="confirmationFlag"
+            (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+    </ng-template>
 
     <!--invoice-template-preview-modal -->
-    <div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog" [config]="{ keyboard: true }"
-        tabindex="0">
-        <div class="modal-dialog modal-xl">
-            <!-- modal-liq-90 class is removed for now-->
-            <div class="modal-content">
-                <invoice-template-preview-modal
-                    (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
-            </div>
-        </div>
-    </div>
+    <ng-template #invoiceTemplatePreviewTemplate>
+        <invoice-template-preview-modal
+            (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
+    </ng-template>
 </div>

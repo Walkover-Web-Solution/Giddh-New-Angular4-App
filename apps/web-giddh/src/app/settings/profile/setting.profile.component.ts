@@ -403,22 +403,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     }
 
-    /**
-     * This will use for on tab changes
-     *
-     * @param {*} event
-     * @memberof SettingProfileComponent
-     */
-    public onTabChange(event: any): void {
-        this.activeTabIndex = event?.index;
-        if (event.index === 0) {
-            this.handleTabChanged("personal");
-        } else if (event.index === 1) {
-            this.handleTabChanged("address");
-        } else {
-            this.handleTabChanged("other");
-        }
-    }
+
 
     public addGst() {
         let addresses = cloneDeep(this.companyProfileObj.addresses);

@@ -261,7 +261,7 @@
                             <div class="pd-t2">
                                 <div class="d-flex column-gap15 justify-content-center">
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         [hidden]="(isCompany || isConsolidatedBranch)"
                                         #submitButton
@@ -275,7 +275,6 @@
                                     </button>
                                     <button
                                         mat-stroked-button
-                                        color="primary"
                                         #resetButton
                                         (keyup)="keyUpOnResetButton($event)"
                                         (click)="acceptCancel()"
@@ -288,7 +287,6 @@
                                 <button
                                     type="button"
                                     mat-stroked-button
-                                    color="primary"
                                     class="mt-1"
                                     (click)="refreshEntry()"
                                 >
@@ -524,7 +522,7 @@
     <div class="modal-footer">
         <div class="d-flex float-end column-gap15">
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 class="w-100"
                 (click)="onSubmitChequeDetail(); focusDebitCreditAmount()"
@@ -532,7 +530,7 @@
             >
                 {{ commonLocaleData?.app_create }}
             </button>
-            <button mat-stroked-button color="primary" class="w-100" (click)="closeChequeDetailForm()">
+            <button mat-stroked-button class="w-100" (click)="closeChequeDetailForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

@@ -70,7 +70,6 @@
 
                                 <button
                                     class="btn btn-sky-blue mr-0"
-                                    data-toggle="tooltip"
                                     matTooltip="Alt+i"
                                     (click)="toggleTransferAsidePane()"
                                 >
@@ -294,16 +293,15 @@
                                 <tr>
                                     <td colspan="7">
                                         <div class="text-center">
-                                            <pagination
-                                                [maxSize]="6"
-                                                [totalItems]="inventoryReport.totalItems"
-                                                [(ngModel)]="inventoryReport.page"
-                                                [itemsPerPage]="6"
-                                                (pageChanged)="applyFilters($event.page)"
-                                                class="pagination-sm"
-                                                [boundaryLinks]="true"
-                                                [rotate]="false"
-                                            ></pagination>
+                                            <mat-paginator
+                                                [length]="inventoryReport.totalItems"
+                                                [pageSize]="6"
+                                                [pageIndex]="inventoryReport.page - 1"
+                                                [pageSizeOptions]="pageSizeOptions"
+                                                [showFirstLastButtons]="true"
+                                                [hidePageSize]="false"
+                                                (page)="handlePageEvent($event)"
+                                            ></mat-paginator>
                                         </div>
                                     </td>
                                 </tr>
@@ -326,65 +324,59 @@
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header theme-bg clearfix">
-                <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
-                    ×
-                </button>
-            </div>
-            <div class="modal-body clearfix">
-                <form action="" [formGroup]="advanceSearchForm">
-                    <div class="row mr-t2">
-                        <div class="col-md-4">Trading Qty.</div>
-                        <div class="col-md-4">
-                            <sh-select
-                                name="entity"
-                                (onClear)="clearShSelect('comparisionFilter')"
-                                [options]="COMPARISON_FILTER"
-                                (selected)="compareChanged($event)"
-                                [placeholder]="'Select'"
-                                #comparisionFilter
-                                [multiple]="false"
-                            >
-                            </sh-select>
-                        </div>
-                        <div class="col-md-4">
-                            <input
-                                type="text"
-                                (keyup)="checkFilters()"
-                                class="form-control"
-                                placeholder="Quantity"
-                                maxlength="10"
-                                formControlName="filterAmount"
-                            />
-                            <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger"
-                                >input number only
-                            </small>
-                        </div>
-                    </div>
-                    <div class="row mr-t4 mr-b3">
-                        <div class="col-12 text-right">
-                            <button
-                                class="btn btn-success"
-                                type="button"
-                                [disabled]="!isFilterCorrect && !filter.quantity"
-                                (click)="advanceSearchAction('search')"
-                            >
-                                Search
-                            </button>
-                            <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">
-                                Clear
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+<ng-template #advanceSearchTemplate>
+    <div mat-dialog-title class="theme-bg clearfix">
+        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close (click)="advanceSearchAction('cancel')">
+            ×
+        </button>
     </div>
-</div>
+    <div mat-dialog-content class="clearfix">
+        <form action="" [formGroup]="advanceSearchForm">
+            <div class="row mr-t2">
+                <div class="col-md-4">Trading Qty.</div>
+                <div class="col-md-4">
+                    <sh-select
+                        name="entity"
+                        (onClear)="clearShSelect('comparisionFilter')"
+                        [options]="COMPARISON_FILTER"
+                        (selected)="compareChanged($event)"
+                        [placeholder]="'Select'"
+                        #comparisionFilter
+                        [multiple]="false"
+                    >
+                    </sh-select>
+                </div>
+                <div class="col-md-4">
+                    <input
+                        type="text"
+                        (keyup)="checkFilters()"
+                        class="form-control"
+                        placeholder="Quantity"
+                        maxlength="10"
+                        formControlName="filterAmount"
+                    />
+                    <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger"
+                        >input number only
+                    </small>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div mat-dialog-actions class="text-right">
+        <button
+            class="btn btn-success"
+            type="button"
+            [disabled]="!isFilterCorrect && !filter.quantity"
+            (click)="advanceSearchAction('search')"
+        >
+            Search
+        </button>
+        <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">
+            Clear
+        </button>
+    </div>
+</ng-template>
 <!-- Advance  search popup -->
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

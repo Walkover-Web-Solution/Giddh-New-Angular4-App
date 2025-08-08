@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTableModule } from "@angular/material/table";
-import { PaginationModule } from "ngx-bootstrap/pagination";
+import { MatPaginatorModule } from "@angular/material/paginator";
 import { DownloadsRoutingModule } from "./downloads.routing.module";
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
@@ -27,7 +27,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     exports: [],
     imports: [
         CommonModule, 
-        PaginationModule.forRoot(), 
+        MatPaginatorModule,
         MatTableModule, 
         DownloadsRoutingModule,
         MatButtonModule, 

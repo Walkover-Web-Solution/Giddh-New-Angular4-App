@@ -297,37 +297,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Callback for tab change event
-     *
-     * @param {*} event
-     * @memberof ExpensesComponent
-     */
-    public tabChanged(event: any): void {
-        let tab = (event?.index === 0) ? "pending" : "rejected";
-        let tabIndex = (event?.index === 0) ? 0 : 1;
 
-        this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } } );
-
-        if (tab === "pending" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
-            this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
-            this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-        } else if (tab === "rejected" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
-            this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
-            this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
-        }
-        this.currentSelectedTab = tab;
-
-        setTimeout(() => {
-            if (tab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
-                this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
-                this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-            } else if (tab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
-                this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
-                this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
-            }
-        }, 20);
-    }
 
     detectChanges() {
         if (!this.cdRf['destroyed']) {
@@ -470,6 +440,24 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             }
 
             this.refreshPendingItem(true);
+        }
+    }
+
+    /**
+     * Callback for tab change event
+     * @param {any} event - Tab change event
+     * @memberof ExpensesComponent
+     */
+    public tabChanged(event: any): void {
+        if (event?.index === 0) {
+            this.currentSelectedTab = 'pending';
+            this.router.navigate(['/pages/expenses/pending']);
+        } else if (event?.index === 1) {
+            this.currentSelectedTab = 'approved';
+            this.router.navigate(['/pages/expenses/approved']);
+        } else if (event?.index === 2) {
+            this.currentSelectedTab = 'rejected';
+            this.router.navigate(['/pages/expenses/rejected']);
         }
     }
 }

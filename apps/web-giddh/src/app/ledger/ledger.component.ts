@@ -4,7 +4,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, 
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -246,7 +247,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** This will hold bank transactions api response */
-    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: PAGINATION_LIMIT };
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: this.pageSizeOptions[2] };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -576,23 +579,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showEledger = false;
         this.entryUniqueNamesForBulkAction = [];
     }
-    /**
-     * To change pagination page number
-     *
-     * @param {*} event Pagination change event
-     * @memberof LedgerComponent
-     */
-    public pageChanged(event: any): void {
-        if (typeof event === 'string') {
-            if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
-                this.advanceSearchRequest.paginationToken = event;
-                this.getAdvanceSearchTxn();
-            } else {
-                this.trxRequest.paginationToken = event;
-                this.getTransactionData();
-            }
-        }
-    }
+
     /**
    * This function will use for get institutions details
    *
@@ -3108,11 +3095,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof LedgerComponent
      */
-    public bankTransactionPageChanged(event: any): void {
-        if (this.bankTransactionsResponse.page !== event.page) {
-            this.bankTransactionsResponse.page = event.page;
-            this.getBankTransactions();
+    /**
+     * Handles pagination events for bank transactions
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof LedgerComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.bankTransactionsResponse.countPerPage !== event.pageSize) {
+            this.bankTransactionsResponse.page = 1;
+        } else {
+            this.bankTransactionsResponse.page = event.pageIndex + 1;
         }
+        this.bankTransactionsResponse.countPerPage = event.pageSize;
+        this.getBankTransactions();
     }
 
     /**

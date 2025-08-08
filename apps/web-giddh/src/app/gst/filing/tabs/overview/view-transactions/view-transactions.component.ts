@@ -198,19 +198,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
-    /**
-     * Handle page change
-     *
-     * @param {*} event
-     * @memberof SubscriptionComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.filterParam.count = event.pageSize;
-            this.pageIndex = event.pageIndex;
-            this.viewFilteredTxn('page', event.pageIndex + 1);
-        }
-    }
+
 
     /**
      * This will handle invoice selection

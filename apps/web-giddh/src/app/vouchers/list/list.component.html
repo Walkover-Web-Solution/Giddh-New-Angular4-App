@@ -30,46 +30,45 @@
                             >
                                 <span>{{ localeData?.new_estimate }}</span>
                             </button>
-                            <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="input-group custom-datepicker" 
-                                    [matMenuTriggerFor]="universalDatepicker"
-                                    #universalDatepickerTrigger="matMenuTrigger"
-                                    (menuOpened)="isDatepickerMenuOpen = true"
-                                    (menuClosed)="isDatepickerMenuOpen = false"
-                                    role="button"
-                                    aria-haspopup="true"
-                                    aria-controls="universalDatepicker"
-                                >
-                                    <input
-                                        type="text"
-                                        name="selectedDateRange"
-                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
-                                    />
-                                </div>
-                                <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-                                    <app-datepicker-wrapper
-                                        *ngIf="isDatepickerMenuOpen"
-                                        [inputStartDate]="selectedDateRange?.startDate"
-                                        [inputEndDate]="selectedDateRange?.endDate"
-                                        [alwaysShowCalendars]="true"
-                                        [ranges]="datePickerOption"
-                                        [selectedRangeLabel]="selectedRangeLabel"
-                                        [showCustomRangeLabel]="true"
-                                        [showClearButton]="false"
-                                        [showCancel]="true"
-                                        [linkedCalendars]="true"
-                                        [showDropdowns]="true"
-                                        (rangeClicked)="dateSelectedCallback($event)"
-                                        (datesUpdated)="dateSelectedCallback($event)"
-                                        (closeCalender)="toggleGiddhDatepicker(false)"
-                                        [keepCalendarOpeningWithRange]="false"
-                                        [showRangeLabelOnInput]="false"
-                                    ></app-datepicker-wrapper>
-                                </mat-menu>
+
+                            <div 
+                                class="input-group custom-datepicker" 
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                (menuOpened)="isDatepickerMenuOpen = true"
+                                (menuClosed)="isDatepickerMenuOpen = false"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker border-radius-2"
+                                />
                             </div>
-                        </div>
+                            <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                                <app-datepicker-wrapper
+                                    *ngIf="isDatepickerMenuOpen"
+                                    [inputStartDate]="selectedDateRange?.startDate"
+                                    [inputEndDate]="selectedDateRange?.endDate"
+                                    [alwaysShowCalendars]="true"
+                                    [ranges]="datePickerOption"
+                                    [selectedRangeLabel]="selectedRangeLabel"
+                                    [showCustomRangeLabel]="true"
+                                    [showClearButton]="false"
+                                    [showCancel]="true"
+                                    [linkedCalendars]="true"
+                                    [showDropdowns]="true"
+                                    (rangeClicked)="dateSelectedCallback($event)"
+                                    (datesUpdated)="dateSelectedCallback($event)"
+                                    (closeCalender)="toggleGiddhDatepicker(false)"
+                                    [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false"
+                                ></app-datepicker-wrapper>
+                            </mat-menu>
+                    </div>
                         <button
                             mat-stroked-button
                             (click)="setInitialAdvanceFilter()"
@@ -83,7 +82,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreEstimate"
                                 *ngIf="selectedVouchers?.length === 1 && !isCompany && !isConsolidatedBranch"
@@ -96,13 +95,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -533,7 +532,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length === 1 && !isCompany && !isConsolidatedBranch"
@@ -552,7 +551,7 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -995,7 +994,7 @@
                             <!-- Cancel e-invoice button -->
                             <button
                                 mat-stroked-button
-                                color="primary"
+                                
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -1004,7 +1003,7 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreInvoice"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -1030,13 +1029,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -1538,7 +1537,7 @@
                             <!-- Cancel e-invoice button -->
                             <button
                                 mat-stroked-button
-                                color="primary"
+                                
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -1547,7 +1546,7 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -1566,13 +1565,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -2001,7 +2000,7 @@
                             <!-- Cancel e-invoice button -->
                             <button
                                 mat-stroked-button
-                                color="primary"
+                                
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -2010,7 +2009,7 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -2029,13 +2028,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -2693,7 +2692,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -2715,13 +2714,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3114,13 +3113,13 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3555,7 +3554,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -3574,7 +3573,7 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3966,7 +3965,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -3985,7 +3984,7 @@
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -5820,7 +5819,7 @@
                                 </p>
                                 <button
                                     [disabled]="true"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="templateEdit()"
                                     *ngIf="voucherApiVersion === 2"
@@ -6069,7 +6068,7 @@
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
         <div class="d-flex column-gap1 mt-4">
-            <button (click)="onSubmit()" mat-stroked-button color="primary">{{ commonLocaleData?.app_save }}</button>
+            <button (click)="onSubmit()" mat-raised-button color="primary">{{ commonLocaleData?.app_save }}</button>
             <button (click)="resetForm()" mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </ng-template>

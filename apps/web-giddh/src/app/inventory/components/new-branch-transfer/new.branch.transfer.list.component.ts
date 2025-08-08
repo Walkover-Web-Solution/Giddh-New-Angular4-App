@@ -6,7 +6,7 @@ import {
     ViewChild,
     HostListener
 } from "@angular/core";
-import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -17,6 +17,8 @@ import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../..
 import { IOption } from '../../../theme/ng-select/ng-select';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
@@ -50,11 +52,14 @@ import { Router } from "@angular/router";
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
-    @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
+    @ViewChild('searchDialog', { static: true }) public searchDialog: TemplateRef<any>;
+    @ViewChild('deleteBranchTransferDialog', { static: true }) public deleteBranchTransferDialog: TemplateRef<any>;
+    /** Reference to delete branch transfer dialog */
+    private deleteBranchTransferDialogRef: MatDialogRef<any>;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
     @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
 
-    public modalRef: BsModalRef;
+    // modalRef removed as part of Angular Material dialog migration
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompany: any = {};
     public voucherTypes: IOption[] = [];
@@ -131,10 +136,12 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private _generalService: GeneralService,
-        private modalService: BsModalService,
+        private dialog: MatDialog, // Replaced modalService with MatDialog
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
@@ -235,15 +242,34 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Opens the search dialog using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog content
+     * @memberof NewBranchTransferListComponent
+     */
     public openSearchModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+        // Open dialog using Angular Material
+        const dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
 
         setTimeout(() => {
             if (this.clearFilter) {
                 this.forceClear$ = observableOf({ status: true });
                 this.clearFilter = false;
             }
-        }, 100);
+        }, 200);
+    }
+
+    /**
+     * Closes the search dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
+    public closeSearchDialog(): void {
+        this.dialog.closeAll();
     }
 
     public initBranchTransferListResponse(): void {
@@ -275,9 +301,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public pageChanged(event: any): void {
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof NewBranchTransferListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
         this.branchTransferResponse.items = [];
-        this.branchTransferGetRequestParams.page = event.page;
+        this.branchTransferGetRequestParams.page = this.branchTransferGetRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.branchTransferGetRequestParams.count = event.pageSize;
         this.getBranchTransferList(false);
     }
 
@@ -289,12 +322,17 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Applies search filters and closes the search dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
     public search(): void {
         this.branchTransferPostRequestParams.voucherType = this.branchTransferTempPostRequestParams.voucherType;
         this.branchTransferPostRequestParams.amountOperator = this.branchTransferTempPostRequestParams.amountOperator;
         this.branchTransferPostRequestParams.amount = this.branchTransferTempPostRequestParams.amount;
         this.getBranchTransferList(true);
-        this.modalRef.hide();
+        this.closeSearchDialog();
     }
 
     public toggleTransferAsidePane(event?): void {
@@ -315,19 +353,34 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Opens the branch transfer dialog using Angular Material
+     *
+     * @memberof NewBranchTransferListComponent
+     */
     public openModal(): void {
-        this.modalRef = this.modalService.show(
+        this.dialog.open(
             this.branchtransfertemplate,
-            Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
+            {
+                panelClass: ['mat-dialog-lg', 'receipt-note-modal', 'mb-0', 'pd-t85'],
+                disableClose: true
+            }
         );
     }
 
+    /**
+     * Hides the modal/dialog and optionally refreshes the list
+     *
+     * @param {boolean} refreshList - Whether to refresh the branch transfer list
+     * @memberof NewBranchTransferListComponent
+     */
     public hideModal(refreshList: boolean): void {
         this.router.navigate(['/pages/inventory/report']);
         if (refreshList) {
             this.getBranchTransferList(true);
         }
-        this.modalRef.hide();
+        // Close all open dialogs
+        this.dialog.closeAll();
     }
 
     public columnSearch(): void {
@@ -352,14 +405,30 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Opens the delete branch transfer confirmation dialog
+     *
+     * @param {any} item - Branch transfer item to delete
+     * @memberof NewBranchTransferListComponent
+     */
     public showDeleteBranchTransferModal(item): void {
         this.selectedBranchTransfer = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        this.deleteBranchTransferModal?.show();
+        
+        // Open the dialog using Angular Material
+        this.deleteBranchTransferDialogRef = this.dialog.open(this.deleteBranchTransferDialog, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
+    /**
+     * Closes the delete branch transfer confirmation dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
     public hideBranchTransferModal(): void {
-        this.deleteBranchTransferModal.hide();
+        this.deleteBranchTransferDialogRef?.close();
     }
 
     public sortBranchTransferList(sortBy): void {
@@ -497,16 +566,23 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     /**
      * To show the datepicker
      *
-     * @param {*} element
+     * @param {*} element - The element that triggered the datepicker
      * @memberof NewBranchTransferListComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this._generalService.getPosition(element.target);
         }
-        this.modalRef = this.modalService.show(
+        this.dialog.open(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+            {
+                panelClass: ['mat-dialog-lg', 'giddh-datepicker-modal'],
+                position: {
+                    top: this.dateFieldPosition?.top + 'px',
+                    left: this.dateFieldPosition?.left + 'px'
+                },
+                hasBackdrop: false
+            }
         );
     }
 
@@ -516,7 +592,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      * @memberof NewBranchTransferListComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.dialog.closeAll();
+    }
+
+    /**
+     * Closes the datepicker dialog when the close button is clicked
+     *
+     * @memberof NewBranchTransferListComponent
+     */
+    public closeDatepickerDialog(): void {
+        this.dialog.closeAll();
     }
 
     /**

@@ -1009,17 +1009,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    /**
-     * This will navigate to selected tab
-     *
-     * @param {string} tab
-     * @memberof SettingIntegrationComponent
-     */
-    public tabChanged(event: any): void {
-        let tab = event?.tab?.textLabel?.toLocaleLowerCase();
-        this.router.navigateByUrl('/pages/settings/integration/' + tab);
-        this.loadTabData(event?.index);
-    }
+
 
     /**
      * Search query change handler

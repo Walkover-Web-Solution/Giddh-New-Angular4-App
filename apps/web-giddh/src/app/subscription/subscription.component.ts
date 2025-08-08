@@ -246,7 +246,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
-                this.selectTab({ index: val.tabIndex });
+                this.activeTabIndex = val.tabIndex;
+                this.onTabChanged();
             }
         });
     }
@@ -292,10 +293,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectTab(event: any): void {
-        this.activeTabIndex = event?.index;
-        this.onTabChanged();
-    }
+
 
     public ngOnDestroy() {
         this.destroyed$.next(true);

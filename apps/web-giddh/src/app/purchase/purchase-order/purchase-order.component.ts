@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -8,7 +8,8 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
-import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import * as dayjs from 'dayjs';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
@@ -31,15 +32,25 @@ export class PurchaseOrderComponent implements OnDestroy {
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* Input element for column search */
     @ViewChild('searchBox') public searchBox: ElementRef;
-    /* Confirm box */
-    @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* Confirm box template */
+    @ViewChild('poConfirmationTemplate') public poConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for confirmation modal */
+    private poConfirmationDialogRef: MatDialogRef<any>;
     /* This will emit if purchase bill lists needs to be refreshed */
     @Output() public refreshPurchaseBill: EventEmitter<any> = new EventEmitter();
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Dialog reference for bulk update modal */
+    private bulkUpdateDialogRef: MatDialogRef<any>;
+    /** Dialog reference for advance search modal */
+    private advanceSearchDialogRef: MatDialogRef<any>;
+    /** Dialog reference for datepicker modal */
+    private datepickerDialogRef: MatDialogRef<any>;
+    /** Dialog reference for send email modal */
+    private sendEmailDialogRef: MatDialogRef<any>;
+    /** Dialog reference for bulk convert modal */
+    private bulkConvertDialogRef: MatDialogRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -63,12 +74,15 @@ export class PurchaseOrderComponent implements OnDestroy {
     /* This will hold the response object*/
     public purchaseOrders: any = {};
     /* This will hold the query params of get all PO api */
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /* This will hold the query params of get all PO api */
     public purchaseOrderGetRequest: any = {
         companyUniqueName: '',
         from: '',
         to: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[2],
         sort: 'DESC',
         sortBy: 'purchaseDate'
     };
@@ -143,7 +157,7 @@ export class PurchaseOrderComponent implements OnDestroy {
     /** This will hold po for bulk convert */
     public selectedPurchaseOrders: any[] = [];
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
+    constructor(private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions, private dialog: MatDialog) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
@@ -277,23 +291,25 @@ export class PurchaseOrderComponent implements OnDestroy {
 
         if (purchaseNumbers?.length > 0) {
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-            this.modalRef = this.modalService.show(
-                template,
-                Object.assign({}, { class: 'modal-sm' })
-            );
+            this.bulkUpdateDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-sm',
+                disableClose: true
+            });
         } else {
             this.toaster.errorToast(this.localeData?.po_selection_error);
         }
     }
 
     /**
-     * This will open the advance search popup
-     *
-     * @param {TemplateRef<any>} template
+     * Opens the advance search dialog
+     * @param {TemplateRef<any>} template - Template reference for the dialog
      * @memberof PurchaseOrderComponent
      */
     public openAdvanceSearchModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+        this.advanceSearchDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
@@ -364,19 +380,20 @@ export class PurchaseOrderComponent implements OnDestroy {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
+        this.datepickerDialogRef = this.dialog.open(this.datepickerTemplate, {
+            panelClass: 'mat-dialog-lg giddh-datepicker-modal',
+            disableClose: this.isMobileScreen
+        });
     }
 
     /**
-     * This will hide the datepicker
-     *
+     * Closes the datepicker dialog
      * @memberof PurchaseOrderComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        if (this.datepickerDialogRef) {
+            this.datepickerDialogRef.close();
+        }
     }
 
     /**
@@ -413,11 +430,20 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @param {*} event
      * @memberof PurchaseOrderComponent
      */
-    public pageChanged(event: any): void {
-        if (this.purchaseOrderGetRequest.page !== event.page) {
-            this.purchaseOrderGetRequest.page = event.page;
-            this.getAllPurchaseOrders(false);
+    /**
+     * Handles pagination events
+     *
+     * @param {PageEvent} event
+     * @memberof PurchaseOrderComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.purchaseOrderGetRequest.count !== event.pageSize) {
+            this.purchaseOrderGetRequest.page = 1;
+        } else {
+            this.purchaseOrderGetRequest.page = event.pageIndex + 1;
         }
+        this.purchaseOrderGetRequest.count = event.pageSize;
+        this.getAllPurchaseOrders(false);
     }
 
     /**
@@ -431,7 +457,9 @@ export class PurchaseOrderComponent implements OnDestroy {
             this.purchaseOrderPostRequest = event;
             this.getAllPurchaseOrders(true);
         }
-        this.modalRef.hide();
+        if (this.advanceSearchDialogRef) {
+            this.advanceSearchDialogRef.close();
+        }
     }
 
     /**
@@ -560,7 +588,7 @@ export class PurchaseOrderComponent implements OnDestroy {
     }
 
     /**
-     * This will show the confirmation popup for delete
+     * This will show the confirmation dialog for delete
      *
      * @param {*} item
      * @memberof PurchaseOrderComponent
@@ -568,7 +596,10 @@ export class PurchaseOrderComponent implements OnDestroy {
     public confirmDelete(item: any): void {
         this.deleteModule = 'purchaseorder';
         this.selectedItem = item?.uniqueName;
-        this.poConfirmationModel?.show();
+        this.poConfirmationDialogRef = this.dialog.open(this.poConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
@@ -594,13 +625,16 @@ export class PurchaseOrderComponent implements OnDestroy {
     }
 
     /**
-     * This will close the confirmation popup
+     * This will close the confirmation dialog
      *
      * @memberof PurchaseOrderComponent
      */
     public closeConfirmationPopup(): void {
         this.selectedItem = '';
-        this.poConfirmationModel.hide();
+        if (this.poConfirmationDialogRef) {
+            this.poConfirmationDialogRef.close();
+            this.poConfirmationDialogRef = null;
+        }
     }
 
     /**
@@ -649,9 +683,9 @@ export class PurchaseOrderComponent implements OnDestroy {
                             this.refreshPurchaseBill.emit(true);
                         }
 
-                        if (this.modalRef) {
+                        if (this.bulkUpdateDialogRef) {
                             this.initBulkUpdateFields();
-                            this.modalRef.hide();
+                            this.bulkUpdateDialogRef.close();
                         }
 
                         this.getAllPurchaseOrders(false);
@@ -681,7 +715,10 @@ export class PurchaseOrderComponent implements OnDestroy {
         let purchaseNumbers = this.getSelectedItems();
         if (purchaseNumbers?.length > 0) {
             this.deleteModule = 'purchaseorderlist';
-            this.poConfirmationModel?.show();
+            this.poConfirmationDialogRef = this.dialog.open(this.poConfirmationTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
         } else {
             this.toaster.errorToast(this.localeData?.po_selection_error);
         }
@@ -707,24 +744,35 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @param {TemplateRef<any>} template
      * @memberof PurchaseOrderComponent
      */
+    /**
+     * Opens the send mail dialog
+     * @param {any} item - Purchase order item
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof PurchaseOrderComponent
+     */
     public openSendMailModal(item: any, template: TemplateRef<any>): void {
         this.sendEmailRequest.email = item.vendor.email;
         this.sendEmailRequest.uniqueName = item?.uniqueName;
         this.sendEmailRequest.accountUniqueName = item.vendor?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.purchaseOrderGetRequest.companyUniqueName;
-        this.modalRef = this.modalService.show(template);
+        this.sendEmailDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
-     * This will close the email popup
-     *
+     * Closes the send mail dialog
      * @memberof PurchaseOrderComponent
      */
-    public closeSendMailPopup(event: any): void {
+    public closeSendMailPopup(): void {
         this.selectedItem = '';
+        if (this.sendEmailDialogRef) {
+            this.sendEmailDialogRef.close();
+        }
 
-        if (event) {
-            this.modalRef.hide();
+        if (event && this.sendEmailDialogRef) {
+            this.sendEmailDialogRef.close();
         }
     }
 
@@ -839,20 +887,26 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @param {*} [purchaseOrder]
      * @memberof PurchaseOrderComponent
      */
+    /**
+     * Opens the bulk convert dialog
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @param {any} [purchaseOrder] - Optional purchase order item
+     * @memberof PurchaseOrderComponent
+     */
     public openBulkConvert(template: TemplateRef<any>, purchaseOrder?: any): void {
         if (this.selectedPo?.length > 0 || purchaseOrder) {
             if (purchaseOrder) {
                 this.selectedPurchaseOrders = [{ poUniqueName: purchaseOrder?.uniqueName, orderNumber: purchaseOrder?.voucherNumber }];
-                this.modalRef = this.modalService.show(
-                    template,
-                    Object.assign({}, { class: 'modal-sm' })
-                );
+                this.bulkConvertDialogRef = this.dialog.open(template, {
+                    panelClass: 'mat-dialog-sm',
+                    disableClose: true
+                });
             } else {
                 this.selectedPurchaseOrders = cloneDeep(this.selectedPo);
-                this.modalRef = this.modalService.show(
-                    template,
-                    Object.assign({}, { class: 'modal-sm' })
-                );
+                this.bulkConvertDialogRef = this.dialog.open(template, {
+                    panelClass: 'mat-dialog-sm',
+                    disableClose: true
+                });
             }
         } else {
             this.toaster.errorToast(this.localeData?.po_selection_error);
@@ -865,8 +919,15 @@ export class PurchaseOrderComponent implements OnDestroy {
      * @param {*} event
      * @memberof PurchaseOrderComponent
      */
+    /**
+     * Closes the bulk convert dialog
+     * @param {any} event - Event from the dialog
+     * @memberof PurchaseOrderComponent
+     */
     public closeBulkConvertPopup(event: any): void {
-        this.modalRef?.hide();
+        if (this.bulkConvertDialogRef) {
+            this.bulkConvertDialogRef.close();
+        }
         if (event) {
             this.getAllPurchaseOrders(true);
         }

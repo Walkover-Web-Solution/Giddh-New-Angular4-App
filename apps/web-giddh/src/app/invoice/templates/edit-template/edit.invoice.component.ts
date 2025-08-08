@@ -1,11 +1,11 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, TemplateRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -28,9 +28,9 @@ import { GeneralService } from '../../../services/general.service';
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
-    @ViewChild('templateModal', { static: true }) public templateModal: ModalDirective;
-    @ViewChild('customTemplateConfirmationModal', { static: true }) public customTemplateConfirmationModal: ModalDirective;
-    @ViewChild('invoiceTemplatePreviewModal', { static: true }) public invoiceTemplatePreviewModal: ModalDirective;
+    @ViewChild('templateModalTemplate', { static: true }) public templateModalTemplate: TemplateRef<any>;
+    @ViewChild('customTemplateConfirmationTemplate', { static: true }) public customTemplateConfirmationTemplate: TemplateRef<any>;
+    @ViewChild('invoiceTemplatePreviewTemplate', { static: true }) public invoiceTemplatePreviewTemplate: TemplateRef<any>;
     public voucherType: string;
     @ViewChild(InvoiceTemplateModalComponent, { static: true }) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
@@ -665,6 +665,12 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public hasInvoiceTemplatePermissions: boolean = true;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /** Dialog reference for template modal */
+    private templateModalDialogRef: MatDialogRef<any>;
+    /** Dialog reference for custom template confirmation modal */
+    private customTemplateConfirmationDialogRef: MatDialogRef<any>;
+    /** Dialog reference for invoice template preview modal */
+    private invoiceTemplatePreviewDialogRef: MatDialogRef<any>;
 
     constructor(
         private _toasty: ToasterService,
@@ -674,7 +680,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         private _activatedRoute: ActivatedRoute,
         private invoiceService: InvoiceService,
         private _invoiceUiDataService: InvoiceUiDataService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
 
     }
@@ -784,17 +791,55 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
         this.showtemplateModal = true;
-        this.templateModal?.show();
+        this.openTemplateModal();
     }
 
     /**
-     * onCloseTemplateModal
+     * Opens the template modal dialog
+     *
+     * @memberof EditInvoiceComponent
      */
-    public onCloseTemplateModal() {
+    public openTemplateModal(): void {
+        this.templateModalDialogRef = this.dialog.open(this.templateModalTemplate, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Opens the custom template confirmation modal dialog
+     *
+     * @memberof EditInvoiceComponent
+     */
+    public openCustomTemplateConfirmationModal(): void {
+        this.customTemplateConfirmationDialogRef = this.dialog.open(this.customTemplateConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Opens the invoice template preview modal dialog
+     *
+     * @memberof EditInvoiceComponent
+     */
+    public openInvoiceTemplatePreviewModal(): void {
+        this.invoiceTemplatePreviewDialogRef = this.dialog.open(this.invoiceTemplatePreviewTemplate, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the template modal dialog
+     *
+     * @memberof EditInvoiceComponent
+     */
+    public onCloseTemplateModal(): void {
         this.confirmationFlag = 'closeConfirmation';
         this.selectedTemplateUniqueName = null;
         this.deleteTemplateConfirmationMessage = `Are you sure want to close this popup? Your unsaved changes will be discarded`;
-        this.customTemplateConfirmationModal?.show();
+        this.openCustomTemplateConfirmationModal();
     }
 
     /**
@@ -862,7 +907,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
-                    this.templateModal.hide();
+                    if (this.templateModalDialogRef) {
+                        this.templateModalDialogRef.close();
+                        this.templateModalDialogRef = null;
+                    }
                     this.showtemplateModal = false;
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
@@ -912,8 +960,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.confirmationFlag = null;
                     this.selectedTemplateUniqueName = null;
                     this.deleteTemplateConfirmationMessage = null;
-                    this.customTemplateConfirmationModal?.hide();
-                    this.templateModal.hide();
+                    if (this.customTemplateConfirmationDialogRef) {
+                        this.customTemplateConfirmationDialogRef.close();
+                        this.customTemplateConfirmationDialogRef = null;
+                    }
+                    if (this.templateModalDialogRef) {
+                        this.templateModalDialogRef.close();
+                        this.templateModalDialogRef = null;
+                    }
                     this._invoiceUiDataService.resetCustomTemplate();
                     this._invoiceUiDataService.setLogoPath('');
                     this._invoiceUiDataService.unusedImageSignature = '';
@@ -956,7 +1010,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
         // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         this.showinvoiceTemplatePreviewModal = true;
-        this.invoiceTemplatePreviewModal?.show();
+        this.openInvoiceTemplatePreviewModal();
     }
 
     /**
@@ -979,7 +1033,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.transactionMode = 'update';
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;
-        this.templateModal?.show();
+        this.templateModalDialogRef = this.dialog.open(this.templateModalTemplate, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
     }
 
     /**
@@ -1001,7 +1058,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate?.uniqueName;
-            this.customTemplateConfirmationModal?.show();
+            this.customTemplateConfirmationDialogRef = this.dialog.open(this.customTemplateConfirmationTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
         }
     }
 
@@ -1020,18 +1080,26 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             }
             this._invoiceUiDataService.resetCustomTemplate();
             this._invoiceUiDataService.setLogoPath('');
-            this.templateModal.hide();
+            if (this.templateModalDialogRef) {
+                this.templateModalDialogRef.close();
+                this.templateModalDialogRef = null;
+            }
             this.showtemplateModal = false;
             this._invoiceUiDataService.unusedImageSignature = '';
         }
-        this.customTemplateConfirmationModal?.hide();
+        this.customTemplateConfirmationDialogRef?.close();
     }
 
     /**
-     * onClosePreviewModal
+     * Closes the invoice template preview modal dialog
+     *
+     * @memberof EditInvoiceComponent
      */
-    public onClosePreviewModal() {
-        this.invoiceTemplatePreviewModal?.hide();
+    public onClosePreviewModal(): void {
+        if (this.invoiceTemplatePreviewDialogRef) {
+            this.invoiceTemplatePreviewDialogRef.close();
+            this.invoiceTemplatePreviewDialogRef = null;
+        }
         this.showinvoiceTemplatePreviewModal = false;
     }
 

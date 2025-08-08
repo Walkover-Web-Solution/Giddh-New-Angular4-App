@@ -1,13 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PaymentSummaryRequest } from '../../../models/api-models/Reports';
@@ -23,6 +23,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { InvoiceService } from '../../../services/invoice.service';
 import { saveAs } from 'file-saver';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'payment-report',
@@ -30,6 +32,8 @@ import { saveAs } from 'file-saver';
     styleUrls: ['./payment-report.component.scss']
 })
 export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Vendor name search bar */
     @ViewChild('vendorName', { static: false }) public vendorName: ElementRef;
     /** Parent of vendor name search bar */
@@ -41,21 +45,19 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Advance search modal instance */
     @ViewChild('paymentSearchFilterModal', { static: false }) public paymentSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('paymentSearchModalContainer', { static: false }) public paymentSearchModalContainer: ModalDirective;
+    @ViewChild('paymentSearchModalTemplate', { static: false }) public paymentSearchModalTemplate: TemplateRef<any>;
     /** Instance of receipt confirmation modal */
-    @ViewChild('paymentConfirmationModel', { static: false }) public paymentConfirmationModel: ModalDirective;
+    @ViewChild('paymentConfirmationTemplate', { static: false }) public paymentConfirmationTemplate: TemplateRef<any>;
     /** dayjs method */
     public dayjs = dayjs;
-    /** Modal reference */
-    public modalRef: BsModalRef;
-    /** Modal bulk export reference */
-    public bulkExportModalRef: BsModalRef;
+    /** Dialog reference for payment search modal */
+    private paymentSearchDialogRef: MatDialogRef<any>;
+    /** Dialog reference for payment confirmation modal */
+    private paymentConfirmationDialogRef: MatDialogRef<any>;
     /** Stores the list of all payments */
     public allPayments: Array<any>;
     /** Stores summary data of all payments based on filters applied */
     public paymentsSummaryData: any;
-    /** Stores the value of pagination limit for template use */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** Stores the current page number */
     public pageConfiguration: { currentPage: number, totalPages: number, totalItems: number } = {
         currentPage: 1,
@@ -67,6 +69,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         receiptNumber: '',  // Receipt Number
         baseAccountName: '',  // Vendor Name
         sortBy: '',  // Sort by
+        count: this.pageSizeOptions[2],
+        page: 1,
         sort: '',
         q: ''
     };
@@ -109,6 +113,14 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     private universalDate: Array<Date>;
     /** Subject to unsubscribe all the observables when the component destroys */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Modal reference */
+    public modalRef: any;
+    /** Modal service reference */
+    public modalService: any;
+    /** Bulk export modal reference */
+    /** Reference to bulk export dialog */
+    private bulkExportDialogRef: MatDialogRef<any>;
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Company unique name for API calls */
     private activeCompanyUniqueName: string;
     /** Date format type */
@@ -174,7 +186,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private toastService: ToasterService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
+        private dialog: MatDialog,
         private router: Router,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
@@ -302,7 +314,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             (componentRef.instance as PaymentAdvanceSearchComponent).closeModal,
             (componentRef.instance as PaymentAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                 // Listener for close and cancel event of modal
-                this.paymentSearchModalContainer.hide();
+                this.closePaymentSearchModal();
             });
         (componentRef.instance as PaymentAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: PaymentAdvanceSearchModel) => {
             // Listener for confirm event of modal
@@ -316,10 +328,35 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 unUsedAmount: data.unusedAmountFilter.amount,
                 unUsedAmountOperation: data.unusedAmountFilter.selectedValue
             }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
-            this.paymentSearchModalContainer.hide();
+            this.closePaymentSearchModal();
         });
-        this.paymentSearchModalContainer.show();
+        this.openPaymentSearchModal();
     }
+
+    /**
+     * Opens the payment search modal dialog
+     *
+     * @memberof PaymentReportComponent
+     */
+    public openPaymentSearchModal(): void {
+        this.paymentSearchDialogRef = this.dialog.open(this.paymentSearchModalTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the payment search modal dialog
+     *
+     * @memberof PaymentReportComponent
+     */
+    public closePaymentSearchModal(): void {
+        if (this.paymentSearchDialogRef) {
+            this.paymentSearchDialogRef.close();
+            this.paymentSearchDialogRef = null;
+        }
+    }
+
     /**
      * Opens/Closes the respective search bar based on parameters provided
      *
@@ -346,13 +383,23 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     }
 
     /**
-     * Pagination change handler
-     *
-     * @param {*} event Selected page details
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
      * @memberof PaymentReportComponent
      */
-    public onPageChanged(event: any): void {
-        this.fetchAllPayments({ page: event.page, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
+    public handlePageEvent(event: PageEvent): void {
+        let newPage: number;
+        
+        if (this.searchQueryParams.count !== event.pageSize) {
+            newPage = 1;
+        } else {
+            newPage = event.pageIndex + 1;
+        }
+        
+        this.searchQueryParams.page = newPage;
+        this.searchQueryParams.count = event.pageSize;
+        this.fetchAllPayments({ page: newPage, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
     }
 
     /**
@@ -469,7 +516,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
             to: this.toDate,
-            count: this.paginationLimit,
+            count: this.searchQueryParams.count,
             q: this.searchQueryParams.q,
             total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
             balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
@@ -775,8 +822,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      *
      * @memberof PaymentReportComponent
      */
-    public openConfirmationPopup() {
-        this.paymentConfirmationModel?.show();
+    public openConfirmationPopup(): void {
+        this.paymentConfirmationDialogRef = this.dialog.open(this.paymentConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
@@ -784,8 +834,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      *
      * @memberof PaymentReportComponent
      */
-    public closeConfirmationPopup() {
-        this.paymentConfirmationModel?.hide();
+    public closeConfirmationPopup(): void {
+        if (this.paymentConfirmationDialogRef) {
+            this.paymentConfirmationDialogRef.close();
+            this.paymentConfirmationDialogRef = null;
+        }
     }
 
     /**
@@ -827,12 +880,26 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     }
 
     /**
-    * This will open the bulk export modal
-    *
-    * @param {TemplateRef<any>} template
-    * @memberof PaymentReportComponent
-    */
+     * Opens the bulk export dialog using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof PaymentReportComponent
+     */
     public openBulkExport(template: TemplateRef<any>): void {
-        this.bulkExportModalRef = this.modalService.show(template);
+        this.bulkExportDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the bulk export dialog
+     *
+     * @memberof PaymentReportComponent
+     */
+    public closeBulkExportDialog(): void {
+        if (this.bulkExportDialogRef) {
+            this.bulkExportDialogRef.close();
+        }
     }
 }

@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { filter, take, takeUntil, tap } from 'rxjs/operators';
@@ -41,7 +40,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public newSalesInvCount: number = 0;
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
-    @ViewChild('paginationChild', { static: true }) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */

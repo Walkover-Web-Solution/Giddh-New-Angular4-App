@@ -23,11 +23,14 @@ import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+import { PageEvent } from '@angular/material/paginator';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+// Removed ngx-bootstrap modal import as all modals have been migrated to Angular Material
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
@@ -69,14 +72,20 @@ const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNot
 
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
-    @ViewChild('invoiceConfirmationModel', { static: true }) public invoiceConfirmationModel: ModalDirective;
-    @ViewChild('performActionOnInvoiceModel', { static: true }) public performActionOnInvoiceModel: ModalDirective;
-    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('invoiceConfirmationDialog', { static: true }) public invoiceConfirmationDialog: TemplateRef<any>;
+    public invoiceConfirmationDialogRef: MatDialogRef<any>;
+    @ViewChild('performActionOnInvoiceDialog', { static: true }) public performActionOnInvoiceDialog: TemplateRef<any>;
+    public performActionOnInvoiceDialogRef: MatDialogRef<any>;
+    @ViewChild('downloadOrSendMailDialog', { static: true }) public downloadOrSendMailDialog: TemplateRef<any>;
+    public downloadOrSendMailDialogRef: MatDialogRef<any>;
     @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild('advanceSearchDialog', { static: true }) public advanceSearchDialog: TemplateRef<any>;
+    public advanceSearchDialogRef: MatDialogRef<any>;
     @ViewChild(DaterangePickerComponent, { static: true }) public dp: DaterangePickerComponent;
-    @ViewChild('bulkUpdate', { static: true }) public bulkUpdate: ModalDirective;
-    @ViewChild('eWayBill', { static: true }) public eWayBill: ModalDirective;
+    @ViewChild('bulkUpdateDialog', { static: true }) public bulkUpdateDialog: TemplateRef<any>;
+    public bulkUpdateDialogRef: MatDialogRef<any>;
+    @ViewChild('eWayBillDialog', { static: true }) public eWayBillDialog: TemplateRef<any>;
+    private eWayBillDialogRef: MatDialogRef<any>;
     @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @ViewChild('cancelEInvoiceTemplate', { static: false }) public cancelEInvoiceTemplate: TemplateRef<any>;
@@ -161,11 +170,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
     public lastListingFilters: any;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
+    public paginationLimit: number = this.pageSizeOptions[2]; // 50
     public purchaseRecord: any = {};
     /**Adjust advance receipts */
-    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
+    private adjustPaymentDialogRef: MatDialogRef<any>;
     /** To add advance receipt modal in DOM */
     public showAdvanceReceiptAdjust: boolean = false;
     /** To check is advance receipts modal in update mode */
@@ -202,6 +214,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Reference to bulk export template ref */
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
+    /** Reference to bulk export dialog */
+    private bulkExportDialogRef: MatDialogRef<any>;
+    /** Reference to cancel E-invoice dialog */
+    private cancelEInvoiceDialogRef: MatDialogRef<any>;
+    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
+    /** Reference to search template dialog */
+    private searchTemplateDialogRef: MatDialogRef<any>;
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: TemplateRef<any>;
+    /** Reference to send email dialog */
+    private sendEmailDialogRef: MatDialogRef<any>;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */
@@ -268,6 +292,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private location: Location,
         private salesService: SalesService,
         private modalService: BsModalService,
+        private dialog: MatDialog,
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private adjustmentUtilityService: AdjustmentUtilityService,
@@ -295,13 +320,36 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will open the search modal
+     * Opens dialogs using Angular Material
      *
-     * @param {TemplateRef<any>} template
+     * @param {TemplateRef<any>} template - Template reference for the dialog
      * @memberof InvoicePreviewComponent
      */
     public openModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+        if (template === this.bulkExport) {
+            this.bulkExportDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else if (template === this.cancelEInvoiceTemplate) {
+            this.cancelEInvoiceDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else if (template === this.template) {
+            this.searchTemplateDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else if (template === this.sendEmailModal) {
+            this.sendEmailDialogRef = this.dialog.open(template, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else {
+            // Fallback for any remaining modals that haven't been migrated yet
+            this.modalRef = this.modalService.show(template);
+        }
     }
 
     public ngOnInit() {
@@ -535,7 +583,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.selectedPerformAdjustPaymentAction) {
                     if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
                         this.showAdvanceReceiptAdjust = true;
-                        this.adjustPaymentModal?.show();
+                        this.openAdjustPaymentDialog();
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         if (response.account && response.date) {
@@ -649,47 +697,122 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Advance search model show hide
-     *
+     * Opens the advance search dialog
      *
      * @memberof InvoicePreviewComponent
      */
     public toggleAdvanceSearchPopup(): void {
-        this.advanceSearch.toggle();
+        if (!this.advanceSearchDialogRef) {
+            this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchDialog, {
+                width: '70%',
+                height: 'auto',
+                panelClass: 'custom-dialog-container'
+            });
+
+            this.advanceSearchDialogRef.afterClosed().subscribe(() => {
+                this.advanceSearchDialogRef = null;
+            });
+        } else {
+            this.closeAdvanceSearchDialog();
+        }
+    }
+
+    /**
+     * Closes the advance search dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeAdvanceSearchDialog(): void {
+        if (this.advanceSearchDialogRef) {
+            this.advanceSearchDialogRef.close();
+        }
     }
 
     /**
      * Bulk update model show hide
      *
-     * @param {boolean} isClose Boolean to check model need to close or not
+     * @param {boolean} isClose
      * @param {boolean} [refreshVouchers]
      * @memberof InvoicePreviewComponent
      */
     public toggleBulkUpdatePopup(isClose: boolean, refreshVouchers?: boolean): void {
         if (isClose) {
-            this.bulkUpdate?.hide();
-            if (refreshVouchers) {
-                this.getVoucher(this.isUniversalDateApplicable);
-            }
+            this.closeBulkUpdateDialog(refreshVouchers);
         } else {
-            this.bulkUpdate?.show();
+            if (!this.bulkUpdateDialogRef) {
+                this.bulkUpdateDialogRef = this.dialog.open(this.bulkUpdateDialog, {
+                    width: '70%',
+                    height: 'auto',
+                    panelClass: 'custom-dialog-container'
+                });
+
+                this.bulkUpdateDialogRef.afterClosed().subscribe(() => {
+                    this.bulkUpdateDialogRef = null;
+                });
+            }
         }
     }
 
+    /**
+     * Closes the bulk update dialog
+     *
+     * @param {boolean} [refreshVouchers]
+     * @memberof InvoicePreviewComponent
+     */
+    public closeBulkUpdateDialog(refreshVouchers?: boolean): void {
+        if (this.bulkUpdateDialogRef) {
+            this.bulkUpdateDialogRef.close();
+        }
+        if (refreshVouchers) {
+            this.getVoucher(this.isUniversalDateApplicable);
+        }
+    }
+
+    /**
+     * Toggles the E-way bill dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
     public toggleEwayBillPopup() {
-        this.eWayBill.toggle();
-        if (this.selectedVoucher === VoucherTypeEnum.sales && this.eWayBill.isShown) {
-            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-            // To get re-assign receipts voucher store
-            if (this.selectedInvoicesList[0]?.account?.uniqueName) {
-                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedInvoicesList[0]?.account?.uniqueName, {
-                    invoiceNumber: this.selectedInvoicesList[0]?.voucherNumber,
-                    voucherType: VoucherTypeEnum.sales,
-                    uniqueName: this.selectedInvoicesList[0]?.uniqueName
-                }));
+        if (!this.eWayBillDialogRef) {
+            // Open the dialog if it's not already open
+            this.eWayBillDialogRef = this.dialog.open(this.eWayBillDialog, {
+                width: '500px',
+                panelClass: 'invoice-eway-bill-dialog',
+                disableClose: true
+            });
+            
+            // Subscribe to dialog close event
+            this.eWayBillDialogRef.afterClosed().subscribe(() => {
+                this.eWayBillDialogRef = null;
+            });
+            
+            if (this.selectedVoucher === VoucherTypeEnum.sales) {
+                this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+                // To get re-assign receipts voucher store
+                if (this.selectedInvoicesList[0]?.account?.uniqueName) {
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedInvoicesList[0]?.account?.uniqueName, {
+                        invoiceNumber: this.selectedInvoicesList[0]?.voucherNumber,
+                        voucherType: VoucherTypeEnum.sales,
+                        uniqueName: this.selectedInvoicesList[0]?.uniqueName
+                    }));
+                }
             }
+        } else {
+            this.closeEwayBillDialog();
         }
         this._invoiceService.selectedInvoicesLists = [];
+    }
+    
+    /**
+     * Closes the E-way bill dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeEwayBillDialog(): void {
+        if (this.eWayBillDialogRef) {
+            this.eWayBillDialogRef.close();
+        }
         this._invoiceService.VoucherType = this.selectedVoucher;
         this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
     }
@@ -702,12 +825,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.invoiceSearchRequest.page) {
-            return;
-        }
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InvoicePreviewComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
         this.toggleAllItems(false);
-        this.invoiceSearchRequest.page = ev.page;
+        this.invoiceSearchRequest.page = this.invoiceSearchRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
+        this.invoiceSearchRequest.count = event.pageSize;
         this.getVoucher(this.isUniversalDateApplicable);
     }
 
@@ -724,9 +851,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let objItem = item || this.selectedInvoiceForDetails;
             let actionToPerform = ev;
             if (actionToPerform === 'paid') {
-                this.performActionOnInvoiceModel?.show();
+                this.selectedInvoice = objItem;
+                this.openPerformActionOnInvoiceDialog();
                 setTimeout(() => {
-                    this.selectedInvoice = objItem;
                     if (this.invoicePaymentModelComponent) {
                         this.invoicePaymentModelComponent.focusAmountField();
                     }
@@ -746,33 +873,67 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Opens the invoice confirmation dialog using Angular Material
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public openInvoiceConfirmationDialog(): void {
+        this.invoiceConfirmationDialogRef = this.dialog.open(this.invoiceConfirmationDialog, {
+            width: '500px',
+            panelClass: 'custom-dialog-container'
+        });
+
+        this.invoiceConfirmationDialogRef.afterClosed().subscribe(() => {
+            this.invoiceConfirmationDialogRef = null;
+        });
+    }
+    
+    /**
+     * Opens the perform action on invoice dialog using Angular Material
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public openPerformActionOnInvoiceDialog(): void {
+        this.performActionOnInvoiceDialogRef = this.dialog.open(this.performActionOnInvoiceDialog, {
+            width: '500px',
+            panelClass: 'custom-dialog-container perform-payment'
+        });
+
+        this.performActionOnInvoiceDialogRef.afterClosed().subscribe(() => {
+            this.performActionOnInvoiceDialogRef = null;
+        });
+    }
+
     public onDeleteBtnClick() {
         let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((o) => o?.uniqueName === this.selectedItems[0]);
-        this.invoiceConfirmationModel?.show();
+        this.openInvoiceConfirmationDialog();
     }
 
     public deleteConfirmedInvoice(selectedVoucher?: any) {
-        this.invoiceConfirmationModel?.hide();
-        // if (this.selectedVoucher === VoucherTypeEnum.purchase && this.voucherApiVersion !== 2) {
-        //     const requestObject = {
-        //         uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails?.uniqueName) : ''
-        //     };
-        //     this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-        //         this.selectedItems = [];
-        //         if (response?.status === 'success') {
-        //             this._toaster.successToast(response.body);
-        //             this.selectedInvoiceForDetails = null;
-        //             this.getVoucher(this.isUniversalDateApplicable);
-        //         } else {
-        //             this._toaster.errorToast(response?.message);
-        //             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-        //             this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-        //                 this.parseBalRes(res);
-        //             });
-        //         }
-        //     });
-        // } else {
+        if (this.invoiceConfirmationDialogRef) {
+            this.invoiceConfirmationDialogRef.close();
+        }
+        if (this.selectedVoucher === VoucherTypeEnum.purchase && this.voucherApiVersion !== 2) {
+            const requestObject = {
+                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails?.uniqueName) : ''
+            };
+            this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.selectedItems = [];
+                if (response?.status === 'success') {
+                    this._toaster.successToast(response.body);
+                    this.selectedInvoiceForDetails = null;
+                    this.getVoucher(this.isUniversalDateApplicable);
+                } else {
+                    this._toaster.errorToast(response?.message);
+                    this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+                    this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                        this.parseBalRes(res);
+                    });
+                }
+            });
+        } else {
             //  It will execute when Bulk delete operation
             if (this.selectedInvoicesList?.length > 1) {
                 let bulkDeleteModel;
@@ -826,11 +987,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
 
-        // }
+        }
     }
 
+    /**
+     * Closes the invoice confirmation dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
     public closeConfirmationPopup(): void {
-        this.invoiceConfirmationModel?.hide();
+        if (this.invoiceConfirmationDialogRef) {
+            this.invoiceConfirmationDialogRef.close();
+        }
     }
 
     public performActionPopup(data: any): void {
@@ -845,9 +1013,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof InvoicePreviewComponent
      */
+    /**
+     * Closes the perform action on invoice dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
     public closePerformActionPopup(): void {
         this.store.dispatch(this.invoiceActions.resetActionOnInvoice());
-        this.performActionOnInvoiceModel?.hide();
+        if (this.performActionOnInvoiceDialogRef) {
+            this.performActionOnInvoiceDialogRef.close();
+        }
     }
 
     public goToInvoice(voucherType: string) {
@@ -867,8 +1042,32 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }, 200);
     }
 
+    /**
+     * Opens the download or send mail dialog using Angular Material
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public openDownloadOrSendMailDialog(): void {
+        this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
+            width: '80%',
+            panelClass: 'custom-dialog-container'
+        });
+
+        this.downloadOrSendMailDialogRef.afterClosed().subscribe(() => {
+            this.downloadOrSendMailDialogRef = null;
+        });
+    }
+
+    /**
+     * Closes the download or send mail dialog
+     *
+     * @param {Object} userResponse Response from the dialog
+     * @memberof InvoicePreviewComponent
+     */
     public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
-        this.downloadOrSendMailModel?.hide();
+        if (this.downloadOrSendMailDialogRef) {
+            this.downloadOrSendMailDialogRef.close();
+        }
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
@@ -1243,7 +1442,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public resetAdvanceSearch() {
+    public resetAdvanceSearch(): void {
         this.showAdvanceSearchIcon = false;
         if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
             this.advanceSearchComponent.allShSelect.forEach(f => {
@@ -1498,7 +1697,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
                     this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
                     this.showAdvanceReceiptAdjust = true;
-                    this.adjustPaymentModal?.show();
+                    this.openAdjustPaymentDialog();
                 } else {
                     this._toaster.errorToast(response?.message);
                 }
@@ -1517,15 +1716,36 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-    * To close advance receipt modal
-    *
-    * @memberof InvoicePreviewComponent
-    */
+     * To close advance receipt modal
+     *
+     * @memberof InvoicePreviewComponent
+     */
     public closeAdvanceReceiptModal(): void {
         this.showAdvanceReceiptAdjust = false;
         this.advanceReceiptAdjustmentData = null;
         this.changeStatusInvoiceUniqueName = '';
-        this.adjustPaymentModal?.hide();
+        if (this.adjustPaymentDialogRef) {
+            this.adjustPaymentDialogRef.close();
+        }
+    }
+    
+    /**
+     * Opens the adjust payment dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public openAdjustPaymentDialog(): void {
+        if (!this.adjustPaymentDialogRef) {
+            this.adjustPaymentDialogRef = this.dialog.open(this.adjustPaymentDialog, {
+                width: '80%',
+                height: 'auto',
+                panelClass: 'custom-dialog-container'
+            });
+
+            this.adjustPaymentDialogRef.afterClosed().subscribe(() => {
+                this.adjustPaymentDialogRef = null;
+            });
+        }
     }
 
     /**
@@ -1614,7 +1834,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.voucherForAdjustment = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
-                        this.adjustPaymentModal?.show();
+                        this.openAdjustPaymentDialog();
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
@@ -1674,16 +1894,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} billUniqueName
      * @memberof InvoicePreviewComponent
      */
+    /**
+     * This will show confirmation modal for delete Purchase Bill
+     *
+     * @param {*} billUniqueName
+     * @memberof InvoicePreviewComponent
+     */
     public deletePurchaseBill(billUniqueName: any): void {
         let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((inv) => inv?.uniqueName === billUniqueName);
-        this.invoiceConfirmationModel?.show();
+        this.openInvoiceConfirmationDialog();
     }
 
     /**
-     * This will open the send email modal
+     * Opens the send email modal using Angular Material
      *
-     * @param {TemplateRef<any>} template
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @param {any} item - Item data for email request
      * @memberof InvoicePreviewComponent
      */
     public openSendMailModal(template: TemplateRef<any>, item: any): void {
@@ -1691,19 +1918,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.sendEmailRequest.uniqueName = item?.uniqueName;
         this.sendEmailRequest.accountUniqueName = item.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
-        this.modalRef = this.modalService.show(template);
+        this.openModal(template);
     }
 
     /**
-     * This will close the send email popup
+     * Closes the send email dialog
      *
-     * @param {*} event
+     * @param {any} event - Event from the email modal component
      * @memberof InvoicePreviewComponent
      */
-    public closeSendMailPopup(event: any): void {
-        if (event) {
-            this.modalRef.hide();
-        }
+    public closeSendMailPopup(): void {
+        this.sendEmailDialogRef?.close();
     }
 
     /**
@@ -1729,6 +1954,51 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
+    }
+
+    /**
+     * Closes the bulk export dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeBulkExportDialog(): void {
+        if (this.bulkExportDialogRef) {
+            this.bulkExportDialogRef.close();
+        }
+    }
+
+    /**
+     * Closes the cancel E-invoice dialog and resets form data
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeCancelEInvoiceDialog(): void {
+        if (this.cancelEInvoiceDialogRef) {
+            this.cancelEInvoiceDialogRef.close();
+            this.resetCancelEInvoice();
+        }
+    }
+
+    /**
+     * Closes the search template dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeSearchTemplateDialog(): void {
+        if (this.searchTemplateDialogRef) {
+            this.searchTemplateDialogRef.close();
+        }
+    }
+
+    /**
+     * Closes the send email dialog
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closeSendEmailDialog(): void {
+        if (this.sendEmailDialogRef) {
+            this.sendEmailDialogRef.close();
+        }
     }
 
     /**

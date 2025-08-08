@@ -381,9 +381,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public handlePageChange(event: any): void {
-        this.pageIndex = event.pageIndex;
+        if (this.ocrDocumentsRequestParams.count !== event.pageSize) {
+            this.ocrDocumentsRequestParams.page = 1;
+            this.pageIndex = 0;
+        } else {
+            this.ocrDocumentsRequestParams.page = event.pageIndex + 1;
+            this.pageIndex = event.pageIndex;
+        }
         this.ocrDocumentsRequestParams.count = event.pageSize;
-        this.ocrDocumentsRequestParams.page = event.pageIndex + 1;
         this.getAllOcrDocuments(false);
     }
 

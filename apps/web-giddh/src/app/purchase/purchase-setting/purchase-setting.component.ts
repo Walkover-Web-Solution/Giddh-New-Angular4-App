@@ -16,6 +16,7 @@ import { AppState } from '../../store';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from '../../services/service.config';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'purchase-setting',
@@ -24,6 +25,8 @@ import { ServiceConfig } from '../../services/service.config';
 })
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
+    /** Selected tab index for Material tabs */
+    public selectedTabIndex: number = 0;
     /* This will hold the invoice settings */
     public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, poAutoWhatsApp: false, autoWhatsApp: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, generateAutoPurchaseNumber: false } };
     /* This will hold the PB lock date */
@@ -294,5 +297,15 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      */
     public getWhatsappSettingLabel(voucherType: string): string {
         return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+    }
+
+    /**
+     * Handles tab change events
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof PurchaseSettingComponent
+     */
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
     }
 }

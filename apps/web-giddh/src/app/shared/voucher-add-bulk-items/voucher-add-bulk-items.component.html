@@ -115,7 +115,7 @@
                             </cdk-virtual-scroll-viewport>
                         </div>
                         <div class="selected-item-action d-flex column-gap1">
-                            <button mat-stroked-button color="primary"
+                            <button mat-raised-button color="primary"
                                 (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"> {{
                                 commonLocaleData?.app_add }}</button>
                             <button mat-stroked-button mat-dialog-close> {{ commonLocaleData?.app_cancel }}</button>

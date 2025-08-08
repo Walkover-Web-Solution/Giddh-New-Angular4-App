@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="setting-page user-detail-page relative overflow-visible" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+    <div class="setting-page user-detail-page relative overflow-visible" *ngIf="!isCreateAndSwitchCompanyInProcess">
         <div class="video-link position-absolute mr-r15" *ngIf="activeTabIndex === 1">
             <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
         </div>
@@ -40,7 +40,7 @@
                                         [readonly]="true"
                                     ></input-field>
                                 </div>
-                                <button type="button" mat-stroked-button color="primary" (click)="toggleIsCopied()">
+                                <button type="button" mat-raised-button color="primary" (click)="toggleIsCopied()">
                                     {{ commonLocaleData?.app_copy }}
                                 </button>
                             </div>

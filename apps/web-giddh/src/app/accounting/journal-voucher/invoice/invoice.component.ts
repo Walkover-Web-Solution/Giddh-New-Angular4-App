@@ -21,7 +21,8 @@ import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as dayjs from 'dayjs';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
@@ -80,12 +81,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     @Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
+    @ViewChild('quickAccountTemplate', { static: true }) public quickAccountTemplate: TemplateRef<any>;
+    /** Dialog reference for quick account modal */
+    private quickAccountDialogRef: MatDialogRef<any>;
 
     @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
     @ViewChild('particular', { static: true }) public accountField: any;
     @ViewChild('dateField', { static: true }) public dateField: ElementRef;
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: any;
     @ViewChild('partyAccNameInputField', { static: true }) public partyAccNameInputField: ElementRef;
     @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
@@ -163,6 +166,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         private inventoryService: InventoryService,
         private inventoryAction: InventoryAction,
         private invoiceActions: InvoiceActions,
+        private dialog: MatDialog
     ) {
         this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
@@ -920,18 +924,31 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         });
     }
 
-    public showQuickAccountModal() {
+    /**
+     * Shows the quick account modal dialog
+     *
+     * @memberof InvoiceComponent
+     */
+    public showQuickAccountModal(): void {
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal?.show();
+            this.quickAccountDialogRef = this.dialog.open(this.quickAccountTemplate, {
+                panelClass: 'mat-dialog-sm',
+                disableClose: true
+            });
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
         }
     }
 
+    /**
+     * Hides the quick account modal dialog
+     *
+     * @memberof InvoiceComponent
+     */
     public hideQuickAccountModal() {
-        this.quickAccountModal.hide();
+        this.quickAccountDialogRef?.close();
     }
 
 

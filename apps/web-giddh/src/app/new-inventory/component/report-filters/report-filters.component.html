@@ -1,6 +1,6 @@
 <div class="inventory-filter-bar top-main-bar align-items-center">
     <div class="back-btnn" *ngIf="reportUniqueName">
-        <button mat-stroked-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
+        <button mat-stroked-button class="report-back-button" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
@@ -66,7 +66,7 @@
         </mat-select>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
-        <button mat-stroked-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
+        <button mat-stroked-button class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
             <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>

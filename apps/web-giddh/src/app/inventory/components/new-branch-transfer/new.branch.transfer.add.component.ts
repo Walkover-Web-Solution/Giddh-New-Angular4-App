@@ -25,7 +25,9 @@ import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from ".
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../../shared/helpers/transporterModes";
 import { InventoryService } from "../../../services/inventory.service";
-import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { NgForm } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
@@ -126,6 +128,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isUpdateMode: boolean = false;
     public allowAutoFocusInField: boolean = false;
     public inventorySettings: any;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     /** True if current organization is branch */
     public isBranch: boolean;
@@ -1434,11 +1438,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    public pageChanged(event: any): void {
-        this.transporterFilterRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof NewBranchTransferAddComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.transporterFilterRequest.count = event.pageSize;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
+    
+
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string): void {
         this.transporterFilterRequest.sort = type;

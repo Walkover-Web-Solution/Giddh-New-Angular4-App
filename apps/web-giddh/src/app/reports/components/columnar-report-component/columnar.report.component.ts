@@ -15,6 +15,8 @@ import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, PAGINATION_LIMIT } from '../../../app.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { GroupService } from '../../../services/group.service';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'columnar-report-component',
@@ -23,6 +25,8 @@ import { GroupService } from '../../../services/group.service';
 })
 
 export class ColumnarReportComponent implements OnInit, OnDestroy {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public fromMonthNames: any = [];
     public toMonthNames: any = [];
     public selectYear: any = [];
@@ -358,21 +362,17 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To call API according to pagination
-     *
-     * @param {*} event Pagination page change event
-     * @returns {void}
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
      * @memberof ColumnarReportComponent
      */
-    public pageChanged(event: any): void {
-        if (event && this.getColumnarRequestModel) {
-            if (event && event.page === this.getColumnarRequestModel.page) {
-                return;
-            }
-            this.getColumnarRequestModel.page = event.page;
+    public handlePageEvent(event: PageEvent): void {
+        if (this.getColumnarRequestModel) {
+            this.getColumnarRequestModel.page = this.getColumnarRequestModel.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.getColumnarRequestModel.count = event.pageSize;
             this.exportReport(true);
         }
-
     }
 
     /**

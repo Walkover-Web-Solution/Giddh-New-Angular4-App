@@ -209,13 +209,12 @@
                 <button
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn"
-                    data-toggle="tooltip"
                     matTooltip="Alt+N"
                     (click)="toggleTransferAsidePane()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" matTooltip="Alt+i" (click)="toggleAsidePane()">
+                <button class="btn btn-sky-blue mr-0" matTooltip="Alt+i" (click)="toggleAsidePane()">
                     Create New
                 </button>
             </div>
@@ -787,16 +786,15 @@
                 <tfoot *ngIf="groupStockReport && groupStockReport.totalPages > 1">
                     <tr>
                         <td colspan="10" class="text-center">
-                            <pagination
-                                [totalItems]="groupStockReport.totalPages"
-                                [(ngModel)]="groupStockReport.page"
-                                [maxSize]="6"
-                                class="pagination-sm"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="1"
-                                [rotate]="false"
-                                (pageChanged)="pageChanged($event)"
-                            ></pagination>
+                            <mat-paginator
+                                [length]="groupStockReport.totalPages"
+                                [pageSize]="GroupStockReportRequest.count"
+                                [pageIndex]="groupStockReport.page - 1"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [showFirstLastButtons]="true"
+                                [hidePageSize]="false"
+                                (page)="handlePageEvent($event)"
+                            ></mat-paginator>
                         </td>
                     </tr>
                 </tfoot>
@@ -960,16 +958,16 @@
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header theme-bg">
-                <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
-                    ×
-                </button>
-            </div>
-            <div class="modal-body clearfix" [hidden]="!showAdvanceSearchModal">
+<ng-template #advanceSearchDialog>
+    <div>
+        <div mat-dialog-title class="theme-bg">
+            <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+            <button mat-dialog-close class="close" (click)="advanceSearchAction('cancel')">
+                ×
+            </button>
+        </div>
+        <div mat-dialog-content>
+            <div class="clearfix" [hidden]="!showAdvanceSearchModal">
                 <form action="" [formGroup]="advanceSearchForm">
                     <div class="row">
                         <div class="col-sm-4">Date Range</div>
@@ -1069,8 +1067,8 @@
             </div>
         </div>
     </div>
-</div>
-<!-- Advance  search popup -->
+</ng-template>
+<!-- Advance search popup -->
 
 <!-- branch transfer modal -->
 <ng-template #template>

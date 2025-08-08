@@ -2,12 +2,14 @@ import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { PAGE_SIZE_OPTIONS } from '../../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { CreateDiscount } from "apps/web-giddh/src/app/models/api-models/Inventory";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { SettingsDiscountService } from "apps/web-giddh/src/app/services/settings.discount.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
+import { ActivatedRoute } from "@angular/router";
 import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component";
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -38,8 +40,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Pagination limit, items per page */
-    public paginationLimit: number = 100;
+    /** Pagination limit */
+
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Pagination Information of (Account & Group) and Stocks  */
     public pagination: any;
     /** Holds Mat Dailog Reference*/
@@ -198,7 +202,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
-            count: this.paginationLimit,
+            count: this.pageSizeOptions[2],
             group: this.groupUniqueName,
             userType: this.userFilterType,
             query: this.userSearchQuery
@@ -350,7 +354,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private getAllDiscount(userData: any, query: string = ''): void {
         let model = {
             page: this.pagination.stock.page,
-            count: this.paginationLimit,
+            count: this.pageSizeOptions[2],
             uniqueName: userData?.uniqueName,
             query: query
         };
@@ -816,7 +820,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             type: type,
             group: this.groupUniqueName,
             page: 1,
-            count: this.paginationLimit
+            count: this.pageSizeOptions[2]
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
             width: '580px',
@@ -892,16 +896,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle page change event for list of Default Stock and Variants
+     * Handles pagination events and updates API parameters
      *
-     * @param {*} event
+     * @param {PageEvent} event - Contains pagination details
      * @memberof CustomerWiseComponent
      */
-    public pageChanged(event: any): void {
-        if (event && this.pagination.stock.page !== event.page) {
-            this.pagination.stock.page = event.page;
-            this.getAllDiscount(this.currentUser, this.stockSearchQuery);
+    public handlePageEvent(event: PageEvent): void {
+        if (this.pagination.stock.page !== event.pageIndex + 1) {
+            this.pagination.stock.page = event.pageIndex + 1;
         }
+        this.getAllDiscount(this.currentUser, this.stockSearchQuery);
     }
 
     /**

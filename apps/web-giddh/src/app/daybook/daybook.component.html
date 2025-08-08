@@ -145,7 +145,7 @@
                     </div>
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button mat-stroked-button color="primary" (click)="initialRequest()">
+                    <button mat-stroked-button (click)="initialRequest()">
                         <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
@@ -711,24 +711,17 @@
 
                 <!-- pagination -->
                 <div
-                    class="pagination-wrapper mt-1"
+                    class="mt-1"
                     [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
                 >
-                    <pagination
-                        [totalItems]="daybookData?.totalItems"
-                        [(ngModel)]="daybookData.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="daybookData?.count"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    >
-                    </pagination>
+                    <mat-paginator
+                        [length]="daybookData?.totalItems"
+                        [pageSize]="daybookData?.count"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [pageIndex]="daybookData?.page - 1"
+                        (page)="handlePageEvent($event)"
+                        [showFirstLastButtons]="true">
+                    </mat-paginator>
                 </div>
                 <!-- pagination -->
             </div>

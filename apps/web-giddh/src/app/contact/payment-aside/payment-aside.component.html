@@ -344,7 +344,7 @@
                     type="button"
                     class="close pull-right"
                     [attr.aria-label]="commonLocaleData?.app_close"
-                    (click)="successModalRef.hide()"
+                    mat-dialog-close
                     aria-label="cross"
                 >
                     <span aria-hidden="true">&times;</span>
@@ -356,7 +356,7 @@
                 </div>
                 <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
                 <p>{{ paymentSuccessfulMessage }}</p>
-                <button mat-stroked-button color="primary" (click)="successModalRef.hide()" aria-label="done">
+                <button mat-raised-button color="primary" mat-dialog-close aria-label="done">
                     {{ commonLocaleData?.app_done }}
                 </button>
             </div>

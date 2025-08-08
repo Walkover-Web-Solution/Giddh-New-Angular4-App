@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
@@ -24,8 +24,9 @@ import { ServiceConfig } from '../../../services/service.config';
 import { ReportType } from '../../../multi-currency-reports/multi-currency.const';
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+
 import { TlPlService } from '../../../services/tl-pl.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'financial-filter',
@@ -77,7 +78,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
     /** Emits true to show Tally Report options */
     @Output() public showReportTally = new EventEmitter<boolean>();
-    @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
+    @ViewChild('createTagTemplate', { static: true }) public createTagTemplate: TemplateRef<any>;
     public universalDate$: Observable<any>;
     public newTagForm: UntypedFormGroup;
     /** Date format type */
@@ -122,6 +123,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public showReconcileOptions: boolean = false;
     /** True if show confirmation on date change */
     public showConfirmationOnDateChange: boolean = false;
+    /** Dialog reference for create tag modal */
+    private createTagDialogRef: MatDialogRef<any>;
 
     constructor(
         private fb: UntypedFormBuilder,
@@ -129,14 +132,14 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private toaster: ToasterService,
         @Inject(ServiceConfig) private serviceConfig,
         private componentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private tlPlService: TlPlService
+        private tlPlService: TlPlService,
+        private modalService: BsModalService
     ) {
         this.filterForm = this.fb.group({
             from: [''],
@@ -451,11 +454,29 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
     }
 
-    public toggleTagsModal() {
-        this.createTagModal.toggle();
+    /**
+     * Opens or closes the create tag dialog
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public toggleTagsModal(): void {
+        if (this.createTagDialogRef) {
+            this.createTagDialogRef.close();
+            this.createTagDialogRef = null;
+        } else {
+            this.createTagDialogRef = this.dialog.open(this.createTagTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        }
     }
 
-    public createTag() {
+    /**
+     * Creates a new tag and closes the dialog
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public createTag(): void {
         this.settingsTagService.CreateTag(this.newTagForm.getRawValue()).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toaster.clearAllToaster();
             if (response?.status === "success") {
@@ -465,7 +486,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.toaster.errorToast(response?.message, response?.code);
             }
         });
-        this.toggleTagsModal();
+        if (this.createTagDialogRef) {
+            this.createTagDialogRef.close();
+            this.createTagDialogRef = null;
+        }
     }
 
     /**

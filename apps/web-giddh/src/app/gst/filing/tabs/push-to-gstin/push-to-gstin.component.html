@@ -28,28 +28,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <tabset #staticTabs class="sub-filter-nav-band" *ngIf="!gstr1SummaryDetailsInProcess"> -->
-                    <!-- <tab>
-                            <ng-template tabHeading>
-                                {{ localeData?.filing?.transaction_summary }}
-                            </ng-template>
-
-                            <div class="subtabs-box transactions-overview">
-                                <transaction-summary
-                                    [activeCompanyGstNumber]="activeCompanyGstNumber"
-                                    [currentPeriod]="currentPeriod"
-                                    [selectedGst]="selectedGst"
-                                    [isTransactionSummary]="true"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                ></transaction-summary>
-                            </div>
-                        </tab> -->
-
-                    <!-- <tab [active]="showHsn">
-                            <ng-template tabHeading>
-                                {{ commonLocaleData?.app_hsn }}
-                            </ng-template> -->
                     <div class="subtabs-box transactions-overview">
                         <hsn-summary
                             [hsnSummary]="gstr1SummaryDetails.data.hsn"
@@ -58,61 +36,6 @@
                             [commonLocaleData]="commonLocaleData"
                         ></hsn-summary>
                     </div>
-                    <!-- </tab>
-
-                        <tab>
-                            <ng-template tabHeading>
-                                {{ localeData?.filing?.nil }}
-                            </ng-template>
-                            <div class="subtabs-box transactions-overview">
-                                <nil-summary
-                                    [nilSummary]="gstr1SummaryDetails.data.nil"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                ></nil-summary>
-                            </div>
-                        </tab>
-
-                        <tab>
-                            <ng-template tabHeading>
-                                {{ localeData?.filing?.b2cs }}
-                            </ng-template>
-                            <div class="subtabs-box transactions-overview">
-                                <b2cs-summary
-                                    [brcsSummary]="gstr1SummaryDetails.data.b2cs"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                ></b2cs-summary>
-                            </div>
-                        </tab>
-
-                        <tab>
-                            <ng-template tabHeading>
-                                {{ localeData?.filing?.document_issued }}
-                            </ng-template>
-                            <div class="subtabs-box transactions-overview">
-                                <document-issued
-                                    [doc_issues]="gstr1SummaryDetails.data.doc_issue"
-                                    [localeData]="localeData"
-                                ></document-issued>
-                            </div>
-                        </tab>
-
-                        <tab>
-                            <ng-template tabHeading>
-                                {{ localeData?.filing?.failed_transactions }}
-                            </ng-template>
-                            <div class="subtabs-box transactions-overview">
-                                <failed-transactions
-                                    [failedTransactions]="gstr1SummaryDetails.errors"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                >
-                                </failed-transactions>
-                            </div>
-                        </tab> -->
-                    <!-- </tabset> -->
-
                     <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
                         <giddh-page-loader></giddh-page-loader>
 

@@ -214,8 +214,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
+        this.accountListRequest.page = this.accountListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.accountListRequest.count = event.pageSize;
-        this.accountListRequest.page = event.pageIndex + 1;
         this.getAccountStatementList(true);
     }
 

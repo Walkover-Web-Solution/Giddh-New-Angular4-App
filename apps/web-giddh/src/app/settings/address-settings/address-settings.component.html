@@ -314,20 +314,16 @@
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
-            <pagination
-                [(ngModel)]="paginationConfig.page"
+            <mat-paginator
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
-                [totalItems]="paginationConfig?.totalItems"
-                [maxSize]="5"
-                [itemsPerPage]="paginationConfig?.count"
-                [boundaryLinks]="true"
-                [rotate]="true"
-                (pageChanged)="handlePageChange($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+                [length]="paginationConfig?.totalItems"
+                [pageSize]="paginationConfig?.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="paginationConfig.page - 1"
+                [showFirstLastButtons]="true"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of addresses"
+            ></mat-paginator>
         </div>
     </div>
 </div>

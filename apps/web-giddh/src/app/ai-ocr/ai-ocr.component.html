@@ -20,7 +20,7 @@
                     <img src="assets/images/ai-ocr.png" alt="upload image" width="350px" height="auto" />
                 </div>
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     (click)="onUploadFile($event, fileInput)"
                     *ngIf="!isCompany && !isConsolidatedBranch"
@@ -32,7 +32,7 @@
                     *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                 >
                     <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
-                    <button mat-stroked-button color="primary" (click)="gotToBranchTab()">
+                    <button mat-raised-button color="primary" (click)="gotToBranchTab()">
                         {{ localeData?.go_to_branch }}
                     </button>
                 </div>
@@ -50,7 +50,7 @@
                     />
                     <button
                         aria-label="show"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         [disabled]="isCompany || isConsolidatedBranch"
                         class="icomoon-ico d-flex align-items-center cursor-pointer"
@@ -123,10 +123,10 @@
                     </div>
                 </div>
                 <div *ngIf="selectedToggle === ocrAction.Create">
-                    <button mat-stroked-button color="primary" (click)="onChangeVoucher('skip')" class="mr-r15">
+                    <button mat-raised-button color="primary" (click)="onChangeVoucher('skip')" class="mr-r15">
                         {{ commonLocaleData?.app_skip_and_next }}
                     </button>
-                    <button mat-stroked-button color="primary" (click)="onChangeVoucher('save')">
+                    <button mat-raised-button color="primary" (click)="onChangeVoucher('save')">
                         {{ commonLocaleData?.app_save_and_next }}
                     </button>
                 </div>

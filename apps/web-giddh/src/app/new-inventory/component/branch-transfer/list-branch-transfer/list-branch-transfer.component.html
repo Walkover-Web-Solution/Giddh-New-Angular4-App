@@ -274,23 +274,18 @@
             </form>
 
             <div
-                class="pagination-wrapper mt-4"
+                class="mt-4"
                 *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
             >
-                <pagination
-                    [totalItems]="branchTransferPaginationObject?.totalItems"
-                    [(ngModel)]="branchTransferPaginationObject.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="branchTransferPaginationObject.count"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+                <mat-paginator
+                    [length]="branchTransferPaginationObject?.totalItems"
+                    [pageSize]="branchTransferPaginationObject.count"
+                    [pageIndex]="branchTransferPaginationObject.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)"
+                ></mat-paginator>
             </div>
         </section>
 
@@ -372,7 +367,7 @@
 
                     <div class="d-flex justify-content-end mt-4">
                         <div class="mr-2">
-                            <button type="button" class="mr-0" mat-stroked-button color="primary" (click)="search()">
+                            <button type="button" class="mr-0" mat-raised-button color="primary" (click)="search()">
                                 {{ commonLocaleData?.app_search }}
                             </button>
                         </div>

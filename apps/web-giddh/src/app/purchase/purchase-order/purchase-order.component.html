@@ -443,24 +443,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="pagination-wrapper">
-            <pagination
-                [hidden]="isLoading"
-                *ngIf="purchaseOrders.totalPages > 1"
-                class="pagination"
-                [(ngModel)]="purchaseOrderGetRequest.page"
-                [totalItems]="purchaseOrders.totalItems"
-                [itemsPerPage]="purchaseOrderGetRequest.count"
-                [maxSize]="5"
-                [boundaryLinks]="true"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
-        </div>
+        <ng-container *ngIf="purchaseOrders?.totalPages > 1 && !isLoading">
+            <mat-paginator [length]="purchaseOrders?.totalItems" [pageSize]="purchaseOrderGetRequest.count" [pageSizeOptions]="pageSizeOptions" [pageIndex]="purchaseOrderGetRequest.page - 1" (page)="handlePageEvent($event)" [showFirstLastButtons]="true">
+            </mat-paginator>
+        </ng-container>
         <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
             <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
@@ -469,7 +455,7 @@
         <div class="purchase-order-bulk-update">
             <div class="modal-header">
                 <h4 class="modal-title pull-left">{{ localeData?.bulk_update }}</h4>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="bulkUpdateDialogRef?.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -537,7 +523,7 @@
                             <button class="btn btn-success" (click)="validateBulkUpdateFields()">
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button class="btn btn-cancel" (click)="modalRef.hide()">
+                            <button class="btn btn-cancel" (click)="bulkUpdateDialogRef?.close()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -605,26 +591,16 @@
             }"
         ></div>
     </ng-template>
-    <div
-        bsModal
-        #poConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-voucher-confirmation-modal
-                    *ngIf="poConfirmationModel.isShown"
-                    [module]="deleteModule"
-                    (confirmDeleteEvent)="processDelete()"
-                    (closeModelEvent)="closeConfirmationPopup()"
-                >
-                </delete-voucher-confirmation-modal>
-            </div>
+    <ng-template #poConfirmationTemplate>
+        <div class="modal-content">
+            <delete-voucher-confirmation-modal
+                [module]="deleteModule"
+                (confirmDeleteEvent)="processDelete()"
+                (closeModelEvent)="closeConfirmationPopup()"
+            >
+            </delete-voucher-confirmation-modal>
         </div>
-    </div>
+    </ng-template>
     <purchase-order-preview
         *ngIf="purchaseOrderUniqueName && translationLoaded"
         [purchaseOrders]="purchaseOrders"

@@ -18,6 +18,8 @@ import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from './../../app.constant';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
@@ -83,6 +85,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
     public activeStockGroup: string;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     private universalDate: Date[];
     private lastPage: number = 0;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -249,7 +253,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.mfStockSearchRequest.searchBy = '';
         this.mfStockSearchRequest.searchOperation = '';
         this.mfStockSearchRequest.page = 1;
-        this.mfStockSearchRequest.count = 20;
+        this.mfStockSearchRequest.count = this.pageSizeOptions[2];
     }
 
     public goToCreateNewPage() {
@@ -264,14 +268,24 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));
     }
 
-    public pageChanged(event: any): void {
-        if (event.page !== this.lastPage) {
-            this.lastPage = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof MfReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if ((event.pageIndex + 1) !== this.lastPage || this.mfStockSearchRequest.count !== event.pageSize) {
             let data = cloneDeep(this.mfStockSearchRequest);
-            data.page = event.page;
+            data.page = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.lastPage = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            data.count = event.pageSize;
+            this.mfStockSearchRequest.count = event.pageSize;
             this.store.dispatch(this.manufacturingActions.GetMfReport(data));
         }
     }
+    
+
 
     public editMFItem(item) {
         if (item?.uniqueName) {

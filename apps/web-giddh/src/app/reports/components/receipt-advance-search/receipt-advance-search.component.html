@@ -91,10 +91,10 @@
             </div>
 
             <div class="clearfix mt-4">
-                <button type="button" class="btn btn-success mr-r1" (click)="confirm.emit(searchModel)">
+                <button type="button" mat-raised-button color="primary" class="mr-r1" (click)="confirm.emit(searchModel)">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button type="button" class="btn btn-cancel" (click)="cancel.emit()">
+                <button type="button" mat-stroked-button (click)="cancel.emit()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

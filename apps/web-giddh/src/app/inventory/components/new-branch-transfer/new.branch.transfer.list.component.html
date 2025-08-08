@@ -6,7 +6,6 @@
                     <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
                         class="btn btn-sky-blue mr-r1 pull-right mobile-none"
-                        data-toggle="tooltip"
                         matTooltip="Alt+N"
                         (click)="toggleTransferAsidePane()"
                     >
@@ -81,7 +80,7 @@
                 <div
                     class="advance-icon pointer mobile-none btn btn-primary mr-0"
                     matTooltip="Advance Search"
-                    (click)="openSearchModal(template)"
+                    (click)="openSearchModal(searchDialog)"
                 >
                     <span class="pd-r05 d-sm-flex d-none">Filter</span>
                     <span class="icon-advance-filter"></span>
@@ -326,17 +325,16 @@
                 </tbody>
             </table>
         </div>
-        <div class="pagination-wrapper mt-4" *ngIf="branchTransferResponse.totalPages > 1">
-            <pagination
-                [totalItems]="branchTransferResponse.totalPages"
-                [(ngModel)]="branchTransferResponse.page"
-                [maxSize]="6"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="1"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-            ></pagination>
+        <div class="mt-4" *ngIf="branchTransferResponse.totalPages > 1">
+            <mat-paginator
+                [length]="branchTransferResponse.totalPages"
+                [pageSize]="branchTransferGetRequestParams.count"
+                [pageIndex]="branchTransferResponse.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
         </div>
         <div
             class="no-data"
@@ -348,14 +346,14 @@
     </div>
 </div>
 <!-- advance search start -->
-<ng-template #template>
-    <div class="modal-header">
+<ng-template #searchDialog>
+    <div mat-dialog-title class="modal-header">
         <h4 class="modal-title bg pull-left">Advance Search</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeSearchDialog()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body pd-l2 pd-r2">
+    <div mat-dialog-content class="modal-body pd-l2 pd-r2">
         <form class="clearfix">
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
@@ -421,52 +419,44 @@
 
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
-    <div class="recept-modal">
-        <div class="modal-body radius-none pr-0 pl-0 pt-0 p-0">
-            <new-branch-transfer
-                (hideModal)="hideModal(true)"
-                [editBranchTransferUniqueName]="editBranchTransferUniqueName"
-                [branchTransferMode]="branchTransferMode"
-            >
-            </new-branch-transfer>
-        </div>
+    <div mat-dialog-content>
+        <new-branch-transfer
+            (hideModal)="hideModal(true)"
+            [editBranchTransferUniqueName]="editBranchTransferUniqueName"
+            [branchTransferMode]="branchTransferMode"
+        >
+        </new-branch-transfer>
     </div>
 </ng-template>
 
 <!--delete modal  -->
-<div bsModal #deleteBranchTransferModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="'Delete ' + selectedBranchTransferType"
-                [body]="'Are you sure you want to delete this ' + selectedBranchTransferType + '?'"
-                (cancelCallBack)="hideBranchTransferModal()"
-                (successCallBack)="deleteNewBranchTransfer()"
-            >
-            </confirm-modal>
-        </div>
+<ng-template #deleteBranchTransferDialog>
+    <div mat-dialog-content>
+        <confirm-modal
+            [title]="'Delete ' + selectedBranchTransferType"
+            [body]="'Are you sure you want to delete this ' + selectedBranchTransferType + '?'"
+            (cancelCallBack)="hideBranchTransferModal()"
+            (successCallBack)="deleteNewBranchTransfer()"
+        >
+        </confirm-modal>
     </div>
-</div>
+</ng-template>
 <ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
+    <app-datepicker-wrapper
+        [inputStartDate]="selectedDateRange?.startDate"
+        [inputEndDate]="selectedDateRange?.endDate"
+        [alwaysShowCalendars]="true"
+        [ranges]="datePickerOption"
+        [selectedRangeLabel]="selectedRangeLabel"
+        [showCustomRangeLabel]="true"
+        [showClearButton]="false"
+        [showCancel]="true"
+        [linkedCalendars]="true"
+        [showDropdowns]="true"
+        (rangeClicked)="dateSelectedCallback($event)"
+        (datesUpdated)="dateSelectedCallback($event)"
+        [keepCalendarOpeningWithRange]="false"
+        [showRangeLabelOnInput]="false"
+        [dateFieldPosition]="dateFieldPosition"
+    ></app-datepicker-wrapper>
 </ng-template>

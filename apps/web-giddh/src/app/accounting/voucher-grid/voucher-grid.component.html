@@ -315,65 +315,58 @@
 </div>
 
 <!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm modal-voucher">
-        <div class="modal-content">
-            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
-        </div>
+<ng-template #quickAccountTemplate>
+    <div class="modal-content">
+        <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
     </div>
-</div>
+</ng-template>
 
 <!-- Cheque Detail Modal-->
-<div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm modal-voucher">
-        <div class="modal-content">
-            <form
-                autocomplete="off"
-                novalidate
-                name="chequeDetailForm"
-                [formGroup]="chequeDetailForm"
-                class="new-account-form"
-                (submit)="onSubmitChequeDetail()"
-            >
-                <div class="modal-header">
-                    <h3 class="modal-title">Cheque details (if any)</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="clearfix mr-t1">
-                        <label>Cheque Number:</label>
-                        <input
-                            #chequeNumberInput
-                            class="form-control"
-                            required
-                            formControlName="chequeNumber"
-                            name="account"
-                            type="text"
-                            placeholder="Cheque Number"
-                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')"
-                        />
-                    </div>
-                    <div class="clearfix mr-t1">
-                        <label>Cheque Clearance Date:</label>
-                        <input
-                            #chequeClearanceDateInput
-                            class="form-control"
-                            formControlName="chequeClearanceDate"
-                            name="account"
-                            type="text"
-                            placeholder="Cheque Clearance Date"
-                            (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')"
-                        />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- [disabled]="chequeDetailForm.invalid" -->
-                    <button #chqFormSubmitBtn type="submit" class="btn btn-success">Create</button>
-                    <button type="button" class="btn btn-default" (click)="closeChequeDetailForm()">Cancel</button>
-                </div>
-            </form>
-        </div>
+<ng-template #chequeEntryTemplate>
+    <div mat-dialog-title class="modal-header">
+        <h3 class="modal-title">Cheque details (if any)</h3>
     </div>
-</div>
+    <div mat-dialog-content class="modal-body">
+        <form
+            autocomplete="off"
+            novalidate
+            name="chequeDetailForm"
+            [formGroup]="chequeDetailForm"
+            class="new-account-form"
+            (submit)="onSubmitChequeDetail()"
+        >
+            <div class="clearfix mr-t1">
+                <label>Cheque Number:</label>
+                <input
+                    #chequeNumberInput
+                    class="form-control"
+                    required
+                    formControlName="chequeNumber"
+                    name="account"
+                    type="text"
+                    placeholder="Cheque Number"
+                    (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')"
+                />
+            </div>
+            <div class="clearfix mr-t1">
+                <label>Cheque Clearance Date:</label>
+                <input
+                    #chequeClearanceDateInput
+                    class="form-control"
+                    formControlName="chequeClearanceDate"
+                    name="account"
+                    type="text"
+                    placeholder="Cheque Clearance Date"
+                    (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate')"
+                />
+            </div>
+        </form>
+    </div>
+    <div mat-dialog-actions class="modal-footer">
+        <button #chqFormSubmitBtn type="submit" mat-raised-button color="primary" (click)="onSubmitChequeDetail()">Create</button>
+        <button type="button" mat-stroked-button (click)="closeChequeDetailForm()">Cancel</button>
+    </div>
+</ng-template>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
 <aside-inventory-stock-group

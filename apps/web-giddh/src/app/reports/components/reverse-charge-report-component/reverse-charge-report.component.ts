@@ -258,20 +258,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.asideGstSidebarMenuState === 'out';
     }
 
-    /**
-     * Handle page change
-     *
-     * @param {*} event
-     * @memberof ReverseChargeReport
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.reverseChargeReportResults.results = [];
-            this.reverseChargeReportGetRequest.page = event.pageIndex + 1;
-            this.reverseChargeReportGetRequest.count = event.pageSize;
-            this.getReverseChargeReport(false);
-        }
-    }
+
 
     /**
      * This function will get the data of vat detailed report

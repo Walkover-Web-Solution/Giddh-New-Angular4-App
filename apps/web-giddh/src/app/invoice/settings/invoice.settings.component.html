@@ -2,15 +2,23 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
-            <tabset class="tab-integration" #staticTabsSettings>
+            <mat-tab-group 
+                class="tab-integration"
+                mat-stretch-tabs="false"
+                mat-align-tabs="start"
+                [selectedIndex]="selectedTabIndex"
+                (selectedTabChange)="tabChanged($event)"
+                #staticTabsSettings>
                 <ng-container *ngIf="selectedVoucher !== 'debit note' && selectedVoucher !== 'credit note'">
                     <!-- region general tab-->
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-chat2"></span> {{ localeData?.general }}
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-chat2 mr-r1"></i>
+                            <span>{{ localeData?.general }}</span>
                         </ng-template>
 
-                        <div class="general-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="general-tab single-tab-block">
                             <div class="box clearfix">
                                 <form class="row" autocomplete="off">
                                     <div class="col-sm-12">
@@ -70,16 +78,19 @@
                                 </form>
                             </div>
                         </div>
-                    </tab>
+                        </div>
+                    </mat-tab>
                     <!-- endregion -->
 
                     <!-- region Email tab-->
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-mail"></span> {{ commonLocaleData?.app_email }}
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-mail mr-r1"></i>
+                            <span>{{ commonLocaleData?.app_email }}</span>
                         </ng-template>
 
-                        <div class="email-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="email-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ localeData?.email_sms }}
@@ -183,17 +194,19 @@
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
-                    </tab>
+                        </div>
+                    </mat-tab>
                     <!-- endregion -->
 
                     <!-- region estimate tab -->
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-estimate1"><span class="path1"></span><span class="path2"></span></span>
-                            {{ localeData?.estimate }}
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-estimate1 mr-r1"><span class="path1"></span><span class="path2"></span></i>
+                            <span>{{ localeData?.estimate }}</span>
                         </ng-template>
 
-                        <div class="estimate-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="estimate-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ localeData?.estimate_quotation }} <span></span>
@@ -370,16 +383,19 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
+                        </div>
+                    </mat-tab>
                     <!-- endregion -->
 
                     <!-- region sales order tab -->
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-sales-order"></span> {{ localeData?.proforma }}
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-sales-order mr-r1"></i>
+                            <span>{{ localeData?.proforma }}</span>
                         </ng-template>
 
-                        <div class="estimate-tab sales-order-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="estimate-tab sales-order-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">{{ localeData?.proforma_invoice }} <span></span></h4>
 
@@ -509,16 +525,19 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
+                        </div>
+                    </mat-tab>
                     <!-- endregion -->
 
                     <!-- region invoice tab -->
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_invoice }}
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-invoice-icon mr-r1"></i>
+                            <span>{{ commonLocaleData?.app_invoice }}</span>
                         </ng-template>
 
-                        <div class="estimate-tab invoice-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="estimate-tab invoice-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_invoice }} <span></span>
@@ -869,18 +888,20 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
+                        </div>
+                    </mat-tab>
                 </ng-container>
                 <ng-container *ngIf="
                         voucherApiVersion === 2 &&
                         (selectedVoucher === 'debit note' || selectedVoucher === 'credit note')
                     ">
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-invoice-icon"></span>
-                            {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-invoice-icon mr-r1"></i>
+                            <span>{{ commonLocaleData?.app_voucher_types?.debit_note }}</span>
                         </ng-template>
-                        <div class="general-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="general-tab single-tab-block">
                             <div class="box clearfix">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_voucher_types?.debit_note }}
@@ -973,13 +994,15 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
-                    <tab>
-                        <ng-template tabHeading>
-                            <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_voucher_types?.credit_note
-                            }}
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-invoice-icon mr-r1"></i>
+                            <span>{{ commonLocaleData?.app_voucher_types?.credit_note }}</span>
                         </ng-template>
-                        <div class="general-tab single-tab-block">
+                        <div class="pd-t15 pd-b15">
+                            <div class="general-tab single-tab-block">
                             <div class="box clearfix">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_voucher_types?.credit_note }}
@@ -1074,18 +1097,19 @@
                                 </div>
                             </div>
                         </div>
-                    </tab>
+                        </div>
+                    </mat-tab>
                 </ng-container>
                 <!-- endregion -->
-            </tabset>
+            </mat-tab-group>
         </section>
 
         <ng-template #buttonsSection>
             <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-                <button aria-label="save" type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
+                <button mat-raised-button color="primary" aria-label="save" type="button" class="mr-r1" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button aria-label="cancel" type="button" class="btn btn-cancel" (click)="resetForm()">
+                <button mat-stroked-button aria-label="cancel" type="button" (click)="resetForm()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

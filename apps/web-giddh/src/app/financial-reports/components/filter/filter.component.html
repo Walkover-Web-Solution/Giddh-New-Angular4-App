@@ -165,7 +165,7 @@
                             </a>
                         </div>
                     </div>
-                    <button mat-stroked-button color="primary" type="submit">
+                    <button mat-raised-button color="primary" type="submit">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </form>
@@ -436,50 +436,46 @@
 
     <!-- end box  -->
     <!-- create tag modal -->
-    <div bsModal #createTagModal="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">{{ localeData?.create_new_tag }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form novalidate [formGroup]="newTagForm">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group clearfix">
-                                    <div class="form-group">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            name="tagName"
-                                            formControlName="name"
-                                            [placeholder]="localeData?.tag_name"
-                                        />
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea
-                                            class="form-control"
-                                            name="tagDescription"
-                                            formControlName="description"
-                                            [placeholder]="localeData?.tag_description"
-                                        ></textarea>
-                                    </div>
-                                </div>
+    <ng-template #createTagTemplate>
+        <div mat-dialog-title>
+            <h3 class="modal-title">{{ localeData?.create_new_tag }}</h3>
+        </div>
+        <div mat-dialog-content>
+            <form novalidate [formGroup]="newTagForm">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group clearfix">
+                            <div class="form-group">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="tagName"
+                                    formControlName="name"
+                                    [placeholder]="localeData?.tag_name"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <textarea
+                                    class="form-control"
+                                    name="tagDescription"
+                                    formControlName="description"
+                                    [placeholder]="localeData?.tag_description"
+                                ></textarea>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
-                        {{ commonLocaleData?.app_create }}
-                    </button>
-                    <button class="btn btn-default" (click)="toggleTagsModal()">
-                        {{ commonLocaleData?.app_cancel }}
-                    </button>
-                </div>
-            </div>
+            </form>
         </div>
-    </div>
+        <div mat-dialog-actions>
+            <button class="btn btn-success" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
+                {{ commonLocaleData?.app_create }}
+            </button>
+            <button class="btn btn-default" (click)="toggleTagsModal()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+        </div>
+    </ng-template>
     <!-- create tag modal -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

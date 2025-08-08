@@ -350,13 +350,11 @@
 </div>
 
 <!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
-        </div>
+<ng-template #quickAccountTemplate>
+    <div class="modal-content">
+        <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
     </div>
-</div>
+</ng-template>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
 <aside-inventory-stock-group

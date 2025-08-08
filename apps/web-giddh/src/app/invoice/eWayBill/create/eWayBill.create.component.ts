@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -14,6 +14,8 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -21,10 +23,12 @@ import { GeneralService } from '../../../services/general.service';
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    @ViewChild('eWayBillCredentialsTemplate', { static: true }) public eWayBillCredentialsTemplate: TemplateRef<any>;
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: ModalDirective;
+    @ViewChild('invoiceRemoveConfirmationTemplate', { static: true }) public invoiceRemoveConfirmationTemplate: TemplateRef<any>;
     @ViewChild('subgrp', { static: true }) public subgrp: any;
     @ViewChild('doctypes', { static: true }) public doctype: any;
     @ViewChild('trans', { static: true }) public transport: any;
@@ -106,10 +110,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public voucherDetails: any;
     /** Transaction type dropdown - (Regular [1] | Bill to - ship to [2] | Bill from - Dispatch from [3] | Combination [4]) */
     public transactionSubType: IOption[] = [];
+    /** Dialog reference for eWayBill credentials */
+    private eWayBillCredentialsDialogRef: MatDialogRef<any>;
+    /** Dialog reference for invoice remove confirmation */
+    private invoiceRemoveConfirmationDialogRef: MatDialogRef<any>;
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService) {
+        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService,
+        private dialog: MatDialog) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -125,8 +134,21 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.generateEwayBillform.transactionType = '1'; // transactionType is default 1 for Regular
     }
 
-    public toggleEwayBillCredentialsPopup() {
-        this.eWayBillCredentials.toggle();
+    /**
+     * Opens or closes the eWayBill credentials dialog
+     *
+     * @memberof EWayBillCreateComponent
+     */
+    public toggleEwayBillCredentialsPopup(): void {
+        if (this.eWayBillCredentialsDialogRef) {
+            this.eWayBillCredentialsDialogRef.close();
+            this.eWayBillCredentialsDialogRef = null;
+        } else {
+            this.eWayBillCredentialsDialogRef = this.dialog.open(this.eWayBillCredentialsTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        }
     }
 
     public ngOnInit() {
@@ -212,7 +234,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
         } else {
-            this.eWayBillCredentials.toggle();
+            this.toggleEwayBillCredentialsPopup();
         }
         this.detectChanges();
     }
@@ -291,26 +313,42 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
-    public removeInvoice(invoice: any[]) {
+    /**
+     * Opens the invoice remove confirmation dialog
+     *
+     * @param {any[]} invoice Invoice to be removed
+     * @memberof EWayBillCreateComponent
+     */
+    public removeInvoice(invoice: any[]): void {
         this.confirmationFlag = 'closeConfirmation';
 
         let removeInvoice = this.localeData?.remove_invoice;
         removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0]?.voucherNumber);
         this.deleteTemplateConfirmationMessage = removeInvoice;
-        this.invoiceRemoveConfirmationModel?.show();
+        
+        this.invoiceRemoveConfirmationDialogRef = this.dialog.open(this.invoiceRemoveConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
-     * onCloseConfirmationModal
+     * Handles the close event of the confirmation modal
+     *
+     * @param {any} userResponse User response from the confirmation dialog
+     * @memberof EWayBillCreateComponent
      */
-    public onCloseConfirmationModal(userResponse: any) {
+    public onCloseConfirmationModal(userResponse: any): void {
         if (userResponse.response && userResponse.close === 'closeConfirmation') {
             this.selectedInvoices?.splice(0, 1);
             if (this.selectedInvoices?.length === 0) {
                 this.redirectToSalesInvoice();
             }
         }
-        this.invoiceRemoveConfirmationModel?.hide();
+        if (this.invoiceRemoveConfirmationDialogRef) {
+            this.invoiceRemoveConfirmationDialogRef.close();
+            this.invoiceRemoveConfirmationDialogRef = null;
+        }
     }
 
     detectChanges() {
@@ -319,8 +357,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageChanged(event: any): void {
-        this.transporterFilterRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof EWayBillCreateComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
+        this.transporterFilterRequest.page = event.pageIndex + 1;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }

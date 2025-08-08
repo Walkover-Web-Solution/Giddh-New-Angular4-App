@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
 import { AsideCustomStockComponent } from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
@@ -45,6 +44,8 @@ import { VoucherModule } from '../voucher/voucher.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -115,7 +116,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         TextCaseChangeModule,
         BsDropdownModule.forRoot(),
         CurrencyModule,
-        TabsModule.forRoot(),
+        MatTabsModule,
         ReactiveFormsModule,
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
@@ -127,7 +128,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         VoucherModule,
         FormFieldsModule,
         MatSlideToggleModule,
-        MatDialogModule
+        MatDialogModule,
+        MatPaginatorModule
     ]
 })
 export class InventoryModule { }

@@ -5,7 +5,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
@@ -26,6 +26,8 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
@@ -51,7 +53,9 @@ import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
-    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('advanceSearchDialog', { static: true }) public advanceSearchDialog: TemplateRef<any>;
+    /** Reference to advance search dialog */
+    private advanceSearchDialogRef: MatDialogRef<any>;
     @ViewChild("productName", { static: true }) productName: ElementRef;
     @ViewChild("sourceName", { static: true }) sourceName: ElementRef;
     @ViewChild('advanceSearchForm', { static: true }) formValues;
@@ -216,6 +220,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public branchTransferMode: string = '';
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Date format type */
@@ -243,7 +249,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private inventoryAction: InventoryAction,
         private invViewService: InvViewService,
         private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -253,6 +260,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
         this.groupStockReport$ = this.store.pipe(select(p => p.inventory.groupStockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
+        this.GroupStockReportRequest.count = this.pageSizeOptions[2];
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -523,10 +531,19 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
-    public pageChanged(event: any): void {
-        this.GroupStockReportRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.GroupStockReportRequest.page = this.GroupStockReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.GroupStockReportRequest.count = event.pageSize;
         this.getGroupReport(false);
     }
+    
+
 
     public DownloadGroupReports(type: string) {
         this.GroupStockReportRequest.reportDownloadType = type;
@@ -661,16 +678,36 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.getGroupReport(true);
     }
 
+    /**
+     * Opens the advance search dialog using Angular Material
+     *
+     * @memberof InventoryGroupStockReportComponent
+     */
     public onOpenAdvanceSearch() {
         this.showAdvanceSearchModal = true;
-        this.advanceSearchModel?.show();
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchDialog, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+
+        this.advanceSearchDialogRef.afterClosed().subscribe(() => {
+            this.showAdvanceSearchModal = false;
+        });
     }
 
+    /**
+     * Handles advance search actions (search, cancel, clear)
+     *
+     * @param {string} [type] - Action type: 'search', 'cancel', or 'clear'
+     * @memberof InventoryGroupStockReportComponent
+     */
     public advanceSearchAction(type?: string) {
         if (type === 'cancel') {
             this.clearModal();
             this.showAdvanceSearchModal = false;
-            this.advanceSearchModel.hide(); // change request : to only reset fields
+            if (this.advanceSearchDialogRef) {
+                this.advanceSearchDialogRef.close();
+            }
             return;
         } else if (type === 'clear') {
             this.clearModal();
@@ -684,7 +721,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 endDate: dayjs(this.pickerSelectedToDate).toDate()
             };
             this.showAdvanceSearchModal = false;
-            this.advanceSearchModel.hide(); // change request : to only reset fields
+            if (this.advanceSearchDialogRef) {
+                this.advanceSearchDialogRef.close();
+            }
             this.getGroupReport(true);
         }
 

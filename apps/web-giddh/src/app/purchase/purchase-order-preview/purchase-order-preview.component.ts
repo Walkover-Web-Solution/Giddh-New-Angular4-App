@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { Router, NavigationStart } from '@angular/router';
@@ -42,8 +42,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public commonLocaleData: any = {};
     /* Search element */
     @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
-    /* Confirm box */
-    @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* Confirm box template */
+    @ViewChild('poConfirmationTemplate') public poConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for confirmation modal */
+    private poConfirmationDialogRef: MatDialogRef<any>;
     /** Attached document preview container instance */
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
@@ -51,7 +53,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
     /* Modal instance */
-    public modalRef: BsModalRef;
+    public modalRef: any;
+    /** Modal service reference */
+    public modalService: any;
     /* This will hold state of activity history aside pan */
     public revisionHistoryAsideState: string = 'out';
     /* This will hold purchase order data */
@@ -103,7 +107,6 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
     constructor(
         private store: Store<AppState>,
-        private modalService: BsModalService,
         public purchaseOrderService: PurchaseOrderService,
         private toaster: ToasterService,
         public router: Router,
@@ -111,7 +114,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private invoiceActions: InvoiceActions,
         private purchaseOrderActions: PurchaseOrderActions,
         private domSanitizer: DomSanitizer,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
 
     }
@@ -331,12 +335,15 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     }
 
     /**
-     * This will close the confirmation modal
+     * This will close the confirmation dialog
      *
      * @memberof PurchaseOrderPreviewComponent
      */
     public closeConfirmationPopup(): void {
-        this.poConfirmationModel.hide();
+        if (this.poConfirmationDialogRef) {
+            this.poConfirmationDialogRef.close();
+            this.poConfirmationDialogRef = null;
+        }
     }
 
     /**
@@ -362,12 +369,15 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     }
 
     /**
-     * This will show the confirmation modal
+     * This will show the confirmation dialog
      *
      * @memberof PurchaseOrderPreviewComponent
      */
     public confirmDelete(): void {
-        this.poConfirmationModel?.show();
+        this.poConfirmationDialogRef = this.dialog.open(this.poConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**

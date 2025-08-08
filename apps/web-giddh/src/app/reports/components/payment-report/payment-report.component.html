@@ -484,26 +484,18 @@
                 </table>
             </div>
 
-            <div
-                [hidden]="isLoading"
-                *ngIf="pageConfiguration.totalItems > paginationLimit"
-                class="pagination-wrapper mt-2"
-            >
-                <pagination
-                    [totalItems]="pageConfiguration.totalItems"
-                    [(ngModel)]="pageConfiguration.currentPage"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    (pageChanged)="onPageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                >
-                </pagination>
+            <div class="mt-2">
+                <ng-container *ngIf="pageConfiguration.totalItems > paginationLimit">
+                    <mat-paginator
+                        [length]="pageConfiguration.totalItems"
+                        [pageSize]="searchQueryParams.count"
+                        [pageIndex]="searchQueryParams.page - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
             <div class="no-data" *ngIf="!allPayments?.length && !isLoading">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
@@ -511,21 +503,10 @@
         </div>
     </div>
 
-    <div
-        bsModal
-        #paymentSearchModalContainer="bs-modal"
-        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
-        tabindex="-1"
-        class="modal fade open-popup"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #paymentSearchFilterModal="elementviewcontainerref">
-                </ng-template>
-            </div>
-        </div>
-    </div>
+    <ng-template #paymentSearchModalTemplate>
+        <ng-template element-view-container-ref #paymentSearchFilterModal="elementviewcontainerref">
+        </ng-template>
+    </ng-template>
 
     <!-- region sort icon template -->
     <ng-template #sortTemplate let-column="column">
@@ -574,25 +555,14 @@
         </div>
     </ng-template>
     <!-- Delete confirmation model -->
-    <div
-        bsModal
-        #paymentConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content" *ngIf="paymentConfirmationModel?.isShown">
-                <confirm-modal
-                    [body]="localeData?.delete_vouchers"
-                    (successCallBack)="deletePayments()"
-                    (cancelCallBack)="closeConfirmationPopup()"
-                >
-                </confirm-modal>
-            </div>
-        </div>
-    </div>
+    <ng-template #paymentConfirmationTemplate>
+        <confirm-modal
+            [body]="localeData?.delete_vouchers"
+            (successCallBack)="deletePayments()"
+            (cancelCallBack)="closeConfirmationPopup()"
+        >
+        </confirm-modal>
+    </ng-template>
 </ng-container>
 <preview
     *ngIf="previewVoucherParams?.uniqueName"
@@ -603,17 +573,19 @@
 
 <!-- Bulk export modal -->
 <ng-template #bulkExport>
-    <bulk-export-voucher
-        [type]="'payment'"
-        [dateRange]="{ from: fromDate, to: toDate }"
-        [advanceSearch]="lastListingFilters"
-        [voucherUniqueNames]="selectedPayments"
-        [totalItems]="
-            selectedPayments && selectedPayments.length > 0
-                ? selectedPayments.length
-                : allPayments && allPayments.length
-        "
-        (closeModelEvent)="bulkExportModalRef.hide()"
-    >
-    </bulk-export-voucher>
+    <div mat-dialog-content>
+        <bulk-export-voucher
+            [type]="'payment'"
+            [dateRange]="{ from: fromDate, to: toDate }"
+            [advanceSearch]="lastListingFilters"
+            [voucherUniqueNames]="selectedPayments"
+            [totalItems]="
+                selectedPayments && selectedPayments.length > 0
+                    ? selectedPayments.length
+                    : allPayments && allPayments.length
+            "
+            (closeModelEvent)="closeBulkExportDialog()"
+        >
+        </bulk-export-voucher>
+    </div>
 </ng-template>

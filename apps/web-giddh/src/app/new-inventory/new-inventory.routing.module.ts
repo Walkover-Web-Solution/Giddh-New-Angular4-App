@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
-import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
@@ -14,8 +13,6 @@ import { ProductServiceListComponent } from "./component/inventory-product-servi
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
-import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
-import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
@@ -87,23 +84,10 @@ const routes: Routes = [
             },
         ],
     },
-
-    {
-        path: "item-wise",
-        component: ItemWiseComponent,
-    },
-    {
-        path: "variant-wise",
-        component: VariantWiseComponent,
-    },
     {
         path: "about-group-detail",
         component: AboutGroupDetailComponent,
 
-    },
-    {
-        path: "about-product-service-detail",
-        component: AboutProductServiceDetailComponent,
     },
     {
         path: "inventory-combo-list",

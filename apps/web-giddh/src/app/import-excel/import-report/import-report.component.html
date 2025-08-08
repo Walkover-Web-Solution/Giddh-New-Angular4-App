@@ -75,25 +75,18 @@
                     </div>
                 </div>
             </div>
-            <div
-                class="pagination-wrap mb-5"
-                [hidden]="isLoading"
-                *ngIf="importStatusResponse?.totalItems > importStatusResponse?.count"
-            >
-                <pagination
-                    [totalItems]="importStatusResponse?.totalItems"
-                    [(ngModel)]="importPaginatedRequest.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="importStatusResponse?.count"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+            <div class="mt-4">
+                <ng-container *ngIf="importStatusResponse?.totalItems > importStatusResponse?.count">
+                    <mat-paginator
+                        [length]="importStatusResponse?.totalItems"
+                        [pageSize]="importPaginatedRequest.count || importStatusResponse?.count"
+                        [pageIndex]="importPaginatedRequest.page - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
             <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
