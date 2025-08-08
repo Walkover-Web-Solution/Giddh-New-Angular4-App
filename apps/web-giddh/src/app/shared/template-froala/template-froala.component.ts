@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
@@ -17,14 +17,13 @@ import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
 import { PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
-declare var tinymce: any;
 @Component({
     selector: 'template-froala',
     templateUrl: './template-froala.component.html',
     styleUrls: ['./template-froala.component.scss'],
     providers: [CustomEmailComponentStore, TriggerComponentStore]
 })
-export class TemplateFroalaComponent implements OnInit, AfterViewInit {
+export class TemplateFroalaComponent implements OnInit {
     /** Instance of select multiple fields*/
     @ViewChildren(SelectMultipleFieldsComponent) childComponents!: QueryList<SelectMultipleFieldsComponent>;
     /** Instance of subject input field */
@@ -202,31 +201,6 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     public isTrigger: boolean;
     /** Holds true if form has unsaved changes */
     public hasUnsavedChanges: boolean = false;
-    /** Hold tinymce editor config */
-    public tinymceConfig = {
-        selector: '#tinyEditor',
-        branding: false,
-        min_height: 300,
-        max_height: 300,
-        zindex: 2501,
-        toolbar_sticky: true,
-        menubar: false,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
-            'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
-            'table', 'help', 'wordcount', 'emoticons', 'pagebreak', 'nonbreaking',
-            'directionality'
-        ],
-        toolbar: [
-            'bold italic underline strikethrough forecolor backcolor | code help fullscreen emoticons | undo redo |',
-            'link image media table charmap  hr pagebreak nonbreaking |',
-            'alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist checklist | insertdatetime anchor | searchreplace visualblocks | ltr rtl | removeformat | blocks fontfamily fontsize '
-        ].join(' '),
-        codesample_languages: [
-            { text: 'HTML/XML', value: 'markup' }
-        ],
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -238,39 +212,6 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
         private titleCasePipe: TitleCasePipe,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) { }
-
-    /**
-     * Initializes the TinyMCE editor after the view is initialized.
-     *
-     * This function configures the TinyMCE editor with specific options for a rich text editor,
-     * including plugins, toolbar buttons, and content styles. It is called after the view is initialized.
-     *
-    * @returns {void}
-    * @memberof TemplateFroalaComponent
-     */
-    public ngAfterViewInit(): void {
-        // Remove any existing TinyMCE script tag
-        const existingScript = document.querySelector('script[src*="tinymce.min.js"]');
-        if (existingScript) {
-            existingScript.remove();
-        }
-        // Remove any existing tinymce instance
-        if ((window as any).tinymce) {
-            delete (window as any).tinymce;
-        }
-    
-        // Always create and append a new TinyMCE script tag
-        const scriptTag = document.createElement('script');
-        scriptTag.src = `https://cdn.tiny.cloud/1/we80wi5vpgskqw6jst4ewz72f9d6kuqd0xnme2wbxktbjtiq/tinymce/6/tinymce.min.js`;
-        scriptTag.referrerPolicy = 'origin';
-        scriptTag.type = 'text/javascript';
-        scriptTag.defer = true;
-        scriptTag.async = true;
-        scriptTag.onload = () => {
-            tinymce.init(this.tinymceConfig);
-        };
-        document.head.appendChild(scriptTag);
-    }
 
     /**
      * Initializes the component and performs necessary operations.
@@ -318,13 +259,6 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
-
-            this.customTriggerForm.get('html').valueChanges.subscribe(value => {
-                const editor = tinymce.get('tinyEditor');
-                if (editor && editor.getContent() !== value) {
-                    editor.setContent(value || '');
-                }
-            });
 
             /** Search for voucher list dropdown */
             this.voucherListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
