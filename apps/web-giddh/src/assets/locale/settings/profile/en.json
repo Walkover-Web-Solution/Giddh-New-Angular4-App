@@ -90,5 +90,7 @@
     "update_sales_tax": "Update Sales Tax",
     "company_sales_tax_list": "List of all the Sales Tax's created and linked in the company",
     "ledger_default_view": "Ledger Default View",
-    "select_view": "Select View"
+    "select_view": "Select View",
+    "module_file_format": "This [module_name] module will be used to export the file name like [file_format]",
+    "file_name_export_setting": "File Name Export Setting"
 }

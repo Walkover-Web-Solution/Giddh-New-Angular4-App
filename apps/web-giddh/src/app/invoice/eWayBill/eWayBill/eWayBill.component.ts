@@ -446,24 +446,24 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
-        this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
+        this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
+                return saveAs(blob, response.body.name);
             } else {
-                this._toaster.errorToast(d?.message);
+                this._toaster.errorToast(response?.message);
             }
         });
     }
 
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = _.cloneDeep(ewayItem);
-        this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
+        this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
+                return saveAs(blob, response.body.name);
             } else {
-                this._toaster.errorToast(d?.message);
+                this._toaster.errorToast(response?.message);
             }
         });
     }

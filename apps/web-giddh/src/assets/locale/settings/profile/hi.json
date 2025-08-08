@@ -90,5 +90,7 @@
     "update_sales_tax": "बिक्री कर अपडेट करें",
     "company_sales_tax_list": "कंपनी में बनाए गए और लिंक किए गए सभी बिक्री करों की सूची",
     "ledger_default_view": "लेजर डिफ़ॉल्ट दृश्य",
-    "select_view": "वियु चुनें"
+    "select_view": "वियु चुनें",
+    "module_file_format": "यह [module_name] मॉड्यूल फ़ाइल नाम को [file_format] की तरह एक्सपोर्ट करने के लिए उपयोग किया जाएगा",
+    "file_name_export_setting": "फाइल नाव एक्सपोर्ट सेटिंग"
 }

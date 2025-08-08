@@ -90,5 +90,7 @@
     "update_sales_tax": "विक्री कर अद्यतनित करा",
     "company_sales_tax_list": "कंपनीमध्ये तयार केलेल्या आणि लिंक केलेल्या सर्व विक्रीकरांची यादी",
     "ledger_default_view": "लेजर डीफॉल्ट दृश्य",
-    "select_view": "वियु निवडा"
+    "select_view": "वियु निवडा",
+    "module_file_format": "हा [module_name] मॉड्यूल [file_format] प्रमाणे फाइल नाव एक्सपोर्ट करण्यासाठी वापरला जाईल",
+    "file_name_export_setting": "फाइल नाव एक्सपोर्ट सेटिंग"
 }

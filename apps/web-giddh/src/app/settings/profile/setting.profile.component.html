@@ -10,7 +10,7 @@
         <!--Tabs of Company Profile-->
         <div class="settings-profile-tabs" *ngIf="!addressOnly">
             <div class="row">
-                <div class="col-lg-12 px-3 w-fit-content">
+                <div class="col-lg-12 px-3 w-fit-content position-relative">
                     <mat-tab-group
                         mat-stretch-tabs="false"
                         mat-align-tabs="start"
@@ -61,16 +61,21 @@
                                 [showTaxColumn]="showTaxColumn"
                             ></address-settings>
                         </mat-tab>
-                        <mat-tab [label]="localeData?.other">
-                            <other-settings
+                        <mat-tab [label]="commonLocaleData?.app_export" *ngIf="currentOrganizationType !== 'BRANCH'">
+                            <export-file-name
+                                #exportFileNameComponent
                                 [organizationType]="currentOrganizationType"
-                                (saveProfile)="handleSaveProfile($event)"
-                                [profileData]="companyProfileObj"
                                 [localeData]="localeData"
-                            >
-                            </other-settings>
+                                [commonLocaleData]="commonLocaleData"
+                            ></export-file-name>
                         </mat-tab>
                     </mat-tab-group>
+                    <button *ngIf="currentOrganizationType !== 'BRANCH' && activeTabIndex === 2" 
+                        mat-raised-button color="primary" class="pull-right position-absolute z-index-1 save-export-file-name" 
+                        (click)="exportFileNameComponent?.updateModuleExportSetting()"
+                        [disabled]="exportFileNameComponent?.exportModuleSettingForm?.invalid"
+                    >
+                        {{ commonLocaleData?.app_save }}</button>
                 </div>
             </div>
         </div>
