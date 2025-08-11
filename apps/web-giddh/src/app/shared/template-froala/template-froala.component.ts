@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
@@ -236,7 +236,8 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -404,6 +405,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                     emailSubject: response.emailSubject ?? null,
                     html: response.html ?? null
                 }, { emitEvent: false });
+                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -583,6 +585,7 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
                 html: [template?.html ?? null]
             }, { emitEvent: false });
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
