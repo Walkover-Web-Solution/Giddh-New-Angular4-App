@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { distinctUntilChanged, ReplaySubject, take, takeUntil } from 'rxjs';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../services/invoice.ui.data.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GeneralService } from '../../../services/general.service';
@@ -13,6 +13,7 @@ import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { InvoiceService } from '../../../services/invoice.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-template-edit-filter',
@@ -22,9 +23,10 @@ import { InvoiceService } from '../../../services/invoice.service';
 })
 export class TemplateEditFilterComponent implements OnInit {
   @Input() public design: boolean;
+  @Input() public sectionName:any;
   @Input() public mode: string = 'create';
   public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
-  public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
+  public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
   public fieldsAndVisibility: any;
   public logoAttached: boolean = false;
   public showLogo: boolean = true;
@@ -50,7 +52,7 @@ export class TemplateEditFilterComponent implements OnInit {
   public isFileUploadInProgress: boolean = false;
   public sampleTemplates: CustomTemplateResponse[];
   public companyUniqueName: string = '';
-  public voucherType: string ='';
+  public voucherType: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showDeleteButton: boolean = false;
   /** fileinput element ref for clear value after remove attachment **/
@@ -75,11 +77,13 @@ export class TemplateEditFilterComponent implements OnInit {
   /** Stores the active company name */
   public activeCompanyName: string;
   public showCompanyName: boolean;
-      /** Hold list of suggestion items for Tribute.js */
-      public suggestionList: any[] = [];
-      public signatureSrc: string = '';
-      public signatureImgAttached: boolean = false;
-      public isSignatureUploadInProgress: boolean = false;
+  /** Hold list of suggestion items for Tribute.js */
+  public suggestionList: any[] = [];
+  public signatureSrc: string = '';
+  public signatureImgAttached: boolean = false;
+  public isSignatureUploadInProgress: boolean = false;
+  /** Stores the voucher API version of company */
+  public voucherApiVersion: 1 | 2;
   constructor(private fb: FormBuilder,
     private generalService: GeneralService,
     private toasty: ToasterService,
@@ -90,8 +94,26 @@ export class TemplateEditFilterComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  /**
+   * Shorthand to fetch a typed FormControl from the root form using a path.
+   * Usage in template: [formControl]="ctrl('sections.header.data.companyName.display')"
+   */
+  public ctrl(path: string): FormControl {
+    const control = this.templateForm.get(path) as FormControl;
+    if (!control) {
+      return;
+    }
+    return control;
+  }
+
+  public ngOnInit(): void {
+    console.log(this.sectionName);
+    this.initForm();
     console.log(this.inputData);
+    // Initialize form early to ensure controls (e.g., 'name') exist before first render
+    // This avoids 'There is no FormControl instance attached ... name' during initial change detection
+    // Link alias controls so using them from footer/table keeps root in sync and vice versa
+    this.voucherApiVersion = this.generalService.voucherApiVersion;
     this.voucherType = this.inputData?.voucherType;
     this.sampleTemplates = this.inputData?.templateList;
     let companyUniqueName = null;
@@ -139,45 +161,45 @@ export class TemplateEditFilterComponent implements OnInit {
         this.customTemplate.sections.footer.data.imageSignature.display = true;
         this.customTemplate.sections.footer.data.slogan.display = false;
         if (this.voucherType !== 'sales') {
-            this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
-            this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+          this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
+          this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
         } else {
-            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+          this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+          this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
         }
-    }
-    this.assignImageSignature();
-      if (this.inputData.mode === 'create') {
-        this.initForm();
-      } else {
-        this.initForm(this.customTemplate);
       }
-
+      this.assignImageSignature();
       this.setFontAndFontSize();
+      // Initialize once; afterwards patch to avoid re-creating the FormGroup during CD
+        if (this.inputData.mode === 'update') {
+          this.patchFormGroup(this.templateForm, this.customTemplate);
+        }
+      console.log('this.templateForm', this.templateForm);
 
     });
 
     this.invoiceService.getEmailContentSuggestions('account').pipe(takeUntil(this.destroyed$)).subscribe(response => {
       console.log('response', response);
       if (response?.body) {
-          this.suggestionList = response.body?.accountSuggestions?.map(item => ({
-              key: item,
-              value: item
-          }));
+        this.suggestionList = response.body?.accountSuggestions?.map(item => ({
+          key: item,
+          value: item
+        }));
       }
-  });
+    });
 
-  this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+    this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+      console.log('info', info);
       this.templateUISectionVisibility = cloneDeep(info);
-  });
+    });
 
-  this.invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
+    this.invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
       this.showCompanyName = cloneDeep(yesOrNo);
-  });
+    });
 
-  this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+    this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
       this.fieldsAndVisibility = cloneDeep(obj);
-  });
+    });
 
     this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
       this.fieldsAndVisibility = cloneDeep(obj);
@@ -201,6 +223,12 @@ export class TemplateEditFilterComponent implements OnInit {
       this.activeCompanyName = activeCompany?.name;
       this.isIndianCompany = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
     });
+
+
+    this.templateForm.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((value) => {
+      console.log(value);
+      this.invoiceUiDataService.setCustomTemplate(value);
+    });
   }
 
   /**
@@ -212,11 +240,24 @@ export class TemplateEditFilterComponent implements OnInit {
     if (!values) return;
     Object.keys(values).forEach(key => {
       const control = group.get(key);
-      if (control instanceof FormGroup && values[key] && typeof values[key] === 'object' && !Array.isArray(values[key])) {
-        // Only patch if the value is an object and the control exists
-        this.patchFormGroup(control, values[key]);
-      } else if (control && values[key] !== undefined) {
-        control.patchValue(values[key], { emitEvent: false });
+      if (!control) {
+        return; // Skip keys that don't have corresponding controls
+      }
+
+      const incoming = values[key];
+
+      // If target is a FormGroup, only recurse when incoming is a plain object.
+      if (control instanceof FormGroup) {
+        if (incoming && typeof incoming === 'object' && !Array.isArray(incoming)) {
+          this.patchFormGroup(control, incoming);
+        }
+        // Do not attempt to patch a FormGroup with primitives/non-objects
+        return;
+      }
+
+      // For non-FormGroup controls, patch primitive/defined values directly
+      if (incoming !== undefined) {
+        control.patchValue(incoming, { emitEvent: false });
       }
     });
   }
@@ -257,6 +298,9 @@ export class TemplateEditFilterComponent implements OnInit {
       showSectionsInline: [customTemplate?.showSectionsInline ?? false],
       defaultImageSize: [this.defaultImageSize],
       templateType: [customTemplate?.templateType ?? 'gst_template_a'],
+      showBankQrCode: [customTemplate?.showBankQrCode ?? false],
+      qrCodeId: [customTemplate?.qrCodeId ?? null],
+      copyFrom: [customTemplate?.copyFrom ?? null],
       sections: this.fb.group({
         header: this.fb.group({
           data: this.createHeaderDataGroup(customTemplate)
@@ -330,7 +374,7 @@ export class TemplateEditFilterComponent implements OnInit {
       discount: this.fb.group({ label: [tableData.discount?.label ?? 'Dis./ Item'], display: [tableData.discount?.display ?? true], width: [tableData.discount?.width ?? '10'] }),
       taxes: this.fb.group({ label: [tableData.taxes?.label ?? 'Taxes'], display: [tableData.taxes?.display ?? true], width: [tableData.taxes?.width ?? '10'] }),
       displayBaseCurrency: this.fb.group({ label: [tableData.displayBaseCurrency?.label ?? ''], display: [tableData.displayBaseCurrency?.display ?? true], width: [tableData.displayBaseCurrency?.width ?? null] }),
-      showDescriptionInRows: this.fb.group({ label: [tableData.showDescriptionInRows?.label ?? ''], display: [tableData.showDescriptionInRows?.display ?? false], width: [tableData.showDescriptionInRows?.width ?? null] }),
+      showDescriptionInRows: this.fb.group({ label: [tableData.showDescriptionInRows?.label ?? ''], display: [tableData.showDescriptionInRows?.display ?? this.inputData.voucherType === 'sales' ? false : true], width: [tableData.showDescriptionInRows?.width ?? null] }),
       amountBeforeDiscount: this.fb.group({ label: [tableData.amountBeforeDiscount?.label ?? 'Total Before Dis.'], display: [tableData.amountBeforeDiscount?.display ?? true], width: [tableData.amountBeforeDiscount?.width ?? null] }),
       hsnSac: this.fb.group({ label: [tableData.hsnSac?.label ?? 'HSN/SAC'], display: [tableData.hsnSac?.display ?? true], width: [tableData.hsnSac?.width ?? '10'] }),
       otherTaxBifurcation: this.fb.group({ label: [tableData.otherTaxBifurcation?.label ?? 'TCS'], display: [tableData.otherTaxBifurcation?.display ?? true], width: [tableData.otherTaxBifurcation?.width ?? null] }),
@@ -360,42 +404,92 @@ export class TemplateEditFilterComponent implements OnInit {
       tcs: this.fb.group({ label: [footerData.tcs?.label ?? 'TCS'], display: [footerData.tcs?.display ?? true], width: [footerData.tcs?.width ?? null] }),
       tds: this.fb.group({ label: [footerData.tds?.label ?? 'TDS'], display: [footerData.tds?.display ?? true], width: [footerData.tds?.width ?? null] }),
       taxBifurcation: this.fb.group({ label: [footerData.taxBifurcation?.label ?? 'Tax Bifurcation'], display: [footerData.taxBifurcation?.display ?? false], width: [footerData.taxBifurcation?.width ?? null] }),
+      total: this.fb.group({ label: [footerData.total?.label ?? 'Total'], display: [footerData.total?.display ?? true], width: [footerData.total?.width ?? '10'] }),
     });
   }
 
+  public changeInvoiceHeader(event: MatCheckboxChange) {
+    this.templateForm.get('sections.header.data.formNameInvoice.display').patchValue(event.checked);
+    this.templateForm.get('sections.header.data.formNameTaxInvoice.display').patchValue(event.checked);
+  }
 
+  public changeDisableBilling(event: MatCheckboxChange) {
+    let template = cloneDeep(this.customTemplate);
+    if (!event.checked) {
+      template.sections.header.data.billingGstin.display = false;
+      template.sections.header.data.billingState.display = false;
+      this.templateForm.get('sections.header.data.billingGstin.display').patchValue(false);
+      this.templateForm.get('sections.header.data.billingState.display').patchValue(false);
+    } else {
+      template.sections.header.data.billingGstin.display = true;
+      template.sections.header.data.billingState.display = true;
+      this.templateForm.get('sections.header.data.billingGstin.display').patchValue(true);
+      this.templateForm.get('sections.header.data.billingState.display').patchValue(true);
+    }
+
+    this.invoiceUiDataService.setCustomTemplate(template);
+  }
   /**
    * onDesignChange
    */
   public onDesignChange(fieldName: string, value: string): void {
+    console.log(fieldName, value, this.inputData);
+
     let template: CustomTemplateResponse;
     if (fieldName === 'uniqueName') { // change whole template
       const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
       template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
-
+      console.log(template, selectedTemplate);
       if (this.inputData?.mode === 'update' && selectedTemplate) {
+        // Preserve current uniqueName and name during update mode
         template.uniqueName = cloneDeep(this.customTemplate?.uniqueName);
         template.name = cloneDeep(this.customTemplate.name);
-        this.templateForm.get('uniqueName').patchValue(template.uniqueName);
-        this.templateForm.get('name').patchValue(template.name);
       }
+      // Apply company name labels
+      if (template?.sections?.header?.data?.companyName) {
+        template.sections.header.data.companyName.label = this.companyName;
+      }
+      if (template?.sections?.footer?.data?.companyName) {
+        template.sections.footer.data.companyName.label = this.companyName;
+      }
+      // Track copyFrom and selection
+      template.copyFrom = cloneDeep(value);
+      this.selectedTemplateUniqueName = value;
+      // If form is not ready, skip to avoid no-control errors
+      if (!this.templateForm) {
+        return;
+      }
+      // Ensure essential fields are present on template before patch
+      if (!template.name) {
+        template.name = this.templateForm.get('name')?.value ?? '';
+      }
+      if (!template.uniqueName) {
+        template.uniqueName = this.templateForm.get('uniqueName')?.value ?? value;
+      }
+      // Ensure critical controls exist
+      if (!this.templateForm.get('name')) {
+        this.templateForm.addControl('name', this.fb.control(template.name ?? ''));
+      }
+      if (!this.templateForm.get('uniqueName')) {
+        this.templateForm.addControl('uniqueName', this.fb.control(template.uniqueName ?? value));
+      }
+      if (!this.templateForm.get('copyFrom')) {
+        this.templateForm.addControl('copyFrom', this.fb.control(template.copyFrom ?? value));
+      }
+      // Patch the entire form with the selected template
+      this.patchFormGroup(this.templateForm, template);
+      // Explicitly patch commonly-bound controls to ensure value sync
+      this.templateForm.get('name')?.patchValue(template.name ?? '');
+      this.templateForm.get('uniqueName')?.patchValue(template.uniqueName ?? value);
+      this.templateForm.get('copyFrom')?.patchValue(template.copyFrom ?? value);
+      this.templateForm.updateValueAndValidity({ emitEvent: false });
+      // Push to UI service
+      this.invoiceUiDataService.setCustomTemplate(cloneDeep(template));
+      return;
     } else { // change specific field
       template = cloneDeep(this.customTemplate);
       template[fieldName] = value;
       this.templateForm.get(fieldName).patchValue(value);
-    }
-    template.copyFrom = cloneDeep(value);
-    this.selectedTemplateUniqueName = value;
-    template.sections['header'].data['companyName'].label = this.companyName;
-    template.sections['footer'].data['companyName'].label = this.companyName;
-    this.templateForm.get('copyFrom').patchValue(value);
-    const labelControl = this.templateForm.get('sections.header.data.companyName.label');
-    const labelControlFooter = this.templateForm.get('sections.footer.data.companyName.label');
-    if (labelControl) {
-      labelControl.patchValue(this.companyName);
-    }
-    if (labelControlFooter) {
-      labelControlFooter.patchValue(this.companyName);
     }
     this.invoiceUiDataService.setCustomTemplate(cloneDeep(template));
   }
@@ -583,20 +677,51 @@ export class TemplateEditFilterComponent implements OnInit {
     this.invoiceUiDataService.setCustomTemplate(template);
   }
 
-      /**
-     * Assigns image signature for CREATE and UPDATE flow
-     *
-     * @memberof ContentFilterComponent
-     */
-      public assignImageSignature(): void {
-        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
-            this.signatureImgAttached = true;
+  /**
+ * Assigns image signature for CREATE and UPDATE flow
+ *
+ * @memberof ContentFilterComponent
+ */
+  public assignImageSignature(): void {
+    if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
+      this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+      this.signatureImgAttached = true;
+    } else {
+      this.signatureSrc = '';
+      this.signatureImgAttached = false;
+    }
+  }
+
+  /**
+* Change Tax Bifurcation then total HSN/SAC or Tax table level will get change
+*
+* @param {string} label: String that allow tabel section either HSN/SAC(hsnSac) or Tax (taxRateBifurcation)
+* @param {string} sectionType:  Define section for template A will be 'footer' and for template E will be 'table'
+* @memberof ContentFilterComponent
+*/
+  public checkedTaxBifurcation(label: string, sectionType: string) {
+    let template = cloneDeep(this.customTemplate);
+    if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
+      if (template.sections.table.data.taxBifurcation?.display) {
+        template.sections.table.data.taxBifurcation.label = label;
+        this.templateForm.get('sections.table.data.taxBifurcation.label').patchValue(label);
+      } else {
+        template.sections.table.data.taxBifurcation.label = '';
+        this.templateForm.get('sections.table.data.taxBifurcation.label').patchValue('');
+      }
+    } else {
+      if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
+        if (template.sections.footer.data.taxBifurcation?.display) {
+          template.sections.footer.data.taxBifurcation.label = label;
+          this.templateForm.get('sections.footer.data.taxBifurcation.label').patchValue(label);
         } else {
-            this.signatureSrc = '';
-            this.signatureImgAttached = false;
+          template.sections.footer.data.taxBifurcation.label = '';
+          this.templateForm.get('sections.footer.data.taxBifurcation.label').patchValue('');
         }
+      }
     }
 
+    this.invoiceUiDataService.setCustomTemplate(template);
+  }
 
 }

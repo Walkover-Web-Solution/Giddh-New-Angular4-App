@@ -44,7 +44,6 @@ import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.modu
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
 import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
-import { GstTemplateAComponent } from "./template/gst-template-a/gst-template-a.component";
 import { TemplatePreviewDialogComponent } from "./template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edit-dialog.component";
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
@@ -93,6 +92,11 @@ import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { SalesPersonService } from "../shared/sales-person/utility/sales-person.service";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
+import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
+import { GstTemplateAComponent } from "./template/all-templates/templates/gst-template-a/gst-template-a.component";
+import { ThermalTemplateComponent } from "./template/all-templates/templates/thermal-template/thermal-template.component";
+import { TallyTemplateComponent } from "./template/all-templates/templates/tally-template/tally-template.component";
 
 @NgModule({
     declarations: [
@@ -107,7 +111,6 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
         BulkUpdateComponent,
         HistoryDialogComponent,
         EmailSendDialogComponent,
-        GstTemplateAComponent,
         TemplatePreviewDialogComponent,
         TemplateEditDialogComponent,
         PrintVoucherComponent,
@@ -116,6 +119,10 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
+        AllTemplatesComponent,
+        GstTemplateAComponent,
+        ThermalTemplateComponent,
+        TallyTemplateComponent
     ],
     imports: [
         CommonModule,
@@ -191,10 +198,12 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule,
         MatButtonToggleModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        TributeMentionModule
     ],
     exports: [
-VoucherCreateComponent
+        VoucherCreateComponent,
+        AllTemplatesComponent,
     ],
     providers: [TitleCasePipe, InvoiceUiDataService, SalesPersonService]
 })
