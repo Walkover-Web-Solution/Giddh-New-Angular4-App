@@ -5836,9 +5836,17 @@
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                     <h3 class="fonr-16">{{ template.name }}</h3>
                                     <span
+                                        *ngIf="template.isDefault"
                                         [ngClass]="{ 'active': template.isDefault }"
                                         class="default-wrap font-12 p-2 cursor-pointer"
-                                        (click)="setTemplateAsDefault(template.uniqueName,'invoice')"
+                                    >
+                                        <i class="icon-favorite-selected"></i>
+                                        Default Template
+                                    </span>
+                                    <span
+                                        *ngIf="!template.isDefault"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        (click)="setTemplateAsDefault(template.uniqueName, 'invoice')"
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         Set as Default
@@ -5851,7 +5859,6 @@
                                             matTooltip="Preview"
                                             matTooltipPosition="above"
                                             (click)="templateDialog(template)"
-                                            
                                         >
                                             <i class="icon-eye"></i>
                                         </button>
@@ -5868,10 +5875,11 @@
                                         <button
                                             mat-stroked-button
                                             color="primary"
-                                            class="mat-icon-md-btn"
+                                            class="mat-icon-md-btn cursor-pointer"
+                                            [disabled]="template.isDefault"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
-                                            (click)="deleteTemplate(template,'invoice')"
+                                            (click)="template.isDefault ? null : deleteTemplate(template, 'invoice')"
                                         >
                                             <i class="icon-trash"></i>
                                         </button>
@@ -5888,18 +5896,29 @@
                             </mat-card>
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
-                                *ngIf="template.type === 'voucher' && (voucherType === 'credit note' || voucherType === 'debit note')"
+                                *ngIf="
+                                    template.type === 'voucher' &&
+                                    (voucherType === 'credit note' || voucherType === 'debit note')
+                                "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                     <h3 class="fonr-16">{{ template.name }}</h3>
                                     <span
-                                        class="default-wrap font-12 p-2 cursor-pointer"
-                                        (click)="setTemplateAsDefault(template.uniqueName,'voucher')"
-                                        [ngClass]="{ 'active': template.isDefaultForVoucher }"
-                                    >
-                                        <i class="icon-favorite-selected"></i>
-                                        Set as Default
-                                    </span>
+                                    *ngIf="template.isDefaultForVoucher"
+                                    [ngClass]="{ 'active': template.isDefaultForVoucher }"
+                                    class="default-wrap font-12 p-2 cursor-pointer"
+                                >
+                                    <i class="icon-favorite-selected"></i>
+                                    Default Template
+                                </span>
+                                <span
+                                    *ngIf="!template.isDefaultForVoucher"
+                                    class="default-wrap font-12 p-2 cursor-pointer"
+                                    (click)="setTemplateAsDefault(template.uniqueName, 'voucher')"
+                                >
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
                                     <div class="d-flex column-gap1 justify-content-center">
                                         <button
                                             mat-stroked-button
@@ -5924,10 +5943,11 @@
                                         <button
                                             mat-stroked-button
                                             color="primary"
-                                            class="mat-icon-md-btn"
+                                            [disabled]="template.isDefaultForVoucher"
+                                            class="mat-icon-md-btn cursor-pointer"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
-                                            (click)="deleteTemplate(template,'invoice')"
+                                            (click)="template.isDefaultForVoucher ? null : deleteTemplate(template, 'voucher')"
                                         >
                                             <i class="icon-trash"></i>
                                         </button>
