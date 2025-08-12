@@ -302,7 +302,7 @@ export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
 /** ZIP Code supported country codes */
 export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
 
-export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
+export const API_POSTMAN_DOC_URL = 'https://giddh.com/api';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
