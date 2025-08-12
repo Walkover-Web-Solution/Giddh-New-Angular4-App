@@ -215,7 +215,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.to = this.toDate;
 
         let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
-        console.log("advanceSearchRequest", body);
         if (body && body.dataToSend) {
             body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
@@ -239,7 +238,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        console.log("body", body);
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 this.isLoading = false;
