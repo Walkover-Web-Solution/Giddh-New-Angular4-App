@@ -1,727 +1,1201 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { distinctUntilChanged, ReplaySubject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../services/invoice.ui.data.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { TemplateDesignUISectionVisibility } from '../../../invoice/templates/edit-template/filters-container/design-filters/design.filters.component';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { CountryNames } from '../../../shared/Enums/common.enum';
 import { InvoiceService } from '../../../services/invoice.service';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { NgForm } from '@angular/forms';
+import { CountryNames } from '../../../shared/Enums/common.enum';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
 
 @Component({
-  selector: 'app-template-edit-filter',
-  templateUrl: './template-edit-filter.component.html',
-  styleUrls: ['./template-edit-filter.component.scss'],
+    selector: 'template-edit-filter',
+    templateUrl: './template-edit-filter.component.html',
+    styleUrls: ['./template-edit-filter.component.scss'],
 
 })
 export class TemplateEditFilterComponent implements OnInit {
-  @Input() public design: boolean;
-  @Input() public sectionName:any;
-  @Input() public mode: string = 'create';
-  public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
-  public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
-  public fieldsAndVisibility: any;
-  public logoAttached: boolean = false;
-  public showLogo: boolean = true;
-  public selectedTemplateUniqueName: string = 'gst_template_a';
-  public presetFonts = [
-    { label: 'Open Sans', value: 'Open Sans' },
-    { label: 'Roboto', value: 'Roboto' },
-    { label: 'Lato', value: 'Lato' },
-    { label: 'Inter', value: 'Inter' }
-  ];
-  public presetFontsSize = [
-    { label: '16px', value: 16 },
-    { label: '14px', value: 14 },
-    { label: '12px', value: 12 },
-    { label: '10px', value: 10 }
+    /** Ng form instance of content filter component */
+    @ViewChild(NgForm) contentForm: NgForm;
+    /** File input element reference for logo upload */
+    @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
+    /** Input data passed to the component */
+    @Input() public inputData: any;
+    /** Current mode of the component (e.g., 'create', 'edit') */
+    public mode: string = 'create';
+    /** Stores the custom template response object */
+    public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    /** True, if a logo is attached */
+    public logoAttached: boolean = false;
+    /** True, if logo should be displayed */
+    public showLogo: boolean = true;
+    /** Unique name of the selected template */
+    public selectedTemplateUniqueName: string = 'gst_template_a';
+    /** List of preset font options */
+    public presetFonts = [
+        { label: 'Open Sans', value: 'Open Sans' },
+        { label: 'Roboto', value: 'Roboto' },
+        { label: 'Lato', value: 'Lato' },
+        { label: 'Inter', value: 'Inter' }
+    ];
+    /** List of preset font size options */
+    public presetFontsSize = [
+        { label: '16px', value: 16 },
+        { label: '14px', value: 14 },
+        { label: '12px', value: 12 },
+        { label: '10px', value: 10 }
+    ];
+    /** True, if file has been uploaded */
+    public isFileUploaded: boolean = false;
+    /** True, if file upload is in progress */
+    public isFileUploadInProgress: boolean = false;
+    /** List of sample templates */
+    public sampleTemplates: any[] = [];
+    /** Unique name of the company */
+    public companyUniqueName: string = '';
+    /** Type of the template */
+    public templateType: any;
+    /** Emits when the component is destroyed */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True, if delete button should be shown */
+    public showDeleteButton: boolean = false;
+    /** Name of the selected font */
+    public selectedFont: string = "";
+    /** Size of the selected font */
+    public selectedFontSize: string = "";
+    /** Default image size */
+    public defaultImageSize: string = 'S';
+    /** Stores the active company name */
+    public companyName: string;
+    /** Available image sizes for selection */
+    public imageSizes = [
+        { label: 'S', value: 'S', px: '60' },
+        { label: 'M', value: 'M', px: '80' },
+        { label: 'L', value: 'L', px: '100' }
+    ];
+    /** Controls visibility of template UI sections */
+    public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
+    /** True, if company name should be shown */
+    public showCompanyName: boolean;
+    /** Stores fields and their visibility settings */
+    public fieldsAndVisibility: any;
+    /** Type of the voucher */
+    public voucherType = '';
+    /** Source URL of the signature image */
+    public signatureSrc: string = '';
+    /** True, if signature image is attached */
+    public signatureImgAttached: boolean = false;
+    /** True, if signature upload is in progress */
+    public isSignatureUploadInProgress: boolean = false;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+    /** True, if GST composition should be shown */
+    public showGstComposition: boolean = false;
+    /** Stores the active company name */
+    public activeCompanyName: string;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** Holds the value if company is Indian */
+    public isIndianCompany: boolean = false;
+    /** Hold list of suggestion items for Tribute.js */
+    public suggestionList: any[] = [];
+    /** Default template */
+    public templateObj: any = {
+        sampleTemplates: null,
+        customCreatedTemplates: null,
+        defaultTemplate: {
+            createdBy: null,
+            fontSize: 14,
+            fontSmall: 10,
+            fontDefault: 14,
+            isDefault: false,
+            fontMedium: 12,
+            isDefaultForVoucher: false,
+            showSectionsInline: false,
+            uniqueName: 'gst_template_a',
+            createdAt: '',
+            updatedAt: '',
+            updatedBy: null,
+            showBankQrCode: false,
+            qrCodeId: "",
+            sections: {
+                footer: {
+                    data: {
+                        totalTax: {
+                            label: 'Total Tax*',
+                            display: true,
+                            width: null
+                        },
+                        displayExportMessage: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        thanks: {
+                            label: 'Thank You for your business.',
+                            display: true,
+                            width: null
+                        },
+                        taxableAmount: {
+                            label: 'Sub Total',
+                            display: true,
+                            width: null
+                        },
+                        otherDeduction: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        imageSignature: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        grandTotal: {
+                            label: 'Invoice Total',
+                            display: true,
+                            width: null
+                        },
+                        totalInWords: {
+                            label: 'Invoice Total (In words)',
+                            display: true,
+                            width: null
+                        },
+                        totalDue: {
+                            label: 'Total Due',
+                            display: true,
+                            width: null
+                        },
+                        companyAddress: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        companyName: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        slogan: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        textUnderSlogan: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        showNotesAtLastPage: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        message1: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        showMessage2: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        tcs: { // this is for template a
+                            label: 'TCS',
+                            display: true,
+                            width: null
+                        },
+                        tds: { // this is for template a
+                            label: 'TDS',
+                            display: true,
+                            width: null
+                        },
+                        taxBifurcation: { // this is for template a
+                            label: 'Tax Bifurcation',
+                            display: false,
+                            width: null
+                        },
+                    }
+                },
+                header: {
+                    data: {
+                        shippingDate: {
+                            label: 'Ship Date',
+                            display: true,
+                            width: null
+                        },
+                        showEInvoiceDetails: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        customField1: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        customField2: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        shippedVia: {
+                            label: 'Ship Via',
+                            display: true,
+                            width: null
+                        },
+                        customField3: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        companyName: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        displayExchangeRate: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        displayLutNumber: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        displayPlaceOfSupply: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        displayPlaceOfCountry: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        dueDate: {
+                            label: 'Due Date',
+                            display: true,
+                            width: null
+                        },
+                        gstComposition: {
+                            label: 'Registered under Composition Scheme',
+                            display: true,
+                            width: null
+                        },
+                        gstin: {
+                            label: 'GSTIN',
+                            display: true,
+                            width: null
+                        },
+                        shippingGstin: {
+                            label: 'GSTIN',
+                            display: true,
+                            width: null
+                        },
+                        voucherNumber: {
+                            label: 'Voucher No.',
+                            display: true,
+                            width: null
+                        },
+                        customerEmail: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        invoiceNumber: {
+                            label: 'Invoice No.',
+                            display: true,
+                            width: null
+                        },
+                        showQrCode: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        voucherDate: {
+                            label: 'Voucher Date',
+                            display: true,
+                            width: null
+                        },
+                        customerMobileNumber: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        attentionTo: {
+                            label: 'Attention To',
+                            display: true,
+                            width: null
+                        },
+                        pan: {
+                            label: 'PAN',
+                            display: true,
+                            width: null
+                        },
+                        trackingNumber: {
+                            label: 'Tracking No.',
+                            display: true,
+                            width: null
+                        },
+                        formNameInvoice: {
+                            label: 'INVOICE',
+                            display: true,
+                            width: null
+                        },
+                        billingGstin: {
+                            label: 'GSTIN',
+                            display: true,
+                            width: null
+                        },
+                        address: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        billingState: {
+                            label: 'State',
+                            display: true,
+                            width: null
+                        },
+                        invoiceDate: {
+                            label: 'Invoice Date',
+                            display: true,
+                            width: null
+                        },
+                        customerName: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        formNameTaxInvoice: {
+                            label: 'TAX INVOICE',
+                            display: true,
+                            width: null
+                        },
+                        shippingAddress: {
+                            label: 'Shipping Address',
+                            display: true,
+                            width: null
+                        },
+                        shippingState: {
+                            label: 'State',
+                            display: true,
+                            width: null
+                        },
+                        billingAddress: {
+                            label: 'Billing Address',
+                            display: true,
+                            width: null
+                        },
+                        warehouseAddress: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        showCompanyAddress: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                    }
+                },
+                table: {
+                    data: {
+                        date: {
+                            label: 'Date',
+                            display: true,
+                            width: '10'
+                        },
+                        item: {
+                            label: 'Description',
+                            display: true,
+                            width: '10'
+                        },
+                        total: {
+                            label: 'Total',
+                            display: true,
+                            width: '10'
+                        },
+                        quantity: {
+                            label: 'Qty.',
+                            display: true,
+                            width: '10'
+                        },
+                        sNo: {
+                            label: '#',
+                            display: true,
+                            width: '10'
+                        },
+                        rate: {
+                            label: 'Rate/ Item',
+                            display: true,
+                            width: '10'
+                        },
+                        showVariantImage: {
+                            label: 'Display Image',
+                            display: false,
+                            width: '15'
+                        },
+                        taxableValue: {
+                            label: 'Taxable Amt.',
+                            display: true,
+                            width: '10'
+                        },
+                        previousDue: {
+                            label: 'Previous Due',
+                            display: false,
+                            width: null
+                        },
+                        description: {
+                            label: 'Some label',
+                            display: true,
+                            width: '10'
+                        },
+                        discount: {
+                            label: 'Dis./ Item',
+                            display: true,
+                            width: '10'
+                        },
+                        taxes: {
+                            label: 'Taxes',
+                            display: true,
+                            width: '10'
+                        },
+                        displayBaseCurrency: {
+                            label: '',
+                            display: true,
+                            width: null
+                        },
+                        showDescriptionInRows: {
+                            label: '',
+                            display: false,
+                            width: null
+                        },
+                        amountBeforeDiscount: {
+                            label: "Total Before Dis.",
+                            display: true,
+                            width: null
+                        },
+                        hsnSac: {
+                            label: 'HSN/SAC',
+                            display: true,
+                            width: '10'
+                        },
+                        otherTaxBifurcation: {
+                            label: "TCS",
+                            display: true,
+                            width: null
+                        },
+                        totalQuantity: { // this is for template e
+                            label: 'Total Quantity',
+                            display: true,
+                            width: null
+                        }
+                    }
+                }
+            },
+            font: 'Inter',
+            topMargin: 10,
+            leftMargin: 10,
+            rightMargin: 10,
+            bottomMargin: 10,
+            logoPosition: 'center/left/right',
+            logoSize: 'small/medium/large',
+            logoUniqueName: null,
+            copyFrom: 'gst_template_a',
+            templateColor: '#AB1F00',
+            tableColor: '#f2f3f4',
+            templateType: 'gst_template_a',
+            name: '',
+        },
+        hasInvoiceTemplatePermissions: true
+    };
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
+    /** Active tab name */
+    public activeTab: string;
 
-  ];
-  public formData: FormData;
-  public files: any[] = [];
-  public dragOver: boolean;
-  public imagePreview: any;
-  public isFileUploaded: boolean = false;
-  public isFileUploadInProgress: boolean = false;
-  public sampleTemplates: CustomTemplateResponse[];
-  public companyUniqueName: string = '';
-  public voucherType: string = '';
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public showDeleteButton: boolean = false;
-  /** fileinput element ref for clear value after remove attachment **/
-  @ViewChild('fileInput', { static: false }) public logoFile: ElementRef;
-  /** Default image size */
-  public defaultImageSize: string = 'S';
-  /** Stores the active company name */
-  public companyName: string;
-  public templateForm: FormGroup;
-  @Input() public inputData: any;
-  public imageSizes = [
-    { label: 'S', value: 'S', px: '60' },
-    { label: 'M', value: 'M', px: '80' },
-    { label: 'L', value: 'L', px: '100' }
-  ];
-
-  // Content Variables
-  /** Holds the value if company is Indian */
-  public isIndianCompany: boolean = false;
-  /* This will hold the value if Gst Composition will show/hide */
-  public showGstComposition: boolean = false;
-  /** Stores the active company name */
-  public activeCompanyName: string;
-  public showCompanyName: boolean;
-  /** Hold list of suggestion items for Tribute.js */
-  public suggestionList: any[] = [];
-  public signatureSrc: string = '';
-  public signatureImgAttached: boolean = false;
-  public isSignatureUploadInProgress: boolean = false;
-  /** Stores the voucher API version of company */
-  public voucherApiVersion: 1 | 2;
-  constructor(private fb: FormBuilder,
-    private generalService: GeneralService,
-    private toasty: ToasterService,
-    private store: Store<AppState>,
-    private invoiceService: InvoiceService,
-    private commonService: CommonService,
-    private invoiceUiDataService: InvoiceUiDataService) {
-
-  }
-
-  /**
-   * Shorthand to fetch a typed FormControl from the root form using a path.
-   * Usage in template: [formControl]="ctrl('sections.header.data.companyName.display')"
-   */
-  public ctrl(path: string): FormControl {
-    const control = this.templateForm.get(path) as FormControl;
-    if (!control) {
-      return;
+    constructor(
+        private generalService: GeneralService,
+        private toasty: ToasterService,
+        private commonService: CommonService,
+        private store: Store<AppState>,
+        private invoiceService: InvoiceService,
+        private invoiceUiDataService: InvoiceUiDataService) {
     }
-    return control;
-  }
 
-  public ngOnInit(): void {
-    console.log(this.sectionName);
-    this.initForm();
-    console.log(this.inputData);
-    // Initialize form early to ensure controls (e.g., 'name') exist before first render
-    // This avoids 'There is no FormControl instance attached ... name' during initial change detection
-    // Link alias controls so using them from footer/table keeps root in sync and vice versa
-    this.voucherApiVersion = this.generalService.voucherApiVersion;
-    this.voucherType = this.inputData?.voucherType;
-    this.sampleTemplates = this.inputData?.templateList;
-    let companyUniqueName = null;
-    let companies = null;
-    this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
-      companyUniqueName = session.companyUniqueName;
-      companies = session.companies;
-      this.companyUniqueName = session.companyUniqueName;
-      this.companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name ?? '';
-    });
-    this.invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, this.inputData.defaultTemplate);
-    this.files = []; // local uploading files array
+    /**
+     * Angular lifecycle hook that is called after data-bound properties are initialized.
+     * Initializes company, template, and UI data for the template editor.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public ngOnInit(): void {
 
-    this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
-      this.customTemplate = cloneDeep(template);
+        this.templateType = this.inputData?.templateType;
+        this.voucherType = this.inputData?.voucherType;
+        this.sampleTemplates = this.inputData?.templateList;
+        this.mode = this.inputData?.mode;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        let companies = null;
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
+            this.companyUniqueName = ss.companyUniqueName;
+            companies = ss.companies;
+        });
 
-      let op = {
-        header: {},
-        table: {},
-        footer: {}
-      };
-
-
-      if (this.customTemplate && this.customTemplate.sections) {
-        op.header = this.customTemplate.sections.header.data;
-        op.table = this.customTemplate.sections.table.data;
-        op.footer = this.customTemplate.sections.footer.data;
-
-        this.invoiceUiDataService.setFieldsAndVisibility(op);
-        if (this.customTemplate.logoSize) {
-          this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L' :
-            this.customTemplate.logoSize === '80' ? 'M' : 'S';
+        this.invoiceUiDataService.setTemplateVoucherType(this.voucherType);
+        if(this.mode === 'create'){
+            this.invoiceUiDataService.initCustomTemplate(this.companyUniqueName, companies, this.templateObj.defaultTemplate);
         }
-        if (this.customTemplate.logoUniqueName) {
-          this.logoAttached = true;
-          this.isFileUploaded = false;
-          if (!this.invoiceUiDataService.isLogoUpdateInProgress) {
-            this.showDeleteButton = true;
-            let preview: any = document.getElementById('logoImage');
-            preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
-          }
+        this.invoiceUiDataService.setIsPreviewMode(false);   
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+            } else {
+                this.showGstComposition = false;
+            }
+            this.activeCompanyName = activeCompany?.name;
+            this.isIndianCompany = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
+        });
+
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+            }
+        });
+
+        this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            this.customTemplate = cloneDeep(template);
+            this.setFontAndFontSize();
+
+            let section = {
+                header: {},
+                table: {},
+                footer: {}
+            };
+
+            if (this.customTemplate && this.customTemplate.sections) {
+                section.header = this.customTemplate.sections.header.data;
+                section.table = this.customTemplate.sections.table.data;
+                section.footer = this.customTemplate.sections.footer.data;
+
+                this.invoiceUiDataService.setFieldsAndVisibility(section);
+
+                if (this.customTemplate.logoSize) {
+                    this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L' :
+                        this.customTemplate.logoSize === '80' ? 'M' : 'S';
+                }
+
+                if (this.customTemplate.logoUniqueName) {
+                    this.logoAttached = true;
+                    this.isFileUploaded = false;
+                    if (!this.invoiceUiDataService.isLogoUpdateInProgress) {
+                        this.showDeleteButton = true;
+                        let preview: any = document.getElementById('logoImage');
+                        preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                    }
+                }
+            }
+
+            if (this.customTemplate.templateType === 'tally_template') {
+                this.customTemplate.sections.footer.data.imageSignature.display = true;
+                this.customTemplate.sections.footer.data.slogan.display = false;
+                if (this.voucherType !== 'sales') {
+                    this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
+                    this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+                } else {
+                    this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+                    this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+                }
+            }
+            this.assignImageSignature();
+        });
+
+        this.invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+            if (!path) {
+                this.showDeleteButton = false;
+                this.logoAttached = false;
+                this.isFileUploaded = false;
+                this.defaultImageSize = 'S';
+            }
+        });
+
+        this.invoiceService.getEmailContentSuggestions('account').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                this.suggestionList = response.body?.accountSuggestions?.map(item => ({
+                    key: item,
+                    value: item
+                }));
+            }
+        });
+
+        this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+            this.templateUISectionVisibility = cloneDeep(info);
+        });
+
+        this.invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
+            this.showCompanyName = cloneDeep(yesOrNo);
+        });
+
+        this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+            this.fieldsAndVisibility = cloneDeep(obj);
+        });
+    }
+
+    /**
+     * Handles value change for a given template field.
+     *
+     * @param {string} fieldName The name of the field to update
+     * @param {string} value The new value for the field
+     * @memberof TemplateEditFilterComponent
+     */
+    public onValueChange(fieldName: string, value: string) {
+        let template = cloneDeep(this.customTemplate);
+        if (fieldName) {
+            template[fieldName] = value;
         }
-      }
-      if (this.customTemplate.templateType === 'tally_template') {
-        this.customTemplate.sections.footer.data.imageSignature.display = true;
-        this.customTemplate.sections.footer.data.slogan.display = false;
-        if (this.voucherType !== 'sales') {
-          this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
-          this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Updates the primary and secondary colors of the template.
+     *
+     * @param {string} primaryColor The new primary color
+     * @param {string} secondaryColor The new secondary color
+     * @memberof TemplateEditFilterComponent
+     */
+    public changeColor(primaryColor: string, secondaryColor: string) {
+        let template = cloneDeep(this.customTemplate);
+        template.templateColor = primaryColor;
+        template.tableColor = secondaryColor;
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+
+    /**
+     * Handles design changes, either switching template or updating a specific field.
+     *
+     * @param {string} fieldName The name of the field or 'uniqueName' to change the template
+     * @param {string} value The new value or uniqueName of the template
+     * @memberof TemplateEditFilterComponent
+     */
+    public onDesignChange(fieldName: string, value: string): void {
+        let template;
+        if (fieldName === 'uniqueName') { // change whole template
+            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
+            template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
+            if (this.mode === 'update' && selectedTemplate) {
+                template.uniqueName = cloneDeep(this.customTemplate?.uniqueName);
+                template.name = cloneDeep(this.customTemplate.name);
+            }
+        } else { // change specific field
+            template = cloneDeep(this.customTemplate);
+            template[fieldName] = value;
+        }
+        template.copyFrom = cloneDeep(value);
+        this.selectedTemplateUniqueName = value;
+        template.sections['header'].data['companyName'].label = this.companyName;
+        template.sections['footer'].data['companyName'].label = this.companyName;
+        this.invoiceUiDataService.setCustomTemplate(cloneDeep(template));
+    }
+
+    /**
+     * Resets print margin settings to their default values.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public resetPrintSetting(): void {
+        let template = cloneDeep(this.customTemplate);
+        template.topMargin = 10;
+        template.bottomMargin = 10;
+        template.leftMargin = 10;
+        template.rightMargin = 10;
+        this.customTemplate = cloneDeep(template);
+        this.setFontAndFontSize();
+        this.onValueChange(null, null);
+    }
+
+
+    /**
+     * Handles font selection for the template.
+     *
+     * @param {IOption} font The selected font option
+     * @memberof TemplateEditFilterComponent
+     */
+    public onFontSelect(font: IOption): void {
+        this.onValueChange('font', font?.value);
+    }
+
+
+    /**
+     * Handles font size selection for the template.
+     *
+     * @param {IOption} fontSize The selected font size option
+     * @memberof TemplateEditFilterComponent
+     */
+    public onFontSizeSelect(fontSize: IOption): void {
+        if (!fontSize?.value) {
+            let template = cloneDeep(this.customTemplate);
+            this.onValueChange('fontSize', template.fontSize);
         } else {
-          this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-          this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.onValueChange('fontSize', fontSize?.value);
         }
-      }
-      this.assignImageSignature();
-      this.setFontAndFontSize();
-      // Initialize once; afterwards patch to avoid re-creating the FormGroup during CD
-        if (this.inputData.mode === 'update') {
-          this.patchFormGroup(this.templateForm, this.customTemplate);
+    }
+
+    /**
+     * Uploads a logo image for the template and updates the UI accordingly.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public uploadLogo(): void {
+        let file = null;
+        let selectedFile: any = null;
+        selectedFile = document.getElementById("logo-edit");
+        if (selectedFile?.files?.length) {
+            file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFile(file, (blob, file) => {
+                this.isFileUploadInProgress = true;
+                this.invoiceUiDataService.isLogoUpdateInProgress = true;
+                this.previewFile(file);
+
+                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isFileUploadInProgress = false;
+                    if (response?.status === 'success') {
+                        this.showDeleteButton = true;
+                        this.onValueChange('logoUniqueName', response.body?.uniqueName);
+                        this.isFileUploaded = true;
+                        this.invoiceUiDataService.isLogoUpdateInProgress = false;
+                        this.toasty.successToast('File uploaded successfully.');
+                    } else {
+                        this.toasty.showSnackBar("error", response.message);
+                    }
+                });
+            });
         }
-      console.log('this.templateForm', this.templateForm);
+    }
 
-    });
+    /**
+     * Replaces new line characters with <br /> tags in specific template fields.
+     *
+     * @param {*} template The template object to update
+     * @returns {*} The updated template object
+     * @memberof TemplateEditFilterComponent
+     */
+    public newLineToBR(template: any): any {
+        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        return template;
+    }
 
-    this.invoiceService.getEmailContentSuggestions('account').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-      console.log('response', response);
-      if (response?.body) {
-        this.suggestionList = response.body?.accountSuggestions?.map(item => ({
-          key: item,
-          value: item
-        }));
-      }
-    });
+    /**
+     * Previews the selected logo file and updates the preview image in the UI.
+     *
+     * @param {*} file The file object to preview
+     * @memberof TemplateEditFilterComponent
+     */
+    public previewFile(file: any): void {
+        let preview: any = document.getElementById('logoImage');
+        let reader = new FileReader();
 
-    this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-      console.log('info', info);
-      this.templateUISectionVisibility = cloneDeep(info);
-    });
+        reader.onloadend = () => {
+            preview.src = reader.result;
+            this.invoiceUiDataService.setLogoPath(preview.src);
+        };
 
-    this.invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-      this.showCompanyName = cloneDeep(yesOrNo);
-    });
+        if (file) {
+            reader.readAsDataURL(file);
+            this.logoAttached = true;
+        } else {
+            preview.src = '';
+            this.logoAttached = false;
+            this.invoiceUiDataService.setLogoPath('');
+        }
+    }
 
-    this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-      this.fieldsAndVisibility = cloneDeep(obj);
-    });
+    /**
+     * Toggles the visibility of the logo in the template.
+     *
+     * @param {boolean} [show] Optional flag to explicitly set visibility
+     * @memberof TemplateEditFilterComponent
+     */
+    public toogleLogoVisibility(show?: boolean): void {
+        if (!this.isFileUploaded) {
+            this.showLogo = show ? show : !this.showLogo;
+            this.invoiceUiDataService.setLogoVisibility(this.showLogo);
+        }
+    }
 
-    this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-      this.fieldsAndVisibility = cloneDeep(obj);
-    });
-
-    this.invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-      if (!path) {
-        this.showDeleteButton = false;
+    /**
+     * Deletes the logo from the template and resets related UI state.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public deleteLogo(): void {
+        this.onValueChange('logoUniqueName', null);
+        this.invoiceUiDataService.setLogoPath('');
         this.logoAttached = false;
         this.isFileUploaded = false;
-        this.defaultImageSize = 'S';
-      }
-    });
-
-    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-      if (activeCompany?.countryV2?.countryName) {
-        this.showGstComposition = activeCompany.countryV2.countryName === 'India';
-      } else {
-        this.showGstComposition = false;
-      }
-      this.activeCompanyName = activeCompany?.name;
-      this.isIndianCompany = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
-    });
-
-
-    this.templateForm.valueChanges.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((value) => {
-      console.log(value);
-      this.invoiceUiDataService.setCustomTemplate(value);
-    });
-  }
-
-  /**
-   * Recursively patches values from a source object into a nested FormGroup.
-   * - group: The FormGroup to patch.
-   * - values: The object with values to patch (may be deeply nested).
-   */
-  private patchFormGroup(group: FormGroup, values: any) {
-    if (!values) return;
-    Object.keys(values).forEach(key => {
-      const control = group.get(key);
-      if (!control) {
-        return; // Skip keys that don't have corresponding controls
-      }
-
-      const incoming = values[key];
-
-      // If target is a FormGroup, only recurse when incoming is a plain object.
-      if (control instanceof FormGroup) {
-        if (incoming && typeof incoming === 'object' && !Array.isArray(incoming)) {
-          this.patchFormGroup(control, incoming);
+        this.isFileUploadInProgress = false;
+        this.showDeleteButton = false;
+        if (this.logoFile && this.logoFile.nativeElement) {
+            this.logoFile.nativeElement.value = "";
         }
-        // Do not attempt to patch a FormGroup with primitives/non-objects
-        return;
-      }
-
-      // For non-FormGroup controls, patch primitive/defined values directly
-      if (incoming !== undefined) {
-        control.patchValue(incoming, { emitEvent: false });
-      }
-    });
-  }
-
-  public initForm(customTemplate?: CustomTemplateResponse): void {
-    this.templateForm = this.fb.group({
-      createdBy: this.fb.group({
-        name: [customTemplate?.createdBy?.name ?? null],
-        email: [customTemplate?.createdBy?.email ?? null],
-        uniqueName: [customTemplate?.createdBy?.uniqueName ?? null],
-        mobileNo: [customTemplate?.createdBy?.mobileNo ?? null]
-      }),
-      uniqueName: [customTemplate?.uniqueName ?? 'gst_template_a'],
-      name: [customTemplate?.name ?? ''],
-      fontSize: [customTemplate?.fontSize ?? 14],
-      fontMedium: [customTemplate?.fontMedium ?? 12],
-      fontDefault: [customTemplate?.fontDefault ?? 14],
-      fontSmall: [customTemplate?.fontSmall ?? 10],
-      createdAt: [customTemplate?.createdAt ?? null],
-      updatedAt: [customTemplate?.updatedAt ?? null],
-      updatedBy: this.fb.group({
-        name: [customTemplate?.updatedBy?.name ?? null],
-        email: [customTemplate?.updatedBy?.email ?? null],
-        uniqueName: [customTemplate?.updatedBy?.uniqueName ?? null],
-        mobileNo: [customTemplate?.updatedBy?.mobileNo ?? null]
-      }),
-      templateColor: [customTemplate?.templateColor ?? '#AB1F00'],
-      tableColor: [customTemplate?.tableColor ?? '#f2f3f4'],
-      font: [customTemplate?.font ?? 'Inter'],
-      topMargin: [customTemplate?.topMargin ?? 10],
-      leftMargin: [customTemplate?.leftMargin ?? 10],
-      rightMargin: [customTemplate?.rightMargin ?? 10],
-      bottomMargin: [customTemplate?.bottomMargin ?? 10],
-      logoPosition: [customTemplate?.logoPosition ?? 'center/left/right'],
-      logoSize: [customTemplate?.logoSize ?? 'small/medium/large'],
-      isDefault: [customTemplate?.isDefault ?? false],
-      isDefaultForVoucher: [customTemplate?.isDefaultForVoucher ?? false],
-      showSectionsInline: [customTemplate?.showSectionsInline ?? false],
-      defaultImageSize: [this.defaultImageSize],
-      templateType: [customTemplate?.templateType ?? 'gst_template_a'],
-      showBankQrCode: [customTemplate?.showBankQrCode ?? false],
-      qrCodeId: [customTemplate?.qrCodeId ?? null],
-      copyFrom: [customTemplate?.copyFrom ?? null],
-      sections: this.fb.group({
-        header: this.fb.group({
-          data: this.createHeaderDataGroup(customTemplate)
-        }),
-        table: this.fb.group({
-          data: this.createTableDataGroup(customTemplate)
-        }),
-        footer: this.fb.group({
-          data: this.createFooterDataGroup(customTemplate)
-        })
-      })
-    });
-  }
-
-  private createHeaderDataGroup(customTemplate?: CustomTemplateResponse): FormGroup {
-    const headerData = customTemplate?.sections?.header?.data ?? {};
-    return this.fb.group({
-      shippingDate: this.fb.group({ label: [headerData.shippingDate?.label ?? 'Ship Date'], display: [headerData.shippingDate?.display ?? true], width: [headerData.shippingDate?.width ?? null] }),
-      showEInvoiceDetails: this.fb.group({ label: [headerData.showEInvoiceDetails?.label ?? ''], display: [headerData.showEInvoiceDetails?.display ?? false], width: [headerData.showEInvoiceDetails?.width ?? null] }),
-      documentTitle: this.fb.group({ label: [headerData.documentTitle?.label ?? ''], display: [headerData.documentTitle?.display ?? true], width: [headerData.documentTitle?.width ?? null] }),
-      customField1: this.fb.group({ label: [headerData.customField1?.label ?? ''], display: [headerData.customField1?.display ?? true], width: [headerData.customField1?.width ?? null] }),
-      customField2: this.fb.group({ label: [headerData.customField2?.label ?? ''], display: [headerData.customField2?.display ?? true], width: [headerData.customField2?.width ?? null] }),
-      shippedVia: this.fb.group({ label: [headerData.shippedVia?.label ?? 'Ship Via'], display: [headerData.shippedVia?.display ?? true], width: [headerData.shippedVia?.width ?? null] }),
-      customField3: this.fb.group({ label: [headerData.customField3?.label ?? ''], display: [headerData.customField3?.display ?? true], width: [headerData.customField3?.width ?? null] }),
-      companyName: this.fb.group({ label: [headerData.companyName?.label ?? ''], display: [headerData.companyName?.display ?? true], width: [headerData.companyName?.width ?? null] }),
-      displayExchangeRate: this.fb.group({ label: [headerData.displayExchangeRate?.label ?? ''], display: [headerData.displayExchangeRate?.display ?? false], width: [headerData.displayExchangeRate?.width ?? null] }),
-      displayLutNumber: this.fb.group({ label: [headerData.displayLutNumber?.label ?? ''], display: [headerData.displayLutNumber?.display ?? false], width: [headerData.displayLutNumber?.width ?? null] }),
-      displayPlaceOfSupply: this.fb.group({ label: [headerData.displayPlaceOfSupply?.label ?? ''], display: [headerData.displayPlaceOfSupply?.display ?? false], width: [headerData.displayPlaceOfSupply?.width ?? null] }),
-      displayPlaceOfCountry: this.fb.group({ label: [headerData.displayPlaceOfCountry?.label ?? ''], display: [headerData.displayPlaceOfCountry?.display ?? false], width: [headerData.displayPlaceOfCountry?.width ?? null] }),
-      dueDate: this.fb.group({ label: [headerData.dueDate?.label ?? 'Due Date'], display: [headerData.dueDate?.display ?? true], width: [headerData.dueDate?.width ?? null] }),
-      gstComposition: this.fb.group({ label: [headerData.gstComposition?.label ?? 'Registered under Composition Scheme'], display: [headerData.gstComposition?.display ?? true], width: [headerData.gstComposition?.width ?? null] }),
-      gstin: this.fb.group({ label: [headerData.gstin?.label ?? 'GSTIN'], display: [headerData.gstin?.display ?? true], width: [headerData.gstin?.width ?? null] }),
-      shippingGstin: this.fb.group({ label: [headerData.shippingGstin?.label ?? 'GSTIN'], display: [headerData.shippingGstin?.display ?? true], width: [headerData.shippingGstin?.width ?? null] }),
-      voucherNumber: this.fb.group({ label: [headerData.voucherNumber?.label ?? 'Voucher No.'], display: [headerData.voucherNumber?.display ?? true], width: [headerData.voucherNumber?.width ?? null] }),
-      customerEmail: this.fb.group({ label: [headerData.customerEmail?.label ?? ''], display: [headerData.customerEmail?.display ?? true], width: [headerData.customerEmail?.width ?? null] }),
-      invoiceNumber: this.fb.group({ label: [headerData.invoiceNumber?.label ?? 'Invoice No.'], display: [headerData.invoiceNumber?.display ?? true], width: [headerData.invoiceNumber?.width ?? null] }),
-      showQrCode: this.fb.group({ label: [headerData.showQrCode?.label ?? ''], display: [headerData.showQrCode?.display ?? false], width: [headerData.showQrCode?.width ?? null] }),
-      voucherDate: this.fb.group({ label: [headerData.voucherDate?.label ?? 'Voucher Date'], display: [headerData.voucherDate?.display ?? true], width: [headerData.voucherDate?.width ?? null] }),
-      customerMobileNumber: this.fb.group({ label: [headerData.customerMobileNumber?.label ?? ''], display: [headerData.customerMobileNumber?.display ?? true], width: [headerData.customerMobileNumber?.width ?? null] }),
-      attentionTo: this.fb.group({ label: [headerData.attentionTo?.label ?? 'Attention To'], display: [headerData.attentionTo?.display ?? true], width: [headerData.attentionTo?.width ?? null] }),
-      pan: this.fb.group({ label: [headerData.pan?.label ?? 'PAN'], display: [headerData.pan?.display ?? true], width: [headerData.pan?.width ?? null] }),
-      trackingNumber: this.fb.group({ label: [headerData.trackingNumber?.label ?? 'Tracking No.'], display: [headerData.trackingNumber?.display ?? true], width: [headerData.trackingNumber?.width ?? null] }),
-      formNameInvoice: this.fb.group({ label: [headerData.formNameInvoice?.label ?? 'INVOICE'], display: [headerData.formNameInvoice?.display ?? true], width: [headerData.formNameInvoice?.width ?? null] }),
-      billingGstin: this.fb.group({ label: [headerData.billingGstin?.label ?? 'GSTIN'], display: [headerData.billingGstin?.display ?? true], width: [headerData.billingGstin?.width ?? null] }),
-      address: this.fb.group({ label: [headerData.address?.label ?? ''], display: [headerData.address?.display ?? true], width: [headerData.address?.width ?? null] }),
-      billingState: this.fb.group({ label: [headerData.billingState?.label ?? 'State'], display: [headerData.billingState?.display ?? true], width: [headerData.billingState?.width ?? null] }),
-      invoiceDate: this.fb.group({ label: [headerData.invoiceDate?.label ?? 'Invoice Date'], display: [headerData.invoiceDate?.display ?? true], width: [headerData.invoiceDate?.width ?? null] }),
-      customerName: this.fb.group({ label: [headerData.customerName?.label ?? ''], display: [headerData.customerName?.display ?? true], width: [headerData.customerName?.width ?? null] }),
-      formNameTaxInvoice: this.fb.group({ label: [headerData.formNameTaxInvoice?.label ?? 'TAX INVOICE'], display: [headerData.formNameTaxInvoice?.display ?? true], width: [headerData.formNameTaxInvoice?.width ?? null] }),
-      shippingAddress: this.fb.group({ label: [headerData.shippingAddress?.label ?? 'Shipping Address'], display: [headerData.shippingAddress?.display ?? true], width: [headerData.shippingAddress?.width ?? null] }),
-      shippingState: this.fb.group({ label: [headerData.shippingState?.label ?? 'State'], display: [headerData.shippingState?.display ?? true], width: [headerData.shippingState?.width ?? null] }),
-      billingAddress: this.fb.group({ label: [headerData.billingAddress?.label ?? 'Billing Address'], display: [headerData.billingAddress?.display ?? true], width: [headerData.billingAddress?.width ?? null] }),
-      warehouseAddress: this.fb.group({ label: [headerData.warehouseAddress?.label ?? ''], display: [headerData.warehouseAddress?.display ?? true], width: [headerData.warehouseAddress?.width ?? null] }),
-      showCompanyAddress: this.fb.group({ label: [headerData.showCompanyAddress?.label ?? ''], display: [headerData.showCompanyAddress?.display ?? true], width: [headerData.showCompanyAddress?.width ?? null] }),
-    });
-  }
-
-  private createTableDataGroup(customTemplate?: CustomTemplateResponse): FormGroup {
-    const tableData = customTemplate?.sections?.table?.data ?? {};
-    return this.fb.group({
-      date: this.fb.group({ label: [tableData.date?.label ?? 'Date'], display: [tableData.date?.display ?? true], width: [tableData.date?.width ?? '10'] }),
-      item: this.fb.group({ label: [tableData.item?.label ?? 'Description'], display: [tableData.item?.display ?? true], width: [tableData.item?.width ?? '10'] }),
-      total: this.fb.group({ label: [tableData.total?.label ?? 'Total'], display: [tableData.total?.display ?? true], width: [tableData.total?.width ?? '10'] }),
-      quantity: this.fb.group({ label: [tableData.quantity?.label ?? 'Qty.'], display: [tableData.quantity?.display ?? true], width: [tableData.quantity?.width ?? '10'] }),
-      sNo: this.fb.group({ label: [tableData.sNo?.label ?? '#'], display: [tableData.sNo?.display ?? true], width: [tableData.sNo?.width ?? '10'] }),
-      rate: this.fb.group({ label: [tableData.rate?.label ?? 'Rate/ Item'], display: [tableData.rate?.display ?? true], width: [tableData.rate?.width ?? '10'] }),
-      showVariantImage: this.fb.group({ label: [tableData.showVariantImage?.label ?? 'Display Image'], display: [tableData.showVariantImage?.display ?? false], width: [tableData.showVariantImage?.width ?? '15'] }),
-      taxableValue: this.fb.group({ label: [tableData.taxableValue?.label ?? 'Taxable Amt.'], display: [tableData.taxableValue?.display ?? true], width: [tableData.taxableValue?.width ?? '10'] }),
-      previousDue: this.fb.group({ label: [tableData.previousDue?.label ?? 'Previous Due'], display: [tableData.previousDue?.display ?? false], width: [tableData.previousDue?.width ?? null] }),
-      description: this.fb.group({ label: [tableData.description?.label ?? 'Some label'], display: [tableData.description?.display ?? true], width: [tableData.description?.width ?? '10'] }),
-      discount: this.fb.group({ label: [tableData.discount?.label ?? 'Dis./ Item'], display: [tableData.discount?.display ?? true], width: [tableData.discount?.width ?? '10'] }),
-      taxes: this.fb.group({ label: [tableData.taxes?.label ?? 'Taxes'], display: [tableData.taxes?.display ?? true], width: [tableData.taxes?.width ?? '10'] }),
-      displayBaseCurrency: this.fb.group({ label: [tableData.displayBaseCurrency?.label ?? ''], display: [tableData.displayBaseCurrency?.display ?? true], width: [tableData.displayBaseCurrency?.width ?? null] }),
-      showDescriptionInRows: this.fb.group({ label: [tableData.showDescriptionInRows?.label ?? ''], display: [tableData.showDescriptionInRows?.display ?? this.inputData.voucherType === 'sales' ? false : true], width: [tableData.showDescriptionInRows?.width ?? null] }),
-      amountBeforeDiscount: this.fb.group({ label: [tableData.amountBeforeDiscount?.label ?? 'Total Before Dis.'], display: [tableData.amountBeforeDiscount?.display ?? true], width: [tableData.amountBeforeDiscount?.width ?? null] }),
-      hsnSac: this.fb.group({ label: [tableData.hsnSac?.label ?? 'HSN/SAC'], display: [tableData.hsnSac?.display ?? true], width: [tableData.hsnSac?.width ?? '10'] }),
-      otherTaxBifurcation: this.fb.group({ label: [tableData.otherTaxBifurcation?.label ?? 'TCS'], display: [tableData.otherTaxBifurcation?.display ?? true], width: [tableData.otherTaxBifurcation?.width ?? null] }),
-      totalQuantity: this.fb.group({ label: [tableData.totalQuantity?.label ?? 'Total Quantity'], display: [tableData.totalQuantity?.display ?? true], width: [tableData.totalQuantity?.width ?? null] }),
-    });
-  }
-
-  private createFooterDataGroup(customTemplate?: CustomTemplateResponse): FormGroup {
-    const footerData = customTemplate?.sections?.footer?.data ?? {};
-    return this.fb.group({
-      totalTax: this.fb.group({ label: [footerData.totalTax?.label ?? 'Total Tax*'], display: [footerData.totalTax?.display ?? true], width: [footerData.totalTax?.width ?? null] }),
-      displayExportMessage: this.fb.group({ label: [footerData.displayExportMessage?.label ?? ''], display: [footerData.displayExportMessage?.display ?? false], width: [footerData.displayExportMessage?.width ?? null] }),
-      thanks: this.fb.group({ label: [footerData.thanks?.label ?? 'Thank You for your business.'], display: [footerData.thanks?.display ?? true], width: [footerData.thanks?.width ?? null] }),
-      taxableAmount: this.fb.group({ label: [footerData.taxableAmount?.label ?? 'Sub Total'], display: [footerData.taxableAmount?.display ?? true], width: [footerData.taxableAmount?.width ?? null] }),
-      otherDeduction: this.fb.group({ label: [footerData.otherDeduction?.label ?? ''], display: [footerData.otherDeduction?.display ?? true], width: [footerData.otherDeduction?.width ?? null] }),
-      imageSignature: this.fb.group({ label: [footerData.imageSignature?.label ?? ''], display: [footerData.imageSignature?.display ?? false], width: [footerData.imageSignature?.width ?? null] }),
-      grandTotal: this.fb.group({ label: [footerData.grandTotal?.label ?? 'Invoice Total'], display: [footerData.grandTotal?.display ?? true], width: [footerData.grandTotal?.width ?? null] }),
-      totalInWords: this.fb.group({ label: [footerData.totalInWords?.label ?? 'Invoice Total (In words)'], display: [footerData.totalInWords?.display ?? true], width: [footerData.totalInWords?.width ?? null] }),
-      totalDue: this.fb.group({ label: [footerData.totalDue?.label ?? 'Total Due'], display: [footerData.totalDue?.display ?? true], width: [footerData.totalDue?.width ?? null] }),
-      companyAddress: this.fb.group({ label: [footerData.companyAddress?.label ?? ''], display: [footerData.companyAddress?.display ?? true], width: [footerData.companyAddress?.width ?? null] }),
-      companyName: this.fb.group({ label: [footerData.companyName?.label ?? ''], display: [footerData.companyName?.display ?? true], width: [footerData.companyName?.width ?? null] }),
-      slogan: this.fb.group({ label: [footerData.slogan?.label ?? ''], display: [footerData.slogan?.display ?? true], width: [footerData.slogan?.width ?? null] }),
-      textUnderSlogan: this.fb.group({ label: [footerData.textUnderSlogan?.label ?? ''], display: [footerData.textUnderSlogan?.display ?? true], width: [footerData.textUnderSlogan?.width ?? null] }),
-      showNotesAtLastPage: this.fb.group({ label: [footerData.showNotesAtLastPage?.label ?? ''], display: [footerData.showNotesAtLastPage?.display ?? false], width: [footerData.showNotesAtLastPage?.width ?? null] }),
-      message1: this.fb.group({ label: [footerData.message1?.label ?? ''], display: [footerData.message1?.display ?? true], width: [footerData.message1?.width ?? null] }),
-      showMessage2: this.fb.group({ label: [footerData.showMessage2?.label ?? ''], display: [footerData.showMessage2?.display ?? true], width: [footerData.showMessage2?.width ?? null] }),
-      tcs: this.fb.group({ label: [footerData.tcs?.label ?? 'TCS'], display: [footerData.tcs?.display ?? true], width: [footerData.tcs?.width ?? null] }),
-      tds: this.fb.group({ label: [footerData.tds?.label ?? 'TDS'], display: [footerData.tds?.display ?? true], width: [footerData.tds?.width ?? null] }),
-      taxBifurcation: this.fb.group({ label: [footerData.taxBifurcation?.label ?? 'Tax Bifurcation'], display: [footerData.taxBifurcation?.display ?? false], width: [footerData.taxBifurcation?.width ?? null] }),
-      total: this.fb.group({ label: [footerData.total?.label ?? 'Total'], display: [footerData.total?.display ?? true], width: [footerData.total?.width ?? '10'] }),
-    });
-  }
-
-  public changeInvoiceHeader(event: MatCheckboxChange) {
-    this.templateForm.get('sections.header.data.formNameInvoice.display').patchValue(event.checked);
-    this.templateForm.get('sections.header.data.formNameTaxInvoice.display').patchValue(event.checked);
-  }
-
-  public changeDisableBilling(event: MatCheckboxChange) {
-    let template = cloneDeep(this.customTemplate);
-    if (!event.checked) {
-      template.sections.header.data.billingGstin.display = false;
-      template.sections.header.data.billingState.display = false;
-      this.templateForm.get('sections.header.data.billingGstin.display').patchValue(false);
-      this.templateForm.get('sections.header.data.billingState.display').patchValue(false);
-    } else {
-      template.sections.header.data.billingGstin.display = true;
-      template.sections.header.data.billingState.display = true;
-      this.templateForm.get('sections.header.data.billingGstin.display').patchValue(true);
-      this.templateForm.get('sections.header.data.billingState.display').patchValue(true);
     }
 
-    this.invoiceUiDataService.setCustomTemplate(template);
-  }
-  /**
-   * onDesignChange
-   */
-  public onDesignChange(fieldName: string, value: string): void {
-    console.log(fieldName, value, this.inputData);
-
-    let template: CustomTemplateResponse;
-    if (fieldName === 'uniqueName') { // change whole template
-      const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
-      template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
-      console.log(template, selectedTemplate);
-      if (this.inputData?.mode === 'update' && selectedTemplate) {
-        // Preserve current uniqueName and name during update mode
-        template.uniqueName = cloneDeep(this.customTemplate?.uniqueName);
-        template.name = cloneDeep(this.customTemplate.name);
-      }
-      // Apply company name labels
-      if (template?.sections?.header?.data?.companyName) {
-        template.sections.header.data.companyName.label = this.companyName;
-      }
-      if (template?.sections?.footer?.data?.companyName) {
-        template.sections.footer.data.companyName.label = this.companyName;
-      }
-      // Track copyFrom and selection
-      template.copyFrom = cloneDeep(value);
-      this.selectedTemplateUniqueName = value;
-      // If form is not ready, skip to avoid no-control errors
-      if (!this.templateForm) {
-        return;
-      }
-      // Ensure essential fields are present on template before patch
-      if (!template.name) {
-        template.name = this.templateForm.get('name')?.value ?? '';
-      }
-      if (!template.uniqueName) {
-        template.uniqueName = this.templateForm.get('uniqueName')?.value ?? value;
-      }
-      // Ensure critical controls exist
-      if (!this.templateForm.get('name')) {
-        this.templateForm.addControl('name', this.fb.control(template.name ?? ''));
-      }
-      if (!this.templateForm.get('uniqueName')) {
-        this.templateForm.addControl('uniqueName', this.fb.control(template.uniqueName ?? value));
-      }
-      if (!this.templateForm.get('copyFrom')) {
-        this.templateForm.addControl('copyFrom', this.fb.control(template.copyFrom ?? value));
-      }
-      // Patch the entire form with the selected template
-      this.patchFormGroup(this.templateForm, template);
-      // Explicitly patch commonly-bound controls to ensure value sync
-      this.templateForm.get('name')?.patchValue(template.name ?? '');
-      this.templateForm.get('uniqueName')?.patchValue(template.uniqueName ?? value);
-      this.templateForm.get('copyFrom')?.patchValue(template.copyFrom ?? value);
-      this.templateForm.updateValueAndValidity({ emitEvent: false });
-      // Push to UI service
-      this.invoiceUiDataService.setCustomTemplate(cloneDeep(template));
-      return;
-    } else { // change specific field
-      template = cloneDeep(this.customTemplate);
-      template[fieldName] = value;
-      this.templateForm.get(fieldName).patchValue(value);
-    }
-    this.invoiceUiDataService.setCustomTemplate(cloneDeep(template));
-  }
-
-  public onFontSelect(font: IOption) {
-    this.onValueChange('font', font?.value);
-    this.templateForm.get('font').patchValue(font?.value);
-  }
-
-  public onFontSizeSelect(fontSize: IOption) {
-    if (!fontSize?.value) {
-      let template = cloneDeep(this.customTemplate);
-      this.onValueChange('fontSize', template.fontSize);
-      this.templateForm.get('fontSize').patchValue(template.fontSize);
-    } else {
-      this.onValueChange('fontSize', fontSize?.value);
-      this.templateForm.get('fontSize').patchValue(fontSize?.value);
-    }
-  }
-
-  public validatePrintSetting(val: number, idx: number, marginPosition: string): void {
-    let paddingCordinatesValue = [200, 200, 200, 200];
-    let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
-    if (val > paddingCordinatesValue[idx]) {
-      let maxVal = paddingCordinatesValue[idx];
-      this.customTemplate[marginPosition] = maxVal;
-      this.templateForm.get(marginPosition).patchValue(maxVal);
-      this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
-      this.toasty.errorToast(paddingCordinates[idx] + ' margin cannot be more than ' + paddingCordinatesValue[idx]);
-    }
-  }
-
-  public resetPrintSetting() {
-    let template = cloneDeep(this.customTemplate);
-    template.topMargin = 10;
-    template.bottomMargin = 10;
-    template.leftMargin = 10;
-    template.rightMargin = 10;
-    this.templateForm.get('topMargin').patchValue(template.topMargin);
-    this.templateForm.get('bottomMargin').patchValue(template.bottomMargin);
-    this.templateForm.get('leftMargin').patchValue(template.leftMargin);
-    this.templateForm.get('rightMargin').patchValue(template.rightMargin);
-    this.customTemplate = cloneDeep(template);
-    this.setFontAndFontSize();
-    this.onValueChange(null, null);
-  }
-
-
-
-  public setFontAndFontSize() {
-    if (this.customTemplate) {
-      if (this.customTemplate.font) {
-        if (this.customTemplate.templateType === 'tally_template') {
-          this.presetFonts = [
-            { label: 'Open Sans', value: 'Open Sans' },
-            { label: 'Roboto', value: 'Roboto' }
-          ];
-        } else {
-          this.presetFonts = this.presetFonts;
-        }
-
-        this.presetFonts.map(font => {
-          if (font?.value === this.customTemplate.font) {
-            this.templateForm.get('font').patchValue(font.value);
-          }
-        });
-      }
-
-      if (this.customTemplate.fontSize) {
-        this.presetFontsSize.map(fontSize => {
-          if (fontSize?.value == this.customTemplate.fontSize) {
-            this.templateForm.get('fontSize').patchValue(fontSize.label);
-          }
-        });
-      }
-    }
-  }
-
-  /**
-   * Uploads logo
-   *
-   * @memberof DesignFiltersContainerComponent
-   */
-  public uploadLogo(): void {
-    let file = null;
-    let selectedFile: any = null;
-    selectedFile = document.getElementById("logo-edit");
-    if (selectedFile?.files?.length) {
-      file = selectedFile?.files[0];
-
-      this.generalService.getSelectedFile(file, (blob, file) => {
-        this.isFileUploadInProgress = true;
-        this.invoiceUiDataService.isLogoUpdateInProgress = true;
-        this.previewFile(file);
-
-        this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-          this.isFileUploadInProgress = false;
-          if (response?.status === 'success') {
-            this.showDeleteButton = true;
-            this.onValueChange('logoUniqueName', response.body?.uniqueName);
-            this.isFileUploaded = true;
-            this.invoiceUiDataService.isLogoUpdateInProgress = false;
-            this.toasty.successToast('File uploaded successfully.');
-          } else {
-            this.toasty.showSnackBar("error", response.message);
-          }
-        });
-      });
-    }
-  }
-
-  public previewFile(file: any) {
-    let preview: any = document.getElementById('logoImage');
-    let reader = new FileReader();
-
-    reader.onloadend = () => {
-      preview.src = reader.result;
-      this.invoiceUiDataService.setLogoPath(preview.src);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-      this.logoAttached = true;
-    } else {
-      preview.src = '';
-      this.logoAttached = false;
-      this.invoiceUiDataService.setLogoPath('');
-    }
-  }
-
-  /**
-     * onValueChange
+    /**
+     * Validates and restricts the print margin settings.
+     *
+     * @param {number} val The margin value
+     * @param {number} idx The index for the margin position
+     * @param {string} marginPosition The margin position (top, left, bottom, right)
+     * @memberof TemplateEditFilterComponent
      */
-  public onValueChange(fieldName: string, value: string): void {
-    let template = cloneDeep(this.customTemplate);
-    if (fieldName) {
-      template[fieldName] = value;
-      this.templateForm.get(fieldName).patchValue(value);
-    }
-    this.invoiceUiDataService.setCustomTemplate(template);
-  }
-
-  public toogleLogoVisibility(show?: boolean): void {
-    if (!this.isFileUploaded) {
-      this.showLogo = show ? show : !this.showLogo;
-      this.invoiceUiDataService.setLogoVisibility(this.showLogo);
-    }
-  }
-
-  public deleteLogo(): void {
-    this.onValueChange('logoUniqueName', null);
-    this.invoiceUiDataService.setLogoPath('');
-    this.files = []; // local uploading files array
-    this.logoAttached = false;
-    this.isFileUploaded = false;
-    this.isFileUploadInProgress = false;
-    this.showDeleteButton = false;
-    if (this.logoFile && this.logoFile.nativeElement) {
-      this.logoFile.nativeElement.value = "";
-    }
-  }
-
-  public changeColor(primaryColor: string, secondaryColor: string): void {
-    let template = cloneDeep(this.customTemplate);
-    template.templateColor = primaryColor;
-    template.tableColor = secondaryColor;
-    this.templateForm.get('templateColor').patchValue(primaryColor);
-    this.templateForm.get('tableColor').patchValue(secondaryColor);
-    this.invoiceUiDataService.setCustomTemplate(template);
-  }
-
-  /**
-  * This will be use for on change field visibility
-  *
-  * @param {string} fieldName
-  * @param {string} value
-  * @memberof DesignFiltersContainerComponent
-  */
-  public onChangeFieldVisibility(fieldName: string, value: string): void {
-    let template = cloneDeep(this.customTemplate);
-    if (fieldName) {
-      template[fieldName] = value;
-      this.templateForm.get(fieldName).patchValue(value);
-    }
-    this.invoiceUiDataService.setCustomTemplate(template);
-  }
-
-  /**
- * Assigns image signature for CREATE and UPDATE flow
- *
- * @memberof ContentFilterComponent
- */
-  public assignImageSignature(): void {
-    if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
-      this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
-      this.signatureImgAttached = true;
-    } else {
-      this.signatureSrc = '';
-      this.signatureImgAttached = false;
-    }
-  }
-
-  /**
-* Change Tax Bifurcation then total HSN/SAC or Tax table level will get change
-*
-* @param {string} label: String that allow tabel section either HSN/SAC(hsnSac) or Tax (taxRateBifurcation)
-* @param {string} sectionType:  Define section for template A will be 'footer' and for template E will be 'table'
-* @memberof ContentFilterComponent
-*/
-  public checkedTaxBifurcation(label: string, sectionType: string) {
-    let template = cloneDeep(this.customTemplate);
-    if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
-      if (template.sections.table.data.taxBifurcation?.display) {
-        template.sections.table.data.taxBifurcation.label = label;
-        this.templateForm.get('sections.table.data.taxBifurcation.label').patchValue(label);
-      } else {
-        template.sections.table.data.taxBifurcation.label = '';
-        this.templateForm.get('sections.table.data.taxBifurcation.label').patchValue('');
-      }
-    } else {
-      if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
-        if (template.sections.footer.data.taxBifurcation?.display) {
-          template.sections.footer.data.taxBifurcation.label = label;
-          this.templateForm.get('sections.footer.data.taxBifurcation.label').patchValue(label);
-        } else {
-          template.sections.footer.data.taxBifurcation.label = '';
-          this.templateForm.get('sections.footer.data.taxBifurcation.label').patchValue('');
+    public validatePrintSetting(val: number, idx: number, marginPosition: string): void {
+        let paddingCordinatesValue = [200, 200, 200, 200];
+        let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
+        if (val > paddingCordinatesValue[idx]) {
+            let maxVal = paddingCordinatesValue[idx];
+            this.customTemplate[marginPosition] = maxVal;
+            this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
+            this.toasty.errorToast(paddingCordinates[idx] + ' margin cannot be more than ' + paddingCordinatesValue[idx]);
         }
-      }
     }
 
-    this.invoiceUiDataService.setCustomTemplate(template);
-  }
+    /**
+     * Sets the selected font and font size based on the template data.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public setFontAndFontSize(): void {
+        if (this.customTemplate) {
+            if (this.customTemplate.font) {
+                if (this.customTemplate.templateType === 'tally_template') {
+                    this.presetFonts = [
+                        { label: 'Open Sans', value: 'Open Sans' },
+                        { label: 'Roboto', value: 'Roboto' }
+                    ];
+                } else {
+                    this.presetFonts = this.presetFonts;
+                }
+
+                this.presetFonts.map(font => {
+                    if (font?.value === this.customTemplate.font) {
+                        this.selectedFont = font.label;
+                    }
+                });
+            }
+
+            if (this.customTemplate.fontSize) {
+                this.presetFontsSize.map(fontSize => {
+                    if (fontSize?.value == this.customTemplate.fontSize) {
+                        this.selectedFontSize = fontSize.label;
+                    }
+                });
+            }
+        }
+    }
+
+
+    /**
+     * Handles the visibility change of a design field.
+     *
+     * @param {string} fieldName The name of the field
+     * @param {string} value The value to set for the field
+     * @memberof TemplateEditFilterComponent
+     */
+    public onChangeDesignFieldVisibility(fieldName: string, value: string): void {
+        let template = cloneDeep(this.customTemplate);
+        if (fieldName) {
+            template[fieldName] = value;
+        }
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Angular lifecycle hook that is called when the component is destroyed. Releases memory and cleans up subscriptions.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * Shows a warning message when attempting to change the template type in update mode.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public showMessage(): void {
+        this.toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
+    }
+
+    /**
+     * Angular lifecycle hook called when an input property changes.
+     *
+     * @param {SimpleChanges} changes The changed input properties
+     * @memberof TemplateEditFilterComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes['content'] && changes['content'].currentValue !== changes['content'].previousValue) {
+            this.signatureImgAttached = false;
+            this.signatureSrc = '';
+            this.assignImageSignature();
+        }
+    }
+
+
+    /**
+     * Handles field changes within a template section.
+     *
+     * @param {string} sectionName The name of the section
+     * @param {string} fieldName The name of the field
+     * @param {string} value The value to set
+     * @memberof TemplateEditFilterComponent
+     */
+    public onFieldChange(sectionName: string, fieldName: string, value: string): void {
+        let template = cloneDeep(this.customTemplate);
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Toggles the display state of shipping address related fields in the template.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public changeDisableShipping(): void {
+        let template = cloneDeep(this.customTemplate);
+        if (!template.sections.header.data.shippingAddress?.display) {
+            template.sections.header.data.shippingGstin.display = false;
+            template.sections.header.data.shippingState.display = false;
+
+        } else {
+            template.sections.header.data.shippingGstin.display = true;
+            template.sections.header.data.shippingState.display = true;
+        }
+
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Toggles the display state of billing address related fields in the template.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public changeDisableBilling(): void {
+        let template = cloneDeep(this.customTemplate);
+        if (!template.sections.header.data.billingAddress?.display) {
+            template.sections.header.data.billingGstin.display = false;
+            template.sections.header.data.billingState.display = false;
+        } else {
+            template.sections.header.data.billingGstin.display = true;
+            template.sections.header.data.billingState.display = true;
+        }
+
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Handles the visibility change of a field within a section.
+     *
+     * @param {string} sectionName The section name
+     * @param {string} fieldName The field name
+     * @param {boolean} value The visibility value
+     * @memberof TemplateEditFilterComponent
+     */
+    public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean): void {
+        let template = cloneDeep(this.customTemplate);
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Toggles the visibility of the company name in the template.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public onChangeCompanyNameVisibility(): void {
+        this.invoiceUiDataService.setCompanyNameVisibility(this.showCompanyName);
+    }
+
+    /**
+     * Uploads signature
+     *
+     * @memberof ContentFilterComponent
+     */
+    public uploadImage(): void {
+        const selectedFile: any = document.getElementById("signatureImg-edit");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFileBase64(file, (base64) => {
+                this.isSignatureUploadInProgress = true;
+
+                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isSignatureUploadInProgress = false;
+
+                    if (response?.status === 'success') {
+                        if (this.invoiceUiDataService.unusedImageSignature) {
+                            this.removeFileFromServer();
+                        }
+                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
+                        this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
+                        this.invoiceUiDataService.unusedImageSignature = response.body?.uniqueName;
+                        this.onChangeFieldVisibility(null, null, null);
+                        this.toasty.showSnackBar("success", 'File uploaded successfully.');
+                    } else {
+                        this.signatureImgAttached = false;
+                        this.toasty.showSnackBar("error", response.message);
+                    }
+                });
+            });
+        }
+    }
+
+    /**
+     * Removes the signature image from the template.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public removeFile(): void {
+        this.signatureImgAttached = false;
+        this.customTemplate.sections.footer.data.imageSignature.label = '';
+        this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
+    }
+
+    /**
+     * Permanently removes the signature file from the server.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public removeFileFromServer(): void {
+        this.invoiceService.removeSignature(this.invoiceUiDataService.unusedImageSignature).subscribe(() => { });
+    }
+
+    /**
+     * Chooses the signature type (slogan or image signature) for the template.
+     *
+     * @param {string} val The selected signature type
+     * @memberof TemplateEditFilterComponent
+    */
+    public chooseSigntureType(val: string): void {
+        let template = cloneDeep(this.customTemplate);
+        if (val === 'slogan') {
+            template.sections.footer.data.slogan.display = true;
+            template.sections.footer.data.imageSignature.display = false;
+        } else {
+            template.sections.footer.data.imageSignature.display = true;
+            template.sections.footer.data.slogan.display = false;
+        }
+        this.invoiceUiDataService.setCustomTemplate(template);
+
+    }
+
+    /**
+     * Toggles the display state of the quantity and total quantity fields in the template.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public changeDisableQuantity(): void {
+        let template = cloneDeep(this.customTemplate);
+        if (template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
+            if (!template.sections.table.data.quantity?.display) {
+                template.sections.table.data.totalQuantity.display = false;
+            } else {
+                template.sections.table.data.totalQuantity.display = true;
+            }
+        }
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Changes the tax bifurcation label for the specified section.
+     *
+     * @param {string} label The label to set
+     * @param {string} sectionType The section type ('footer' or 'table')
+     * @memberof TemplateEditFilterComponent
+    */
+    public checkedTaxBifurcation(label: string, sectionType: string): void {
+        let template = cloneDeep(this.customTemplate);
+        if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
+            if (template.sections.table.data.taxBifurcation?.display) {
+                template.sections.table.data.taxBifurcation.label = label;
+            } else {
+                template.sections.table.data.taxBifurcation.label = '';
+            }
+        } else {
+            if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
+                if (template.sections.footer.data.taxBifurcation?.display) {
+                    template.sections.footer.data.taxBifurcation.label = label;
+                } else {
+                    template.sections.footer.data.taxBifurcation.label = '';
+                }
+            }
+        }
+
+        this.invoiceUiDataService.setCustomTemplate(template);
+    }
+
+    /**
+     * Toggles the display of the document title header.
+     *
+     * @param {boolean} event True if the header should be displayed
+     * @memberof TemplateEditFilterComponent
+     */
+    public changeInvoiceHeader(event: boolean): void {
+        this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+    }
+
+    /**
+     * Assigns the image signature for CREATE and UPDATE flows.
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public assignImageSignature(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.label) {
+            this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + this.customTemplate.sections.footer.data.imageSignature.label;
+            this.signatureImgAttached = true;
+        } else {
+            this.signatureSrc = '';
+            this.signatureImgAttached = false;
+        }
+    }
+
+    /**
+     * Change voucher number or date based on Invoice number or date
+     *
+     * @param {boolean} [isDate=true] True, if date is changed
+     * @memberof TemplateEditFilterComponent
+     */
+    public handleInvoiceDateNumberChange(isDate: boolean = true): void {
+        if (isDate) {
+            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+        } else {
+            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
+        }
+    }
+
+    /**
+     * Handles tab change
+     *
+     * @param {*} event
+     * @memberof TemplateEditFilterComponent
+     */
+    public tabChanged(event: any): void {
+        this.selectedTabIndex = event.index;
+        this.invoiceUiDataService.setIsPreviewMode(event?.index === 1 ? true : false);
+    }
 
 }

@@ -1,188 +1,47 @@
-import { ActivatedRoute } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
-import { Component, Injector, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { ReplaySubject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-import { IServiceConfigArgs, ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
-import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../services/invoice.ui.data.service';
-import { AppState } from '../../../store';
+import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 
 @Component({
-  selector: 'all-templates',
-  templateUrl: './all-templates.component.html',
-  styleUrls: ['./all-templates.component.scss']
+    selector: 'all-templates',
+    templateUrl: './all-templates.component.html',
+    styleUrls: ['./all-templates.component.scss']
 })
 export class AllTemplatesComponent implements OnInit {
-  @Input() public isPreviewMode: boolean = true;
-  public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
-  public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
-  public logoSrc: string;
-  public imageSignatureSrc: string;
-  public showLogo: boolean = true;
-  public showImageSignature: boolean = false;
-  public showCompanyName: boolean;
-  public companyGSTIN: string;
-  public companyPAN: string;
-  public fieldsAndVisibility: any;
-  public companyUniqueName: string;
-  public voucherType = 'default';
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  /* Company unique name observable */
-  public companyUniqueName$: Observable<string>;
-  /* This will hold the value if Gst Composition will show/hide */
-  public showGstComposition: boolean = false;
-  /** Active company details */
-  public activeCompany: any;
+    /** Input template */
+    public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    /** Destroyed$ subject */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-      private store: Store<AppState>,
-      private injector: Injector,
-      private _invoiceUiDataService: InvoiceUiDataService,
-      private _activatedRoute: ActivatedRoute) {
-      let companyUniqueName = null;
-      let companies = null;
-      let defaultTemplate = null;
+    constructor(
+        private invoiceUiDataService: InvoiceUiDataService) {
+    }
 
-      this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
-          companyUniqueName = ss.companyUniqueName;
-          companies = ss.companies;
-          this.companyUniqueName = ss.companyUniqueName;
-      });
+    /**
+     * Angular lifecycle hook that is called after data-bound properties are initialized.
+     * Initializes company, template, and UI data for the template editor.
+     *
+     * @memberof AllTemplatesComponent
+     */
+    public ngOnInit() {
+        this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            if (template && template.uniqueName) {
+                this.inputTemplate = cloneDeep(template);
+            }
+        });
+    }
 
-      this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
-
-      this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
-          defaultTemplate = ss.defaultTemplate;
-      });
-      this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-  }
-
-  public ngOnInit() {
-      const config: IServiceConfigArgs = this.injector.get(ServiceConfig) as IServiceConfigArgs;
-      this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-          if (activeCompany?.countryV2?.countryName) {
-              this.activeCompany = cloneDeep(activeCompany);
-              this.showGstComposition = activeCompany.countryV2.countryName === 'India';
-          } else {
-              this.showGstComposition = false;
-          }
-      });
-      this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-          if (!a) {
-              return;
-          }
-          this.voucherType = a?.voucherType;
-      });
-      this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
-          this.voucherType = cloneDeep(voucherType);
-      });
-
-      this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-          this.fieldsAndVisibility = cloneDeep(obj);
-      });
-
-      this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-          this.logoSrc = cloneDeep(path);
-      });
-
-      this._invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-          this.showLogo = cloneDeep(yesOrNo);
-      });
-
-      this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
-          if (template && template.logoUniqueName) {
-              this.showLogo = true;
-              if (!this._invoiceUiDataService.isLogoUpdateInProgress) {
-                  this.logoSrc = (config.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
-              }
-          }
-          if (template && template.sections) {
-              if (template.sections.footer.data.imageSignature?.display) {
-                  this.showImageSignature = true;
-                  if (template.sections.footer.data.imageSignature.label) {
-                      this.imageSignatureSrc = (config.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
-                  } else {
-                      this.imageSignatureSrc = '';
-                  }
-              } else {
-                  this.showImageSignature = false;
-                  this.imageSignatureSrc = '';
-              }
-          } else if (template && template.sections && template.sections.footer.data.slogan?.display) {
-              this.showImageSignature = false;
-              this.imageSignatureSrc = '';
-          }
-          this.inputTemplate = cloneDeep(template);
-          if (this.inputTemplate.fontSize) {
-              this.inputTemplate.fontSmall = this.inputTemplate.fontSize - 4;
-              this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
-              this.inputTemplate.fontMedium = this.inputTemplate.fontSize - 2;
-              this.inputTemplate.fontLarge = this.inputTemplate.fontSize - 1 + 4;
-          }
-      });
-
-      this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-          this.showCompanyName = cloneDeep(yesOrNo);
-      });
-
-      this.companyGSTIN = this._invoiceUiDataService.companyGSTIN.getValue();
-      this.companyPAN = this._invoiceUiDataService.companyPAN.getValue();
-
-      if (this.isPreviewMode) {
-          this.templateUISectionVisibility = {
-              header: true,
-              table: true,
-              footer: true
-          };
-      } else {
-          this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-              this.templateUISectionVisibility = cloneDeep(info);
-          });
-      }
-
-      this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-          if (this.isPreviewMode) {
-              this.templateUISectionVisibility = {
-                  header: true,
-                  table: true,
-                  footer: true
-              };
-          } else {
-              this.templateUISectionVisibility = cloneDeep(info);
-          }
-      });
-  }
-
-  public onClickSection(sectionName: string) {
-      if (!this.isPreviewMode) {
-          this._invoiceUiDataService.setSelectedSection(sectionName);
-      }
-  }
-
-  public ngOnDestroy() {
-      this.destroyed$.next(true);
-      this.destroyed$.complete();
-  }
-
-  /**
-   * ngOnChanges
-   */
-  public ngOnChanges(s: SimpleChanges) {
-      if (s && s.isPreviewMode.currentValue) {
-          this.templateUISectionVisibility = {
-              header: true,
-              table: true,
-              footer: true
-          };
-      } else if (s && s.isPreviewMode && !s.isPreviewMode.currentValue && s.isPreviewMode.currentValue !== s.isPreviewMode.previousValue) {
-          this.templateUISectionVisibility = {
-              header: true,
-              table: false,
-              footer: false
-          };
-      }
-  }
-
+    /**
+     * Angular lifecycle hook that is called when the component is destroyed.
+     * Cleans up subscriptions and resources.
+     *
+     * @memberof AllTemplatesComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

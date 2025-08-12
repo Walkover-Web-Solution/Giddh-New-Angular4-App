@@ -49,7 +49,6 @@ import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edi
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
 import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
-import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MatBadgeModule } from '@angular/material/badge';
 import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
@@ -97,6 +96,7 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { GstTemplateAComponent } from "./template/all-templates/templates/gst-template-a/gst-template-a.component";
 import { ThermalTemplateComponent } from "./template/all-templates/templates/thermal-template/thermal-template.component";
 import { TallyTemplateComponent } from "./template/all-templates/templates/tally-template/tally-template.component";
+import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 
 @NgModule({
     declarations: [

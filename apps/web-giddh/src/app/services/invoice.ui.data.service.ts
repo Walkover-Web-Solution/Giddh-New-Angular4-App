@@ -41,6 +41,7 @@ export class InvoiceUiDataService {
     private companyName: string;
     private companyAddress: string;
     private _: any;
+    public isPreviewMode: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     constructor(@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this._ = config._;
@@ -96,6 +97,10 @@ export class InvoiceUiDataService {
      */
     public setLogoVisibility(value: boolean) {
         this.isLogoVisible.next(value);
+    }
+
+    public setIsPreviewMode(value: boolean) {
+        this.isPreviewMode.next(value);
     }
 
     /**

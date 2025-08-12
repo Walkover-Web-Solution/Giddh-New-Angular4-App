@@ -3394,12 +3394,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-      /**
-     * Open template dialog
-     *
-     * @memberof VoucherListComponent
-     */
-      public templateDialog(template: any): void {
+    /**
+   * Open template dialog
+   *
+   * @memberof VoucherListComponent
+   */
+    public templateDialog(template: any): void {
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px',
             height: '90vh',
@@ -3413,16 +3413,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public templateEdit(template: any, type: string): void {
-        console.log(template, type, this.createdTemplatesList);
         let companyUniqueName = null;
         let companies = null;
         let defaultTemplate = null;
         let customCreatedTemplates = null;
 
         const templateType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'invoice';
-        defaultTemplate = this.createdTemplatesList.find(template => templateType === 'voucher'? template?.isDefaultForVoucher : template?.isDefault);
+        const voucherType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'sales';
+        defaultTemplate = this.createdTemplatesList.find(template => templateType === 'voucher' ? template?.isDefaultForVoucher : template?.isDefault);
         defaultTemplate.type = templateType;
-        if(type === 'create'){
+        if (type === 'create') {
             this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
                 companyUniqueName = ss.companyUniqueName;
                 companies = ss.companies;
@@ -3444,15 +3444,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
         const dataToSend = {
             templateList: this.templatesList,
-            voucherType: templateType,
+            voucherType: voucherType,
+            templateType: templateType,
             createTemplateList: this.createdTemplatesList,
             defaultTemplate: defaultTemplate,
-            mode:type
+            mode: type === 'edit' ? 'update' : 'create'
         };
-        this.dialog.open(TemplateEditDialogComponent, {
+        const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
             height: '90vh',
             data: dataToSend
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.fetchAllCreatedTemplates(templateType);
+            }
         });
     }
 
