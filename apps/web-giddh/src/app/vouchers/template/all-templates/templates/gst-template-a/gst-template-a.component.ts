@@ -8,7 +8,7 @@ import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { CountryNames } from 'apps/web-giddh/src/app/shared/Enums/common.enum';
 import { CustomTemplateResponse } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { InvoiceUiDataService, TemplateContentUISectionVisibility } from 'apps/web-giddh/src/app/services/invoice.ui.data.service';
+import { TemplateContentUISectionVisibility, InvoiceUiDataService } from 'apps/web-giddh/src/app/services/invoice.ui.data.service';
 
 @Component({
     selector: 'gst-template-a',
@@ -18,9 +18,9 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from 'apps/w
 
 export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     /** Holds fields and visibility object */
-    public fieldsAndVisibility: any = null;
+    public sectionSettings: any = null;
     /** Holds true if preview mode */
-    public isPreviewMode: boolean;
+    public isContentMode: boolean;
     /** Holds true to show company logo */
     public showLogo: boolean = true;
     /** Holds true if show company name */
@@ -30,7 +30,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     /** Holds true if company PAN number as string */
     public companyPAN: string;
     /** Holds template input data */
-    public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    public contentTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     /** Holds uploaded company logo source */
     public logoSrc: string;
     /** Holds uploaded image signature source */
@@ -40,7 +40,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     /* This will hold active company*/
     public activeCompany: any;
     /** Holds template UI Section Visibility  status and label name */
-    public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
+    public templateSectionsVisible: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
     /** Holds voucher type */
@@ -72,8 +72,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
         @Inject(ServiceConfig) private serviceConfig,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
-        private invoiceUiDataService: InvoiceUiDataService) {
-        this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
+        private templateService: InvoiceUiDataService) {
+        this.companySetting$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
     }
 
     /**
@@ -86,24 +86,29 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
         this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
-        this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-            this.fieldsAndVisibility = cloneDeep(obj);
+        // Section settings
+        this.templateService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe(obj => {
+            this.sectionSettings = obj ? cloneDeep(obj) : obj;
         });
 
-        this.invoiceUiDataService.isPreviewMode.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.templateUISectionVisibility = new TemplateContentUISectionVisibility();
-            this.isPreviewMode = res;
+        // Content mode and section visibility
+        this.templateService.isPreviewMode.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.templateSectionsVisible = new TemplateContentUISectionVisibility();
+            this.isContentMode = res;
             if (!res) {
-                this.templateUISectionVisibility.header = true;
-                this.templateUISectionVisibility.table = true;
-                this.templateUISectionVisibility.footer = true;
-            } else {
-                this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-                    this.templateUISectionVisibility = cloneDeep(info);
-                });
+                this.templateSectionsVisible.header = true;
+                this.templateSectionsVisible.table = true;
+                this.templateSectionsVisible.footer = true;
+            }
+        });
+        // Section selection (only in preview mode)
+        this.templateService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+            if (this.isContentMode) {
+                this.templateSectionsVisible = info ? cloneDeep(info) : info;
             }
         });
 
+        // Company info
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.activeCompany = cloneDeep(activeCompany);
@@ -113,11 +118,13 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        this.invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
-            this.voucherType = cloneDeep(voucherType);
+        // Voucher type
+        this.templateService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
+            this.voucherType = voucherType;
         });
 
-        this.companySetting$.subscribe(response => {
+        // Company address
+        this.companySetting$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.address) {
                 this.companyAddress = cloneDeep(response.address);
             } else if (!response) {
@@ -125,52 +132,59 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
-            this.companyUniqueName = ss.companyUniqueName;
+        // Company unique name (one-time)
+        this.store.pipe(select(state => state.session), take(1)).subscribe(res => {
+            this.companyUniqueName = res.companyUniqueName;
         });
 
+        // Company unique name observable
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.companyGSTIN = this.invoiceUiDataService.companyGSTIN.getValue();
-        this.companyPAN = this.invoiceUiDataService.companyPAN.getValue();
+        this.companyGSTIN = this.templateService.companyGSTIN.getValue();
+        this.companyPAN = this.templateService.companyPAN.getValue();
 
-        this.invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-            this.showLogo = cloneDeep(yesOrNo);
+        // Logo visibility
+        this.templateService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
+            this.showLogo = yesOrNo;
         });
 
-        this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
-            if (template && template.logoUniqueName) {
-                this.showLogo = true;
-                if (!this.invoiceUiDataService.isLogoUpdateInProgress) {
-                    this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+        // Custom template and image signature
+        this.templateService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            if (template) {
+                if (template.logoUniqueName) {
+                    this.showLogo = true;
+                    if (!this.templateService.isLogoUpdateInProgress) {
+                        this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
+                    }
                 }
-            }
-            if (template && template.sections) {
-                if (template.sections.footer.data.imageSignature?.display) {
-                    this.showImageSignature = true;
-                    if (template.sections.footer.data.imageSignature.label) {
-                        this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
+                if (template.sections) {
+                    if (template.sections.footer.data.imageSignature?.display) {
+                        this.showImageSignature = true;
+                        if (template.sections.footer.data.imageSignature.label) {
+                            this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
+                        } else {
+                            this.imageSignatureSrc = '';
+                        }
                     } else {
+                        this.showImageSignature = false;
                         this.imageSignatureSrc = '';
                     }
-                } else {
+                } else if (template.sections && template.sections.footer.data.slogan?.display) {
                     this.showImageSignature = false;
                     this.imageSignatureSrc = '';
                 }
-            } else if (template && template.sections && template.sections.footer.data.slogan?.display) {
-                this.showImageSignature = false;
-                this.imageSignatureSrc = '';
-            }
-            this.inputTemplate = cloneDeep(template);
-            if (this.inputTemplate.fontSize) {
-                this.inputTemplate.fontSmall = this.inputTemplate.fontSize - 4;
-                this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
-                this.inputTemplate.fontMedium = this.inputTemplate.fontSize - 2;
-                this.inputTemplate.fontLarge = this.inputTemplate.fontSize - 1 + 4;
+                this.contentTemplate = cloneDeep(template);
+                if (this.contentTemplate.fontSize) {
+                    this.contentTemplate.fontSmall = this.contentTemplate.fontSize - 4;
+                    this.contentTemplate.fontDefault = this.contentTemplate.fontSize;
+                    this.contentTemplate.fontMedium = this.contentTemplate.fontSize - 2;
+                    this.contentTemplate.fontLarge = this.contentTemplate.fontSize - 1 + 4;
+                }
             }
         });
 
-        this.invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-            this.logoSrc = cloneDeep(path);
+        // Logo path
+        this.templateService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+            this.logoSrc = path;
         });
     }
 
@@ -181,8 +195,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof GstTemplateAComponent
      */
     public onClickSection(sectionName: string): void {
-        if (this.isPreviewMode) {
-            this.invoiceUiDataService.setSelectedSection(sectionName);
+        if (this.isContentMode) {
+            this.templateService.setSelectedSection(sectionName);
         }
     }
 
@@ -206,39 +220,17 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         this.columnsVisibled = 0;
-        if (changes.fieldsAndVisibility.currentValue.table) {
-            if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo?.display) {
-                this.columnsVisibled++;
-            }
-            if ((changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item?.display) || (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date?.display)) {
-                this.columnsVisibled++;
-            }
-            if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac?.display) {
-                this.columnsVisibled++;
-            }
-            if (changes.fieldsAndVisibility.currentValue.table.quantity && changes.fieldsAndVisibility.currentValue.table.quantity?.display) {
-                this.columnsVisibled++;
-            }
-            if (changes.fieldsAndVisibility.currentValue.table.rate && changes.fieldsAndVisibility.currentValue.table.rate?.display) {
-                this.columnsVisibled++;
-            }
-            if (changes.fieldsAndVisibility.currentValue.table.discount && changes.fieldsAndVisibility.currentValue.table.discount?.display) {
-                this.columnsVisibled++;
-            }
-            if (changes.fieldsAndVisibility.currentValue.table.taxableValue && changes.fieldsAndVisibility.currentValue.table.taxableValue?.display) {
-                this.columnsVisibled++;
-            }
-            if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes?.display) {
-                this.columnsVisibled++;
-            }
-            if (changes?.fieldsAndVisibility?.currentValue?.table?.displayBaseCurrency && changes.fieldsAndVisibility.currentValue.table.displayBaseCurrency?.display) {
-                this.columnsVisibled++;
-            }
+        const table = changes?.sectionSettings?.currentValue?.table;
+        if (table) {
+            if (table.sNo?.display) this.columnsVisibled++;
+            if ((table.item?.display) || (table.date?.display)) this.columnsVisibled++;
+            const keys = ['hsnSac', 'quantity', 'rate', 'discount', 'taxableValue', 'taxes'];
+            keys.forEach(key => {
+                if (table[key]?.display) this.columnsVisibled++;
+            });
+            if (table.displayBaseCurrency?.display) this.columnsVisibled++;
             if (this.columnsVisibled) {
-                this.columnsVisibled++;
-                this.columnsVisibled++;
-                this.columnsVisibled++;
-                this.columnsVisibled++;
+                this.columnsVisibled += 4;
             }
         }
     }

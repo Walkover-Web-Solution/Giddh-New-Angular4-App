@@ -26,7 +26,7 @@ export class AllTemplatesComponent implements OnInit {
      *
      * @memberof AllTemplatesComponent
      */
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             if (template && template.uniqueName) {
                 this.inputTemplate = cloneDeep(template);
@@ -40,7 +40,7 @@ export class AllTemplatesComponent implements OnInit {
      *
      * @memberof AllTemplatesComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

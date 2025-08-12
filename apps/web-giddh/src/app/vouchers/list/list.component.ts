@@ -1081,6 +1081,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
@@ -1127,6 +1129,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
@@ -3400,6 +3404,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
    * @memberof VoucherListComponent
    */
     public templateDialog(template: any): void {
+        console.log(template);
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px',
             height: '90vh',
@@ -3453,7 +3458,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
             height: '90vh',
-            data: dataToSend
+            data: dataToSend,
+            disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {

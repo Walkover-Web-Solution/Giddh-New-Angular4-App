@@ -2,7 +2,7 @@
     <div class="create-discount-aside p-3">
         <div class="d-flex column-gap1">
             <div class="template-left-side">
-                <template-edit-filter [inputData]="templateData"></template-edit-filter>
+                <template-edit-filter [dialogData]="templateData"></template-edit-filter>
             </div>
             <div class="template-right-side">
                 <all-templates></all-templates>
@@ -12,9 +12,9 @@
             <button
                 mat-stroked-button
                 color="primary"
-                (click)="templateData?.mode === 'create' ? createTemplate(templateData?.templateType) : updateTemplate(templateData?.templateType)"
+                (click)="templateData?.mode === templateModeEnum.Create ? createTemplate(templateData?.templateType) : updateTemplate(templateData?.templateType)"
             >
-                {{ templateData?.mode === "create" ? "Create Template" : "Update Template" }}
+                {{ templateData?.mode === templateModeEnum.Create ? "Create Template" : "Update Template" }}
             </button>
             <button mat-stroked-button (click)="closeDialog()">Close</button>
         </div>

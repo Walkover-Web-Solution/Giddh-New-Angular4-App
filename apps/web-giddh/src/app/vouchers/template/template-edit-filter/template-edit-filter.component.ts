@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
-import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../services/invoice.ui.data.service';
+import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
@@ -13,6 +13,7 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { TemplateModeEnum, TemplateTypeEnum } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'template-edit-filter',
@@ -22,13 +23,17 @@ import { CurrentCompanyState } from '../../../store/company/company.reducer';
 })
 export class TemplateEditFilterComponent implements OnInit {
     /** Ng form instance of content filter component */
-    @ViewChild(NgForm) contentForm: NgForm;
+    @ViewChild(NgForm) templateForm: NgForm;
     /** File input element reference for logo upload */
     @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     /** Input data passed to the component */
-    @Input() public inputData: any;
+    @Input() public dialogData: any;
     /** Current mode of the component (e.g., 'create', 'edit') */
-    public mode: string = 'create';
+    public templateModeEnum = TemplateModeEnum;
+    /** Current template type (e.g., 'invoice', 'voucher') */
+    public templateTypeEnum = TemplateTypeEnum;
+    /** Current template mode (e.g., 'create', 'edit') */
+    public templateMode: string;
     /** Stores the custom template response object */
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     /** True, if a logo is attached */
@@ -36,20 +41,26 @@ export class TemplateEditFilterComponent implements OnInit {
     /** True, if logo should be displayed */
     public showLogo: boolean = true;
     /** Unique name of the selected template */
-    public selectedTemplateUniqueName: string = 'gst_template_a';
+    public selectedTemplateUniqueName: string = TemplateTypeEnum.GstTemplateA;
     /** List of preset font options */
-    public presetFonts = [
+    public templateFonts = [
         { label: 'Open Sans', value: 'Open Sans' },
         { label: 'Roboto', value: 'Roboto' },
         { label: 'Lato', value: 'Lato' },
         { label: 'Inter', value: 'Inter' }
     ];
     /** List of preset font size options */
-    public presetFontsSize = [
+    public templateFontsSize = [
         { label: '16px', value: 16 },
         { label: '14px', value: 14 },
         { label: '12px', value: 12 },
         { label: '10px', value: 10 }
+    ];
+    /** Available image sizes for selection */
+    public imageSizes = [
+        { label: 'S', value: 'S', px: '60' },
+        { label: 'M', value: 'M', px: '80' },
+        { label: 'L', value: 'L', px: '100' }
     ];
     /** True, if file has been uploaded */
     public isFileUploaded: boolean = false;
@@ -71,20 +82,12 @@ export class TemplateEditFilterComponent implements OnInit {
     public selectedFontSize: string = "";
     /** Default image size */
     public defaultImageSize: string = 'S';
-    /** Stores the active company name */
-    public companyName: string;
-    /** Available image sizes for selection */
-    public imageSizes = [
-        { label: 'S', value: 'S', px: '60' },
-        { label: 'M', value: 'M', px: '80' },
-        { label: 'L', value: 'L', px: '100' }
-    ];
     /** Controls visibility of template UI sections */
-    public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
+    public templateSectionsVisible: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /** True, if company name should be shown */
     public showCompanyName: boolean;
     /** Stores fields and their visibility settings */
-    public fieldsAndVisibility: any;
+    public sectionSettings: any;
     /** Type of the voucher */
     public voucherType = '';
     /** Source URL of the signature image */
@@ -118,7 +121,7 @@ export class TemplateEditFilterComponent implements OnInit {
             fontMedium: 12,
             isDefaultForVoucher: false,
             showSectionsInline: false,
-            uniqueName: 'gst_template_a',
+            uniqueName: TemplateTypeEnum.GstTemplateA,
             createdAt: '',
             updatedAt: '',
             updatedBy: null,
@@ -530,7 +533,7 @@ export class TemplateEditFilterComponent implements OnInit {
         private commonService: CommonService,
         private store: Store<AppState>,
         private invoiceService: InvoiceService,
-        private invoiceUiDataService: InvoiceUiDataService) {
+        private templateService: InvoiceUiDataService) {
     }
 
     /**
@@ -541,86 +544,87 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public ngOnInit(): void {
 
-        this.templateType = this.inputData?.templateType;
-        this.voucherType = this.inputData?.voucherType;
-        this.sampleTemplates = this.inputData?.templateList;
-        this.mode = this.inputData?.mode;
+        // Initialize dialog data
+        const { templateType, voucherType, templateList, mode } = this.dialogData || {};
+        this.templateType = templateType;
+        this.voucherType = voucherType;
+        this.sampleTemplates = templateList;
+        this.templateMode = mode;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        let companies = null;
+
+        // Get company info and companies list
+        let companies: any = null;
         this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             this.companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
         });
 
-        this.invoiceUiDataService.setTemplateVoucherType(this.voucherType);
-        if(this.mode === 'create'){
-            this.invoiceUiDataService.initCustomTemplate(this.companyUniqueName, companies, this.templateObj.defaultTemplate);
+        this.templateService.setTemplateVoucherType(this.voucherType);
+        if (this.templateMode === TemplateModeEnum.Create) {
+            this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.templateObj.defaultTemplate);
         }
-        this.invoiceUiDataService.setIsPreviewMode(false);   
+        this.templateService.setIsPreviewMode(false);
+
+        // Subscribe to active company info
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany?.countryV2?.countryName) {
-                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
-            } else {
-                this.showGstComposition = false;
-            }
+            const countryName = activeCompany?.countryV2?.countryName;
+            this.showGstComposition = countryName === 'India';
             this.activeCompanyName = activeCompany?.name;
-            this.isIndianCompany = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
+            this.isIndianCompany = countryName === CountryNames.INDIA;
         });
 
+        // Subscribe to company state for TCS/TDS applicability
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
-            if (companyData) {
-                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
-            }
+            this.isTcsTdsApplicable = companyData?.isTcsTdsApplicable;
         });
 
-        this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+        // Subscribe to template changes
+        this.templateService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = cloneDeep(template);
             this.setFontAndFontSize();
 
-            let section = {
-                header: {},
-                table: {},
-                footer: {}
+            // Prepare section data
+            const section = {
+                header: this.customTemplate?.sections?.header?.data || {},
+                table: this.customTemplate?.sections?.table?.data || {},
+                footer: this.customTemplate?.sections?.footer?.data || {}
             };
+            this.templateService.setFieldsAndVisibility(section);
 
-            if (this.customTemplate && this.customTemplate.sections) {
-                section.header = this.customTemplate.sections.header.data;
-                section.table = this.customTemplate.sections.table.data;
-                section.footer = this.customTemplate.sections.footer.data;
-
-                this.invoiceUiDataService.setFieldsAndVisibility(section);
-
-                if (this.customTemplate.logoSize) {
-                    this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L' :
-                        this.customTemplate.logoSize === '80' ? 'M' : 'S';
-                }
-
-                if (this.customTemplate.logoUniqueName) {
-                    this.logoAttached = true;
-                    this.isFileUploaded = false;
-                    if (!this.invoiceUiDataService.isLogoUpdateInProgress) {
-                        this.showDeleteButton = true;
-                        let preview: any = document.getElementById('logoImage');
-                        preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
-                    }
+            // Set logo size and preview
+            if (this.customTemplate.logoSize) {
+                this.defaultImageSize = this.customTemplate.logoSize === '100' ? 'L'
+                    : this.customTemplate.logoSize === '80' ? 'M' : 'S';
+            }
+            if (this.customTemplate.logoUniqueName) {
+                this.logoAttached = true;
+                this.isFileUploaded = false;
+                if (!this.templateService.isLogoUpdateInProgress) {
+                    this.showDeleteButton = true;
+                    const preview: any = document.getElementById('logoImage');
+                    preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
                 }
             }
 
-            if (this.customTemplate.templateType === 'tally_template') {
-                this.customTemplate.sections.footer.data.imageSignature.display = true;
-                this.customTemplate.sections.footer.data.slogan.display = false;
+            // Tally template-specific logic
+            if (this.customTemplate.templateType === TemplateTypeEnum.TallyTemplate) {
+                const footerData = this.customTemplate.sections.footer.data;
+                const headerData = this.customTemplate.sections.header.data;
+                footerData.imageSignature.display = true;
+                footerData.slogan.display = false;
                 if (this.voucherType !== 'sales') {
-                    this.customTemplate.sections['header'].data['invoiceDate'].label = this.customTemplate.sections['header'].data['voucherDate'].label;
-                    this.customTemplate.sections['header'].data['invoiceNumber'].label = this.customTemplate.sections['header'].data['voucherNumber'].label;
+                    headerData.invoiceDate.label = headerData.voucherDate.label;
+                    headerData.invoiceNumber.label = headerData.voucherNumber.label;
                 } else {
-                    this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-                    this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+                    headerData.voucherDate.label = headerData.invoiceDate.label;
+                    headerData.voucherNumber.label = headerData.invoiceNumber.label;
                 }
             }
             this.assignImageSignature();
         });
 
-        this.invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+        // Listen for logo path changes
+        this.templateService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
             if (!path) {
                 this.showDeleteButton = false;
                 this.logoAttached = false;
@@ -629,25 +633,25 @@ export class TemplateEditFilterComponent implements OnInit {
             }
         });
 
+        // Fetch email content suggestions
         this.invoiceService.getEmailContentSuggestions('account').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body) {
-                this.suggestionList = response.body?.accountSuggestions?.map(item => ({
-                    key: item,
-                    value: item
-                }));
-            }
+            const suggestions = response?.body?.accountSuggestions;
+            this.suggestionList = suggestions ? suggestions.map((item: string) => ({ key: item, value: item })) : [];
         });
 
-        this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-            this.templateUISectionVisibility = cloneDeep(info);
+        // Subscribe to UI section visibility changes
+        this.templateService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+            this.templateSectionsVisible = cloneDeep(info);
         });
 
-        this.invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
+        // Subscribe to company name visibility changes
+        this.templateService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
             this.showCompanyName = cloneDeep(yesOrNo);
         });
 
-        this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-            this.fieldsAndVisibility = cloneDeep(obj);
+        // Subscribe to fields and visibility settings
+        this.templateService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+            this.sectionSettings = cloneDeep(obj);
         });
     }
 
@@ -659,11 +663,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onValueChange(fieldName: string, value: string) {
-        let template = cloneDeep(this.customTemplate);
-        if (fieldName) {
-            template[fieldName] = value;
-        }
-        this.invoiceUiDataService.setCustomTemplate(template);
+        const template = cloneDeep(this.customTemplate);
+        if (fieldName) template[fieldName] = value;
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -674,10 +676,10 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public changeColor(primaryColor: string, secondaryColor: string) {
-        let template = cloneDeep(this.customTemplate);
+        const template = cloneDeep(this.customTemplate);
         template.templateColor = primaryColor;
         template.tableColor = secondaryColor;
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
 
@@ -690,22 +692,22 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onDesignChange(fieldName: string, value: string): void {
         let template;
-        if (fieldName === 'uniqueName') { // change whole template
-            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
-            template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
-            if (this.mode === 'update' && selectedTemplate) {
-                template.uniqueName = cloneDeep(this.customTemplate?.uniqueName);
-                template.name = cloneDeep(this.customTemplate.name);
+        if (fieldName === 'uniqueName') {
+            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => t?.uniqueName === value));
+            template = selectedTemplate || cloneDeep(this.customTemplate);
+            if (this.templateMode === TemplateModeEnum.Update && selectedTemplate) {
+                template.uniqueName = this.customTemplate?.uniqueName;
+                template.name = this.customTemplate.name;
             }
-        } else { // change specific field
+        } else {
             template = cloneDeep(this.customTemplate);
             template[fieldName] = value;
         }
-        template.copyFrom = cloneDeep(value);
+        template.copyFrom = value;
         this.selectedTemplateUniqueName = value;
-        template.sections['header'].data['companyName'].label = this.companyName;
-        template.sections['footer'].data['companyName'].label = this.companyName;
-        this.invoiceUiDataService.setCustomTemplate(cloneDeep(template));
+        template.sections['header'].data['companyName'].label = this.activeCompanyName;
+        template.sections['footer'].data['companyName'].label = this.activeCompanyName;
+        this.templateService.setCustomTemplate(cloneDeep(template));
     }
 
     /**
@@ -714,16 +716,12 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public resetPrintSetting(): void {
-        let template = cloneDeep(this.customTemplate);
-        template.topMargin = 10;
-        template.bottomMargin = 10;
-        template.leftMargin = 10;
-        template.rightMargin = 10;
+        const template = cloneDeep(this.customTemplate);
+        template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
         this.customTemplate = cloneDeep(template);
         this.setFontAndFontSize();
         this.onValueChange(null, null);
     }
-
 
     /**
      * Handles font selection for the template.
@@ -735,7 +733,6 @@ export class TemplateEditFilterComponent implements OnInit {
         this.onValueChange('font', font?.value);
     }
 
-
     /**
      * Handles font size selection for the template.
      *
@@ -744,10 +741,10 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onFontSizeSelect(fontSize: IOption): void {
         if (!fontSize?.value) {
-            let template = cloneDeep(this.customTemplate);
+            const template = cloneDeep(this.customTemplate);
             this.onValueChange('fontSize', template.fontSize);
         } else {
-            this.onValueChange('fontSize', fontSize?.value);
+            this.onValueChange('fontSize', fontSize.value);
         }
     }
 
@@ -757,29 +754,27 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public uploadLogo(): void {
-        let file = null;
-        let selectedFile: any = null;
-        selectedFile = document.getElementById("logo-edit");
+        const selectedFile: any = document.getElementById("logo-edit");
         if (selectedFile?.files?.length) {
-            file = selectedFile?.files[0];
-
-            this.generalService.getSelectedFile(file, (blob, file) => {
+            const file = selectedFile.files[0];
+            this.generalService.getSelectedFile(file, (blob, fileObj) => {
                 this.isFileUploadInProgress = true;
-                this.invoiceUiDataService.isLogoUpdateInProgress = true;
-                this.previewFile(file);
-
-                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isFileUploadInProgress = false;
-                    if (response?.status === 'success') {
-                        this.showDeleteButton = true;
-                        this.onValueChange('logoUniqueName', response.body?.uniqueName);
-                        this.isFileUploaded = true;
-                        this.invoiceUiDataService.isLogoUpdateInProgress = false;
-                        this.toasty.successToast('File uploaded successfully.');
-                    } else {
-                        this.toasty.showSnackBar("error", response.message);
-                    }
-                });
+                this.templateService.isLogoUpdateInProgress = true;
+                this.previewFile(fileObj);
+                this.commonService.uploadFile({ file: blob, fileName: fileObj.name })
+                    .pipe(takeUntil(this.destroyed$))
+                    .subscribe(response => {
+                        this.isFileUploadInProgress = false;
+                        if (response?.status === 'success') {
+                            this.showDeleteButton = true;
+                            this.onValueChange('logoUniqueName', response.body?.uniqueName);
+                            this.isFileUploaded = true;
+                            this.templateService.isLogoUpdateInProgress = false;
+                            this.toasty.successToast('File uploaded successfully.');
+                        } else {
+                            this.toasty.showSnackBar("error", response.message);
+                        }
+                    });
             });
         }
     }
@@ -792,9 +787,12 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public newLineToBR(template: any): any {
-        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        const footerData = template.sections?.footer?.data;
+        if (footerData) {
+            if (footerData['message1']?.label) footerData['message1'].label = footerData['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+            if (footerData['companyAddress']?.label) footerData['companyAddress'].label = footerData['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+            if (footerData['slogan']?.label) footerData['slogan'].label = footerData['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        }
         return template;
     }
 
@@ -805,21 +803,19 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public previewFile(file: any): void {
-        let preview: any = document.getElementById('logoImage');
-        let reader = new FileReader();
-
+        const preview: any = document.getElementById('logoImage');
+        const reader = new FileReader();
         reader.onloadend = () => {
             preview.src = reader.result;
-            this.invoiceUiDataService.setLogoPath(preview.src);
+            this.templateService.setLogoPath(preview.src);
         };
-
         if (file) {
             reader.readAsDataURL(file);
             this.logoAttached = true;
         } else {
             preview.src = '';
             this.logoAttached = false;
-            this.invoiceUiDataService.setLogoPath('');
+            this.templateService.setLogoPath('');
         }
     }
 
@@ -831,8 +827,8 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public toogleLogoVisibility(show?: boolean): void {
         if (!this.isFileUploaded) {
-            this.showLogo = show ? show : !this.showLogo;
-            this.invoiceUiDataService.setLogoVisibility(this.showLogo);
+            this.showLogo = show ?? !this.showLogo;
+            this.templateService.setLogoVisibility(this.showLogo);
         }
     }
 
@@ -843,14 +839,12 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public deleteLogo(): void {
         this.onValueChange('logoUniqueName', null);
-        this.invoiceUiDataService.setLogoPath('');
+        this.templateService.setLogoPath('');
         this.logoAttached = false;
         this.isFileUploaded = false;
         this.isFileUploadInProgress = false;
         this.showDeleteButton = false;
-        if (this.logoFile && this.logoFile.nativeElement) {
-            this.logoFile.nativeElement.value = "";
-        }
+        this.logoFile?.nativeElement && (this.logoFile.nativeElement.value = "");
     }
 
     /**
@@ -862,13 +856,13 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public validatePrintSetting(val: number, idx: number, marginPosition: string): void {
-        let paddingCordinatesValue = [200, 200, 200, 200];
-        let paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
+        const paddingCordinatesValue = [200, 200, 200, 200];
+        const paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
         if (val > paddingCordinatesValue[idx]) {
-            let maxVal = paddingCordinatesValue[idx];
+            const maxVal = paddingCordinatesValue[idx];
             this.customTemplate[marginPosition] = maxVal;
-            this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
-            this.toasty.errorToast(paddingCordinates[idx] + ' margin cannot be more than ' + paddingCordinatesValue[idx]);
+            this.templateService.setCustomTemplate(this.customTemplate);
+            this.toasty.errorToast(`${paddingCordinates[idx]} margin cannot be more than ${paddingCordinatesValue[idx]}`);
         }
     }
 
@@ -878,31 +872,22 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public setFontAndFontSize(): void {
-        if (this.customTemplate) {
-            if (this.customTemplate.font) {
-                if (this.customTemplate.templateType === 'tally_template') {
-                    this.presetFonts = [
-                        { label: 'Open Sans', value: 'Open Sans' },
-                        { label: 'Roboto', value: 'Roboto' }
-                    ];
-                } else {
-                    this.presetFonts = this.presetFonts;
-                }
-
-                this.presetFonts.map(font => {
-                    if (font?.value === this.customTemplate.font) {
-                        this.selectedFont = font.label;
-                    }
-                });
+        if (!this.customTemplate) return;
+        if (this.customTemplate.font) {
+            if (this.customTemplate.templateType === TemplateTypeEnum.TallyTemplate) {
+                this.templateFonts = [
+                    { label: 'Open Sans', value: 'Open Sans' },
+                    { label: 'Roboto', value: 'Roboto' }
+                ];
             }
-
-            if (this.customTemplate.fontSize) {
-                this.presetFontsSize.map(fontSize => {
-                    if (fontSize?.value == this.customTemplate.fontSize) {
-                        this.selectedFontSize = fontSize.label;
-                    }
-                });
-            }
+            this.templateFonts.forEach(font => {
+                if (font?.value === this.customTemplate.font) this.selectedFont = font.label;
+            });
+        }
+        if (this.customTemplate.fontSize) {
+            this.templateFontsSize.forEach(fontSize => {
+                if (fontSize?.value == this.customTemplate.fontSize) this.selectedFontSize = fontSize.label;
+            });
         }
     }
 
@@ -915,11 +900,9 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onChangeDesignFieldVisibility(fieldName: string, value: string): void {
-        let template = cloneDeep(this.customTemplate);
-        if (fieldName) {
-            template[fieldName] = value;
-        }
-        this.invoiceUiDataService.setCustomTemplate(template);
+        const template = cloneDeep(this.customTemplate);
+        if (fieldName) template[fieldName] = value;
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -966,7 +949,7 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onFieldChange(sectionName: string, fieldName: string, value: string): void {
         let template = cloneDeep(this.customTemplate);
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -985,7 +968,7 @@ export class TemplateEditFilterComponent implements OnInit {
             template.sections.header.data.shippingState.display = true;
         }
 
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -1003,7 +986,7 @@ export class TemplateEditFilterComponent implements OnInit {
             template.sections.header.data.billingState.display = true;
         }
 
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -1016,7 +999,7 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean): void {
         let template = cloneDeep(this.customTemplate);
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -1025,7 +1008,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onChangeCompanyNameVisibility(): void {
-        this.invoiceUiDataService.setCompanyNameVisibility(this.showCompanyName);
+        this.templateService.setCompanyNameVisibility(this.showCompanyName);
     }
 
     /**
@@ -1045,12 +1028,12 @@ export class TemplateEditFilterComponent implements OnInit {
                     this.isSignatureUploadInProgress = false;
 
                     if (response?.status === 'success') {
-                        if (this.invoiceUiDataService.unusedImageSignature) {
+                        if (this.templateService.unusedImageSignature) {
                             this.removeFileFromServer();
                         }
                         this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
                         this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
-                        this.invoiceUiDataService.unusedImageSignature = response.body?.uniqueName;
+                        this.templateService.unusedImageSignature = response.body?.uniqueName;
                         this.onChangeFieldVisibility(null, null, null);
                         this.toasty.showSnackBar("success", 'File uploaded successfully.');
                     } else {
@@ -1070,7 +1053,7 @@ export class TemplateEditFilterComponent implements OnInit {
     public removeFile(): void {
         this.signatureImgAttached = false;
         this.customTemplate.sections.footer.data.imageSignature.label = '';
-        this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
+        this.templateService.setCustomTemplate(this.customTemplate);
     }
 
     /**
@@ -1079,7 +1062,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public removeFileFromServer(): void {
-        this.invoiceService.removeSignature(this.invoiceUiDataService.unusedImageSignature).subscribe(() => { });
+        this.invoiceService.removeSignature(this.templateService.unusedImageSignature).subscribe(() => { });
     }
 
     /**
@@ -1097,7 +1080,7 @@ export class TemplateEditFilterComponent implements OnInit {
             template.sections.footer.data.imageSignature.display = true;
             template.sections.footer.data.slogan.display = false;
         }
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
 
     }
 
@@ -1115,7 +1098,7 @@ export class TemplateEditFilterComponent implements OnInit {
                 template.sections.table.data.totalQuantity.display = true;
             }
         }
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -1143,7 +1126,7 @@ export class TemplateEditFilterComponent implements OnInit {
             }
         }
 
-        this.invoiceUiDataService.setCustomTemplate(template);
+        this.templateService.setCustomTemplate(template);
     }
 
     /**
@@ -1195,7 +1178,7 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public tabChanged(event: any): void {
         this.selectedTabIndex = event.index;
-        this.invoiceUiDataService.setIsPreviewMode(event?.index === 1 ? true : false);
+        this.templateService.setIsPreviewMode(event?.index === 1 ? true : false);
     }
 
 }

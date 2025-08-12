@@ -19,9 +19,9 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 export class TallyTemplateComponent implements OnInit, OnDestroy {
     /** Holds fields and visibility object */
-    public fieldsAndVisibility: any = null;
+    public sectionSettings: any = null;
     /** Holds true if preview mode */
-    public isPreviewMode: boolean;
+    public isContentMode: boolean;
     /** Holds true to show company logo */
     public showLogo: boolean = true;
     /** Holds true if show company name */
@@ -31,7 +31,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
     /** Holds true if company PAN number as string */
     public companyPAN: string;
     /** Holds template input data */
-    public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    public contentTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     /** Holds uploaded company logo source */
     public logoSrc: string;
     /** Holds uploaded image signature source */
@@ -41,7 +41,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
     /* This will hold active company*/
     public activeCompany: any;
     /** Holds template UI Section Visibility  status and label name */
-    public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
+    public templateSectionsVisible: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
     /** Holds voucher type */
@@ -68,7 +68,7 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
         private store: Store<AppState>,
-        private invoiceUiDataService: InvoiceUiDataService,
+        private templateService: InvoiceUiDataService,
         private settingsProfileActions: SettingsProfileActions
     ) {
         this.companySetting$ = this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$));
@@ -80,91 +80,123 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
      * @memberof TallyTemplateAComponent
      */
     public ngOnInit(): void {
-
-        this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
-            this.fieldsAndVisibility = cloneDeep(obj);
+        // 1. Fields and Visibility
+        this.templateService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe(obj => {
+            this.sectionSettings = obj ? cloneDeep(obj) : null;
         });
 
-        this.invoiceUiDataService.isPreviewMode.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.templateUISectionVisibility = new TemplateContentUISectionVisibility();
-            this.isPreviewMode = res;
+        // 2. Preview Mode and Section Visibility
+        this.templateService.isPreviewMode.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.isContentMode = res;
             if (!res) {
-                this.templateUISectionVisibility.header = true;
-                this.templateUISectionVisibility.table = true;
-                this.templateUISectionVisibility.footer = true;
+                this.templateSectionsVisible = { header: true, table: true, footer: true } as TemplateContentUISectionVisibility;
             } else {
-                this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
-                    this.templateUISectionVisibility = cloneDeep(info);
+                this.templateService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+                    this.templateSectionsVisible = info ? cloneDeep(info) : new TemplateContentUISectionVisibility();
                 });
             }
         });
 
+        // 3. Active Company and GST Composition
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany?.countryV2?.countryName) {
-                this.activeCompany = cloneDeep(activeCompany);
-                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
-            } else {
-                this.showGstComposition = false;
-            }
+            this.activeCompany = activeCompany ? cloneDeep(activeCompany) : null;
+            this.showGstComposition = !!activeCompany?.countryV2?.countryName && activeCompany.countryV2.countryName === 'India';
         });
-        this.invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
-            this.voucherType = cloneDeep(voucherType);
+
+        // 4. Voucher Type
+        this.templateService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
+            this.voucherType = voucherType || '';
         });
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
-        this.companySetting$.subscribe(a => {
-            if (a && a.address) {
-                this.companyAddress = cloneDeep(a.address);
-            } else if (!a) {
+
+        // 5. Image Path
+        this.imgPath = typeof isElectron !== 'undefined' && isElectron
+            ? 'assets/images/'
+            : ((this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/');
+
+        // 6. Company Setting and Address
+        this.companySetting$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.address) {
+                this.companyAddress = response.address;
+            } else if (!response) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
-        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
-            this.companyUniqueName = ss.companyUniqueName;
+        // 7. Company Unique Name
+        this.store.pipe(select(state => state.session), take(1)).subscribe(res => {
+            this.companyUniqueName = res.companyUniqueName;
         });
-
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
 
-        this.companyGSTIN = this.invoiceUiDataService.companyGSTIN.getValue();
-        this.companyPAN = this.invoiceUiDataService.companyPAN.getValue();
-        this.invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
-            this.showLogo = cloneDeep(yesOrNo);
+        // 8. Company GSTIN and PAN
+        this.companyGSTIN = this.templateService.companyGSTIN.getValue();
+        this.companyPAN = this.templateService.companyPAN.getValue();
+
+        // 9. Logo Visibility
+        this.templateService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
+            this.showLogo = yesOrNo;
         });
-        this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
-            if (template && template.logoUniqueName) {
+
+        // 10. Custom Template and Logo/Image Signature
+        this.templateService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+            this.handleCustomTemplate(template);
+        });
+
+        // 11. Logo Path
+        this.templateService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+            this.logoSrc = path;
+        });
+    }
+
+    /**
+     * Handles custom template logic for logo, image signature, and font sizes
+     *
+     * @private
+     * @param {CustomTemplateResponse} template
+     * @memberof TallyTemplateComponent
+     */
+    private handleCustomTemplate(template: CustomTemplateResponse): void {
+        if (template) {
+            // Logo
+            if (template.logoUniqueName) {
                 this.showLogo = true;
-                if (!this.invoiceUiDataService.isLogoUpdateInProgress) {
+                if (!this.templateService.isLogoUpdateInProgress) {
                     this.logoSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName;
                 }
             }
-            if (template && template.sections) {
-                if (template.sections.footer.data.imageSignature?.display) {
-                    this.showImageSignature = true;
-                    if (template.sections.footer.data.imageSignature.label) {
-                        this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
-                    } else {
-                        this.imageSignatureSrc = '';
-                    }
+
+            // Image Signature
+            if (template.sections?.footer?.data?.imageSignature?.display) {
+                this.showImageSignature = true;
+                if (template.sections.footer.data.imageSignature.label) {
+                    this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
                 } else {
-                    this.showImageSignature = false;
                     this.imageSignatureSrc = '';
                 }
-            } else if (template && template.sections && template.sections.footer.data.slogan?.display) {
+            } else {
                 this.showImageSignature = false;
                 this.imageSignatureSrc = '';
             }
-            this.inputTemplate = cloneDeep(template);
-            if (this.inputTemplate.fontSize) {
-                this.inputTemplate.fontSmall = this.inputTemplate.fontSize - 4;
-                this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
-                this.inputTemplate.fontMedium = this.inputTemplate.fontSize - 2;
-                this.inputTemplate.fontLarge = this.inputTemplate.fontSize - 1 + 4;
-            }
-        });
 
-        this.invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
-            this.logoSrc = cloneDeep(path);
-        });
+            // Slogan disables image signature
+            if (template.sections?.footer?.data?.slogan?.display) {
+                this.showImageSignature = false;
+                this.imageSignatureSrc = '';
+            }
+
+            // Font sizes
+            this.contentTemplate = cloneDeep(template);
+            if (this.contentTemplate.fontSize) {
+                this.contentTemplate.fontSmall = this.contentTemplate.fontSize - 4;
+                this.contentTemplate.fontDefault = this.contentTemplate.fontSize;
+                this.contentTemplate.fontMedium = this.contentTemplate.fontSize - 2;
+                this.contentTemplate.fontLarge = this.contentTemplate.fontSize - 1 + 4;
+            }
+        } else {
+            this.contentTemplate = new CustomTemplateResponse();
+            this.showImageSignature = false;
+            this.imageSignatureSrc = '';
+        }
     }
 
     /**
@@ -186,8 +218,8 @@ export class TallyTemplateComponent implements OnInit, OnDestroy {
      * @memberof TallyTemplateAComponent
      */
     public onClickSection(sectionName: string): void {
-        if (this.isPreviewMode) {
-            this.invoiceUiDataService.setSelectedSection(sectionName);
+        if (this.isContentMode) {
+            this.templateService.setSelectedSection(sectionName);
         }
     }
 

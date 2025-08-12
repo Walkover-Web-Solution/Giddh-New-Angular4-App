@@ -6,14 +6,14 @@
     </head>
 
     <body
-        *ngIf="inputTemplate.sections && inputTemplate.sections"
+        *ngIf="contentTemplate.sections && contentTemplate.sections"
         [ngStyle]="{
-            'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans',
-            'padding-top': inputTemplate.topMargin + 'px',
-            'padding-bottom': inputTemplate.bottomMargin + 'px',
-            'padding-right': inputTemplate.rightMargin + 'px',
-            'padding-left': inputTemplate.leftMargin + 'px',
-            'font-size': inputTemplate.fontDefault + 'px'
+            'font-family': contentTemplate.font ? contentTemplate.font : 'Open Sans',
+            'padding-top': contentTemplate.topMargin + 'px',
+            'padding-bottom': contentTemplate.bottomMargin + 'px',
+            'padding-right': contentTemplate.rightMargin + 'px',
+            'padding-left': contentTemplate.leftMargin + 'px',
+            'font-size': contentTemplate.fontDefault + 'px'
         }"
     >
         <!--class="disabled-area"-->
@@ -21,47 +21,47 @@
             <div
                 id="Template-header"
                 [ngClass]="{
-                    'disabled-area': !templateUISectionVisibility.header,
-                    ' ': templateUISectionVisibility.header
+                    'disabled-area': !templateSectionsVisible.header,
+                    ' ': templateSectionsVisible.header
                 }"
                 (click)="onClickSection('header')"
             >
-                <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
+                <a href="javascript:void(0);" class="edit-template" *ngIf="!templateSectionsVisible.header">
                     <i class="icon-edit-pencil"></i>
                 </a>
                 <header>
-                    <div class="docTitle" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                    <div class="docTitle" *ngIf="sectionSettings.header.formNameTaxInvoice?.display">
                         <h2
                             [ngStyle]="{
                                 'color': 'black',
-                                'font-size': inputTemplate.fontDefault + 'px'
+                                'font-size': contentTemplate.fontDefault + 'px'
                             }"
-                            [title]="fieldsAndVisibility.header.formNameTaxInvoice?.label"
+                            [title]="sectionSettings.header.formNameTaxInvoice?.label"
                         ></h2>
                     </div>
-                    <div class="company-title" *ngIf="fieldsAndVisibility.header.companyName?.display">
+                    <div class="company-title" *ngIf="sectionSettings.header.companyName?.display">
                         <h2
                             [ngStyle]="{
                                 'color': 'black',
                                 'font-size': '20px'
                             }"
                         >
-                            {{ fieldsAndVisibility.header.companyName?.label }}
+                            {{ sectionSettings.header.companyName?.label }}
                         </h2>
                     </div>
                     <div
                         class="companyAddress"
-                        *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display"
+                        *ngIf="sectionSettings?.header?.showCompanyAddress?.display"
                         [ngStyle]="{ 'text-align': 'center' }"
                     >
                         <p>Walkover Web Solutions Indore-452018, MP, India</p>
                     </div>
                     <div
                         class="companyGstin"
-                        [hidden]="!fieldsAndVisibility.header.gstin?.display"
+                        [hidden]="!sectionSettings.header.gstin?.display"
                         [ngStyle]="{ 'text-align': 'center' }"
                     >
-                        <strong>{{ fieldsAndVisibility.header.gstin?.label }}</strong>
+                        <strong>{{ sectionSettings.header.gstin?.label }}</strong>
                         {{ companyGSTIN ? companyGSTIN : "2344ACM9769L1Z0" }}
                     </div>
                     <div class="header-table-thermal">
@@ -69,28 +69,28 @@
                             <tbody>
                                 <tr>
                                     <td class="custAddress">
-                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Customer Name</p>
-                                        <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                        <p *ngIf="sectionSettings.header.customerName?.display">Customer Name</p>
+                                        <p *ngIf="sectionSettings.header.billingAddress?.display">
                                             <strong>Walkover Web Solutions Pvt</strong>
                                         </p>
                                     </td>
                                     <td class="invdate">
                                         <ng-container *ngIf="voucherType === 'sales'">
-                                            <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
+                                            <tr *ngIf="sectionSettings.header.invoiceDate?.display">
                                                 <td class="text-left invdate-td">
                                                     <strong>{{
-                                                        fieldsAndVisibility.header.invoiceDate?.label?.length > 0
-                                                            ? fieldsAndVisibility.header.invoiceDate?.label
+                                                        sectionSettings.header.invoiceDate?.label?.length > 0
+                                                            ? sectionSettings.header.invoiceDate?.label
                                                             : "Invoice Date"
                                                     }}</strong>
                                                 </td>
                                                 <td class="text-right invdate-td">02-03-2022</td>
                                             </tr>
-                                            <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
+                                            <tr *ngIf="sectionSettings.header.invoiceNumber?.display">
                                                 <td class="text-left invdate-td">
                                                     <strong>{{
-                                                        fieldsAndVisibility.header.invoiceNumber?.label?.length > 0
-                                                            ? fieldsAndVisibility.header.invoiceNumber?.label
+                                                        sectionSettings.header.invoiceNumber?.label?.length > 0
+                                                            ? sectionSettings.header.invoiceNumber?.label
                                                             : "Invoice No."
                                                     }}</strong>
                                                 </td>
@@ -100,11 +100,11 @@
                                         <ng-container
                                             *ngIf="voucherType === 'credit note' || voucherType === 'debit note'"
                                         >
-                                            <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
+                                            <tr *ngIf="sectionSettings.header.voucherDate?.display">
                                                 <td>
                                                     <strong>{{
-                                                        fieldsAndVisibility.header.voucherDate?.label?.length > 0
-                                                            ? fieldsAndVisibility.header.voucherDate?.label
+                                                        sectionSettings.header.voucherDate?.label?.length > 0
+                                                            ? sectionSettings.header.voucherDate?.label
                                                             : "Voucher Date"
                                                     }}</strong>
                                                 </td>
@@ -112,11 +112,11 @@
                                                     <p>02-03-2022</p>
                                                 </td>
                                             </tr>
-                                            <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
+                                            <tr *ngIf="sectionSettings.header.voucherNumber?.display">
                                                 <td>
                                                     <strong>{{
-                                                        fieldsAndVisibility.header.voucherNumber?.label?.length > 0
-                                                            ? fieldsAndVisibility.header.voucherNumber?.label
+                                                        sectionSettings.header.voucherNumber?.label?.length > 0
+                                                            ? sectionSettings.header.voucherNumber?.label
                                                             : "Voucher No."
                                                     }}</strong>
                                                 </td>
@@ -133,43 +133,43 @@
             <div
                 id="template-table "
                 [ngClass]="{
-                    'disabled-area': !templateUISectionVisibility.table,
-                    ' ': templateUISectionVisibility.table
+                    'disabled-area': !templateSectionsVisible.table,
+                    ' ': templateSectionsVisible.table
                 }"
                 (click)="onClickSection('table')"
             >
-                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.table">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateSectionsVisible.table">
                     <i class="icon-edit-pencil"></i>
                 </a>
                 <article class="table-item">
                     <table id="item " class="item" cellpadding="0 " cellspacing="0 ">
                         <thead class="thermal-thead">
                             <tr>
-                                <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left word-break">
+                                <th *ngIf="sectionSettings.table.item?.display" class="text-left word-break">
                                     {{
-                                        fieldsAndVisibility.table.item?.label?.length > 0
-                                            ? fieldsAndVisibility.table.item?.label
+                                        sectionSettings.table.item?.label?.length > 0
+                                            ? sectionSettings.table.item?.label
                                             : "Item"
                                     }}
                                 </th>
-                                <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="word-break">
+                                <th *ngIf="sectionSettings.table.quantity?.display" class="word-break">
                                     {{
-                                        fieldsAndVisibility.table.quantity?.label?.length > 0
-                                            ? fieldsAndVisibility.table.quantity?.label
+                                        sectionSettings.table.quantity?.label?.length > 0
+                                            ? sectionSettings.table.quantity?.label
                                             : "Qty."
                                     }}
                                 </th>
-                                <th *ngIf="fieldsAndVisibility.table.rate?.display" class="word-break">
+                                <th *ngIf="sectionSettings.table.rate?.display" class="word-break">
                                     {{
-                                        fieldsAndVisibility.table.rate?.label?.length > 0
-                                            ? fieldsAndVisibility.table.rate?.label
+                                        sectionSettings.table.rate?.label?.length > 0
+                                            ? sectionSettings.table.rate?.label
                                             : "Rate"
                                     }}
                                 </th>
-                                <th class="text-right word-break" *ngIf="fieldsAndVisibility.table.total?.display">
+                                <th class="text-right word-break" *ngIf="sectionSettings.table.total?.display">
                                     {{
-                                        fieldsAndVisibility.table.total?.label?.length > 0
-                                            ? fieldsAndVisibility.table.total?.label
+                                        sectionSettings.table.total?.label?.length > 0
+                                            ? sectionSettings.table.total?.label
                                             : "Total"
                                     }}
                                 </th>
@@ -177,26 +177,26 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 1 - Variant 1</span>
+                                <td *ngIf="sectionSettings.table.item?.display" class="text-left">
+                                    <span *ngIf="sectionSettings.table.item?.display">Stock Name Edition 1 - Variant 1</span>
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2,000</td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
+                                <td *ngIf="sectionSettings.table.quantity?.display">2,000</td>
+                                <td *ngIf="sectionSettings.table.rate?.display">
                                     <span [innerHTML]="rupeeSymbol"></span>500.00
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                <td *ngIf="sectionSettings.table.total?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>10,00,000.00
                                 </td>
                             </tr>
                             <tr>
-                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 2 - Variant 1</span>
+                                <td *ngIf="sectionSettings.table.item?.display" class="text-left">
+                                    <span *ngIf="sectionSettings.table.item?.display">Stock Name Edition 2 - Variant 1</span>
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">10</td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
+                                <td *ngIf="sectionSettings.table.quantity?.display">10</td>
+                                <td *ngIf="sectionSettings.table.rate?.display">
                                     <span [innerHTML]="rupeeSymbol"></span>500.00
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                <td *ngIf="sectionSettings.table.total?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>5,000.00
                                 </td>
                             </tr>
@@ -207,13 +207,13 @@
             <div
                 id="template-footer"
                 [ngClass]="{
-                    'disabled-area': !templateUISectionVisibility.footer,
-                    ' ': templateUISectionVisibility.footer
+                    'disabled-area': !templateSectionsVisible.footer,
+                    ' ': templateSectionsVisible.footer
                 }"
                 (click)="onClickSection('footer')"
             >
                 <div class="clearfix">
-                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer">
+                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateSectionsVisible.footer">
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <article>
@@ -221,39 +221,39 @@
                             <tr>
                                 <td>
                                     <p
-                                        *ngIf="fieldsAndVisibility.table.totalQuantity?.display"
+                                        *ngIf="sectionSettings.table.totalQuantity?.display"
                                         class="nowrap text-left"
                                     >
-                                        {{ fieldsAndVisibility.table.totalQuantity.label }}
+                                        {{ sectionSettings.table.totalQuantity.label }}
                                         <span class="qty-number">4 No.</span>
                                     </p>
                                 </td>
                                 <td class="text-left">
-                                    <p *ngIf="fieldsAndVisibility.table.totalQuantity?.display">2010</p>
+                                    <p *ngIf="sectionSettings.table.totalQuantity?.display">2010</p>
                                 </td>
 
                                 <td class="word-break text-right">
-                                    <p *ngIf="fieldsAndVisibility.table.discount?.display">
-                                        {{ fieldsAndVisibility.table.discount?.label }}
+                                    <p *ngIf="sectionSettings.table.discount?.display">
+                                        {{ sectionSettings.table.discount?.label }}
                                     </p>
                                 </td>
                                 <td class="last-balance-td text-right">
-                                    <p *ngIf="fieldsAndVisibility.table.discount?.display">5,04,750.00</p>
+                                    <p *ngIf="sectionSettings.table.discount?.display">5,04,750.00</p>
                                 </td>
                             </tr>
-                            <tr class="taxAmountVal" *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
+                            <tr class="taxAmountVal" *ngIf="sectionSettings.footer.taxableAmount?.display">
                                 <td></td>
                                 <td></td>
-                                <td>{{ fieldsAndVisibility.table.taxableValue?.label }}</td>
+                                <td>{{ sectionSettings.table.taxableValue?.label }}</td>
                                 <td>90,000.00</td>
                             </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                            <tr *ngIf="sectionSettings.footer.taxBifurcation?.display">
                                 <td></td>
                                 <td></td>
                                 <td>GST9%</td>
                                 <td>45,000.00</td>
                             </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                            <tr *ngIf="sectionSettings.footer.taxBifurcation?.display">
                                 <td></td>
                                 <td></td>
                                 <td class="text-right tax-gst">
@@ -263,7 +263,7 @@
                             </tr>
                             <tr
                                 *ngIf="
-                                   fieldsAndVisibility.footer.totalInWords?.display
+                                   sectionSettings.footer.totalInWords?.display
                                 "
                             >
                                 <td></td>
@@ -279,7 +279,7 @@
                         >
                             <p
                                 *ngIf="
-                                    fieldsAndVisibility.footer.totalInWords?.display 
+                                    sectionSettings.footer.totalInWords?.display 
                                 "
                             >
                                 Five Lakh Ninty Thousand Two Hundred Fifty Only
@@ -289,7 +289,7 @@
                 </div>
                 <div class="qr-footer">
                     <tr>
-                        <td *ngIf="fieldsAndVisibility.header.showQrCode?.display" class="qr-thermal">
+                        <td *ngIf="sectionSettings.header.showQrCode?.display" class="qr-thermal">
                             <div class="qr-image">
                                 <img
                                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
@@ -299,32 +299,32 @@
                     </tr>
                 </div>
                 <div class="clearfix">
-                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer">
+                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateSectionsVisible.footer">
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <aside>
                         <div class="subfooter">
                             <div class="thermal-footer">
                                 <div class="accc left-footer">
-                                    <div *ngIf="fieldsAndVisibility.footer.thanks?.display">
+                                    <div *ngIf="sectionSettings.footer.thanks?.display">
                                         <h2
-                                            *ngIf="fieldsAndVisibility.footer.thanks?.label"
-                                            [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
+                                            *ngIf="sectionSettings.footer.thanks?.label"
+                                            [innerHTML]="sectionSettings.footer.thanks?.label"
                                         ></h2>
-                                        <h2 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
+                                        <h2 *ngIf="!sectionSettings.footer.thanks?.label">
                                             Thank You for your business.
                                         </h2>
                                     </div>
                                 </div>
                                 <div class="right-footer">
-                                    <p *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-15">
-                                        {{ fieldsAndVisibility.header.companyName?.label }}
+                                    <p *ngIf="sectionSettings.footer.companyName?.display" class="font-15">
+                                        {{ sectionSettings.header.companyName?.label }}
                                     </p>
                                 </div>
-                                <div class="full-bottom" *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                <div class="full-bottom" *ngIf="sectionSettings.footer.message1?.display">
                                     <span style="white-space: pre-line" class="font-15">
-                                        <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label">
-                                            {{ fieldsAndVisibility.footer.message1?.label }}
+                                        <ng-container *ngIf="sectionSettings?.footer?.message1?.label">
+                                            {{ sectionSettings.footer.message1?.label }}
                                         </ng-container>
                                     </span>
                                 </div>

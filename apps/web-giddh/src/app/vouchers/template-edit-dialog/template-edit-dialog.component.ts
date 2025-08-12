@@ -9,6 +9,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { TemplateModeEnum } from '../../models/api-models/Sales';
 
 @Component({
   selector: 'app-template-edit-dialog',
@@ -30,6 +31,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   /* Destroyed$ subject*/
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
+  /** Current mode of the component (e.g., 'create', 'edit') */
+  public templateModeEnum = TemplateModeEnum;
 
   constructor(
     public dialog: MatDialog,
