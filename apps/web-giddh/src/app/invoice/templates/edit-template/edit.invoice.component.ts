@@ -747,11 +747,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         });
         
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany?.countryV2?.countryName) {
-                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
-            } else {
-                this.showGstComposition = false;
-            }
+            this.showGstComposition = activeCompany?.countryV2?.countryName === 'India';
         });
 
     }
