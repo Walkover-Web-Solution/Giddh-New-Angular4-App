@@ -671,6 +671,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     private customTemplateConfirmationDialogRef: MatDialogRef<any>;
     /** Dialog reference for invoice template preview modal */
     private invoiceTemplatePreviewDialogRef: MatDialogRef<any>;
+    /* This will hold the value if Gst Composition will show/hide */
+    public showGstComposition: boolean = false;
 
     constructor(
         private _toasty: ToasterService,
@@ -743,6 +745,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.invoiceTemplate.hasInvoiceTemplatePermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasInvoiceTemplatePermissions = response;
         });
+        
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            this.showGstComposition = activeCompany?.countryV2?.countryName === 'India';
+        });
+
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -903,6 +910,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     data.sections['footer'].data['companyName'].label = companyName;
                 }
             });
+
+            if (!(this.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
+                data.sections['header'].data['gstComposition'].display = false;
+            }
             
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
@@ -952,6 +963,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['textUnderSlogan'].display = false;
                 data.sections['footer'].data['textUnderSlogan'].label = '';
+            }
+            if (!(this.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
+                data.sections['header'].data['gstComposition'].display = false;
             }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
