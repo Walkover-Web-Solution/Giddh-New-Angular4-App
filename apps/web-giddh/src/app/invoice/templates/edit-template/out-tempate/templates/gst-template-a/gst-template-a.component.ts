@@ -56,30 +56,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        // console.log('fieldsAndVisibility:', this.fieldsAndVisibility);
-        // console.log('isPreviewMode:', this.isPreviewMode);
-        // console.log('showLogo:', this.showLogo);
-        // console.log('showCompanyName:', this.showCompanyName);
-        // console.log('companyGSTIN:', this.companyGSTIN);
-        // console.log('companyPAN:', this.companyPAN);
-        // console.log('inputTemplate:', this.inputTemplate);
-        // console.log('logoSrc:', this.logoSrc);
-        // console.log('imageSignatureSrc:', this.imageSignatureSrc);
-        // console.log('showImageSignature:', this.showImageSignature);
-        // console.log('templateUISectionVisibility:', this.templateUISectionVisibility);
-        // console.log('showGstComposition:', this.showGstComposition);
-        // console.log('voucherType:', this.voucherType);
-        // console.log('sectionName (EventEmitter):', this.sectionName);
-        // console.log('companySetting$ (Observable):', this.companySetting$);
-        // console.log('companyAddress:', this.companyAddress);
-        // console.log('columnsVisibled:', this.columnsVisibled);
-        // console.log('destroyed$ (ReplaySubject):', this.destroyed$);
-        // console.log('dollarSymbol:', this.dollarSymbol);
-        // console.log('isBaseCurrencyRupee:', this.isBaseCurrencyRupee);
-        // console.log('rupeeSymbol:', this.rupeeSymbol);
-        // console.log('activeCompany:', this.activeCompany);
-        // console.log('imgPath:', this.imgPath);
-        // console.log('isIndianCompany:', this.isIndianCompany);
 
         this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
