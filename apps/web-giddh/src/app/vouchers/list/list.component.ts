@@ -867,6 +867,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const broadcast = new BroadcastChannel("settings");
         broadcast.onmessage = (event) => {
             if (event?.data?.form !== undefined && event?.data?.form !== null) {
+                this.isSettingUpdateMode = false;
                 let formValues = event?.data?.form;
                 this.settingForm.patchValue({
                     purchaseBillSettings: formValues.purchaseBillSettings || {},
