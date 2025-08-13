@@ -8,22 +8,25 @@
         <mat-tab [label]="'Design'">
             <div>
                 <div class="option-value-field design-field my-3">
-                    <text-field
-                        placeholder="My Template Name"
+                    <input-field
                         [type]="'text'"
+                        [placeholder]="'Enter Template Name'"
+                        [name]="'fieldName'"
                         [(ngModel)]="customTemplate.name"
                         (ngModelChange)="onValueChange(null, null)"
-                        [name]="'name'"
+                        [label]="'Template Name'"
                         [maxlength]="'18'"
-                        [cssClass]="'form-control'"
                         [autocomplete]="'off'"
-                    ></text-field>
+                        [floatLabel]="'always'"
+                    >
+                    </input-field>
                 </div>
                 <div class="template-scroll">
                     <mat-accordion class="template-design-wrap">
                         <!-- templates-expansion -->
                         <mat-expansion-panel
                             class="mb-2"
+                            *ngIf="templateType !== 'purchase_order' && templateType !== 'purchase_bill'"
                             [expanded]="templateMode === templateModeEnum.Update ? true : false"
                         >
                             <mat-expansion-panel-header>
@@ -41,7 +44,12 @@
                                                 ? showMessage()
                                                 : onDesignChange('uniqueName', template?.uniqueName)
                                         "
-                                        *ngIf="template.type === 'invoice' && templateType === 'invoice'"
+                                        *ngIf="
+                                            template.type === 'invoice' &&
+                                            templateType === 'invoice' &&
+                                            templateType !== 'purchase_order' &&
+                                            templateType !== 'purchase_bill'
+                                        "
                                     >
                                         <img
                                             src="./assets/images/templates/{{ template.templateType }}.png"
@@ -59,7 +67,12 @@
                                                 ? showMessage()
                                                 : onDesignChange('uniqueName', template?.uniqueName)
                                         "
-                                        *ngIf="template.type === 'voucher' && templateType === 'voucher'"
+                                        *ngIf="
+                                            template.type === 'voucher' &&
+                                            templateType === 'voucher' &&
+                                            templateType !== 'purchase_order' &&
+                                            templateType !== 'purchase_bill'
+                                        "
                                     >
                                         <img
                                             src="./assets/images/templates/{{ template.templateType }}.png"
@@ -77,7 +90,11 @@
                                                 ? showMessage()
                                                 : onDesignChange('uniqueName', template?.uniqueName)
                                         "
-                                        *ngIf="template?.templateType === templateTypeEnum.ThermalTemplate"
+                                        *ngIf="
+                                            template?.templateType === templateTypeEnum.ThermalTemplate &&
+                                            templateType !== 'purchase_order' &&
+                                            templateType !== 'purchase_bill'
+                                        "
                                     >
                                         <img
                                             src="./assets/images/templates/{{ template.templateType }}.png"
@@ -272,7 +289,7 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="px-3 pb-3 d-flex align-items-center column-gap1 print-field">
-                                <div class="w125">
+                                <div class="w150">
                                     <input-field
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
@@ -287,7 +304,7 @@
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
-                                <div class="w125">
+                                <div class="w150">
                                     <input-field
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
@@ -302,7 +319,7 @@
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
-                                <div class="w125">
+                                <div class="w150">
                                     <input-field
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
@@ -317,7 +334,7 @@
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
-                                <div class="w125">
+                                <div class="w150">
                                     <input-field
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
@@ -385,39 +402,44 @@
                                     <div>
                                         <div class="px-3">
                                             <!-- company name -->
-                                            <div *ngIf="sectionSettings.header.companyName">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="companyNameCheckbox"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['companyName'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Company Name
-                                                </mat-checkbox>
-                                                <div
-                                                    class="option-value-field"
-                                                    *ngIf="
-                                                        customTemplate?.templateType ===
-                                                            templateTypeEnum.GstTemplateA ||
-                                                        customTemplate?.templateType === templateTypeEnum.TallyTemplate
-                                                    "
-                                                >
-                                                    <text-field
-                                                        type="text"
-                                                        name="headerCompanyName"
-                                                        cssClass="form-control"
-                                                        [maxlength]="50"
+                                            <div *ngIf="sectionSettings?.header.companyName">
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="companyNameCheckbox"
                                                         [(ngModel)]="
-                                                            customTemplate.sections['header'].data['companyName'].label
-                                                        "
-                                                        (ngModelChange)="onFieldChange(null, null, null)"
-                                                        [readonly]="
-                                                            !customTemplate.sections['header'].data['companyName']
+                                                            customTemplate.sections['header'].data['companyName']
                                                                 .display
                                                         "
-                                                    ></text-field>
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div
+                                                        class="w-100 ml-2"
+                                                        *ngIf="
+                                                            customTemplate?.templateType ===
+                                                                templateTypeEnum.GstTemplateA ||
+                                                            customTemplate?.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                        "
+                                                    >
+                                                        <input-field
+                                                            type="text"
+                                                            name="headerCompanyName"
+                                                            cssClass="form-control"
+                                                            [label]="'Company Name'"
+                                                            [maxlength]="50"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['companyName']
+                                                                    .label
+                                                            "
+                                                            (ngModelChange)="onFieldChange(null, null, null)"
+                                                            [readonly]="
+                                                                !customTemplate.sections['header'].data['companyName']
+                                                                    .display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
                                                 </div>
                                                 <p class="ml-4 mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
@@ -431,7 +453,7 @@
                                             <!-- exchange rate -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.displayExchangeRate &&
+                                                    sectionSettings?.header.displayExchangeRate &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
@@ -450,7 +472,7 @@
                                             <!-- place of supply -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.displayPlaceOfSupply &&
+                                                    sectionSettings?.header.displayPlaceOfSupply &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
                                             >
@@ -469,7 +491,7 @@
                                             <!-- place of country -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.displayPlaceOfCountry &&
+                                                    sectionSettings?.header.displayPlaceOfCountry &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
@@ -490,7 +512,7 @@
                                             <div
                                                 *ngIf="
                                                     isIndianCompany &&
-                                                    sectionSettings.header.displayLutNumber &&
+                                                    sectionSettings?.header.displayLutNumber &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
@@ -623,7 +645,7 @@
                                                 </mat-checkbox>
                                             </div>
                                             <!-- gstin -->
-                                            <div *ngIf="sectionSettings.header.gstin">
+                                            <div *ngIf="sectionSettings?.header.gstin">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="gstinCheckbox"
@@ -638,6 +660,7 @@
                                             </div>
                                             <!-- gst composition -->
                                             <div
+                                                class="mr-t1"
                                                 *ngIf="
                                                     showGstComposition === true &&
                                                     customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
@@ -645,42 +668,49 @@
                                                     voucherType === 'sales'
                                                 "
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="gstCompositionLabel"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['gstComposition'].display
-                                                    "
-                                                    (ngModelChange)="
-                                                        onChangeFieldVisibility(null, null, null);
-                                                        customTemplate.sections['header'].data['gstComposition']
-                                                            .display &&
-                                                        customTemplate.sections['header'].data['gstComposition'].label
-                                                            .length === 0
-                                                            ? (customTemplate.sections['header'].data[
-                                                                  'gstComposition'
-                                                              ].label = 'Registered under Composition Scheme')
-                                                            : customTemplate.sections['header'].data['gstComposition']
-                                                                  .label
-                                                    "
-                                                ></mat-checkbox>
-                                                <div class="option-value-field">
-                                                    <text-field
-                                                        type="text"
-                                                        maxlength="70"
-                                                        cssClass="form-control"
-                                                        name="gstComposition"
-                                                        placeholder="Registered under Composition Scheme"
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="gstCompositionLabel"
                                                         [(ngModel)]="
                                                             customTemplate.sections['header'].data['gstComposition']
-                                                                .label
-                                                        "
-                                                        (ngModelChange)="onFieldChange(null, null, null)"
-                                                        [readonly]="
-                                                            !customTemplate.sections['header'].data['gstComposition']
                                                                 .display
                                                         "
-                                                    ></text-field>
+                                                        (ngModelChange)="
+                                                            onChangeFieldVisibility(null, null, null);
+                                                            customTemplate.sections['header'].data['gstComposition']
+                                                                .display &&
+                                                            customTemplate.sections['header'].data['gstComposition']
+                                                                .label.length === 0
+                                                                ? (customTemplate.sections['header'].data[
+                                                                      'gstComposition'
+                                                                  ].label = 'Registered under Composition Scheme')
+                                                                : customTemplate.sections['header'].data[
+                                                                      'gstComposition'
+                                                                  ].label
+                                                        "
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            type="text"
+                                                            maxlength="70"
+                                                            cssClass="form-control"
+                                                            name="gstComposition"
+                                                            [label]="'Registered under Composition Scheme'"
+                                                            [placeholder]="'Registered under Composition Scheme'"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['gstComposition']
+                                                                    .label
+                                                            "
+                                                            (ngModelChange)="onFieldChange(null, null, null)"
+                                                            [readonly]="
+                                                                !customTemplate.sections['header'].data[
+                                                                    'gstComposition'
+                                                                ].display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
                                                 </div>
                                                 <p class="ml-4 mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
@@ -699,31 +729,25 @@
                                                 "
                                             >
                                                 <!-- invoice date -->
-                                                <div *ngIf="sectionSettings.header.invoiceDate">
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="invoiceDateCheckbox"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['header'].data['invoiceDate']
-                                                                .display
-                                                        "
-                                                        (ngModelChange)="
-                                                            handleInvoiceDateNumberChange(true);
-                                                            onChangeFieldVisibility(null, null, null)
-                                                        "
-                                                        class="d-block"
-                                                        cssClass="form-control"
-                                                    >
-                                                        {{
-                                                            customTemplate?.templateType === "tally_template" &&
-                                                            voucherType !== "sales"
-                                                                ? "Voucher Date"
-                                                                : "Invoice Date"
-                                                        }}
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
+                                                <div *ngIf="sectionSettings?.header.invoiceDate" class="mr-t1">
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="invoiceDateCheckbox"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['invoiceDate']
+                                                                    .display
+                                                            "
+                                                            (ngModelChange)="
+                                                                handleInvoiceDateNumberChange(true);
+                                                                onChangeFieldVisibility(null, null, null)
+                                                            "
+                                                            class="d-block"
+                                                            cssClass="form-control"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="w-100 ml-2">
+                                                            <input-field
                                                                 type="text"
                                                                 cssClass="form-control"
                                                                 [maxlength]="
@@ -747,8 +771,17 @@
                                                                         'invoiceDate'
                                                                     ].display
                                                                 "
-                                                            ></text-field>
+                                                                [label]="
+                                                                    customTemplate?.templateType ===
+                                                                        templateTypeEnum.TallyTemplate &&
+                                                                    voucherType !== 'sales'
+                                                                        ? 'Voucher Date'
+                                                                        : 'Invoice Date'
+                                                                "
+                                                            ></input-field>
                                                         </div>
+                                                    </div>
+                                                    <div class="ml-4">
                                                         <p class="mt-1">
                                                             <span class="light-gray font-12">Characters left:</span>
                                                             {{
@@ -766,30 +799,24 @@
                                                     </div>
                                                 </div>
                                                 <!-- invoice number -->
-                                                <div *ngIf="sectionSettings.header.invoiceNumber">
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="invoiceNumberCheckbox"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['header'].data['invoiceNumber']
-                                                                .display
-                                                        "
-                                                        (ngModelChange)="
-                                                            handleInvoiceDateNumberChange(false);
-                                                            onChangeFieldVisibility(null, null, null)
-                                                        "
-                                                        class="d-block"
-                                                    >
-                                                        {{
-                                                            customTemplate?.templateType === "tally_template" &&
-                                                            voucherType !== "sales"
-                                                                ? "Voucher Number"
-                                                                : "Invoice Number"
-                                                        }}
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
+                                                <div *ngIf="sectionSettings?.header.invoiceNumber" class="mr-t1">
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="invoiceNumberCheckbox"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['invoiceNumber']
+                                                                    .display
+                                                            "
+                                                            (ngModelChange)="
+                                                                handleInvoiceDateNumberChange(false);
+                                                                onChangeFieldVisibility(null, null, null)
+                                                            "
+                                                            class="d-block"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="w-100 ml-2">
+                                                            <input-field
                                                                 type="text"
                                                                 name="invoiceNo"
                                                                 cssClass="form-control"
@@ -813,12 +840,22 @@
                                                                         'invoiceNumber'
                                                                     ].display
                                                                 "
-                                                            ></text-field>
+                                                                [label]="
+                                                                    customTemplate.templateType ===
+                                                                        templateTypeEnum.TallyTemplate &&
+                                                                    voucherType !== 'sales'
+                                                                        ? 'Voucher Number'
+                                                                        : 'Invoice Number'
+                                                                "
+                                                            ></input-field>
                                                         </div>
+                                                    </div>
+                                                    <div class="ml-4">
                                                         <p class="mt-1">
                                                             <span class="light-gray font-12">Characters left:</span>
                                                             {{
-                                                                customTemplate.templateType === "thermal_template"
+                                                                customTemplate.templateType ===
+                                                                templateTypeEnum.ThermalTemplate
                                                                     ? 14 -
                                                                       customTemplate.sections["header"].data[
                                                                           "invoiceNumber"
@@ -839,22 +876,21 @@
                                                 "
                                             >
                                                 <!-- voucher date -->
-                                                <div *ngIf="sectionSettings.header.voucherDate">
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="voucherDateCheckbox"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['header'].data['voucherDate']
-                                                                .display
-                                                        "
-                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        class="d-block"
-                                                    >
-                                                        Voucher Date
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
+                                                <div *ngIf="sectionSettings?.header.voucherDate" class="mr-t1">
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="voucherDateCheckbox"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['voucherDate']
+                                                                    .display
+                                                            "
+                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                            class="d-block"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="ml-2 w-100">
+                                                            <input-field
                                                                 type="text"
                                                                 maxlength="15"
                                                                 cssClass="form-control"
@@ -864,27 +900,27 @@
                                                                         'voucherDate'
                                                                     ].label
                                                                 "
+                                                                [label]="'Voucher Date'"
                                                                 (ngModelChange)="onFieldChange(null, null, null)"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
                                                                         'voucherDate'
                                                                     ].display
                                                                 "
-                                                            ></text-field>
+                                                            ></input-field>
                                                         </div>
-                                                        <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
-                                                            {{
-                                                                15 -
-                                                                    customTemplate.sections["header"].data[
-                                                                        "voucherDate"
-                                                                    ].label?.length
-                                                            }}
-                                                        </p>
                                                     </div>
+                                                    <p class="mt-1">
+                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        {{
+                                                            15 -
+                                                                customTemplate.sections["header"].data["voucherDate"]
+                                                                    .label?.length
+                                                        }}
+                                                    </p>
                                                 </div>
                                                 <!-- voucher number -->
-                                                <div *ngIf="sectionSettings.header.voucherNumber">
+                                                <div *ngIf="sectionSettings?.header.voucherNumber">
                                                     <mat-checkbox
                                                         color="primary"
                                                         name="voucherNumberCheckbox"
@@ -898,7 +934,7 @@
                                                     </mat-checkbox>
                                                     <div class="ml-4">
                                                         <div class="option-value-field">
-                                                            <text-field
+                                                            <input-field
                                                                 type="text"
                                                                 cssClass="form-control"
                                                                 maxlength="15"
@@ -914,7 +950,7 @@
                                                                         'voucherNumber'
                                                                     ].display
                                                                 "
-                                                            ></text-field>
+                                                            ></input-field>
                                                         </div>
                                                         <p class="mt-1">
                                                             <span class="light-gray font-12">Characters left:</span>
@@ -931,27 +967,28 @@
                                             <!-- due date -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.dueDate &&
+                                                    sectionSettings?.header.dueDate &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
+                                                class="mr-t1"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="dueDateCheckbox"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['dueDate'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Due Date
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="dueDateCheckbox"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['header'].data['dueDate'].display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="ml-2 w-100">
+                                                        <input-field
                                                             type="text"
                                                             name="dueDate1"
                                                             cssClass="form-control"
+                                                            [label]="'Due Date'"
                                                             maxlength="15"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['header'].data['dueDate'].label
@@ -961,8 +998,10 @@
                                                                 !customTemplate.sections['header'].data['dueDate']
                                                                     .display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -1002,7 +1041,7 @@
                                                 *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
                                                 <div class="option-value-field">
-                                                    <text-field
+                                                    <input-field
                                                         [type]="'text'"
                                                         name="title"
                                                         [(ngModel)]="
@@ -1016,7 +1055,7 @@
                                                         "
                                                         [cssClass]="'form-control'"
                                                         maxlength="15"
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
@@ -1030,7 +1069,7 @@
                                             <!-- form name tax invoice -->
                                             <div class="ml-4">
                                                 <div class="option-value-field">
-                                                    <text-field
+                                                    <input-field
                                                         [type]="'text'"
                                                         [cssClass]="'form-control'"
                                                         maxlength="15"
@@ -1045,7 +1084,7 @@
                                                                 'formNameTaxInvoice'
                                                             ].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
@@ -1060,7 +1099,7 @@
                                         <div class="px-3">
                                             <h4 class="font-16 my-2">Customer Details</h4>
                                             <!-- customer name -->
-                                            <div *ngIf="sectionSettings.header.customerName">
+                                            <div *ngIf="sectionSettings?.header.customerName">
                                                 <mat-checkbox
                                                     color="primary"
                                                     class="d-block"
@@ -1076,7 +1115,7 @@
                                             <!-- attention to -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.attentionTo &&
+                                                    sectionSettings?.header.attentionTo &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
                                             >
@@ -1095,7 +1134,7 @@
                                             <!-- email id -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.customerEmail &&
+                                                    sectionSettings?.header.customerEmail &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
                                             >
@@ -1114,7 +1153,7 @@
                                             <!-- mobile number -->
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.header.customerMobileNumber &&
+                                                    sectionSettings?.header.customerMobileNumber &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
                                             >
@@ -1138,30 +1177,31 @@
                                         >
                                             <h4 class="font-16 my-2">Billing Details</h4>
                                             <!-- billing address -->
-                                            <div *ngIf="sectionSettings.header.billingAddress">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="billingAddressCheckbox"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['billingAddress'].display
-                                                    "
-                                                    (ngModelChange)="
-                                                        onChangeFieldVisibility(null, null, null);
-                                                        changeDisableBilling()
-                                                    "
-                                                >
-                                                    Billing Address
-                                                </mat-checkbox>
-                                                <div
-                                                    class="ml-4"
-                                                    *ngIf="
-                                                        customTemplate?.templateType !==
-                                                        templateTypeEnum.ThermalTemplate
-                                                    "
-                                                >
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                            <div *ngIf="sectionSettings?.header.billingAddress" class="mr-t2">
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="billingAddressCheckbox"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['header'].data['billingAddress']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="
+                                                            onChangeFieldVisibility(null, null, null);
+                                                            changeDisableBilling()
+                                                        "
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div
+                                                        class="ml-2 w-100"
+                                                        *ngIf="
+                                                            customTemplate?.templateType !==
+                                                            templateTypeEnum.ThermalTemplate
+                                                        "
+                                                    >
+                                                        <input-field
                                                             [type]="'text'"
+                                                            [label]="'Billing Address'"
                                                             name="bill"
                                                             [maxlength]="
                                                                 customTemplate?.templateType ===
@@ -1180,8 +1220,16 @@
                                                                     'billingAddress'
                                                                 ].display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div
+                                                    class="ml-4"
+                                                    *ngIf="
+                                                        customTemplate?.templateType !==
+                                                        templateTypeEnum.ThermalTemplate
+                                                    "
+                                                >
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -1195,7 +1243,7 @@
                                                 </div>
                                             </div>
                                             <!-- billing state -->
-                                            <div *ngIf="sectionSettings.header.billingState" [hidden]="true">
+                                            <div *ngIf="sectionSettings?.header.billingState" [hidden]="true">
                                                 <mat-checkbox
                                                     color="primary"
                                                     class="d-block"
@@ -1213,21 +1261,54 @@
                                                 </mat-checkbox>
                                             </div>
                                             <!-- billing gstin -->
-                                            <div *ngIf="sectionSettings.header.billingGstin">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="billingGstinCheckbox"
-                                                    [readonly]="
-                                                        !customTemplate.sections['header'].data['billingAddress']
-                                                            .display
-                                                    "
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['billingGstin'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    GSTIN
-                                                </mat-checkbox>
+                                            <div *ngIf="sectionSettings?.header.billingGstin" class="mr-t1">
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="billingGstinCheckbox"
+                                                        [readonly]="
+                                                            !customTemplate.sections['header'].data['billingAddress']
+                                                                .display
+                                                        "
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['header'].data['billingGstin']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div
+                                                        class="ml-2 w-100"
+                                                        *ngIf="
+                                                            customTemplate?.templateType !==
+                                                            templateTypeEnum.ThermalTemplate
+                                                        "
+                                                    >
+                                                        <div class="option-value-field">
+                                                            <input-field
+                                                                type="text"
+                                                                name="billingGstin"
+                                                                [label]="'GSTIN'"
+                                                                maxlength="15"
+                                                                cssClass="form-control"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'billingGstin'
+                                                                    ].label
+                                                                "
+                                                                (ngModelChange)="onFieldChange(null, null, null)"
+                                                                [readonly]="
+                                                                    !customTemplate.sections['header'].data[
+                                                                        'billingAddress'
+                                                                    ].display ||
+                                                                    !customTemplate.sections['header'].data[
+                                                                        'billingGstin'
+                                                                    ].display
+                                                                "
+                                                            ></input-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div
                                                     class="ml-4"
                                                     *ngIf="
@@ -1235,26 +1316,6 @@
                                                         templateTypeEnum.ThermalTemplate
                                                     "
                                                 >
-                                                    <div class="option-value-field">
-                                                        <text-field
-                                                            type="text"
-                                                            name="billingGstin"
-                                                            maxlength="15"
-                                                            cssClass="form-control"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['billingGstin']
-                                                                    .label
-                                                            "
-                                                            (ngModelChange)="onFieldChange(null, null, null)"
-                                                            [readonly]="
-                                                                !customTemplate.sections['header'].data[
-                                                                    'billingAddress'
-                                                                ].display ||
-                                                                !customTemplate.sections['header'].data['billingGstin']
-                                                                    .display
-                                                            "
-                                                        ></text-field>
-                                                    </div>
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -1267,29 +1328,29 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 pb-3"
+                                            class="px-3 pb-3 mr-t1"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
                                             <h4 class="font-16 my-2">Shipping Details</h4>
                                             <!-- shipping address -->
-                                            <div *ngIf="sectionSettings.header.shippingAddress">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="shippingAddressCheckbox"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['shippingAddress']
-                                                            .display
-                                                    "
-                                                    (ngModelChange)="
-                                                        onChangeFieldVisibility(null, null, null);
-                                                        changeDisableShipping()
-                                                    "
-                                                >
-                                                    Shipping Address
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                            <div *ngIf="sectionSettings?.header.shippingAddress" class="mr-t2">
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="shippingAddressCheckbox"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['header'].data['shippingAddress']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="
+                                                            onChangeFieldVisibility(null, null, null);
+                                                            changeDisableShipping()
+                                                        "
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="ml-2 w-100">
+                                                        <input-field
+                                                            [label]="'Shipping Address'"
                                                             [type]="'text'"
                                                             [name]="'name'"
                                                             cssClass="form-control"
@@ -1311,8 +1372,10 @@
                                                                     'shippingAddress'
                                                                 ].display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -1327,7 +1390,7 @@
                                                 </div>
                                             </div>
                                             <!-- shipping state -->
-                                            <div *ngIf="sectionSettings.header.shippingState" [hidden]="true">
+                                            <div *ngIf="sectionSettings?.header.shippingState" [hidden]="true">
                                                 <mat-checkbox
                                                     color="primary"
                                                     class="d-block"
@@ -1345,25 +1408,26 @@
                                                 </mat-checkbox>
                                             </div>
                                             <!-- shipping gstin -->
-                                            <div *ngIf="sectionSettings.header.shippingGstin">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="shippingGstinCheckbox"
-                                                    [readonly]="
-                                                        !customTemplate.sections['header'].data['shippingAddress']
-                                                            .display
-                                                    "
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['header'].data['shippingGstin'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    GSTIN
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                            <div *ngIf="sectionSettings?.header.shippingGstin" class="mr-t1">
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="shippingGstinCheckbox"
+                                                        [readonly]="
+                                                            !customTemplate.sections['header'].data['shippingAddress']
+                                                                .display
+                                                        "
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['header'].data['shippingGstin']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="ml-2 w-100">
+                                                        <input-field
                                                             type="text"
+                                                            [label]="'GSTIN'"
                                                             name="shippingGstin"
                                                             maxlength="15"
                                                             cssClass="form-control"
@@ -1379,8 +1443,10 @@
                                                                 !customTemplate.sections['header'].data['shippingGstin']
                                                                     .display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -1406,23 +1472,26 @@
                                                 </mat-expansion-panel-header>
                                                 <div class="px-3 pb-3">
                                                     <!-- shipping date -->
-                                                    <div *ngIf="sectionSettings.header.shippingDate">
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="transportDetailsCheckbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['shippingDate']
-                                                                    .display
-                                                            "
-                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        >
-                                                            Ship Date
-                                                        </mat-checkbox>
-                                                        <div class="ml-4">
-                                                            <div class="option-value-field">
-                                                                <text-field
+                                                    <div *ngIf="sectionSettings?.header.shippingDate" class="mr-t1">
+                                                        <div class="d-flex">
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                name="transportDetailsCheckbox"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'shippingDate'
+                                                                    ].display
+                                                                "
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility(null, null, null)
+                                                                "
+                                                            >
+                                                            </mat-checkbox>
+                                                            <div class="w-100 ml-2">
+                                                                <input-field
                                                                     [type]="'text'"
                                                                     name="shippingDate"
+                                                                    label="Ship Date"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
                                                                             'shippingDate'
@@ -1436,8 +1505,10 @@
                                                                     "
                                                                     maxlength="15"
                                                                     [cssClass]="'form-control'"
-                                                                ></text-field>
+                                                                ></input-field>
                                                             </div>
+                                                        </div>
+                                                        <div class="ml-4">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">Characters left:</span>
                                                                 {{
@@ -1450,23 +1521,25 @@
                                                         </div>
                                                     </div>
                                                     <!-- ship via -->
-                                                    <div *ngIf="sectionSettings.header.shippedVia">
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="shipViaCheckbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['shippedVia']
-                                                                    .display
-                                                            "
-                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        >
-                                                            Ship Via
-                                                        </mat-checkbox>
-                                                        <div class="ml-4">
-                                                            <div class="option-value-field">
-                                                                <text-field
+                                                    <div *ngIf="sectionSettings?.header.shippedVia" class="mr-t1">
+                                                        <div class="d-flex">
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                name="shipViaCheckbox"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data['shippedVia']
+                                                                        .display
+                                                                "
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility(null, null, null)
+                                                                "
+                                                            >
+                                                            </mat-checkbox>
+                                                            <div class="w-100 ml-2">
+                                                                <input-field
                                                                     [type]="'text'"
                                                                     name="shippedVia"
+                                                                    [label]="'Ship Via'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
                                                                             'shippedVia'
@@ -1480,8 +1553,10 @@
                                                                     "
                                                                     maxlength="15"
                                                                     [cssClass]="'form-control'"
-                                                                ></text-field>
+                                                                ></input-field>
                                                             </div>
+                                                        </div>
+                                                        <div class="ml-4">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">Characters left:</span>
                                                                 {{
@@ -1496,25 +1571,29 @@
                                                     <!-- tracking number -->
                                                     <div
                                                         *ngIf="
-                                                            sectionSettings.header.trackingNumber &&
+                                                            sectionSettings?.header.trackingNumber &&
                                                             customTemplate?.templateType !==
                                                                 templateTypeEnum.ThermalTemplate
                                                         "
+                                                        class="mr-t1"
                                                     >
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="trackingNumberCheckbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['trackingNumber']
-                                                                    .display
-                                                            "
-                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        >
-                                                            Tracking No.
-                                                        </mat-checkbox>
-                                                        <div class="ml-4">
-                                                            <div class="option-value-field">
-                                                                <text-field
+                                                        <div class="d-flex">
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                name="trackingNumberCheckbox"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'trackingNumber'
+                                                                    ].display
+                                                                "
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility(null, null, null)
+                                                                "
+                                                            >
+                                                            </mat-checkbox>
+                                                            <div class="w-100 ml-2">
+                                                                <input-field
+                                                                    [label]="'Tracking No.'"
                                                                     [type]="'text'"
                                                                     name="trackingNumber"
                                                                     [(ngModel)]="
@@ -1530,8 +1609,10 @@
                                                                     "
                                                                     [cssClass]="'form-control'"
                                                                     maxlength="15"
-                                                                ></text-field>
+                                                                ></input-field>
                                                             </div>
+                                                        </div>
+                                                        <div class="ml-4">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">Characters left:</span>
                                                                 {{
@@ -1560,21 +1641,24 @@
                                                     <mat-panel-title> Custom Field </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <div class="px-3 pb-3">
-                                                    <div *ngIf="sectionSettings.header.customField1">
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="customField1Checkbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['customField1']
-                                                                    .display
-                                                            "
-                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        >
-                                                            Custom Field 1
-                                                        </mat-checkbox>
-                                                        <div class="ml-4">
-                                                            <div class="option-value-field">
-                                                                <text-field
+                                                    <div *ngIf="sectionSettings?.header.customField1" class="mr-t1">
+                                                        <div class="d-flex">
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                name="customField1Checkbox"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'customField1'
+                                                                    ].display
+                                                                "
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility(null, null, null)
+                                                                "
+                                                            >
+                                                            </mat-checkbox>
+                                                            <div class="w-100 ml-2">
+                                                                <input-field
+                                                                    [label]="'Custom Field 1'"
                                                                     [type]="'text'"
                                                                     name="customField1"
                                                                     [(ngModel)]="
@@ -1590,8 +1674,10 @@
                                                                     "
                                                                     [cssClass]="'form-control'"
                                                                     maxlength="15"
-                                                                ></text-field>
+                                                                ></input-field>
                                                             </div>
+                                                        </div>
+                                                        <div class="ml-4">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">Characters left:</span>
                                                                 {{
@@ -1603,21 +1689,24 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <div *ngIf="sectionSettings.header.customField2">
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="customField2Checkbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['customField2']
-                                                                    .display
-                                                            "
-                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        >
-                                                            Custom Field 2
-                                                        </mat-checkbox>
-                                                        <div class="ml-4">
-                                                            <div class="option-value-field">
-                                                                <text-field
+                                                    <div *ngIf="sectionSettings?.header.customField2" class="mr-t1">
+                                                        <div class="d-flex">
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                name="customField2Checkbox"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'customField2'
+                                                                    ].display
+                                                                "
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility(null, null, null)
+                                                                "
+                                                            >
+                                                            </mat-checkbox>
+                                                            <div class="w-100 ml-2">
+                                                                <input-field
+                                                                    [label]="' Custom Field 2'"
                                                                     [type]="'text'"
                                                                     [cssClass]="'form-control'"
                                                                     maxlength="15"
@@ -1633,8 +1722,10 @@
                                                                             'customField2'
                                                                         ].display
                                                                     "
-                                                                ></text-field>
+                                                                ></input-field>
                                                             </div>
+                                                        </div>
+                                                        <div class="ml-4">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">Characters left:</span>
                                                                 {{
@@ -1646,21 +1737,24 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <div *ngIf="sectionSettings.header.customField3">
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="customField3Checkbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['customField3']
-                                                                    .display
-                                                            "
-                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                        >
-                                                            Custom Field 3
-                                                        </mat-checkbox>
-                                                        <div class="ml-4">
-                                                            <div class="option-value-field">
-                                                                <text-field
+                                                    <div *ngIf="sectionSettings?.header.customField3" class="mr-t1">
+                                                        <div class="d-flex">
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                name="customField3Checkbox"
+                                                                [(ngModel)]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'customField3'
+                                                                    ].display
+                                                                "
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility(null, null, null)
+                                                                "
+                                                            >
+                                                            </mat-checkbox>
+                                                            <div class="w-100 ml-2">
+                                                                <input-field
+                                                                    [label]="' Custom Field 3'"
                                                                     [type]="'text'"
                                                                     [cssClass]="'form-control'"
                                                                     maxlength="15"
@@ -1676,8 +1770,10 @@
                                                                             'customField3'
                                                                         ].display
                                                                     "
-                                                                ></text-field>
+                                                                ></input-field>
                                                             </div>
+                                                        </div>
+                                                        <div class="ml-4">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">Characters left:</span>
                                                                 {{
@@ -1709,22 +1805,23 @@
                                     <div *ngIf="customTemplate.sections['table']">
                                         <div
                                             *ngIf="
-                                                sectionSettings.table.sNo &&
+                                                sectionSettings?.table.sNo &&
                                                 customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                             "
+                                            class="mr-t1"
                                         >
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="sN"
-                                                [(ngModel)]="customTemplate.sections['table'].data['sNo'].display"
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Number
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="sN"
+                                                    [(ngModel)]="customTemplate.sections['table'].data['sNo'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
+                                                        [label]="'Number'"
                                                         [cssClass]="'form-control'"
                                                         maxlength="10"
                                                         name="ss"
@@ -1733,8 +1830,10 @@
                                                         [readonly]="
                                                             !customTemplate.sections['table'].data['sNo'].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -1745,7 +1844,7 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                sectionSettings.table.showVariantImage &&
+                                                sectionSettings?.table.showVariantImage &&
                                                 customTemplate.templateType === templateTypeEnum.GstTemplateA
                                             "
                                         >
@@ -1765,22 +1864,25 @@
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
                                                 sectionSettings?.table.date
                                             "
+                                            class="mr-t1"
                                         >
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="dt"
-                                                [(ngModel)]="customTemplate.sections['table'].data['date'].display"
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Date
-                                            </mat-checkbox>
-                                            <div
-                                                class="ml-4"
-                                                *ngIf="customTemplate.templateType !== templateTypeEnum.TallyTemplate"
-                                            >
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="dt"
+                                                    [(ngModel)]="customTemplate.sections['table'].data['date'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div
+                                                    class="w-100 ml-2"
+                                                    *ngIf="
+                                                        customTemplate.templateType !== templateTypeEnum.TallyTemplate
+                                                    "
+                                                >
+                                                    <input-field
                                                         [type]="'text'"
+                                                        [label]="'Date'"
                                                         [cssClass]="'form-control'"
                                                         maxlength="10"
                                                         name="dt1"
@@ -1791,8 +1893,13 @@
                                                         [readonly]="
                                                             !customTemplate.sections['table'].data['date'].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div
+                                                class="ml-4"
+                                                *ngIf="customTemplate.templateType !== templateTypeEnum.TallyTemplate"
+                                            >
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -1801,41 +1908,45 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings.table.item">
+                                        <div *ngIf="sectionSettings?.table.item" class="mr-t1">
                                             <div
                                                 *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="it"
-                                                    [(ngModel)]="customTemplate.sections['table'].data['item'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Item
-                                                </mat-checkbox>
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="it"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['table'].data['item'].display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            label="Item"
+                                                            [name]="'name'"
+                                                            [cssClass]="'form-control'"
+                                                            [maxlength]="
+                                                                customTemplate.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                                    ? 20
+                                                                    : 12
+                                                            "
+                                                            name="it1"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['table'].data['item'].label
+                                                            "
+                                                            (ngModelChange)="onFieldChange(null, null, null)"
+                                                            [readonly]="
+                                                                !customTemplate.sections['table'].data['item'].display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
-                                                        [type]="'text'"
-                                                        [name]="'name'"
-                                                        [cssClass]="'form-control'"
-                                                        [maxlength]="
-                                                            customTemplate.templateType ===
-                                                            templateTypeEnum.TallyTemplate
-                                                                ? 20
-                                                                : 12
-                                                        "
-                                                        name="it1"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['table'].data['item'].label
-                                                        "
-                                                        (ngModelChange)="onFieldChange(null, null, null)"
-                                                        [readonly]="
-                                                            !customTemplate.sections['table'].data['item'].display
-                                                        "
-                                                    ></text-field>
-                                                </div>
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -1867,22 +1978,25 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                sectionSettings.table.hsnSac &&
+                                                sectionSettings?.table.hsnSac &&
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate
                                             "
+                                            class="mr-t1"
                                         >
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="hsn"
-                                                [(ngModel)]="customTemplate.sections['table'].data['hsnSac'].display"
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                HSN/SAC
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="hsn"
+                                                    [(ngModel)]="
+                                                        customTemplate.sections['table'].data['hsnSac'].display
+                                                    "
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
+                                                        [label]="'HSN/SAC'"
                                                         [name]="'name'"
                                                         [cssClass]="'form-control'"
                                                         maxlength="8"
@@ -1894,8 +2008,10 @@
                                                         [readonly]="
                                                             !customTemplate.sections['table'].data['hsnSac'].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -1906,46 +2022,49 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings.table.quantity">
+                                        <div *ngIf="sectionSettings?.table.quantity" class="mr-t1">
                                             <div
                                                 *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="qt"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['table'].data['quantity'].display
-                                                    "
-                                                    (ngModelChange)="
-                                                        onChangeFieldVisibility(null, null, null);
-                                                        changeDisableQuantity()
-                                                    "
-                                                >
-                                                    Quantity
-                                                </mat-checkbox>
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="qt"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['table'].data['quantity'].display
+                                                        "
+                                                        (ngModelChange)="
+                                                            onChangeFieldVisibility(null, null, null);
+                                                            changeDisableQuantity()
+                                                        "
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [label]="'Quantity'"
+                                                            [name]="'name'"
+                                                            [cssClass]="'form-control'"
+                                                            [maxlength]="
+                                                                customTemplate.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                                    ? 8
+                                                                    : 6
+                                                            "
+                                                            name="qt1"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['table'].data['quantity'].label
+                                                            "
+                                                            (ngModelChange)="onFieldChange(null, null, null)"
+                                                            [readonly]="
+                                                                !customTemplate.sections['table'].data['quantity']
+                                                                    .display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
-                                                        [type]="'text'"
-                                                        [name]="'name'"
-                                                        [cssClass]="'form-control'"
-                                                        [maxlength]="
-                                                            customTemplate.templateType ===
-                                                            templateTypeEnum.TallyTemplate
-                                                                ? 8
-                                                                : 6
-                                                        "
-                                                        name="qt1"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['table'].data['quantity'].label
-                                                        "
-                                                        (ngModelChange)="onFieldChange(null, null, null)"
-                                                        [readonly]="
-                                                            !customTemplate.sections['table'].data['quantity'].display
-                                                        "
-                                                    ></text-field>
-                                                </div>
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -1957,19 +2076,19 @@
                                             </div>
                                         </div>
                                         <div [hidden]="true">
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="dsc"
-                                                [(ngModel)]="
-                                                    customTemplate.sections['table'].data['description'].display
-                                                "
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Description
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="dsc"
+                                                    [(ngModel)]="
+                                                        customTemplate.sections['table'].data['description'].display
+                                                    "
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
+                                                        [label]="'Description'"
                                                         [type]="'text'"
                                                         [cssClass]="'form-control'"
                                                         maxlength="10"
@@ -1982,8 +2101,10 @@
                                                             !customTemplate.sections['table'].data['description']
                                                                 .display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -1994,35 +2115,39 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings.table.rate">
+                                        <div *ngIf="sectionSettings?.table.rate" class="mr-t1">
                                             <div
                                                 *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="rt"
-                                                    [(ngModel)]="customTemplate.sections['table'].data['rate'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Rate/Item
-                                                </mat-checkbox>
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="rt"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['table'].data['rate'].display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            [label]="'Rate/Item'"
+                                                            [type]="'text'"
+                                                            [cssClass]="'form-control'"
+                                                            maxlength="10"
+                                                            name="rt1"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['table'].data['rate'].label
+                                                            "
+                                                            (ngModelChange)="onFieldChange(null, null, null)"
+                                                            [readonly]="
+                                                                !customTemplate.sections['table'].data['rate'].display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
-                                                        [type]="'text'"
-                                                        [cssClass]="'form-control'"
-                                                        maxlength="10"
-                                                        name="rt1"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['table'].data['rate'].label
-                                                        "
-                                                        (ngModelChange)="onFieldChange(null, null, null)"
-                                                        [readonly]="
-                                                            !customTemplate.sections['table'].data['rate'].display
-                                                        "
-                                                    ></text-field>
-                                                </div>
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -2053,22 +2178,25 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                sectionSettings.table.discount &&
+                                                sectionSettings?.table.discount &&
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate
                                             "
+                                            class="mr-t1"
                                         >
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="ds"
-                                                [(ngModel)]="customTemplate.sections['table'].data['discount'].display"
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Discount/Item
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="ds"
+                                                    [(ngModel)]="
+                                                        customTemplate.sections['table'].data['discount'].display
+                                                    "
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
+                                                        label=" Discount/Item"
                                                         maxlength="10"
                                                         [cssClass]="'form-control'"
                                                         name="ds1"
@@ -2079,8 +2207,10 @@
                                                         [readonly]="
                                                             !customTemplate.sections['table'].data['discount'].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -2093,25 +2223,26 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                sectionSettings.table.taxableValue &&
+                                                sectionSettings?.table.taxableValue &&
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
                                                 customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                             "
+                                            class="mr-t1"
                                         >
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="tv"
-                                                [(ngModel)]="
-                                                    customTemplate.sections['table'].data['taxableValue'].display
-                                                "
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Taxable Value
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="tv"
+                                                    [(ngModel)]="
+                                                        customTemplate.sections['table'].data['taxableValue'].display
+                                                    "
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
+                                                        label=" Taxable Value"
                                                         maxlength="14"
                                                         [cssClass]="'form-control'"
                                                         name="tv1"
@@ -2123,8 +2254,10 @@
                                                             !customTemplate.sections['table'].data['taxableValue']
                                                                 .display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -2135,20 +2268,20 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings.table.tax">
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="ta"
-                                                [(ngModel)]="customTemplate.sections['table'].data['tax'].display"
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Tax
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                        <div *ngIf="sectionSettings?.table.tax" class="mr-t1">
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="ta"
+                                                    [(ngModel)]="customTemplate.sections['table'].data['tax'].display"
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
                                                         maxlength="10"
+                                                        [label]="'Tax'"
                                                         [cssClass]="'form-control'"
                                                         name="t1"
                                                         [(ngModel)]="customTemplate.sections['table'].data['tax'].label"
@@ -2156,8 +2289,10 @@
                                                         [readonly]="
                                                             !customTemplate.sections['table'].data['tax'].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -2166,23 +2301,27 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings.table.total">
-                                            <div
-                                                *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
-                                            >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="tot"
-                                                    [(ngModel)]="customTemplate.sections['table'].data['total'].display"
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                        <div *ngIf="sectionSettings?.table.total" class="mr-t1">
+                                            <div class="d-flex">
+                                                <div
+                                                    *ngIf="
+                                                        customTemplate.templateType !== templateTypeEnum.ThermalTemplate
+                                                    "
                                                 >
-                                                    Total
-                                                </mat-checkbox>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="tot"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['table'].data['total'].display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                </div>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
+                                                        label="Total"
                                                         [maxlength]="
                                                             customTemplate.templateType ===
                                                             templateTypeEnum.ThermalTemplate
@@ -2198,8 +2337,10 @@
                                                         [readonly]="
                                                             !customTemplate.sections['table'].data['total'].display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -2216,26 +2357,27 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                sectionSettings.table.previousDue &&
+                                                sectionSettings?.table.previousDue &&
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
                                                 customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                 voucherType === 'sales'
                                             "
+                                            class="mr-t1"
                                         >
-                                            <mat-checkbox
-                                                color="primary"
-                                                name="preDue"
-                                                [(ngModel)]="
-                                                    customTemplate.sections['table'].data['previousDue'].display
-                                                "
-                                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            >
-                                                Previous Due
-                                            </mat-checkbox>
-                                            <div class="ml-4">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                            <div class="d-flex">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    name="preDue"
+                                                    [(ngModel)]="
+                                                        customTemplate.sections['table'].data['previousDue'].display
+                                                    "
+                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                >
+                                                </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
                                                         [type]="'text'"
+                                                        label="Previous Due"
                                                         [cssClass]="'form-control'"
                                                         maxlength="14"
                                                         name="previousDue"
@@ -2247,8 +2389,10 @@
                                                             !customTemplate.sections['table'].data['previousDue']
                                                                 .display
                                                         "
-                                                    ></text-field>
+                                                    ></input-field>
                                                 </div>
+                                            </div>
+                                            <div class="ml-4">
                                                 <p class="mt-1">
                                                     <span class="light-gray font-12">Characters left:</span>
                                                     {{
@@ -2261,7 +2405,7 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                sectionSettings.footer.totalInWords &&
+                                                sectionSettings?.footer.totalInWords &&
                                                 customTemplate?.templateType !== templateTypeEnum.GstTemplateA &&
                                                 customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                             "
@@ -2319,18 +2463,18 @@
                                         <ng-container
                                             *ngIf="customTemplate?.templateType === templateTypeEnum.TallyTemplate"
                                         >
-                                            <div>
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="bankQrCodeCheckbox"
-                                                    [(ngModel)]="customTemplate.showBankQrCode"
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Show Bank QR Code
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                            <div class="mr-t1">
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="bankQrCodeCheckbox"
+                                                        [(ngModel)]="customTemplate.showBankQrCode"
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            label="Show Bank QR Code"
                                                             [type]="'text'"
                                                             [name]="'name'"
                                                             [cssClass]="'form-control'"
@@ -2339,7 +2483,7 @@
                                                             [(ngModel)]="customTemplate.qrCodeId"
                                                             (ngModelChange)="onFieldChange(null, null, null)"
                                                             pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2382,21 +2526,21 @@
                                                     customTemplate.sections['footer'].data['tcs']
                                                 "
                                             >
-                                                <div *ngIf="isTcsTdsApplicable">
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="tcsCheckbox"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['footer'].data['tcs'].display
-                                                        "
-                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                    >
-                                                        TCS
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
+                                                <div *ngIf="isTcsTdsApplicable" class="mr-t1">
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="tcsCheckbox"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['footer'].data['tcs'].display
+                                                            "
+                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="ml-2 w-100">
+                                                            <input-field
                                                                 [type]="'text'"
+                                                                label="TCS"
                                                                 name="tcs"
                                                                 maxlength="10"
                                                                 [cssClass]="'form-control'"
@@ -2408,8 +2552,10 @@
                                                                     !customTemplate.sections['footer'].data['tcs']
                                                                         .display
                                                                 "
-                                                            ></text-field>
+                                                            ></input-field>
                                                         </div>
+                                                    </div>
+                                                    <div class="ml-4">
                                                         <p class="mt-1">
                                                             <span class="light-gray font-12">Characters left:</span>
                                                             {{
@@ -2425,22 +2571,23 @@
                                                         isTcsTdsApplicable &&
                                                         customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                     "
+                                                    class="mr-t1"
                                                 >
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="tdsCheckbox"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['footer'].data['tds'].display
-                                                        "
-                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                    >
-                                                        TDS
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="tdsCheckbox"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['footer'].data['tds'].display
+                                                            "
+                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="w-100 ml-2">
+                                                            <input-field
                                                                 [type]="'text'"
                                                                 maxlength="10"
+                                                                label="TDS"
                                                                 [cssClass]="'form-control'"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data['tds'].label
@@ -2450,8 +2597,10 @@
                                                                     !customTemplate.sections['footer'].data['tds']
                                                                         .display
                                                                 "
-                                                            ></text-field>
+                                                            ></input-field>
                                                         </div>
+                                                    </div>
+                                                    <div class="ml-4">
                                                         <p class="mt-1">
                                                             <span class="light-gray font-12">Characters left:</span>
                                                             {{
@@ -2468,21 +2617,23 @@
                                                             templateTypeEnum.TallyTemplate &&
                                                         customTemplate.sections['footer'].data['totalDue']
                                                     "
+                                                    class="mr-t1"
                                                 >
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="totalDues"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['footer'].data['totalDue'].display
-                                                        "
-                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                    >
-                                                        Total Due
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="totalDues"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['footer'].data['totalDue']
+                                                                    .display
+                                                            "
+                                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="w-100 ml-2">
+                                                            <input-field
                                                                 [type]="'text'"
+                                                                label="Total Due"
                                                                 maxlength="40"
                                                                 name="totalDue"
                                                                 [cssClass]="'form-control'"
@@ -2495,8 +2646,10 @@
                                                                     !customTemplate.sections['footer'].data['totalDue']
                                                                         .display
                                                                 "
-                                                            ></text-field>
+                                                            ></input-field>
                                                         </div>
+                                                    </div>
+                                                    <div class="ml-4">
                                                         <p class="mt-1">
                                                             <span class="light-gray font-12">Characters left:</span>
                                                             {{
@@ -2510,31 +2663,34 @@
                                             </ng-container>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.companyName &&
+                                                    sectionSettings?.footer.companyName &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
+                                                class="mr-t1"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="footerCompanyNameCheckbox"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['footer'].data['companyName'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Company Name
-                                                </mat-checkbox>
-                                                <div
-                                                    class="ml-4"
-                                                    *ngIf="
-                                                        customTemplate?.templateType ===
-                                                            templateTypeEnum.GstTemplateA ||
-                                                        customTemplate?.templateType === templateTypeEnum.TallyTemplate
-                                                    "
-                                                >
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        class="d-block"
+                                                        name="footerCompanyNameCheckbox"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['footer'].data['companyName']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div
+                                                        *ngIf="
+                                                            customTemplate?.templateType ===
+                                                                templateTypeEnum.GstTemplateA ||
+                                                            customTemplate?.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                        "
+                                                        class="w-100 ml-2"
+                                                    >
+                                                        <input-field
+                                                            label="Company Name"
                                                             [type]="'text'"
                                                             [maxlength]="50"
                                                             [cssClass]="'form-control'"
@@ -2548,8 +2704,17 @@
                                                                 !customTemplate.sections['footer'].data['companyName']
                                                                     .display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div
+                                                    class="ml-4"
+                                                    *ngIf="
+                                                        customTemplate?.templateType ===
+                                                            templateTypeEnum.GstTemplateA ||
+                                                        customTemplate?.templateType === templateTypeEnum.TallyTemplate
+                                                    "
+                                                >
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -2579,7 +2744,7 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.companyAddress &&
+                                                    sectionSettings?.footer.companyAddress &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
@@ -2627,7 +2792,7 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.taxableAmount &&
+                                                    sectionSettings?.footer.taxableAmount &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
@@ -2644,7 +2809,7 @@
                                                     Taxable Amount
                                                 </mat-checkbox>
                                             </div>
-                                            <div *ngIf="sectionSettings.footer.totalTax">
+                                            <div *ngIf="sectionSettings?.footer.totalTax">
                                                 <mat-checkbox
                                                     color="primary"
                                                     class="d-block"
@@ -2657,7 +2822,7 @@
                                                     Total Tax
                                                 </mat-checkbox>
                                             </div>
-                                            <div *ngIf="sectionSettings.footer.total">
+                                            <div *ngIf="sectionSettings?.footer.total">
                                                 <mat-checkbox
                                                     color="primary"
                                                     class="d-block"
@@ -2677,33 +2842,37 @@
                                                     customTemplate.sections['table'].data['totalQuantity'] &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
+                                                class="mr-t1"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="totalQuantityCheck"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['table'].data['totalQuantity'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Total Quantity
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="totalQuantityCheck"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['table'].data['totalQuantity']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
                                                             [type]="'text'"
+                                                            label="Total Quantity"
                                                             name="totalQuantity"
                                                             maxlength="13"
                                                             [cssClass]="'form-control'"
                                                             placeholder="Total Quantity"
-                                                            [disabled]="!sectionSettings.table.quantity?.display"
+                                                            [disabled]="!sectionSettings?.table.quantity?.display"
                                                             (keyup)="onFieldChange(null, null, null)"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['totalQuantity']
                                                                     .label
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -2716,24 +2885,25 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.table.discount &&
+                                                    sectionSettings?.table.discount &&
                                                     customTemplate?.templateType === templateTypeEnum.ThermalTemplate
                                                 "
+                                                class="mr-t1"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="ds"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['table'].data['discount'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Discount
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="ds"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['table'].data['discount'].display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
                                                             [type]="'text'"
+                                                            label="Discount"
                                                             maxlength="10"
                                                             [cssClass]="'form-control'"
                                                             name="ds1"
@@ -2745,8 +2915,10 @@
                                                                 !customTemplate.sections['table'].data['discount']
                                                                     .display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -2759,23 +2931,25 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.taxableAmount &&
+                                                    sectionSettings?.footer.taxableAmount &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
+                                                class="mr-t1"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="tam"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['footer'].data['taxableAmount'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Taxable Amount
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="tam"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['footer'].data['taxableAmount']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            label="Taxable Amount"
                                                             [type]="'text'"
                                                             maxlength="14"
                                                             [cssClass]="'form-control'"
@@ -2789,8 +2963,10 @@
                                                                 !customTemplate.sections['table'].data['taxableValue']
                                                                     .display
                                                             "
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -2803,7 +2979,7 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.totalInWords &&
+                                                    sectionSettings?.footer.totalInWords &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
@@ -2821,7 +2997,7 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.totalInWords &&
+                                                    sectionSettings?.footer.totalInWords &&
                                                     customTemplate?.templateType === templateTypeEnum.ThermalTemplate
                                                 "
                                             >
@@ -2905,27 +3081,25 @@
                                             <ng-container
                                                 *ngIf="customTemplate?.templateType === templateTypeEnum.GstTemplateA"
                                             >
-                                                <div>
+                                                <div class="mr-t1 d-flex">
                                                     <mat-checkbox
                                                         color="primary"
                                                         name="bankQrCodeCheckbox"
                                                         [(ngModel)]="customTemplate.showBankQrCode"
                                                         (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                                     >
-                                                        Show Bank QR Code
                                                     </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <text-field
-                                                                [type]="'text'"
-                                                                name="bankQrCode"
-                                                                [cssClass]="'form-control'"
-                                                                placeholder="Enter UPI ID"
-                                                                (ngModelChange)="onFieldChange(null, null, null)"
-                                                                [disabled]="!customTemplate.showBankQrCode"
-                                                                pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
-                                                            ></text-field>
-                                                        </div>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            label="Show Bank QR Code"
+                                                            name="bankQrCode"
+                                                            [cssClass]="'form-control'"
+                                                            placeholder="Enter UPI ID"
+                                                            (ngModelChange)="onFieldChange(null, null, null)"
+                                                            [disabled]="!customTemplate.showBankQrCode"
+                                                            pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
                                             </ng-container>
@@ -3027,7 +3201,7 @@
                                                     </mat-radio-group>
                                                 </div>
                                             </div>
-                                            <div *ngIf="sectionSettings.footer.message1">
+                                            <div *ngIf="sectionSettings?.footer.message1">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="msg1"
@@ -3105,7 +3279,7 @@
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
-                                                    sectionSettings.footer.thanks
+                                                    sectionSettings?.footer.thanks
                                                 "
                                             >
                                                 <mat-checkbox
@@ -3117,21 +3291,21 @@
                                                     (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                                 >
                                                 </mat-checkbox>
+                                                <div class="w-100 ml-2">
+                                                    <input-field
+                                                        [type]="'text'"
+                                                        name="thanks"
+                                                        maxlength="30"
+                                                        [cssClass]="'form-control'"
+                                                        placeholder="Thank You for your business"
+                                                        [readonly]="!sectionSettings?.footer.thanks?.display"
+                                                        (keyup)="onFieldChange(null, null, null)"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['footer'].data['thanks'].label
+                                                        "
+                                                    ></input-field>
+                                                </div>
                                                 <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
-                                                            [type]="'text'"
-                                                            name="thanks"
-                                                            maxlength="30"
-                                                            [cssClass]="'form-control'"
-                                                            placeholder="Thank You for your business"
-                                                            [readonly]="!sectionSettings.footer.thanks?.display"
-                                                            (keyup)="onFieldChange(null, null, null)"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['footer'].data['thanks'].label
-                                                            "
-                                                        ></text-field>
-                                                    </div>
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{
@@ -3144,7 +3318,7 @@
                                             </div>
                                             <div
                                                 *ngIf="
-                                                    sectionSettings.footer.companyName &&
+                                                    sectionSettings?.footer.companyName &&
                                                     customTemplate?.templateType === templateTypeEnum.ThermalTemplate
                                                 "
                                             >
@@ -3164,27 +3338,28 @@
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate.sections['footer'].data['textUnderSlogan']
                                                 "
+                                                class="mr-t1"
                                             >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    name="textUnderSloganCheckbox"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['footer'].data['textUnderSlogan']
-                                                            .display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                >
-                                                    Text under Image Signature / Slogan
-                                                </mat-checkbox>
-                                                <div class="ml-4">
-                                                    <div class="option-value-field">
-                                                        <text-field
+                                                <div class="d-flex">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        name="textUnderSloganCheckbox"
+                                                        [(ngModel)]="
+                                                            customTemplate.sections['footer'].data['textUnderSlogan']
+                                                                .display
+                                                        "
+                                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                                    >
+                                                    </mat-checkbox>
+                                                    <div class="w-100 ml-2">
+                                                        <input-field
                                                             [type]="'text'"
                                                             name="textUnderSlogan"
+                                                            label=" Text under Image Signature / Slogan"
                                                             [cssClass]="'form-control'"
                                                             placeholder="Text under slogan"
                                                             [readonly]="
-                                                                !sectionSettings.footer.textUnderSlogan?.display
+                                                                !sectionSettings?.footer.textUnderSlogan?.display
                                                             "
                                                             (keyup)="onFieldChange(null, null, null)"
                                                             [(ngModel)]="
@@ -3193,8 +3368,10 @@
                                                                 ].label
                                                             "
                                                             maxlength="50"
-                                                        ></text-field>
+                                                        ></input-field>
                                                     </div>
+                                                </div>
+                                                <div class="ml-4">
                                                     <p class="mt-1">
                                                         <span class="light-gray font-12">Characters left:</span>
                                                         {{

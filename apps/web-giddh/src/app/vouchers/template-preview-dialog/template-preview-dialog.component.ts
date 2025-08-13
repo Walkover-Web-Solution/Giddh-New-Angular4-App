@@ -38,7 +38,6 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplatePreviewDialogComponent
    */
   public ngOnInit(): void {
-    console.log(this.data);
     this.getTemplatePreview();
   }
 
@@ -49,11 +48,8 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    */
   public getTemplatePreview(): void {
     this.invoiceTemplatesService.getTemplatePreview(this.data.type, this.data.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-      console.log(response);
       if (response?.status === 'success') {
-        console.log(response);
-        return;
-        this.selectedInvoiceType = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
+        this.selectedInvoiceType = this.generalService.base64ToBlob(response?.body?.data, 'application/pdf', 512);
         const file = new Blob([this.selectedInvoiceType], { type: 'application/pdf' });
         URL.revokeObjectURL(this.pdfFileURL);
         this.pdfFileURL = URL.createObjectURL(file);

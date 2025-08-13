@@ -1,10 +1,11 @@
 .upload-button {
-    width: 100px !important;
+    width: 300px !important;
     background: var(--color-white);
     display: table-cell;
     height: 100px;
     vertical-align: middle;
     border: 4px dashed var(--color-gray);
+    text-align: center;
 }
 
 .template-view {

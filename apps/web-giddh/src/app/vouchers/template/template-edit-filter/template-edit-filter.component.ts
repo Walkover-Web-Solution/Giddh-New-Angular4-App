@@ -517,10 +517,447 @@ export class TemplateEditFilterComponent implements OnInit {
             copyFrom: 'gst_template_a',
             templateColor: '#AB1F00',
             tableColor: '#f2f3f4',
-            templateType: 'gst_template_a',
+            templateType: TemplateTypeEnum.GstTemplateA,
             name: '',
         },
         hasInvoiceTemplatePermissions: true
+    };
+    /** Default Tally template */
+    public tallyTemplateObj: any = {
+        sections: {
+            footer: {
+                data: {
+                    taxableAmount: {
+                        label: "Taxable Amount",
+                        display: true,
+                        width: null
+                    },
+                    showNotesAtLastPage: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    tds: {
+                        label: "TDS",
+                        display: false,
+                        width: null
+                    },
+                    imageSignature: {
+                        label: "",
+                        display: false,
+                        width: null
+                    },
+                    showMessage2: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    tcs: {
+                        label: "TCS",
+                        display: false,
+                        width: null
+                    },
+                    grandTotal: {
+                        label: "Invoice Total",
+                        display: true,
+                        width: null
+                    },
+                    totalDue: {
+                        label: "Total Due",
+                        display: false,
+                        width: null
+                    },
+                    companyName: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    displayExportMessage: {
+                        label: "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX",
+                        display: true,
+                        width: null
+                    },
+                    grandTotalInAccountsCurrency: {
+                        label: "Invoice Total",
+                        display: true,
+                        width: null
+                    },
+                    totalInWordsInAccountsCurrency: {
+                        label: "Invoice Total (In words)",
+                        display: true,
+                        width: null
+                    },
+                    totalTax: {
+                        label: "Total Tax*",
+                        display: true,
+                        width: null
+                    },
+                    thanks: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    otherDeduction: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    taxBifurcation: {
+                        label: "hsnSac",
+                        display: true,
+                        width: null
+                    },
+                    totalInWords: {
+                        label: "Invoice Total (In words)",
+                        display: true,
+                        width: null
+                    },
+                    companyAddress: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    textUnderSlogan: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    slogan: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    message1: {
+                        label: "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.",
+                        display: true,
+                        width: null
+                    }
+                }
+            },
+            header: {
+                data: {
+                    warehouseAddress: {
+                        label: null,
+                        display: false,
+                        width: null
+                    },
+                    shippingDate: {
+                        label: "Ship Date",
+                        display: true,
+                        width: null
+                    },
+                    customField1: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    customField2: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    shippedVia: {
+                        label: "Ship Via",
+                        display: true,
+                        width: null
+                    },
+                    customField3: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    companyName: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    dueDate: {
+                        label: "Due Date",
+                        display: true,
+                        width: null
+                    },
+                    displayExchangeRate: {
+                        label: "Exchange/Conversion Rate",
+                        display: true,
+                        width: null
+                    },
+                    gstin: {
+                        label: "GSTIN",
+                        display: true,
+                        width: null
+                    },
+                    displayPlaceOfSupply: {
+                        label: "Place Of Supply",
+                        display: true,
+                        width: null
+                    },
+                    displayPlaceOfCountry: {
+                        label: "Country of Supply",
+                        display: true,
+                        width: null
+                    },
+                    shippingGstin: {
+                        label: "GSTIN",
+                        display: true,
+                        width: null
+                    },
+                    voucherNumber: {
+                        label: "Voucher No.",
+                        display: true,
+                        width: null
+                    },
+                    customerEmail: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    invoiceNumber: {
+                        label: "Invoice No.",
+                        display: true,
+                        width: null
+                    },
+                    showQrCode: {
+                        label: null,
+                        display: false,
+                        width: null
+                    },
+                    voucherDate: {
+                        label: "Voucher Date",
+                        display: true,
+                        width: null
+                    },
+                    customerMobileNumber: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    attentionTo: {
+                        label: "Attention To",
+                        display: true,
+                        width: null
+                    },
+                    displayLutNumber: {
+                        label: "LUT Number",
+                        display: true,
+                        width: null
+                    },
+                    showCompanyAddress: {
+                        label: null,
+                        display: false,
+                        width: null
+                    },
+                    pan: {
+                        label: "PAN",
+                        display: true,
+                        width: null
+                    },
+                    trackingNumber: {
+                        label: "Tracking No.",
+                        display: true,
+                        width: null
+                    },
+                    shippingCounty: {
+                        label: "County",
+                        display: true,
+                        width: null
+                    },
+                    formNameInvoice: {
+                        label: "INVOICE",
+                        display: true,
+                        width: null
+                    },
+                    billingGstin: {
+                        label: "GSTIN",
+                        display: true,
+                        width: null
+                    },
+                    showEInvoiceDetails: {
+                        label: "",
+                        display: false,
+                        width: null
+                    },
+                    address: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    billingState: {
+                        label: "State",
+                        display: true,
+                        width: null
+                    },
+                    invoiceDate: {
+                        label: "Invoice Date",
+                        display: true,
+                        width: null
+                    },
+                    customerName: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    formNameTaxInvoice: {
+                        label: "TAX INVOICE",
+                        display: true,
+                        width: null
+                    },
+                    shippingAddress: {
+                        label: "Shipping Address",
+                        display: true,
+                        width: null
+                    },
+                    shippingState: {
+                        label: "State",
+                        display: true,
+                        width: null
+                    },
+                    billingAddress: {
+                        label: "Billing Address",
+                        display: true,
+                        width: null
+                    },
+                    billingCounty: {
+                        label: "County",
+                        display: true,
+                        width: null
+                    },
+                    gstComposition: {
+                        label: "Register under composition scheme",
+                        display: false,
+                        width: null
+                    }
+                }
+            },
+            table: {
+                data: {
+                    date: {
+                        label: "Date",
+                        display: true,
+                        width: "10"
+                    },
+                    displayBaseCurrency: {
+                        label: "",
+                        display: true,
+                        width: null
+                    },
+                    item: {
+                        label: "Description",
+                        display: true,
+                        width: "10"
+                    },
+                    quantity: {
+                        label: "Qty.",
+                        display: true,
+                        width: "10"
+                    },
+                    otherTaxBifurcation: {
+                        label: "Tax",
+                        display: true,
+                        width: null
+                    },
+                    showDescriptionInRows: {
+                        label: "",
+                        display: true,
+                        width: ""
+                    },
+                    description: {
+                        label: "Some label",
+                        display: true,
+                        width: "10"
+                    },
+                    discount: {
+                        label: "Dis./ Item",
+                        display: true,
+                        width: "10"
+                    },
+                    taxes: {
+                        label: "Taxes",
+                        display: true,
+                        width: "10"
+                    },
+                    hsnSac: {
+                        label: "HSN/SAC",
+                        display: true,
+                        width: "10"
+                    },
+                    total: {
+                        label: "Total",
+                        display: true,
+                        width: "10"
+                    },
+                    totalQuantity: {
+                        label: "totalQuantity",
+                        display: false,
+                        width: null
+                    },
+                    showVariantImage: {
+                        label: "Image",
+                        display: false,
+                        width: null
+                    },
+                    sNo: {
+                        label: "#",
+                        display: true,
+                        width: "10"
+                    },
+                    rate: {
+                        label: "Rate/ Item",
+                        display: true,
+                        width: "10"
+                    },
+                    taxableValue: {
+                        label: "Taxable Amt.",
+                        display: true,
+                        width: "10"
+                    },
+                    previousDue: {
+                        label: "Previous Due",
+                        display: true,
+                        width: null
+                    },
+                    amountBeforeDiscount: {
+                        label: "Total Before Dis.",
+                        display: true,
+                        width: null
+                    },
+                    skuCode: {
+                        label: "SkuCode",
+                        display: true,
+                        width: "10"
+                    }
+                }
+            }
+        },
+        fontDefault: 0,
+        fontMedium: 0,
+        fontSmall: 0,
+        showSectionsInline: true,
+        showBankQrCode: false,
+        name: "Tally template",
+        type: "invoice",
+        templateType: "tally_template",
+        copyFrom: null,
+        qrCodeId: null,
+        isDefaultForVoucher: false,
+        templateColor: "#f63407",
+        tableColor: "#ffffff",
+        updatedAt: "",
+        logoSize: "50",
+        font: "Open Sans",
+        primaryColor: "#f63407",
+        secondaryColor: "#ffffff",
+        topMargin: 25,
+        leftMargin: 25,
+        rightMargin: 25,
+        bottomMargin: 25,
+        fontSize: "14",
+        logoUniqueName: null,
+        createdAt: "",
+        isDefault: false,
+        logoPosition: "center/left/right",
+        uniqueName: "tally_template",
+        createdBy: null,
+        updatedBy: null
     };
     /** Index of selected tab */
     public selectedTabIndex: number = 0;
@@ -543,7 +980,6 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public ngOnInit(): void {
-
         // Initialize dialog data
         const { templateType, voucherType, templateList, mode } = this.dialogData || {};
         this.templateType = templateType;
@@ -561,7 +997,13 @@ export class TemplateEditFilterComponent implements OnInit {
 
         this.templateService.setTemplateVoucherType(this.voucherType);
         if (this.templateMode === TemplateModeEnum.Create) {
-            this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.templateObj.defaultTemplate);
+            if(this.templateType !== 'purchase_order' && this.templateType !== 'purchase_bill') {
+                this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.templateObj.defaultTemplate);
+            } else {
+                this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.tallyTemplateObj);
+            }
+        } else {
+          this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.dialogData.updateTemplate);
         }
         this.templateService.setIsPreviewMode(false);
 
@@ -582,6 +1024,13 @@ export class TemplateEditFilterComponent implements OnInit {
         this.templateService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = cloneDeep(template);
             this.setFontAndFontSize();
+
+            // Always assign sectionSettings to prevent undefined errors in the template
+            this.sectionSettings = {
+                header: this.customTemplate?.sections?.header?.data || {},
+                table: this.customTemplate?.sections?.table?.data || {},
+                footer: this.customTemplate?.sections?.footer?.data || {}
+            };
 
             // Prepare section data
             const section = {
