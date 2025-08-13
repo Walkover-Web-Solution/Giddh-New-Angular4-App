@@ -43,6 +43,7 @@ import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
+import { TemplateModeEnum } from "../../models/api-models/Sales";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -489,8 +490,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
-                const templateType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'invoice';
-                this.fetchTemplates();
+                const templateType =
+                    this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
+                        : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? 'invoice' : this.voucherType;
+                this.fetchTemplates(templateType);
                 this.fetchAllCreatedTemplates(templateType);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
@@ -1081,7 +1084,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+                } else if (this.voucherType === 'purchase-order' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 3) {
@@ -1129,7 +1132,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+                } else if (this.voucherType === 'purchase-order' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
@@ -1210,6 +1213,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = "purchase";
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "purchase-order";
+                    activeModule = "templates";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "purchase";
+                    activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1273,6 +1282,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = "purchase";
                     activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "purchase-order";
+                    activeModule = "templates";
+                }
+                else if (selectedTabIndex === 3) {
+                    voucherType = "purchase";
+                    activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -3311,8 +3327,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * Calls InvoiceTemplatesService.getTemplates() and updates the templatesList.
      * Handles errors and shows a toaster message if needed.
      */
-    public fetchTemplates(): void {
-        this.invoiceTemplatesService.getTemplates().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+    public fetchTemplates(templateType?: string): void {
+        this.invoiceTemplatesService.getTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
                 this.templatesList = res.body;
             } else {
@@ -3327,9 +3343,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param templateType The type of template to fetch
      */
     public fetchAllCreatedTemplates(templateType: string): void {
+        this.createdTemplatesList = [];
         this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.createdTemplatesList = res.body;
+                this.createdTemplatesList = res?.body;
             } else {
                 this.createdTemplatesList = [];
             }
@@ -3388,7 +3405,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         if (templateType) {
                             this.fetchAllCreatedTemplates(templateType);
                         } else {
-                            this.fetchTemplates();
+                            this.fetchTemplates(templateType);
                         }
                     } else {
                         this.toasterService.showSnackBar('error', res?.message);
@@ -3404,7 +3421,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
    * @memberof VoucherListComponent
    */
     public templateDialog(template: any): void {
-        console.log(template);
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px',
             height: '90vh',
@@ -3418,46 +3434,23 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public templateEdit(template: any, type: string): void {
-        let companyUniqueName = null;
-        let companies = null;
-        let defaultTemplate = null;
-        let customCreatedTemplates = null;
-
-        const templateType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'invoice';
+        const templateType =
+            this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
+                : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? 'invoice' : this.voucherType;
         const voucherType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'sales';
-        defaultTemplate = this.createdTemplatesList.find(template => templateType === 'voucher' ? template?.isDefaultForVoucher : template?.isDefault);
-        defaultTemplate.type = templateType;
-        if (type === 'create') {
-            this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
-                companyUniqueName = ss.companyUniqueName;
-                companies = ss.companies;
-            });
-            if (defaultTemplate && defaultTemplate.sections && defaultTemplate.sections.footer && defaultTemplate.sections.footer.data && defaultTemplate.sections.footer.data.companyName) { // slogan default company on new template creation
-                defaultTemplate.sections.footer.data.slogan.label = defaultTemplate.sections.footer.data.companyName.label;
-                defaultTemplate.sections.footer.data.textUnderSlogan.label = defaultTemplate.sections.footer.data.companyName.label;
-            }
-            this.invoiceUiDataService.setLogoPath('');
-            this.invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-        } else {
-            customCreatedTemplates = this.createdTemplatesList;
-            customCreatedTemplates.forEach((template) => {
-                if (template.sections.header.data?.gstComposition?.label.length === 0) {
-                    template.sections.header.data.gstComposition.label = 'Registered under Composition Scheme';
-                }
-            });
-            this.invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
-        }
+
         const dataToSend = {
             templateList: this.templatesList,
             voucherType: voucherType,
             templateType: templateType,
             createTemplateList: this.createdTemplatesList,
-            defaultTemplate: defaultTemplate,
-            mode: type === 'edit' ? 'update' : 'create'
+            updateTemplate: type === TemplateModeEnum.Edit ? template : null,
+            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
-            height: '90vh',
+            height: '95vh',
+            maxWidth: '95vw',
             data: dataToSend,
             disableClose: true
         });

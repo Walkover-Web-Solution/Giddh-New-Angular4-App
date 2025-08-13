@@ -183,7 +183,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
         if (res?.status === 'success') {
           this.toasty.successToast('Template Updated Successfully.');
-          this.invoiceUiDataService.resetCustomTemplate();
           this.invoiceUiDataService.setLogoPath('');
           this.invoiceUiDataService.unusedImageSignature = '';
           this.dialogRef.close(true);

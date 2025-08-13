@@ -5804,7 +5804,7 @@
                         <ng-container *ngFor="let template of createdTemplatesList">
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
-                                *ngIf="template.type === 'invoice' && voucherType === 'sales'"
+                                *ngIf="(template.type === 'invoice' || template.type === 'purchase_bill'|| template.type === 'purchase_order') && (voucherType === 'sales' || voucherType === 'purchase')"
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                     <h3 class="fonr-16">{{ template.name }}</h3>
@@ -5819,7 +5819,7 @@
                                     <span
                                         *ngIf="!template.isDefault"
                                         class="default-wrap font-12 p-2 cursor-pointer"
-                                        (click)="setTemplateAsDefault(template.uniqueName, 'invoice')"
+                                        (click)="setTemplateAsDefault(template.uniqueName,template.type === 'invoice' ? 'invoice' : template.type === 'purchase_bill' ? 'purchase_bill' : 'purchase_order')"
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         Set as Default
@@ -5852,7 +5852,7 @@
                                             [disabled]="template.isDefault"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
-                                            (click)="template.isDefault ? null : deleteTemplate(template, 'invoice')"
+                                            (click)="template.isDefault ? null : deleteTemplate(template, template.type === 'invoice' ? 'invoice' : template.type === 'purchase_bill' ? 'purchase_bill' : 'purchase_order')"
                                         >
                                             <i class="icon-trash"></i>
                                         </button>
