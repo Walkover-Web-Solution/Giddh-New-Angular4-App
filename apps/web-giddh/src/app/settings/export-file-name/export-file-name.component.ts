@@ -134,6 +134,11 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
             this.settingsProfileService.updateModuleExportSetting({exportFormatList: updateRequest}).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response.status === 'success') {
                     this.toastService.showSnackBar("success", response.body);
+                    this.moduleExportSettingArray.controls.filter((control: FormGroup) => {
+                        return control.get('format')?.value !== control.get('originalFormat')?.value;
+                    }).forEach((control: FormGroup) => {
+                        control.get('originalFormat')?.setValue(control.get('format')?.value);
+                    });
                 }
             });
         }
