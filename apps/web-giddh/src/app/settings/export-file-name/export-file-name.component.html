@@ -10,7 +10,7 @@
             <mat-label>
               <span class="text-capitalize">
                 {{ (module.get('exportName')?.value | replaceAll: '_' : ' ' | titlecase) }}
-                <i class="icon-info" [matTooltip]="localeData?.module_file_format?.replace('[module_name]', (module.get('exportName')?.value | replaceAll: '_' : ' ' | titlecase)).replace('[file_format]', module.get('suggestedFileFormat')?.value)"
+                <i class="icon-info" [matTooltip]="localeData?.module_file_format?.replace('[module_name]', (module.get('exportName')?.value | replaceAll: '_' : ' ' | titlecase)).replace('[file_format]', module.get('suggestedFileFormat')?.value || 'walkover_123')"
                 matTooltipPosition="right" ></i>
               </span>
             </mat-label>
@@ -25,7 +25,7 @@
               [appTributeMentionValues]="module.get('supportedVariableList')?.value || []"
             />
           </mat-form-field>
-          <div class="font-12 word-break pd-t05 pd-b05">
+          <div class="font-12 word-break pd-t05 pd-b05 text-gray">
             {{ module.get('suggestedFileFormat')?.value }}
           </div>
         </div>
