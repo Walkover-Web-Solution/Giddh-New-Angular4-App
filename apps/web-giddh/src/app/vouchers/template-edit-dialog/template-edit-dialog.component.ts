@@ -47,7 +47,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<any>
   ) {
     this.templateData = this.inputData;
-    console.log(this.templateData);
   }
 
 /**
