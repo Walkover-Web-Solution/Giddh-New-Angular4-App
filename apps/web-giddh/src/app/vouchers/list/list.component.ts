@@ -43,6 +43,8 @@ import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
+import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
+import { TemplateModeEnum } from "../../models/api-models/Sales";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -386,6 +388,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private invoiceTemplatesService: InvoiceTemplatesService,
+        private invoiceUiDataService: InvoiceUiDataService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
@@ -493,8 +496,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
-                const templateType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'invoice';
-                this.fetchTemplates();
+                const templateType =
+                    this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
+                        : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? 'invoice' : this.voucherType;
+                this.fetchTemplates(templateType);
                 this.fetchAllCreatedTemplates(templateType);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
@@ -1082,6 +1087,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'purchase-order' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
@@ -1128,6 +1135,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'purchase-order' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
@@ -1207,6 +1216,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = "purchase";
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "purchase-order";
+                    activeModule = "templates";
+                } else if (selectedTabIndex === 4) {
+                    voucherType = "purchase";
+                    activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1270,6 +1285,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = "purchase";
                     activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "purchase-order";
+                    activeModule = "templates";
+                }
+                else if (selectedTabIndex === 3) {
+                    voucherType = "purchase";
+                    activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1764,32 +1786,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Open template dialog
-     *
-     * @memberof VoucherListComponent
-     */
-    public templateDialog(template: any): void {
-        this.dialog.open(TemplatePreviewDialogComponent, {
-            width: '980px',
-            height: '90vh',
-            data: template
-        });
-    }
-
-    /**
-     * Open template edit dialog
-     *
-     * @memberof VoucherListComponent
-     */
-    public templateEdit(template: any): void {
-        this.dialog.open(TemplateEditDialogComponent, {
-            width: '100%',
-            height: '90vh',
-            data: template,
-            disableClose: true
-        });
-    }
 
     /**
      * Toggle between table header title and search input field
@@ -3354,8 +3350,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * Calls InvoiceTemplatesService.getTemplates() and updates the templatesList.
      * Handles errors and shows a toaster message if needed.
      */
-    public fetchTemplates(): void {
-        this.invoiceTemplatesService.getTemplates().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+    public fetchTemplates(templateType?: string): void {
+        this.invoiceTemplatesService.getTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
                 this.templatesList = res.body;
             } else {
@@ -3370,9 +3366,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param templateType The type of template to fetch
      */
     public fetchAllCreatedTemplates(templateType: string): void {
+        this.createdTemplatesList = [];
         this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.createdTemplatesList = res.body;
+                this.createdTemplatesList = res?.body;
             } else {
                 this.createdTemplatesList = [];
             }
@@ -3398,7 +3395,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
-                this.toasterService.showSnackBar('error', 'Failed to set template as default');
+                this.toasterService.showSnackBar('error', res?.message);
             }
         });
     }
@@ -3431,12 +3428,59 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         if (templateType) {
                             this.fetchAllCreatedTemplates(templateType);
                         } else {
-                            this.fetchTemplates();
+                            this.fetchTemplates(templateType);
                         }
                     } else {
-                        this.toasterService.showSnackBar('error', 'Failed to delete template');
+                        this.toasterService.showSnackBar('error', res?.message);
                     }
                 });
+            }
+        });
+    }
+
+    /**
+   * Open template dialog
+   *
+   * @memberof VoucherListComponent
+   */
+    public templateDialog(template: any): void {
+        this.dialog.open(TemplatePreviewDialogComponent, {
+            width: '980px',
+            height: '90vh',
+            data: template
+        });
+    }
+
+    /**
+     * Open template edit dialog
+     *
+     * @memberof VoucherListComponent
+     */
+    public templateEdit(template: any, type: string): void {
+        const templateType =
+            this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
+                : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? 'invoice' : this.voucherType;
+        const voucherType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'sales';
+
+        const dataToSend = {
+            templateList: this.templatesList,
+            voucherType: voucherType,
+            templateType: templateType,
+            createTemplateList: this.createdTemplatesList,
+            updateTemplate: type === TemplateModeEnum.Edit ? template : null,
+            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create
+        };
+        const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
+            width: '100%',
+            height: '95vh',
+            maxWidth: '95vw',
+            data: dataToSend,
+            disableClose: true
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.fetchAllCreatedTemplates(templateType);
             }
         });
     }
