@@ -46,12 +46,12 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.templateData = this.inputData;
   }
 
-  /**
-   * Angular lifecycle hook that is called after data-bound properties are initialized.
-   * Initializes company, template, and UI data for the template editor.
-   *
-   * @memberof TemplateEditDialogComponent
-   */
+/**
+ * Angular lifecycle hook that is called after data-bound properties are initialized.
+ * Initializes company, template, and UI data for the template editor.
+ *
+ * @memberof TemplateEditDialogComponent
+ */
   public ngOnInit(): void {
     this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = template;
@@ -67,157 +67,230 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.close(false);
   }
 
-  /**
-   * Create template
-   *
-   * @param {string} vouchertyp
-   * @memberof TemplateEditDialogComponent
-   */
-  public createTemplate(vouchertyp: string) {
-    let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
-    data.type = vouchertyp;
-    let copiedTemplate = cloneDeep(data);
-    if (data.name) {
-      data = this.newLineToBR(data);
-      // data.sections['table'].content['taxes'].field = 'taxes';
-      data.sections['footer'].data['grandTotal'].field = 'grandTotal';
-      // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
-      //   data.sections[1].content[8].field = 'taxableValue';
-      // }
-      data.copyFrom = copiedTemplate?.uniqueName;
-      if (data.fontSize) {
-        data.fontSmall = data.fontSize - 4;
-        data.fontDefault = data.fontSize;
-        data.fontMedium = data.fontSize - 2;
-      }
-      if (!data.sections['footer'].data['textUnderSlogan']?.display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
-        // If user checks the checkbox but didn't provide label then remove the selection
-        if (!data.sections['footer'].data['textUnderSlogan']) {
-          data.sections['footer'].data['textUnderSlogan'] = {
-            label: '',
-            display: false
-          };
-        } else {
-          data.sections['footer'].data['textUnderSlogan'].display = false;
-          data.sections['footer'].data['textUnderSlogan'].label = '';
-        }
-      }
-      delete data['uniqueName'];
-      if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template' && data.templateType?.toLowerCase() !== 'tally_template') {
-        delete data?.sections?.header?.data?.showCompanyAddress;
-        delete data?.sections?.header?.data?.showQrCode;
-        delete data?.sections?.header?.data?.showEInvoiceDetails;
-        delete data?.sections?.table?.data?.showDescriptionInRows;
-        delete data?.sections?.footer?.data?.showNotesAtLastPage;
-        delete data?.sections?.footer?.data?.showMessage2;
-        delete data?.sections?.footer?.data?.textUnderSlogan;
-      }
-
-      if (vouchertyp === 'voucher') {
-        data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
-        data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
-      } else {
-        data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
-        data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
-      }
-
-      this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
-        const companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name;
-        if (!data?.sections?.header?.data['companyName']?.label) {
-          data.sections['header'].data['companyName'].label = companyName;
-        }
-        if (!data?.sections?.footer?.data['companyName']?.label) {
-          data.sections['footer'].data['companyName'].label = companyName;
-        }
-      });
-
-      this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        if (res?.status === 'success') {
-          this.toasty.successToast('Template Saved Successfully.');
-          this.dialogRef.close(true);
-        } else {
-          this.toasty.errorToast(res?.message, res?.code);
-          this.dialogRef.close(false);
-        }
-      });
-    } else {
-      this.toasty.errorToast('Please enter template name.');
-    }
-  }
-
-  /**
-   * Update template
-   *
-   * @param {string} templateType
-   * @memberof TemplateEditDialogComponent
-   */
-  public updateTemplate(templateType: string) {
-    let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
-    if (data.name) {
-      data.updatedAt = null;
-      data.updatedBy = null;
-      // data.copyFrom = 'gst_template_a'; // this should be dynamic
-      data.sections['header'].data['address'].label = '';
-      data.sections['table'].data['taxes'].field = 'taxes';
-      data.sections['footer'].data['grandTotal'].field = 'grandTotal';
-      // if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
-      //   data.sections[1].content[8].field = 'taxableValue';
-      // }
-      if (data.fontSize) {
-        data.fontSize = Number(data.fontSize);
-        data.fontSmall = data.fontSize - 4;
-        data.fontDefault = data.fontSize;
-        data.fontMedium = data.fontSize - 2;
-      }
-      if (!data.sections['footer'].data['message1']?.display || !data?.sections['footer']?.data['message1']?.label) {
-        // If user checks the checkbox but didn't provide label then remove the selection
-        data.sections['footer'].data['message1'].display = false;
-        data.sections['footer'].data['message1'].label = '';
-      }
-      if (!data.sections['footer'].data['textUnderSlogan']?.display || !data?.sections['footer']?.data['textUnderSlogan']?.label) {
-        // If user checks the checkbox but didn't provide label then remove the selection
-        data.sections['footer'].data['textUnderSlogan'].display = false;
-        data.sections['footer'].data['textUnderSlogan'].label = '';
-      }
-      data = this.newLineToBR(data);
-      this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        if (res?.status === 'success') {
-          this.toasty.successToast('Template Updated Successfully.');
-          this.invoiceUiDataService.setLogoPath('');
-          this.invoiceUiDataService.unusedImageSignature = '';
-          this.dialogRef.close(true);
-        } else {
-          this.toasty.errorToast(res?.message, res?.code);
-          this.dialogRef.close(false);
-        }
-      });
-    } else {
-      this.toasty.errorToast('Please enter template name.');
-    }
-  }
-
-
-
-  /**
- * Replaces new line characters with <br /> tags in specific template fields.
+/**
+ * createTemplate method
  *
- * @param {*} template The template object to update
- * @returns {*} The updated template object
- * @memberof TemplateEditFilterComponent
+ * @memberof TemplateEditDialogComponent
  */
-  public newLineToBR(template): void {
-    template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['message1'].label = '';
-    template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['companyAddress'].label = '';
-    template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+  public createTemplate(): void {
+    let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
+    data.type = this.inputData.templateType;
+    let copiedTemplate = cloneDeep(data);
+    if (!data.name) {
+      this.toasty.errorToast('Please enter template name.');
+      return;
+    }
+
+    data = this.newLineToBR(data);
+    data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+    data.copyFrom = copiedTemplate?.uniqueName;
+    this.setFontSizes(data);
+    this.ensureTextUnderSlogan(data);
+    delete data['uniqueName'];
+    this.cleanTemplateFields(data);
+    this.syncVoucherLabels(data);
+
+    this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
+      const companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name;
+      if (!data?.sections?.header?.data['companyName']?.label) {
+        data.sections['header'].data['companyName'].label = companyName;
+      }
+      if (!data?.sections?.footer?.data['companyName']?.label) {
+        data.sections['footer'].data['companyName'].label = companyName;
+      }
+    });
+
+    this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+      if (res?.status === 'success') {
+        this.toasty.successToast('Template Saved Successfully.');
+        this.dialogRef.close(true);
+      } else {
+        this.toasty.errorToast(res?.message, res?.code);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
+/**
+ * setFontSizes method
+ *
+ * @private
+ * @param {*} data
+ * @memberof TemplateEditDialogComponent
+ */
+private setFontSizes(data: any): void {
+    if (data.fontSize) {
+      data.fontSmall = data.fontSize - 4;
+      data.fontDefault = data.fontSize;
+      data.fontMedium = data.fontSize - 2;
+    }
+  }
+
+/**
+ * ensureTextUnderSlogan method
+ *
+ * @private
+ * @param {*} data
+ * @memberof TemplateEditDialogComponent
+ */
+private ensureTextUnderSlogan(data: any): void {
+    const tus = data.sections['footer'].data['textUnderSlogan'];
+    if (!tus?.display || !tus?.label) {
+      if (!tus) {
+        data.sections['footer'].data['textUnderSlogan'] = { label: '', display: false };
+      } else {
+        tus.display = false;
+        tus.label = '';
+      }
+    }
+  }
+
+/**
+ * cleanTemplateFields method
+ *
+ * @private
+ * @param {*} data
+ * @memberof TemplateEditDialogComponent
+ */
+private cleanTemplateFields(data: any): void {
+    const specialTypes = ['gst_template_a', 'gst_template_e', 'thermal_template', 'tally_template'];
+    if (!specialTypes.includes((data.templateType || '').toLowerCase())) {
+      delete data?.sections?.header?.data?.showCompanyAddress;
+      delete data?.sections?.header?.data?.showQrCode;
+      delete data?.sections?.header?.data?.showEInvoiceDetails;
+      delete data?.sections?.table?.data?.showDescriptionInRows;
+      delete data?.sections?.footer?.data?.showNotesAtLastPage;
+      delete data?.sections?.footer?.data?.showMessage2;
+      delete data?.sections?.footer?.data?.textUnderSlogan;
+    }
+  }
+
+  /**
+   * syncVoucherLabels method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private syncVoucherLabels(data: any): void {
+    if (this.inputData.templateType === 'voucher') {
+      data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
+      data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+    } else {
+      data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
+      data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
+    }
+  }
+
+  /**
+   * updateTemplate method
+   *
+   * @memberof TemplateEditDialogComponent
+   */
+  public updateTemplate(): void {
+    let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
+    if (!data.name) {
+      this.toasty.errorToast('Please enter template name.');
+      return;
+    }
+    data.updatedAt = null;
+    data.updatedBy = null;
+    data.sections['header'].data['address'].label = '';
+    data.sections['table'].data['taxes'].field = 'taxes';
+    data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+    this.setFontSizesUpdate(data);
+    this.ensureMessage1(data);
+    this.ensureTextUnderSloganUpdate(data);
+    data = this.newLineToBR(data);
+    this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+      if (res?.status === 'success') {
+        this.toasty.successToast('Template Updated Successfully.');
+        this.invoiceUiDataService.setLogoPath('');
+        this.invoiceUiDataService.unusedImageSignature = '';
+        this.dialogRef.close(true);
+      } else {
+        this.toasty.errorToast(res?.message, res?.code);
+        this.dialogRef.close(false);
+      }
+    });
+  }
+
+  /**
+   * setFontSizesUpdate method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private setFontSizesUpdate(data: any): void {
+    if (data.fontSize) {
+      data.fontSize = Number(data.fontSize);
+      data.fontSmall = data.fontSize - 4;
+      data.fontDefault = data.fontSize;
+      data.fontMedium = data.fontSize - 2;
+    }
+  }
+
+  /**
+   * ensureMessage1 method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private ensureMessage1(data: any): void {
+    const msg1 = data.sections['footer'].data['message1'];
+    if (!msg1?.display || !msg1?.label) {
+      msg1.display = false;
+      msg1.label = '';
+    }
+  }
+
+  /**
+   * ensureTextUnderSloganUpdate method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private ensureTextUnderSloganUpdate(data: any): void {
+    const tus = data.sections['footer'].data['textUnderSlogan'];
+    if (!tus?.display || !tus?.label) {
+      tus.display = false;
+      tus.label = '';
+    }
+  }
+
+  /**
+   * newLineToBR method
+   *
+   * @param {*} template
+   * @returns
+   * @memberof TemplateEditDialogComponent
+   */
+  public newLineToBR(template: any): any {
+    const footerData = template.sections['footer'].data;
+    if (footerData['message1'] && typeof footerData['message1'].label === 'string') {
+      footerData['message1'].label = footerData['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    } else if (footerData['message1']) {
+      footerData['message1'].label = '';
+    }
+    if (footerData['companyAddress'] && typeof footerData['companyAddress'].label === 'string') {
+      footerData['companyAddress'].label = footerData['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    } else if (footerData['companyAddress']) {
+      footerData['companyAddress'].label = '';
+    }
+    if (footerData['slogan'] && typeof footerData['slogan'].label === 'string') {
+      footerData['slogan'].label = footerData['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    }
     return template;
   }
 
   /**
-  * Angular lifecycle hook that is called when the component is destroyed.
-  * Releases memory and cleans up subscriptions.
-  *
-  * @memberof TemplateEditDialogComponent
-  */
+   * ngOnDestroy method
+   *
+   * @memberof TemplateEditDialogComponent
+   */
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();

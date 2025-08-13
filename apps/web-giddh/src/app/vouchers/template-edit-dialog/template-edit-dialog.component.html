@@ -12,7 +12,7 @@
             <button
                 mat-stroked-button
                 color="primary"
-                (click)="templateData?.mode === templateModeEnum.Create ? createTemplate(templateData?.templateType) : updateTemplate(templateData?.templateType)"
+                (click)="templateData?.mode === templateModeEnum.Create ? createTemplate() : updateTemplate()"
             >
                 {{ templateData?.mode === templateModeEnum.Create ? "Create Template" : "Update Template" }}
             </button>
