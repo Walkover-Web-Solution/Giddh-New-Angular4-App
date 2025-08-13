@@ -10,6 +10,7 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { TemplateModeEnum } from '../../models/api-models/Sales';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
   selector: 'app-template-edit-dialog',
@@ -33,6 +34,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   /** Current mode of the component (e.g., 'create', 'edit') */
   public templateModeEnum = TemplateModeEnum;
+  /* This will hold the value if Gst Composition will show/hide */
+  public showGstComposition: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -44,6 +47,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<any>
   ) {
     this.templateData = this.inputData;
+    console.log(this.templateData);
   }
 
   /**
@@ -55,6 +59,10 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = template;
+    });
+
+    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+      this.showGstComposition = activeCompany?.countryV2?.countryName === 'India';
     });
   }
 
@@ -131,6 +139,10 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         }
       });
 
+      if (!(this.templateData?.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
+        data.sections['header'].data['gstComposition'].display = false;
+      }
+
       this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
         if (res?.status === 'success') {
           this.toasty.successToast('Template Saved Successfully.');
@@ -180,6 +192,10 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         data.sections['footer'].data['textUnderSlogan'].label = '';
       }
       data = this.newLineToBR(data);
+      if (!(this.templateData?.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
+        data.sections['header'].data['gstComposition'].display = false;
+      }
+      
       this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
         if (res?.status === 'success') {
           this.toasty.successToast('Template Updated Successfully.');
