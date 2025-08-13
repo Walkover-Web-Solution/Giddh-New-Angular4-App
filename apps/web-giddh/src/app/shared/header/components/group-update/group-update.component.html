@@ -304,12 +304,14 @@
     </div>
 </div>
 <!--delete Group modal  -->
-<ng-template #deleteGroupModal>
-    <confirm-modal
-        [title]="localeData?.delete_group_title"
-        [body]="localeData?.delete_group_content"
-        (cancelCallBack)="closeDeleteGroupDialog()"
-        (successCallBack)="deleteGroup()"
-    >
-    </confirm-modal>
+<ng-template #deleteGroupTemplate>
+    <div mat-dialog-content>
+        <confirm-modal
+            [title]="localeData?.delete_group_title"
+            [body]="localeData?.delete_group_content"
+            (cancelCallBack)="hideDeleteGroupModal()"
+            (successCallBack)="deleteGroup()"
+        >
+        </confirm-modal>
+    </div>
 </ng-template>

@@ -177,7 +177,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 if (response.body?.data) {
                     let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
                     this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false, originalFileExtension: "pdf" };
-                    if (!this.selectedItem?.isAttachment) {
+                    if (!this.selectedItem?.isAttachment || !this.attachments?.length) {
                         this.showVoucherPreview();
                     } else {
                         this.showFilePreview(this.attachments[0]);
@@ -268,7 +268,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public closeAttachmentDialog(): void {
-        this.dialogRef?.close();
+        this.dialogRef?.close(true);
     }
 
     /**

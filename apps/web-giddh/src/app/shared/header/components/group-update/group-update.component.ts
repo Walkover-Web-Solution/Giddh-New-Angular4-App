@@ -66,6 +66,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
     /** Dialog reference for delete group modal */
     public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
+    @ViewChild('deleteGroupTemplate', { static: true }) public deleteGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for delete group modal */
+    private deleteGroupDialogRef: MatDialogRef<any>;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
@@ -373,24 +376,24 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Open delete group dialog
-     * @returns void
+     * Shows the delete group modal dialog
+     *
      * @memberof GroupUpdateComponent
      */
-    public openDeleteGroupDialog(): void {
-        this.deleteGroupConfirmationDialogRef = this.dialog.open(this.deleteGroupConfirmationDialog, {
-            panelClass: ['mat-dialog-md'],
+    public showDeleteGroupModal() {
+        this.deleteGroupDialogRef = this.dialog.open(this.deleteGroupTemplate, {
+            panelClass: 'mat-dialog-md',
             disableClose: true
         });
     }
 
     /**
-     * Close delete group dialog
-     * @returns void
+     * Hides the delete group modal dialog
+     *
      * @memberof GroupUpdateComponent
      */
-    public closeDeleteGroupDialog(): void {
-        this.deleteGroupConfirmationDialogRef?.close();
+    public hideDeleteGroupModal() {
+        this.deleteGroupDialogRef?.close();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -447,7 +450,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
-        this.closeDeleteGroupDialog();
+        this.hideDeleteGroupModal();
     }
 
     public updateGroup() {

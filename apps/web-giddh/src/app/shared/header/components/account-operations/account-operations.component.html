@@ -2,7 +2,7 @@
     <ng-container *ngIf="breadcrumbPath?.length > 0">
         <!--breadcrumbs-->
         <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100 d-flex justify-content-space-between">
-            <div class="col-lg-8">
+            <div class="col-lg-8 full-width">
                 <ol class="breadcrumb row">
                     <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
                         <a href="javascript:void(0)"> {{ value }}</a>
@@ -10,7 +10,7 @@
                 </ol>
             </div>
             <!--share group/account-->
-            <div class="col-lg-4 pr-0 pl-0" *ngIf="showEditGroup$ | async">
+            <div class="col-lg-4 pr-0 pl-0 full-width" *ngIf="showEditGroup$ | async">
                 <!--group-->
                 <div class="pull-right text-right">
                     <button 
@@ -18,7 +18,7 @@
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
-                        class="mr-r1 mr-b1"
+                        class="mr-r1"
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
@@ -28,7 +28,6 @@
                         class="pull-right" 
                         (click)="openShareGroupDialog()"
                         color="primary"
-                        class="mr-r1 mr-b1"
                     >
                         {{ commonLocaleData?.app_share }}
                     </button>
@@ -41,11 +40,11 @@
                 </div>
             </div>
             <!--account-->
-            <div class="col-lg-4 pull-right pr-0 pl-0" *ngIf="showEditAccount$ | async">
+            <div class="col-lg-4 pull-right pr-0 pl-0 full-width" *ngIf="showEditAccount$ | async">
                 <button
                     mat-stroked-button
                     aria-label="share" 
-                    class="pull-right" 
+                    class="pull-right"
                     (click)="openShareAccountDialog()"
                     color="primary"
                 >
