@@ -372,6 +372,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public createdTemplatesList: any[] = [];
     /** True if datepicker menu is open */
     public isDatepickerMenuOpen: boolean = false;
+    /** List of all created templates for a given type */
+    public purchaseTemplatesList: any[] = [
+        { label: "Purchase Bill", value: "purchase_bill" },
+        { label: "Purchase Order", value: "purchase_order" }
+    ];
+    /** Selected template */
+    public selectedTemplate: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -498,9 +505,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.activeModule = params.module;
                 const templateType =
                     this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
-                        : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? 'invoice' : this.voucherType;
-                this.fetchTemplates(templateType);
-                this.fetchAllCreatedTemplates(templateType);
+                        : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
+
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    this.fetchTemplates('purchase_bill');
+                    this.fetchAllCreatedTemplates('purchase_bill');
+                    this.selectedTemplate = this.purchaseTemplatesList[0];
+                } else {
+                    this.fetchTemplates(templateType);
+                    this.fetchAllCreatedTemplates(templateType);
+                }
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
                 }
@@ -1087,7 +1101,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'purchase-order' && this.activeModule === 'templates') {
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 3) {
@@ -1135,7 +1149,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'purchase-order' && this.activeModule === 'templates') {
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
                     this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
@@ -1217,9 +1231,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     voucherType = "purchase";
                     activeModule = "settings";
                 } else if (selectedTabIndex === 3) {
-                    voucherType = "purchase-order";
-                    activeModule = "templates";
-                } else if (selectedTabIndex === 4) {
                     voucherType = "purchase";
                     activeModule = "templates";
                 }
@@ -1286,10 +1297,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     voucherType = "purchase";
                     activeModule = "list";
                 } else if (selectedTabIndex === 2) {
-                    voucherType = "purchase-order";
-                    activeModule = "templates";
-                }
-                else if (selectedTabIndex === 3) {
                     voucherType = "purchase";
                     activeModule = "templates";
                 }
@@ -3459,13 +3466,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public templateEdit(template: any, type: string): void {
         const templateType =
             this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
-                : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? 'invoice' : this.voucherType;
-        const voucherType = this.voucherType === 'credit note' || this.voucherType === 'debit note' ? 'voucher' : 'sales';
-
+                : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
+        const voucherType = this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher : VoucherTypeEnum.sales;
+        const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate.value : templateType;
         const dataToSend = {
             templateList: this.templatesList,
             voucherType: voucherType,
-            templateType: templateType,
+            templateType: templatesType,
             createTemplateList: this.createdTemplatesList,
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
             mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create
@@ -3473,14 +3480,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
             height: '95vh',
-            maxWidth: '95vw',
+            maxWidth: '90vw',
             data: dataToSend,
             disableClose: true
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.fetchAllCreatedTemplates(templateType);
+                this.fetchAllCreatedTemplates(templatesType);
             }
         });
     }
@@ -3504,17 +3511,29 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof VoucherListComponent
-     */
-     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
         }
+    }
+
+    /**
+     * This will use for select template
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private templateSelect(template: any): void {
+        this.selectedTemplate = template;
+        this.fetchAllCreatedTemplates(template.value);
+        this.fetchTemplates(template.value);
     }
 }
