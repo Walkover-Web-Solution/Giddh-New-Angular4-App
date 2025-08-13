@@ -4,6 +4,7 @@ import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { NgForm } from '@angular/forms';
+import { cloneDeep } from '../lodash-optimized';
 
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
@@ -88,8 +89,8 @@ export class InvoiceUiDataService {
                 defaultTemplate.sections.footer.data.companyName.label = this.companyName;
                 defaultTemplate.sections.footer.data.companyAddress.label = this.companyAddress;
             }
-            this.BRToNewLine(defaultTemplate);
-            this.customTemplate.next(_.cloneDeep(defaultTemplate));
+            this.bRToNewLine(defaultTemplate);
+            this.customTemplate.next(cloneDeep(defaultTemplate));
         }
         this.selectedSection.next({ header: true, table: false, footer: false });
     }
@@ -102,7 +103,7 @@ export class InvoiceUiDataService {
      * @memberof InvoiceUiDataService
      */
     public setCustomTemplate(template: CustomTemplateResponse): void {
-        this.BRToNewLine(template);
+        this.bRToNewLine(template);
         this.customTemplate.next(template);
     }
 
@@ -207,9 +208,9 @@ export class InvoiceUiDataService {
      * @returns {*} Modified template object
      * @memberof InvoiceUiDataService
      */
-    public BRToNewLine(template: any): any {
+    public bRToNewLine(template: any): any {
         const fields = ['message1', 'companyAddress', 'slogan'];
-        if (template.sections && template.sections.footer && template.sections.footer.data) {
+        if (template?.sections?.footer?.data) {
             fields.forEach(field => {
                 if (template.sections.footer.data[field]) {
                     const label = template.sections.footer.data[field]?.label;
@@ -242,9 +243,9 @@ export class InvoiceUiDataService {
      */
     public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse): void {
         if (!customCreatedTemplates?.length) return;
-        const allTemplates = _.cloneDeep(customCreatedTemplates);
+        const allTemplates = cloneDeep(customCreatedTemplates);
         const selectedTemplateIndex = allTemplates.findIndex(template => template?.uniqueName === uniqueName);
-        let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
+        let selectedTemplate = cloneDeep(allTemplates[selectedTemplateIndex]);
         if (!selectedTemplate) return;
 
         const headerData = selectedTemplate.sections.header.data;
@@ -294,8 +295,8 @@ export class InvoiceUiDataService {
         if (!footerData.companyName.label) {
             footerData.companyName.label = this.companyName;
         }
-        this.BRToNewLine(selectedTemplate);
-        this.customTemplate.next(_.cloneDeep(selectedTemplate));
+        this.bRToNewLine(selectedTemplate);
+        this.customTemplate.next(cloneDeep(selectedTemplate));
     }
 
     /**

@@ -3409,11 +3409,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.invoiceTemplatesService.deleteTemplate(template.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res?.status === 'success') {
                         this.toasterService.showSnackBar('success', 'Template deleted successfully');
-                        if (templateType) {
-                            this.fetchAllCreatedTemplates(templateType);
-                        } else {
-                            this.fetchTemplates(templateType);
-                        }
+                        this.fetchAllCreatedTemplates(templateType);
+                        this.fetchTemplates(templateType);
                     } else {
                         this.toasterService.showSnackBar('error', res?.message);
                     }
@@ -3423,10 +3420,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Open template dialog
-   *
-   * @memberof VoucherListComponent
-   */
+     * Open template dialog
+     *
+     * @param {*} template
+     * @memberof VoucherListComponent
+     */
     public templateDialog(template: any): void {
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px',
@@ -3438,6 +3436,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /**
      * Open template edit dialog
      *
+     * @param {*} template
+     * @param {string} type
      * @memberof VoucherListComponent
      */
     public templateEdit(template: any, type: string): void {
@@ -3449,7 +3449,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const dataToSend = {
             templateList: this.templatesList,
             voucherType: voucherType,
-            templateType:templatesType ,
+            templateType: templatesType,
             createTemplateList: this.createdTemplatesList,
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
             mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create
