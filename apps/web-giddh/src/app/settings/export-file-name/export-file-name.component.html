@@ -57,12 +57,11 @@
 
 <ng-template #saveButton>
   <button
-        mat-raised-button
-        color="primary"
-        class="mr-l15"
-        (click)="updateModuleExportSetting()"
-        [disabled]="exportModuleSettingForm.invalid"
-      >
-        {{ commonLocaleData?.app_save }}
-      </button>
+    mat-raised-button
+    color="primary"
+    (click)="updateModuleExportSetting()"
+    [disabled]="exportModuleSettingForm.invalid"
+  >
+    {{ commonLocaleData?.app_save }}
+  </button>
 </ng-template>
