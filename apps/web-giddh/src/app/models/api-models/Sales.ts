@@ -28,6 +28,18 @@ export enum VoucherTypeEnum {
     'cashBill' = 'cash bill'
 }
 
+export enum TemplateTypeEnum {
+    'GstTemplateA' = 'gst_template_a',
+    'TallyTemplate' = 'tally_template',
+    'ThermalTemplate' = 'thermal_template'
+}
+
+export enum TemplateModeEnum {
+    'Create' = 'create',
+    'Edit' = 'edit',
+    'Update' = 'update'
+}
+
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
     generate,
     generateAndClose,

@@ -232,6 +232,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public paymentProvider: typeof PaymentProvider = PaymentProvider;
     /** This will hold razorpay key */
     public razorpayKey: string = '';
+    /** Hold true in production environment */
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     constructor(
         public dialog: MatDialog,
