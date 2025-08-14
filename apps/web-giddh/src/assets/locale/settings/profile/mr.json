@@ -94,5 +94,6 @@
     "set_as_default_address": "डीफॉल्ट पत्ता सेट करा",
     "default_address": "डीफॉल्ट पत्ता",
     "module_file_format": "हा [module_name] मॉड्यूल [file_format] प्रमाणे फाइल नाव एक्सपोर्ट करण्यासाठी वापरला जाईल",
-    "file_name_export_setting": "फाइल नाव एक्सपोर्ट सेटिंग"
+    "file_name_export_setting": "फाइल नाव एक्सपोर्ट सेटिंग",
+    "default_file_format": "Walkover_123_14-08-2025"
 }
