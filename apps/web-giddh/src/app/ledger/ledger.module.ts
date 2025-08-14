@@ -151,6 +151,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         CarouselComponent,
         AsideMenuCreateTaxModule,
         AsideMenuAccountModule,
+        NgxMatSelectSearchModule,
         TributeMentionModule,
         MatDividerModule,
         NgxMatSelectSearchModule
