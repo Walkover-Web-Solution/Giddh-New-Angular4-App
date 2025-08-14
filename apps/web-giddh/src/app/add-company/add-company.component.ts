@@ -373,7 +373,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 const module = response.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === RestrictedModules.Users
                 );
-                this.remainingUsers = module.remainingUsers;
+                this.remainingUsers = module?.remainingUsers;
             }
         });
         this.changeDetection.detectChanges();

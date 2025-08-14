@@ -1,0 +1,9 @@
+<link
+    href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700|Roboto:400,500i,700"
+    rel="stylesheet"
+/>
+<ng-container [ngSwitch]="inputTemplate.templateType">
+    <gst-template-a *ngSwitchDefault> </gst-template-a>
+    <tally-template *ngSwitchCase="'tally_template'"> </tally-template>
+    <thermal-template *ngSwitchCase="'thermal_template'"> </thermal-template>
+</ng-container>

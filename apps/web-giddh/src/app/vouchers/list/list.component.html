@@ -5807,8 +5807,22 @@
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
-            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
+            <mat-tab
+                [label]="localeData?.tabs?.templates"
+                *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2"
+            >
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
+                    <dropdown-field
+                        [name]="'design'"
+                        *ngIf="voucherType === voucherTypeEnum.purchase"
+                        [label]="localeData?.select_design_for"
+                        [placeholder]="commonLocaleData?.app_select"
+                        [options]="purchaseTemplatesList"
+                        class="w-50 template-design d-block"
+                        (selectedOption)="templateSelect($event)"
+                        [defaultValue]="selectedTemplate.label"
+                    >
+                    </dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
@@ -5818,10 +5832,9 @@
                                     columns,and headers in line item table.
                                 </p>
                                 <button
-                                    [disabled]="true"
                                     mat-raised-button
                                     color="primary"
-                                    (click)="templateEdit()"
+                                    (click)="templateEdit(null, 'create')"
                                     *ngIf="voucherApiVersion === 2"
                                 >
                                     Add New
@@ -5831,7 +5844,12 @@
                         <ng-container *ngFor="let template of createdTemplatesList">
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
-                                *ngIf="template.type === 'invoice' && voucherType === 'sales'"
+                                *ngIf="
+                                    (template.type === 'invoice' ||
+                                        template.type === 'purchase_bill' ||
+                                        template.type === 'purchase_order') &&
+                                    (voucherType === 'sales' || voucherType === 'purchase')
+                                "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                     <h3 class="fonr-16">{{ template.name }}</h3>
@@ -5846,7 +5864,16 @@
                                     <span
                                         *ngIf="!template.isDefault"
                                         class="default-wrap font-12 p-2 cursor-pointer"
-                                        (click)="setTemplateAsDefault(template.uniqueName, 'invoice')"
+                                        (click)="
+                                            setTemplateAsDefault(
+                                                template.uniqueName,
+                                                template.type === 'invoice'
+                                                    ? 'invoice'
+                                                    : template.type === 'purchase_bill'
+                                                    ? 'purchase_bill'
+                                                    : 'purchase_order'
+                                            )
+                                        "
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         Set as Default
@@ -5868,7 +5895,7 @@
                                             class="mat-icon-md-btn"
                                             matTooltip="Edit Template"
                                             matTooltipPosition="above"
-                                            disabled
+                                            (click)="templateEdit(template, 'edit')"
                                         >
                                             <i class="icon-edit-pencil"></i>
                                         </button>
@@ -5879,7 +5906,18 @@
                                             [disabled]="template.isDefault"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
-                                            (click)="template.isDefault ? null : deleteTemplate(template, 'invoice')"
+                                            (click)="
+                                                template.isDefault
+                                                    ? null
+                                                    : deleteTemplate(
+                                                          template,
+                                                          template.type === 'invoice'
+                                                              ? 'invoice'
+                                                              : template.type === 'purchase_bill'
+                                                              ? 'purchase_bill'
+                                                              : 'purchase_order'
+                                                      )
+                                            "
                                         >
                                             <i class="icon-trash"></i>
                                         </button>
@@ -5904,21 +5942,21 @@
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                     <h3 class="fonr-16">{{ template.name }}</h3>
                                     <span
-                                    *ngIf="template.isDefaultForVoucher"
-                                    [ngClass]="{ 'active': template.isDefaultForVoucher }"
-                                    class="default-wrap font-12 p-2 cursor-pointer"
-                                >
-                                    <i class="icon-favorite-selected"></i>
-                                    Default Template
-                                </span>
-                                <span
-                                    *ngIf="!template.isDefaultForVoucher"
-                                    class="default-wrap font-12 p-2 cursor-pointer"
-                                    (click)="setTemplateAsDefault(template.uniqueName, 'voucher')"
-                                >
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
+                                        *ngIf="template.isDefaultForVoucher"
+                                        [ngClass]="{ 'active': template.isDefaultForVoucher }"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                    >
+                                        <i class="icon-favorite-selected"></i>
+                                        Default Template
+                                    </span>
+                                    <span
+                                        *ngIf="!template.isDefaultForVoucher"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        (click)="setTemplateAsDefault(template.uniqueName, 'voucher')"
+                                    >
+                                        <i class="icon-favorite-selected"></i>
+                                        Set as Default
+                                    </span>
                                     <div class="d-flex column-gap1 justify-content-center">
                                         <button
                                             mat-stroked-button
@@ -5936,7 +5974,7 @@
                                             class="mat-icon-md-btn"
                                             matTooltip="Edit Template"
                                             matTooltipPosition="above"
-                                            disabled
+                                            (click)="templateEdit(template, 'edit')"
                                         >
                                             <i class="icon-edit-pencil"></i>
                                         </button>
@@ -5947,7 +5985,11 @@
                                             class="mat-icon-md-btn cursor-pointer"
                                             matTooltip="Delete"
                                             matTooltipPosition="above"
-                                            (click)="template.isDefaultForVoucher ? null : deleteTemplate(template, 'voucher')"
+                                            (click)="
+                                                template.isDefaultForVoucher
+                                                    ? null
+                                                    : deleteTemplate(template, 'voucher')
+                                            "
                                         >
                                             <i class="icon-trash"></i>
                                         </button>

@@ -102,9 +102,11 @@
                                                 <mat-button-toggle value="YEARLY">{{
                                                     commonLocaleData?.app_duration?.year
                                                 }}</mat-button-toggle>
-                                                <mat-button-toggle value="DAILY">{{
-                                                    commonLocaleData?.app_duration?.daily
-                                                }}</mat-button-toggle>
+                                                <ng-container *ngIf="!isProdMode">
+                                                    <mat-button-toggle value="DAILY">{{
+                                                        commonLocaleData?.app_duration?.daily
+                                                    }}</mat-button-toggle>
+                                                </ng-container>
                                             </mat-button-toggle-group>
                                         </div>
                                     </div>
