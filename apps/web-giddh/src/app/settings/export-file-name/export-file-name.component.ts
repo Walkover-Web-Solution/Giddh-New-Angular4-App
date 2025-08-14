@@ -22,7 +22,7 @@ interface ExportSettingType {
 })
 
 export class ExportFileNameComponent implements OnInit, OnDestroy {
-    
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -34,6 +34,8 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
         suggestionPrefix: '{',
         suggestionSuffix: '}',
     };
+    /** isLoading */
+    public isLoading: boolean = false;
 
     /** Get module export setting array */
     get moduleExportSettingArray(): FormArray {
@@ -49,11 +51,17 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    public ngOnInit() : void {
+    /**
+     * Initialize component
+     * 
+     * @returns void
+     * @memberof ExportFileNameComponent
+     */
+    public ngOnInit(): void {
         this.getAllModuleExportSetting();
         this.exportModuleSettingForm = this.formBuilder.group({
             moduleExportSetting: this.formBuilder.array([]) // Initialize as empty FormArray
-          });
+        });
     }
 
     /** 
@@ -80,9 +88,10 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
      * @returns void
      * @memberof ExportFileNameComponent
      */
-    public getAllModuleExportSetting() : void {
+    public getAllModuleExportSetting(): void {
+        this.isLoading = true;
         this.settingsProfileService.getModuleExportSetting().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
+            if (response.status === 'success') {
                 this.moduleExportSettingArray.clear();
                 response.body.forEach((item: ExportSettingType) => {
                     item.supportedVariableList = Object.keys(item.supportedVariableMap).map((key) => {
@@ -94,7 +103,10 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
                     item.originalFormat = item.format;
                     this.moduleExportSettingArray.push(this.initExportModuleSettingForm(item, true));
                 });
+            } else {
+                this.toastService.showSnackBar("error", response.message);
             }
+            this.isLoading = false;
         });
     }
 
@@ -105,7 +117,7 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
      * @returns string
      * @memberof ExportFileNameComponent
      */
-    public getFileFormat(module: FormGroup) : string {
+    public getFileFormat(module: FormGroup): string {
         let fileNameFormat = module.get('format')?.value;
         Object.keys(module.get('supportedVariableMap')?.value).forEach((key) => {
             if (fileNameFormat.includes(`{${key}}`)) {
@@ -122,7 +134,7 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
      * @returns void
      * @memberof ExportFileNameComponent
      */
-    public updateModuleExportSetting() : void {
+    public updateModuleExportSetting(): void {
         const updateRequest: ExportSettingType[] = this.moduleExportSettingArray.controls.filter((control: FormGroup) => {
             return control.get('format')?.value !== control.get('originalFormat')?.value;
         }).map((control: FormGroup) => {
@@ -131,8 +143,8 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
                 format: control.get('format')?.value
             };
         });
-        if(updateRequest.length > 0) {
-            this.settingsProfileService.updateModuleExportSetting({exportFormatList: updateRequest}).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        if (updateRequest.length > 0) {
+            this.settingsProfileService.updateModuleExportSetting({ exportFormatList: updateRequest }).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response.status === 'success') {
                     this.toastService.showSnackBar("success", response.body);
                     this.moduleExportSettingArray.controls.filter((control: FormGroup) => {
@@ -140,11 +152,13 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
                     }).forEach((control: FormGroup) => {
                         control.get('originalFormat')?.setValue(control.get('format')?.value);
                     });
+                } else {
+                    this.toastService.showSnackBar("error", response.message);
                 }
             });
         }
     }
-    
+
     /**
      * Releases memory
      *

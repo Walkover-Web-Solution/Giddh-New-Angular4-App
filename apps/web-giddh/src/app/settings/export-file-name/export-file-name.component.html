@@ -1,8 +1,8 @@
-<ng-container *ngIf="moduleExportSettingArray?.length">
-  <div class="d-flex flex-row justify-content-between">
+<ng-container *ngIf="!isLoading">
+  <div *ngIf="moduleExportSettingArray?.length" class="d-flex flex-row justify-content-between">
     <div class="col-lg-7 col-md-12">
-      <div class="pd-t1 pd-l15">
-        <h2>{{ localeData?.file_name_export_setting }}</h2>
+      <div class="pd-t2">
+        <h2>{{ localeData?.export_setting_description }}</h2>
       </div>
       <div class="settings-profile-tabs pd-t2" [formGroup]="exportModuleSettingForm">
         <ng-container formArrayName="moduleExportSetting">
@@ -29,7 +29,7 @@
                       (click)="tribute?.open()"
                       formControlName="format"
                       [placeholder]="commonLocaleData?.app_variable_search_hint"
-                      (ngModelChange)="getFileFormat(module)"
+                      (input)="getFileFormat(module)"
                       [appTributeMention]="tributeConfig"
                       [appTributeMentionValues]="module.get('supportedVariableList')?.value || []"
                     />
@@ -50,8 +50,11 @@
       <ng-container *ngTemplateOutlet="saveButton"></ng-container> <!-- Bottom save button -->
     </div>
   </div>
+  <div class="no-data" *ngIf="!moduleExportSettingArray?.length">
+    <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+</div>
 </ng-container>
-<giddh-page-loader *ngIf="!moduleExportSettingArray?.length"></giddh-page-loader>
+<giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
 
 <ng-template #saveButton>
   <button
