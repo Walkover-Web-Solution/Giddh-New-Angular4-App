@@ -61,7 +61,7 @@
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 // Access domainName directly from the parsed object
-                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apirelease.giddh.com";
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
 
                 if (whiteLabelConfig) {

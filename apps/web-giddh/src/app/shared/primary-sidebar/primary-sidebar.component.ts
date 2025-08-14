@@ -74,6 +74,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public apiMenuItems: Array<any> = [];
     /** True, if sidebar needs to be expanded */
     @Input() public isSidebarExpanded: boolean = false;
+    /** True if command dialog is open */
+    @Input() public showCommandDialog: boolean = false;
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
@@ -179,10 +181,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)) {
                     this.commandkDialogRef.close()
                 }
-                this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-                    width: '630px',
-                    height: '600'
-                });
+                this.showNavigationModal()
             }
         }
     }
@@ -200,6 +199,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.getVisibleMenuItems();
+        }
+
+        if ('showCommandDialog' in changes && changes.showCommandDialog.previousValue !== changes.showCommandDialog.currentValue && changes.showCommandDialog.currentValue) {
+            this.showNavigationModal();
         }
     }
 
@@ -381,7 +384,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-    * Displays the CMD+K modal
+    * Opens the CMD+K dialog
     *
     * @memberof PrimarySidebarComponent
     */
@@ -399,6 +402,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
+        console.log("Trap 1");
+        
         if (e[0] === "group") {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
@@ -547,19 +552,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public trackItems(index: number, item: AllItem): string {
         return item.link;
-    }
-
-    /**
-     * Unsubscribes from all the listeners
-     *
-     * @private
-     * @memberof PrimarySidebarComponent
-     */
-    private unsubscribe(): void {
-        this.subscriptions.forEach((subscription: Subscription) => {
-            subscription.unsubscribe();
-        });
-        this.subscriptions = [];
     }
 
     /**

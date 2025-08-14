@@ -218,7 +218,8 @@
         "yearly": "Yearly",
         "month": "Month",
         "year": "Year",
-        "weekly": "Weekly"
+        "weekly": "Weekly",
+        "daily": "Daily"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",
@@ -772,8 +773,7 @@
     "app_password": "Password",
     "app_select_column": "Select Column",
     "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
-    "app_file_format": "File Format",
-    "app_select_file": "Select file",
+    "app_file_format": "File Name Format",
     "app_ledger_view": {
         "t_view": "T View",
         "statement_view": "Statement View"
@@ -798,5 +798,6 @@
     "app_sales_person": "Sales Person",
     "app_sales_person_placeholder": "Select sales person",
     "app_skip_and_next": "Skip and Next",
-    "app_save_and_next": "Save and Next"
+    "app_save_and_next": "Save and Next",
+    "app_variable_search_hint": "Use '{' to search variable or write name manually."
 }

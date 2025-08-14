@@ -60,6 +60,8 @@ export class AdvanceSearchModel {
     public particulars: string[];
     public vouchers: string[];
     public inventory: AdvanceSearchRequestInventory = new AdvanceSearchRequestInventory();
+    public includeSalesPersons: boolean = true;
+    public salesPersonUniqueNames: string[];
 
     constructor() {
         this.inventory = new AdvanceSearchRequestInventory();

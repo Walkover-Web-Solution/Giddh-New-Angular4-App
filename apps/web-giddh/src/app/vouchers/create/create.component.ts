@@ -634,7 +634,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesPersonStore: SalesPersonComponentStore,
         private aiOcrService: AiOcrService
     ) {
-       this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -1176,7 +1176,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-                    
+
                     const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
@@ -1809,13 +1809,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm
-                            .get("salesPurchaseAsReceiptPayment")
-                            .patchValue(
-                                this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
-                                    ? profile.purchaseAsPayment
-                                    : profile.salesAsReceipt
-                            );
+                        const isCashSalesPurchaseInvoice =
+                            this.invoiceType.isCashInvoice &&
+                            ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) ||
+                                this.invoiceType.isPurchaseInvoice);
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm
+                                .get("salesPurchaseAsReceiptPayment")
+                                .patchValue(
+                                    this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+                                        ? profile.purchaseAsPayment
+                                        : profile.salesAsReceipt
+                                );
+                        }
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -3499,12 +3506,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
             this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-
-            if (this.invoiceForm.get("isRcmEntry")?.value) {
-                this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-            } else {
-                this.invoiceForm.get("subVoucher")?.patchValue("");
-            }
+            this.checkRcm();
         }
     }
 
@@ -4570,6 +4572,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Checks RCM
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public checkRcm(): void {
+        if (this.invoiceForm.get("isRcmEntry")?.value) {
+            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+        } else {
+            this.invoiceForm.get("subVoucher")?.patchValue("");
+        }
+    }
+
+    /**
      * Saves voucher
      *
      * @param {Function} [callback]
@@ -4580,7 +4595,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const entries = this.getEntries();
         const deposits = this.getDeposits();
-
+        this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
 
         invoiceForm.entries = entries;
@@ -5058,7 +5073,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.changeDetection.detectChanges();
     }
 
-    
+
 
     /**
      * Toggles between create and list

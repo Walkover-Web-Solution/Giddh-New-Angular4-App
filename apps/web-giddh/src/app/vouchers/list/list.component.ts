@@ -1535,6 +1535,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.advanceFiltersApplied = true;
+            this.ledgerSearchRequest.page = 1;
+            this.advanceFilters.page = 1;
 
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));

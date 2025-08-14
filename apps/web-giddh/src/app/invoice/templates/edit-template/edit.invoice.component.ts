@@ -665,6 +665,8 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     public hasInvoiceTemplatePermissions: boolean = true;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2 = 2;
+    /* This will hold the value if Gst Composition will show/hide */
+    public showGstComposition: boolean = false;
 
     constructor(
         private _toasty: ToasterService,
@@ -736,6 +738,15 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.invoiceTemplate.hasInvoiceTemplatePermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasInvoiceTemplatePermissions = response;
         });
+        
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+            } else {
+                this.showGstComposition = false;
+            }
+        });
+
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -858,6 +869,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     data.sections['footer'].data['companyName'].label = companyName;
                 }
             });
+
+            if (!(this.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
+                data.sections['header'].data['gstComposition'].display = false;
+            }
             
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
@@ -904,6 +919,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 // If user checks the checkbox but didn't provide label then remove the selection
                 data.sections['footer'].data['textUnderSlogan'].display = false;
                 data.sections['footer'].data['textUnderSlogan'].label = '';
+            }
+            if (!(this.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
+                data.sections['header'].data['gstComposition'].display = false;
             }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -971,7 +989,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             customCreatedTemplates = ss.customCreatedTemplates;
             defaultTemplate = ss.defaultTemplate;
         });
-
+        customCreatedTemplates.forEach((template) => {
+            if (template.sections.header.data?.gstComposition?.label.length === 0) {
+                template.sections.header.data.gstComposition.label = 'Registered under Composition Scheme';
+            }
+        });
         this.transactionMode = 'update';
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;
