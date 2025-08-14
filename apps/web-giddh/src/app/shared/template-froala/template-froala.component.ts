@@ -48,6 +48,8 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     public showBcc: boolean = false;
     /** Hold froala editor instance */
     public froalaEditor: any;
+    /** Hold tinymce editor instance */
+    public tinymceEditor: any;
     /** Hold froala editor text trigger */
     public froalaEditorTextTrigger: string = '{'; // By default froala editor instance is @ if not defined
     /** Hold email suggestion prefix */
@@ -147,14 +149,14 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     public get getTotalEmailsCount(): number {
         return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
     };
+    /** Holds tribute suggestions */
+    public tributeSuggestions: any[] = [];
     /** Holds width of select-multiple-fields */
     public optionClass: string = '';
     /** Hold tinymce editor config */
     public tinymceConfig = {
         selector: '#tinyEditor',
         branding: false,
-        min_height: 300,
-        max_height: 300,
         zindex: 2501,
         toolbar_sticky: true,
         menubar: false,
@@ -162,17 +164,45 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
             'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
             'table', 'help', 'wordcount', 'emoticons', 'pagebreak', 'nonbreaking',
-            'directionality'
+            'directionality', 'hr'
         ],
         toolbar: [
-            'bold italic underline strikethrough forecolor backcolor | code help fullscreen emoticons | undo redo |',
-            'link image media table charmap  hr pagebreak nonbreaking |',
-            'alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist checklist | insertdatetime anchor | searchreplace visualblocks | ltr rtl | removeformat | blocks fontfamily fontsize '
-        ].join(' '),
-        codesample_languages: [
-            { text: 'HTML/XML', value: 'markup' }
+            'undo redo | bold italic underline strikethrough fontfamily fontsize forecolor backcolor removeformat',
+            'blockquote code help fullscreen emoticons alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist',
+            'paragraph blocks | hr pagebreak nonbreaking link image media table charmap insertdatetime anchor searchreplace visualblocks ltr rtl',
         ],
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        placeholder: this.localeData?.email_content_suggestions,
+        elementpath: false,
+        statusbar: false,
+        valid_elements: '*[*]', // allow all tags
+        valid_children: '+body[style]', // allow style in body
+        setup: (editor) => {
+    editor.on('init', (e) => {
+        this.tinymceEditor = editor;
+        // Attach Tribute after TinyMCE is ready
+        setTimeout(() => {
+            if (this.froalaTribute && this.tinymceEditor.getBody) {
+                this.froalaTribute.attach(this.tinymceEditor.getBody());
+            }
+        }, 100);
+    });
+            editor.on('blur', (e) => {
+                // Custom logic to handle blur similar to Froala's code view
+                if (editor.plugins.code && editor.plugins.code.isOpen && typeof editor.getContent === 'function') {
+                    editor.setContent(editor.getContent());
+                    this.updateFormControl();
+                }
+            });
+            editor.on('keydown', (e) => {
+                // Mimic Froala's ENTER key + tribute active logic if needed
+                if (e.key === 'Enter' && this.froalaTribute?.isActive) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        contextmenu: false
     };
 
     constructor(
@@ -216,8 +246,8 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
             if (response) {
                 const emailSuggestions = this.inputData?.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
                 const tributeSuggestions = emailSuggestions?.map(item => ({
-                    value: item,
-                    key: item
+                    key: item,
+                    value: item
                 }));
 
                 setTimeout(() => {
@@ -291,33 +321,58 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
      * @memberof TemplateFroalaComponent
      */
     private initializeTribute(tributeSuggestions: any[]): void {
-        if (this.froalaTribute) {
-            this.froalaTribute.detach(this.froalaEditor.el);
-        }
-
-        if (this.subjectTribute) {
-            this.froalaTribute.detach(this.subjectInputField.nativeElement);
-        }
-
-        this.froalaTribute = new Tribute({
-            trigger: this.froalaEditorTextTrigger,
-            values: tributeSuggestions,
-            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`
-        });
-
-        this.subjectTribute = new Tribute({
-            trigger: this.froalaEditorTextTrigger,
-            values: tributeSuggestions,
-            selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
-        });
-
-        if (this.froalaEditor) {
-            this.froalaTribute.attach(this.froalaEditor.el);
-        }
-        if (this.subjectInputField && this.subjectInputField.nativeElement) {
-            this.subjectTribute.attach(this.subjectInputField.nativeElement);
-        }
+    console.log('DEBUG: Tribute suggestions:', tributeSuggestions);
+    if (this.tinymceEditor && this.tinymceEditor.getBody) {
+        console.log('DEBUG: Attaching Tribute to TinyMCE body:', this.tinymceEditor.getBody());
+    } else {
+        console.warn('DEBUG: tinymceEditor or getBody is not available at Tribute attach time.');
     }
+    if (this.froalaTribute) {
+        this.froalaTribute.detach(this.tinymceEditor?.getBody ? this.tinymceEditor.getBody() : this.tinymceEditor?.getElement ? this.tinymceEditor.getElement() : undefined);
+    }
+
+    if (this.subjectTribute) {
+        this.froalaTribute.detach(this.subjectInputField.nativeElement);
+    }
+
+    this.froalaTribute = new Tribute({
+    trigger: this.froalaEditorTextTrigger,
+    values: tributeSuggestions,
+    selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`,
+    positionMenu: (menu, anchor) => {
+        // Use TinyMCE's API to get the position of the caret
+        if (this.tinymceEditor && this.tinymceEditor.selection && typeof this.tinymceEditor.selection.getBoundingClientRect === 'function') {
+            const rect = this.tinymceEditor.selection.getBoundingClientRect();
+            if (rect) {
+                menu.style.position = 'fixed';
+                menu.style.left = `${rect.left}px`;
+                menu.style.top = `${rect.bottom}px`;
+                menu.style.zIndex = '3000';
+                return;
+            }
+        }
+        // Fallback to default
+        Tribute.defaultPositionMenu(menu, anchor);
+    }
+});
+
+    this.subjectTribute = new Tribute({
+        trigger: this.froalaEditorTextTrigger,
+        values: tributeSuggestions,
+        selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
+    });
+
+    if (this.froalaEditor) {
+        this.froalaTribute.attach(this.froalaEditor.el);
+    }
+
+    if (this.tinymceEditor && this.tinymceEditor.getBody) {
+        this.froalaTribute.attach(this.tinymceEditor.getBody());
+    }
+    if (this.subjectInputField && this.subjectInputField.nativeElement) {
+        this.subjectTribute.attach(this.subjectInputField.nativeElement);
+    }
+}
 
     /**
      * Maps email suggestions to a format suitable for the dropdown options.

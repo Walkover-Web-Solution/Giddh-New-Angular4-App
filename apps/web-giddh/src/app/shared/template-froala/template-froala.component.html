@@ -149,7 +149,7 @@
                 </div>
             </div>
             <div class="form-group editor-container">
-                <textarea id="tinyEditor" formControlName="html"></textarea>
+                <editor [init]="tinymceConfig" formControlName="html"></editor>
             </div>
         </form>
         <div mat-dialog-actions class="justify-content-start">

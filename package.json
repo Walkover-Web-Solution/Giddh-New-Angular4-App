@@ -74,12 +74,8 @@
         "@ngx-translate/core": "^15.0.0",
         "@ngx-translate/http-loader": "^8.0.0",
         "@nrwl/workspace": "^16.0.0",
-<<<<<<< Updated upstream
-        "angular-froala-wysiwyg": "^4.2.1",
-=======
         "@tinymce/tinymce-angular": "^9.0.0",
         "angular-froala-wysiwyg": "^4.5.1",
->>>>>>> Stashed changes
         "angular2-ladda": "^5.0.0",
         "bootstrap-daterangepicker": "3.1.0",
         "chart.js": "^4.3.3",

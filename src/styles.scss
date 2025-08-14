@@ -1,0 +1,7 @@
+@import '~tributejs/dist/tribute.css';
+
+// Tribute dropdown z-index and pointer fix
+.tribute-container {
+  z-index: 3000 !important;
+  pointer-events: auto !important;
+}
