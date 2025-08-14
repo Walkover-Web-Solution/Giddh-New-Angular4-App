@@ -19,7 +19,7 @@
                                 voucherName: localeData | titlecase) }}</h1>
                                 
                             <mat-slide-toggle color="primary" class="ml-4"
-                                *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote"
+                                *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)"
                                 formControlName="salesPurchaseAsReceiptPayment">
                                 <span
                                     [ngClass]="{'voucher-heading': invoiceForm.get('salesPurchaseAsReceiptPayment')?.value}"

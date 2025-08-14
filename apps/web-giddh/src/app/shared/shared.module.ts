@@ -61,6 +61,7 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatListModule } from '@angular/material/list';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -140,7 +141,8 @@ export function provideConfig() {
         CallBackPageComponent,
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatListModule
     ],
     exports: [
         CommonModule,

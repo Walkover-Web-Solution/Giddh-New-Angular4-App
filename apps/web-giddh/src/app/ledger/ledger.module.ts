@@ -65,6 +65,9 @@ import { CarouselComponent } from '../shared/carousel/carousel.component';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [
@@ -147,7 +150,10 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         CarouselComponent,
         AsideMenuCreateTaxModule,
         BankIntegrationModule,
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        NgxMatSelectSearchModule,
+        TributeMentionModule,
+        MatDividerModule
     ]
 })
 export class LedgerModule {

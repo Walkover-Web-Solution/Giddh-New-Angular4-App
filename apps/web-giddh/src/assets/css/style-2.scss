@@ -13812,6 +13812,11 @@ mat-list {
     background: var(--color-white) !important;
 }
 
+.only-right-radius {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
 .template-froala-wrapper {
     .balance-options {
         height: auto !important;

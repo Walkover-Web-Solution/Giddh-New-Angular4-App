@@ -20,6 +20,7 @@ import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store'
 import { saveAs } from 'file-saver';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { CopyType } from '../../../shared/Enums/common.enum';
+import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -102,18 +103,24 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
     public fileFormatList = [
-        { uniqueName: 'DATE', name: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
-        { uniqueName: 'ENTRY_NO', name: 'Entry No', showValue: "3824" },
-        { uniqueName: 'ACC_NAME', name: 'Account Name', showValue: "Walkover" }
+        { value: 'Voucher Date', label: 'Voucher Date', key: 'DATE', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'Entry No', label: 'Entry No', key: 'ENTRY_NO', showValue: "3824" },
+        { value: 'Account Name', label: 'Account Name', key: 'ACC_NAME', showValue: "Walkover" }
     ];
     /** List of selected file formats */
-    public selectedFormatList: any[] = [];
+    public selectedFormatList: string = "";
     /** List of copy type */
     public copyTypes: IOption[] = [];
     /** Prefix of format file name */
     public fileFormatPrefix: string = "AS";
     /* Will check if form is valid */
     public isValidForm: boolean = true;
+    /** Tribute config */
+    public tributeConfig: TributeConfig = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+    };
 
     constructor(
         private ledgerService: LedgerService,
@@ -259,7 +266,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
                 if (this.exportRequest.attachmentExport) {
-                    postRequest.fileNameFormat = this.selectedFormatList.length ? this.exportRequest.fileNameFormat : (this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}");
+                    let fileNameFormat = this.selectedFormatList?.trim();
+                    if (fileNameFormat?.length) {
+                        this.fileFormatList.forEach(format => {
+                            const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
+                            fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
+                        });
+                        postRequest.fileNameFormat = fileNameFormat;
+                    } else {
+                        postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+                    }
                 }
                 if (this.exportRequest.voucherExport) {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
@@ -404,38 +420,19 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Returns a sorted list of file formats.The selected formats appear at the top in the order they were selected.
-     * 
-     * @returns {any []} A sorted array of file formats.
-     * @memberof ExportLedgerComponent
-     */
-    public getSortedFormatList(): any[] {
-        return [...this.fileFormatList].sort((a, b) => {
-            let indexA = this.selectedFormatList.findIndex(item => item.uniqueName === a.uniqueName);
-            let indexB = this.selectedFormatList.findIndex(item => item.uniqueName === b.uniqueName);
-
-            if (indexA === -1) indexA = Infinity;
-            if (indexB === -1) indexB = Infinity;
-
-            return indexA - indexB;
-        });
-    }
-
-    /**
      * Generates a formatted file name based on selected file formats.
      *
      * @returns {string} The formatted file name string.
      * @memberof ExportLedgerComponent
      */
-    public getFileFormat(): string {
-        let showFileFormat = this.fileFormatPrefix;
-        let fileNameFormat = this.fileFormatPrefix;
-        this.selectedFormatList.forEach((format) => {
-            showFileFormat += `-${format.showValue}`
-            fileNameFormat += "-${" + format.uniqueName + "}";
+    public getFileFormat() {
+        let fileNameFormat = this.selectedFormatList;
+        this.fileFormatList.forEach((format) => {
+            if (this.selectedFormatList.includes(`{${format.value}}`)) {
+                fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
+            }
         });
         this.exportRequest.fileNameFormat = fileNameFormat;
-        return showFileFormat;
     }
 
     /**
