@@ -65,9 +65,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     @Input() public addressOnly: boolean = false;
     /** This will emit pageHeading */
     @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
-    /** Export file name component */
-    @ViewChild('exportFileNameComponent', { static: false }) exportFileNameComponent: ExportFileNameComponent;
-
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];

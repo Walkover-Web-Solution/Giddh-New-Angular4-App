@@ -92,5 +92,6 @@
     "ledger_default_view": "Ledger Default View",
     "select_view": "Select View",
     "module_file_format": "This [module_name] module will be used to export the file name like [file_format]",
-    "file_name_export_setting": "File Name Export Setting"
+    "file_name_export_setting": "File Name Export Setting",
+    "default_file_format": "Walkover_123_14-08-2025"
 }
