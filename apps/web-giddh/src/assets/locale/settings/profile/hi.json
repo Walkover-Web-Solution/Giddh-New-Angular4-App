@@ -94,5 +94,6 @@
     "set_as_default_address": "डिफ़ॉल्ट पता सेट करें",
     "default_address": "डिफ़ॉल्ट पता",
     "module_file_format": "यह [module_name] मॉड्यूल फ़ाइल नाम को [file_format] की तरह एक्सपोर्ट करने के लिए उपयोग किया जाएगा",
-    "file_name_export_setting": "फाइल नाव एक्सपोर्ट सेटिंग"
+    "export_setting_description": "निर्यात की गई फ़ाइल के नाम का प्रारूप सेट करें। आप दिनांक, खाता नाम या प्रविष्टि संख्या जैसे वेरिएबल शामिल कर सकते हैं, या अपना कस्टम टेक्स्ट लिख सकते हैं।",
+    "default_file_format": "Walkover_123_14-08-2025"
 }
