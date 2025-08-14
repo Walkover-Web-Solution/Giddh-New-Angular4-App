@@ -95,6 +95,7 @@ import { SubscriptionUpgradeButtonModule } from "../shared/subscription-upgrade-
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { SalesPersonService } from "../shared/sales-person/utility/sales-person.service";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
 
 @NgModule({
     declarations: [
@@ -194,7 +195,8 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
         ValidateSectionPermissionDirectiveModule,
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        TributeMentionModule
     ],
     exports: [
 VoucherCreateComponent

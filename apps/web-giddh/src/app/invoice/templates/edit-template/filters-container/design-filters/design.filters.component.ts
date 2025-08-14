@@ -209,10 +209,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      */
     public resetPrintSetting() {
         let template = cloneDeep(this.customTemplate);
-        template.topMargin = 10;
-        template.bottomMargin = 10;
-        template.leftMargin = 10;
-        template.rightMargin = 10;
+        template.topMargin = 25;
+        template.bottomMargin = 25;
+        template.leftMargin = 25;
+        template.rightMargin = 25;
         this.customTemplate = cloneDeep(template);
         this.setFontAndFontSize();
         this.onValueChange(null, null);
