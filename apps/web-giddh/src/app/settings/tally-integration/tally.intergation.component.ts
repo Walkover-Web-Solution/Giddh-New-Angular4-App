@@ -34,7 +34,6 @@ export class TallyIntegrationComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         let companyUniqueName = this.generalService.companyUniqueName;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
-        console.log(this.apiUrl);
     }
 
     /**
