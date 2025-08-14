@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -15,6 +15,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../store';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'purchase-setting',
@@ -54,7 +55,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
 
-    constructor(private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, private dialog: MatDialog, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
 
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl())?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -262,7 +263,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public getRedirectUrl(): string {
-        return AppUrl + 'pages/purchase-management/purchase/settings';
+        return (this.serviceConfig.AppUrl || AppUrl) + 'pages/purchase-management/purchase/settings';
     }
 
     /**

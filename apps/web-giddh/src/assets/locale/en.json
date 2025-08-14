@@ -87,9 +87,12 @@
     "app_voucher_types": {
         "sales": "Sales",
         "purchase": "Purchase",
+        "purchase_order": "Purchase Order",
         "purchases": "Purchases",
         "receipt": "Receipt",
         "payment": "Payment",
+        "estimate": "Estimate",
+        "proforma": "Proforma",
         "journal": "Journal",
         "contra": "Contra",
         "debit_note": "Debit Note",
@@ -215,7 +218,8 @@
         "yearly": "Yearly",
         "month": "Month",
         "year": "Year",
-        "weekly": "Weekly"
+        "weekly": "Weekly",
+        "daily": "Daily"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",
@@ -769,8 +773,7 @@
     "app_password": "Password",
     "app_select_column": "Select Column",
     "app_allow_manufacturing_sales_transactions": "Allow manufacturing to proceed during sales transactions",
-    "app_file_format": "File Format",
-    "app_select_file": "Select file",
+    "app_file_format": "File Name Format",
     "app_ledger_view": {
         "t_view": "T View",
         "statement_view": "Statement View"
@@ -779,6 +782,22 @@
     "app_uncheck_all_item_message": "Are you sure you want to uncheck all rows?",
     "app_account_status": "Account Status",
     "app_both": "Both",
+    "app_client": "Client",
+    "app_search_by_name_and_unique_name": "Search by name and unique name",
+    "app_search_by_invoice_number_customer_name_and_amount": "Search by invoice number, customer name and amount.",
+    "app_weekdays": {
+        "daily": "Daily",
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+    },
+    "app_sales_person": "Sales Person",
+    "app_sales_person_placeholder": "Select sales person",
     "app_skip_and_next": "Skip and Next",
-    "app_save_and_next": "Save and Next"
+    "app_save_and_next": "Save and Next",
+    "app_variable_search_hint": "Use '{' to search variable or write name manually."
 }

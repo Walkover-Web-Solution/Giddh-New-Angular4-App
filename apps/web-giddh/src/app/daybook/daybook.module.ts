@@ -31,6 +31,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LedgerModule } from '../ledger/ledger.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -65,7 +67,9 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         MatExpansionModule,
         MatSlideToggleModule,
         LedgerModule,
-        WatchVideoModule
+        WatchVideoModule,
+        NgxMatSelectSearchModule,
+        MatSelectModule
     ]
 })
 export class DaybookModule {

@@ -1,0 +1,77 @@
+<button
+  mat-icon-button
+  [ngClass]="useRowIndexVisibility ? { 'invisible': activeRowIndex !== rowIndex } : {}"
+  [matMenuTriggerFor]="menu"
+  aria-label="actions"
+>
+  <span class="icon-dots-three-vertical"></span>
+</button>
+
+<mat-menu #menu="matMenu">
+  <div class="account-detail-custom-header">
+    <div class="d-flex p-0">
+      <div class="account-detail-padding flex-fill border-right-0">
+        <h3 class="account-detail-custom-title word-break font-15 mr-t05">
+          <span (click)="performActions(4, account)">
+            {{ account?.name }}
+          </span>
+        </h3>
+      </div>
+      <a (click)="performActions(4, account)" class="cursor-pointer pl-1 pd-t05">
+        <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+      </a>
+    </div>
+    <div class="custom-detail">
+      <h4>{{ account?.mobileNo }}</h4>
+      <h4>{{ account?.email }}</h4>
+      <h4>{{ account?.gstIn }}</h4>
+    </div>
+  </div>
+
+  <button
+    mat-menu-item
+    *ngIf="showGotoLedger && !isMobileScreen"
+    class="menu-table-item"
+    (click)="performActions(1, account)"
+    aria-label="ledger"
+  >
+    {{ commonLocaleData?.app_goto_ledger }}
+  </button>
+
+  <button
+    mat-menu-item
+    *ngIf="showGenerateInvoice && !isCompany"
+    class="menu-table-item"
+    (click)="performActions(2, account)"
+    aria-label="generate invoice"
+  >
+    {{ commonLocaleData?.app_generate_invoice }}
+  </button>
+
+  <button
+    mat-menu-item
+    *ngIf="showSendEmail"
+    class="menu-table-item"
+    (click)="performActions(3, account)"
+    aria-label="send email"
+  >
+    {{ commonLocaleData?.app_send_email }}
+  </button>
+</mat-menu>
+
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+
+<div *ngIf="accountAsideMenuState === 'in'">
+    <aside-menu-account
+        [activeGroupUniqueName]="selectedGroupForCreateAcc"
+        [activeAccountDetails]="activeAccountDetails"
+        [isUpdateAccount]="isUpdateAccount"
+        class="account-aside-menu-state transform-inherit"
+        [@slideInOut]="accountAsideMenuState"
+        [commonLocaleData]="commonLocaleData"
+        (closeAsideEvent)="toggleAccountAsidePane($event)"
+        (getUpdateList)="getUpdatedList($event)"
+        [isActionMenu]="isActionMenu"
+    >
+    </aside-menu-account>
+</div>

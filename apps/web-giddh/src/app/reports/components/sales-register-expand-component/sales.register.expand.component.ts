@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
+import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
@@ -18,6 +18,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
+import { CompanyActions } from '../../../actions/company.actions';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -103,7 +105,19 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
+    constructor(
+        @Inject(ServiceConfig) private serviceConfig,
+        private store: Store<AppState>,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private activeRoute: ActivatedRoute,
+        private router: Router,
+        private _cd: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService,
+        private modalService: BsModalService,
+        private dialog: MatDialog,
+        private companyActions: CompanyActions
+    ) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -117,7 +131,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = this.paginationLimit;
         this.getDetailedsalesRequestFilter.q = '';
@@ -134,13 +148,15 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
                 this.getDetailedsalesRequestFilter.from = this.from;
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
@@ -293,6 +309,13 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
+
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
     }
 
     public getDetailedSalesReport(SalesDetailedfilter) {

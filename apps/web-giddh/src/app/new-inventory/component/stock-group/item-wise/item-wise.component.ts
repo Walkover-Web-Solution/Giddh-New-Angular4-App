@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { ServiceConfig } from "apps/web-giddh/src/app/services/service.config";
 
 export interface PeriodicElement {
     productName: any;
@@ -32,7 +33,7 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
     /* It will store image path */
     public imgPath: string = '';
 
-    constructor() {}
+    constructor(@Inject(ServiceConfig) private serviceConfig ) {}
 
     displayedColumns: string[] = ['productName', 'groupName', 'openingStockQty', 'openingStockValue', 'inwardsQty', 'inwardsValue', 'outwardsQty', 'outwardsValue', 'closingStockQty', 'closingStockValue'];
     dataSource = ELEMENT_DATA;
@@ -43,13 +44,13 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
      * @memberof ItemWiseComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         document.querySelector("body")?.classList?.add("item-wise-page");
     }
 
     /**
      * Lifecycle hook runs when component is destroyed
-     * 
+     *
      * @memberof ItemWiseComponent
      */
     public ngOnDestroy(): void {

@@ -1,16 +1,16 @@
 import { BankIntegrationDialogComponent } from './../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap, filter as rxjsFilter } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -19,8 +19,8 @@ import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType } from '../models/api-models/Ledger';
-import { SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, TLedgerView, LedgerViewEnum, LedgerType, TransactionType, LedgerResponse } from '../models/api-models/Ledger';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/advance-search-request';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { GeneralService } from '../services/general.service';
@@ -57,9 +57,12 @@ import { BankLinkComponent } from '../shared/bank-integration/bank-link/bank-lin
 import { SettingIntegrationComponentStore } from '../settings/integration/utility/setting.integration.store';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { LedgerComponentStore } from './ledger.store';
+import { ServiceConfig } from '../services/service.config';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 
 @Component({
     selector: 'ledger',
@@ -407,6 +410,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private ledgerActions: LedgerActions,
         private route: ActivatedRoute,
         private ledgerService: LedgerService,
@@ -561,7 +565,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.isStock = Boolean(e.additional?.stock);
         txn.stockUniqueName = e.additional?.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
-        if (!txn.isStock) {
+        if (txn.duplicateEntry) {
+            this.handeLoadDetailsForDuplicateEntry(e, txn);
+        } else if (!txn.isStock) {
             this.loadDetails(e, txn, '', allowChangeDetection);
         }
         this.cdRf.markForCheck();
@@ -678,7 +684,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceAction.getInvoiceSetting());
         this.getPurchaseSettings();
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakpointObserver.observe([
             '(max-width: 991px)'
@@ -1500,7 +1506,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
-     * 
+     *
      *  @returns {void}
      * @memberof LedgerComponent
      */
@@ -1519,7 +1525,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Generates a ledger entry. If conditions are met, it will open the e-Way Bill dialog; otherwise, it directly saves the blank transaction.
      * @returns {void}
-     * 
+     *
      * @memberof LedgerComponent
      */
     public generateLedger(): void {
@@ -1651,25 +1657,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
             }
             let newTrx = this.lc.addNewTransaction(event.type);
-            this.lc.blankLedger?.transactions.push(newTrx);
-            this.selectBlankTxn(newTrx);
+                this.lc.blankLedger?.transactions.push(newTrx);
+                this.selectBlankTxn(newTrx);
         }
         this.closeAllAccountDropdown();
 
         setTimeout(() => {
-            if (this.ledgerView === LedgerViewEnum.StatementView) {
-                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit) || dropdown?.cssClass?.includes(TransactionType.Credit));
+            this.focusDebitCreditDropdowns(event?.type);
+        }, 0);
+    }
+
+    /**
+     * Focus the debit or credit dropdown
+     * 
+     * @param type The type of transaction
+     * @memberof LedgerComponent
+     */
+    private focusDebitCreditDropdowns(type: TransactionType) {
+        if (this.ledgerView === LedgerViewEnum.StatementView) {
+            const debitCreditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit) || dropdown?.cssClass?.includes(TransactionType.Credit));
+            debitCreditDropdowns[debitCreditDropdowns?.length - 1]?.openDropdownPanel();
+        } else {
+            if (type === TransactionType.Debit) {
+                const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit));
                 debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
             } else {
-                if (event?.type === TransactionType.Debit) {
-                    const debitDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Debit));
-                    debitDropdowns[debitDropdowns?.length - 1]?.openDropdownPanel();
-                } else {
-                    const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Credit));
-                    creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
-                }
+                const creditDropdowns = this.dropdowns.filter(dropdown => dropdown?.cssClass?.includes(TransactionType.Credit));
+                creditDropdowns[creditDropdowns?.length - 1]?.openDropdownPanel();
             }
-        }, 0);
+        }
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {
@@ -1709,7 +1725,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Set the blank ledger transactions
-     * 
+     *
      * @returns {void}
      */
     private setBlankLedgerTransactions(): void {
@@ -1727,7 +1743,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Reset the blank transaction
-     * 
+     *
      * @returns {void}
      */
     public resetBlankTransaction(): void {
@@ -1832,8 +1848,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public hideUpdateLedgerModal() {
-        this.updateLedgerModalDialogRef?.close();
+    /**
+     * Hide update ledger modal
+     *
+     * @param {any} event
+     * @memberof LedgerComponent
+     */
+    public hideUpdateLedgerModal(event: any): void {
+        this.updateLedgerModalDialogRef?.close(event);
     }
 
     /**
@@ -1918,9 +1940,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Handle save blank transaction
-     * 
-     * @param eWayBillResponse 
-     * @returns 
+     *
+     * @param eWayBillResponse
+     * @returns
      */
     public saveBlankTransaction(eWayBillResponse?: any): void {
         this.loaderService.show();
@@ -2101,11 +2123,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'update'
         })
 
-        this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
-            this.hideUpdateLedgerModal();
+        this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             this.entryManipulated();
             if (this.isAdvanceSearchImplemented) {
                 this.createLedgerBalance();
+            }
+
+            // For duplicate entry
+            if (response?.transactionDetails) {
+                this.prepareDuplicateTransaction(response?.transactionDetails);
             }
         });
     }
@@ -2693,12 +2719,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName, this.advanceSearchRequest.paginationToken)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
         this.getLedgerStatementViewGridColumnsValue();
@@ -2762,7 +2788,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
-        this.getTransactionData();
+        if (this.isAdvanceSearchImplemented) {
+            this.getAdvanceSearchTxn();
+        } else {
+            this.getTransactionData();
+        }
     }
 
     /**
@@ -3355,9 +3385,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @param {TemplateRef<any>} templateRef
      * @param {*} transaction
+     * @param {boolean} [isAttachment=false]
      * @memberof LedgerComponent
      */
-    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
+    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any, isAttachment: boolean = false): void {
+        transaction['isAttachment'] = isAttachment;
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
@@ -3458,7 +3490,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.groupTaxes ?? []);
                 if (txn?.taxesVm?.length) {
                     txn?.taxesVm.forEach(tax => {
-                        tax.isChecked = false;
+                        tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
                         tax.isDisabled = false;
                     });
                 }
@@ -3469,7 +3501,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     category: data.body.category,
                     value: event?.value,
                     isHilighted: true,
-                    applicableTaxes: taxes,
+                    applicableTaxes: txn.duplicateEntry ? [] : taxes,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,
@@ -3477,9 +3509,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
                     nameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
-                    stock: data.body.stock,
+                    stock: txn.duplicateEntry ? txn?.inventory?.stock : data.body.stock,
                     uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
-                    accountApplicableDiscounts: data.body.applicableDiscounts,
+                    accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
                 if (txn?.selectedAccount && txn.selectedAccount.stock) {
@@ -3489,33 +3521,63 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.lc.currentBlankTxn = txn;
                 }
                 let rate = 0;
+                let quantity = 1;
                 let unitCode = '';
                 let stockName = '';
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
+                let variantUniqueName = '';
+                let variantDiscount = '';
 
                 txn.isMrpDiscountApplied = false;
 
                 //#region unit rates logic
                 if (txn?.selectedAccount?.stock) {
-                    const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
-                    const defaultUnit = {
-                        stockUnitCode: defaultUnitRates[0].stockUnitCode,
-                        code: defaultUnitRates[0].stockUnitCode,
-                        rate: defaultUnitRates[0].rate,
-                        name: txn.selectedAccount.stock.name
-                    };
-                    const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
-                    txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
-                    stockName = defaultUnit.name;
-                    rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
-                    unitCode = defaultUnit.code;
-                    stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
-
-                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
-                    if (hasMrpDiscount?.length) {
-                        rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                    const stock = txn?.inventory?.stock;
+                    if (txn?.duplicateEntry) {
+                        const unitRate = stock.unitRates.find(unitRate => unitRate.stockUnitUniqueName === txn?.inventory?.unit?.uniqueName) || stock.unitRates[0];
+                        const defaultUnit = {
+                            stockUnitCode: unitRate.stockUnitCode,
+                            code: unitRate.stockUnitCode,
+                            rate: unitRate.rate,
+                            name: txn.selectedAccount.stock.name
+                        };
+                        txn.unitRate = stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                        stockName = defaultUnit.name;
+                        rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+                        unitCode = defaultUnit.code;
+                        stockUnitUniqueName = unitRate.stockUnitUniqueName;
+    
+                        const hasMrpDiscount = stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                        if (hasMrpDiscount?.length) {
+                            rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        }
+                        variantUniqueName = stock.variant?.uniqueName;
+                        variantDiscount = stock.variant?.variantDiscount;
+                        quantity = txn?.inventory?.quantity || 1;
+                    } else {
+                        const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
+                        const defaultUnit = {
+                            stockUnitCode: defaultUnitRates[0].stockUnitCode,
+                            code: defaultUnitRates[0].stockUnitCode,
+                            rate: defaultUnitRates[0].rate,
+                            name: txn.selectedAccount.stock.name
+                        };
+                        const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : defaultUnitRates;
+                        txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                        stockName = defaultUnit.name;
+                        rate = Number((defaultUnit.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        stockUniqueName = txn.selectedAccount.stock?.uniqueName;
+                        unitCode = defaultUnit.code;
+                        stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
+    
+                        const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                        if (hasMrpDiscount?.length) {
+                            rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                        }
+                        variantUniqueName = txn.selectedAccount.stock.variant?.uniqueName;
+                        variantDiscount = txn.selectedAccount.stock.variant?.variantDiscount;
                     }
                 }
                 if (stockName && stockUniqueName) {
@@ -3524,8 +3586,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
-                        quantity: 1,
+                        variant: { 
+                            uniqueName: variantUniqueName, 
+                            variantDiscount: variantDiscount
+                        },
+                        quantity: quantity,
                         unit: {
                             stockUnitCode: unitCode,
                             code: unitCode,
@@ -3536,8 +3601,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     delete txn.inventory;
                 }
-                if (rate > 0) {
+                if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
+                }
+                if (!this.lc.blankLedger.transactions?.[0].duplicateEntry) {
+                    if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
+                        this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
+                        this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
+                    } else {
+                        this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse.salesPerson?.uniqueName || null;
+                        this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || '';
+                    }
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
@@ -3671,10 +3745,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-      * This will be use for redirect to bank integration page
-      *
-      * @memberof LedgerComponent
-      */
+     * This will be use for redirect to bank integration page
+     *
+     * @memberof LedgerComponent
+     */
     public redirectToBankIntegration(): void {
         this.router.navigate(['pages', 'settings', 'integration', 'payment']);
     }
@@ -3779,5 +3853,255 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             disableClose: true
         });
+    }
+
+    /** 
+     * Prepare duplicate transaction
+     *
+     * @param {any} res
+     * @memberof LedgerComponent
+     */
+    private prepareDuplicateTransaction(res: any): void {
+        if (!res) return;
+        let isDebitTransaction: boolean;
+        const isJournalVoucher = res?.voucher?.shortCode ? (res?.voucher?.shortCode === AdjustedVoucherType.Journal) : (res?.voucherGeneratedType === AdjustedVoucherType.JournalVoucher);
+        const isActiveAccountAndParticularIsSame = res?.particular?.uniqueName === this.lc?.activeAccount?.uniqueName;
+        const transaction: TransactionVM = new TransactionVM();
+
+        transaction.duplicateEntry = true; // Use this to handle duplicate entry logic every where
+        transaction.subVoucher = res?.subVoucher;
+        let transactionsParticular: any;
+        let sumOfTax = 0;
+        if (res.transactions?.length) {
+            res.transactions.forEach(item => {
+                if (Object.hasOwn(item.particular, 'category') && (['income','expenses','assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
+                    transactionsParticular = item.particular;
+                    if (item.inventory) {
+                        transactionsParticular['uniqueName'] = transactionsParticular?.uniqueName?.split('#')[0];
+                        transactionsParticular = { ...transactionsParticular, stock: item.inventory?.stock, hasVariants: Boolean(item?.inventory?.variant) }
+                    }
+                }
+
+                if (item.isTax && res.transactions?.length !== 1) { // This temporary logic we will fix in future with journal entry
+                    sumOfTax += item.amount;
+                }
+            })
+        }
+        const transactionAmount = isJournalVoucher ? res?.total.amount - sumOfTax : res?.actualAmount;
+        transaction.amount = transactionAmount;
+        transaction.convertedAmount = transactionAmount;
+        transaction.total = res?.total.amount;
+        transaction.convertedTotal = res?.total.amount;
+
+        if (isActiveAccountAndParticularIsSame) {
+            isDebitTransaction = res?.total?.type === TransactionType.Debit ? true : false;
+        } else {
+            isDebitTransaction = res?.total?.type === TransactionType.Debit ? false : true;
+        }
+        const transactionType = isDebitTransaction ? TransactionType.Debit : TransactionType.Credit;
+        if (isDebitTransaction) {
+            transaction.debitAmount = transactionAmount
+            transaction.debitTotal = res.total.amount;
+        } else {
+            transaction.creditAmount = transactionAmount
+            transaction.creditTotal = res.total.amount;
+        }
+        let selectedAccountName = "";
+        let selectedAccountUniqueName = "";
+
+        if (isActiveAccountAndParticularIsSame) {
+            if (transactionsParticular?.stock) {
+                selectedAccountName = `${transactionsParticular?.name} (${transactionsParticular?.stock?.name})`;
+            } else {
+                selectedAccountName = transactionsParticular?.name;
+            }
+            selectedAccountUniqueName = transactionsParticular?.uniqueName;
+        } else {
+            selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
+            selectedAccountUniqueName = res.particular?.uniqueName;
+        }
+
+        let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
+        if (res?.discounts?.length) {
+            res.discounts.forEach(discount => {
+
+                if (!discount?.discount?.uniqueName) {
+                    discounts[0].isActive = true;
+                    discounts[0].amount = discount?.discount?.discountValue;
+                    discounts[0].discountValue = discount?.discount?.discountValue;
+                    discounts[0].discountType = discount?.discount?.discountType;
+                    return;
+                }
+
+                const discountObj: LedgerDiscountClass = discount?.discount;
+                discounts.push({
+                    amount: discount?.convertedAmount,
+                    discountValue: discountObj?.discountValue,
+                    discountType: discountObj?.discountType,
+                    isActive: true,
+                    particular: discount?.account?.uniqueName,
+                    discountUniqueName: discountObj?.uniqueName,
+                    name: discountObj?.name,
+                    uniqueName: discountObj?.uniqueName
+                });
+            }); 
+        }
+        transaction.discounts = discounts;
+        transaction.taxes = res?.taxes ?? [];
+        transaction.reverseChargeTaxableAmount = res.reverseChargeTaxableAmount;
+        transaction.itcAvailable = res.itcAvailable;
+        transaction.particular = selectedAccountUniqueName;
+        transaction.type = transactionType;
+        let inventory;
+        if (res.transactions?.length) {
+            inventory = res.transactions.find(txn => Object.keys(txn?.inventory || {}).length > 0)?.inventory;
+            if (inventory) {
+
+                if (inventory.stock && res.unitRates?.length) {
+                    inventory.stock['unitRates'] = res.unitRates;
+                }
+
+                if (inventory.stock && inventory.variant && res.unitRates?.length) {
+                    inventory.stock['variant'] = inventory.variant;
+                }
+
+                res['inventory'] = inventory;
+                transaction.inventory = inventory;
+            }
+        }
+        this.selectBlankTxn(transaction);
+        this.lc.blankLedger.isOtherTaxesApplicable = res.isOtherTaxesApplicable;
+        this.lc.blankLedger.otherTaxesSum = res.otherTaxesSum;
+        this.lc.blankLedger.voucherType = null;
+        this.lc.blankLedger.chequeNumber = res.chequeNumber;
+        this.lc.blankLedger.chequeClearanceDate = res.chequeClearanceDate;
+        this.lc.blankLedger.tagNames = res.tagNames;
+        this.lc.blankLedger.description = res.description;
+        this.lc.blankLedger.generateInvoice = res.voucherGenerated;
+        this.lc.blankLedger.touristSchemeApplicable = res.touristSchemeApplicable;
+        this.lc.blankLedger.passportNumber = res.passportNumber;
+        this.lc.blankLedger.salesPersonUniqueName = res.salesPerson?.uniqueName;
+        this.lc.blankLedger.salesPersonName = res.salesPerson?.name;
+
+        let txnIndex: number;
+        
+        if (this.ledgerView === LedgerViewEnum.TView) {
+            let filterTypedTxn = this.lc.blankLedger.transactions?.filter(txn => txn.type === (transactionType));
+            if (filterTypedTxn[filterTypedTxn.length - 1]?.particular) {
+                const newTrx = this.lc.addNewTransaction(transactionType);
+                this.lc.blankLedger?.transactions.push(newTrx);
+                txnIndex = this.lc.blankLedger.transactions.length - 1;
+            } else {
+                txnIndex = this.lc.blankLedger.transactions.findIndex(txn => txn.id === filterTypedTxn[filterTypedTxn.length - 1].id);
+            }
+        } else {
+            let filterTypedTxn = this.lc.blankLedger.transactions[this.lc.blankLedger.transactions?.length - 1];
+            if (filterTypedTxn?.particular) {
+                const newTrx = this.lc.addNewTransaction(transactionType);
+                this.lc.blankLedger?.transactions.push(newTrx);
+            } else {
+                this.lc.blankLedger.transactions[this.lc.blankLedger.transactions?.length - 1].type = transactionType;
+            }
+            txnIndex = this.lc.blankLedger.transactions.length - 1;
+        }
+
+
+        if (this.lc.blankLedger.transactions[txnIndex].particular) {
+            const newTrx = this.lc.addNewTransaction(transactionType);
+            this.lc.blankLedger?.transactions.push(newTrx);
+        }
+        
+        this.lc.blankLedger.transactions[txnIndex].duplicateEntry = true; // Use this to handle duplicate entry logic every where
+        this.lc.blankLedger.transactions[txnIndex].subVoucher = res?.subVoucher;
+        this.lc.blankLedger.transactions[txnIndex].inventory = inventory || null;
+        if (isDebitTransaction) {
+            this.lc.blankLedger.transactions[txnIndex].debitAmount = transactionAmount;
+            this.lc.blankLedger.transactions[txnIndex].debitTotal = res.total.amount;
+        } else {
+            this.lc.blankLedger.transactions[txnIndex].creditAmount = transactionAmount;
+            this.lc.blankLedger.transactions[txnIndex].creditTotal = res.total.amount;
+        }
+
+        this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName;
+        const particular = (isActiveAccountAndParticularIsSame || transactionsParticular?.stock) ? transactionsParticular : res.particular;
+        this.lc.blankLedger.transactions[txnIndex].selectedAccount = {
+                label: selectedAccountName, 
+                value: selectedAccountUniqueName, 
+                name: selectedAccountName, 
+                uniqueName: selectedAccountUniqueName, 
+                category: particular?.category, 
+                parentGroups: particular?.parentGroups,
+                uNameStr : particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+                additional: {
+                    name: selectedAccountName, 
+                    uniqueName: selectedAccountUniqueName, 
+                    stock: particular?.stock || null
+                }
+            };
+        this.lc.blankLedger.transactions[txnIndex].amount = transactionAmount;
+        this.lc.blankLedger.transactions[txnIndex].convertedAmount = transactionAmount;
+        this.lc.blankLedger.transactions[txnIndex].total = res?.total.amount;
+        this.lc.blankLedger.transactions[txnIndex].convertedTotal = res?.total.amount;
+        this.lc.blankLedger.transactions[txnIndex].discounts = discounts;
+        this.lc.blankLedger.transactions[txnIndex].taxes = res?.taxes ?? [];
+        this.lc.blankLedger.transactions[txnIndex].taxesVm = this.companyTaxesList?.filter(tax => !TCS_TDS_TAXES_TYPES?.includes(tax?.taxType)) || [];
+
+        // Other Tax Logic
+        let tax: TaxResponse;
+        let otherTaxesModal = new SalesOtherTaxesModal();
+        otherTaxesModal.itemLabel = res.particular?.name;
+        if (res?.tcsTaxes && res?.tcsTaxes.length) {
+            tax = this.companyTaxesList.find(item => item?.uniqueName === res?.tcsTaxes[0]);
+            this.lc.blankLedger.otherTaxType = OtherTaxTypeEnum.TCS;
+        } else if (res?.tdsTaxes && res?.tdsTaxes.length) {
+            tax = this.companyTaxesList.find(item => item?.uniqueName === res?.tdsTaxes[0]);
+            this.lc.blankLedger.otherTaxType = OtherTaxTypeEnum.TDS;
+        }
+        if (tax) {
+            otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+            otherTaxesModal.tcsCalculationMethod = res.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            this.lc.blankLedger.otherTaxModal = otherTaxesModal;
+            this.lc.blankLedger.isOtherTaxesApplicable = true;
+        }
+        
+        this.selectAccount(
+            this.lc.blankLedger.transactions[txnIndex].selectedAccount,
+            this.lc.blankLedger.transactions[txnIndex],
+            false,
+            false,
+            false
+        );
+        setTimeout(() => {
+            this.lc.showNewLedgerPanel = true;
+        }, 200);
+    }
+
+    /**
+     * Handle load details for duplicate entry
+     * 
+     * @param event The event object
+     * @param txn The transaction object
+     * @memberof LedgerComponent
+     */
+    private handeLoadDetailsForDuplicateEntry(event: any, txn: any): void {
+        txn.showTaxationDiscountBox = false;
+        // Take taxes of parent group and stock's own taxes
+        if (txn?.taxesVm?.length) {
+            txn.taxesVm.forEach(tax => {
+                tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
+                tax.isDisabled = false;
+            });
+        }
+        if (!this.isHideBankLedgerPopup) {
+            this.lc.currentBlankTxn = txn;
+        }
+        txn.isMrpDiscountApplied = false;
+        txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+        txn.showOtherTax = this.showOtherTax(txn);
+        this.handleRcmVisibility(txn);
+        this.handleTaxableAmountVisibility(txn);
+        this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
+        this.needToReCalculate.next(true);
+        this.getTransactionCountConvertToEntries();
     }
 }

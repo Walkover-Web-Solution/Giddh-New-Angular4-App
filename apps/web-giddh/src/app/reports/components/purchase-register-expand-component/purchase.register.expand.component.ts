@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
+import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
@@ -18,6 +18,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: "purchase-register-expand",
@@ -104,12 +106,14 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private activeRoute: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _cd: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
         private dialog: MatDialog,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private companyActions: CompanyActions
     ) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(
             select((appState) => appState.receipt.PurchaseRegisteDetailedResponse),
@@ -134,7 +138,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? "assets/icon/" : AppUrl + APP_FOLDER + "assets/icon/";
+        this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
         this.getDetailedPurchaseRequestFilter.q = "";
@@ -154,14 +158,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.isDefaultLoaded = true;
             }
         });
-
-        this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
+        
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
                 this.getDetailedPurchaseRequestFilter.from = this.from;
                 this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
@@ -313,6 +319,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {

@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
@@ -25,6 +25,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "preview",
@@ -206,6 +207,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private domSanitizer: DomSanitizer,
         private thermalService: ThermalService,
         private toaster: ToasterService,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private adjustmentUtilityService: AdjustmentUtilityService
@@ -253,7 +255,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter

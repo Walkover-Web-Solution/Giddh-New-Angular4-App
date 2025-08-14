@@ -16,6 +16,7 @@ export class ReportsModel {
     public to?: string;
     public interval?: string;
     public selectedMonth?: string;
+    public salesPerson?: {name: string, uniqueName: string};
 }
 /*
 * Report Response Model to be bind with get sales report API
@@ -47,6 +48,8 @@ export class ReportsDetailedRequestFilter {
     public page?: number
     public count?: number
     public branchUniqueName?: string;
+    public salesPersonUniqueName?: string;
+    public accountUniqueNames?: string[];
 }
 export class Balance {
     public amount: number;
@@ -142,6 +145,7 @@ export class PurchaseReportsModel {
     public to?: string;
     public interval?: string;
     public selectedMonth?: string;
+    public salesPerson?: {name: string, uniqueName: string};
 }
 
 export interface PurchaseRegisteDetailedResponse {

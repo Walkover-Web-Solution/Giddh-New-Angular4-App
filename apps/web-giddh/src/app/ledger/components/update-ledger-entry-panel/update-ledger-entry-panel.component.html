@@ -164,7 +164,7 @@
                                                             'other-account-entry':
                                                                 isPettyCash && txn?.particular?.uniqueName === 'others'
                                                         }"
-                                                        class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center column-gap5"
+                                                        class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center column-gap1"
                                                     >
                                                         <ng-template [ngIf]="!txn.isDiscount">
                                                             <div class="d-flex update-ledger-account w-100 column-gap5">
@@ -293,20 +293,32 @@
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
+                                            <span
+                                                class="d-flex cursor-pointer"
+                                                *ngIf="voucherApiVersion === 2 &&
+                                                        vm.selectedLedger.attachedFile?.length > 0 &&
+                                                        (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                "
+                                                (click)="openAttachmentsDialog(attachments, true)"
+                                                [matTooltip]="vm.selectedLedger.attachedFileName"
+                                                [matTooltipPosition]="'above'"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-attachment left"></i>
+                                            </span>
 
                                                         <span
-                                                            class="download-invoice-ledger cursor-pointer"
+                                                            class="cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
-                                                                (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                                    (vm.selectedLedger.voucherGenerated &&
-                                                                        !restrictedVouchersForDownload.includes(
-                                                                            vm.selectedLedger.voucherGeneratedType
-                                                                        ))) &&
+                                                                vm.selectedLedger.voucherGenerated &&
+                                                                    !restrictedVouchersForDownload.includes(
+                                                                        vm.selectedLedger.voucherGeneratedType
+                                                                    ) &&
                                                                 (txn?.particular?.name || txn?.particular?.uniqueName)
                                                             "
                                                             (click)="openAttachmentsDialog(attachments)"
-                                                            [matTooltipPosition]="'left'"
+                                                            [matTooltipPosition]="'above'"
                                                             [containerClass]="'col-xs-3'"
                                                             [matTooltip]="
                                                                 vm.selectedLedger.attachedFile?.length > 0 &&
@@ -325,7 +337,7 @@
                                                             "
                                                             matTooltipClass="tooltip-black"
                                                         >
-                                                            <i class="icon-download-circle pull-left"></i>
+                                                            <i class="icon-eye pull-left"></i>
                                                         </span>
                                                     </td>
 
@@ -455,7 +467,7 @@
                                                     <td
                                                         [attr.data-title]="commonLocaleData?.app_particular"
                                                         [id]="'credit-id-' + i"
-                                                        class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                        class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between column-gap1"
                                                         [ngClass]="{
                                                             'other-account-entry':
                                                                 isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -592,18 +604,31 @@
                                                         </span>
 
                                                         <span
-                                                            class="download-invoice-ledger cursor-pointer"
+                                                            class="d-flex cursor-pointer"
+                                                            *ngIf="voucherApiVersion === 2 &&
+                                                                    vm.selectedLedger.attachedFile?.length > 0 &&
+                                                                    (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                            "
+                                                            (click)="openAttachmentsDialog(attachments, true)"
+                                                            [matTooltip]="vm.selectedLedger.attachedFileName"
+                                                            [matTooltipPosition]="'above'"
+                                                            matTooltipClass="tooltip-black"
+                                                        >
+                                                            <i class="icon-attachment left"></i>
+                                                        </span>
+
+                                                        <span
+                                                            class="cursor-pointer"
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
-                                                                (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                                    (vm.selectedLedger.voucherGenerated &&
-                                                                        !restrictedVouchersForDownload.includes(
-                                                                            vm.selectedLedger.voucherGeneratedType
-                                                                        ))) &&
+                                                                vm.selectedLedger.voucherGenerated &&
+                                                                !restrictedVouchersForDownload.includes(
+                                                                    vm.selectedLedger.voucherGeneratedType
+                                                                ) &&
                                                                 (txn?.particular?.name || txn?.particular?.uniqueName)
                                                             "
                                                             (click)="openAttachmentsDialog(attachments)"
-                                                            [matTooltipPosition]="'left'"
+                                                            [matTooltipPosition]="'above'"
                                                             [containerClass]="'col-xs-3'"
                                                             [matTooltip]="
                                                                 vm.selectedLedger.attachedFile?.length > 0 &&
@@ -622,7 +647,7 @@
                                                             "
                                                             matTooltipClass="tooltip-black"
                                                         >
-                                                            <i class="icon-download-circle pull-left"></i>
+                                                            <i class="icon-eye pull-left"></i>
                                                         </span>
                                                     </td>
 
@@ -760,7 +785,7 @@
                                                     'other-account-entry':
                                                         isPettyCash && txn?.particular?.uniqueName === 'others'
                                                 }"
-                                                class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center column-gap5"
+                                                class="col-9 position-relative select2-parent select2-ledger d-flex align-items-center column-gap15"
                                             >
                                                 <ng-template [ngIf]="!txn.isDiscount">
                                                     <div class="d-flex update-ledger-account w-100 column-gap5">
@@ -884,20 +909,32 @@
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
+                                            <span
+                                                class="d-flex cursor-pointer"
+                                                *ngIf="voucherApiVersion === 2 &&
+                                                        vm.selectedLedger.attachedFile?.length > 0 &&
+                                                        (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                "
+                                                (click)="openAttachmentsDialog(attachments, true)"
+                                                [matTooltip]="vm.selectedLedger.attachedFileName"
+                                                [matTooltipPosition]="'above'"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-attachment left"></i>
+                                            </span>
 
                                                 <span
-                                                    class="download-invoice-ledger cursor-pointer"
+                                                    class="cursor-pointer"
                                                     *ngIf="
                                                         voucherApiVersion === 2 &&
-                                                        (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                            (vm.selectedLedger.voucherGenerated &&
-                                                                !restrictedVouchersForDownload.includes(
-                                                                    vm.selectedLedger.voucherGeneratedType
-                                                                ))) &&
+                                                        vm.selectedLedger.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            vm.selectedLedger.voucherGeneratedType
+                                                        ) &&
                                                         (txn?.particular?.name || txn?.particular?.uniqueName)
                                                     "
                                                     (click)="openAttachmentsDialog(attachments)"
-                                                    [matTooltipPosition]="'left'"
+                                                    [matTooltipPosition]="'above'"
                                                     [containerClass]="'col-xs-3'"
                                                     [matTooltip]="
                                                         vm.selectedLedger.attachedFile?.length > 0 &&
@@ -916,7 +953,7 @@
                                                     "
                                                     matTooltipClass="tooltip-black"
                                                 >
-                                                    <i class="icon-download-circle pull-left"></i>
+                                                    <i class="icon-eye pull-left"></i>
                                                 </span>
                                             </td>
 
@@ -1042,7 +1079,7 @@
                                             <td
                                                 [attr.data-title]="commonLocaleData?.app_particular"
                                                 [id]="'credit-id-' + i"
-                                                class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                                class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between column-gap15"
                                                 [ngClass]="{
                                                     'other-account-entry':
                                                         isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -1174,19 +1211,32 @@
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
 
+                                            <span
+                                                class="d-flex cursor-pointer"
+                                                *ngIf="voucherApiVersion === 2 &&
+                                                        vm.selectedLedger.attachedFile?.length > 0 &&
+                                                        (txn?.particular?.name || txn?.particular?.uniqueName)
+                                                "
+                                                (click)="openAttachmentsDialog(attachments, true)"
+                                                [matTooltip]="vm.selectedLedger.attachedFileName"
+                                                [matTooltipPosition]="'above'"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-attachment left"></i>
+                                            </span>
+
                                                 <span
-                                                    class="download-invoice-ledger cursor-pointer"
+                                                    class="cursor-pointer"
                                                     *ngIf="
                                                         voucherApiVersion === 2 &&
-                                                        (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                            (vm.selectedLedger.voucherGenerated &&
-                                                                !restrictedVouchersForDownload.includes(
-                                                                    vm.selectedLedger.voucherGeneratedType
-                                                                ))) &&
+                                                        vm.selectedLedger.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            vm.selectedLedger.voucherGeneratedType
+                                                        ) &&
                                                         (txn?.particular?.name || txn?.particular?.uniqueName)
                                                     "
                                                     (click)="openAttachmentsDialog(attachments)"
-                                                    [matTooltipPosition]="'left'"
+                                                    [matTooltipPosition]="'above'"
                                                     [containerClass]="'col-xs-3'"
                                                     [matTooltip]="
                                                         vm.selectedLedger.attachedFile?.length > 0 &&
@@ -1205,7 +1255,7 @@
                                                     "
                                                     matTooltipClass="tooltip-black"
                                                 >
-                                                    <i class="icon-download-circle pull-left"></i>
+                                                    <i class="icon-eye pull-left"></i>
                                                 </span>
                                             </td>
 
@@ -1374,7 +1424,7 @@
                         <ng-container
                             *ngIf="
                                 (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                vm.selectedLedger.voucher.shortCode !== 'jr'
+                                vm.selectedLedger.voucher.shortCode !== 'jr'; else showOnlySalesPerson
                             "
                         >
                             <div
@@ -1693,7 +1743,13 @@
                                         </p>
                                     </div>
                                 </ng-template>
-                                <div class="pull-right mr-t1 min-width-0">
+                            </div>
+                            <div class="row mr-t15">
+                                <!-- Sales Person -->
+                                <div class="col-6">
+                                    <ng-container *ngTemplateOutlet="salesPersonDropdown"></ng-container>
+                                </div>
+                                <div class="col-6">
                                     <div
                                         *ngIf="vm.showNewEntryPanel && isTcsTdsApplicable"
                                         class="text-right table-amount last-table-amount"
@@ -1742,14 +1798,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <span class="font-12 pull-right pd-t05">{{ vm.selectedLedger?.otherTaxModal?.appliedOtherTax?.name }}</span>
                                 </div>
                             </div>
-                            <div class="clearfix pd-1 text-right bd-rb pr-0">
+                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0">
                                 <span class="in-words font-15">
                                     {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
                                 </span>
                             </div>
                         </ng-container>
+                        <ng-template #showOnlySalesPerson>
+                            <div class="row mr-t15">
+                                <!-- Sales Person -->
+                                <div class="col-6">
+                                    <ng-container *ngTemplateOutlet="salesPersonDropdown"></ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
                     </div>
                     <!-- endregion -->
 
@@ -2466,17 +2531,9 @@
                                         class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block"
                                        *ngIf="!isPettyCash && voucherApiVersion === 2"
                                     >
-                                        <div class="d-flex column-gap15">
+                                        <div class="d-flex column-gap15 w-100">
                                             <button
-                                                mat-stroked-button
-                                                color="warn"
-                                                id="update-ledger-delete-button"
-                                                (click)="showDeleteEntryModal()"
-                                            >
-                                                {{ commonLocaleData?.app_delete }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 id="update-ledger-update-button"
                                                 [disabled]="isFileUploading"
@@ -2484,6 +2541,27 @@
                                                 (click)="saveLedgerTransaction()"
                                             >
                                                 {{ commonLocaleData?.app_update }}
+                                            </button>
+                                            <button
+                                                *ngIf="
+                                                    !isDaybook &&
+                                                    !((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1)
+                                                "
+                                                aria-label="Duplicate entry button"
+                                                mat-stroked-button
+                                                (click)="duplicateEntry()"
+                                            >
+                                                {{ localeData?.duplicate }}
+                                            </button>
+
+                                            <button
+                                                class="ml-auto"
+                                                mat-stroked-button
+                                                color="warn"
+                                                id="update-ledger-delete-button"
+                                                (click)="showDeleteEntryModal()"
+                                            >
+                                                {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </div>
                                     </div>
@@ -2564,7 +2642,7 @@
     </ng-template>
 
     <ng-template #attachments>
-        <attachments [selectedItem]="vm.selectedLedger"></attachments>
+        <attachments [selectedItem]="selectedItem"></attachments>
     </ng-template>
 
     <!-- Create Tax Aside Pane -->
@@ -2579,3 +2657,18 @@
         ></aside-menu-create-tax-component>
     </ng-template>
 </ng-container>
+
+<!-- Sales person dropdown template reference -->
+<ng-template #salesPersonDropdown>
+    <reactive-dropdown-field 
+        [name]="'sales-person'"
+        [label]="commonLocaleData?.app_sales_person"
+        [labelValue]="vm.selectedLedger.salesPerson?.name"
+        [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+        [options]="salesPersonList$ | async"
+        [showCreateNew]="true"
+        [createNewText]="commonLocaleData?.app_create_new"
+        (createOption)="openSalesPersonDialog()"
+        (selectedOption)="handleSalesPersonSelection($event)"
+    ></reactive-dropdown-field>
+</ng-template>

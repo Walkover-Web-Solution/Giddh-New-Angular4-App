@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -33,6 +33,7 @@ import { CancelEInvoiceDialogComponent } from "../cancel-einvoice-dialog/cancel-
 import { BulkExportComponent } from "../bulk-export/bulk-export.component";
 import { GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GetAllLedgersForInvoiceResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
+import { ServiceConfig } from "../../services/service.config";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { RestrictedModules } from '../../app.constant';
@@ -132,6 +133,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dayjs: any = dayjs;
     /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
+    /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -362,6 +364,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private router: Router,
         public dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
         private componentStore: VoucherComponentStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -459,7 +462,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.setInitialAdvanceFilter(true);
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
@@ -1524,6 +1527,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.advanceFiltersApplied = true;
+            this.ledgerSearchRequest.page = 1;
+            this.advanceFilters.page = 1;
 
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));

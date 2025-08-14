@@ -87,9 +87,12 @@
     "app_voucher_types": {
         "sales": "बिक्री",
         "purchase": "खरीद",
+        "purchase_order": "खरीद अर्थात",
         "purchases": "खरीद",
         "receipt": "रसीद",
         "payment": "भुगतान",
+        "estimate": "आयात",
+        "proforma": "प्रोफॉर्मा",
         "journal": "पत्रिका",
         "contra": "विपरीत",
         "debit_note": "डेबिट नोट",
@@ -215,7 +218,8 @@
         "yearly": "वार्षिक",
         "weekly": "साप्ताहिक",
         "month": "महिना",
-        "year": "वर्ष"
+        "year": "वर्ष",
+        "daily": "दिनांक"
     },
     "app_tax_subtypes": {
         "receivable": "प्राप्य",
@@ -767,7 +771,7 @@
     "app_password": "पासवर्ड",
     "app_select_column": "कॉलम चुनें",
     "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें",
-    "app_file_format": "फाइल प्रारूप",
+    "app_file_format": "फाइल नाम प्रारूप",
     "app_select_file": "फाइल चुनें",
     "app_ledger_view": {
         "t_view": "टी दृश्य",
@@ -777,6 +781,22 @@
     "app_uncheck_all_item_message": "क्या आप वाकई सभी पंक्तियों को अनचेक करना चाहते हैं?",
     "app_account_status": "खाता स्थिति",
     "app_both": "दोनों",
+    "app_client": "ग्राहक",
+    "app_search_by_name_and_unique_name": "नाम और अद्वितीय नाम द्वारा खोजें",
+    "app_search_by_invoice_number_customer_name_and_amount": "चालान संंख्या, ग्राहक नाम और राशि द्वारा खोजें",
+    "app_weekdays": {
+        "daily": "दैनिक",
+        "sunday": "रविवार",
+        "monday": "सोमवार",
+        "tuesday": "मंगलवार",
+        "wednesday": "बुधवार",
+        "thursday": "गुरुवार",
+        "friday": "शुक्रवार",
+        "saturday": "शनिवार"
+    },
+    "app_sales_person": "विक्रेता",
+    "app_sales_person_placeholder": "विक्रेता चुनें",
     "app_skip_and_next": "छोड़ें और अगला",
-    "app_save_and_next":"सहेजें और अगला"
+    "app_save_and_next":"सहेजें और अगला",
+    "app_variable_search_hint": "'{' का उपयोग करके वेरिएबल खोजें या नाम मैन्युअली लिखें"
 }
