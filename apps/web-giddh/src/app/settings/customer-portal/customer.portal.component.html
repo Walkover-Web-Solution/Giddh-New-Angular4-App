@@ -131,7 +131,7 @@
                             <div class="col-sm-12 form-group">
                                 <div class="d-flex column-gap1">
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         aria-label="save"
                                         *ngIf="!updateRazor"
@@ -141,7 +141,7 @@
                                         {{ commonLocaleData?.app_save }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         aria-label="update"
                                         *ngIf="updateRazor"
@@ -215,7 +215,7 @@
                                         aria-label="save"
                                         type="button"
                                         *ngIf="!updatePaypal"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         [disabled]="paypalForm.invalid"
                                         (click)="savePaypalDetails()"
@@ -226,7 +226,7 @@
                                         aria-label="update"
                                         *ngIf="updatePaypal"
                                         type="button"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         [disabled]="paypalForm.invalid"
                                         (click)="updatePaypalDetails()"
@@ -312,7 +312,7 @@
                             <div class="col-sm-12 form-group">
                                 <div class="d-flex column-gap1">
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         aria-label="save"
                                         (click)="savePayuDetails()"

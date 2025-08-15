@@ -9,7 +9,7 @@
             <div class="form-group initial-screen position-absolute text-center mb-5">
                 <button
                     aria-label="connect bank"
-                    mat-stroked-button
+                    mat-raised-button
                     class="mr-r2"
                     color="primary"
                     (click)="openInstitutionsDialog()"
@@ -37,7 +37,7 @@
                         <div class="form-group mr-l2">
                             <button
                                 type="button"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="mr-r2"
                                 (click)="openCreateNewAccountModal()"
@@ -71,7 +71,7 @@
                 <!-- This is not using no due to gocardless -->
                 <!-- <ng-container *ngIf="isPlaidSupportedCountry">
             <div class="form-group">
-                <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
+                <button aria-label="connect bank" mat-raised-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
                     {{ localeData?.payment?.connect_bank }}
                 </button>
             </div>
@@ -80,7 +80,7 @@
                     <div class="form-group">
                         <button
                             aria-label="connect bank"
-                            mat-stroked-button
+                            mat-raised-button
                             class="mr-r2"
                             color="primary"
                             (click)="openInstitutionsDialog()"
@@ -304,7 +304,7 @@
                                     <button
                                         aria-label="users"
                                         type="button"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         class="bold font-15 mt-2 mr-l15"
                                         (click)="openCreateNewAccountUserModal(bankAccount)"

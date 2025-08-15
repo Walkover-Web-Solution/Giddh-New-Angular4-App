@@ -55,7 +55,7 @@
                                 <button
                                     type="button"
                                     class="mr-0 search-btn"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="getReport()"
                                 >
@@ -68,7 +68,6 @@
                                     type="button"
                                     class="mr-0"
                                     mat-stroked-button
-                                    color="primary"
                                     (click)="initializeSearchReqObj()"
                                     *ngIf="showClearButton"
                                 >
@@ -80,7 +79,7 @@
                                 <button
                                     type="button"
                                     (click)="openAdvanceFilterDialog()"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                 >
                                     {{ commonLocaleData?.app_filter }}
@@ -313,7 +312,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     mat-dialog-close
                                     (click)="getReport()"

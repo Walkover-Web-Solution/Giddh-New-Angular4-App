@@ -60,14 +60,14 @@
                             <div class="d-flex column-gap1">
                                 <button
                                     *ngIf="!transportEditMode"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="generateTransporter(transportedCreateEditForm.value)"
                                 >
                                     {{ commonLocaleData?.app_save }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="transportEditMode"
                                     (click)="updateTransporter(transportedCreateEditForm.value)"

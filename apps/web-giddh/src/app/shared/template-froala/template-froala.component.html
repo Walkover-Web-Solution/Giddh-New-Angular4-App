@@ -468,7 +468,7 @@
         <div mat-dialog-actions class="justify-content-start">
             <button
                 aria-label="save"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 type="button"
                 (click)="isTrigger ? createUpdateTrigger() : onSubmit('save')"
@@ -478,7 +478,7 @@
             <button
                 *ngIf="inputData?.activeTab"
                 aria-label="save and send email"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 type="button"
                 (click)="onSubmit('send')"

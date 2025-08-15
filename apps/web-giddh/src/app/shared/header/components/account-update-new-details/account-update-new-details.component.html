@@ -428,7 +428,6 @@
                         >
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="text-left w-50 pd-r2"
                                 (click)="showMoreGst()"
                             > {{ commonLocaleData?.app_show_all }} ({{
@@ -437,7 +436,6 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="text-left w-50"
                                 (click)="showLessGst()"
                             > {{ commonLocaleData?.app_show_less }}
@@ -446,7 +444,6 @@
                         <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             > + {{ localeData?.add_address }}
                             </button>
@@ -585,7 +582,6 @@
                         <div class="pl-2 mr-t05">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="removePortalUser(domain, i)"
                                 aria-label="delete icon"
                             >
@@ -949,7 +945,7 @@
                                     >
                                     </reactive-dropdown-field>
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         type="submit"
                                         [disabled]="moveAccountForm.invalid"
@@ -984,7 +980,7 @@
                             >
                             </reactive-dropdown-field>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 type="submit"
                                 (click)="mergeAccounts()"
@@ -1031,7 +1027,7 @@
                             (onClear)="discountSelected()"
                         ></reactive-dropdown-field>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="isDiscountSaveDisable$ | async"
                             (click)="applyDiscounts()"
@@ -1095,7 +1091,7 @@
                             <button
                                 [disabled]="isTaxesSaveDisable$ | async"
                                 type="submit"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 aria-label="save"
                             >
@@ -1140,7 +1136,7 @@
         <div class="d-flex column-gap15" *ngIf="isOtherSelectedTab">
         <button
             (click)="submit()"
-            mat-stroked-button
+            mat-raised-button
             color="primary"
             aria-label="update"
         >
@@ -1149,7 +1145,7 @@
 
         <button
             class="ml-auto"
-            mat-stroked-button
+            mat-raised-button
             color="primary"
             (click)="accountArchiveUnarchive()"
         >
@@ -1159,7 +1155,6 @@
             type="button"
             *ngIf="showDeleteButton"
             mat-stroked-button
-            color="primary"
             (click)="deleteClicked.emit(true)"
             aria-label="delete"
         >
@@ -1172,7 +1167,7 @@
     <div class="d-flex column-gap15 pd-t2">
         <button
         (click)="submit()"
-        mat-stroked-button
+        mat-raised-button
         color="primary"
         aria-label="update"
         >
@@ -1180,7 +1175,7 @@
     </button>
     <button
         class="ml-auto"
-        mat-stroked-button
+        mat-raised-button
         color="primary"
         (click)="accountArchiveUnarchive()"
     >

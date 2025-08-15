@@ -112,7 +112,7 @@
                             target="_blank"
                             *ngIf="!isElectron"
                             [href]="element.path"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -121,7 +121,7 @@
                         <a
                             *ngIf="isElectron"
                             (click)="downloadFile(element.path)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -156,7 +156,7 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -179,7 +179,7 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >

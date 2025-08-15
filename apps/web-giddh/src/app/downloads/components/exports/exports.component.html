@@ -67,7 +67,7 @@
                             target="_blank"
                             [href]="element.s3Path"
                             *ngIf="!isElectron && element.status === 'COMPLETED'"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="download-button-status desktop"
                         >
@@ -76,7 +76,7 @@
                         <a
                             *ngIf="isElectron && element.status === 'COMPLETED'"
                             (click)="downloadFile(element.s3Path)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="download-button-status electron"
                         >

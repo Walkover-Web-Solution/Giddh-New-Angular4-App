@@ -32,7 +32,7 @@
                             </button>
 
                             <div 
-                                class="input-group custom-datepicker" 
+                                class="custom-datepicker" 
                                 [matMenuTriggerFor]="universalDatepicker"
                                 #universalDatepickerTrigger="matMenuTrigger"
                                 (menuOpened)="isDatepickerMenuOpen = true"
@@ -545,7 +545,7 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
@@ -990,8 +990,8 @@
                         <div class="d-flex align-items-center column-gap1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-stroked-button
-                                
+                                mat-raised-button
+                                color="primary"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -1533,8 +1533,8 @@
                         <div class="d-flex align-items-center column-gap1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-stroked-button
-                                
+                                mat-raised-button
+                                color="primary"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -1996,8 +1996,8 @@
                         <div class="d-flex align-items-center column-gap1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-stroked-button
-                                
+                                mat-raised-button
+                                color="primary"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -2441,7 +2441,7 @@
                                     </div>
                                 </div>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length > 0"
                                     (click)="generateBulkInvoice(false)"
@@ -2449,7 +2449,7 @@
                                     {{ localeData?.generate_multiple }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length > 0"
                                     (click)="generateBulkInvoice(true)"
@@ -2457,7 +2457,7 @@
                                     {{ localeData?.generate_compound }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length && hasSameVoucherAccount"
                                     (click)="invoiceGenerate()"
@@ -3014,7 +3014,6 @@
                                         <button
                                             *ngIf="element?.status === 'open' && !isCompany && !isConsolidatedBranch"
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn icon-font-11"
                                             [matTooltip]="localeData?.convert_to_bill"
                                             [matTooltipPosition]="'above'"
@@ -3024,7 +3023,6 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn icon-font-11"
                                             [matTooltip]="commonLocaleData?.app_send_email"
                                             [matTooltipPosition]="'above'"
@@ -3035,7 +3033,6 @@
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch"
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_copy"
                                             [matTooltipPosition]="'above'"
@@ -3048,7 +3045,6 @@
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch"
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
@@ -3564,7 +3560,7 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button colo="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
@@ -3975,7 +3971,7 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button colo="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
@@ -4289,7 +4285,7 @@
                                     </div>
                                 </div>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
@@ -4298,7 +4294,7 @@
                                     {{ localeData?.generate_multiple }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
@@ -5833,7 +5829,6 @@
                                 <div class="d-flex column-gap1 justify-content-center">
                                     <button
                                         mat-stroked-button
-                                        color="primary"
                                         class="mat-icon-md-btn"
                                         matTooltip="Preview"
                                         matTooltipPosition="above"
@@ -5843,7 +5838,6 @@
                                     </button>
                                     <button
                                         mat-raised-button
-                                        color="primary"
                                         class="mat-icon-md-btn"
                                         matTooltip="Edit Template"
                                         matTooltipPosition="above"
@@ -5853,7 +5847,6 @@
                                     </button>
                                     <button
                                         mat-stroked-button
-                                        color="primary"
                                         class="mat-icon-md-btn"
                                         matTooltip="Delete"
                                         matTooltipPosition="above"
@@ -5877,7 +5870,6 @@
                                 <div class="d-flex column-gap1 justify-content-center">
                                     <button
                                         mat-stroked-button
-                                        color="primary"
                                         class="mat-icon-md-btn"
                                         matTooltip="Preview"
                                         matTooltipPosition="above"
@@ -5887,7 +5879,6 @@
                                     </button>
                                     <button
                                         mat-stroked-button
-                                        color="primary"
                                         class="mat-icon-md-btn"
                                         matTooltip="Edit Template"
                                         matTooltipPosition="above"
@@ -5897,7 +5888,6 @@
                                     </button>
                                     <button
                                         mat-stroked-button
-                                        color="primary"
                                         class="mat-icon-md-btn"
                                         matTooltip="Delete"
                                         matTooltipPosition="above"
