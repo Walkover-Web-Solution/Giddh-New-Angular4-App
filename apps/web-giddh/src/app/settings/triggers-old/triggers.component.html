@@ -97,7 +97,7 @@
                 ></input-field>
             </div>
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 class="font-15"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
@@ -110,7 +110,7 @@
     <ng-container *ngIf="!editCommunicationPlatform">
         <button
             class="new-trigger font-15"
-            mat-stroked-button
+            mat-raised-button
             color="primary"
             *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
             (click)="toggleTriggerForm()"
@@ -165,7 +165,7 @@
                     <td mat-cell *matCellDef="let element">
                         <button
                             class="small-button"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             (click)="updateTriggerStatus(element?.uniqueName)"
                         >
@@ -316,7 +316,7 @@
             </div>
             <button
                 *ngIf="triggerMode === 'create' || triggerMode === 'copy'"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 (click)="createNewTrigger()"
                 [disabled]="disableSubmitButton"
@@ -326,7 +326,7 @@
             </button>
             <button
                 *ngIf="triggerMode === 'update'"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 (click)="updateTrigger()"
                 [disabled]="disableSubmitButton"

@@ -10,7 +10,7 @@
         </div>
         <button
             class="buy-plan-btn position-absolute"
-            mat-stroked-button
+            mat-raised-button
             color="primary"
             [routerLink]="['/pages/user-details/subscription/buy-plan/' + subscriptionId]"
             *ngIf="activeTabIndex === 3 && profileData?.planVersion === 1 && !isSubscriptionLoading"
@@ -51,7 +51,7 @@
                             </div>
                             <div class="form-group clearfix mb-0">
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     type="submit"
                                     (click)="regenerateKey()"
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-lg-4 pd-l05">
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     class="btn mr-l1 margin-top"
                                     [ladda]="isAddNewMobileNoInProcess$ | async"
@@ -113,7 +113,7 @@
                             </div>
                             <div class="col-lg-4 pd-l05 pd-t1">
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     class="btn mr-l1 mt-2"
                                     [ladda]="isVerifyAddNewMobileNoInProcess$ | async"

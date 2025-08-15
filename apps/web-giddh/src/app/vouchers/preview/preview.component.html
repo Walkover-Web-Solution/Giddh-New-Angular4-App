@@ -24,7 +24,7 @@
                 <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                     <ng-container *ngIf="voucherType === voucherTypeEnum.sales; else other">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [matMenuTriggerFor]="newInvoice"
                             class="invoice-btn width-150"
@@ -43,7 +43,7 @@
                     </ng-container>
                     <ng-template #other>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="invoice-btn width-150"
                             [routerLink]="[createNewVoucher.link]"
@@ -130,7 +130,6 @@
                         <div class="d-flex action-btn">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
@@ -140,7 +139,6 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_send_email"
                                 [matTooltipPosition]="'above'"
@@ -150,7 +148,6 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_print"
                                 [matTooltipPosition]="'above'"
@@ -163,7 +160,6 @@
                                     defaultThermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder
                                 "
                                 mat-stroked-button
-                                color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_print_thermal"
                                 [matTooltipPosition]="'above'"
@@ -173,7 +169,6 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_download_pdf"
                                 [matTooltipPosition]="'above'"
@@ -184,7 +179,6 @@
                             <button
                                 *ngIf="(!isCompany && !isConsolidatedBranch)"
                                 mat-stroked-button
-                                color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
@@ -194,7 +188,7 @@
                             </button>
                         </div>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [matMenuTriggerFor]="changeStatus"
                             *ngIf="(selectedInvoice?.balanceStatus !== 'CANCEL') && (!isCompany && !isConsolidatedBranch && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice)"

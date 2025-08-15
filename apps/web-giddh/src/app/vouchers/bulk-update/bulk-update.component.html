@@ -136,7 +136,7 @@
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
         <div class="d-flex column-gap1 mr-t15">
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 (click)="updateBulkInvoice()"
                 [disabled]="(bulkUpdateVoucherInProgress$ | async) || (uploadImageBase64InProgress$ | async)"

@@ -10,7 +10,7 @@
                 <button
                     type="button"
                     mat-stroked-button
-                    class="btn-default mr-r1"
+                    class="mr-r1"
                     *ngIf="showEditButton"
                     (click)="editVoucher()"
                 >
@@ -19,7 +19,7 @@
                 <button
                     type="button"
                     mat-stroked-button
-                    class="btn-default mr-r1"
+                    class="mr-r1"
                     [matMenuTriggerFor]="showMoreOptions"
                     (click)="showEsign = false"
                 >
@@ -61,7 +61,7 @@
                                         (currentVoucherFilter === invoicesEnum && !invoiceType?.length)
                                     "
                                     type="button"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="onSendInvoiceOnMail(emailList?.value)"
                                 >
@@ -78,7 +78,7 @@
                             <div [ngClass]="{'mr-t15': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}">
                                 <button
                                     type="button"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="downloadInvoice()"
                                     [disabled]="
@@ -102,7 +102,7 @@
                             <div class="mr-t15">
                                 <button
                                     type="button"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="onSendInvoiceOnSms(smsList?.value)"
                                 >

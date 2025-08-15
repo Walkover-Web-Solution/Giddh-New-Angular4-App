@@ -14,7 +14,7 @@
                 <!--group-->
                 <div class="pull-right text-right">
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
@@ -23,7 +23,7 @@
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         aria-label="share" 
                         class="pull-right" 
                         (click)="openShareGroupDialog()"
@@ -42,7 +42,7 @@
             <!--account-->
             <div class="col-lg-4 pull-right pr-0 pl-0 full-width" *ngIf="showEditAccount$ | async">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     aria-label="share" 
                     class="pull-right"
                     (click)="openShareAccountDialog()"

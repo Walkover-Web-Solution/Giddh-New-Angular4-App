@@ -39,7 +39,7 @@
                         >
                         </reactive-dropdown-field>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="shareAccountForm.invalid || isUserRestricted"
                             (click)="shareAccount()">
@@ -81,7 +81,6 @@
 
                                 <button
                                     mat-stroked-button
-                                    color="primary"
                                     (click)="unShareAccount(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"
                                 >

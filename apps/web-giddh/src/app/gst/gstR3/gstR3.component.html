@@ -102,7 +102,7 @@
                                             <div>
                                                 <button
                                                     class="flex-grow-0"
-                                                    mat-stroked-button
+                                                    mat-raised-button
                                                     color="primary"
                                                     (click)="emailGSTR3bSheet(false)"
                                                     [disabled]="!userEmail"
@@ -119,7 +119,7 @@
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         (click)="checkAuthenticationAndFileGstr3B()"
                                         [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
@@ -132,7 +132,7 @@
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         (click)="openSettingAsidePane()"
                                         [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        

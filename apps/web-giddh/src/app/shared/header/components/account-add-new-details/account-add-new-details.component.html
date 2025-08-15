@@ -427,7 +427,7 @@
                             "
                         >
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="text-left w-50 pd-r2"
                                 (click)="showMoreGst()"
@@ -436,7 +436,7 @@
                                 }})
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="text-left w-50"
                                 (click)="showLessGst()"
@@ -446,7 +446,6 @@
                         <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -916,7 +915,7 @@
     <div class="row pd-t2">
         <div class="col-sm-12">
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 aria-label="save"
                 type="submit"
