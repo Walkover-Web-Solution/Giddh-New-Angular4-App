@@ -10,6 +10,7 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { EmailType } from './utility/template-froala.const';
 import { cloneDeep, isArray } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 declare var tinymce: any;
 @Component({
     selector: 'template-froala',
@@ -149,69 +150,112 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     public get getTotalEmailsCount(): number {
         return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
     };
+
+    content: SafeHtml = '';
     /** Holds tribute suggestions */
     public tributeSuggestions: any[] = [];
     /** Holds width of select-multiple-fields */
     public optionClass: string = '';
     /** Hold tinymce editor config */
-    public tinymceConfig = {
-        selector: '#tinyEditor',
-        branding: false,
-        zindex: 2501,
-        toolbar_sticky: true,
-        menubar: false,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
-            'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
-            'table', 'help', 'wordcount', 'emoticons', 'pagebreak', 'nonbreaking',
-            'directionality', 'hr'
-        ],
-        toolbar: [
-            'undo redo | bold italic underline strikethrough fontfamily fontsize forecolor backcolor removeformat',
-            'blockquote code help fullscreen emoticons alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist',
-            'paragraph blocks | hr pagebreak nonbreaking link image media table charmap insertdatetime anchor searchreplace visualblocks ltr rtl',
-        ],
-        placeholder: this.localeData?.email_content_suggestions,
-        elementpath: false,
-        statusbar: false,
-        valid_elements: '*[*]', // allow all tags
-        valid_children: '+body[style]', // allow style in body
-        setup: (editor) => {
-    editor.on('init', (e) => {
-        this.tinymceEditor = editor;
-        // Attach Tribute after TinyMCE is ready
-        setTimeout(() => {
-            if (this.froalaTribute && this.tinymceEditor.getBody) {
-                this.froalaTribute.attach(this.tinymceEditor.getBody());
-            }
-        }, 100);
-    });
-            editor.on('blur', (e) => {
-                // Custom logic to handle blur similar to Froala's code view
-                if (editor.plugins.code && editor.plugins.code.isOpen && typeof editor.getContent === 'function') {
-                    editor.setContent(editor.getContent());
-                    this.updateFormControl();
-                }
-            });
-            editor.on('keydown', (e) => {
-                // Mimic Froala's ENTER key + tribute active logic if needed
-                if (e.key === 'Enter' && this.froalaTribute?.isActive) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-        },
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        contextmenu: false
-    };
+    public tinymceConfig: any
+    editorContent: string = '';   // plain string for editor
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
+        private sanitizer: DomSanitizer,
         public dialogRef: MatDialogRef<any>
-    ) { }
+    ) {
+        this.tinymceConfig = {
+            selector: '#tinyEditor',
+            branding: false,
+            height: 500,
+            toolbar_sticky: true,
+            menubar: false,
+            mentions_trigger: '{',
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor',
+                'searchreplace', 'visualblocks', 'code', 'fullscreen', 'insertdatetime', 'media',
+                'table', 'help', 'wordcount', 'pagebreak', 'nonbreaking',
+                'mentions'
+            ],
+            toolbar: [
+                'undo redo | bold italic underline strikethrough fontfamily fontsize forecolor backcolor removeformat',
+                'blockquote code help fullscreen emoticons alignleft aligncenter alignright alignjustify | outdent indent | bullist numlist',
+                'paragraph blocks | hr pagebreak nonbreaking link image media table charmap insertdatetime anchor searchreplace visualblocks ltr rtl',
+                'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat'
+            ],
+            mentions_selector: 'span.mention',
+            mentions_fetch: (query: string, success: (items: any[]) => void) => {
+              const users = [
+                { id: 1, name: 'Alice' },
+                { id: 2, name: 'Bob' },
+                { id: 3, name: 'Charlie' },
+              ];
+      
+              // Filter by query
+              success(
+                users
+                  .filter(u => u.name.toLowerCase().includes(query.toLowerCase()))
+                  .map(u => ({ id: u.id, name: u.name }))
+              );
+            },
+            mentions_menu_complete: (editor: any, user: any) => {
+                return `<span class="mention" data-id="${user.id}">@${user.name}</span>`;
+              },
+              content_style: `
+              .mention {
+                background-color: #e6f3ff;
+                color: #0077cc;
+                padding: 2px 6px;
+                border-radius: 12px;
+                font-weight: 500;
+                display: inline-block;
+                white-space: nowrap;
+              }
+            `,
+            
+            placeholder: this.localeData?.email_content_suggestions,
+            statusbar: false,
+            setup: (editor) => {
+                editor.on('init', (e) => {
+                    this.tinymceEditor = editor;
+                    // Attach Tribute after TinyMCE is ready
+                    setTimeout(() => {
+                        if (this.tinymceEditor.getBody) {
+
+
+                            // this.attachTribute(editor);
+                            // Attach keydown handler for '{' after Tribute is attached
+                            this.tinymceEditor.on('keydown', (e) => {
+                                // Mimic Froala's ENTER key + tribute active logic if needed
+                                if (e.key === 'Enter' && this.froalaTribute?.isActive) {
+                                    e.preventDefault();
+                                    return false;
+                                }
+                            });
+                        }
+                    }, 100);
+                });
+                editor.on('blur', (e) => {
+                    // Custom logic to handle blur similar to Froala's code view
+                    if (editor.plugins.code && editor.plugins.code.isOpen && typeof editor.getContent === 'function') {
+                        editor.setContent(editor.getContent());
+                        this.updateFormControl();
+                    }
+                });
+                editor.on('keydown', (e) => {
+                    if (e.key === 'Enter' && this.froalaTribute?.isActive) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            },
+            contextmenu: false
+        };
+    }
 
     /**
      * Initializes the TinyMCE editor after the view is initialized.
@@ -244,16 +288,14 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
 
         this.emailContentSuggestions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const emailSuggestions = this.inputData?.activeTab ? response?.customerVendorSuggestions : response?.voucherSuggestions;
-                const tributeSuggestions = emailSuggestions?.map(item => ({
+                const tributeSuggestions = response?.voucherSuggestions?.map(item => ({
                     key: item,
                     value: item
                 }));
 
-                setTimeout(() => {
-                    this.initializeTribute(tributeSuggestions);
-                }, 300);
-
+                // setTimeout(() => {
+                //     this.initializeTribute(tributeSuggestions);
+                // }, 300);
                 const mappedEmail = this.mapEmailSuggestions(response.emailSuggestions);
                 this.toEmails = mappedEmail;
                 this.ccEmails = mappedEmail;
@@ -321,58 +363,28 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
      * @memberof TemplateFroalaComponent
      */
     private initializeTribute(tributeSuggestions: any[]): void {
-    console.log('DEBUG: Tribute suggestions:', tributeSuggestions);
-    if (this.tinymceEditor && this.tinymceEditor.getBody) {
-        console.log('DEBUG: Attaching Tribute to TinyMCE body:', this.tinymceEditor.getBody());
-    } else {
-        console.warn('DEBUG: tinymceEditor or getBody is not available at Tribute attach time.');
-    }
-    if (this.froalaTribute) {
-        this.froalaTribute.detach(this.tinymceEditor?.getBody ? this.tinymceEditor.getBody() : this.tinymceEditor?.getElement ? this.tinymceEditor.getElement() : undefined);
-    }
+        // if (this.froalaTribute) {
+        //     this.froalaTribute.detach(this.froalaEditor.el);
+        // }
 
-    if (this.subjectTribute) {
-        this.froalaTribute.detach(this.subjectInputField.nativeElement);
-    }
-
-    this.froalaTribute = new Tribute({
-    trigger: this.froalaEditorTextTrigger,
-    values: tributeSuggestions,
-    selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`,
-    positionMenu: (menu, anchor) => {
-        // Use TinyMCE's API to get the position of the caret
-        if (this.tinymceEditor && this.tinymceEditor.selection && typeof this.tinymceEditor.selection.getBoundingClientRect === 'function') {
-            const rect = this.tinymceEditor.selection.getBoundingClientRect();
-            if (rect) {
-                menu.style.position = 'fixed';
-                menu.style.left = `${rect.left}px`;
-                menu.style.top = `${rect.bottom}px`;
-                menu.style.zIndex = '3000';
-                return;
-            }
+        if (this.subjectTribute) {
+            this.froalaTribute.detach(this.subjectInputField.nativeElement);
         }
-        // Fallback to default
-        Tribute.defaultPositionMenu(menu, anchor);
-    }
-});
 
-    this.subjectTribute = new Tribute({
-        trigger: this.froalaEditorTextTrigger,
-        values: tributeSuggestions,
-        selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
-    });
+        this.subjectTribute = new Tribute({
+            trigger: this.froalaEditorTextTrigger,
+            values: tributeSuggestions,
+            selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`,
+            menuContainer: document.body // Ensure menu is rendered outside editor content
+        });
 
-    if (this.froalaEditor) {
-        this.froalaTribute.attach(this.froalaEditor.el);
+        if (this.froalaEditor) {
+            this.froalaTribute.attach(this.froalaEditor.el);
+        }
+        if (this.subjectInputField && this.subjectInputField.nativeElement) {
+            this.subjectTribute.attach(this.subjectInputField.nativeElement);
+        }
     }
-
-    if (this.tinymceEditor && this.tinymceEditor.getBody) {
-        this.froalaTribute.attach(this.tinymceEditor.getBody());
-    }
-    if (this.subjectInputField && this.subjectInputField.nativeElement) {
-        this.subjectTribute.attach(this.subjectInputField.nativeElement);
-    }
-}
 
     /**
      * Maps email suggestions to a format suitable for the dropdown options.
