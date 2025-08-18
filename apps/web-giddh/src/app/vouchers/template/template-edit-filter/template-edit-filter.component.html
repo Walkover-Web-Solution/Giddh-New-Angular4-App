@@ -5,16 +5,16 @@
         [selectedIndex]="selectedTabIndex"
         (selectedTabChange)="tabChanged($event)"
     >
-        <mat-tab [label]="'Design'">
+        <mat-tab [label]="localeData?.design_tab">
             <div>
                 <div class="option-value-field design-field my-3">
                     <input-field
                         [type]="'text'"
-                        [placeholder]="'Enter Template Name'"
+                        [placeholder]="localeData?.enter_template_name"
                         [name]="'fieldName'"
                         [(ngModel)]="customTemplate.name"
                         (ngModelChange)="onValueChange(null, null)"
-                        [label]="'Template Name'"
+                        [label]="localeData?.template_name"
                         [maxlength]="'18'"
                         [autocomplete]="'off'"
                         [floatLabel]="'always'"
@@ -32,7 +32,7 @@
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <i class="icon-change_template mr-2"></i>
-                                    Change up to template
+                                    {{ localeData?.change_up_to_template }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="template-view px-3 pb-3">
@@ -116,7 +116,7 @@
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <i class="icon-template_edit mr-2"></i>
-                                    Make logo edit
+                                    {{ localeData?.make_logo_edit }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="d-flex align-items-center column-gap15 px-3 pb-3">
@@ -135,7 +135,7 @@
                                                 accept="image/png, image/jpeg"
                                                 (change)="uploadLogo()"
                                             />
-                                            <small>Upload Your Logo</small>
+                                            <small>{{ localeData?.upload_your_logo }}</small>
                                         </label>
                                         <label for="logo-edit">
                                             <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
@@ -144,7 +144,7 @@
                                     <span
                                         class="start-upload-btn floar-right mr-l2 position-relative"
                                         *ngIf="isFileUploadInProgress"
-                                        ><b>Uploading...</b></span
+                                        ><b>{{ localeData?.uploading }}</b></span
                                     >
                                     <button
                                         *ngIf="showDeleteButton"
@@ -155,11 +155,11 @@
                                         color="warn"
                                         matTooltip="Clicking on this, will delete image from server"
                                     >
-                                        Delete
+                                        {{ localeData?.delete }}
                                     </button>
                                     <div class="pull-left mr-l1 mr-t1 choose-size">
                                         <div class="d-block">
-                                            <p>Size</p>
+                                            <p>{{ localeData?.size }}</p>
                                             <div class="d-flex column-gap1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
@@ -179,8 +179,8 @@
                                                 class="primary-color cursor-pointer"
                                                 [hidden]="!logoAttached"
                                                 (click)="toogleLogoVisibility()"
-                                                ><span [hidden]="showLogo">Show</span
-                                                ><span [hidden]="!showLogo">Hide</span> logo</a
+                                                ><span [hidden]="showLogo">{{ localeData?.show }}</span
+                                                ><span [hidden]="!showLogo">{{ localeData?.hide }}</span>{{ localeData?.logo }}</a
                                             >
                                         </div>
                                     </div>
@@ -198,7 +198,7 @@
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <i class="ico-swatch mr-2"></i>
-                                    Try other colour
+                                    {{ localeData?.try_other_colour }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="swatch text-center">
@@ -243,12 +243,12 @@
                             </mat-expansion-panel-header>
                             <div class="px-3 pb-3">
                                 <reactive-dropdown-field
-                                    [label]="'Choose font'"
+                                    [label]="'localeData?.choose_font'"
                                     [options]="templateFonts"
                                     (selectedOption)="onFontSelect($event)"
                                     (onClear)="selectedFont = ''"
                                     [labelValue]="selectedFont"
-                                    [placeholder]="'Choose font'"
+                                    [placeholder]="'localeData?.choose_font'"
                                 ></reactive-dropdown-field>
                             </div>
                         </mat-expansion-panel>
@@ -260,17 +260,17 @@
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <i class="icon-font mr-2"></i>
-                                    Select different fonts size
+                                    {{ localeData?.select_different_fonts_size }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="px-3 pb-3">
-                                <reactive-dropdown-field
-                                    [label]="'Choose font'"
+                                <reactive-dropdown-field                              
+                                [label]="localeData?.choose_font"
                                     [options]="templateFontsSize"
                                     (selectedOption)="onFontSizeSelect($event)"
                                     (onClear)="selectedFontSize = ''"
                                     [labelValue]="selectedFontSize"
-                                    [placeholder]="'Choose font size'"
+                                    [placeholder]="localeData?.enter_template_name"
                                 ></reactive-dropdown-field>
                             </div>
                         </mat-expansion-panel>
@@ -285,7 +285,7 @@
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <i class="icon-print_settings mr-2"></i>
-                                    Edit print setting
+                                    {{ localeData?.edit_print_setting }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="px-3 pb-3 d-flex align-items-center column-gap1 print-field">
@@ -300,7 +300,7 @@
                                         "
                                         [type]="'number'"
                                         [name]="'topMargin'"
-                                        [label]="'Top'"
+                                        [label]="'localeData?.top'"
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
@@ -315,7 +315,7 @@
                                         [(ngModel)]="customTemplate.leftMargin"
                                         [type]="'number'"
                                         [name]="'leftMargin'"
-                                        [label]="'Left'"
+                                        [label]="'localeData?.left'"
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
@@ -330,7 +330,7 @@
                                         [(ngModel)]="customTemplate.bottomMargin"
                                         [type]="'text'"
                                         [name]="'bottomMargin'"
-                                        [label]="'Bottom'"
+                                        [label]="localeData?.bottom"
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
@@ -345,12 +345,12 @@
                                         [(ngModel)]="customTemplate.rightMargin"
                                         [type]="'number'"
                                         [name]="'rightMargin'"
-                                        [label]="'Right'"
+                                        [label]="'localeData?.right'"
                                         [cssClass]="'text-right'"
                                     ></input-field>
                                 </div>
 
-                                <a href="javascript:;" (click)="resetPrintSetting()" class="mr-l1">Reset</a>
+                                <a href="javascript:;" (click)="resetPrintSetting()" class="mr-l1">{{ localeData?.reset }}</a>
                             </div>
                         </mat-expansion-panel>
                         <!-- Show sections inline settings -->
@@ -361,7 +361,7 @@
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <i class="icon-font mr-2"></i>
-                                    Show sections inline
+                                    {{ localeData?.show_sections_inline }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="px-3 pb-3">
@@ -376,7 +376,7 @@
                                         )
                                     "
                                 >
-                                    Show Header/Footer on first and last page
+                                    {{ localeData?.show_header_footer_first_last_page }}
                                 </mat-checkbox>
                             </div>
                         </mat-expansion-panel>
@@ -385,7 +385,7 @@
             </div>
         </mat-tab>
 
-        <mat-tab [label]="'Content'">
+        <mat-tab [label]="localeData?.design_tab">
             <!-- template-scroll use krlege bd m  -->
             <form #templateForm="ngForm" novalidate>
                 <div class="mr-t1">
@@ -395,7 +395,7 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-change_template mr-2"></i>
-                                        Header
+                                        {{ localeData?.header }}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div>
@@ -427,7 +427,7 @@
                                                             type="text"
                                                             name="headerCompanyName"
                                                             cssClass="form-control"
-                                                            [label]="'Company Name'"
+                                                            [label]="localeData?.template_name"
                                                             [maxlength]="50"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['header'].data['companyName']
@@ -442,7 +442,7 @@
                                                     </div>
                                                 </div>
                                                 <p class="ml-4 mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         50 -
                                                             customTemplate.sections["header"].data["companyName"].label
@@ -466,7 +466,7 @@
                                                             .display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                                    >Exchange/Conversion Rate</mat-checkbox
+                                                    >{{ localeData?.exchange_conversion_rate }}</mat-checkbox
                                                 >
                                             </div>
                                             <!-- place of supply -->
@@ -485,7 +485,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                                 >
-                                                    Place Of Supply</mat-checkbox
+                                                    {{ localeData?.place_of_supply }}</mat-checkbox
                                                 >
                                             </div>
                                             <!-- place of country -->
@@ -713,7 +713,7 @@
                                                     </div>
                                                 </div>
                                                 <p class="ml-4 mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         70 -
                                                             customTemplate.sections["header"].data["gstComposition"]
@@ -783,7 +783,7 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
+                                                            <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                             {{
                                                                 customTemplate.templateType === "thermal_template"
                                                                     ? 12 -
@@ -852,7 +852,7 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
+                                                            <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                             {{
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.ThermalTemplate
@@ -911,7 +911,7 @@
                                                         </div>
                                                     </div>
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             15 -
                                                                 customTemplate.sections["header"].data["voucherDate"]
@@ -953,7 +953,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
+                                                            <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                             {{
                                                                 15 -
                                                                     customTemplate.sections["header"].data[
@@ -1003,7 +1003,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             15 -
                                                                 customTemplate.sections["header"].data["dueDate"].label
@@ -1017,7 +1017,7 @@
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.TallyTemplate"
                                             class="px-3"
                                         >
-                                            <h4 class="font-16 my-2">Form</h4>
+                                            <h4 class="font-16 my-2">{{ localeData?.form }}</h4>
                                             <!-- form name tax invoice -->
                                             <div>
                                                 <mat-checkbox
@@ -1032,7 +1032,7 @@
                                                         onChangeFieldVisibility(null, null, null)
                                                     "
                                                 >
-                                                    Document Title
+                                                    {{ localeData?.document_title }}
                                                 </mat-checkbox>
                                             </div>
                                             <!-- form name invoice -->
@@ -1058,7 +1058,7 @@
                                                     ></input-field>
                                                 </div>
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         15 -
                                                             customTemplate.sections["header"].data["formNameInvoice"]
@@ -1087,7 +1087,7 @@
                                                     ></input-field>
                                                 </div>
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         15 -
                                                             customTemplate.sections["header"].data["formNameTaxInvoice"]
@@ -1097,7 +1097,7 @@
                                             </div>
                                         </div>
                                         <div class="px-3">
-                                            <h4 class="font-16 my-2">Customer Details</h4>
+                                            <h4 class="font-16 my-2">{{ localeData?.customer_details }}</h4>
                                             <!-- customer name -->
                                             <div *ngIf="sectionSettings?.header.customerName">
                                                 <mat-checkbox
@@ -1175,7 +1175,7 @@
                                             class="px-3"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <h4 class="font-16 my-2">Billing Details</h4>
+                                            <h4 class="font-16 my-2">{{ localeData?.billing_details }}</h4>
                                             <!-- billing address -->
                                             <div *ngIf="sectionSettings?.header.billingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1231,7 +1231,7 @@
                                                     "
                                                 >
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             (customTemplate?.templateType === "tally_template"
                                                                 ? 20
@@ -1317,7 +1317,7 @@
                                                     "
                                                 >
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             15 -
                                                                 customTemplate.sections["header"].data["billingGstin"]
@@ -1331,7 +1331,7 @@
                                             class="px-3 pb-3 mr-t1"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <h4 class="font-16 my-2">Shipping Details</h4>
+                                            <h4 class="font-16 my-2">{{ localeData?.shipping_details }}</h4>
                                             <!-- shipping address -->
                                             <div *ngIf="sectionSettings?.header.shippingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1377,7 +1377,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             (customTemplate?.templateType === "tally_template"
                                                                 ? 20
@@ -1448,7 +1448,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             15 -
                                                                 customTemplate.sections["header"].data["shippingGstin"]
@@ -1468,7 +1468,7 @@
                                                 "
                                             >
                                                 <mat-expansion-panel-header>
-                                                    <mat-panel-title> Transport Details </mat-panel-title>
+                                                    <mat-panel-title> {{ localeData?.transport_details }} </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <div class="px-3 pb-3">
                                                     <!-- shipping date -->
@@ -1491,7 +1491,7 @@
                                                                 <input-field
                                                                     [type]="'text'"
                                                                     name="shippingDate"
-                                                                    label="Ship Date"
+                                                                    [label]="localeData?.ship_date"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
                                                                             'shippingDate'
@@ -1510,7 +1510,7 @@
                                                         </div>
                                                         <div class="ml-4">
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">Characters left:</span>
+                                                                <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                                 {{
                                                                     15 -
                                                                         customTemplate.sections["header"].data[
@@ -1558,7 +1558,7 @@
                                                         </div>
                                                         <div class="ml-4">
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">Characters left:</span>
+                                                                <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                                 {{
                                                                     15 -
                                                                         customTemplate.sections["header"].data[
@@ -1614,7 +1614,7 @@
                                                         </div>
                                                         <div class="ml-4">
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">Characters left:</span>
+                                                                <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                                 {{
                                                                     15 -
                                                                         customTemplate.sections["header"].data[
@@ -1638,7 +1638,7 @@
                                                 "
                                             >
                                                 <mat-expansion-panel-header>
-                                                    <mat-panel-title> Custom Field </mat-panel-title>
+                                                    <mat-panel-title> {{ localeData?.custom_field }} </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <div class="px-3 pb-3">
                                                     <div *ngIf="sectionSettings?.header.customField1" class="mr-t1">
@@ -1679,7 +1679,7 @@
                                                         </div>
                                                         <div class="ml-4">
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">Characters left:</span>
+                                                                <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                                 {{
                                                                     15 -
                                                                         customTemplate.sections["header"].data[
@@ -1727,7 +1727,7 @@
                                                         </div>
                                                         <div class="ml-4">
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">Characters left:</span>
+                                                                <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                                 {{
                                                                     15 -
                                                                         customTemplate.sections["header"].data[
@@ -1775,7 +1775,7 @@
                                                         </div>
                                                         <div class="ml-4">
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">Characters left:</span>
+                                                                <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                                 {{
                                                                     15 -
                                                                         customTemplate.sections["header"].data[
@@ -1835,7 +1835,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         10 - customTemplate.sections["table"].data["sNo"].label?.length
                                                     }}
@@ -1901,7 +1901,7 @@
                                                 *ngIf="customTemplate.templateType !== templateTypeEnum.TallyTemplate"
                                             >
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         10 - customTemplate.sections["table"].data["date"].label?.length
                                                     }}
@@ -1925,7 +1925,7 @@
                                                     <div class="w-100 ml-2">
                                                         <input-field
                                                             [type]="'text'"
-                                                            label="Item"
+                                                            [label]="localeData?.item"
                                                             [name]="'name'"
                                                             [cssClass]="'form-control'"
                                                             [maxlength]="
@@ -1948,7 +1948,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         (customTemplate.templateType === "tally_template" ? 20 : 12) -
                                                             customTemplate.sections["table"].data["item"].label?.length
@@ -2013,7 +2013,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         8 -
                                                             customTemplate.sections["table"].data["hsnSac"].label
@@ -2066,7 +2066,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         (customTemplate.templateType === "tally_template" ? 8 : 6) -
                                                             customTemplate.sections["table"].data["quantity"].label
@@ -2106,7 +2106,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         10 -
                                                             customTemplate.sections["table"].data["description"].label
@@ -2149,7 +2149,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         10 - customTemplate.sections["table"].data["rate"].label?.length
                                                     }}
@@ -2196,7 +2196,7 @@
                                                 <div class="w-100 ml-2">
                                                     <input-field
                                                         [type]="'text'"
-                                                        label=" Discount/Item"
+                                                        [label]="localeData?.discount_per_item"
                                                         maxlength="10"
                                                         [cssClass]="'form-control'"
                                                         name="ds1"
@@ -2212,7 +2212,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         10 -
                                                             customTemplate.sections["table"].data["discount"].label
@@ -2242,7 +2242,7 @@
                                                 <div class="w-100 ml-2">
                                                     <input-field
                                                         [type]="'text'"
-                                                        label=" Taxable Value"
+                                                        [label]="localeData?.taxable_value"
                                                         maxlength="14"
                                                         [cssClass]="'form-control'"
                                                         name="tv1"
@@ -2259,7 +2259,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         14 -
                                                             customTemplate.sections["table"].data["taxableValue"].label
@@ -2294,7 +2294,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         10 - customTemplate.sections["table"].data["tax"].label?.length
                                                     }}
@@ -2321,7 +2321,7 @@
                                                 <div class="w-100 ml-2">
                                                     <input-field
                                                         [type]="'text'"
-                                                        label="Total"
+                                                        [label]="localeData?.total"
                                                         [maxlength]="
                                                             customTemplate.templateType ===
                                                             templateTypeEnum.ThermalTemplate
@@ -2342,7 +2342,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         customTemplate.templateType === "thermal_template"
                                                             ? 5 -
@@ -2377,7 +2377,7 @@
                                                 <div class="w-100 ml-2">
                                                     <input-field
                                                         [type]="'text'"
-                                                        label="Previous Due"
+                                                        [label]="localeData?.previous_due"
                                                         [cssClass]="'form-control'"
                                                         maxlength="14"
                                                         name="previousDue"
@@ -2394,7 +2394,7 @@
                                             </div>
                                             <div class="ml-4">
                                                 <p class="mt-1">
-                                                    <span class="light-gray font-12">Characters left:</span>
+                                                    <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                     {{
                                                         14 -
                                                             customTemplate.sections["table"].data["previousDue"].label
@@ -2474,11 +2474,11 @@
                                                     </mat-checkbox>
                                                     <div class="w-100 ml-2">
                                                         <input-field
-                                                            label="Show Bank QR Code"
+                                                            [label]="localeData?.show_bank_qr_code"
                                                             [type]="'text'"
                                                             [name]="'name'"
                                                             [cssClass]="'form-control'"
-                                                            placeholder="Enter UPI ID"
+                                                            [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
                                                             (ngModelChange)="onFieldChange(null, null, null)"
@@ -2540,7 +2540,7 @@
                                                         <div class="ml-2 w-100">
                                                             <input-field
                                                                 [type]="'text'"
-                                                                label="TCS"
+                                                                [label]="localeData?.tcs"
                                                                 name="tcs"
                                                                 maxlength="10"
                                                                 [cssClass]="'form-control'"
@@ -2557,7 +2557,7 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
+                                                            <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                             {{
                                                                 10 -
                                                                     customTemplate.sections["footer"].data["tcs"].label
@@ -2587,7 +2587,7 @@
                                                             <input-field
                                                                 [type]="'text'"
                                                                 maxlength="10"
-                                                                label="TDS"
+                                                                [label]="localeData?.tds"
                                                                 [cssClass]="'form-control'"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data['tds'].label
@@ -2602,7 +2602,7 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
+                                                            <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                             {{
                                                                 10 -
                                                                     customTemplate.sections["footer"].data["tds"].label
@@ -2633,7 +2633,7 @@
                                                         <div class="w-100 ml-2">
                                                             <input-field
                                                                 [type]="'text'"
-                                                                label="Total Due"
+                                                                [label]="localeData?.total_due"
                                                                 maxlength="40"
                                                                 name="totalDue"
                                                                 [cssClass]="'form-control'"
@@ -2651,7 +2651,7 @@
                                                     </div>
                                                     <div class="ml-4">
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">Characters left:</span>
+                                                            <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                             {{
                                                                 40 -
                                                                     customTemplate.sections["footer"].data["totalDue"]
@@ -2690,7 +2690,7 @@
                                                         class="w-100 ml-2"
                                                     >
                                                         <input-field
-                                                            label="Company Name"
+                                                            [label]="localeData?.company_name"
                                                             [type]="'text'"
                                                             [maxlength]="50"
                                                             [cssClass]="'form-control'"
@@ -2716,7 +2716,7 @@
                                                     "
                                                 >
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             50 -
                                                                 customTemplate.sections["footer"].data["companyName"]
@@ -2761,11 +2761,11 @@
                                                 </mat-checkbox>
                                                 <div class="ml-4">
                                                     <mat-form-field appearance="outline" class="w-100 address-text">
-                                                        <mat-label>Textarea</mat-label>
+                                                        <mat-label>{{ localeData?.textarea }}</mat-label>
                                                         <textarea
                                                             matInput
                                                             rows="2"
-                                                            placeholder="Company Address"
+                                                            [placeholder]="localeData?.company_address"
                                                             maxlength="124"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['footer'].data['companyAddress']
@@ -2781,7 +2781,7 @@
                                                         ></textarea>
                                                     </mat-form-field>
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             124 -
                                                                 customTemplate.sections["footer"].data["companyAddress"]
@@ -2858,11 +2858,11 @@
                                                     <div class="w-100 ml-2">
                                                         <input-field
                                                             [type]="'text'"
-                                                            label="Total Quantity"
+                                                            [label]="localeData?.total_quantity"
                                                             name="totalQuantity"
                                                             maxlength="13"
                                                             [cssClass]="'form-control'"
-                                                            placeholder="Total Quantity"
+                                                            [placeholder]="localeData?.total_quantity"
                                                             [disabled]="!sectionSettings?.table.quantity?.display"
                                                             (keyup)="onFieldChange(null, null, null)"
                                                             [(ngModel)]="
@@ -2874,7 +2874,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             13 -
                                                                 customTemplate.sections["table"].data["totalQuantity"]
@@ -2903,7 +2903,7 @@
                                                     <div class="w-100 ml-2">
                                                         <input-field
                                                             [type]="'text'"
-                                                            label="Discount"
+                                                            [label]="localeData.vouchers.preview.discount"
                                                             maxlength="10"
                                                             [cssClass]="'form-control'"
                                                             name="ds1"
@@ -2920,7 +2920,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             10 -
                                                                 customTemplate.sections["table"].data["discount"].label
@@ -2949,7 +2949,7 @@
                                                     </mat-checkbox>
                                                     <div class="w-100 ml-2">
                                                         <input-field
-                                                            label="Taxable Amount"
+                                                            [label]="localeData?.taxable_amount"
                                                             [type]="'text'"
                                                             maxlength="14"
                                                             [cssClass]="'form-control'"
@@ -2968,7 +2968,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             14 -
                                                                 customTemplate.sections["table"].data["taxableValue"]
@@ -3056,7 +3056,7 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >Tax Rate</mat-radio-button
+                                                            >{{ localeData?.tax_rate }}</mat-radio-button
                                                         >
                                                         <mat-radio-button
                                                             value="2"
@@ -3073,7 +3073,7 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >HSN/SAC</mat-radio-button
+                                                            >{{ localeData?.hsn_sac }}</mat-radio-button
                                                         >
                                                     </mat-radio-group>
                                                 </div>
@@ -3092,10 +3092,10 @@
                                                     <div class="w-100 ml-2">
                                                         <input-field
                                                             [type]="'text'"
-                                                            label="Show Bank QR Code"
+                                                            [label]="localeData?.show_bank_qr_code"
                                                             name="bankQrCode"
                                                             [cssClass]="'form-control'"
-                                                            placeholder="Enter UPI ID"
+                                                            [placeholder]="localeData?.enter_upi_id"
                                                             (ngModelChange)="onFieldChange(null, null, null)"
                                                             [disabled]="!customTemplate.showBankQrCode"
                                                             pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
@@ -3196,7 +3196,7 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >Tax Rate</mat-radio-button
+                                                            >{{ localeData?.tax_rate }}</mat-radio-button
                                                         >
                                                     </mat-radio-group>
                                                 </div>
@@ -3214,7 +3214,7 @@
                                                 </mat-checkbox>
                                                 <div class="ml-4">
                                                     <mat-form-field appearance="outline" class="w-100 address-text">
-                                                        <mat-label>Textarea</mat-label>
+                                                        <mat-label>{{ localeData?.textarea }}</mat-label>
                                                         <textarea
                                                             matInput
                                                             class="form-control"
@@ -3245,7 +3245,7 @@
                                                         ></textarea>
                                                     </mat-form-field>
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             200 -
                                                                 customTemplate.sections["footer"].data["message1"].label
@@ -3307,7 +3307,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             30 -
                                                                 customTemplate.sections["footer"].data["thanks"].label
@@ -3373,7 +3373,7 @@
                                                 </div>
                                                 <div class="ml-4">
                                                     <p class="mt-1">
-                                                        <span class="light-gray font-12">Characters left:</span>
+                                                        <span class="light-gray font-12">{{ localeData?.characters_left }}</span>
                                                         {{
                                                             50 -
                                                                 customTemplate.sections["footer"].data[
@@ -3429,7 +3429,7 @@
                                                                     id="signatureImg-edit"
                                                                     (change)="uploadImage()"
                                                                 />
-                                                                <small>Upload Signature</small>
+                                                                <small>{{ localeData?.upload_signature }}</small>
                                                             </label>
                                                             <label
                                                                 for="signatureImg-edit"
@@ -3448,7 +3448,7 @@
                                                                 class="logo-preview"
                                                                 [hidden]="!signatureImgAttached"
                                                             >
-                                                                <span><b>Uploading...</b></span>
+                                                                <span><b>{{ localeData?.uploading }}</b></span>
                                                             </label>
                                                         </span>
                                                         <button
@@ -3460,7 +3460,7 @@
                                                             color="warn"
                                                             matTooltip="Clicking on this, will delete image from server"
                                                         >
-                                                            Delete
+                                                            {{ localeData?.delete }}
                                                         </button>
                                                     </div>
                                                 </div>
@@ -3508,7 +3508,7 @@
                                                                     >
                                                                     <ng-container>
                                                                         <span class="max-character-label"
-                                                                            >Characters left:&nbsp;</span
+                                                                            >{{ localeData?.characters_left }}&nbsp;</span
                                                                         ><span class="max-character-value">{{
                                                                             30 -
                                                                                 customTemplate.sections["footer"].data[

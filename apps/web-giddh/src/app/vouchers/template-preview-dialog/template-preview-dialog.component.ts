@@ -22,6 +22,10 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
   public isFileUploading: boolean = true;
   /** Holds PDF file value */
   public pdfFileURL: string = '';
+  /** This will hold local JSON data */
+  public localeData: any = {};
+  /** This will hold common JSON data */
+  public commonLocaleData: any = {};
 
   constructor(
     public dialog: MatDialog,
@@ -38,6 +42,8 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplatePreviewDialogComponent
    */
   public ngOnInit(): void {
+    this.localeData = this.data?.localeData;
+    this.commonLocaleData = this.data?.commonLocaleData;
     this.getTemplatePreview();
   }
 

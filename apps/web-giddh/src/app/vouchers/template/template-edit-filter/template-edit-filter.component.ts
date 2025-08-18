@@ -963,6 +963,10 @@ export class TemplateEditFilterComponent implements OnInit {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private generalService: GeneralService,
@@ -981,12 +985,14 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public ngOnInit(): void {
         // Initialize dialog data
-        const { templateType, voucherType, templateList, mode } = this.dialogData || {};
+        const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;
         this.voucherType = voucherType;
         this.sampleTemplates = templateList;
         this.templateMode = mode;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.localeData = localeData;
+        this.commonLocaleData = commonLocaleData;
 
         // Get company info and companies list
         let companies: any = null;

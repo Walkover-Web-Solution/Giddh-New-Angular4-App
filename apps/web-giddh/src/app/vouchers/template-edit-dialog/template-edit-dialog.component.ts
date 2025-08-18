@@ -57,6 +57,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
  * @memberof TemplateEditDialogComponent
  */
   public ngOnInit(): void {
+    this.localeData = this.inputData?.localeData;
+    this.commonLocaleData = this.inputData?.commonLocaleData;
     this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = template;
     });

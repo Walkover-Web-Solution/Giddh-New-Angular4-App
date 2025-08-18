@@ -3452,7 +3452,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             templateType: templatesType,
             createTemplateList: this.createdTemplatesList,
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
-            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create
+            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
