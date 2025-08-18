@@ -85,7 +85,7 @@
                                         class="d-flex column-gap15 align-items-center ml-auto"
                                         *ngIf="inputData?.length"
                                     >
-                                        <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
+                                        <!-- <button mat-raised-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
                                     </button> -->
                                         <!-- <div class="form-group col-md-2" *ngIf="isNewUserLoggedIn"> -->
@@ -113,12 +113,12 @@
                                 </div>
                                 <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
                                     <!-- <div class="scroll-left">
-                                        <button mat-stroked-button color="primary" (click)="scrollLeft()">
+                                        <button mat-stroked-button (click)="scrollLeft()">
                                             <i class="icon-left"></i>
                                         </button>
                                     </div>
                                     <div class="scroll-right">
-                                        <button mat-stroked-button color="primary" (click)="scrollRight()">
+                                        <button mat-stroked-button (click)="scrollRight()">
                                             <i class="icon-right"></i>
                                         </button>
                                     </div> -->
@@ -360,7 +360,8 @@
                                                             </p>
                                                         </ng-container>
                                                         <button
-                                                            mat-stroked-button
+                                                            *ngIf="firstStepForm.get('planUniqueName').value === plan?.uniqueName"
+                                                            mat-raised-button
                                                             color="primary"
                                                             class="selected-plan-button mt-auto"
                                                             aria-label="monthly"
@@ -376,12 +377,27 @@
                                                             (click)="selectPlan(plan)"
                                                         >
                                                             <span class="font-14">
-                                                                {{
-                                                                    firstStepForm.get("planUniqueName").value ===
-                                                                    plan.uniqueName
-                                                                        ? localeData?.selected
-                                                                        : localeData?.select_plan
-                                                                }}
+                                                                {{ localeData?.select_plan }}
+                                                            </span>
+                                                        </button>
+                                                        <button
+                                                            *ngIf="firstStepForm.get('planUniqueName').value !== plan?.uniqueName"
+                                                            mat-stroked-button
+                                                            class="selected-plan-button mt-auto"
+                                                            aria-label="monthly"
+                                                            [class.selected]="
+                                                                firstStepForm.get('planUniqueName').value ===
+                                                                plan?.uniqueName
+                                                            "
+                                                            [ngClass]="{
+                                                                'selected-plan':
+                                                                    firstStepForm.get('planUniqueName').value ===
+                                                                    plan?.uniqueName
+                                                            }"
+                                                            (click)="selectPlan(plan)"
+                                                        >
+                                                            <span class="font-14">
+                                                                {{ localeData?.select_plan }}
                                                             </span>
                                                         </button>
                                                     </div>
@@ -1093,7 +1109,7 @@
                         <div class="mt-3">
                             <button
                                 [disabled]="isChangePlan && !isUserManualChangePlan && !isRenewPlan && !isTrialPlan"
-                                mat-stroked-button
+                                mat-raised-button
                                 aria-label="next"
                                 color="primary"
                                 class="w-100"
@@ -1103,7 +1119,7 @@
                                 {{ localeData?.continue_billing_account }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 aria-label="next-step"
                                 color="primary"
                                 class="w-100"
@@ -1114,7 +1130,7 @@
                             </button>
                             <button
                                 aria-label="submit"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="w-100"
                                 *ngIf="selectedStep === 2 && !isChangePlan"
@@ -1124,7 +1140,7 @@
                             </button>
                             <button
                                 aria-label="submit"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="w-100 mt-2"
                                 *ngIf="selectedStep === 2"

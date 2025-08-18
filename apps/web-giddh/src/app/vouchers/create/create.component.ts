@@ -145,8 +145,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("sendEmailModal", { static: true }) public sendEmailModal: any;
     /* Selector for print modal */
     @ViewChild("printVoucherModal", { static: true }) public printVoucherModal: any;
-    /** Date change confirmation modal */
-    @ViewChild("dateChangeConfirmationModel", { static: true }) public dateChangeConfirmationModel: any;
     /* Selector for adjustment modal */
     @ViewChild("adjustmentModal", { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
@@ -3753,13 +3751,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (entries?.length > 1) {
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
-            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-                this.localeData,
-                this.commonLocaleData,
-                false
-            );
-            this.dialog.open(this.dateChangeConfirmationModel, {
-                width: "650px",
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+               panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
+                },
+            });
+    
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
             });
         }
     }
@@ -3796,14 +3796,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.dateChangeType = "voucher";
 
-        this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-            this.localeData,
-            this.commonLocaleData,
-            true
-        );
-        this.dialog.open(this.dateChangeConfirmationModel, {
-            width: "650px",
-        });
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: "mat-dialog-sm",
+             data: {
+                 configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+             },
+         });
+ 
+         dialogRef.afterClosed().subscribe((response) => {
+             this.handleDateChangeConfirmation(response);
+         });
     }
 
     /**

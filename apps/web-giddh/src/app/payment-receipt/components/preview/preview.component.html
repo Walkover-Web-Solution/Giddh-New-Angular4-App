@@ -23,7 +23,7 @@
                             <button
                                 *ngIf="(!isCompany && !isConsolidatedBranch) && !(voucherType === receiptVoucherType || voucherType === paymentVoucherType)"
                                 class="mr-l1"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/' + voucherType + '/create']"
                             >

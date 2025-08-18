@@ -3,7 +3,7 @@
         <div class="d-inline-flex">
             <button
                 type="button"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 [matMenuTriggerFor]="filterByAccountMenu"
                 #filterMenu="matMenuTrigger"
@@ -122,7 +122,7 @@
                     <div class="clearfix mr-t4 d-flex column-gap15">
                         <button
                             [disabled]="searchQueryForm.invalid"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="pull-right"
                             (click)="filterData(); filterMenu?.closeMenu()"

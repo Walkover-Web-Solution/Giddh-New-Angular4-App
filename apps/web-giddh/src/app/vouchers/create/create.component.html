@@ -1097,7 +1097,7 @@
                                                                             </div>
 
                                                                             <div class="mt-3">
-                                                                                <button mat-stroked-button
+                                                                                <button mat-raised-button
                                                                                     color="primary" class="mr-2"
                                                                                     (click)="menuTrigger?.closeMenu()">{{
                                                                                     commonLocaleData?.app_save
@@ -2005,11 +2005,6 @@
     </app-email-send-dialog>
 </ng-template>
 <!-- endregion -->
-
-<ng-template #dateChangeConfirmationModel>
-    <confirmation-modal [configuration]="dateChangeConfiguration"
-        (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
-</ng-template>
 
 <ng-template #adjustmentModal>
     <voucher-adjustments [account]="account" [voucherDetails]="invoiceForm?.value" [voucherTotals]="voucherTotals"

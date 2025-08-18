@@ -62,8 +62,7 @@
                     <button
                         *ngIf="companyList?.length && isSubscriptionModule"
                         class="min160 company-button"
-                        color="primary"
-                        mat-stroked-button
+                        mat-raised-button
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
@@ -76,8 +75,7 @@
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
                         class="min160 company-button ml-3"
-                        color="primary"
-                        mat-stroked-button
+                        mat-raised-button
                         (click)="backToSubscription()"
                         aria-label="back"
                     >
@@ -342,7 +340,7 @@
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 class="mr-t2"
                                                 (click)="gotToBranchTab()"

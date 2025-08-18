@@ -11,7 +11,7 @@
             <div>
                 <watch-video [cssClass]="'text-primary mr-r15'" [moduleName]="'TAX_CREATION'"></watch-video>
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     [matTooltip]="localeData?.create_new_tax"
                     [matTooltipPosition]="'above'"
@@ -124,7 +124,6 @@
                                     [matTooltip]="commonLocaleData?.app_edit"
                                     [matTooltipPosition]="'above'"
                                     class="min-width-unset"
-                                    color="primary"
                                     (click)="openCreateUpdateDialog(element)"
                                 >
                                     <i class="icon-edit-pencil" aria-hidden="true"></i>

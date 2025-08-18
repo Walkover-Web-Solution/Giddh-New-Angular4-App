@@ -105,7 +105,7 @@
                         <b>{{ localeData?.gstr3b_summary }}</b>
                     </div>
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         aria-label="summary"
                         (click)="navigateTogstR3B(GstReport.Gstr3b)"
@@ -146,7 +146,7 @@
                             </div>
                             <button
                                 *ngIf="gstr1TransactionCounts"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 aria-label="summary"
                                 class="mr-t1"
@@ -269,7 +269,7 @@
                     >
                     <button
                         *ngIf="gstr2TransactionCounts"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         aria-label="summary"
                         class="pull-right mr-t1"
@@ -407,7 +407,7 @@
                 <div class="return-content pd-15" *ngIf="false">
                     <span class="btn-toolbar pull-right">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                         >{{ localeData?.file_now }}</button>
                     </span>
@@ -432,7 +432,7 @@
                 <!-- =================================== TAX RETURN ============================= -->
                 <div class="return-content pd-15" *ngIf="false">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="btn-toolbar pull-right"
                     >

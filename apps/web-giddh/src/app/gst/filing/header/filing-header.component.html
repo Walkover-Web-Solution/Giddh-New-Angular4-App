@@ -25,14 +25,14 @@
                 </li>
                 <li class="d-flex column-gap1 align-items-center">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="onDownloadSheetGSTR('error')"
                     >
                         {{ localeData?.filing?.errors }}
                     </button>
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="openPushToPortalDialog()">
                         <i class="icon-download"></i>
@@ -42,7 +42,7 @@
 
                 <li class="d-flex column-gap1 align-items-center" *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         [disabled]="!gstAuthenticated"
                         (click)="pullFromGstIn($event)"
@@ -51,7 +51,7 @@
                         {{ localeData?.filing?.pull_from_gstn }}
                     </button>
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         [ngClass]="{ 'btn-success': gstAuthenticated }"
                         (click)="openSettingAsidePane($event, taxServiceEnum.TAXPRO)"
@@ -98,7 +98,7 @@
                         <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR2' }"></ng-container>
                     </div>
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         aria-labelledby="button-triggers-manual"
                         [matMenuTriggerFor]="downloadMenu"
@@ -118,7 +118,7 @@
                 </div>
                 <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         [ngClass]="{ 'btn-success': gstAuthenticated }"
                         (click)="!gstAuthenticated ? openSettingAsidePane($event, taxServiceEnum.TAXPRO) : ''"
@@ -127,7 +127,7 @@
                         {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
                     </button>
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         [disabled]="!gstAuthenticated"
                         (click)="pullFromGstIn($event)"

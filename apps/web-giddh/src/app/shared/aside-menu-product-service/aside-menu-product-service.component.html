@@ -22,7 +22,7 @@
                         </button>
                     </ng-container>
                     <!-- <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="mb-2"
                         *ngIf="voucherApiVersion !== 2
@@ -32,7 +32,7 @@
                     </button> -->
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="mb-2"
                         (click)="toggleStockPane('product')"
@@ -41,7 +41,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="mb-2"
                         (click)="toggleStockPane('service')"
@@ -50,7 +50,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="mb-2"
                         (click)="toggleStockPane('fixed_assets')"

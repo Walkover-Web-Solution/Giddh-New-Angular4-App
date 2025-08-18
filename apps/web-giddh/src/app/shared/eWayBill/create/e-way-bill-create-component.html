@@ -220,7 +220,7 @@
                     </div>
                     <div class="row clearfix d-flex justify-content-end column-gap15">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             (click)="onSubmitEwaybill()"
                         >
@@ -285,7 +285,7 @@
                 <div class="form-group mt-3">
                     <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="!transportEditMode">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
                             (click)="generateTransporter()"
@@ -299,7 +299,7 @@
                     </div>
                     <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="transportEditMode">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
                             (click)="updateTransporter()"

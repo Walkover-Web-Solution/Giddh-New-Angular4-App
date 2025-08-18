@@ -109,7 +109,7 @@
 
             <button
                 *ngIf="showEditGroup$ | async"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 class="mr-l1"
                 type="submit"
@@ -152,7 +152,7 @@
                         >
                         </reactive-dropdown-field>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             type="submit"
                             [disabled]="moveGroupForm.invalid"
@@ -205,7 +205,7 @@
                     <button
                         [disabled]="isTaxesSaveDisable$ | async"
                         type="submit"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         aria-label="save"
                         [matTooltip]="commonLocaleData?.app_save"
@@ -263,7 +263,7 @@
                     class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
                 ></select-multiple-fields>
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     [disabled]="isDiscountSaveDisable$ | async"
                     (click)="applyDiscounts()"
