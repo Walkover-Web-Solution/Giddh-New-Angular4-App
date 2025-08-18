@@ -19,9 +19,9 @@
         </div>
         <div class="modal-body mr-b4" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <div class="text-left pd-b1">
+                <p class="mr-b1">
                     {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
-                </div>
+                </p>
                 <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mr-b15">
                     <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
                     <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
