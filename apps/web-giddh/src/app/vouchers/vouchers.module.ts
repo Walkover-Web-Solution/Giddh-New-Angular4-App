@@ -69,7 +69,6 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
-import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmation-modal.module";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
@@ -176,7 +175,6 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
         ReplacePipeModule,
         CurrencyModule,
         NgxMatSelectSearchModule,
-        ConfirmationModalModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
         NgxMaskModule,
