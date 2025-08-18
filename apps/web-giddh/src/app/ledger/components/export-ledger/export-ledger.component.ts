@@ -311,10 +311,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 if (response?.body?.status === "success") {
                                     if (response.queryString.fileType === 'xlsx') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                                        return download(response.body.fileName, blob, 'application/vnd.ms-excel');
                                     } else if (response.queryString.fileType === 'pdf') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                                        return download(response.body.fileName, blob, 'application/pdf');
                                     }
                                 } else {
                                     this.toaster.showSnackBar("success", response.body.message);
