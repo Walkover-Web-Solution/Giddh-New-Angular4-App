@@ -2006,11 +2006,6 @@
 </ng-template>
 <!-- endregion -->
 
-<ng-template #dateChangeConfirmationModel>
-    <confirmation-modal [configuration]="dateChangeConfiguration"
-        (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
-</ng-template>
-
 <ng-template #adjustmentModal>
     <voucher-adjustments [account]="account" [voucherDetails]="invoiceForm?.value" [voucherTotals]="voucherTotals"
         [adjustedVoucherType]="voucherType" [isUpdateMode]="isUpdateMode" [depositAmount]="totalDepositAmount"
