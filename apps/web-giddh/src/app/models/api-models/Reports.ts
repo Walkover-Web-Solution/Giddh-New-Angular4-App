@@ -48,6 +48,8 @@ export class ReportsDetailedRequestFilter {
     public page?: number
     public count?: number
     public branchUniqueName?: string;
+    public salesPersonUniqueName?: string;
+    public accountUniqueNames?: string[];
 }
 export class Balance {
     public amount: number;

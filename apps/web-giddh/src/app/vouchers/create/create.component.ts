@@ -634,7 +634,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesPersonStore: SalesPersonComponentStore,
         private aiOcrService: AiOcrService
     ) {
-       this.imgPath =  isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -1176,7 +1176,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-                    
+
                     const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
@@ -1809,13 +1809,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm
-                            .get("salesPurchaseAsReceiptPayment")
-                            .patchValue(
-                                this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
-                                    ? profile.purchaseAsPayment
-                                    : profile.salesAsReceipt
-                            );
+                        const isCashSalesPurchaseInvoice =
+                            this.invoiceType.isCashInvoice &&
+                            ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) ||
+                                this.invoiceType.isPurchaseInvoice);
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm
+                                .get("salesPurchaseAsReceiptPayment")
+                                .patchValue(
+                                    this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+                                        ? profile.purchaseAsPayment
+                                        : profile.salesAsReceipt
+                                );
+                        }
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -5066,7 +5073,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.changeDetection.detectChanges();
     }
 
-    
+
 
     /**
      * Toggles between create and list

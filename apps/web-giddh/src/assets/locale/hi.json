@@ -771,7 +771,7 @@
     "app_password": "पासवर्ड",
     "app_select_column": "कॉलम चुनें",
     "app_allow_manufacturing_sales_transactions": "बिक्री लेनदेन के दौरान विनिर्माण जारी रखने की अनुमति दें",
-    "app_file_format": "फाइल प्रारूप",
+    "app_file_format": "फाइल नाम प्रारूप",
     "app_select_file": "फाइल चुनें",
     "app_ledger_view": {
         "t_view": "टी दृश्य",
@@ -797,5 +797,7 @@
     "app_sales_person": "विक्रेता",
     "app_sales_person_placeholder": "विक्रेता चुनें",
     "app_skip_and_next": "छोड़ें और अगला",
-    "app_save_and_next":"सहेजें और अगला"
+    "app_save_and_next":"सहेजें और अगला",
+    "app_variable_search_hint": "'{' का उपयोग करके वेरिएबल खोजें या नाम मैन्युअली लिखें",
+    "app_export_file_name_change_note": "फ़ाइल नाम बदलने के लिए कंपनी सेटिंग पेज पर जाएं"
 }
