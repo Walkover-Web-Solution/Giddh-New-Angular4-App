@@ -1226,6 +1226,11 @@ body {
     }
 }
 
+/* Hide Froala license expired banner only inside dialog */
+.mat-mdc-dialog-container .fr-wrapper ~ div[style*="froala.com/wysiwyg-editor"] {
+    display: none !important;
+  }
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
