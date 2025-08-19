@@ -21,7 +21,6 @@ import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 export class AsideSettingComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-
     public imgPath: string = '';
     public settingsPageTabs: any[] = [];
     public search: any = "";
@@ -51,6 +50,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public isPlaidSupportedCountry: boolean;
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
+    /** True if we should set language */
+    public setLanguage: boolean = false;
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
     }
@@ -77,8 +78,10 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
+                this.setLanguage = true;
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
+                    this.translationComplete(true);
                 });
             }
             this.activeLocale = response?.value;
@@ -91,7 +94,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && this.localeData) {
+            if (activeCompany && this.localeData && !this.setLanguage) {
                 this.selectedCompany = activeCompany;
                 this.translationComplete(true);
             }
