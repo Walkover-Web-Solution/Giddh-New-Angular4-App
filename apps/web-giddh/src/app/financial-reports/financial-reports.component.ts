@@ -94,7 +94,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
                 this.activeTab = val.tab;
                 this.activeTabIndex = val.tabIndex;
                 this.preventTabChangeWithRoute = true;
-                this.selectTab(val.tabIndex);
+                this.selectTab(Number(val.tabIndex));
             }
         });
     }
@@ -109,6 +109,9 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
         if (this.staticTabs) {
             this.staticTabs.selectedIndex = id;
             this.selectedTabIndex = id;
+            this.CanTBLoad = id === 0;
+            this.CanPLLoad = id === 1;
+            this.CanBSLoad = id === 2;
         }
     }
 
