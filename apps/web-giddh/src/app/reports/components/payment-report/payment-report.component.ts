@@ -814,9 +814,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     this.allPayments.forEach((item) => {
                         item.isSelected = false;
                     });
-                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName = `${isAllItemsSelected ? this.localeData?.all_payments : this.localeData?.payments}.xls`;
-                    return saveAs(blob, fileName);
+                    let blob = this.generalService.base64ToBlob(response.body.data, 'application/xls', 512);
+                    return saveAs(blob, response.body.name);
                 } else {
                     this.toastService.errorToast(response.message);
                 }

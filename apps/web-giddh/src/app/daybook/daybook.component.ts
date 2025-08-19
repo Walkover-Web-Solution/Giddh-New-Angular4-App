@@ -421,9 +421,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                                 if (response?.body?.type === "message") {
                                     this.toasterService.showSnackBar("success", response?.body?.file);
                                 } else {
-                                    let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                                    let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                                    saveAs(blob, 'Daybook' + type);
+                                    let blob = this.generalService.base64ToBlob(response?.body?.data, response?.queryString?.requestType, 512);
+                                    saveAs(blob, response?.body?.name);
                                 }
                             } else {
                                 this.toasterService.showSnackBar("error", response?.message);
@@ -436,9 +435,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                             if (response?.body?.type === "message") {
                                 this.toasterService.showSnackBar("success", response?.body?.file);
                             } else {
-                                let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                                let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                                saveAs(blob, 'response' + type);
+                                let blob = this.generalService.base64ToBlob(response?.body?.data, response?.queryString?.requestType, 512);
+                                saveAs(blob, response?.body?.name);
                             }
                         } else {
                             this.toasterService.showSnackBar("error", response?.message);

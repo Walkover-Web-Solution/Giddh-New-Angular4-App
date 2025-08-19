@@ -47,8 +47,9 @@
                         [placeholder]="commonLocaleData?.app_select"
                         [options]="groupByOptions"
                         formControlName="groupBy"
-                        [labelValue]="groupByOptions?.[0]?.label"
+                        [labelValue]="reportForm?.get('groupBy')?.value === groupByEnum.Duration ? groupByOptions?.[0]?.label : groupByOptions?.[1]?.label"
                         [required]="true"
+                        (selectedOption)="handleGroupByChange($event)"
                     >
                     </reactive-dropdown-field>
                 </div>
