@@ -261,18 +261,6 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for translation response complete
-     *
-     * @param {boolean} event
-     * @memberof ExportsComponent
-     */
-    public translationComplete(event: boolean): void {
-        if (event) {
-            this.getDownloads(true);
-        }
-    }
-
-    /**
      * Download export file
      *
      * @param {*} url

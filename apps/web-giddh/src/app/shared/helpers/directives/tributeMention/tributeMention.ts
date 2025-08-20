@@ -41,9 +41,6 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
     ) {
       this.initializeTribute();
     }
-    if (changes.tributeConfig) {
-      this.initializeTribute();
-    }
   }
 
   /**
@@ -75,6 +72,9 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
     this.hostElement.nativeElement.addEventListener('tribute-replaced', (event: any) => {
       this.mentionSelected.emit(event?.detail?.item?.original ?? "");
     });
+    this.hostElement.nativeElement.addEventListener('keyup', (event: any) => {
+      this.open(false);
+    });
   }
 
   /**
@@ -105,15 +105,18 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
    * @returns {void}
    * @memberof TributeMentionDirective
    */
-  public open(): void {
-    if (!this.hostElement.nativeElement.value?.trim()) {
+  public open(openByFocus: boolean = true): void {
+    if (!this.tributeInstance) {
+      return;
+    }
+    if (!this.hostElement.nativeElement.value?.trim() && openByFocus) {
       this.hostElement.nativeElement.value = this.tributeConfig.trigger;
     }
     
     this.hostElement.nativeElement.dispatchEvent(new InputEvent('input', { bubbles: true }));
 
     setTimeout(() => {
-        this.hostElement.nativeElement.focus();
+      this.hostElement.nativeElement.focus();
         const fileFormatPrefix = this.hostElement.nativeElement.value;
         if (this.tributeInstance && fileFormatPrefix.lastIndexOf(this.tributeConfig.trigger) > fileFormatPrefix.lastIndexOf(this.tributeConfig.suggestionSuffix)) {
             this.tributeInstance['showMenuFor'](this.hostElement.nativeElement);

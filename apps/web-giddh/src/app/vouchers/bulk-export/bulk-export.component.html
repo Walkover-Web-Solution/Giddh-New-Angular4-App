@@ -16,9 +16,12 @@
         <div mat-dialog-content>
             <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
             <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async" class="pd-15">
+                <p class="mr-b1">
+                    {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
+                </p>
                 <!-- Export attachment -->
                 <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
-                    <div class="pd-b1 pd-t15 clearfix export-type d-flex column-gap15">
+                    <div class="pd-b1 clearfix export-type d-flex column-gap15">
                         <div class="d-flex align-items-center">
                             <label class="w150">{{ localeData?.attachment }}:</label>
                             <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">

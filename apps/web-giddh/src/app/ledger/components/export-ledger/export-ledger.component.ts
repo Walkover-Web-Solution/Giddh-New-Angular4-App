@@ -243,10 +243,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
-                        this.toaster.showSnackBar("success", response.body.file);
+                        this.toaster.showSnackBar("success", response.body.name);
                     } else {
-                        let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
-                        return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
+                        let blob = this.generalService.base64ToBlob(response?.body?.data, 'application/vnd.ms-excel', 512);
+                        return download(response.body.name, blob, 'application/vnd.ms-excel');
                     }
                 } else if (response?.message) {
                     this.toaster.showSnackBar("error", response?.message);
@@ -306,10 +306,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 if (response?.body?.status === "success") {
                                     if (response.queryString.fileType === 'xlsx') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                                        return download(response.body.fileName, blob, 'application/vnd.ms-excel');
                                     } else if (response.queryString.fileType === 'pdf') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                                        return download(response.body.fileName, blob, 'application/pdf');
                                     }
                                 } else {
                                     this.toaster.showSnackBar("success", response.body.message);

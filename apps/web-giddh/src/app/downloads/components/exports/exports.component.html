@@ -3,33 +3,42 @@
     [file]="'downloads/exports'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
-    (translationComplete)="translationComplete($event)"
 >
     <div class="download-table-container overflow-visible">
-        <div class="activity-filter-wrap">
-            <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
-                <div class="custom-datepicker" 
-                     [matMenuTriggerFor]="universalDatepicker" 
-                     #universalDatepickerTrigger="matMenuTrigger"
-                     role="button"
-                     aria-haspopup="true"
-                     aria-controls="universalDatepicker"
-                     (menuOpened)="isDatepickerMenuOpen = true"
-                     (menuClosed)="isDatepickerMenuOpen = false">
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                        readonly
-                    />
+        <div class="activity-filter-wrap d-flex justify-content-between pd-t2">
+            <div class="d-flex align-items-center">
+                <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
+                    <div class="custom-datepicker" 
+                         [matMenuTriggerFor]="universalDatepicker" 
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         aria-haspopup="true"
+                         aria-controls="universalDatepicker"
+                         (menuOpened)="isDatepickerMenuOpen = true"
+                         (menuClosed)="isDatepickerMenuOpen = false">
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <div class="clear-filter" *ngIf="showClearFilter">
+                    <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                    </button>
                 </div>
             </div>
-            <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
-                    <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
-                </button>
-            </div>
+            <a
+                class="cursor-pointer pd-1 mr-r1 bdr d-flex"
+                (click)="getDownloads()"
+                [matTooltip]="commonLocaleData?.app_refresh"
+                [matTooltipPosition]="'above'"
+            >
+                <span class="icon-refresh"></span>
+            </a>
         </div>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
