@@ -14,6 +14,7 @@ import {
     TemplateRef,
     ViewChild,
 } from "@angular/core";
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
@@ -59,6 +60,7 @@ import { TemplateFroalaComponent } from '../shared/template-froala/template-froa
 import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { isElectron } from '@giddh-workspaces/utils';
 
 @Component({
     selector: "contact-detail",
@@ -269,7 +271,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     };
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
