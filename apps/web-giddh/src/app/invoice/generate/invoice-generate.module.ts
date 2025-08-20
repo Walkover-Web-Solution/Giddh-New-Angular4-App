@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { InvoiceGenerateComponent } from './invoice.generate.component';
@@ -32,7 +33,8 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         DatepickerWrapperModule,
         AmountFieldComponentModule,
         GiddhPageLoaderModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        MatButtonModule,
     ],
     exports: [
         InvoiceGenerateComponent
