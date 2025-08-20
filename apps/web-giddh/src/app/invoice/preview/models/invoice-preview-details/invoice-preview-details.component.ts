@@ -11,7 +11,6 @@ import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
 import { saveAs } from 'file-saver';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
 import { GeneralActions } from '../../../../actions/general/general.actions';
@@ -33,6 +32,7 @@ import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'invoice-preview-details-component',

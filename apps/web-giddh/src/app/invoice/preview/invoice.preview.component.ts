@@ -15,7 +15,7 @@ import {
     Output
 } from '@angular/core';
 import { UntypedFormControl, NgForm } from '@angular/forms';
-import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { cloneDeep, map, uniqBy } from '../../lodash-optimized';
@@ -27,7 +27,7 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalService, BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
@@ -86,6 +86,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public refreshPurchaseBill: boolean = false;
     /* This will emit if purchase bill lists needs to be refreshed */
     @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
 
     public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -100,6 +104,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public voucherData: ReciptResponse;
     public dayjs = dayjs;
     public modalRef: BsModalRef;
+    @ViewChild('datePickerMenuTrigger') datePickerMenuTrigger: MatMenuTrigger;
     public showInvoiceNoSearch = false;
     public modalConfig: ModalOptions = {
         animated: true,
@@ -201,17 +206,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    public isDatePickerOpen: boolean = false;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** True if consolidated branch */
@@ -1707,28 +1710,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-    *To show the datepicker
+    * This will show the datepicker
     *
-    * @param {*} element
-    * @memberof InvoicePreviewComponent
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof InvoicePreviewComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -1739,7 +1731,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1747,7 +1739,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

@@ -1,6 +1,7 @@
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -9,7 +10,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
@@ -82,27 +83,19 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public newTagForm: UntypedFormGroup;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
+    /** Flag to track if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** dayjs object */
     public dayjs = dayjs;
-    /** Selected from date */
-    public fromDate: string;
-    /** Selected to date */
-    public toDate: string;
-    /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
@@ -122,6 +115,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public showReconcileOptions: boolean = false;
     /** True if show confirmation on date change */
     public showConfirmationOnDateChange: boolean = false;
+    /** From date for datepicker */
+    public fromDate: string;
+    /** To date for datepicker */
+    public toDate: string;
 
     constructor(
         private fb: UntypedFormBuilder,
@@ -129,7 +126,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private toaster: ToasterService,
@@ -467,6 +463,20 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         });
         this.toggleTagsModal();
     }
+    
+    /**
+     * Gets the list of tags
+     *
+     * @memberof FinancialReportsFilterComponent
+     */
+    public getTags(): void {
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success") {
+                this.tags = response.body;
+                this.cd.detectChanges();
+            }
+        });
+    }
 
     /**
      * Emit Expand
@@ -543,28 +553,18 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker
+     * Toggles the datepicker menu
      *
+     * @param {boolean} isOpen
      * @param {*} element
      * @memberof FinancialReportsFilterComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean, element?: any): void {
+        if (isOpen && this.universalDatepickerTrigger) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else if (!isOpen && this.universalDatepickerTrigger) {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -575,7 +575,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {        
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -583,7 +583,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             const isDifferentDate = !this.isSameDateRange(value.startDate, value.endDate);
 
@@ -598,38 +598,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.filterData();
             }
         }
-    }
-
-    /**
-     * Callback for translation response complete
-     *
-     * @param {boolean} event
-     * @memberof FinancialReportsFilterComponent
-     */
-    public translationComplete(event: boolean): void {
-        if (event) {
-            this.dateOptions = [
-                { label: this.commonLocaleData?.app_date_range, value: '1' },
-                { label: this.commonLocaleData?.app_financial_year, value: '0' }
-            ];
-        }
-    }
-
-    /**
-     * Fetching list of tags
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    public getTags(): void {
-        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.length > 0) {
-                map(response?.body, (tag) => {
-                    tag.value = tag.name;
-                    tag.label = tag.name;
-                });
-                this.tags = orderBy(response?.body, 'name');
-            }
-        });
     }
 
     /**
@@ -699,5 +667,17 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.cd.detectChanges();
             }
         });
+    }
+
+    /**
+     * Callback when translation is complete
+     *
+     * @param {boolean} event
+     * @memberof FinancialReportsFilterComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.cd.detectChanges();
+        }
     }
 }

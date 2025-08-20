@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { Router, NavigationStart } from '@angular/router';
@@ -18,6 +17,7 @@ import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-orde
 import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'purchase-order-preview',

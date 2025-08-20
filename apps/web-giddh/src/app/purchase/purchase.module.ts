@@ -46,6 +46,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 
 @NgModule({
@@ -102,6 +103,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         FormFieldsModule,
         MatFormFieldModule,
         MatInputModule,
+        MatMenuModule,
         PurchaseSettingModule
     ]
 })

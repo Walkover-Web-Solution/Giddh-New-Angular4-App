@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable, ReplaySubject, of } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -6,7 +7,6 @@ import { ContactService } from "../../../services/contact.service";
 import { takeUntil } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
@@ -18,18 +18,16 @@ import { OrganizationType } from '../../../models/user-login-state';
     styleUrls: ['./cr-dr-list.component.scss', '../../home.component.scss'],
 })
 export class CrDrComponent implements OnInit, OnDestroy {
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /** Flag to track if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Selected range label */
     public selectedRangeLabel: any = "";
     public universalDate$: Observable<any>;
@@ -69,7 +67,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
 
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -180,28 +178,16 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the datepicker
-     *
-     * @param {*} element input element
+     * Toggles the datepicker
+     * @param {boolean} isOpen - If true, opens the datepicker; if false, closes it
      * @memberof CrDrComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target, element);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
-    }
-
-    /**
-    * This will hide the datepicker
-    *
-    * @memberof ProfitLossComponent
-    */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -212,7 +198,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -220,7 +206,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

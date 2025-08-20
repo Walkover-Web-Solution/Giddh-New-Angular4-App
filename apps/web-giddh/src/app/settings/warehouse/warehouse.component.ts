@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -33,6 +32,7 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
+import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 
 /**
  * Warehouse component

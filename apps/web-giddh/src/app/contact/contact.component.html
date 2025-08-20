@@ -51,17 +51,24 @@
                                         class="form-inline input-grp-date-range-picker position-relative"
                                     >
                                         <div class="form-group d-flex flex-fill">
-                                            <div
-                                                class="form-group custom-datepicker"
-                                                (click)="showGiddhDatepicker($event)"
-                                            >
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    name="selectedDateRange"
-                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                    class="giddh-datepicker form-control date-range-picker"
-                                                />
+                                            <div class="custom-datepicker-wrapper">
+                                                <div 
+                                                    class="custom-datepicker" 
+                                                    [matMenuTriggerFor]="universalDatepicker"
+                                                    #universalDatepickerTrigger="matMenuTrigger"
+                                                    (menuOpened)="isDatepickerMenuOpen = true"
+                                                    (menuClosed)="isDatepickerMenuOpen = false"
+                                                    role="button"
+                                                    aria-haspopup="true"
+                                                    aria-controls="universalDatepicker"
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        name="selectedDateRange"
+                                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -333,10 +340,21 @@
                             class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
                             *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
                         >
-                            <p (click)="showGiddhDatepicker($event)">
+                            <div class="custom-datepicker-wrapper">
+                            <div 
+                                class="custom-datepicker" 
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                (menuOpened)="isDatepickerMenuOpen = true"
+                                (menuClosed)="isDatepickerMenuOpen = false"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
                                 <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
                                 <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                            </p>
+                            </div>
+                        </div>
                         </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
@@ -1647,29 +1665,26 @@
     </ng-template>
     <!-- endregion -->
 
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="selectedDate($event)"
-                    (datesUpdated)="selectedDate($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <app-datepicker-wrapper
+            *ngIf="isDatepickerMenuOpen"
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="selectedDate($event)"
+            (datesUpdated)="selectedDate($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </mat-menu>
 
     <ng-template
         #searchTemplate

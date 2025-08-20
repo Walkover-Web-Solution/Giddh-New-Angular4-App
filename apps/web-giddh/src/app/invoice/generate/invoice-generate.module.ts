@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { InvoiceGenerateComponent } from './invoice.generate.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
@@ -23,6 +24,7 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        MatMenuModule,
         ClickOutsideModule,
         TranslateDirectiveModule,
         TooltipModule.forRoot(),

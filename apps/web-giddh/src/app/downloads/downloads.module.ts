@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { DownloadsRoutingModule } from "./downloads.routing.module";
@@ -29,6 +30,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         CommonModule, 
         PaginationModule.forRoot(), 
         MatTableModule, 
+        MatMenuModule,
         DownloadsRoutingModule,
         MatButtonModule, 
         MatDialogModule, 

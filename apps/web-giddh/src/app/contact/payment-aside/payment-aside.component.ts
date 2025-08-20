@@ -11,7 +11,6 @@ import { CompanyService } from "../../services/company.service";
 import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest, BulkPaymentConfirmRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { UntypedFormGroup, UntypedFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -19,6 +18,7 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ServiceConfig } from '../../services/service.config';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'payment-aside',

@@ -21,14 +21,43 @@
                     </select-field>
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <div 
+                        class="custom-datepicker" 
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        (menuOpened)="isDatepickerMenuOpen = true"
+                        (menuClosed)="isDatepickerMenuOpen = false"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
                         <input
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker"
+                            class="giddh-datepicker date-range-picker border-radius-2"
                         />
                     </div>
+                    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                        <app-datepicker-wrapper
+                            *ngIf="isDatepickerMenuOpen"
+                            [inputStartDate]="selectedDateRange?.startDate"
+                            [inputEndDate]="selectedDateRange?.endDate"
+                            [alwaysShowCalendars]="true"
+                            [ranges]="datePickerOptions"
+                            [selectedRangeLabel]="selectedRangeLabel"
+                            [showCustomRangeLabel]="true"
+                            [showClearButton]="false"
+                            [showCancel]="true"
+                            [linkedCalendars]="true"
+                            [showDropdowns]="true"
+                            (rangeClicked)="dateSelectedCallback($event)"
+                            (datesUpdated)="dateSelectedCallback($event)"
+                            (closeCalender)="toggleGiddhDatepicker(false)"
+                            [keepCalendarOpeningWithRange]="false"
+                            [showRangeLabelOnInput]="false"
+                        ></app-datepicker-wrapper>
+                    </mat-menu>
                 </div>
                 <div class="entity-wrapper mr-l1" *ngIf="selectedField?.value === 'ENTITY'">
                     <select-field
@@ -44,24 +73,82 @@
                     </select-field>
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTRY_DATE'">
-                    <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                    <div 
+                        class="custom-datepicker" 
+                        [matMenuTriggerFor]="entryDatepicker"
+                        #entryDatepickerTrigger="matMenuTrigger"
+                        (menuOpened)="isEntryDatepickerMenuOpen = true"
+                        (menuClosed)="isEntryDatepickerMenuOpen = false"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="entryDatepicker"
+                    >
                         <input
                             type="text"
                             name="selectedEntryDateRange"
                             [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker"
+                            class="giddh-datepicker date-range-picker border-radius-2"
                         />
                     </div>
+                    <mat-menu #entryDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                        <app-datepicker-wrapper
+                            *ngIf="isEntryDatepickerMenuOpen"
+                            [inputStartDate]="selectedEntryDateRange?.startDate"
+                            [inputEndDate]="selectedEntryDateRange?.endDate"
+                            [alwaysShowCalendars]="true"
+                            [ranges]="entryDatePickerOptions"
+                            [selectedRangeLabel]="selectedEntryRangeLabel"
+                            [showCustomRangeLabel]="true"
+                            [showClearButton]="false"
+                            [showCancel]="true"
+                            [linkedCalendars]="true"
+                            [showDropdowns]="true"
+                            (rangeClicked)="entryDateSelectedCallback($event)"
+                            (datesUpdated)="entryDateSelectedCallback($event)"
+                            (closeCalender)="toggleEntryGiddhDatepicker(false)"
+                            [keepCalendarOpeningWithRange]="false"
+                            [showRangeLabelOnInput]="false"
+                        ></app-datepicker-wrapper>
+                    </mat-menu>
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'VOUCHER_DATE'">
-                    <div class="custom-datepicker" (click)="showVoucherGiddhDatepicker($event)">
+                    <div 
+                        class="custom-datepicker" 
+                        [matMenuTriggerFor]="voucherDatepicker"
+                        #voucherDatepickerTrigger="matMenuTrigger"
+                        (menuOpened)="isVoucherDatepickerMenuOpen = true"
+                        (menuClosed)="isVoucherDatepickerMenuOpen = false"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="voucherDatepicker"
+                    >
                         <input
                             type="text"
                             name="selectedVoucherDateRange"
                             [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker"
+                            class="giddh-datepicker date-range-picker border-radius-2"
                         />
                     </div>
+                    <mat-menu #voucherDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                        <app-datepicker-wrapper
+                            *ngIf="isVoucherDatepickerMenuOpen"
+                            [inputStartDate]="selectedVoucherDateRange?.startDate"
+                            [inputEndDate]="selectedVoucherDateRange?.endDate"
+                            [alwaysShowCalendars]="true"
+                            [ranges]="voucherDatePickerOptions"
+                            [selectedRangeLabel]="selectedVoucherRangeLabel"
+                            [showCustomRangeLabel]="true"
+                            [showClearButton]="false"
+                            [showCancel]="true"
+                            [linkedCalendars]="true"
+                            [showDropdowns]="true"
+                            (rangeClicked)="voucherDateSelectedCallback($event)"
+                            (datesUpdated)="voucherDateSelectedCallback($event)"
+                            (closeCalender)="toggleVoucherGiddhDatepicker(false)"
+                            [keepCalendarOpeningWithRange]="false"
+                            [showRangeLabelOnInput]="false"
+                        ></app-datepicker-wrapper>
+                    </mat-menu>
                 </div>
                 <div class="operation-wrapper mr-l1" *ngIf="selectedField?.value === 'OPERATION'">
                     <select-field
@@ -357,75 +444,3 @@
         </div>
     </div>
 </ng-container>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
-<ng-template #datepickerEntryTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedEntryDateRange?.startDate"
-                [inputEndDate]="selectedEntryDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="entryDatePickerOptions"
-                [selectedRangeLabel]="selectedEntryRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="entryDateSelectedCallback($event)"
-                (datesUpdated)="entryDateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
-<ng-template #datepickerVoucherTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedVoucherDateRange?.startDate"
-                [inputEndDate]="selectedVoucherDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="voucherDatePickerOptions"
-                [selectedRangeLabel]="selectedVoucherRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="voucherDateSelectedCallback($event)"
-                (datesUpdated)="voucherDateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>

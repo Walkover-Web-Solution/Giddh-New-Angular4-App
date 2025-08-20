@@ -9,6 +9,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
@@ -119,7 +122,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatButtonModule,
         CompareWithDateRangePickerComponent,
         MatCheckboxModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
 })
 export class FinancialReportsModule {

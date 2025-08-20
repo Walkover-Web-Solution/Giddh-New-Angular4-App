@@ -7,7 +7,7 @@ import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, tap, filter as rxjsFilter } from 'rxjs/operators';
@@ -101,8 +101,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('newLedPanel', { static: false }) public newLedgerComponent: NewLedgerEntryPanelComponent;
     /** Instance of advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
-    /** datepicker element reference  */
-    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: TemplateRef<any>;
+    /** Mobile datepicker trigger */
+    @ViewChild('mobileUniversalDatepickerTrigger', { read: MatMenuTrigger }) public mobileUniversalDatepickerTrigger: MatMenuTrigger;
+    /** iPad datepicker trigger */
+    @ViewChild('ipadUniversalDatepickerTrigger', { read: MatMenuTrigger }) public ipadUniversalDatepickerTrigger: MatMenuTrigger;
+    /** Desktop datepicker trigger */
+    @ViewChild('desktopUniversalDatepickerTrigger', { read: MatMenuTrigger }) public desktopUniversalDatepickerTrigger: MatMenuTrigger;
+    /** Flag to track datepicker menu state */
+    public isDatepickerMenuOpen: boolean = false;
     /** Holds of carousel template reference */
     @ViewChild('carousel', { static: false }) public carousel: TemplateRef<any>;
     /** Instance of entry confirmation modal */
@@ -196,8 +202,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isHide: boolean = false;
     public visibleTransactionTypeMobile: string = "all";
     public ledgerTransactions: any;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -206,8 +210,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public datePickerRanges: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
     /** Default search suggestion list to be shown for search */
@@ -421,7 +423,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private warehouseActions: WarehouseActions,
         private cdRf: ChangeDetectorRef,
-        private modalService: BsModalService,
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
         private zone: NgZone,
@@ -488,7 +489,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
 
         this.needToShowLoader = false;
         let from = dayjs(value.startDate, GIDDH_DATE_FORMAT).toDate();
@@ -2976,27 +2977,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the datepicker
+     * Toggles the universal datepicker menu based on screen size
      *
+     * @param {boolean} isOpen - Whether to open or close the menu
      * @memberof LedgerComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        const activeTrigger = this.getActiveDatepickerTrigger();
+        if (isOpen) {
+            activeTrigger?.openMenu();
+        } else {
+            activeTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
     }
 
     /**
-     * This will hide the datepicker
+     * Gets the appropriate datepicker trigger based on current screen size
      *
+     * @private
+     * @returns {MatMenuTrigger} The active trigger for current screen size
      * @memberof LedgerComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    private getActiveDatepickerTrigger(): MatMenuTrigger {
+        // Try to get the currently visible trigger based on screen size
+        if (this.isMobileScreen && this.mobileUniversalDatepickerTrigger) {
+            return this.mobileUniversalDatepickerTrigger;
+        } else if (!this.isMobileScreen && this.desktopUniversalDatepickerTrigger) {
+            return this.desktopUniversalDatepickerTrigger;
+        } else if (this.ipadUniversalDatepickerTrigger) {
+            return this.ipadUniversalDatepickerTrigger;
+        }
+        // Fallback to any available trigger
+        return this.desktopUniversalDatepickerTrigger || this.mobileUniversalDatepickerTrigger || this.ipadUniversalDatepickerTrigger;
     }
 
     /**
@@ -3007,16 +3019,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
-
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
 
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -3604,7 +3615,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (rate > 0 && !txn.duplicateEntry) {
                     txn.amount = rate;
                 }
-                if (!this.lc.blankLedger.transactions?.[0].duplicateEntry) {
+                if (!this.lc.blankLedger.transactions?.[0]?.duplicateEntry) {
                     if ((data.body?.salesPerson || data.body?.oppositeAccount?.salesPerson) && !this.isSundryDebtorCreditor) {
                         this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
                         this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';

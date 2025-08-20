@@ -1,8 +1,8 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
@@ -30,8 +30,8 @@ import { InventoryComponentStore } from "../inventory.store";
     providers: [InventoryComponentStore]
 })
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
-    /** Instance of datepicker */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Instance of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -76,8 +76,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public branchesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Search field form control */
     public searchFilters: UntypedFormControl = new UntypedFormControl();
-    /* This will store datepicker modal reference */
-    public modalRef: BsModalRef;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
@@ -94,8 +94,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Hold warehouse checked  */
     public selectedWarehouse: any[] = [];
     /** List of warehouses */
@@ -154,7 +152,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         public dialog: MatDialog,
         private location: Location,
-        public modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private generalService: GeneralService,
@@ -718,13 +715,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} [value]
+     * @param {*} [value] - Selected date value
      * @return {*}  {void}
      * @memberof ReportFiltersComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -733,7 +730,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
         this.todaySelected = false;
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -750,28 +747,21 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will hide the datepicker
+     * Toggles the datepicker menu
      *
+     * @param {boolean} isOpen - True to open the datepicker, false to close it
      * @memberof ReportFiltersComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
-    }
-
-    /**
-     * To show the datepicker
-     *
-     * @param {*} element
-     * @memberof ReportFiltersComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {
+            if (this.universalDatepickerTrigger) {
+                this.universalDatepickerTrigger?.openMenu();
+            }
+        } else {
+            if (this.universalDatepickerTrigger) {
+                this.universalDatepickerTrigger?.closeMenu();
+            }
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**

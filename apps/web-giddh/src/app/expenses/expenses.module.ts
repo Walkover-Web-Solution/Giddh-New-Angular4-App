@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MatMenuModule } from '@angular/material/menu';
 import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
@@ -68,7 +69,8 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         MatListModule,
         MatDividerModule,
         MatInputModule,
-        LightboxModule
+        LightboxModule,
+        MatMenuModule
     ],
     exports: [
         ExpensesComponent,

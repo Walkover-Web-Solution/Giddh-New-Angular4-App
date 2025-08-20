@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
+import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -19,6 +19,7 @@ import { WarehouseActions } from '../../settings/warehouse/action/warehouse.acti
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'purchase-order',
@@ -27,8 +28,8 @@ import { cloneDeep } from '../../lodash-optimized';
 })
 
 export class PurchaseOrderComponent implements OnDestroy {
-    /* Datepicker component */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /* Datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* Input element for column search */
     @ViewChild('searchBox') public searchBox: ElementRef;
     /* Confirm box */
@@ -56,8 +57,8 @@ export class PurchaseOrderComponent implements OnDestroy {
     public activeCompanyUniqueName$: Observable<string>;
     /* This will store if loading is active or not */
     public isLoading: boolean = false;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will store if datepicker menu is open or not */
+    public isDatepickerMenuOpen: boolean = false;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the response object*/
@@ -356,38 +357,30 @@ export class PurchaseOrderComponent implements OnDestroy {
     }
 
     /**
-     * This will show the datepicker
+     * This will toggle the datepicker
      *
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
      * @memberof PurchaseOrderComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger?.openMenu();
+            } else {
+                this.universalDatepickerTrigger?.closeMenu();
+            }
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof PurchaseOrderComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value Selected date range object
      * @memberof PurchaseOrderComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -396,7 +389,7 @@ export class PurchaseOrderComponent implements OnDestroy {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
 
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

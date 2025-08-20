@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
 import { CompanyImportExportComponent } from './company-import-export.component';
 import { CompanyImportExportRoutingModule } from './company-import-export.routing.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -21,7 +22,8 @@ import { SharedModule } from '../shared/shared.module';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        SharedModule
+        SharedModule,
+        MatMenuModule
     ],
     exports: [],
     declarations: [

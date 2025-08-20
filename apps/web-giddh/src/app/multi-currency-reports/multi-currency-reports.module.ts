@@ -39,6 +39,7 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
 import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [
@@ -88,6 +89,7 @@ import { MatListModule } from '@angular/material/list';
         TooltipModule,
         MatTabsModule,
         MatListModule,
+        MatMenuModule,
         FormFieldsModule
     ],
 })

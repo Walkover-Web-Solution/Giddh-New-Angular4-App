@@ -16,8 +16,8 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { BootstrapToggleSwitch } from '../../../app.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
