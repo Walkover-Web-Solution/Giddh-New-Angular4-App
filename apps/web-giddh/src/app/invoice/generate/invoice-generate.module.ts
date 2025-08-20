@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { InvoiceGenerateComponent } from './invoice.generate.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
@@ -24,7 +23,6 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         ReactiveFormsModule,
         ClickOutsideModule,
         TranslateDirectiveModule,
-        BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
 
         NoDataModule,

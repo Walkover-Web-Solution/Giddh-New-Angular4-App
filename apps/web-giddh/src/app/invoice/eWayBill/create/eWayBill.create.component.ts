@@ -228,8 +228,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
-            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
-
+            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;     
+            
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }

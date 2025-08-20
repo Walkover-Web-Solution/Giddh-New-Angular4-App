@@ -1216,6 +1216,14 @@ body {
     }
 }
 
+.custom-giddh-datepicker {
+    .mat-datepicker-toggle {
+        position: absolute;
+        right: -11%;
+        top: 0px;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

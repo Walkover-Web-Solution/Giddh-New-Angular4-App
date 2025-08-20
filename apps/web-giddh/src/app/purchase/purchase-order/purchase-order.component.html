@@ -11,14 +11,14 @@
             <div class="d-flex date-advance-search">
                 <div class="btn-wrapper">
                     <button
-                        *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                        *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 1"
                         class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/purchase-management/purchase-order/new']"
                     >
                         {{ localeData?.new_order }}
                     </button>
                     <button
-                        *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                        *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                         class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/vouchers/purchase-order/create']"
                     >
@@ -49,7 +49,7 @@
                     *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0"
                     class="more-toggle"
                 >
-                    <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
+                    <div *ngIf="!isCompany && !isConsolidatedBranch" class="btn-group" dropdown #dp="bs-dropdown">
                         <button
                             dropdownToggle
                             type="button"
@@ -117,7 +117,7 @@
                 </button>
             </div>
             <div>
-                <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
+                <div *ngIf="!isCompany && !isConsolidatedBranch" class="btn-group" dropdown #dp="bs-dropdown">
                     <button
                         dropdownToggle
                         type="button"
@@ -169,7 +169,7 @@
             </div>
             <div class="btn-wrapper">
                 <button
-                    *ngIf="(!isCompany && !isConsolidatedBranch)"
+                    *ngIf="!isCompany && !isConsolidatedBranch"
                     class="btn btn-sky-blue desktop-view-btn mr-0"
                     [routerLink]="['/pages/purchase-management/purchase-order/new']"
                 >
@@ -398,7 +398,7 @@
                                 <a
                                     [matTooltip]="localeData?.convert_tobill"
                                     matTooltipPosition="above"
-                                    *ngIf="item?.status === 'open' && (!isCompany && !isConsolidatedBranch)"
+                                    *ngIf="item?.status === 'open' && !isCompany && !isConsolidatedBranch"
                                     (click)="
                                         voucherApiVersion === 2
                                             ? openBulkConvert(purchaseBulkConvert, item)
@@ -415,7 +415,7 @@
                                     <span class="icon-envelope font-12"></span>
                                 </a>
                                 <a
-                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                     [matTooltip]="commonLocaleData?.app_copy"
                                     matTooltipPosition="above"
                                     [routerLink]="['/pages/purchase-management/purchase-order/new/' + item?.uniqueName]"
@@ -423,7 +423,7 @@
                                     <span class="icon-copy-small font-15"></span>
                                 </a>
                                 <a
-                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                    *ngIf="!isCompany && !isConsolidatedBranch"
                                     [matTooltip]="commonLocaleData?.app_delete"
                                     matTooltipPosition="above"
                                     (click)="confirmDelete(item)"
@@ -444,7 +444,14 @@
             </table>
         </div>
         <ng-container *ngIf="purchaseOrders?.totalPages > 1 && !isLoading">
-            <mat-paginator [length]="purchaseOrders?.totalItems" [pageSize]="purchaseOrderGetRequest.count" [pageSizeOptions]="pageSizeOptions" [pageIndex]="purchaseOrderGetRequest.page - 1" (page)="handlePageEvent($event)" [showFirstLastButtons]="true">
+            <mat-paginator
+                [length]="purchaseOrders?.totalItems"
+                [pageSize]="purchaseOrderGetRequest.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="purchaseOrderGetRequest.page - 1"
+                (page)="handlePageEvent($event)"
+                [showFirstLastButtons]="true"
+            >
             </mat-paginator>
         </ng-container>
         <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
@@ -455,7 +462,12 @@
         <div class="purchase-order-bulk-update">
             <div class="modal-header">
                 <h4 class="modal-title pull-left">{{ localeData?.bulk_update }}</h4>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="bulkUpdateDialogRef?.close()">
+                <button
+                    type="button"
+                    class="close pull-right"
+                    aria-label="Close"
+                    (click)="bulkUpdateDialogRef?.close()"
+                >
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -480,26 +492,22 @@
                                 "
                             >
                                 <div class="input-group">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        bsDatepicker
-                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                        name="purchaseDate"
+                                    <giddh-datepicker
+                                        name="invoiceDate"
                                         [(ngModel)]="bulkUpdatePostParams.purchaseDate"
+                                        [appearance]="'outline'"
                                         [placeholder]="localeData?.select_date"
+                                        class="w-100"
                                         *ngIf="bulkUpdateGetParams.action === 'purchasedate'"
-                                    />
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        bsDatepicker
-                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                        name="dueDate"
+                                    ></giddh-datepicker>
+                                    <giddh-datepicker
+                                        name="invoiceDate"
                                         [(ngModel)]="bulkUpdatePostParams.dueDate"
+                                        [appearance]="'outline'"
                                         [placeholder]="localeData?.select_date"
-                                        *ngIf="bulkUpdateGetParams.action === 'duedate'"
-                                    />
+                                        class="w-100"
+                                        *ngIf="bulkUpdateGetParams.action === 'dueDate'"
+                                    ></giddh-datepicker>
                                     <span
                                         class="input-group-addon"
                                         *ngIf="

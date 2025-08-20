@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { InvoiceSettingComponent } from './invoice.settings.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,7 +19,6 @@ import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgra
         FormsModule,
         MatTabsModule,
         TranslateDirectiveModule,
-        BsDatepickerModule.forRoot(),
         MatSlideToggleModule,
         ValidateSectionPermissionDirectiveModule,
         GiddhDatepickerModule,

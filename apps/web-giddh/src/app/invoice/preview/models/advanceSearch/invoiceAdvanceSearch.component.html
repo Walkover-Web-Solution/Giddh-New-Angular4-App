@@ -223,14 +223,12 @@
                             </div>
 
                             <div class="col-sm-8 col-md-8 pl-0">
-                                <input
-                                    type="text"
+                                <giddh-datepicker
                                     name="invoiceDate"
-                                    bsDatepicker
-                                    class="form-control w-100"
                                     [(ngModel)]="request.invoiceDate"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                />
+                                    [appearance]="'outline'"
+                                    class="w-100"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>
@@ -373,14 +371,12 @@
                                 ></sh-select>
                             </div>
                             <div class="col-sm-7 col-12 pl-0">
-                                <input
-                                    type="text"
+                                <giddh-datepicker
                                     name="invoiceDate"
-                                    bsDatepicker
-                                    class="form-control w-100 mr-b15"
                                     [(ngModel)]="request.invoiceDate"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                />
+                                    [appearance]="'outline'"
+                                    class="w-100 mr-b15"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>
@@ -428,14 +424,12 @@
                                 ></sh-select>
                             </div>
                             <div class="col-sm-7 col-12 pl-0">
-                                <input
-                                    type="text"
-                                    bsDatepicker
-                                    class="form-control w-100 mr-b15"
+                                <giddh-datepicker
                                     name="dueDate"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                     [(ngModel)]="request.dueDate"
-                                />
+                                    [appearance]="'outline'"
+                                    class="w-100 mr-b15"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>

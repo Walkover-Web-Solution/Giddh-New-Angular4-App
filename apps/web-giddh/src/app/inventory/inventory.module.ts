@@ -47,6 +47,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -129,7 +130,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         FormFieldsModule,
         MatSlideToggleModule,
         MatDialogModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        GiddhDatepickerModule
     ]
 })
 export class InventoryModule { }
