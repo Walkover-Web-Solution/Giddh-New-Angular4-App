@@ -45,7 +45,6 @@ import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -56,6 +55,7 @@ import { SettingsDiscountService } from '../../services/settings.discount.servic
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { CommonService } from '../../services/common.service';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {

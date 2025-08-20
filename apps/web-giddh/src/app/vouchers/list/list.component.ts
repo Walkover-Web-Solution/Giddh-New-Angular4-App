@@ -15,7 +15,6 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
@@ -108,8 +107,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     /** Holds E-way bill dailog template reference */
     @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Holds send email dailog template reference send email */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
     /** Instance of universal datepicker menu trigger */
@@ -139,18 +136,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public urlVoucherType: string = '';
     /** Hold day js reference */
     public dayjs: any = dayjs;
-    /** Hold Bootstrap Modal Reference */
-    public modalRef: BsModalRef;
     /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Last vouchers get in progress Observable */
@@ -392,7 +385,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
-        private modalService: BsModalService,
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
@@ -1522,31 +1514,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * To show the datepicker
-    *
-    * @param {*} element
-    * @memberof VoucherListComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof VoucherListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
-    }
-
-    /**
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
@@ -1554,7 +1521,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
             this.toggleGiddhDatepicker(false);
             return;
         }
@@ -1563,7 +1529,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
         this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
@@ -20,7 +20,6 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { takeUntil } from 'rxjs/operators';
@@ -34,8 +33,8 @@ import { takeUntil } from 'rxjs/operators';
 export class ListManufacturingComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Reference to universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -47,15 +46,13 @@ export class ListManufacturingComponent implements OnInit {
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Datepicker modal reference */
-    public modalRef: BsModalRef;
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Holds available page size options */
@@ -129,7 +126,6 @@ export class ListManufacturingComponent implements OnInit {
 
     constructor(
         private dialog: MatDialog,
-        private modalService: BsModalService,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private warehouseAction: WarehouseActions,
@@ -419,39 +415,28 @@ export class ListManufacturingComponent implements OnInit {
     }
 
     /**
-      * To show the datepicker
-      *
-      * @param {*} element
-      * @memberof ListManufacturingComponent
-      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-      * This will hide the datepicker
-      *
-      * @memberof ListManufacturingComponent
-      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
-
-    /**
-     * Call back function for date/range selection in datepicker
+     * Shows the datepicker
      *
-     * @param {*} value
+     * @param {boolean} isOpen
+     * @memberof ListManufacturingComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
+    }
+
+    /**
+     * Callback function for date/range selection in datepicker
+     *
+     * @param {*} value - Selected date range object
      * @memberof ListManufacturingComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -459,7 +444,7 @@ export class ListManufacturingComponent implements OnInit {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -573,12 +558,6 @@ export class ListManufacturingComponent implements OnInit {
         this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
     }
 
-    /**
-     *  Handle Pagination Event to change the page number and call api
-     *
-     * @param {*} event
-     * @memberof ListManufacturingComponent
-     */
     /**
      * Handles pagination events and updates API parameters
      *

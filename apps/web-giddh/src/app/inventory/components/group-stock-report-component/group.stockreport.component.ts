@@ -32,6 +32,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'invetory-group-stock-report',
@@ -212,7 +213,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public groupStockReportInProcess: boolean = false;
     public universalDate$: Observable<any>;
     public showAdvanceSearchModal: boolean = false;
-
     public branchAvailable: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     modalRef: BsModalRef;
@@ -226,8 +226,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public currentOrganizationType: OrganizationType;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -236,8 +236,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will hold if datepicker menu is open or not */
+    public isDatepickerMenuOpen: boolean = false;
 
     constructor(
         private modalService: BsModalService,
@@ -867,39 +867,29 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     /**
-     *To show the datepicker
+     * Toggles the datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen - If true, opens the datepicker; if false, closes it
      * @memberof InventoryGroupStockReportComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof InventoryGroupStockReportComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+         } else {
+            this.universalDatepickerTrigger?.closeMenu();
+         }
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value - Value from datepicker
+     * @param {*} [from] - Source of the event
      * @memberof InventoryGroupStockReportComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -907,7 +897,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

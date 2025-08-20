@@ -29,6 +29,7 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -62,6 +63,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
     /** Dialog reference for advance search modal */
     private advanceSearchDialogRef: MatDialogRef<any>;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: any;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
@@ -254,16 +256,14 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public asideTransferPaneState: string = 'out';
     /** Hold branch transfer mode */
     public branchTransferMode: string = '';
-    /** Modal Reference */
-    public modalRef: any;
-    /** Modal service reference */
-    public modalService: any;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /** Flag to track if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -272,8 +272,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True if stock report API is in progress */
     public stockReportInProcess: boolean = false;
     /** Holds available page size options */
@@ -720,13 +718,24 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
-                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedRangeLabel = "";
+
+                if (a && a.length > 0) {
+                    this.selectedRangeLabel = a[2];
+                }
+                this.toggleGiddhDatepicker(false);
+                if (a && a.length > 0) {
+                    this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                    this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
+                    this.pickerSelectedFromDate = this.fromDate;
+                    this.pickerSelectedToDate = this.toDate;
+                    if (!isReset) {
+                        this.isFilterCorrect = true;
+                        this.getStockReport(true);
+                    }
+                }
             }
         });
         //Reset Date
@@ -927,19 +936,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public openBranchTransferPopup(event: any): void {
         this.branchTransferMode = event;
         this.toggleTransferAsidePane();
-        this.openModal();
-    }
-
-    /**
-     * Open's modal
-     *
-     * @memberof InventoryStockReportComponent
-     */
-    public openModal(): void {
-        this.modalRef = this.modalService.show(
-            this.template,
-            Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
-        );
     }
 
     /**
@@ -949,26 +945,23 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public hideModal(isNoteCreatedSuccessfully?: boolean): void {
-        this.modalRef.hide();
         if (isNoteCreatedSuccessfully) {
             this.getStockReport(true);
         }
     }
 
     /**
-     *To show the datepicker
+     * To show/hide the datepicker
      *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
+     * @param {boolean} isOpen
+     * @memberof InventoryStockReportComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
@@ -976,9 +969,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      *
      * @memberof AuditLogsFormComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      * Call back function for date/range selection in datepicker
@@ -988,21 +978,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.pickerSelectedFromDate = this.fromDate;
             this.pickerSelectedToDate = this.toDate;
             if (!from) {
                 this.isFilterCorrect = true;

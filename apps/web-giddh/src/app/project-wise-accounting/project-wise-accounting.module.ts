@@ -27,7 +27,6 @@ import { SharedModule } from '../shared/shared.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatMenuModule } from '@angular/material/menu';
@@ -64,7 +63,6 @@ import { MatMenuModule } from '@angular/material/menu';
         SharedModule,
         GiddhPageLoaderModule,
         NoDataModule,
-        FinancialReportsModule,
         MatProgressSpinnerModule,
         HamburgerMenuModule,
         MatMenuModule

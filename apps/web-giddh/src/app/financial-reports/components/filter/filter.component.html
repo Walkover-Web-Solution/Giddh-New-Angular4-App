@@ -104,7 +104,16 @@
                         class="form-group relative datepicker-field"
                         *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                     >
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div 
+                            class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            (menuOpened)="isDatepickerMenuOpen = true"
+                            (menuClosed)="isDatepickerMenuOpen = false"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
                             <input
                                 type="text"
                                 name="selectedDateRange"
@@ -112,6 +121,28 @@
                                 class="giddh-datepicker date-range-picker"
                             />
                         </div>
+                        <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                            <app-datepicker-wrapper
+                                *ngIf="isDatepickerMenuOpen"
+                                [inputStartDate]="selectedDateRange?.startDate"
+                                [inputEndDate]="selectedDateRange?.endDate"
+                                [alwaysShowCalendars]="true"
+                                [ranges]="datePickerOptions"
+                                [selectedRangeLabel]="selectedRangeLabel"
+                                [showCustomRangeLabel]="true"
+                                [showClearButton]="false"
+                                [showCancel]="true"
+                                [linkedCalendars]="true"
+                                [showDropdowns]="true"
+                                (rangeClicked)="dateSelectedCallback($event)"
+                                (datesUpdated)="dateSelectedCallback($event)"
+                                (closeCalender)="toggleGiddhDatepicker(false)"
+                                [keepCalendarOpeningWithRange]="false"
+                                [showRangeLabelOnInput]="false"
+                                [showConfirmationOnChange]="showConfirmationOnDateChange"
+                                [confirmationMessage]="localeData?.reconcile_mode_turned_off_message"
+                            ></app-datepicker-wrapper>
+                        </mat-menu>
                     </div>
                     <div class="form-group" *ngIf="plBsExportXLS">
                         <giddh-compare-with-date-range-picker
@@ -348,7 +379,16 @@
                     class="form-group relative datepicker-field"
                     *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                 >
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <div 
+                        class="custom-datepicker" 
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        (menuOpened)="isDatepickerMenuOpen = true"
+                        (menuClosed)="isDatepickerMenuOpen = false"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
                         <input
                             type="text"
                             name="selectedDateRange"
@@ -477,29 +517,4 @@
         </div>
     </ng-template>
     <!-- create tag modal -->
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                    [showConfirmationOnChange]="showConfirmationOnDateChange"
-                    [confirmationMessage]="localeData?.reconcile_mode_turned_off_message"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
 </ng-container>

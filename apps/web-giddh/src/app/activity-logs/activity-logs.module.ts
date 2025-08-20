@@ -8,6 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DataTypeModule } from '../shared/helpers/pipes/dataType/dataType.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -43,7 +44,8 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         FormFieldsModule,
         HamburgerMenuModule,
         SharedModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatMenuModule
     ],
 })
 export class ActivityLogsModule {

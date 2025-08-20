@@ -1,5 +1,6 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ToasterService } from '../../../services/toaster.service';
@@ -13,7 +14,6 @@ import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
@@ -49,16 +49,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Reference to universal date picker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    
+    /** Flag to indicate if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -67,8 +68,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This property has been removed as it's already defined above */
     /** To hold export request object */
     public exportRequest: ExportBodyRequest = {
         from: '',
@@ -131,7 +131,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
         private changeDetectorRef: ChangeDetectorRef,
-        private modalService: BsModalService,
         private router: Router,
         private componentStore: VoucherComponentStore
     ) {
@@ -364,28 +363,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         });
     }
     /**
-    *To show the datepicker
-    *
-    * @param {*} element
-    * @memberof ExportLedgerComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
+     * This will show the datepicker
      *
+     * @param {boolean} isOpen
      * @memberof ExportLedgerComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
     }
 
     /**
@@ -396,7 +384,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -404,7 +392,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

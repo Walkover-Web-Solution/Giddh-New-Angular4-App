@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectedInvoices } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { TemplateRef } from '@angular/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'app-generate-ewaybill-dialog',
     templateUrl: './generateEWayBill.component.html',

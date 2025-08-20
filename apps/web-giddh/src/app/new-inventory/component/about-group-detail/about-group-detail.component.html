@@ -181,7 +181,7 @@
                         <i class="icon-info pd ml-1"></i>
                     </p>
                     <div class="d-flex mr-b15">
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" (menuOpened)="isDatepickerMenuOpen = true" (menuClosed)="isDatepickerMenuOpen = false" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                             <input
                                 type="text"
                                 id="select-date-group"
@@ -252,3 +252,25 @@
         </div>
     </div>
 </div>
+
+<!-- Angular Material datepicker menu -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <app-datepicker-wrapper
+        *ngIf="isDatepickerMenuOpen"
+        [inputStartDate]="selectedDateRange?.startDate"
+        [inputEndDate]="selectedDateRange?.endDate"
+        [alwaysShowCalendars]="true"
+        [ranges]="datePickerOptions"
+        [selectedRangeLabel]="selectedRangeLabel"
+        [showCustomRangeLabel]="true"
+        [showClearButton]="false"
+        [showCancel]="true"
+        [linkedCalendars]="true"
+        [showDropdowns]="true"
+        (rangeClicked)="dateSelectedCallback($event)"
+        (datesUpdated)="dateSelectedCallback($event)"
+        (closeCalender)="toggleGiddhDatepicker(false)"
+        [keepCalendarOpeningWithRange]="false"
+        [showRangeLabelOnInput]="false"
+    ></app-datepicker-wrapper>
+</mat-menu>

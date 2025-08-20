@@ -22,8 +22,7 @@ import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 import { SalesService } from '../../../services/sales.service';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
