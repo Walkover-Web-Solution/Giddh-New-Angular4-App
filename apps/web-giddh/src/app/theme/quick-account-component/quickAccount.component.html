@@ -81,13 +81,13 @@
     </div>
     <div class="modal-footer">
         <button
-            class="btn btn-success"
+            mat-stroked-button
             [ladda]="isQuickAccountInProcess$ | async"
             (click)="submit()"
             [disabled]="newAccountForm.invalid"
         >
             Create
         </button>
-        <button class="btn btn-default" (click)="closeQuickAccountModal.emit(true)">Cancel</button>
+        <button mat-stroked-button (click)="closeQuickAccountModal.emit(true)">Cancel</button>
     </div>
 </form>

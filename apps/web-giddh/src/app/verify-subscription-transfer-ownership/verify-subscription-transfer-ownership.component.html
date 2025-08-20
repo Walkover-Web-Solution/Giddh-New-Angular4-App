@@ -11,7 +11,9 @@
             <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
                 <p>{{ localeData?.request_accepted_successfully }}</p>
                 <a
-                    class="btn btn-primary mr-0 min160 d-flex align-items-center justify-content-center"
+                    mat-raised-button
+                    color="primary"
+                    class="mr-0 min160 d-flex align-items-center justify-content-center"
                     [href]="loginUrl"
                     target="_blank"
                 >

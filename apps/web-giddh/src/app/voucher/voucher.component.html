@@ -396,7 +396,7 @@
                                         <mat-menu #billingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of accountAddressList; let i = index">
-                                                    <button
+                                                    <button mat-stroked-button
                                                         *ngIf="
                                                             address.gstNumber ||
                                                             address.taxNumber ||
@@ -720,7 +720,7 @@
                                                     <ng-container
                                                         *ngFor="let address of accountAddressList; let i = index"
                                                     >
-                                                        <button
+                                                        <button mat-stroked-button
                                                             *ngIf="
                                                                 address.gstNumber ||
                                                                 address.taxNumber ||
@@ -1060,7 +1060,7 @@
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
-                                                    <button
+                                                    <button mat-stroked-button
                                                         *ngIf="
                                                             address.gstNumber ||
                                                             address.taxNumber ||
@@ -1203,7 +1203,7 @@
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index"
                                                     >
-                                                        <button
+                                                        <button mat-stroked-button
                                                             *ngIf="
                                                                 address.gstNumber ||
                                                                 address.taxNumber ||

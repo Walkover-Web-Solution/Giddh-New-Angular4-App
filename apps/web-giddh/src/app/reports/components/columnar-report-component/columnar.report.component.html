@@ -92,20 +92,20 @@
             <div class="row">
                 <div class="col-sm-12 col-xs-12 mr-b15 clear-both">
                     <button
-                        class="btn btn-sky-blue"
+                        mat-raised-button color="primary"
                         [disabled]="!isFormValid() || isLoading"
                         (click)="exportReport(false)"
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button
-                        class="btn btn-sky-blue"
+                        mat-raised-button color="primary"
                         [disabled]="!isFormValid() || isLoading"
                         (click)="exportReport(true)"
                     >
                         {{ commonLocaleData?.app_show }}
                     </button>
-                    <button class="btn btn-sky-blue" (click)="clearFilter()">{{ commonLocaleData?.app_reset }}</button>
+                    <button mat-raised-button color="primary" (click)="clearFilter()">{{ commonLocaleData?.app_reset }}</button>
                 </div>
             </div>
         </div>

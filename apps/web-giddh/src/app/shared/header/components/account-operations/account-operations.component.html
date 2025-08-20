@@ -153,7 +153,7 @@
 <!--add new buttons-->
 <div class="inline-table new-form ng-scope" *ngIf="showNewForm$ | async">
     <div class="vertical-center groups-buttons">
-        <button aria-label="create group" class="btn isActive mr-b2" (click)="showAddGroupForm()">
+        <button mat-stroked-button aria-label="create group" class="isActive mr-b2" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clearfix"></span>

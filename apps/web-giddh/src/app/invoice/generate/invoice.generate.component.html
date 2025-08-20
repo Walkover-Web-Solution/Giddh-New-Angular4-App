@@ -60,7 +60,8 @@
                                         />
                                     </div>
                                     <button
-                                        class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
+                                        mat-stroked-button
+                                        class="clear-filter align-items-center d-flex justify-content-center"
                                         *ngIf="customDateSelected && isMobileView"
                                         (click)="resetDateSearch()"
                                     >
@@ -87,12 +88,12 @@
                                         {{ localeData?.generate_compound }}
                                     </button>
                                     <button
+                                        mat-raised-button color="primary"
                                         type="button"
                                         *ngIf="(!isCompany && !isConsolidatedBranch) && !isMobileView"
                                         [matTooltip]="localeData?.works_for_single_entry"
                                         matTooltipPosition="above"
                                         [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"
-                                        class="btn btn-primary"
                                         (click)="previewInvoice()"
                                     >
                                         {{ localeData?.preview_generate }}

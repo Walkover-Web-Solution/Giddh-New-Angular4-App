@@ -20,7 +20,7 @@
                     <ng-template #template>
                         <div class="modal-header">
                             <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
-                            <button
+                            <button mat-stroked-button
                                 type="button"
                                 class="close pull-right"
                                 [attr.aria-label]="commonLocaleData?.app_close"
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-success btn-sm">{{ commonLocaleData?.app_search }}</button>
+                                    <button mat-stroked-button color="accent">{{ commonLocaleData?.app_search }}</button>
                                     <a class="cp" href="javascript:;">
                                         <i
                                             aria-hidden="true"
@@ -223,7 +223,7 @@
 
                         <div class="form-group mr-r1">
                             <label class="d-block">&nbsp;</label>
-                            <button class="btn btn-success btn-sm">{{ commonLocaleData?.app_search }}</button>
+                            <button mat-stroked-button color="accent">{{ commonLocaleData?.app_search }}</button>
                             <a class="cp" href="javascript:;">
                                 <i
                                     aria-hidden="true"
@@ -247,6 +247,7 @@
                             >
                                 <button
                                     dropdownToggle
+                                    mat-stroked-button
                                     type="button"
                                     class="btn more-btn-dropdown dropdown-toggle"
                                     aria-controls="dropdown-basic"

@@ -16,7 +16,7 @@
                 <ng-container *ngIf="button?.color === 'primary'; else elseBlock">
                     <button
                         *ngIf="!inputData?.configuration?.disableRipple"
-                        mat-raised-button
+                        mat-raised-button color="primary"
                         class="confirmation-buttons"
                         (click)="sendResponse(button?.text)"
                         [ngClass]="button?.cssClass"

@@ -19,12 +19,12 @@
                 <div class="radio-btn-wrapper mr-t15">
                     <form [formGroup]="formGroupRadio" class="form-body">
                         <mat-radio-group aria-label="Select an option" formControlName="radioType">
-                            <mat-radio-button color="primary" value="product" [checked]="true"
+                            <mat-radio-button value="product" [checked]="true"
                                 >Product
                             </mat-radio-button>
-                            <mat-radio-button color="primary" value="service">Service</mat-radio-button>
-                            <mat-radio-button color="primary" value="combo">Combo</mat-radio-button>
-                            <mat-radio-button color="primary" value="bulkCreation">Bulk Creation</mat-radio-button>
+                            <mat-radio-button value="service">Service</mat-radio-button>
+                            <mat-radio-button value="combo">Combo</mat-radio-button>
+                            <mat-radio-button value="bulkCreation">Bulk Creation</mat-radio-button>
                         </mat-radio-group>
                     </form>
                 </div>
@@ -695,7 +695,7 @@
                                         </button>
                                     </form>
                                     <div class="mt-3 mb-3">
-                                        <button mat-raised-button class="bdr-radius-50">
+                                        <button mat-raised-button color="primary" class="bdr-radius-50">
                                             <i class="icon-options mr-2"></i>Customise
                                         </button>
                                     </div>

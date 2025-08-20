@@ -2748,7 +2748,9 @@
                                     *ngIf="signatureImgAttached"
                                     (click)="removeFile()"
                                     type="button"
-                                    class="mt-2 start-upload-btn btn btn-danger"
+                                    mat-raised-button color="primary"
+                                    color="warn"
+                                    class="mt-2 start-upload-btn"
                                     matTooltip="Clicking on this, will delete image from server"
                                 >
                                     Delete

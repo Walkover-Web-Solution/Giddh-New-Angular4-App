@@ -1,7 +1,7 @@
 <div class="clearfix">
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">{{ commonLocaleData?.app_advance_search }}</h4>
-        <button
+        <button mat-stroked-button
             type="button"
             class="close pull-right"
             [attr.aria-label]="commonLocaleData?.app_close"
@@ -71,10 +71,10 @@
             </div>
 
             <div class="clearfix mt-4">
-                <button type="button" class="btn btn-success mr-r1" (click)="confirm.emit(searchModel)">
+                <button type="button" mat-stroked-button color="accent" (click)="confirm.emit(searchModel)">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button type="button" class="btn btn-cancel" (click)="cancel.emit()">
+                <button type="button" mat-stroked-button (click)="cancel.emit()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

@@ -130,10 +130,10 @@
         (onClear)="resetUser()"
     ></sh-select>
 </div>
-<button class="btn btn-success pull-left mr-t15" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
+<button mat-stroked-button color="accent" class="pull-left mr-t15" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
     {{ localeData?.get_logs }}
 </button>
-<button class="btn btn-warning pull-left mr-t15 mr-l05" (click)="resetFilters()">
+<button mat-stroked-button color="warn" class="pull-left mr-t15 mr-l05" (click)="resetFilters()">
     {{ commonLocaleData?.app_reset }}
 </button>
 <br />

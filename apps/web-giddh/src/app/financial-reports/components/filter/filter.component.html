@@ -468,10 +468,10 @@
             </form>
         </div>
         <div mat-dialog-actions>
-            <button class="btn btn-success" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
+            <button mat-stroked-button color="accent" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
                 {{ commonLocaleData?.app_create }}
             </button>
-            <button class="btn btn-default" (click)="toggleTagsModal()">
+            <button mat-stroked-button (click)="toggleTagsModal()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

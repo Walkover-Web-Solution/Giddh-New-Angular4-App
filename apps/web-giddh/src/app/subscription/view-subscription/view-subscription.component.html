@@ -246,13 +246,13 @@
                             >
                                 {{ localeData?.change_subscription }}
                             </button>
-                            <button
+                            <button mat-stroked-button
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.period?.toLowerCase() !== 'yearly'
                                 "
                                 aria-label="cancelsubscription"
-                                mat-raised-button
+                                mat-raised-button color="primary"
                                 (click)="cancelSubscription()"
                             >
                                 {{ localeData?.cancel_subscription }}

@@ -29,10 +29,10 @@
                 </ng-container>
             </div>
             <div class="pull-right">
-                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="convertPoToBill()">
+                <button mat-stroked-button type="submit" (click)="convertPoToBill()">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                <button mat-stroked-button type="submit" (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

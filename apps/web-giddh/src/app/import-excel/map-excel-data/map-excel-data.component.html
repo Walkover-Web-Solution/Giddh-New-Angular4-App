@@ -45,8 +45,8 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button class="btn btn-default" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
-                <button class="btn btn-success" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
+                <button mat-stroked-button (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+                <button mat-stroked-button color="accent" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
             </div>
         </div>
     </div>

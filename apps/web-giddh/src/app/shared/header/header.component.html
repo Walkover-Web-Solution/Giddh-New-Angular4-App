@@ -2,7 +2,7 @@
 <div class="message-wrapper" *ngIf="showDepreciationMessage">
     <p class="text-center py-2">
         {{ localeData?.depreciation_message }}
-        <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">
+        <a href="mailto:support@giddh.com" aria-label="email" mat-stroked-button>
             support
             <span>&#64;</span>
             <!-- This &#64; Html Code for @ symbol  -->
@@ -13,7 +13,7 @@
         <a
             href="javascript:void(0);"
             aria-label="dismiss"
-            class="text-underline"
+            mat-stroked-button
             (click)="removeDepreciationMessage()"
             >{{ localeData?.depreciation_dismiss }}</a
         >
@@ -63,6 +63,7 @@
                         *ngIf="companyList?.length && isSubscriptionModule"
                         class="min160 company-button"
                         mat-raised-button
+                        color="primary"
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
@@ -75,7 +76,7 @@
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
                         class="min160 company-button ml-3"
-                        mat-raised-button
+                        mat-stroked-button
                         (click)="backToSubscription()"
                         aria-label="back"
                     >
@@ -355,7 +356,7 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div mat-stroked-button class="p-1" mr-t2 mr-b05 d-flex align-items-center>
                                                 <span class="d-flex">
                                                     <i class="icon-estimate-new mr-r1"></i>
                                                 </span>
@@ -368,7 +369,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
                                                 <span class="d-flex">
                                                     <i class="icon-proforma mr-r1"></i>
                                                 </span>
@@ -381,7 +382,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
                                                 <span class="d-flex">
                                                     <i class="icon-purchase-order mr-r1"></i>
                                                 </span>
@@ -396,7 +397,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new mr-r1"></i>
                                                 </span>
@@ -409,7 +410,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new mr-r1"></i>
                                                 </span>
@@ -422,7 +423,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
                                                 </span>
@@ -453,7 +454,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button class="btn btn-link p-1" (click)="dateSelectedCallback()">
+                            <button mat-stroked-button class="p-1" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -691,7 +692,7 @@
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button
+            <button mat-stroked-button
                 type="button"
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
@@ -707,12 +708,12 @@
             <div class="clearfix">
                 <ul class="list-inline upgrade-plan">
                     <li>
-                        <button class="btn btn-green" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
+                        <button mat-stroked-button *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
                             {{ localeData?.renew_plan }}
                         </button>
                     </li>
                     <li>
-                        <button class="btn btn-green" (click)="goToSelectPlan()">
+                        <button mat-stroked-button (click)="goToSelectPlan()">
                             {{ localeData?.change_plan }}
                         </button>
                     </li>
@@ -734,7 +735,7 @@
     <ng-template #crossedTxLimitModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button
+            <button mat-stroked-button
                 type="button"
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
@@ -751,7 +752,7 @@
             <div class="clearfix">
                 <ul class="list-inline">
                     <li>
-                        <button class="btn btn-sky-blue" (click)="goToSelectPlan()">
+                        <button mat-stroked-button (click)="goToSelectPlan()">
                             {{ commonLocaleData?.app_buy_plan }}
                         </button>
                     </li>
@@ -791,7 +792,7 @@
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
-                <button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
+                <button mat-stroked-button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
                     <i class="icon-cross"></i>
                 </button>
                 <object [data]="calendlyUrl" title="calendar"></object>

@@ -6,7 +6,7 @@
                     <h3 *ngIf="!isUpdatingStockForm">Create Stock</h3>
                     <h3 *ngIf="isUpdatingStockForm">Update Stock</h3>
                 </div>
-                <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+                <button mat-stroked-button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
                 <div class="aside-pane-form">
                     <section class="form-body white-bg clearfix margin-child-label">
                         <div class="clearfix">
@@ -32,7 +32,7 @@
                                     <label class="d-block">&nbsp;</label>
                                     <button
                                         type="button"
-                                        class="btn btn-default"
+                                        mat-stroked-button
                                         (click)="moveStock()"
                                         [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                                     >
@@ -146,11 +146,12 @@
                                     <div class="form-group col-4 col-sm-4">
                                         <label>Tax</label>
 
-                                        <div class="btn-group btn-block" dropdown>
+                                        <div dropdown>
                                             <button
                                                 dropdownToggle
                                                 type="button"
                                                 class="dropdown-toggle form-control text-left"
+                                                mat-stroked-button
                                             >
                                                 Selected ({{ taxTempArray?.length }})
                                                 <span class="pull-right"><span class="caret"></span></span>
@@ -391,9 +392,9 @@
                                                     #purchaseStockUnitCode
                                                     formControlName="stockUnitUniqueName"
                                                     [multiple]="false"
+                                                    [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                                     [placeholder]="'Select Unit'"
                                                     [ItemHeight]="33"
-                                                    [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                                     [forceClearReactive]="forceClear$ | async"
                                                     [notFoundLinkText]="'+ Add New'"
                                                     (noResultsClicked)="addNewStockUnit()"
@@ -415,14 +416,14 @@
                                             </div>
                                             <div class="pull-right unit-add">
                                                 <button
-                                                    class="btn-link btn mr-0"
+                                                    mat-stroked-button
                                                     (click)="addPurchaseUnitRates(i)"
                                                     *ngIf="l"
                                                 >
                                                     <i class="icon-plus add-row"></i>
                                                 </button>
                                                 <button
-                                                    class="btn-link btn"
+                                                    mat-stroked-button
                                                     (click)="removePurchaseUnitRates(i)"
                                                     *ngIf="!l"
                                                 >
@@ -512,14 +513,14 @@
                                             </div>
                                             <div class="pull-right unit-add">
                                                 <button
-                                                    class="btn-link btn mr-0"
+                                                    mat-stroked-button
                                                     (click)="addSaleUnitRates(i)"
                                                     *ngIf="l"
                                                 >
                                                     <i class="icon-plus add-row"></i>
                                                 </button>
                                                 <button
-                                                    class="btn-link btn mr-0"
+                                                    mat-stroked-button
                                                     (click)="removeSaleUnitRates(i)"
                                                     *ngIf="!l"
                                                 >
@@ -675,7 +676,7 @@
                                                 </td>
                                                 <td>
                                                     <button
-                                                        class="btn-link btn mr-0"
+                                                        mat-stroked-button
                                                         (click)="addItemInLinkedStocks(list, i, i)"
                                                         *ngIf="l"
                                                         [disabled]="disableStockButton"
@@ -683,7 +684,7 @@
                                                         <i class="icon-plus add-row"></i>
                                                     </button>
                                                     <button
-                                                        class="btn-link"
+                                                        mat-stroked-button
                                                         (click)="removeItemInLinkedStocks(i)"
                                                         *ngIf="!l"
                                                     >
@@ -704,23 +705,23 @@
                                     *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async"
                                     (click)="submit()"
-                                    class="btn btn-success"
+                                    mat-stroked-button
                                     [disabled]="addStockForm.invalid || disableStockButton"
                                 >
                                     Save
                                 </button>
                                 <!-- <button type="button" *ngIf="isUpdatingStockForm"
-                                    [ladda]="isStockUpdateInProcess$ | async" class="btn btn-primary" (click)="update()"
+                                    [ladda]="isStockUpdateInProcess$ | async" mat-raised-button color="primary" (click)="update()"
                                     [disabled]="addStockForm.invalid || disableStockButton">Update
                                 </button>
                                 <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async"
-                                    class="btn btn-danger" (click)="deleteStock()">Delete Stock
+                                    mat-stroked-button color="warn" (click)="deleteStock()">Delete Stock
                                 </button> -->
                                 <button
                                     type="button"
                                     *ngIf="!isUpdatingStockForm"
                                     (click)="resetStockForm()"
-                                    class="btn btn-default"
+                                    mat-stroked-button
                                 >
                                     Cancel
                                 </button>
