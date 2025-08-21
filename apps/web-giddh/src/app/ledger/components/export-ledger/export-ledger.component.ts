@@ -51,7 +51,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Reference to universal date picker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
-/* This will store selected date range to use in api */
+    /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -65,7 +65,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This property has been removed as it's already defined above */
     /** To hold export request object */
     public exportRequest: ExportBodyRequest = {
         from: '',

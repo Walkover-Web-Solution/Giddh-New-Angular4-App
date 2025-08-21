@@ -4,11 +4,12 @@
             <h4>Sales Report</h4>
             <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                 <input
+                    matInput
                     type="text"
-                    id="select-date-selling"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker bdr-radius-50"
+                    class="giddh-datepicker date-range-picker"
+                    readonly
                     placeholder="Enter Date"
                 />
             </div>

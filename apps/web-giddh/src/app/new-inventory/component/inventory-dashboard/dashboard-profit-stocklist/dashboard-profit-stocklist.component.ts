@@ -31,12 +31,11 @@ export class DashboardProfitStockList implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-@ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     constructor(
-        @Inject(ServiceConfig) private serviceConfig,
-        private generalService: GeneralService,
-        private _breakPointObservar: BreakpointObserver) {
+        @Inject(ServiceConfig) private serviceConfig) {
     }
     /**
      * Shows or hides the datepicker
@@ -78,7 +77,7 @@ export class DashboardProfitStockList implements OnInit {
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
 }

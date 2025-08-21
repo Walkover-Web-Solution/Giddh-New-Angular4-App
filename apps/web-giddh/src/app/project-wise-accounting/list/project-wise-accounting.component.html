@@ -17,7 +17,8 @@
                #universalDatepickerTrigger="matMenuTrigger"
                role="button"
                aria-haspopup="true"
-               aria-controls="universalDatepicker">
+               aria-controls="universalDatepicker"
+          >
               <input
                 matInput
                 type="text"
@@ -25,6 +26,7 @@
                 aria-label="Select date range"
                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                 class="giddh-datepicker date-range-picker"
+                readonly
               />
           </div>
           <div *ngIf="isCompany" class="mr-l1">

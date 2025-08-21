@@ -59,8 +59,6 @@ import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { isElectron } from '@giddh-workspaces/utils';
 
 @Component({
     selector: "contact-detail",
@@ -178,7 +176,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
     public universalDate: any;
-    public modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     /**True, if get accounts request in process */
     public isGetAccountsInProcess: boolean = false;

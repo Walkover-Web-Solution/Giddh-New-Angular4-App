@@ -19,7 +19,7 @@ import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+
 export const filterTransaction = {
     entityType: '',
     type: '',
@@ -55,7 +55,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public gstr2entityType = [];
     public filterParam: GStTransactionRequest = new GStTransactionRequest();
     public imgPath: string = '';
-    public modalRef: BsModalRef;
     public modalConfig = {
         animated: true,
         keyboard: false,

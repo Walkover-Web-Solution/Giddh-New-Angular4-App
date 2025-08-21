@@ -110,7 +110,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
     public voucherData: ReciptResponse;
     public dayjs = dayjs;
     public modalRef: BsModalRef;
-    @ViewChild('datePickerMenuTrigger') datePickerMenuTrigger: MatMenuTrigger;
     public showInvoiceNoSearch = false;
     public modalConfig: ModalOptions = {
         animated: true,

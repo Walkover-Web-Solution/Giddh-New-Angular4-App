@@ -19,12 +19,13 @@
                         <div class="form-group date-advance-search">
                             <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                                 <input
+                                    matInput
                                     type="text"
-                                    id="select-date-group"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker bdr-radius-50"
+                                    class="giddh-datepicker date-range-picker"
                                     placeholder="Enter Date"
+                                    readonly
                                 />
                             </div>
                         </div>

@@ -99,10 +99,12 @@
                                 aria-controls="universalDatepicker"
                             >
                                 <input
+                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker"
+                                    readonly
                                 />
                             </div>
                             <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

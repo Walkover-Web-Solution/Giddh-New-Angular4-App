@@ -34,10 +34,12 @@
                             </div>
                             <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                                 <input
+                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker"
+                                    readonly
                                 />
                             </div>
                             <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">

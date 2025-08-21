@@ -30,10 +30,12 @@
                         aria-controls="universalDatepicker"
                     >
                         <input
+                            matInput
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
                         />
                     </div>
                     <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
@@ -81,10 +83,12 @@
                         aria-controls="entryDatepicker"
                     >
                         <input
+                            matInput
                             type="text"
                             name="selectedEntryDateRange"
-                                [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
+                            [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
                         />
                     </div>
                     <mat-menu #entryDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
@@ -112,17 +116,19 @@
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'VOUCHER_DATE'">
                     <div 
                         class="custom-datepicker" 
-                                [matMenuTriggerFor]="voucherDatepicker"
+                        [matMenuTriggerFor]="voucherDatepicker"
                         #voucherDatepickerTrigger="matMenuTrigger"
                         role="button"
                         aria-haspopup="true"
                         aria-controls="voucherDatepicker"
                     >
                         <input
+                            matInput
                             type="text"
                             name="selectedVoucherDateRange"
-                                [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
+                            [value]="selectedVoucherDateRangeUi ? selectedVoucherDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
                         />
                     </div>
                     <mat-menu #voucherDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
