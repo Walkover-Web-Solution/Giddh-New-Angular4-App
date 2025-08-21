@@ -73,7 +73,8 @@
     >
         <div class="row row-item">
             <div class="col-4 account no-select" [style.padding-left]="padding + 20 + 'px !important'">
-                <div
+                <!-- under working -->
+                <!-- <div
                     class="p-0 bd-r-right-none text-danger"
                     [innerHTML]="account.name | lowercase | highlight: search"
                     [popover]="accountDetailModalTemplate"
@@ -98,7 +99,7 @@
                         (modalClosedTemporary)="openAccountModal.emit($event); hideModal(); accountDetailPopup?.hide()"
                     >
                     </span>
-                </ng-template>
+                </ng-template> -->
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">

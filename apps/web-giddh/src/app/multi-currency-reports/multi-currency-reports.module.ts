@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -76,7 +75,6 @@ import { MatListModule } from '@angular/material/list';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule.forRoot(),
         AsideMenuAccountModule,
         MatTooltipModule,
         MatButtonModule,
