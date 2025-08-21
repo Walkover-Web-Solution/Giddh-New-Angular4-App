@@ -122,7 +122,7 @@ public isActionMenu: boolean = true;
                 if (event) {
                     event.stopPropagation();
                 }
-                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType, false);
+                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType === 'sales' ? 'customer' : 'vendor', false);
                 break;
             case 4: // edit account
                 if (event) {
