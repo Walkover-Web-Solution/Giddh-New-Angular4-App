@@ -63,7 +63,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public taxPopOverTemplate: string = '';
     public showEditTaxSection: boolean = false;
     public accountList: any[];
-    public showTaxes: boolean = false;
+    public showTaxes: boolean = true;
     @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
     public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
     /** To check is groups belongs to debtor or creditors type  */
@@ -464,23 +464,22 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public async taxHierarchy() {
-        if (this.showTaxes) {
-            let activeAccount: AccountResponseV2 = null;
-            let activeGroupUniqueName: string = null;
-            this.store.pipe(take(1)).subscribe(s => {
-                if (s.groupwithaccounts) {
-                    activeAccount = s.groupwithaccounts.activeAccount;
-                    activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
-                }
-            });
-            if (activeAccount) {
-                this.store.dispatch(this.companyActions.getTax());
-                this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
-            } else {
-                this.store.dispatch(this.companyActions.getTax());
-                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
-                this.showEditTaxSection = true;
+        this.showTaxes = false;
+        let activeAccount: AccountResponseV2 = null;
+        let activeGroupUniqueName: string = null;
+        this.store.pipe(take(1)).subscribe(s => {
+            if (s.groupwithaccounts) {
+                activeAccount = s.groupwithaccounts.activeAccount;
+                activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
             }
+        });
+        if (activeAccount) {
+            this.store.dispatch(this.companyActions.getTax());
+            this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
+        } else {
+            this.store.dispatch(this.companyActions.getTax());
+            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
+            this.showEditTaxSection = true;
         }
     }
 

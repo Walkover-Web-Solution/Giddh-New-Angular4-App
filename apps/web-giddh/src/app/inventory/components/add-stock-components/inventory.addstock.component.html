@@ -62,7 +62,7 @@
                         <!-- other details -->
                         <div class="row mr-b1">
                             <div class="col-12 col-sm-12">
-                                <mat-expansion-panel class="mr-t1" (opened)="showOtherDetails = !showOtherDetails; toggleOtherDetails()">
+                                <mat-expansion-panel class="mr-t1" (opened)="toggleOtherDetails()">
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>Other Details</mat-panel-title>
                                     </mat-expansion-panel-header>
@@ -80,7 +80,7 @@
                                                 />
                                             </div>
                                             <div class="form-group col-sm-4 col-12">
-                                                <span class="mr-r15">
+                                                <span>
                                                     <input
                                                         type="radio"
                                                         class="radio-custom radio-theme"
@@ -91,7 +91,7 @@
                                                     />
                                                     <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
                                                 </span>
-                                                <span>
+                                                <span class="pull-right">
                                                     <input
                                                         type="radio"
                                                         class="radio-custom radio-theme"
