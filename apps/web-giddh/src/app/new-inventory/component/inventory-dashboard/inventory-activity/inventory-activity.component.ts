@@ -24,10 +24,7 @@ export class InventoryActivityComponent {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+@ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     constructor() { }
 

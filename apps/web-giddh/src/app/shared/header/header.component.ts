@@ -279,9 +279,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** True if command dialog is open */
+/** True if command dialog is open */
     public showCommandDialog: boolean = false;
 
     /**
@@ -850,7 +848,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
         if (window['Headway'] === undefined) {
@@ -998,7 +995,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-
     /**
      * This will toggle the settings popup
      *
@@ -1137,12 +1133,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsDialogRef?.close();
     }
 
-
-
     public onHide() {
         this.store.dispatch(this.companyActions.ResetCompanyPopup());
     }
-
 
     /**
     * This function is used to open manage groups accounts dialog
@@ -1869,7 +1862,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         ) ?? "";
     }
 
-
     /**
      * This will return plan ended note
      *
@@ -1918,7 +1910,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.expiry
         ) ?? "";
     }
-
 
     /**
      * This will return transaction limit crossed note

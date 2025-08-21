@@ -4,7 +4,6 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
 
-
 @Component({
     selector: 'dashboard-sales-report',
     templateUrl: './dashboard-sales-report.component.html',
@@ -29,9 +28,7 @@ export class DashboardSalesReport implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Instance of universal datepicker menu trigger */
+/** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     constructor() {

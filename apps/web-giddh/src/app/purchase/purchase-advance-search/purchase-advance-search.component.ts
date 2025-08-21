@@ -31,9 +31,6 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /** Universal datepicker trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track datepicker menu state */
-    public isDatepickerMenuOpen: boolean = false;
-
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store selected date range to use in api */

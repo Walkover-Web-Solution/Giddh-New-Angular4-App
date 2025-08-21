@@ -37,9 +37,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** Flag to indicate if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+/** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;

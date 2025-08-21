@@ -107,8 +107,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('ipadUniversalDatepickerTrigger', { read: MatMenuTrigger }) public ipadUniversalDatepickerTrigger: MatMenuTrigger;
     /** Desktop datepicker trigger */
     @ViewChild('desktopUniversalDatepickerTrigger', { read: MatMenuTrigger }) public desktopUniversalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track datepicker menu state */
-    public isDatepickerMenuOpen: boolean = false;
     /** Holds of carousel template reference */
     @ViewChild('carousel', { static: false }) public carousel: TemplateRef<any>;
     /** Instance of entry confirmation modal */

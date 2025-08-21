@@ -107,9 +107,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Modal reference */
+/** Modal reference */
     public modalRef: BsModalRef;
 
     constructor(
@@ -276,7 +274,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
         });
 
-
     }
 
     public ngOnDestroy() {
@@ -330,7 +327,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }, 100);
         }
     }
-
 
     public compareChanged(option: IOption) {
         switch (option.value) {
@@ -498,7 +494,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.advanceSearchModel.hide();
             this.applyFilters(1, true);
         }
-
 
     }
 

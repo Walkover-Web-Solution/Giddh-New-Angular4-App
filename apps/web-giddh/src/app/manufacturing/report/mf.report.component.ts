@@ -107,10 +107,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** This will hold warehouses list based on branch */
     public allWarehouses: any[] = [];
-    /** True if datepicker menu is open */
-public isDatepickerMenuOpen: boolean = false;
-
-    constructor(
+constructor(
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,

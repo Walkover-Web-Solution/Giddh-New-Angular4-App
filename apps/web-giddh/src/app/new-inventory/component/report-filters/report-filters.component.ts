@@ -76,9 +76,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public branchesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Search field form control */
     public searchFilters: UntypedFormControl = new UntypedFormControl();
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+/** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
     public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();

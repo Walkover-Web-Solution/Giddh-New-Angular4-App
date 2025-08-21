@@ -25,9 +25,7 @@ import { saveAs } from 'file-saver';
 export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Template reference for the advance search modal */
+/** Template reference for the advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** Reference to the Material paginator component */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -168,7 +166,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         }
         event.stopPropagation();
     }
-
 
     /**
      * Resets all applied advance filters and optionally fetches the account statement list.
@@ -345,7 +342,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.setDefaultParam();
         }
     }
-
 
     /**
      * Toggles the datepicker menu open/close state.

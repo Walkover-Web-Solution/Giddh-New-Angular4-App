@@ -68,8 +68,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** Boolean to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** True, if search filter is applied */

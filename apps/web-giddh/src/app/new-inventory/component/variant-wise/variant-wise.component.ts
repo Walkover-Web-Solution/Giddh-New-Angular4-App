@@ -36,9 +36,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class VariantWiseComponent implements OnInit, OnDestroy {
     /** Instance of datepicker trigger */
     @ViewChild('universalDatepickerTrigger', { static: false }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Selected date range */
+/** Selected date range */
     public selectedDateRange: any;
     /** Selected date range UI representation */
     public selectedDateRangeUi: any;

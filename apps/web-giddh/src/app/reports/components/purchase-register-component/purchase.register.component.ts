@@ -132,10 +132,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    constructor(
+constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
         private store: Store<AppState>,
@@ -263,7 +260,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
             });
-
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {

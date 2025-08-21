@@ -29,10 +29,7 @@ export class DashboardPurchaseReport implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* Boolean to maintain if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    /** MatMenuTrigger directive for datepicker */
+/** MatMenuTrigger directive for datepicker */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     constructor(

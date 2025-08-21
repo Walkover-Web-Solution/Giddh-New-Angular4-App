@@ -85,9 +85,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /* This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Hold initial params data */
+/** Hold initial params data */
     private params: any = { from: '', to: '' };
     /**True if API called on single time */
     public isDefaultLoaded: boolean = false;

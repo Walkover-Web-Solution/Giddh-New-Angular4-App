@@ -108,9 +108,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
-    /** Tracks whether the datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Selected range label */
+/** Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -198,7 +196,6 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     ) {
         this.getFinancialYears();
     }
-
 
     /**
      * Initializes the component

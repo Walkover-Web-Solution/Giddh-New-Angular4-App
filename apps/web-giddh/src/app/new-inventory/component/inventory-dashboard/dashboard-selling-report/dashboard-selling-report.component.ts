@@ -27,9 +27,7 @@ export class DashboardSellingReport implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Instance of universal datepicker menu trigger */
+/** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     constructor() {

@@ -17,7 +17,6 @@ import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
 Chart.register(...registerables);
 
-
 @Component({
     selector: 'total-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
@@ -27,9 +26,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** This will store if device is mobile or not */
+/** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -131,7 +128,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.requestInFlight = false;
         this.cdRef.detectChanges();
     }
-
 
     public ngOnDestroy() {
         this.destroyed$.next(true);

@@ -42,8 +42,6 @@ export class ListBranchTransferComponent implements OnInit {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** Boolean to maintain if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     /** Material table elements */
     public displayedColumns: string[] = [];
     /** This will store selected date range to show on UI */

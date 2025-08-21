@@ -65,9 +65,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /** This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Stores the search results pagination details for group dropdown */
+/** Stores the search results pagination details for group dropdown */
     public groupsSearchResultsPaginationData = {
         page: 0,
         totalPages: 0,

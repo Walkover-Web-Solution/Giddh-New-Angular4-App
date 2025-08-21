@@ -355,10 +355,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public paymentTableColumnsEnum: typeof PaymentTableColumnsEnum = PaymentTableColumnsEnum;
     /** True if columns loading */
     public isColumnsLoading: boolean = true;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    constructor(
+constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private router: Router,
@@ -565,7 +562,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
@@ -1450,7 +1446,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * Generate E-Invoice API Call
      *
@@ -1619,7 +1614,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             dataToSend['voucherUniqueNames'] = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
         }
-
 
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
             panelClass: ['mat-dialog-md'],
@@ -2723,7 +2717,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         };
         this.componentStore.verifyPurchaseEmail({ getRequestObject: getRequestObject, postRequestObject: postRequestObject });
     }
-
 
     /**
      * Open custom email dialog

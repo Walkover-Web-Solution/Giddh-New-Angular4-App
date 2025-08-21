@@ -57,9 +57,7 @@ export class PurchaseOrderComponent implements OnDestroy {
     public activeCompanyUniqueName$: Observable<string>;
     /* This will store if loading is active or not */
     public isLoading: boolean = false;
-    /* This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+/* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the response object*/
     public purchaseOrders: any = {};

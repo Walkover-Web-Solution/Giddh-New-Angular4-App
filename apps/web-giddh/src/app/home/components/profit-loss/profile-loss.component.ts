@@ -34,9 +34,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /* This will store if device is mobile or not */
+/* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -160,8 +158,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             this.universalDatepickerTrigger?.closeMenu();
         }
     }
-
-
 
     /**
     * Call back function for date/range selection in datepicker

@@ -37,9 +37,7 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** Holds Datepicker Menu Trigger Reference */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /* This will store selected date range to use in api */
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -57,7 +55,6 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
     dataSource = ELEMENT_DATA;
     
     constructor() {}
-
 
     /**
      * Toggles the datepicker menu

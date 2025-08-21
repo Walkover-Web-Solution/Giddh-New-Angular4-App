@@ -93,10 +93,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
+public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
         page: 1,

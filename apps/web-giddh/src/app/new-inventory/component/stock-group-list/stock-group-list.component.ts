@@ -25,8 +25,6 @@ export class StockGroupListComponent implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 

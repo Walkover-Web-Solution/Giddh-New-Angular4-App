@@ -142,10 +142,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
     /** Instance of modal */
     public modalDialogRef: any;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    constructor(
+constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _cdRef: ChangeDetectorRef,

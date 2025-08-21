@@ -97,9 +97,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** This will store selected date range to show on UI */
+/** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -429,7 +427,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.getAllAdjustReports(false);
     }
 
-
     /**
      * This method will be use for route to create adjust inventory
      *
@@ -451,7 +448,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             this.changeDetection.detectChanges();
         }
     }
-
 
     /**
     * Returns the search field text
@@ -525,7 +521,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         }
     }
-
 
     /**
      * This will be use for toggle search field

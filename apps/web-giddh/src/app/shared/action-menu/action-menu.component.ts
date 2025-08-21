@@ -67,8 +67,7 @@ export class ActionMenuComponent {
     public selectedGroupForCreateAcc: string = '';
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** True if action menu is open */
-    public isActionMenu: boolean = true;
+public isActionMenu: boolean = true;
 
     constructor(private generalService: GeneralService, private dialog: MatDialog, private store: Store<AppState>) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;

@@ -61,10 +61,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-
-    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
