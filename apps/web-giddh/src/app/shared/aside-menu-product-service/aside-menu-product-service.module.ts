@@ -10,13 +10,11 @@ import { DecimalDigitsModule } from "../helpers/directives/decimalDigits/decimal
 import { TextCaseChangeModule } from "../helpers/directives/textCaseChange/textCaseChange.module";
 import { UniqueNameModule } from "../helpers/directives/uniqueName/uniqueName.module";
 import { AsideMenuProductServiceComponent } from "./aside-menu-product-service.component";
-import { SalesAddStockComponent } from "./components/create-stock/sales.create.stock.component";
 import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
-        AsideMenuProductServiceComponent,
-        SalesAddStockComponent
+        AsideMenuProductServiceComponent
     ],
     imports: [
         CommonModule,
@@ -33,8 +31,7 @@ import { MatButtonModule } from "@angular/material/button";
         MatButtonModule 
     ],
     exports: [
-        AsideMenuProductServiceComponent,
-        SalesAddStockComponent
+        AsideMenuProductServiceComponent
     ]
 })
 export class AsideMenuProductServiceModule {

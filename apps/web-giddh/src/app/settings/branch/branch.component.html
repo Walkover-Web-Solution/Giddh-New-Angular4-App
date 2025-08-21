@@ -153,6 +153,13 @@
                                                                 class="linked-add"
                                                             >
                                                                 <ng-container *ngIf="address">
+                                                                    <span
+                                                                        class="cursor-pointer"
+                                                                        cdkOverlayOrigin
+                                                                        #popTemplate="cdkOverlayOrigin"
+                                                                        (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
+                                                                        (mouseleave)="openAddressInfo(false)"
+                                                                    >
                                                                     <i
                                                                         (click)="setDefault(address, branch, 'address')"
                                                                         *ngIf="!address?.isDefault"
@@ -163,29 +170,37 @@
                                                                         *ngIf="address?.isDefault"
                                                                         class="cursor-pointer icon-favorite-selected mr-r05"
                                                                     ></i>
-                                                                    <label
-                                                                        class="position-static cursor-pointer border-none bg-transparent"
-                                                                        [popover]="popTemplate"
-                                                                        popoverTitle="{{ address?.name }}"
-                                                                        placement="right"
-                                                                        popover
-                                                                        triggers="mouseenter:mouseleave"
-                                                                        >{{ address?.name }}
-                                                                    </label>
-                                                                    <ng-template #popTemplate>
-                                                                        {{ address?.address }} {{ address?.stateCode }}
-                                                                        <p
-                                                                            *ngIf="
-                                                                                address?.taxType && address?.taxNumber
-                                                                            "
-                                                                        >
-                                                                            {{ address?.taxType }} :
-                                                                            {{ address?.taxNumber }}
-                                                                        </p>
-                                                                        <p *ngIf="address?.pincode">
-                                                                            {{ commonLocaleData?.app_pin }}:
-                                                                            {{ address?.pincode }}
-                                                                        </p>
+                                                                        {{ address?.name }}
+                                                                    </span>
+                                                                    <ng-template
+                                                                        cdkConnectedOverlay
+                                                                        [cdkConnectedOverlayOrigin]="popTemplate"
+                                                                        [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + branch.uniqueName)"
+                                                                        [cdkConnectedOverlayPositions]="[
+                                                                            {
+                                                                                originX: 'end',
+                                                                                originY: 'center',
+                                                                                overlayX: 'start',
+                                                                                overlayY: 'center',
+                                                                                offsetX: 8
+                                                                            }
+                                                                        ]">
+                                                                        <div class="tax-tooltip font-14 overlay " (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
+                                                                        (mouseleave)="openAddressInfo(false)">
+                                                                            {{ address?.address }} {{ address?.stateCode }}
+                                                                            <p
+                                                                                *ngIf="
+                                                                                    address?.taxType && address?.taxNumber
+                                                                                "
+                                                                            >
+                                                                                {{ address?.taxType }} :
+                                                                                {{ address?.taxNumber }}
+                                                                            </p>
+                                                                            <p *ngIf="address?.pincode">
+                                                                                {{ commonLocaleData?.app_pin }}:
+                                                                                {{ address?.pincode }}
+                                                                            </p>
+                                                                        </div>
                                                                     </ng-template>
                                                                 </ng-container>
                                                             </div>
