@@ -6,7 +6,7 @@
     <div class="container h-100">
         <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
         <div class="pdf-preview h-100">
-            <div *ngIf="!isFileUploading" class="error danger text-center">
+            <div *ngIf="!isFileUploading && !sanitizedPdfFileUrl" class="error danger text-center">
                 <span>{{ localeData?.invoice_preview_unavailable }}</span>
             </div>
             <iframe

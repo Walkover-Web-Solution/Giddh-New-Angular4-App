@@ -63,7 +63,8 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
         this.isFileUploading = false;
       } else {
         this.isFileUploading = false;
-        this.toasterService.showSnackBar('error', 'Failed to get template preview ');
+        this.sanitizedPdfFileUrl = null;
+        this.toasterService.showSnackBar('error', this.localeData?.failed_to_get_template_preview);
       }
     });
   }

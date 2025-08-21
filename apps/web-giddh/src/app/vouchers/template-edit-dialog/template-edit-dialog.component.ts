@@ -9,8 +9,11 @@ import { ToasterService } from '../../services/toaster.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { TemplateModeEnum } from '../../models/api-models/Sales';
+import { TemplateModeEnum, TemplateTypeEnum } from '../../models/api-models/Sales';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
+import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
+import { GeneralService } from '../../services/general.service';
+import { CountryNames } from '../../shared/Enums/common.enum';
 
 @Component({
   selector: 'app-template-edit-dialog',
@@ -41,13 +44,13 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private invoiceUiDataService: InvoiceUiDataService,
     private invoiceTemplatesService: InvoiceTemplatesService,
+    private generalService: GeneralService,
     private toasty: ToasterService,
     private store: Store<AppState>,
     @Inject(MAT_DIALOG_DATA) public inputData: any,
     public dialogRef: MatDialogRef<any>
   ) {
     this.templateData = this.inputData;
-    console.log(this.templateData);
   }
 
 /**
@@ -64,7 +67,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     });
 
     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-      this.showGstComposition = activeCompany?.countryV2?.countryName === 'India';
+      this.showGstComposition = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
     });
   }
 
@@ -74,7 +77,18 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   * @memberof TemplateEditDialogComponent
   */
   public closeDialog(): void {
-    this.dialogRef.close(false);
+    this.InvoiceConfirmationConfiguration = this.generalService.closeTemplateDialogConfiguration(this.localeData, this.commonLocaleData);
+   const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+        panelClass: ['mat-dialog-md'],
+        data: {
+            configuration: this.InvoiceConfirmationConfiguration
+        }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result ==='Yes') {
+        this.dialogRef.close(false);
+      }
+    });
   }
 
   /**
@@ -87,7 +101,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     data.type = this.inputData.templateType;
     let copiedTemplate = cloneDeep(data);
     if (!data.name) {
-      this.toasty.errorToast('Please enter template name.');
+      this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
 
@@ -115,7 +129,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     }
     this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
-        this.toasty.successToast('Template Saved Successfully.');
+        this.toasty.successToast(this.localeData?.template_saved_successfully);
         this.dialogRef.close(true);
       } else {
         this.toasty.errorToast(res?.message, res?.code);
@@ -166,7 +180,7 @@ private ensureTextUnderSlogan(data: any): void {
  * @memberof TemplateEditDialogComponent
  */
 private cleanTemplateFields(data: any): void {
-    const specialTypes = ['gst_template_a', 'gst_template_e', 'thermal_template', 'tally_template'];
+    const specialTypes = [TemplateTypeEnum.GstTemplateA, TemplateTypeEnum.ThermalTemplate, TemplateTypeEnum.TallyTemplate];
     if (!specialTypes.includes((data.templateType || '').toLowerCase())) {
       delete data?.sections?.header?.data?.showCompanyAddress;
       delete data?.sections?.header?.data?.showQrCode;
@@ -203,7 +217,7 @@ private cleanTemplateFields(data: any): void {
   public updateTemplate(): void {
     let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
     if (!data.name) {
-      this.toasty.errorToast('Please enter template name.');
+      this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
     data.updatedAt = null;
@@ -220,7 +234,7 @@ private cleanTemplateFields(data: any): void {
     }
     this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
-        this.toasty.successToast('Template Updated Successfully.');
+        this.toasty.successToast(this.localeData?.template_updated_successfully);
         this.invoiceUiDataService.setLogoPath('');
         this.invoiceUiDataService.unusedImageSignature = '';
         this.dialogRef.close(true);

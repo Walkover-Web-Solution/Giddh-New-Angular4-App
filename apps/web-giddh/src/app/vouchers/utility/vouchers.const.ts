@@ -32,7 +32,9 @@ export enum VoucherTypeEnum {
     'cashBill' = 'cash bill',
     'purchaseOrder' = 'purchase-order',
     'invoice' = 'invoice',
-    'voucher' = 'voucher'
+    'voucher' = 'voucher',
+    'purchase_bill' = 'purchase_bill',
+    'purchase_order' = 'purchase_order'
 };
 
 export const SearchType = {

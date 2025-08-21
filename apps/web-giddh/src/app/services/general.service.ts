@@ -2234,15 +2234,15 @@ export class GeneralService {
      *
      * @throws {Error} If there is an error parsing the white label data from the local storage.
      */
-public getDecodedWhiteLabel(): any {
-    try {
-        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
-        return whiteLabelData?.body || null;
-    } catch (error) {
-        console.error('Error parsing whiteLabel data from localStorage:', error);
-        return null;
+    public getDecodedWhiteLabel(): any {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            console.error('Error parsing whiteLabel data from localStorage:', error);
+            return null;
+        }
     }
-}
 
     /**
      * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
@@ -2255,7 +2255,7 @@ public getDecodedWhiteLabel(): any {
     public replacePlaceholders(text: string, ...args: string[]): string {
         return text.replace(/\[.*?\]/g, () => args.shift() || '');
     }
-    
+
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
@@ -2418,6 +2418,38 @@ public getDecodedWhiteLabel(): any {
             return { fromDate, toDate };
         }
         return { fromDate: '', toDate: '' };
+    }
+
+    /**
+     * Close template dialog configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public closeTemplateDialogConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.close_message,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
     }
 }
 
