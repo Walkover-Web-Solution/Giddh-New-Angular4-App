@@ -62,6 +62,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -142,7 +144,9 @@ export function provideConfig() {
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
         MatMenuModule,
-        MatListModule
+        MatListModule,
+        MatExpansionModule,
+        OverlayModule
     ],
     exports: [
         CommonModule,

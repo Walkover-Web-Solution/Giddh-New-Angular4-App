@@ -96,6 +96,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public defaultTaxLabel: string[] = [];
     /** Stores the list of selected discount labels to display in the UI. */
     public defaultDiscountLabel: string[] = [];
+    /** Stores the current tax to display in the UI. */
+    public currentTax: any;
+    /** Stores the current discount to display in the UI. */
+    public currentDiscount: any;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -134,7 +138,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.taxPopOverTemplate = '<div class="popover-content"><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
+        this.taxPopOverTemplate = '<div><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],

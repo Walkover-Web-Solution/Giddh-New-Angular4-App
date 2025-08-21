@@ -28,6 +28,8 @@ import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module'
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/aside-menu-create-tax.module';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
     declarations: [
@@ -65,7 +67,9 @@ import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
-        })
+        }),
+        PopoverModule,
+        OverlayModule
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })
