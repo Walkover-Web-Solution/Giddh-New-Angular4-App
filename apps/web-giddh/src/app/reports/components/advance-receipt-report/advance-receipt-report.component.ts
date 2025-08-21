@@ -143,9 +143,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Reference to universal datepicker trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /* This will store selected date range to use in api */
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;

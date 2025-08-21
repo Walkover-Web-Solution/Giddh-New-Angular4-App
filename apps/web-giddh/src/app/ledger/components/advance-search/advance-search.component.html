@@ -61,25 +61,26 @@
                                     </mat-form-field>
                                 </div>
                                 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-                                    <app-datepicker-wrapper
-                                        *ngIf="isDatepickerMenuOpen"
-                                        [inputStartDate]="selectedDateRange?.startDate"
-                                        [inputEndDate]="selectedDateRange?.endDate"
-                                        [alwaysShowCalendars]="true"
-                                        [showClearButton]="false"
-                                        [showApplyButton]="false"
-                                        [ranges]="datePickerOptions"
-                                        [locale]="{ applyLabel: commonLocaleData?.app_apply, cancelLabel: commonLocaleData?.app_cancel, customRangeLabel: commonLocaleData?.app_custom_range }"
-                                        [linkedCalendars]="false"
-                                        [singleDatePicker]="false"
-                                        [showCancel]="true"
-                                        [autoApply]="false"
-                                        [keepCalendarOpeningWithRange]="false"
-                                        [showRangeLabelOnInput]="false"
-                                        (rangeClicked)="dateSelectedCallback($event)"
-                                        (datesUpdated)="dateSelectedCallback($event)"
-                                        (closeCalender)="toggleGiddhDatepicker(false)"
-                                    ></app-datepicker-wrapper>
+                                    <ng-template matMenuContent>
+                                        <app-datepicker-wrapper
+                                            [inputStartDate]="selectedDateRange?.startDate"
+                                            [inputEndDate]="selectedDateRange?.endDate"
+                                            [alwaysShowCalendars]="true"
+                                            [showClearButton]="false"
+                                            [showApplyButton]="false"
+                                            [ranges]="datePickerOptions"
+                                            [locale]="{ applyLabel: commonLocaleData?.app_apply, cancelLabel: commonLocaleData?.app_cancel, customRangeLabel: commonLocaleData?.app_custom_range }"
+                                            [linkedCalendars]="false"
+                                            [singleDatePicker]="false"
+                                            [showCancel]="true"
+                                            [autoApply]="false"
+                                            [keepCalendarOpeningWithRange]="false"
+                                            [showRangeLabelOnInput]="false"
+                                            (rangeClicked)="dateSelectedCallback($event)"
+                                            (datesUpdated)="dateSelectedCallback($event)"
+                                            (closeCalender)="toggleGiddhDatepicker(false)"
+                                        ></app-datepicker-wrapper>
+                                    </ng-template>
                                 </mat-menu>
                             </div>
                         </div>

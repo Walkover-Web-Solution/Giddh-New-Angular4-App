@@ -50,9 +50,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     };
     /* This will store if loading is active or not */
     public isLoading: boolean = false;
-    /* This will track if the datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+/** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};

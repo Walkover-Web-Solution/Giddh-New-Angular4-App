@@ -49,9 +49,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Holds local JSON data */
+/** Holds local JSON data */
     public localeData: any = {};
     /** Holds common JSON data */
     public commonLocaleData: any = {};
@@ -165,7 +163,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getAllOcrDocuments(false);
 
-
         this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 this.listCount = res?.totalItems;
@@ -202,7 +199,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.aiOcrStore.getCompletedCount(null);
             }
         }, 5000);
-
 
         this.ocrMainListInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
             this.aiOcrService.ocrList$.next(this.ocrList);
@@ -292,7 +288,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.aiOcrService.uploadDataSuccess$.next(true);
             }
         });
-
 
         this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.type === OcrAction.Save && response !== null) {
@@ -416,7 +411,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         this.broadcast = new BroadcastChannel("ai-ocr");
         this.broadcast.postMessage({ success: true });
     }
-
 
     /**
      * Callback for date/range selection in datepicker.

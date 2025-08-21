@@ -39,9 +39,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    public advanceSearchObject: DayBookRequestModel = null;
+public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: UntypedFormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;

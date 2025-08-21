@@ -51,9 +51,7 @@ export class ListManufacturingComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Pagination limit */
+/** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;

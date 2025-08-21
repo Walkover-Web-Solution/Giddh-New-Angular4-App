@@ -52,9 +52,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* Boolean to maintain if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Stores the E-invoice status */
+/** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;

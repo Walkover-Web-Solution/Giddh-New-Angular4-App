@@ -34,8 +34,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     /** Universal datepicker trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track datepicker menu state */
-    public isDatepickerMenuOpen: boolean = false;
     public bsRangeValue: string[];
     /** Taking advance search params as input */
     @Input() public advanceSearchRequest: AdvanceSearchRequest;

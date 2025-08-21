@@ -56,8 +56,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public universalDateICurrent: boolean = false;
     /** Stores the currently active company information */
     public activeCompany: any;
-    /** Boolean to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     /** The selected date range used in API requests */
     public selectedDateRange: any;
     /** The selected date range displayed on the user interface */

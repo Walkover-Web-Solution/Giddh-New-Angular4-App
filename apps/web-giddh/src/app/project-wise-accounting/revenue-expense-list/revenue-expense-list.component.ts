@@ -39,9 +39,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Request parameters for fetching project entries */
+/** Request parameters for fetching project entries */
     public getProjectEntryListRequest: any = { count: 50, page: 1 };
     /** Default parameters for API requests */
     public defaultParamsValue: DefaultParamType = {

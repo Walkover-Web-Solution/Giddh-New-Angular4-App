@@ -59,9 +59,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /* This will store available date ranges */
+/* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
@@ -332,7 +330,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.universalDatepickerTrigger?.closeMenu();
         }
     }
-
 
     /**
      * Call back function for date/range selection in datepicker

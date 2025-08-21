@@ -46,55 +46,13 @@ export class NewInventoryComponent implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Instance of universal datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     constructor(
         private modalService: BsModalService,
         private _breakPointObservar: BreakpointObserver
     ) { }
-
-    /**
-     * Toggles the datepicker menu
-     *
-     * @param {boolean} isOpen - If true, opens the datepicker. If false, closes it.
-     * @memberof NewInventoryComponent
-     */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
-    }
     
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof NewInventoryComponent
-     */
-    public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.toggleGiddhDatepicker(false);
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
-    }
     /* show/hide funcation search input field */
     public searhcGroup() {
         this.inputFullWidth = !this.inputFullWidth

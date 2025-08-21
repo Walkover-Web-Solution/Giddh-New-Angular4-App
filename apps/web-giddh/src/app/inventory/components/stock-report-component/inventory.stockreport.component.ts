@@ -262,9 +262,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /* This will store selected date range to use in api */
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -792,7 +790,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             this.getStockReport(true);
         }
     }
-
 
     public clearModal() {
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {

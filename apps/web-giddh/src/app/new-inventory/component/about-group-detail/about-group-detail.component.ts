@@ -32,8 +32,6 @@ export class AboutGroupDetailComponent implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     /* this will store image path*/
     public imgPath: string = '';
     /* this will store hsn boolean value */

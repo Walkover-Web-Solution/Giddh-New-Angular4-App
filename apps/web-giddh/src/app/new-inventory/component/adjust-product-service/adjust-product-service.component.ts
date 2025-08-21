@@ -29,8 +29,6 @@ export class AdjustProductServiceComponent implements OnInit {
     ]
     public mode: boolean = true;
     public closingQty: Number = 23;
-    /** Boolean to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     /** The selected date range used in API requests */
     public selectedDateRange: any;
     /** The selected date range displayed on the user interface */

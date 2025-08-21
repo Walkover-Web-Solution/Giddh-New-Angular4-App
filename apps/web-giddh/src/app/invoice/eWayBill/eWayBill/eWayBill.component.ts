@@ -118,8 +118,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -413,7 +411,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.EwayBillfilterRequest.branchUniqueName = selectedEntity?.value;
         this.getAllFilteredInvoice();
     }
-
 
     /**
      * Search query handler for from place field

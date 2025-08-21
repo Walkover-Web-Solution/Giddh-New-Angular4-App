@@ -76,11 +76,9 @@
                         role="button"
                         tabindex="0"
                         aria-haspopup="true"
-                        aria-controls="universal-datepicker-menu"
-                        (menuOpened)="isDatepickerMenuOpen = true"
-                        (menuClosed)="isDatepickerMenuOpen = false"
-                    >
+                        aria-controls="universal-datepicker-menu">
                         <input
+                            matInput
                             type="text"
                             name="selectedDateRange"
                             class="form-control"
@@ -238,8 +236,8 @@
     </mat-paginator>
 </div>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
         <app-datepicker-wrapper
-            *ngIf="isDatepickerMenuOpen"
             [inputStartDate]="selectedDateRange?.startDate"
             [inputEndDate]="selectedDateRange?.endDate"
             [alwaysShowCalendars]="true"
@@ -256,4 +254,5 @@
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
         ></app-datepicker-wrapper>
-    </mat-menu>
+    </ng-template>
+</mat-menu>

@@ -44,9 +44,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-    /** This will store selected date range to show on UI */
+/** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;

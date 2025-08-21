@@ -146,9 +146,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Amount filter values for Advance Search in payment reports */
+/** Amount filter values for Advance Search in payment reports */
     public paymentAdvanceSearchAmountFilters: any;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;

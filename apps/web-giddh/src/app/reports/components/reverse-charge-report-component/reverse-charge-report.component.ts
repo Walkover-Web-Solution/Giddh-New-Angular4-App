@@ -66,9 +66,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public dayjs = dayjs;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-    /** Observable to store the branches of current company */
+/** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;

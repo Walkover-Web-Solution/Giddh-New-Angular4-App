@@ -97,10 +97,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-
-    public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
+public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,

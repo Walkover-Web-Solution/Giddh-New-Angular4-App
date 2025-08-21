@@ -1490,7 +1490,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * Generate E-Invoice API Call
      *
@@ -1659,7 +1658,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             dataToSend['voucherUniqueNames'] = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
         }
-
 
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
             panelClass: ['mat-dialog-md'],
@@ -2757,7 +2755,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         };
         this.componentStore.verifyPurchaseEmail({ getRequestObject: getRequestObject, postRequestObject: postRequestObject });
     }
-
 
     /**
      * Open custom email dialog

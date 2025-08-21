@@ -102,10 +102,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public nameStockOrPerson: string;
     public universalDate$: Observable<any>;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Modal reference */
-    public modalRef: any;
-    /** Modal service reference */
-    public modalService: any;
     private inventoryReport$: Observable<InventoryReport>;
     /** Directive to get reference of element */
     /* This will store selected date range to use in api */
@@ -116,8 +112,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
 
     constructor(
         private inventoryReportActions: InventoryReportActions,
@@ -284,7 +278,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
         });
 
-
     }
 
     public ngOnDestroy() {
@@ -343,7 +336,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }, 100);
         }
     }
-
 
     public compareChanged(option: IOption) {
         switch (option.value) {
@@ -542,7 +534,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.advanceSearchDialogRef?.close();
             this.applyFilters(1, true);
         }
-
 
     }
 

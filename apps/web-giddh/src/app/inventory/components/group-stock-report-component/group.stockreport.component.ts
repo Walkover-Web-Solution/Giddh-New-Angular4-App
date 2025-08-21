@@ -236,8 +236,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will hold if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
 
     constructor(
         private modalService: BsModalService,

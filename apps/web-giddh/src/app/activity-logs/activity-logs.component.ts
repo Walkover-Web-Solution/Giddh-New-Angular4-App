@@ -52,13 +52,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     @ViewChild('entryDatepickerTrigger', { read: MatMenuTrigger }) public entryDatepickerTrigger: MatMenuTrigger;
     /** Instance of voucher datepicker menu trigger */
     @ViewChild('voucherDatepickerTrigger', { read: MatMenuTrigger }) public voucherDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** True if entry datepicker menu is open */
-    public isEntryDatepickerMenuOpen: boolean = false;
-    /** True if voucher datepicker menu is open */
-    public isVoucherDatepickerMenuOpen: boolean = false;
-    /** This will use for table heading */
+/** This will use for table heading */
     public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation', 'history'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;

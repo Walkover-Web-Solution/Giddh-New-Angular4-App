@@ -64,9 +64,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('datePickerMenuTrigger') datePickerMenuTrigger: MatMenuTrigger;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    public showAdvanceSearchModal: boolean = false;
+public showAdvanceSearchModal: boolean = false;
     public showResetAdvanceSearchIcon: boolean = false;
     public selectedItems: string[] = [];
     public selectedCustomerUniqueName: string;

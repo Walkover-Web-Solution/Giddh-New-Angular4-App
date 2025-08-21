@@ -27,9 +27,7 @@
                                     #universalDatepickerTrigger="matMenuTrigger" 
                                     role="button" 
                                     aria-haspopup="true" 
-                                    aria-controls="universalDatepicker" 
-                                    (menuOpened)="isDatepickerMenuOpen = true" 
-                                    (menuClosed)="isDatepickerMenuOpen = false"
+                                    aria-controls="universalDatepicker"
                                 >
                                     <input
                                         type="text"
@@ -388,22 +386,23 @@
 </ng-template>
 <!-- Advance  search popup -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-    <app-datepicker-wrapper
-        *ngIf="isDatepickerMenuOpen"
-        [inputStartDate]="selectedDateRange?.startDate"
-        [inputEndDate]="selectedDateRange?.endDate"
-        [alwaysShowCalendars]="true"
-        [ranges]="datePickerOptions"
-        [selectedRangeLabel]="selectedRangeLabel"
-        [showCustomRangeLabel]="true"
-        [showClearButton]="false"
-        [showCancel]="true"
-        [linkedCalendars]="true"
-        [showDropdowns]="true"
-        (rangeClicked)="dateSelectedCallback($event)"
-        (datesUpdated)="dateSelectedCallback($event)"
-        (closeCalender)="toggleGiddhDatepicker(false)"
-        [keepCalendarOpeningWithRange]="false"
-        [showRangeLabelOnInput]="false"
-    ></app-datepicker-wrapper>
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
 </mat-menu>

@@ -58,9 +58,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /** This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-    /** To unsubscribe observer */
+/** To unsubscribe observer */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** To hold export request object */
     public exportRequest: ExportBodyRequest = {

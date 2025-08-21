@@ -20,9 +20,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 export class CrDrComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Flag to track if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
-    /** This will store if device is mobile or not */
+/** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;

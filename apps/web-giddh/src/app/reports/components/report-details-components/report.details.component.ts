@@ -131,10 +131,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store if datepicker menu is open or not */
-    public isDatepickerMenuOpen: boolean = false;
-
-    constructor(
+constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
         private store: Store<AppState>,

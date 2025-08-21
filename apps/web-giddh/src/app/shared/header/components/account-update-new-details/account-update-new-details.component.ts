@@ -290,8 +290,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public showBankDetailPreview: boolean = false;
     /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public contactPreview: boolean = false;
-    /** True if action menu is opened */
-    @Input() public isActionMenu: boolean = false;
+@Input() public isActionMenu: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -904,7 +903,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
     }
-
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -1961,7 +1959,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
     }
-
 
     /**
      * Scroll end handler for group dropdown
