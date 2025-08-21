@@ -463,6 +463,7 @@
                             <span class="icon-calender-new calendar-addon" (click)="toggleGiddhDatepicker(true)"></span>
                             <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                                 <input
+                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
@@ -472,6 +473,7 @@
                                     role="button"
                                     aria-haspopup="true"
                                     aria-controls="universalDatepicker"
+                                    readonly
                                 />
                             </div>
                             <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="before">

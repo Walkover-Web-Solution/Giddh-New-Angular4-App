@@ -21,12 +21,15 @@
                          role="button"
                          aria-haspopup="true"
                          aria-controls="universalDatepicker">
-                        <input matInput 
-                               type="text" 
-                               name="selectedDateRange"
-                               [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                               class="giddh-datepicker date-range-picker"
-                               aria-label="Select date range" />
+                        <input 
+                            matInput 
+                            type="text" 
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            aria-label="Select date range"
+                            readonly
+                        />
                     </div>
                 </div>
                 <div class="col flex-grow-0" *ngIf="taxesList?.length > 1" >

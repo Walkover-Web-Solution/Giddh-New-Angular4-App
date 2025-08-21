@@ -78,10 +78,12 @@
                             aria-controls="universalDatepicker"
                         >
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker"
+                                readonly
                             />
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" (click)="toggleGiddhDatepicker(true)">

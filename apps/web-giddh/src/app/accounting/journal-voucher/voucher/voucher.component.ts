@@ -25,7 +25,7 @@ import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-serv
 import { cloneDeep, isEqual, find, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as dayjs from 'dayjs';
 import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { ModalDirective, BsModalRef } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -179,8 +179,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public accountAsideMenuState: string = 'out';
     /** Category of accounts to display based on voucher type */
     public categoryOfAccounts: string = 'currentassets';
-    /* Object of bootstrap modal */
-    public modalRef: BsModalRef;
     /* This will hold the transaction details to use in adjustment popup */
     public currentTransaction: any;
     /* This will hold list of pending invoices */

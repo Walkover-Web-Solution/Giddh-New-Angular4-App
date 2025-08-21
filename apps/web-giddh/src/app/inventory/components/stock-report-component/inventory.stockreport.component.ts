@@ -694,20 +694,20 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.initVoucherType();
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
         //Reset Date with universal date
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
+        this.universalDate$.subscribe(response => {
+            if (response) {
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: response[0], endDate: response[1], chosenLabel: response[2] };
                 this.selectedRangeLabel = "";
 
-                if (a && a.length > 0) {
-                    this.selectedRangeLabel = a[2];
+                if (response && response.length > 0) {
+                    this.selectedRangeLabel = response[2];
                 }
                 this.toggleGiddhDatepicker(false);
-                if (a && a.length > 0) {
-                    this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
-                    this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
+                if (response && response.length > 0) {
+                    this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                    this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                     this.pickerSelectedFromDate = this.fromDate;
                     this.pickerSelectedToDate = this.toDate;
                     if (!isReset) {

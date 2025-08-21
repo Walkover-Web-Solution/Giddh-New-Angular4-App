@@ -10,7 +10,6 @@ import { AppState } from '../../../store';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { cloneDeep } from '../../../lodash-optimized';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'new-inventory-advance-search',
@@ -23,8 +22,6 @@ export class NewInventoryAdvanceSearch implements OnInit {
     /** Reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /** This will store universalDate */
     public universalDate: any;
     /** Universal date observer */
@@ -64,7 +61,6 @@ export class NewInventoryAdvanceSearch implements OnInit {
         private _breakPointObservar: BreakpointObserver,
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
-        public modalService: BsModalService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }

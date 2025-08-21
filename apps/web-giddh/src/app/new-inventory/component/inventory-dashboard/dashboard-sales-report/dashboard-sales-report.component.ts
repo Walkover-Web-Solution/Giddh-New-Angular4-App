@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'dashboard-sales-report',
@@ -28,11 +29,12 @@ export class DashboardSalesReport implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-/** Instance of universal datepicker menu trigger */
+    /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
-    constructor() {
-    }
+    constructor(
+        @Inject(ServiceConfig) private serviceConfig
+    ) { }
     
     /**
      * Shows or hides the datepicker
@@ -74,7 +76,7 @@ export class DashboardSalesReport implements OnInit {
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
 }

@@ -5,12 +5,12 @@
             <div class="d-flex mr-b15">
                 <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                     <input
+                        matInput
                         type="text"
-                        id="select-date-activity"
                         name="selectedDateRange"
                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker bdr-radius-50"
-                        placeholder="Enter Date"
+                        class="giddh-datepicker date-range-picker"
+                        readonly
                     />
                 </div>
             </div>

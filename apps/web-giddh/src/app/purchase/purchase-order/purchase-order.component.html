@@ -34,11 +34,13 @@
                              aria-haspopup="true"
                              aria-controls="universalDatepicker">
                             <input
+                                matInput
                                 type="text"
                                 name="dateRange"
                                 aria-label="Select date range"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker form-control date-range-picker"
+                                readonly
                             />
                         </div>
                     </div>

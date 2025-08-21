@@ -77,10 +77,11 @@
                         aria-haspopup="true"
                         aria-controls="universal-datepicker-menu">
                         <input
+                            matInput
                             type="text"
                             name="selectedDateRange"
                             class="form-control"
-                            [value]="selectedDateRangeUi"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                             readonly
                         />
                         <i class="fa fa-calendar"></i>

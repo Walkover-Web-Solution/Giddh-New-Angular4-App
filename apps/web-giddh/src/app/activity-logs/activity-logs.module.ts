@@ -17,6 +17,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         HamburgerMenuModule,
         SharedModule,
         MatCheckboxModule,
+        MatInputModule,
         MatMenuModule
     ],
 })
