@@ -98,7 +98,7 @@
                                             <span
                                                 class="cursor-pointer"
                                                 cdkOverlayOrigin
-                                                #popTemplate="cdkOverlayOrigin"
+                                                #addressTemplate="cdkOverlayOrigin"
                                                 (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
                                                 (mouseleave)="openAddressInfo(false)"
                                             >
@@ -107,7 +107,7 @@
 
                                             <ng-template
                                                 cdkConnectedOverlay
-                                                [cdkConnectedOverlayOrigin]="popTemplate"
+                                                [cdkConnectedOverlayOrigin]="addressTemplate"
                                                 [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + warehouse.uniqueName)"
                                                 [cdkConnectedOverlayPositions]="[
                                                     {

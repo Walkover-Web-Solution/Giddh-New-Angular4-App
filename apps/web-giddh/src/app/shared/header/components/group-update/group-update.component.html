@@ -172,7 +172,7 @@
 <!-- Taxes collapse -->
 <div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
     <div class="col-xs-12 col-sm-12">
-        <mat-expansion-panel class="mr-t1" (opened)="showTaxes = !showTaxes; taxHierarchy()">
+        <mat-expansion-panel class="mr-t1" (opened)="showTaxes && taxHierarchy()">
             <mat-expansion-panel-header>
                 <mat-panel-title>{{ commonLocaleData?.app_taxes }}</mat-panel-title>
             </mat-expansion-panel-header>
@@ -236,7 +236,7 @@
                                             offsetX: 8
                                         }
                                     ]">
-                                    <div class="tax-tooltip font-14 overlay" *ngIf="currentTax">
+                                    <div class="tax-tooltip font-14 overlay">
                                         <div>
                                             <p>{{ localeData?.tax_inherited }}:</p>
                                             <p>{{ inTax?.name }}</p>
@@ -314,7 +314,7 @@
                                 offsetX: 8
                             }
                         ]">
-                        <div class="tax-tooltip bg-gray font-14 overlay" *ngIf="currentDiscount">
+                        <div class="tax-tooltip bg-gray font-14 overlay">
                             <div>
                                 <p>{{ localeData?.discounts_inherited_from }}:</p>
                                 <p>{{ item?.name }}</p>
