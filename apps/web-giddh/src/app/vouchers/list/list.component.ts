@@ -3471,7 +3471,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public templateEdit(template: any, type: string): void {
         const templateType =
             this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
-                : this.voucherType === VoucherTypeEnum.purchaseOrder ? 'purchase_order' : this.voucherType === VoucherTypeEnum.purchase ? 'purchase_bill' : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
+                : this.voucherType === VoucherTypeEnum.purchaseOrder ? VoucherTypeEnum.purchase_order : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase_bill : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
         const voucherType = this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher : VoucherTypeEnum.sales;
         const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate.value : templateType;
         const dataToSend = {
@@ -3480,7 +3480,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             templateType: templatesType,
             createTemplateList: this.createdTemplatesList,
             updateTemplate: type === TemplateModeEnum.Edit ? template : null,
-            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create
+            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',

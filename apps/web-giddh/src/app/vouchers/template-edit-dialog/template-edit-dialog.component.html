@@ -14,9 +14,9 @@
                 color="primary"
                 (click)="templateData?.mode === templateModeEnum.Create ? createTemplate() : updateTemplate()"
             >
-                {{ templateData?.mode === templateModeEnum.Create ? "Create Template" : "Update Template" }}
+                {{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}
             </button>
-            <button mat-stroked-button (click)="closeDialog()">Close</button>
+            <button mat-stroked-button (click)="closeDialog()">{{ commonLocaleData?.app_close }}</button>
         </div>
     </div>
 </ng-container>
