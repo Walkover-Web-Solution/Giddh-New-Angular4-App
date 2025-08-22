@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
 import { LaddaModule } from 'angular2-ladda';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
@@ -16,7 +17,6 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
         AuditLogsComponent,
         AuditLogsSidebarComponent,
         AuditLogsGridComponent,
@@ -32,6 +32,7 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        MatMenuModule,
         AuditLogsRoutingModule,
         LaddaModule.forRoot({
             style: 'slide-left',

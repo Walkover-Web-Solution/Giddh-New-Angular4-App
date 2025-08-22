@@ -4,7 +4,7 @@ import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';

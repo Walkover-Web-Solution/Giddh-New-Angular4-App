@@ -3,12 +3,11 @@ import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } 
 import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -26,7 +25,7 @@ import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { clone, cloneDeep, slice, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
-import { AccountResponse, AddAccountRequest } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
@@ -49,8 +48,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SalesActions } from '../../actions/sales/sales.action';
 import { ServiceConfig } from '../../services/service.config';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -305,7 +304,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private companyActions: CompanyActions,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private zone: NgZone,
         private _generalActions: GeneralActions,
         private authService: AuthenticationService,
@@ -326,7 +324,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
         private socialAuthService: AuthService,
-        private salesAction: SalesActions,
         @Inject(ServiceConfig) private serviceConfig,
         private elementRef: ElementRef,
         private renderer: Renderer2
@@ -854,7 +851,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
         if (window['Headway'] === undefined) {
@@ -1002,7 +998,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-
     /**
      * This will toggle the settings popup
      *
@@ -1141,12 +1136,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsDialogRef?.close();
     }
 
-
-
     public onHide() {
         this.store.dispatch(this.companyActions.ResetCompanyPopup());
     }
-
 
     /**
     * This function is used to open manage groups accounts dialog
@@ -1873,7 +1865,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         ) ?? "";
     }
 
-
     /**
      * This will return plan ended note
      *
@@ -1922,7 +1913,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.subscribedPlan?.expiry
         ) ?? "";
     }
-
 
     /**
      * This will return transaction limit crossed note

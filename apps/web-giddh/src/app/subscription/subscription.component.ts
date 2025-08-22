@@ -8,7 +8,6 @@ import { ToasterService } from '../services/toaster.service';
 import { CompanyResponse } from '../models/api-models/Company';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
@@ -21,6 +20,7 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
+
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -64,7 +64,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
-    public modalRef: BsModalRef;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
