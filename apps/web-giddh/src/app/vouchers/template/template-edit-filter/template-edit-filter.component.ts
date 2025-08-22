@@ -507,10 +507,10 @@ export class TemplateEditFilterComponent implements OnInit {
                 }
             },
             font: 'Inter',
-            topMargin: 10,
-            leftMargin: 10,
-            rightMargin: 10,
-            bottomMargin: 10,
+            topMargin: 25,
+            leftMargin: 25,
+            rightMargin: 25,
+            bottomMargin: 25,
             logoPosition: 'center/left/right',
             logoSize: 'small/medium/large',
             logoUniqueName: null,
@@ -976,7 +976,7 @@ export class TemplateEditFilterComponent implements OnInit {
         private commonService: CommonService,
         private store: Store<AppState>,
         private invoiceService: InvoiceService,
-        public templateService: InvoiceUiDataService) {
+        private templateService: InvoiceUiDataService) {
     }
 
     /**
@@ -1005,7 +1005,7 @@ export class TemplateEditFilterComponent implements OnInit {
 
         this.templateService.setTemplateVoucherType(this.voucherType);
         if (this.templateMode === TemplateModeEnum.Create) {
-            if (this.templateType !== 'purchase_order' && this.templateType !== 'purchase_bill') {
+            if (this.templateType !== VoucherTypeEnum.purchase_order && this.templateType !== VoucherTypeEnum.purchase_bill) {
                 this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(this.templateObj.defaultTemplate));
             } else {
                 this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(this.tallyTemplateObj));
@@ -1019,7 +1019,7 @@ export class TemplateEditFilterComponent implements OnInit {
         // Subscribe to active company info
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             const countryName = activeCompany?.countryV2?.countryName;
-            this.showGstComposition = countryName === 'India';
+            this.showGstComposition = countryName === CountryNames.INDIA;
             this.activeCompanyName = activeCompany?.name;
             this.isIndianCompany = countryName === CountryNames.INDIA;
         });
@@ -1097,7 +1097,7 @@ export class TemplateEditFilterComponent implements OnInit {
         // Fetch email content suggestions
         this.invoiceService.getEmailContentSuggestions('account').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             const suggestions = response?.body?.accountSuggestions;
-            this.suggestionList = suggestions ? suggestions.map((item: string) => ({ key: item, value: item })) : [];
+            this.suggestionList = suggestions ? suggestions.map((item: string) => ({ label: item, value: item })) : [];
         });
 
         // Subscribe to UI section visibility changes
@@ -1125,12 +1125,7 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onValueChange(fieldName: string, value: string) {
         const template = cloneDeep(this.customTemplate);
-        if (fieldName) {
-            template[fieldName] = value;
-        } else {
-            // Handle template name change
-            template.name = value;
-        }
+        if (fieldName) template[fieldName] = value;
         this.templateService.setCustomTemplate(template);
     }
 
@@ -1184,8 +1179,9 @@ export class TemplateEditFilterComponent implements OnInit {
     public resetPrintSetting(): void {
         const template = cloneDeep(this.customTemplate);
         template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
-        this.templateService.setCustomTemplate(template);
+        this.customTemplate = cloneDeep(template)
         this.setFontAndFontSize();
+        this.onValueChange(null, null);
     }
 
     /**
@@ -1325,9 +1321,8 @@ export class TemplateEditFilterComponent implements OnInit {
         const paddingCordinates = ['Top', 'Left', 'Bottom', 'Right'];
         if (val > paddingCordinatesValue[idx]) {
             const maxVal = paddingCordinatesValue[idx];
-            const updatedTemplate = cloneDeep(this.customTemplate);
-            updatedTemplate[marginPosition] = maxVal;
-            this.templateService.setCustomTemplate(updatedTemplate);
+            this.customTemplate[marginPosition] = maxVal;
+            this.templateService.setCustomTemplate(this.customTemplate);
             this.toasty.errorToast(`${paddingCordinates[idx]} ${this.localeData.margin_cannot_be_more_than} ${paddingCordinatesValue[idx]}`);
         }
     }
@@ -1498,12 +1493,10 @@ export class TemplateEditFilterComponent implements OnInit {
                             this.removeFileFromServer();
                         }
                         this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
-                        const updatedTemplate = cloneDeep(this.customTemplate);
-                        updatedTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
-                        this.templateService.setCustomTemplate(updatedTemplate);
+                        this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
                         this.templateService.unusedImageSignature = response.body?.uniqueName;
                         this.onChangeFieldVisibility();
-                        this.toasty.successToast(this.localeData.file_uploaded_successfully);
+                        this.toasty.showSnackBar("success", this.localeData.file_uploaded_successfully);
                     } else {
                         this.signatureImgAttached = false;
                         this.toasty.showSnackBar("error", response.message);
@@ -1520,9 +1513,8 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public removeFile(): void {
         this.signatureImgAttached = false;
-        const template = cloneDeep(this.customTemplate);
-        template.sections.footer.data.imageSignature.label = '';
-        this.templateService.setCustomTemplate(template);
+        this.customTemplate.sections.footer.data.imageSignature.label = '';
+        this.templateService.setCustomTemplate(this.customTemplate);
     }
 
     /**
@@ -1604,10 +1596,8 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {boolean} event True if the header should be displayed
      * @memberof TemplateEditFilterComponent
      */
-    public changeInvoiceHeader(event: boolean): void {
-        const updatedTemplate = cloneDeep(this.customTemplate);
-        updatedTemplate.sections['header'].data['formNameInvoice'].display = event;
-        this.templateService.setCustomTemplate(updatedTemplate);
+    public handleHeader(event: boolean): void {
+        this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
     }
 
     /**
@@ -1632,15 +1622,13 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
-        const updatedTemplate = cloneDeep(this.customTemplate);
         if (isDate) {
-            updatedTemplate.sections['header'].data['voucherDate'].label = updatedTemplate.sections['header'].data['invoiceDate'].label;
-            updatedTemplate.sections['header'].data['voucherDate'].display = updatedTemplate.sections['header'].data['invoiceDate'].display;
+            this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
+            this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
         } else {
-            updatedTemplate.sections['header'].data['voucherNumber'].label = updatedTemplate.sections['header'].data['invoiceNumber'].label;
-            updatedTemplate.sections['header'].data['voucherNumber'].display = updatedTemplate.sections['header'].data['invoiceNumber'].display;
+            this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
+            this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
         }
-        this.templateService.setCustomTemplate(updatedTemplate);
     }
 
     /**

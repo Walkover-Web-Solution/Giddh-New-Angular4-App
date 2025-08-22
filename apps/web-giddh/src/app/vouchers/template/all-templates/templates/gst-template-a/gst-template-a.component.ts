@@ -88,7 +88,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.activeCompany = cloneDeep(activeCompany);
-                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+                this.showGstComposition = activeCompany.countryV2.countryName === CountryNames.INDIA;
             } else {
                 this.showGstComposition = false;
             }
