@@ -290,7 +290,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public showBankDetailPreview: boolean = false;
     /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public contactPreview: boolean = false;
-@Input() public isActionMenu: boolean = false;
+    /** True if action menu is open */
+    @Input() public isActionMenu: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
