@@ -1,6 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationModalConfiguration } from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { InvoiceUiDataService } from '../../services/invoice.ui.data.service';
@@ -9,8 +8,10 @@ import { ToasterService } from '../../services/toaster.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { TemplateModeEnum } from '../../models/api-models/Sales';
+import { TemplateModeEnum, TemplateTypeEnum } from '../../models/api-models/Sales';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { CountryNames } from '../../shared/Enums/common.enum';
 
 @Component({
   selector: 'app-template-edit-dialog',
@@ -18,8 +19,6 @@ import { VoucherTypeEnum } from '../utility/vouchers.const';
   styleUrls: ['./template-edit-dialog.component.scss']
 })
 export class TemplateEditDialogComponent implements OnInit, OnDestroy {
-  /** Invoice confirmation popup configuration */
-  public InvoiceConfirmationConfiguration: ConfirmationModalConfiguration;
   /** This will hold local JSON data */
   public localeData: any = {};
   /** This will hold common JSON data */
@@ -49,19 +48,21 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.templateData = this.inputData;
   }
 
-/**
- * Angular lifecycle hook that is called after data-bound properties are initialized.
- * Initializes company, template, and UI data for the template editor.
- *
- * @memberof TemplateEditDialogComponent
- */
+  /**
+   * Angular lifecycle hook that is called after data-bound properties are initialized.
+   * Initializes company, template, and UI data for the template editor.
+   *
+   * @memberof TemplateEditDialogComponent
+   */
   public ngOnInit(): void {
+    this.localeData = this.inputData?.localeData;
+    this.commonLocaleData = this.inputData?.commonLocaleData;
     this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = template;
     });
 
     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-      this.showGstComposition = activeCompany?.countryV2?.countryName === 'India';
+      this.showGstComposition = activeCompany?.countryV2?.countryName === CountryNames.INDIA;
     });
   }
 
@@ -71,7 +72,21 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   * @memberof TemplateEditDialogComponent
   */
   public closeDialog(): void {
-    this.dialogRef.close(false);
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      panelClass: ['mat-dialog-md'],
+      data: {
+        title: this.commonLocaleData?.app_confirmation,
+        body: this.localeData?.close_popup,
+        ok: this.commonLocaleData?.app_yes,
+        cancel: this.commonLocaleData?.app_no,
+        permanentlyDeleteMessage: ''
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.dialogRef.close(false);
+      }
+    });
   }
 
   /**
@@ -84,7 +99,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     data.type = this.inputData.templateType;
     let copiedTemplate = cloneDeep(data);
     if (!data.name) {
-      this.toasty.errorToast('Please enter template name.');
+      this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
 
@@ -106,13 +121,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         data.sections['footer'].data['companyName'].label = companyName;
       }
     });
-
-    if (!(this.templateData?.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
-      data.sections['header'].data['gstComposition'].display = false;
-    }
     this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
-        this.toasty.successToast('Template Saved Successfully.');
+        this.toasty.successToast(this.localeData?.template_saved_successfully);
         this.dialogRef.close(true);
       } else {
         this.toasty.errorToast(res?.message, res?.code);
@@ -121,14 +132,14 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     });
   }
 
-/**
- * setFontSizes method
- *
- * @private
- * @param {*} data
- * @memberof TemplateEditDialogComponent
- */
-private setFontSizes(data: any): void {
+  /**
+   * setFontSizes method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private setFontSizes(data: any): void {
     if (data.fontSize) {
       data.fontSmall = data.fontSize - 4;
       data.fontDefault = data.fontSize;
@@ -136,14 +147,14 @@ private setFontSizes(data: any): void {
     }
   }
 
-/**
- * ensureTextUnderSlogan method
- *
- * @private
- * @param {*} data
- * @memberof TemplateEditDialogComponent
- */
-private ensureTextUnderSlogan(data: any): void {
+  /**
+   * ensureTextUnderSlogan method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private ensureTextUnderSlogan(data: any): void {
     const tus = data.sections['footer'].data['textUnderSlogan'];
     if (!tus?.display || !tus?.label) {
       if (!tus) {
@@ -155,15 +166,15 @@ private ensureTextUnderSlogan(data: any): void {
     }
   }
 
-/**
- * cleanTemplateFields method
- *
- * @private
- * @param {*} data
- * @memberof TemplateEditDialogComponent
- */
-private cleanTemplateFields(data: any): void {
-    const specialTypes = ['gst_template_a', 'gst_template_e', 'thermal_template', 'tally_template'];
+  /**
+   * cleanTemplateFields method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private cleanTemplateFields(data: any): void {
+    const specialTypes = [TemplateTypeEnum.GstTemplateA, TemplateTypeEnum.ThermalTemplate, TemplateTypeEnum.TallyTemplate];
     if (!specialTypes.includes((data.templateType || '').toLowerCase())) {
       delete data?.sections?.header?.data?.showCompanyAddress;
       delete data?.sections?.header?.data?.showQrCode;
@@ -200,7 +211,7 @@ private cleanTemplateFields(data: any): void {
   public updateTemplate(): void {
     let data = cloneDeep(this.invoiceUiDataService.customTemplate.getValue());
     if (!data.name) {
-      this.toasty.errorToast('Please enter template name.');
+      this.toasty.errorToast(this.localeData?.please_enter_template_name);
       return;
     }
     data.updatedAt = null;
@@ -212,12 +223,9 @@ private cleanTemplateFields(data: any): void {
     this.ensureMessage1(data);
     this.ensureTextUnderSloganUpdate(data);
     data = this.newLineToBR(data);
-    if (!(this.templateData?.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
-      data.sections['header'].data['gstComposition'].display = false;
-    }
     this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
-        this.toasty.successToast('Template Updated Successfully.');
+        this.toasty.successToast(this.localeData?.template_updated_successfully);
         this.invoiceUiDataService.setLogoPath('');
         this.invoiceUiDataService.unusedImageSignature = '';
         this.dialogRef.close(true);

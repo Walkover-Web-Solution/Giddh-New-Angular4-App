@@ -76,7 +76,6 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
 import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
-import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
@@ -187,7 +186,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         PurchaseSettingModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        InvoiceTemplatesModule,
         CdkScrollModule,
         TrimPipeModule,
         A11yModule,

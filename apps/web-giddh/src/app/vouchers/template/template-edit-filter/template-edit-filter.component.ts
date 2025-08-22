@@ -13,7 +13,7 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-import { TemplateModeEnum, TemplateTypeEnum } from '../../../models/api-models/Sales';
+import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'template-edit-filter',
@@ -507,10 +507,10 @@ export class TemplateEditFilterComponent implements OnInit {
                 }
             },
             font: 'Inter',
-            topMargin: 10,
-            leftMargin: 10,
-            rightMargin: 10,
-            bottomMargin: 10,
+            topMargin: 25,
+            leftMargin: 25,
+            rightMargin: 25,
+            bottomMargin: 25,
             logoPosition: 'center/left/right',
             logoSize: 'small/medium/large',
             logoUniqueName: null,
@@ -963,6 +963,12 @@ export class TemplateEditFilterComponent implements OnInit {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Holds voucher type enum */
+    public voucherTypeEnum: any = VoucherTypeEnum;
 
     constructor(
         private generalService: GeneralService,
@@ -981,12 +987,14 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public ngOnInit(): void {
         // Initialize dialog data
-        const { templateType, voucherType, templateList, mode } = this.dialogData || {};
+        const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;
         this.voucherType = voucherType;
         this.sampleTemplates = templateList;
         this.templateMode = mode;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.localeData = localeData;
+        this.commonLocaleData = commonLocaleData;
 
         // Get company info and companies list
         let companies: any = null;
@@ -997,20 +1005,21 @@ export class TemplateEditFilterComponent implements OnInit {
 
         this.templateService.setTemplateVoucherType(this.voucherType);
         if (this.templateMode === TemplateModeEnum.Create) {
-            if(this.templateType !== 'purchase_order' && this.templateType !== 'purchase_bill') {
-                this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.templateObj.defaultTemplate);
+            if (this.templateType !== VoucherTypeEnum.purchase_order && this.templateType !== VoucherTypeEnum.purchase_bill) {
+                this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(this.templateObj.defaultTemplate));
             } else {
-                this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.tallyTemplateObj);
+                this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(this.tallyTemplateObj));
             }
         } else {
-          this.templateService.initCustomTemplate(this.companyUniqueName, companies, this.dialogData.updateTemplate);
+            this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(this.dialogData.updateTemplate));
         }
+
         this.templateService.setIsPreviewMode(false);
 
         // Subscribe to active company info
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             const countryName = activeCompany?.countryV2?.countryName;
-            this.showGstComposition = countryName === 'India';
+            this.showGstComposition = countryName === CountryNames.INDIA;
             this.activeCompanyName = activeCompany?.name;
             this.isIndianCompany = countryName === CountryNames.INDIA;
         });
@@ -1021,6 +1030,7 @@ export class TemplateEditFilterComponent implements OnInit {
         });
 
         // Subscribe to template changes
+
         this.templateService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = cloneDeep(template);
             this.setFontAndFontSize();
@@ -1056,12 +1066,13 @@ export class TemplateEditFilterComponent implements OnInit {
             }
 
             // Tally template-specific logic
+
             if (this.customTemplate.templateType === TemplateTypeEnum.TallyTemplate) {
                 const footerData = this.customTemplate.sections.footer.data;
                 const headerData = this.customTemplate.sections.header.data;
                 footerData.imageSignature.display = true;
                 footerData.slogan.display = false;
-                if (this.voucherType !== 'sales') {
+                if (this.voucherType !== VoucherTypeEnum.sales) {
                     headerData.invoiceDate.label = headerData.voucherDate.label;
                     headerData.invoiceNumber.label = headerData.voucherNumber.label;
                 } else {
@@ -1069,6 +1080,7 @@ export class TemplateEditFilterComponent implements OnInit {
                     headerData.voucherNumber.label = headerData.invoiceNumber.label;
                 }
             }
+
             this.assignImageSignature();
         });
 
@@ -1085,7 +1097,7 @@ export class TemplateEditFilterComponent implements OnInit {
         // Fetch email content suggestions
         this.invoiceService.getEmailContentSuggestions('account').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             const suggestions = response?.body?.accountSuggestions;
-            this.suggestionList = suggestions ? suggestions.map((item: string) => ({ key: item, value: item })) : [];
+            this.suggestionList = suggestions ? suggestions.map((item: string) => ({ label: item, value: item })) : [];
         });
 
         // Subscribe to UI section visibility changes
@@ -1167,7 +1179,7 @@ export class TemplateEditFilterComponent implements OnInit {
     public resetPrintSetting(): void {
         const template = cloneDeep(this.customTemplate);
         template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
-        this.customTemplate = cloneDeep(template);
+        this.customTemplate = cloneDeep(template)
         this.setFontAndFontSize();
         this.onValueChange(null, null);
     }
@@ -1219,7 +1231,7 @@ export class TemplateEditFilterComponent implements OnInit {
                             this.onValueChange('logoUniqueName', response.body?.uniqueName);
                             this.isFileUploaded = true;
                             this.templateService.isLogoUpdateInProgress = false;
-                            this.toasty.successToast('File uploaded successfully.');
+                            this.toasty.successToast(this.localeData.file_uploaded_successfully);
                         } else {
                             this.toasty.showSnackBar("error", response.message);
                         }
@@ -1311,7 +1323,7 @@ export class TemplateEditFilterComponent implements OnInit {
             const maxVal = paddingCordinatesValue[idx];
             this.customTemplate[marginPosition] = maxVal;
             this.templateService.setCustomTemplate(this.customTemplate);
-            this.toasty.errorToast(`${paddingCordinates[idx]} margin cannot be more than ${paddingCordinatesValue[idx]}`);
+            this.toasty.errorToast(`${paddingCordinates[idx]} ${this.localeData.margin_cannot_be_more_than} ${paddingCordinatesValue[idx]}`);
         }
     }
 
@@ -1370,7 +1382,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public showMessage(): void {
-        this.toasty.showSnackBar("warning", 'You can not change the template type in update mode.');
+        this.toasty.showSnackBar("warning", this.localeData.you_can_not_change_the_template_type_in_update_mode);
     }
 
     /**
@@ -1396,7 +1408,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {string} value The value to set
      * @memberof TemplateEditFilterComponent
      */
-    public onFieldChange(sectionName: string, fieldName: string, value: string): void {
+    public onFieldChange(): void {
         let template = cloneDeep(this.customTemplate);
         this.templateService.setCustomTemplate(template);
     }
@@ -1446,7 +1458,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {boolean} value The visibility value
      * @memberof TemplateEditFilterComponent
      */
-    public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean): void {
+    public onChangeFieldVisibility(): void {
         let template = cloneDeep(this.customTemplate);
         this.templateService.setCustomTemplate(template);
     }
@@ -1483,8 +1495,8 @@ export class TemplateEditFilterComponent implements OnInit {
                         this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
                         this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
                         this.templateService.unusedImageSignature = response.body?.uniqueName;
-                        this.onChangeFieldVisibility(null, null, null);
-                        this.toasty.showSnackBar("success", 'File uploaded successfully.');
+                        this.onChangeFieldVisibility();
+                        this.toasty.showSnackBar("success", this.localeData.file_uploaded_successfully);
                     } else {
                         this.signatureImgAttached = false;
                         this.toasty.showSnackBar("error", response.message);
@@ -1584,7 +1596,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {boolean} event True if the header should be displayed
      * @memberof TemplateEditFilterComponent
      */
-    public changeInvoiceHeader(event: boolean): void {
+    public handleHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
     }
 
@@ -1628,6 +1640,45 @@ export class TemplateEditFilterComponent implements OnInit {
     public tabChanged(event: any): void {
         this.selectedTabIndex = event.index;
         this.templateService.setIsPreviewMode(event?.index === 1 ? true : false);
+    }
+
+    /**
+     * Initializes template with company details and processes it
+     *
+     * @param {string} companyUniqueName Unique name of the company
+     * @param {any[]} companies List of companies
+     * @param {CustomTemplateResponse} defaultTemplate Default template object
+     * @memberof TemplateEditFilterComponent
+     */
+    private initializeTemplate(companyUniqueName: string, companies: any[], defaultTemplate: CustomTemplateResponse): void {
+        this.templateService.setLogoVisibility(true);
+        const currentCompany = companies.find(company => company?.uniqueName === companyUniqueName);
+        let companyName = '';
+        let companyAddress = '';
+        
+        if (currentCompany) {
+            companyName = currentCompany.name;
+            companyAddress = currentCompany.address;
+            const firstAddress = currentCompany.addresses?.[0];
+            if (firstAddress?.taxNumber) {
+                this.templateService.companyGSTIN.next(firstAddress.taxNumber);
+            }
+            if (currentCompany.panNumber) {
+                this.templateService.companyPAN.next(currentCompany.panNumber);
+            }
+        }
+        
+        this.templateService.setCompanyNameVisibility(true);
+        
+        if (defaultTemplate) {
+            const processedTemplate = cloneDeep(defaultTemplate);
+            if (companyName) {
+                processedTemplate.sections.header.data.companyName.label = companyName;
+                processedTemplate.sections.footer.data.companyName.label = companyName;
+                processedTemplate.sections.footer.data.companyAddress.label = companyAddress;
+            }
+            this.templateService.initCustomTemplate(processedTemplate);
+        }
     }
 
 }

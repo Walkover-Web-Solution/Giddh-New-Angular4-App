@@ -83,6 +83,17 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof GstTemplateAComponent
      */
     public ngOnInit(): void {
+
+        // Company info
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.activeCompany = cloneDeep(activeCompany);
+                this.showGstComposition = activeCompany.countryV2.countryName === CountryNames.INDIA;
+            } else {
+                this.showGstComposition = false;
+            }
+        });
+
         this.isIndianCompany = this.activeCompany?.countryV2?.countryName === CountryNames.INDIA;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
@@ -105,16 +116,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
         this.templateService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
             if (this.isContentMode) {
                 this.templateSectionsVisible = info ? cloneDeep(info) : info;
-            }
-        });
-
-        // Company info
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany?.countryV2?.countryName) {
-                this.activeCompany = cloneDeep(activeCompany);
-                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
-            } else {
-                this.showGstComposition = false;
             }
         });
 

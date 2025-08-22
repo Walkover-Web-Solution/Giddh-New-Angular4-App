@@ -1,12 +1,12 @@
 <div class="dialog-header">
-    <h3 class="modal-title">Invoice template preview</h3>
+    <h3 class="modal-title">{{ templatePreviewTitle }}</h3>
     <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
 </div>
 <mat-dialog-content class="dialog-body">
     <div class="container h-100">
         <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
         <div class="pdf-preview h-100">
-            <div *ngIf="!isFileUploading" class="error danger text-center">
+            <div *ngIf="!isFileUploading && !sanitizedPdfFileUrl" class="error danger text-center">
                 <span>{{ localeData?.invoice_preview_unavailable }}</span>
             </div>
             <iframe

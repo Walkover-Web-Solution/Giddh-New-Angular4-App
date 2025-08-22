@@ -41,10 +41,6 @@ export class InvoiceUiDataService {
     public unusedImageSignature: string;
     /** Indicates if a logo update is in progress */
     public isLogoUpdateInProgress: boolean;
-    /** Stores the company name */
-    private companyName: string;
-    /** Stores the company address */
-    private companyAddress: string;
     /** Internal utility variable */
     private _: any;
     /** Emits the preview mode state */
@@ -61,36 +57,15 @@ export class InvoiceUiDataService {
     }
 
     /**
-     * Initializes the custom template with company and template details.
+     * Sets the custom template after processing.
      *
-     * @param {string} companyUniqueName Unique name of the company
-     * @param {CompanyResponse[]} companies List of companies
-     * @param {CustomTemplateResponse} defaultTemplate Default template object
+     * @param {CustomTemplateResponse} template Template object
      * @memberof InvoiceUiDataService
      */
-    public initCustomTemplate(companyUniqueName: string = '', companies: CompanyResponse[] = [], defaultTemplate: CustomTemplateResponse): void {
-        this.isLogoVisible.next(true);
-        const currentCompany = companies.find(company => company?.uniqueName === companyUniqueName);
-        if (currentCompany) {
-            this.companyName = currentCompany.name;
-            this.companyAddress = currentCompany.address;
-            const firstAddress = currentCompany.addresses?.[0];
-            if (firstAddress?.taxNumber) {
-                this.companyGSTIN.next(firstAddress.taxNumber);
-            }
-            if (currentCompany.panNumber) {
-                this.companyPAN.next(currentCompany.panNumber);
-            }
-        }
-        this.isCompanyNameVisible.next(true);
-        if (defaultTemplate) {
-            if (this.companyName) {
-                defaultTemplate.sections.header.data.companyName.label = this.companyName;
-                defaultTemplate.sections.footer.data.companyName.label = this.companyName;
-                defaultTemplate.sections.footer.data.companyAddress.label = this.companyAddress;
-            }
-            this.bRToNewLine(defaultTemplate);
-            this.customTemplate.next(cloneDeep(defaultTemplate));
+    public initCustomTemplate(template: CustomTemplateResponse): void {
+        if (template) {
+            this.bRToNewLine(template);
+            this.customTemplate.next(cloneDeep(template));
         }
         this.selectedSection.next({ header: true, table: false, footer: false });
     }
@@ -233,70 +208,16 @@ export class InvoiceUiDataService {
     }
 
     /**
-     * Sets the template by unique name and applies visibility and default values.
+     * Sets the processed template.
      *
-     * @param {string} uniqueName Unique name of the template
-     * @param {string} mode Mode of operation
-     * @param {CustomTemplateResponse[]} customCreatedTemplates List of custom templates
-     * @param {CustomTemplateResponse} defaultTemplate Default template object
+     * @param {CustomTemplateResponse} template Processed template object
      * @memberof InvoiceUiDataService
      */
-    public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse): void {
-        if (!customCreatedTemplates?.length) return;
-        const allTemplates = cloneDeep(customCreatedTemplates);
-        const selectedTemplateIndex = allTemplates.findIndex(template => template?.uniqueName === uniqueName);
-        let selectedTemplate = cloneDeep(allTemplates[selectedTemplateIndex]);
-        if (!selectedTemplate) return;
-
-        const headerData = selectedTemplate.sections.header.data;
-        const footerData = selectedTemplate.sections.footer.data;
-        const tableData = selectedTemplate.sections.table.data;
-        const defaultHeader = defaultTemplate?.sections.header.data;
-        const defaultFooter = defaultTemplate?.sections.footer.data;
-        const defaultTable = defaultTemplate?.sections.table.data;
-
-        if (headerData.companyName.display) {
-            this.isCompanyNameVisible.next(true);
+    public setTemplateUniqueName(template: CustomTemplateResponse): void {
+        if (template) {
+            this.bRToNewLine(template);
+            this.customTemplate.next(cloneDeep(template));
         }
-        this.isLogoVisible.next(!!selectedTemplate.logoUniqueName);
-
-        headerData.attentionTo = { display: true, label: 'Attention To', field: 'attentionTo', width: null };
-        if (!headerData.showCompanyAddress) {
-            headerData.showCompanyAddress = {
-                label: '',
-                display: headerData.warehouseAddress?.display,
-                width: null
-            };
-        }
-        if (!headerData.showQrCode) {
-            headerData.showQrCode = defaultHeader?.showQrCode ?? { label: '', display: false, width: null };
-        }
-        if (!headerData.showEInvoiceDetails) {
-            headerData.showEInvoiceDetails = defaultHeader?.showEInvoiceDetails ?? { label: '', display: false, width: null };
-        }
-        if (!headerData.gstComposition) {
-            headerData.gstComposition = defaultHeader?.gstComposition ?? { label: '', display: true, width: null };
-        }
-        if (!footerData.textUnderSlogan) {
-            footerData.textUnderSlogan = { label: this.companyName, display: true, width: null };
-        }
-        if (!footerData.showNotesAtLastPage) {
-            footerData.showNotesAtLastPage = defaultFooter?.showNotesAtLastPage ?? { label: '', display: false, width: null };
-        }
-        if (!footerData.showMessage2) {
-            footerData.showMessage2 = defaultFooter?.showMessage2 ?? { label: '', display: false, width: null };
-        }
-        if (!tableData.showDescriptionInRows) {
-            tableData.showDescriptionInRows = defaultTable?.showDescriptionInRows ?? { label: '', display: false, width: null };
-        }
-        if (!headerData.companyName.label) {
-            headerData.companyName.label = this.companyName;
-        }
-        if (!footerData.companyName.label) {
-            footerData.companyName.label = this.companyName;
-        }
-        this.bRToNewLine(selectedTemplate);
-        this.customTemplate.next(cloneDeep(selectedTemplate));
     }
 
     /**

@@ -5885,10 +5885,9 @@
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
-                                <h3 class="fonr-16">Design Template</h3>
+                                <h3 class="fonr-16">{{ localeData?.design_template }}</h3>
                                 <p class="my-3">
-                                    Click to add a template from our gallery. You can customize the template title,
-                                    columns,and headers in line item table.
+                                    {{ localeData?.template_gallery_info }}
                                 </p>
                                 <button
                                     mat-raised-button
@@ -5896,7 +5895,7 @@
                                     (click)="templateEdit(null, 'create')"
                                     *ngIf="voucherApiVersion === 2"
                                 >
-                                    Add New
+                                    {{ localeData?.add_new }}
                                 </button>
                             </mat-card-content>
                         </mat-card>
@@ -5918,7 +5917,7 @@
                                         class="default-wrap font-12 p-2 cursor-pointer"
                                     >
                                         <i class="icon-favorite-selected"></i>
-                                        Default Template
+                                        {{ localeData?.default_template }}
                                     </span>
                                     <span
                                         *ngIf="!template.isDefault"
@@ -5935,13 +5934,13 @@
                                         "
                                     >
                                         <i class="icon-favorite-selected"></i>
-                                        Set as Default
+                                        {{ localeData?.set_as_default }}
                                     </span>
                                     <div class="d-flex column-gap1 justify-content-center">
                                         <button
                                             mat-stroked-button
                                             class="mat-icon-md-btn"
-                                            matTooltip="Preview"
+                                            matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
                                             (click)="templateDialog(template)"
                                         >
@@ -5950,7 +5949,7 @@
                                         <button
                                             mat-stroked-button
                                             class="mat-icon-md-btn"
-                                            matTooltip="Edit Template"
+                                            [matTooltip]="localeData?.edit_template"
                                             matTooltipPosition="above"
                                             (click)="templateEdit(template, 'edit')"
                                         >
@@ -5960,7 +5959,7 @@
                                             mat-stroked-button
                                             class="mat-icon-md-btn cursor-pointer"
                                             [disabled]="template.isDefault"
-                                            matTooltip="Delete"
+                                            [matTooltip]="localeData?.delete"
                                             matTooltipPosition="above"
                                             (click)="
                                                 template.isDefault
@@ -5984,7 +5983,7 @@
                                             template.createdBy.name.length > 13 ? template.createdBy.name : null
                                         "
                                     >
-                                        Created by: {{ template.createdBy?.name }}
+                                        {{ localeData?.created_by }} {{ template.createdBy?.name }}
                                     </p>
                                 </mat-card-content>
                             </mat-card>
@@ -6003,7 +6002,7 @@
                                         class="default-wrap font-12 p-2 cursor-pointer"
                                     >
                                         <i class="icon-favorite-selected"></i>
-                                        Default Template
+                                        {{ localeData?.default_template }}
                                     </span>
                                     <span
                                         *ngIf="!template.isDefaultForVoucher"
@@ -6011,13 +6010,13 @@
                                         (click)="setTemplateAsDefault(template.uniqueName, 'voucher')"
                                     >
                                         <i class="icon-favorite-selected"></i>
-                                        Set as Default
+                                        {{ localeData?.set_as_default }}
                                     </span>
                                     <div class="d-flex column-gap1 justify-content-center">
                                         <button
                                             mat-stroked-button
                                             class="mat-icon-md-btn"
-                                            matTooltip="Preview"
+                                            matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
                                             (click)="templateDialog(template)"
                                         >
@@ -6026,7 +6025,7 @@
                                         <button
                                             mat-stroked-button
                                             class="mat-icon-md-btn"
-                                            matTooltip="Edit Template"
+                                            matTooltip="{{ localeData?.edit_template }}"
                                             matTooltipPosition="above"
                                             (click)="templateEdit(template, 'edit')"
                                         >
@@ -6036,7 +6035,7 @@
                                             mat-stroked-button
                                             [disabled]="template.isDefaultForVoucher"
                                             class="mat-icon-md-btn cursor-pointer"
-                                            matTooltip="Delete"
+                                            matTooltip="{{ localeData?.delete }}"
                                             matTooltipPosition="above"
                                             (click)="
                                                 template.isDefaultForVoucher
@@ -6053,7 +6052,7 @@
                                             template.createdBy.name.length > 13 ? template.createdBy.name : null
                                         "
                                     >
-                                        Created by: {{ template.createdBy?.name }}
+                                        {{ localeData?.created_by }} {{ template.createdBy?.name }}
                                     </p>
                                 </mat-card-content>
                             </mat-card>
