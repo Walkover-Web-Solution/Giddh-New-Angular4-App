@@ -72,10 +72,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
-    /** True if command dialog is open */
-    @Input() public showCommandDialog: boolean = false;
     /** True, if sidebar needs to be expanded */
     @Input() public isSidebarExpanded: boolean = false;
+    /** True if command dialog is open */
+    @Input() public showCommandDialog: boolean = false;
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */

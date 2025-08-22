@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -24,7 +25,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -62,8 +62,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
-    /** Modal reference */
-    public modalRef: BsModalRef;
     /** Reference to bulk export dialog */
     private bulkExportDialogRef: MatDialogRef<any>;
     @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
@@ -140,14 +138,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private activeCompanyUniqueName: string;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store selected date range to use in api */
+    /** Reference to universal datepicker trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -156,8 +154,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -205,8 +201,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private invoiceService: InvoiceService,
         private router: Router,
-        private dialog: MatDialog,
-        private modalService: BsModalService
+        private dialog: MatDialog
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -705,30 +700,19 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
         }
     }
-
+    
     /**
-    *To show the datepicker
+    * Toggles the datepicker menu
     *
-    * @param {*} element
-    * @memberof AuditLogsFormComponent
+    * @param {boolean} isOpen - True if datepicker needs to be opened
+    * @memberof AdvanceReceiptReportComponent
     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+         } else {
+            this.universalDatepickerTrigger?.closeMenu();
+         }
     }
 
     /**
@@ -739,7 +723,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -747,7 +731,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

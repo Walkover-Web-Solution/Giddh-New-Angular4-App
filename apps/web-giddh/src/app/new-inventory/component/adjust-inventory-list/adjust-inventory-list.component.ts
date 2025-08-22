@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -30,8 +29,6 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
-    /** Holds Datepicker Reference */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -50,24 +47,12 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public adjustInventoryInProgress$ = this.componentStore.select(state => state.adjustInventoryListInProgress);
     /* This will hold list of inventory adjust list*/
     public adjustInventoryList: AdjustInventoryListResponse[] = [];
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs: any = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    /* Selected range label */
-    public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will use for subscription pagination logs object */
     public adjustInventoryListRequest: InventorytAdjustReportQueryRequest;
     /** Hold table page index number */
@@ -112,10 +97,13 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+/** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** This will store selected date range to use in api */
+    public selectedDateRange: any;
 
     constructor(
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private readonly componentStore: AdjustInventoryListComponentStore,
         private formBuilder: FormBuilder,
@@ -440,60 +428,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This method will be use for show datepicker
-     *
-     * @param {*} element
-     * @memberof AdjustInventoryListComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AdjustInventoryListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
-
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof AdjustInventoryListComponent
-     */
-    public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.adjustInventoryListRequest.from = this.fromDate;
-            this.adjustInventoryListRequest.to = this.toDate;
-        }
-        this.getAllAdjustReports(false);
-        this.changeDetection.detectChanges();
-    }
-
-    /**
      * This method will be use for route to create adjust inventory
      *
      * @memberof AdjustInventoryListComponent
@@ -514,7 +448,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             this.changeDetection.detectChanges();
         }
     }
-
 
     /**
     * Returns the search field text
@@ -588,7 +521,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         }
     }
-
 
     /**
      * This will be use for toggle search field

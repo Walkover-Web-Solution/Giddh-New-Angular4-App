@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { AppState } from '../../../store';
@@ -11,7 +12,6 @@ import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, t
 import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, UntypedFormControl } from '@angular/forms';
@@ -59,7 +59,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public updateEwayvehicleSuccess$: Observable<boolean>;
     /** Holds list of eway bill */
     public ewaybillLists: IEwayBillAllList;
-    public modalRef: BsModalRef;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** True if api call in progress */
     public isLoading: boolean = true;
@@ -101,14 +100,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Reference to the universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -119,8 +118,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -166,7 +163,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private invoiceActions: InvoiceActions,
         private invoiceService: InvoiceService,
         private _toaster: ToasterService,
-        private modalService: BsModalService,
         private _location: LocationService,
         private _cd: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -235,7 +231,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.updateEwayvehicleSuccess$.subscribe(p => {
             if (p) {
                 this.updateVehicleForm.reset();
-                this.modalRef.hide();
             }
         });
         this.store.pipe(select(state => state.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((response: IEwayBillAllList) => {
@@ -416,7 +411,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.EwayBillfilterRequest.branchUniqueName = selectedEntity?.value;
         this.getAllFilteredInvoice();
     }
-
 
     /**
      * Search query handler for from place field
@@ -610,39 +604,27 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker
+     * Toggles the datepicker menu
      *
-     * @param {*} element
      * @memberof EWayBillComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof EWayBillComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value - Value from the datepicker component
      * @memberof EWayBillComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -650,7 +632,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

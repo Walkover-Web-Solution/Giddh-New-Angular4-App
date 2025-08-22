@@ -15,7 +15,7 @@ import {
     Output
 } from '@angular/core';
 import { UntypedFormControl, NgForm } from '@angular/forms';
-import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { cloneDeep, map, uniqBy } from '../../lodash-optimized';
@@ -30,7 +30,6 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-// Removed ngx-bootstrap modal import as all modals have been migrated to Angular Material
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
@@ -95,8 +94,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public refreshPurchaseBill: boolean = false;
     /* This will emit if purchase bill lists needs to be refreshed */
     @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
-
-    public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -108,14 +108,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public voucherData: ReciptResponse;
     public dayjs = dayjs;
-    public modalRef: BsModalRef;
     public showInvoiceNoSearch = false;
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public modalUniqueName: string;
     public startDate: Date;
     public endDate: Date;
@@ -212,17 +205,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public invoiceSearch: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Reference to bulk export template ref */
     @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Reference to bulk export dialog */
     private bulkExportDialogRef: MatDialogRef<any>;
     /** Reference to cancel E-invoice dialog */
     private cancelEInvoiceDialogRef: MatDialogRef<any>;
-    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
+    /** Reference to search template ref */
+    @ViewChild('searchTemplate', { static: true }) public searchTemplate: TemplateRef<any>;
     /** Reference to search template dialog */
     private searchTemplateDialogRef: MatDialogRef<any>;
+    /** Reference to send email template ref */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: TemplateRef<any>;
     /** Reference to send email dialog */
     private sendEmailDialogRef: MatDialogRef<any>;
@@ -231,11 +224,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** True if consolidated branch */
@@ -291,7 +282,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private location: Location,
         private salesService: SalesService,
-        private modalService: BsModalService,
         private dialog: MatDialog,
         private generalService: GeneralService,
         private commonActions: CommonActions,
@@ -336,7 +326,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 panelClass: 'mat-dialog-md',
                 disableClose: true
             });
-        } else if (template === this.template) {
+        } else if (template === this.searchTemplate) {
             this.searchTemplateDialogRef = this.dialog.open(template, {
                 panelClass: 'mat-dialog-md',
                 disableClose: true
@@ -346,9 +336,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 panelClass: 'mat-dialog-md',
                 disableClose: true
             });
-        } else {
-            // Fallback for any remaining modals that haven't been migrated yet
-            this.modalRef = this.modalService.show(template);
         }
     }
 
@@ -1931,28 +1918,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-    *To show the datepicker
+    * This will show the datepicker
     *
-    * @param {*} element
-    * @memberof InvoicePreviewComponent
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof InvoicePreviewComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -2008,7 +1984,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -2016,7 +1992,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -2320,7 +2296,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.getVoucher(this.isUniversalDateApplicable);
             if (response?.status === 'success') {
                 this._toaster.successToast(response.body);
-                this.modalRef?.hide();
+                this.dialog.closeAll();
                 this.resetCancelEInvoice();
             } else if (response?.status === 'error') {
                 this._toaster.errorToast(response.message, response.code);

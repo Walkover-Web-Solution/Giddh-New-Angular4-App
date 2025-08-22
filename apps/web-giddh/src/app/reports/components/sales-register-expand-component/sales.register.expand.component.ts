@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -16,7 +17,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -46,8 +46,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Directive to get reference of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     /** Universal date observer */
     public universalDate$: Observable<any>;
@@ -56,17 +56,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Modal reference */
-    public modalRef: BsModalRef;
-
-    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
@@ -114,7 +109,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         private _cd: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
     ) {
@@ -531,39 +525,30 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-    *To show the datepicker
-    *
-    * @param {*} element
-    * @memberof SalesRegisterExpandComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
+     * This will toggle the datepicker
      *
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
      * @memberof SalesRegisterExpandComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger?.openMenu();
+            } else {
+                this.universalDatepickerTrigger?.closeMenu();
+            }
+        }
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value Selected date range object
      * @memberof SalesRegisterExpandComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -571,7 +556,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
