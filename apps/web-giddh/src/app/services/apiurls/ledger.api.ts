@@ -37,7 +37,7 @@ export const LEDGER_API = {
 
     GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus',
     GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate&count=:count&page=:page&number=:number',
-    GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances',
+    GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances-v2',
     // Export Ledger get columnar report table
     EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to',
     IMPORT_STATEMENT: 'company/:companyUniqueName/imports/import-pdf/bank-statement?entity=pdf&accountUniqueName=:accountUniqueName',
@@ -47,7 +47,7 @@ export const LEDGER_API = {
     EXPORT: 'company/:companyUniqueName/exports',
 
     //Export Bill to Bill Report
-    EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to',
+    EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export-v2?from=:from&to=:to',
     ACCOUNT_SEARCH_PREDICTION: 'company/:companyUniqueName/account-search-predicted?accountUniqueName=:accountUniqueName',
 
     // Run Auto-paid

@@ -330,18 +330,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Callback for translation response complete
-   *
-   * @param {boolean} event
-   * @memberof ImportsComponent
-   */
-    public translationComplete(event: boolean): void {
-        if (event) {
-            this.getImports(true);
-        }
-    }
-
-    /**
    * Branch change handler
    *
    * @memberof EWayBillComponent

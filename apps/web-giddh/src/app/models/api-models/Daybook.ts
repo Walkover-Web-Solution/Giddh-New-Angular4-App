@@ -10,6 +10,8 @@ export interface DayBookResponseModel {
     toDate: string;
     creditTotal: number;
     debitTotal: number;
+    name: string;
+    data?: string;
 }
 
 export interface Entry {

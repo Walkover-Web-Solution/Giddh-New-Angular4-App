@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -28,6 +28,7 @@ import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
 import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
+import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -64,7 +65,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     @Input() public addressOnly: boolean = false;
     /** This will emit pageHeading */
     @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
-
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -301,7 +301,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.activeTabIndex = 0;
             } else if ((params['referrer']) === 'address') {
                 this.activeTabIndex = 1;
-            } else if ((params['referrer']) === 'other') {
+            } else if ((params['referrer']) === 'export') {
                 this.activeTabIndex = 2;
             }
         });
@@ -403,7 +403,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     }
 
-
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if (event.index === 0) {
+            this.handleTabChanged("personal");
+        } else if (event.index === 1) {
+            this.handleTabChanged("address");
+        } else {
+            this.handleTabChanged("export");
+        }
+    }
 
     public addGst() {
         let addresses = cloneDeep(this.companyProfileObj.addresses);

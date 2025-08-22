@@ -1582,9 +1582,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.voucherData.items.forEach((item) => {
                         item.isSelected = false;
                     });
-                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
-                    return saveAs(blob, fileName);
+                    let blob = this.generalService.base64ToBlob(response.body.data, 'application/xls', 512);
+                    return saveAs(blob, response.body.name);
                 } else {
                     this._toaster.errorToast(response.message);
                 }
