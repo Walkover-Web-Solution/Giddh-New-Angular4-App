@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -26,8 +25,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 
 export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
-    // /** Instance of tabset */
-    // @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */

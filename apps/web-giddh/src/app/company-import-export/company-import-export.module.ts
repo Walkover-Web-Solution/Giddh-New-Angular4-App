@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { CompanyImportExportComponent } from './company-import-export.component';
 import { CompanyImportExportRoutingModule } from './company-import-export.routing.module';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CompanyImportExportFormComponent } from './component/form/company-import-export-form';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +12,6 @@ import { SharedModule } from '../shared/shared.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
-        TabsModule.forRoot(),
         ShSelectModule,
         FormsModule,
         CommonModule,

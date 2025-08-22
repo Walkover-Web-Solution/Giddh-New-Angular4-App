@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerModule } from '../ledger/ledger.module';
@@ -49,7 +48,6 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         FormsModule,
         Daterangepicker,
         ExpensesRoutingModule,
-        TabsModule.forRoot(),
         LedgerModule,
         CurrencyModule,
         MatPaginatorModule,
