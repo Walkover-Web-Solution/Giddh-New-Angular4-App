@@ -7,7 +7,9 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -115,7 +117,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatButtonModule,
         CompareWithDateRangePickerComponent,
         MatCheckboxModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
 })
 export class FinancialReportsModule {

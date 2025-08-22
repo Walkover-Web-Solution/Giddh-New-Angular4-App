@@ -8,7 +8,6 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ToasterService } from '../../services/toaster.service';
 import { Organization, States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
-import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { animate, style, transition, trigger, state } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/Common";
@@ -64,7 +63,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     @Input() public addressOnly: boolean = false;
     /** This will emit pageHeading */
     @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
-
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -301,7 +299,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.activeTabIndex = 0;
             } else if ((params['referrer']) === 'address') {
                 this.activeTabIndex = 1;
-            } else if ((params['referrer']) === 'other') {
+            } else if ((params['referrer']) === 'export') {
                 this.activeTabIndex = 2;
             }
         });
@@ -403,7 +401,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     }
 
-
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if (event.index === 0) {
+            this.handleTabChanged("personal");
+        } else if (event.index === 1) {
+            this.handleTabChanged("address");
+        } else {
+            this.handleTabChanged("export");
+        }
+    }
 
     public addGst() {
         let addresses = cloneDeep(this.companyProfileObj.addresses);
@@ -668,15 +681,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
-    }
-
-    public typeaheadOnSelect(e: TypeaheadMatch): void {
-        this.dataSourceBackup.forEach(item => {
-            if (item.city === e.item) {
-                this.companyProfileObj.country = item.country;
-                this.patchProfile({ city: this.companyProfileObj.city });
-            }
-        });
     }
 
     public pushToUpdate(event) {

@@ -37,28 +37,3 @@
 <ng-template #inventoryAdvanceSearch>
     <new-inventory-advance-search></new-inventory-advance-search>
 </ng-template>
-
-<!-- datepicker template -->
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>

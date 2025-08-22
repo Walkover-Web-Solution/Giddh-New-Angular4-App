@@ -96,6 +96,16 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     }
 
     /**
+     * Handles profile update operation
+     *
+     * @param {any} event
+     * @memberof PersonalInformationComponent
+     */
+    public updateOtherSettings(event): void {
+        this.saveProfile.emit(event);
+    }
+
+    /**
      * On Change of input properties
      *
      * @memberof PersonalInformationComponent

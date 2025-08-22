@@ -29,6 +29,8 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OrganizationType } from '../../../models/user-login-state';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from "@angular/router";
+import { MatMenuTrigger } from "@angular/material/menu";
+import { BsModalRef, BsModalService, ModalDirective } from "ngx-bootstrap/modal";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -49,6 +51,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     @ViewChild('asideTransferPaneTemplate', { static: true }) public asideTransferPaneTemplate: TemplateRef<any>;
     /** Reference to aside transfer pane dialog */
     public asideTransferPaneDialogRef: MatDialogRef<any>;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
     // modalRef removed as part of Angular Material dialog migration
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -74,22 +78,18 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
@@ -212,7 +212,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -397,7 +397,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public showDeleteBranchTransferModal(item): void {
         this.selectedBranchTransfer = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        
+
         // Open the dialog using Angular Material
         this.deleteBranchTransferDialogRef = this.dialog.open(this.deleteBranchTransferDialog, {
             panelClass: 'mat-dialog-md',
@@ -546,44 +546,17 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker
-     *
-     * @param {*} element - The element that triggered the datepicker
-     * @memberof NewBranchTransferListComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this._generalService.getPosition(element.target);
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof NewBranchTransferListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.dialog.open(
-            this.datepickerTemplate,
-            {
-                panelClass: ['mat-dialog-lg', 'giddh-datepicker-modal'],
-                position: {
-                    top: this.dateFieldPosition?.top + 'px',
-                    left: this.dateFieldPosition?.left + 'px'
-                },
-                hasBackdrop: false
-            }
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof NewBranchTransferListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.dialog.closeAll();
-    }
-
-    /**
-     * Closes the datepicker dialog when the close button is clicked
-     *
-     * @memberof NewBranchTransferListComponent
-     */
-    public closeDatepickerDialog(): void {
-        this.dialog.closeAll();
     }
 
     /**
@@ -594,7 +567,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -602,7 +575,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

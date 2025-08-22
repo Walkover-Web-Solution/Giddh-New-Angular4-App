@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, ViewChildren } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
@@ -39,8 +38,6 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     @Output() public entriesList: EventEmitter<any> = new EventEmitter();
     /* List of adjustment entries */
     public receiptEntries: any[] = [];
-    /* Object of bootstrap modal */
-    public modalRef: BsModalRef;
     /* This will hold list of pending invoices */
     public pendingInvoiceList: any[] = [];
     /* Observable for list of pending invoices */

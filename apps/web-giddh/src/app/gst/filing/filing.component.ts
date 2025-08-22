@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';

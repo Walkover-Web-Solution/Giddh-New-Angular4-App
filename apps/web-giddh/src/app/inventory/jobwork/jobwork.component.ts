@@ -19,8 +19,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'jobwork',
@@ -40,6 +40,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
     /** Dialog reference for aside menu */
     public asideMenuDialogRef: MatDialogRef<any>;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
     public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
@@ -96,18 +98,14 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public modalService: any;
     private inventoryReport$: Observable<InventoryReport>;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-
 
     constructor(
         private inventoryReportActions: InventoryReportActions,
@@ -117,7 +115,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
         private invViewService: InvViewService,
         private _store: Store<AppState>,
         private cdr: ChangeDetectorRef,
-        private generalService: GeneralService,
         private dialog: MatDialog) {
 
         this.stocksList$ = this._store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
@@ -275,7 +272,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
         });
 
-
     }
 
     public ngOnDestroy() {
@@ -334,7 +330,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }, 100);
         }
     }
-
 
     public compareChanged(option: IOption) {
         switch (option.value) {
@@ -526,7 +521,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.applyFilters(1, true);
         }
 
-
     }
 
     public checkFilters() {
@@ -649,29 +643,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
             });
     }
 
-    /**
-    *To show the datepicker
+   /**
+    * This will show the datepicker
     *
-    * @param {*} element
+    * @param {boolean} isOpen
     * @memberof JobworkComponent
     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof JobworkComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -682,7 +665,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -690,7 +673,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

@@ -8,7 +8,6 @@ import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as dayjs from 'dayjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -17,6 +16,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
     selector: 'app-recurring',
@@ -28,7 +28,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public currentPage = 1;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    public modalRef: BsModalRef;
     /** Reference to aside pane template */
     @ViewChild('asideMenuStateForRecurringEntryTemplate') asideMenuStateForRecurringEntryTemplate: TemplateRef<any>;
     /** Reference to aside pane dialog */
@@ -46,12 +45,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
         voucherNumber: '',
         duration: '',
         lastInvoiceDate: ''
-    };
-    public modalConfig = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
     };
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
     @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
@@ -86,12 +79,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService, private dialog: MatDialog) {
+        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private dialog: MatDialog) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
     }
 
     public ngOnInit() {
@@ -154,6 +143,19 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.invoice.hasRecurringVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasRecurringVoucherListPermissions = response;
+        });
+    }
+
+    /**
+     * Opens dialogs using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof RecurringComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialog.open(template, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
         });
     }
 

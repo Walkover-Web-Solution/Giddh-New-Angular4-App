@@ -14,17 +14,17 @@
                 (ngSubmit)="submit()"
             >
                 <div class="d-flex search-icon-block mr-b15" *ngIf="isMobileScreen">
-                    <div (click)="openModal(template)">
+                    <div (click)="openDialog(searchTemplate)">
                         <i class="icon-search"></i>
                     </div>
-                    <ng-template #template>
+                    <ng-template #searchTemplate>
                         <div class="modal-header">
                             <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
                             <button
                                 type="button"
                                 class="close pull-right"
                                 [attr.aria-label]="commonLocaleData?.app_close"
-                                (click)="modalRef.hide()"
+                                mat-dialog-close
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -116,17 +116,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-success btn-sm">{{ commonLocaleData?.app_search }}</button>
-                                    <a class="cp" href="javascript:;">
+                                    <button mat-raised-button color="primary">{{ commonLocaleData?.app_search }}</button>
+                                    <button 
+                                        mat-stroked-button
+                                        *ngIf="showResetFilterButton"
+                                        [matTooltip]="commonLocaleData?.app_reset_filter"
+                                        matTooltipPosition="above"
+                                        (click)="resetFilter()"
+                                    >
                                         <i
                                             aria-hidden="true"
                                             class="icon-refresh"
-                                            [matTooltip]="commonLocaleData?.app_reset_filter"
-                                            matTooltipPosition="above"
-                                            *ngIf="showResetFilterButton"
-                                            (click)="resetFilter()"
                                         ></i>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>

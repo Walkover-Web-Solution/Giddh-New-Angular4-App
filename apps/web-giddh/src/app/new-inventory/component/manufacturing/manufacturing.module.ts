@@ -11,6 +11,7 @@ import { ListManufacturingComponent } from './list-manufacturing/list-manufactur
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
@@ -33,6 +34,7 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
         MatTableModule,
         MatDialogModule,
         MatTooltipModule,
+        MatMenuModule,
         DatepickerWrapperModule,
 
         GiddhDatepickerModule,
