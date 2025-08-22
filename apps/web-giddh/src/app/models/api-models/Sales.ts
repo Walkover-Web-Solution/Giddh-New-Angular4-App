@@ -10,10 +10,10 @@ import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { ITaxControlData } from '../interfaces/tax.interface';
 
+
 export enum VoucherTypeEnum {
     'sales' = 'sales',
     'purchase' = 'purchase',
-    'purchaseOrder' = 'purchase-order',
     'debitNote' = 'debit note',
     'creditNote' = 'credit note',
     'proforma' = 'proforma',
@@ -25,8 +25,13 @@ export enum VoucherTypeEnum {
     'payment' = 'payment',
     'cashDebitNote' = 'cash debit note',
     'cashCreditNote' = 'cash credit note',
-    'cashBill' = 'cash bill'
-}
+    'cashBill' = 'cash bill',
+    'purchaseOrder' = 'purchase-order',
+    'invoice' = 'invoice',
+    'voucher' = 'voucher',
+    'purchase_bill' = 'purchase_bill',
+    'purchase_order' = 'purchase_order'
+};
 
 export enum TemplateTypeEnum {
     'GstTemplateA' = 'gst_template_a',

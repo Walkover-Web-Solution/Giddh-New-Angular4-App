@@ -1,6 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ConfirmationModalConfiguration } from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { InvoiceUiDataService } from '../../services/invoice.ui.data.service';
@@ -11,8 +10,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { TemplateModeEnum, TemplateTypeEnum } from '../../models/api-models/Sales';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
-import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
-import { GeneralService } from '../../services/general.service';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { CountryNames } from '../../shared/Enums/common.enum';
 
 @Component({
@@ -21,8 +19,6 @@ import { CountryNames } from '../../shared/Enums/common.enum';
   styleUrls: ['./template-edit-dialog.component.scss']
 })
 export class TemplateEditDialogComponent implements OnInit, OnDestroy {
-  /** Invoice confirmation popup configuration */
-  public InvoiceConfirmationConfiguration: ConfirmationModalConfiguration;
   /** This will hold local JSON data */
   public localeData: any = {};
   /** This will hold common JSON data */
@@ -44,7 +40,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private invoiceUiDataService: InvoiceUiDataService,
     private invoiceTemplatesService: InvoiceTemplatesService,
-    private generalService: GeneralService,
     private toasty: ToasterService,
     private store: Store<AppState>,
     @Inject(MAT_DIALOG_DATA) public inputData: any,
@@ -53,12 +48,12 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.templateData = this.inputData;
   }
 
-/**
- * Angular lifecycle hook that is called after data-bound properties are initialized.
- * Initializes company, template, and UI data for the template editor.
- *
- * @memberof TemplateEditDialogComponent
- */
+  /**
+   * Angular lifecycle hook that is called after data-bound properties are initialized.
+   * Initializes company, template, and UI data for the template editor.
+   *
+   * @memberof TemplateEditDialogComponent
+   */
   public ngOnInit(): void {
     this.localeData = this.inputData?.localeData;
     this.commonLocaleData = this.inputData?.commonLocaleData;
@@ -77,15 +72,18 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   * @memberof TemplateEditDialogComponent
   */
   public closeDialog(): void {
-    this.InvoiceConfirmationConfiguration = this.generalService.closeTemplateDialogConfiguration(this.localeData, this.commonLocaleData);
-   const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-        panelClass: ['mat-dialog-md'],
-        data: {
-            configuration: this.InvoiceConfirmationConfiguration
-        }
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      panelClass: ['mat-dialog-md'],
+      data: {
+        title: this.commonLocaleData?.app_confirmation,
+        body: this.localeData?.close_popup,
+        ok: this.commonLocaleData?.app_yes,
+        cancel: this.commonLocaleData?.app_no,
+        permanentlyDeleteMessage: ''
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result ==='Yes') {
+      if (result) {
         this.dialogRef.close(false);
       }
     });
@@ -123,10 +121,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         data.sections['footer'].data['companyName'].label = companyName;
       }
     });
-
-    if (!(this.templateData?.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
-      data.sections['header'].data['gstComposition'].display = false;
-    }
     this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
         this.toasty.successToast(this.localeData?.template_saved_successfully);
@@ -138,14 +132,14 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     });
   }
 
-/**
- * setFontSizes method
- *
- * @private
- * @param {*} data
- * @memberof TemplateEditDialogComponent
- */
-private setFontSizes(data: any): void {
+  /**
+   * setFontSizes method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private setFontSizes(data: any): void {
     if (data.fontSize) {
       data.fontSmall = data.fontSize - 4;
       data.fontDefault = data.fontSize;
@@ -153,14 +147,14 @@ private setFontSizes(data: any): void {
     }
   }
 
-/**
- * ensureTextUnderSlogan method
- *
- * @private
- * @param {*} data
- * @memberof TemplateEditDialogComponent
- */
-private ensureTextUnderSlogan(data: any): void {
+  /**
+   * ensureTextUnderSlogan method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private ensureTextUnderSlogan(data: any): void {
     const tus = data.sections['footer'].data['textUnderSlogan'];
     if (!tus?.display || !tus?.label) {
       if (!tus) {
@@ -172,14 +166,14 @@ private ensureTextUnderSlogan(data: any): void {
     }
   }
 
-/**
- * cleanTemplateFields method
- *
- * @private
- * @param {*} data
- * @memberof TemplateEditDialogComponent
- */
-private cleanTemplateFields(data: any): void {
+  /**
+   * cleanTemplateFields method
+   *
+   * @private
+   * @param {*} data
+   * @memberof TemplateEditDialogComponent
+   */
+  private cleanTemplateFields(data: any): void {
     const specialTypes = [TemplateTypeEnum.GstTemplateA, TemplateTypeEnum.ThermalTemplate, TemplateTypeEnum.TallyTemplate];
     if (!specialTypes.includes((data.templateType || '').toLowerCase())) {
       delete data?.sections?.header?.data?.showCompanyAddress;
@@ -229,9 +223,6 @@ private cleanTemplateFields(data: any): void {
     this.ensureMessage1(data);
     this.ensureTextUnderSloganUpdate(data);
     data = this.newLineToBR(data);
-    if (!(this.templateData?.voucherType === VoucherTypeEnum.sales && this.showGstComposition)) {
-      data.sections['header'].data['gstComposition'].display = false;
-    }
     this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
         this.toasty.successToast(this.localeData?.template_updated_successfully);
