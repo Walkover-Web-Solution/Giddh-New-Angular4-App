@@ -507,26 +507,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Displays the welcome page for second step of warehouse on boarding and for update
-     * warehouse flow
-     *
-     * @private
-     * @memberof WarehouseComponent
-     */
-    private showWelcomePage(): void {
-        if (this.itemOnBoardingDetails &&
-            (this.itemOnBoardingDetails.isOnBoardingInProgress || this.itemOnBoardingDetails.isItemUpdateInProgress)) {
-            const modalConfig: ModalOptions = {
-                class: 'warehouse-welcome-modal',
-                animated: false,
-                keyboard: false,
-                backdrop: false
-            };
-            this.welcomePageModalInstance = this.bsModalService.show(this.welcomeComponentTemplate, modalConfig);
-        }
-    }
-
-    /**
      * Resets the welcome form
      *
      * @private

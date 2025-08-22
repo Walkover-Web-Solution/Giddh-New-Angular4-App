@@ -92,8 +92,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public nameStockOrPerson: string;
     public universalDate$: Observable<any>;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Modal reference */
-    public modalRef: any;
     /** Modal service reference */
     public modalService: any;
     private inventoryReport$: Observable<InventoryReport>;

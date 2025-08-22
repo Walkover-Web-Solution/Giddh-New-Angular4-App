@@ -56,10 +56,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public revisionHistoryDialogRef: MatDialogRef<any>;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
-    /* Modal instance */
-    public modalRef: any;
-    /** Modal service reference */
-    public modalService: any;
+    /* Dialog reference */
+    public dialogRef: MatDialogRef<any>;
     /* This will hold purchase order data */
     public purchaseOrder: any = {};
     /* Send email request params object */
@@ -293,7 +291,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         this.sendEmailRequest.uniqueName = this.purchaseOrder?.uniqueName;
         this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
-        this.modalRef = this.modalService.show(template);
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -314,7 +314,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public closeSendMailPopup(event: any): void {
         if (event) {
-            this.modalRef.hide();
+            this.dialogRef.close();
         }
     }
 
@@ -578,10 +578,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public openBulkConvert(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-sm' })
-        );
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -591,7 +590,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public closeBulkConvertPopup(event: any): void {
-        this.modalRef?.hide();
+        this.dialogRef?.close();
         if (event) {
             this.getPurchaseOrder();
         }

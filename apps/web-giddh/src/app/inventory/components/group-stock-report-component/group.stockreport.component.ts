@@ -3,7 +3,6 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Inpu
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
@@ -208,7 +207,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showAdvanceSearchModal: boolean = false;
     public branchAvailable: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    modalRef: BsModalRef;
     valueWidth = false;
     public branchTransferMode: string = '';
     /* This will hold if it's mobile screen or not */
@@ -229,9 +227,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+    public dialogRef: MatDialogRef<any>;
 
     constructor(
-        private modalService: BsModalService,
         private store: Store<AppState>,
         private stockReportActions: StockReportActions,
         private inventoryService: InventoryService,
@@ -812,11 +810,16 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     //************************************//
 
-    openModal() {
-        this.modalRef = this.modalService.show(
-            this.template,
-            Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
-        );
+    /**
+     * Opens the dialog with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public openDialog(): void {
+        this.dialogRef = this.dialog.open(this.template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -826,7 +829,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public hideModal(isNoteCreatedSuccessfully?: boolean): void {
-        this.modalRef.hide();
+        this.dialogRef.close();
         if (isNoteCreatedSuccessfully) {
             this.getGroupReport(true);
         }
@@ -835,7 +838,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public openBranchTransferPopup(event) {
         this.branchTransferMode = event;
         this.openBranchTransferDialog();
-        this.openModal();
+        this.openDialog();
     }
 
     /**

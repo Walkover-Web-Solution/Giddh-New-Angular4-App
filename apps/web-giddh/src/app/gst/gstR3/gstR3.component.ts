@@ -22,7 +22,6 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
-import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'file-gstr3',
@@ -116,7 +115,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private generalService: GeneralService,
-        public modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
         private componentStore: GstComponentStore

@@ -12,21 +12,19 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 
 export class AdjustGroupComponent implements OnInit {
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* this will store image path*/
     public imgPath: string = '';
     /* This will store aside pane template reference */
     @ViewChild('asideMenuStateForInventoryAdjustmentTemplate') public asideMenuStateForInventoryAdjustmentTemplate: TemplateRef<any>;
     /* This will store aside pane dialog reference */
     public asideMenuStateForInventoryAdjustmentDialogRef: MatDialogRef<any>;
-
+    /* This will store modal reference */
+    public dialogRef: MatDialogRef<any>;
     /* sh-select view child */
     @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
-        private modalService: BsModalService,
         private dialog: MatDialog
     ) { }
 
@@ -34,10 +32,17 @@ export class AdjustGroupComponent implements OnInit {
     public openAdjustmentDialog(): void {
         this.asideMenuStateForInventoryAdjustmentDialogRef = this.dialog.open(this.asideMenuStateForInventoryAdjustmentTemplate, ASIDE_PANE_CONFIG);
     }
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'modal-xl' })
-        );
+
+    /**
+     * Opens the dialog with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof AdjustGroupComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'modal-xl'
+        });
     }
 
     public ngOnInit() {

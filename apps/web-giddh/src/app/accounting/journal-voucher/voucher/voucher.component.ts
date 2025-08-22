@@ -142,7 +142,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public selectedField: 'account' | 'stock';
 
     public chequeDetailForm: UntypedFormGroup;
-    public asideMenuStateForProductService: string = 'out';
     public isFirstRowDeleted: boolean = false;
     public autoFocusStockGroupField: boolean = false;
     public createStockSuccess$: Observable<boolean>;
@@ -456,7 +455,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
             if (yesOrNo) {
-                this.asideMenuStateForProductService = 'out';
                 this.autoFocusStockGroupField = false;
                 // this.getStock(null, null, true);
                 setTimeout(() => {

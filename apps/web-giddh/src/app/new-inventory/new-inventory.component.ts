@@ -21,14 +21,14 @@ export class NewInventoryComponent implements OnInit {
     @ViewChild('asideMenuStateForCreateNewGroupTemplate') public asideMenuStateForCreateNewGroupTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public asideMenuStateForCreateNewGroupDialogRef: MatDialogRef<any>;
+    /* This will store modal reference */
+    public dialogRef: MatDialogRef<any>;
     /* More button dropdown */
     public moreBtnDropwon: BsDropdownDirective;
     /* show search input field full width */
     public inputFullWidth: boolean = true;
     /* show search input field full width */
     public dateRangFullWidth: boolean = true;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* this will check mobile screen size */
     public isMobileScreen: boolean = false;
@@ -49,7 +49,6 @@ export class NewInventoryComponent implements OnInit {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     constructor(
-        private modalService: BsModalService,
         private _breakPointObservar: BreakpointObserver,
         private dialog: MatDialog
     ) { }
@@ -115,10 +114,10 @@ export class NewInventoryComponent implements OnInit {
         }
     }
     /* advance serach modal */
-    openModal(inventoryAdvanceSearch: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(inventoryAdvanceSearch,
-            Object.assign({}, { class: 'modal-lg' })
-        );
+    public openModal(inventoryAdvanceSearch: TemplateRef<any>) {
+        this.dialogRef = this.dialog.open(inventoryAdvanceSearch, {
+            panelClass: 'modal-md'
+        });
     }
 
     public ngOnInit() {

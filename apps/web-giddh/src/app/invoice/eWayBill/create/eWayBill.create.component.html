@@ -158,7 +158,7 @@
                                         (onShortcutPress)="keydownPressed()"
                                     >
                                         <span
-                                            (click)="OpenTransporterModel()"
+                                            (click)="openTransporterDialog()"
                                             [ngClass]="{ 'active': keydownClassAdded }"
                                             >Create New</span
                                         >
@@ -420,10 +420,9 @@
         </delete-template-confirmation-modal>
     </ng-template>
 
-    <div class="right-modal account-aside-menu-state">
-        <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
-        <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-            <button type="button" class="btn btn-sm btn-primary" id="closedialog" (click)="OpenTransporterModel()">
+    <ng-template #transporterTemplate>
+        <div>
+            <button type="button" class="btn btn-sm btn-primary" id="closedialog" (click)="transporterDialogRef.close()">
                 <i class="icon-cross"></i>
             </button>
             <div class="form-header">
@@ -605,5 +604,6 @@
                 </ng-container>
             </div>
         </div>
-    </div>
+    </ng-template>
+
 </ng-container>

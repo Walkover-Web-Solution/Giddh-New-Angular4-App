@@ -16,7 +16,6 @@ import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { ServiceConfig } from './services/service.config';
 import { PageLeaveUtilityService } from './services/page-leave-utility.service';
 
@@ -56,7 +55,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
-        private modalService: BsModalService,
         @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
@@ -124,9 +122,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event) {
                 this.dialog?.closeAll();
-                for (let i = 1; i <= this.modalService.getModalsCount(); i++) {
-                    this.modalService.hide(i);
-                }
             }
         });
 
