@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject, fromEvent } from 'rxjs';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
-import { TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { saveAs } from 'file-saver';
@@ -50,14 +50,16 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
+    /** This will hold state of activity history aside pan */
+    @ViewChild('revisionHistoryTemplate') public revisionHistoryTemplate: TemplateRef<any>;
+    /** Dialog reference for activity history modal */
+    public revisionHistoryDialogRef: MatDialogRef<any>;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
     /* Modal instance */
     public modalRef: any;
     /** Modal service reference */
     public modalService: any;
-    /* This will hold state of activity history aside pan */
-    public revisionHistoryAsideState: string = 'out';
     /* This will hold purchase order data */
     public purchaseOrder: any = {};
     /* Send email request params object */
@@ -272,30 +274,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     }
 
     /**
-     * This will toggle the activity history aside pan
-     *
-     * @param {*} [event]
-     * @memberof PurchaseOrderPreviewComponent
-     */
-    public toggleActivityHistoryAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    /**
-     * This will toggle the fixed class on body
+     * This will open the activity history aside dialog
      *
      * @memberof PurchaseOrderPreviewComponent
      */
-    public toggleBodyClass(): void {
-        if (this.revisionHistoryAsideState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    public openActivityHistoryAsidePaneDialog(): void {
+        this.revisionHistoryDialogRef = this.dialog.open(this.revisionHistoryTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**

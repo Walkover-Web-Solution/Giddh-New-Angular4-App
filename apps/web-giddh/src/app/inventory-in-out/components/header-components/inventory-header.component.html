@@ -22,7 +22,7 @@
                         <a
                             class="dropdown-item"
                             href="javascript:void(0);"
-                            (click)="toggleGroupStockAsidePane('inward', $event)"
+                            (click)="openGroupStockAsidePaneDialog('inward')"
                             >Inward Note</a
                         >
                     </li>
@@ -30,7 +30,7 @@
                         <a
                             class="dropdown-item"
                             href="javascript:void(0);"
-                            (click)="toggleGroupStockAsidePane('outward', $event)"
+                            (click)="openGroupStockAsidePaneDialog('outward')"
                             >Outward Note</a
                         >
                     </li>
@@ -38,7 +38,7 @@
                         <a
                             class="dropdown-item"
                             href="javascript:void(0);"
-                            (click)="toggleGroupStockAsidePane('transfer', $event)"
+                            (click)="openGroupStockAsidePaneDialog('transfer')"
                             >Transfer Note</a
                         >
                     </li>
@@ -46,7 +46,7 @@
                         <a
                             class="dropdown-item"
                             href="javascript:void(0);"
-                            (click)="toggleGroupStockAsidePane('createStock', $event)"
+                            (click)="openGroupStockAsidePaneDialog('createStock')"
                             >Create Stock</a
                         >
                     </li>
@@ -54,7 +54,7 @@
                         <a
                             class="dropdown-item"
                             href="javascript:void(0);"
-                            (click)="toggleGroupStockAsidePane('createAccount', $event)"
+                            (click)="openGroupStockAsidePaneDialog('createAccount')"
                             >Create Account</a
                         >
                     </li>
@@ -63,10 +63,9 @@
         </div>
     </div>
 </div>
-<aside-menu
-    [class]="asideMenuState"
-    [@slideInOut]="asideMenuState"
-    (closeAsideEvent)="toggleGroupStockAsidePane('', $event)"
-    [selectedAsideView]="selectedAsideView"
-></aside-menu>
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<ng-template #asideMenuTemplate>
+    <aside-menu
+        (closeAsideEvent)="asideMenuDialogRef.close()"
+        [selectedAsideView]="selectedAsideView"
+    ></aside-menu>
+</ng-template>

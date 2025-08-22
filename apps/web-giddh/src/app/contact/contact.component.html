@@ -493,32 +493,26 @@
     </ng-template>
     <!--endregion-->
 
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-
-    <div *ngIf="accountAsideMenuState === 'in'">
+    <ng-template #accountAsideMenuTemplate>
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="isUpdateAccount"
-            class="account-aside-menu-state transform-inherit"
-            [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="toggleAccountAsidePane($event)"
+            (closeAsideEvent)="accountAsideMenuDialogRef.close()"
             (getUpdateList)="getUpdatedList($event)"
         >
         </aside-menu-account>
-    </div>
+    </ng-template>
 
-    <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+    <ng-template #paymentAsideMenuTemplate>
         <payment-aside
-            class="account-aside-menu-state transform-inherit"
             [selectedAccForPayment]="selectedAccForPayment"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
         >
         </payment-aside>
-    </div>
+    </ng-template>
 
     <ng-template #mainTable>
         <div class="table-responsive vendor-page all-table overflow-visible">

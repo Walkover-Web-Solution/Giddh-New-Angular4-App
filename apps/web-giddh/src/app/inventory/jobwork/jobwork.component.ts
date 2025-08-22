@@ -5,7 +5,6 @@ import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
 import { InventoryFilter, InventoryReport, InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
@@ -18,7 +17,7 @@ import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
@@ -26,22 +25,9 @@ import { OrganizationType } from '../../models/user-login-state';
 @Component({
     selector: 'jobwork',
     templateUrl: './jobwork.component.html',
-    styleUrls: ['./jobwork.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0);'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0);'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./jobwork.component.scss']
 })
 export class JobworkComponent implements OnInit, OnDestroy {
-    public asideTransferPaneState: string = 'out';
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
     /** Dialog reference for advance search modal */
     private advanceSearchDialogRef: MatDialogRef<any>;
@@ -50,6 +36,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('productName', { static: false }) public productName: ElementRef;
     @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
+    /** Template reference for aside menu */
+    @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu */
+    public asideMenuDialogRef: MatDialogRef<any>;
 
     public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
@@ -405,25 +395,17 @@ export class JobworkComponent implements OnInit, OnDestroy {
         if (event.altKey && event.which === 73) { // Alt + i
             event.preventDefault();
             event.stopPropagation();
-            this.toggleTransferAsidePane();
+            this.openTransferAsidePaneDialog();
         }
     }
 
-    // new transfer aside pane
-    public toggleTransferAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    public toggleBodyClass() {
-        if (this.asideTransferPaneState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    /**
+     * Opens the aside pane dialog
+     *
+     * @memberof JobworkComponent
+     */
+    public openTransferAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**

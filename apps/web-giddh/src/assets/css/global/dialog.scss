@@ -28,7 +28,7 @@
 
 // Handel Asidepan header height with giddh header
 .cdk-overlay-pane{
-    margin-top: -1px !important;
+    transform: translateY(-1px) !important;
 }
 
 .dialog-asidepan {

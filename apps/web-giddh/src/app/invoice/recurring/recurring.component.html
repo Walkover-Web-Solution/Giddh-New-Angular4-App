@@ -486,18 +486,16 @@
             </div>
         </div>
 
-        <div class="aside-overlay" *ngIf="asideMenuStateForRecurringEntry === 'in'"></div>
-        <app-aside-recurring-entry
-            *ngIf="asideMenuStateForRecurringEntry === 'in'"
-            [invoice]="selectedInvoice"
-            [class]="asideMenuStateForRecurringEntry"
-            [@slideInOut]="asideMenuStateForRecurringEntry"
-            [mode]="'update'"
-            [isCompany]="isCompany"
-            [isConsolidatedBranch]="isConsolidatedBranch"
-            (closeAsideEvent)="toggleRecurringAsidePane('out')"
-        >
-        </app-aside-recurring-entry>
+        <ng-template #asideMenuStateForRecurringEntryTemplate>
+            <app-aside-recurring-entry
+                [invoice]="selectedInvoice"
+                [mode]="'update'"
+                [isCompany]="isCompany"
+                [isConsolidatedBranch]="isConsolidatedBranch"
+                (closeAsideEvent)="asideMenuStateForRecurringEntryDialogRef.close()"
+            >
+            </app-aside-recurring-entry>
+        </ng-template>
 
         <!-- region search template -->
         <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">

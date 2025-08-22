@@ -24,7 +24,6 @@ import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxj
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -34,7 +33,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -44,19 +43,7 @@ import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 @Component({
     selector: 'invetory-stock-report',
     templateUrl: './inventory.stockreport.component.html',
-    styleUrls: ['./inventory.stockreport.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./inventory.stockreport.component.scss']
 })
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
@@ -68,6 +55,14 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
     /** Template reference */
     @ViewChild('template', { static: true }) public template: TemplateRef<any>;
+    /** Template reference for aside menu */
+    @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu */
+    public asideMenuDialogRef: MatDialogRef<any>;
+    /** Template reference for aside transfer pane */
+    @ViewChild('asideTransferPaneTemplate', { static: true }) public asideTransferPaneTemplate: TemplateRef<any>;
+    /** Dialog reference for aside transfer pane */
+    public asideTransferPaneDialogRef: MatDialogRef<any>;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -89,7 +84,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public fromDate: string;
     public dayjs = dayjs;
     public activeStockName = null;
-    public asideMenuState: string = 'out';
     public isWarehouse: boolean = false;
     public selectedEntity: string = 'all';
     public selectedTransactionType: string = 'all';
@@ -250,8 +244,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
     public updateStockSuccess$: Observable<boolean>;
-    /** Hold the state of new transfer side pan */
-    public asideTransferPaneState: string = 'out';
     /** Hold branch transfer mode */
     public branchTransferMode: string = '';
     /** Modal Reference */
@@ -456,14 +448,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         if (event.altKey && event.which === 73) { // Alt + i
             event.preventDefault();
             event.stopPropagation();
-            this.toggleAsidePane();
+            this.openAsidePaneDialog();
         }
 
         if (event.key === KEYS.ESC) {
             event.preventDefault();
             event.stopPropagation();
-            this.asideTransferPaneState = 'out';
-            this.toggleBodyClass();
+            this.asideTransferPaneDialogRef.close();
         }
     }
 
@@ -663,21 +654,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this._toasty.infoToast('Upcoming feature');
     }
 
-    // region asidemenu toggle
-    public toggleBodyClass() {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
-    public toggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    /**
+     * open aside pane dialog
+     *
+     * @memberof InventoryStockReportComponent
+     */
+    public openAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     // From Entity Dropdown
@@ -905,17 +888,12 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     /**
-     * Toggle's the branch transfer side pan
+     * open transfer aside pane dialog
      *
-     * @param {*} [event]
      * @memberof InventoryStockReportComponent
      */
-    public toggleTransferAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    public openTransferAsidePaneDialog(): void {
+        this.asideTransferPaneDialogRef = this.dialog.open(this.asideTransferPaneTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -926,7 +904,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      */
     public openBranchTransferPopup(event: any): void {
         this.branchTransferMode = event;
-        this.toggleTransferAsidePane();
+        this.openTransferAsidePaneDialog();
         this.openModal();
     }
 

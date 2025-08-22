@@ -24,10 +24,8 @@ import { FormControl } from "@angular/forms";
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -255,7 +253,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
 

@@ -1,4 +1,3 @@
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -12,6 +11,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
@@ -23,26 +23,15 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'trial-balance-grid',
     templateUrl: './trial-balance-grid.component.html',
     styleUrls: [`./trial-balance-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
     providers: [FinancialReportsComponentStore]
 })
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
@@ -72,8 +61,10 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public hideData: boolean;
     /** True, when expand all button is toggled while search is enabled */
     public isExpandToggledDuringSearch: boolean;
-    /** Account update modal state */
-    public accountAsideMenuState: string = "out";
+    /** Template reference for aside menu account modal */
+    @ViewChild("accountAsideMenuTemplate", { static: true }) public accountAsideMenuTemplate: TemplateRef<any>;
+    /** Reference for account aside menu dialog */
+    public accountAsideMenuDialogRef: MatDialogRef<any>;
     /** Account group unique name */
     public activeGroupUniqueName: string = "";
     /** Holds account details */
@@ -233,30 +224,16 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public openAccountModal(account: any): void {
         this.accountDetails = account;
         this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     /**
-     * Toggle's account update modal
+     * Opens the account aside pane dialog
      *
      * @memberof TrialBalanceGridComponent
      */
-    public toggleAccountAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggle's fixed class in body
-     *
-     * @memberof TrialBalanceGridComponent
-     */
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
-        }
+    public openAccountAsidePaneDialog(): void {
+        this.accountAsideMenuDialogRef = this.dialog.open(this.accountAsideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -266,7 +243,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     public getUpdatedList(event: any): void {
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     /**

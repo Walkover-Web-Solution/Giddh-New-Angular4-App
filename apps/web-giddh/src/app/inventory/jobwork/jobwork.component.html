@@ -71,7 +71,7 @@
                                 <button
                                     class="btn btn-sky-blue mr-0"
                                     matTooltip="Alt+i"
-                                    (click)="toggleTransferAsidePane()"
+                                    (click)="openTransferAsidePaneDialog()"
                                 >
                                     Create New
                                 </button>
@@ -315,12 +315,11 @@
 </div>
 
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-transfer-pane>
+<ng-template #asideMenuTemplate>
+    <aside-transfer-pane
+        (closeAsideEvent)="asideMenuDialogRef.close()"
+    ></aside-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->

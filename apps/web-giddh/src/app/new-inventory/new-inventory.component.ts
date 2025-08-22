@@ -5,9 +5,10 @@ import { GeneralService } from '../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'new-inventory',
     templateUrl: './new-inventory.component.html',
@@ -17,9 +18,11 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/d
 
 export class NewInventoryComponent implements OnInit {
     /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideInventorySidebarMenuState: string = 'in';
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
+    public asideInventorySidebarMenuState: boolean = true;
+    /* This will store modal reference */
+    @ViewChild('asideMenuStateForCreateNewGroupTemplate') public asideMenuStateForCreateNewGroupTemplate: TemplateRef<any>;
+    /* This will store modal reference */
+    public asideMenuStateForCreateNewGroupDialogRef: MatDialogRef<any>;
     /* More button dropdown */
     public moreBtnDropwon: BsDropdownDirective;
     /* show search input field full width */
@@ -53,7 +56,8 @@ export class NewInventoryComponent implements OnInit {
     constructor(
         private generalService: GeneralService,
         private modalService: BsModalService,
-        private _breakPointObservar: BreakpointObserver
+        private _breakPointObservar: BreakpointObserver,
+        private dialog: MatDialog
     ) { }
 
     /*datepicker funcation*/
@@ -109,59 +113,42 @@ export class NewInventoryComponent implements OnInit {
         this.dateRangFullWidth = !this.dateRangFullWidth
     }
 
-
-    /* Aside pane toggle fixed class */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    /**
+     * This will open aside pane dialog for revision history
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openAsidePaneDialog(): void {
+        this.asideMenuStateForCreateNewGroupDialogRef.close();
+        this.asideMenuStateForCreateNewGroupDialogRef = this.dialog.open(this.asideMenuStateForCreateNewGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
-    /* Aside pane open function */
-    public toggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    /* Create group aside pane open function */
-    public createGroupToggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    /**
+     * This will open aside pane dialog for revision history
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public createGroupToggleAsidePane(): void {
+        this.asideMenuStateForCreateNewGroupDialogRef.close();
+        this.asideMenuStateForCreateNewGroupDialogRef = this.dialog.open(this.asideMenuStateForCreateNewGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /* Create item aside pane open function */
     public createItemToggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.asideMenuStateForCreateNewGroupDialogRef.close();
+        this.asideMenuStateForCreateNewGroupDialogRef = this.dialog.open(this.asideMenuStateForCreateNewGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /* Create unit aside pane open function */
-    public createUnitToggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    public createUnitToggleAsidePane(): void {
+        this.asideMenuStateForCreateNewGroupDialogRef.close();
+        this.asideMenuStateForCreateNewGroupDialogRef = this.dialog.open(this.asideMenuStateForCreateNewGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /* Create combo aside pane open function */
-    public createComboToggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    public createComboToggleAsidePane(): void {
+        this.asideMenuStateForCreateNewGroupDialogRef.close();
+        this.asideMenuStateForCreateNewGroupDialogRef = this.dialog.open(this.asideMenuStateForCreateNewGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -171,10 +158,8 @@ export class NewInventoryComponent implements OnInit {
     * @memberof SettingsComponent
     */
     public toggleSettingPane(event?): void {
-        this.toggleBodyClass();
-
-        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
-            this.asideInventorySidebarMenuState = "out";
+        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState) {
+            this.asideInventorySidebarMenuState = false;
         }
     }
     /* advance serach modal */

@@ -8,14 +8,12 @@
 </div>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<div *ngIf="asideMenuState === 'in'">
+<ng-template #asideMenuTemplate>
     <aside-pane
-        [class]="asideMenuState"
-        [@slideInOut]="asideMenuState"
         [keyboardShortcut]="'esc'"
-        (onShortcutPress)="toggleAsidePane()"
-        (closeAsideEvent)="toggleAsidePane()"
+        (onShortcutPress)="asideMenuDialogRef.close()"
+        (closeAsideEvent)="asideMenuDialogRef.close()"
     ></aside-pane>
-</div>
+</ng-template>
+
 <!-- aside menu section -->

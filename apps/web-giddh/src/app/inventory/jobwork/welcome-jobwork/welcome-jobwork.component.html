@@ -3,15 +3,14 @@
         <img src="assets/images/new/Inventory_welcome.svg" />
         <h3 class="mr-t1 font-16"><strong>Job Work</strong></h3>
         <p class="mr-t1">Add & Manage product in the inventory</p>
-        <button class="btn btn-sky-blue mr-t2" (click)="toggleTransferAsidePane()">Start</button>
+        <button class="btn btn-sky-blue mr-t2" (click)="openTransferAsidePaneDialog()">Start</button>
     </div>
 </div>
 
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-transfer-pane>
+<ng-template #asideMenuTemplate>
+    <aside-transfer-pane
+        (closeAsideEvent)="asideMenuDialogRef.close()"
+    ></aside-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
