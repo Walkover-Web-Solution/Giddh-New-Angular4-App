@@ -23,9 +23,11 @@ import { ProformaActions } from '../../actions/proforma/proforma.actions';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
-import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -35,7 +37,7 @@ import { Router } from '@angular/router';
 import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 
@@ -44,19 +46,25 @@ const VOUCHER_TYPES = ['proformas', 'estimates'];
 @Component({
     selector: 'app-proforma-list-component',
     templateUrl: './proforma-list.component.html',
-    styleUrls: [`./proforma-list.component.scss`]
+    styleUrls: ['./proforma-list.component.scss']
 })
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
-    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
-    /** Confirmation popup for delete operation */
-    @ViewChild('deleteConfirmationModel', { static: true }) public deleteConfirmationModel: ModalDirective;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
+    /** Holds the reference of delete confirmation modal */
+    @ViewChild('deleteConfirmationTemplate', { static: true }) public deleteConfirmationTemplate: TemplateRef<any>;
     @ViewChild(InvoiceAdvanceSearchComponent, { static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;
+    /** Modal service reference */
     public modalRef: BsModalRef;
-    public showAdvanceSearchModal: boolean = false;
+    @ViewChild('datePickerMenuTrigger') datePickerMenuTrigger: MatMenuTrigger;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+public showAdvanceSearchModal: boolean = false;
     public showResetAdvanceSearchIcon: boolean = false;
     public selectedItems: string[] = [];
     public selectedCustomerUniqueName: string;
@@ -71,7 +79,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     /** Current branches */
     public branches: Array<any>;
 
-    public modalConfig: ModalOptions = {
+    public modalConfig: any = {
         animated: true,
         keyboard: true,
         backdrop: 'static',
@@ -169,7 +177,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    public isDatePickerOpen: boolean = false;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
@@ -182,8 +190,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will hold if updated is account in master to refresh the list of vouchers */
     public isAccountUpdated: boolean = false;
     /* This will hold local JSON data */
@@ -196,10 +202,14 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public giddhBalanceDecimalPlaces: number = 2;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Dialog reference for advance search modal */
+    private advanceSearchDialogRef: MatDialogRef<any>;
+    /** Dialog reference for delete confirmation modal */
+    private deleteConfirmationDialogRef: MatDialogRef<any>;
 
-    constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
+    constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private dialog: MatDialog, private commonActions: CommonActions, private modalService: BsModalService) {
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = 20;
+        this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
         this.advanceSearchFilter.from = dayjs(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
         this.advanceSearchFilter.to = dayjs(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
@@ -556,9 +566,23 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.itemStateChanged(item);
     }
 
-    public toggleAdvanceSearchPopup() {
-        this.showAdvanceSearchModal = !this.showAdvanceSearchModal;
-        this.advanceSearch.toggle();
+    /**
+     * Toggles the advance search popup dialog
+     *
+     * @memberof ProformaListComponent
+     */
+    public toggleAdvanceSearchPopup(): void {
+        if (this.advanceSearchDialogRef) {
+            this.advanceSearchDialogRef.close();
+            this.advanceSearchDialogRef = null;
+            this.showAdvanceSearchModal = false;
+        } else {
+            this.showAdvanceSearchModal = true;
+            this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        }
     }
 
     public itemStateChanged(item: ProformaItem, allSelected: boolean = false) {
@@ -643,7 +667,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
         this.advanceSearchFilter = new ProformaFilter();
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = 20;
+        this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
 
         // set date picker date as application date
         if (universalDate?.length > 1) {
@@ -665,11 +689,15 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.getAll();
     }
 
-    public pageChanged(ev: any): void {
-        if (ev.page === this.advanceSearchFilter.page) {
-            return;
-        }
-        this.advanceSearchFilter.page = ev.page;
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ProformaListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.advanceSearchFilter.page = this.advanceSearchFilter.count !== event.pageSize? 1 : event.pageIndex + 1;
+        this.advanceSearchFilter.count = event.pageSize;
         this.getAll();
     }
 
@@ -700,8 +728,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public deleteVoucher() {
-        if (this.deleteConfirmationModel && this.deleteConfirmationModel.isShown) {
-            this.deleteConfirmationModel.hide();
+        if (this.deleteConfirmationDialogRef) {
+            this.deleteConfirmationDialogRef.close();
         }
         // for deleting voucher which is previewed
         if (this.selectedVoucher) {
@@ -756,12 +784,22 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      * @param {boolean} shouldOpenModal True, if the modal needs to opened
      * @memberof ProformaListComponent
      */
+    /**
+     * Toggles the delete confirmation modal dialog
+     *
+     * @param {boolean} shouldOpenModal Whether to open the modal
+     * @memberof ProformaListComponent
+     */
     public toggleConfirmationModel(shouldOpenModal: boolean = false): void {
-        if (this.deleteConfirmationModel) {
-            if (shouldOpenModal) {
-                this.deleteConfirmationModel.show();
-            } else {
-                this.deleteConfirmationModel.hide();
+        if (shouldOpenModal) {
+            this.deleteConfirmationDialogRef = this.dialog.open(this.deleteConfirmationTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
+        } else {
+            if (this.deleteConfirmationDialogRef) {
+                this.deleteConfirmationDialogRef.close();
+                this.deleteConfirmationDialogRef = null;
             }
         }
     }
@@ -828,28 +866,18 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     *To show the datepicker
+     * Toggle datepicker visibility
      *
-     * @param {*} element
+     * @param {boolean} isOpen - Whether to open or close the datepicker
+     * @param {*} element - The element that triggered the datepicker
      * @memberof ProformaListComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean, element?: any): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof ProformaListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -860,7 +888,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -868,7 +896,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

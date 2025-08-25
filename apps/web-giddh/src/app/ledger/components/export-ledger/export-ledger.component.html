@@ -10,15 +10,32 @@
         <mat-dialog-content>
             <div class="modal-body" id="export-body">
                 <form name="addShareEmailForm" novalidate autocomplete="off">
+                    <p class="mr-b1">
+                        {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
+                    </p>
                     <div class="pd-b3 clearfix">
                         <div class="form-inline">
                             <div class="form-group">
                                 <label class="w120 justify-content-start">{{ commonLocaleData?.app_date_range }}:
                                 </label>
-                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                    <input type="text" name="selectedDateRange"
-                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker" />
+                                <div class="custom-datepicker-wrapper">
+                                    <div 
+                                        class="custom-datepicker" 
+                                        [matMenuTriggerFor]="universalDatepicker"
+                                        #universalDatepickerTrigger="matMenuTrigger"
+                                        role="button"
+                                        aria-haspopup="true"
+                                        aria-controls="universalDatepicker"
+                                    >
+                                        <input
+                                            matInput
+                                            type="text"
+                                            name="selectedDateRange"
+                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                            class="giddh-datepicker date-range-picker"
+                                            readonly
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -74,17 +91,19 @@
                                 {{ commonLocaleData?.app_file_format }}
                             </div>
                             <div class="d-flex flex-column w-50">
-                                <textarea
+                                <input
+                                    matInput
+                                    #tribute="appTributeMention"
+                                    (click)="tribute?.open()"
                                     [(ngModel)]="selectedFormatList"
-                                    [placeholder]="commonLocaleData?.app_file_format"
-                                    class="form-control"
+                                    [placeholder]="commonLocaleData?.app_variable_search_hint"
+                                    class="form-control radius-none border-0 border-bottom"
                                     name="formatList"
-                                    rows="2"
                                     (ngModelChange)="getFileFormat()"
-                                    [appTributeMention]="{trigger: '{', suggestionPrefix: '{',suggestionSuffix: '}'}"
+                                    [appTributeMention]="tributeConfig"
                                     [appTributeMentionValues]="fileFormatList"
-                                ></textarea>
-                                <div class="font-12">
+                                />
+                                <div class="font-12 word-break pd-t05 pd-b05">
                                     {{ exportRequest.fileNameFormat }}
                                 </div>
                             </div>
@@ -315,7 +334,7 @@
         </mat-dialog-content>
         <mat-dialog-actions align="end">
             <div class="pd-b15">
-                <button mat-stroked-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()"
+                <button mat-raised-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()"
                     [disabled]="
             isLoading ||
             (emailTypeSelected === 'voucher' &&
@@ -324,7 +343,7 @@
         ">
                     {{ commonLocaleData?.app_download }}
                 </button>
-                <button mat-stroked-button color="primary" class="show-columnar-button unbold mr-l1"
+                <button mat-raised-button color="primary" class="show-columnar-button unbold mr-l1"
                     [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">
                     {{ commonLocaleData?.app_show }}
                 </button>
@@ -332,16 +351,26 @@
         </mat-dialog-actions>
     </div>
 </ng-container>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<!-- Angular Material datepicker menu -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+            >
+        </app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

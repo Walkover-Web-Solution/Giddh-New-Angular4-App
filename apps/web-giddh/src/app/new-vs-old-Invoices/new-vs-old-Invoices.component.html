@@ -43,7 +43,7 @@
                         </div>
                         <div
                             class="form-group mr-r1 max-width-500 d-initial flex-column"
-                            *ngIf="selectedType === 'month'"
+                            *ngIf="selectedType === selectedTypeEnum.MONTH"
                         >
                             <label>{{ localeData?.select_month_label }}</label>
                             <sh-select
@@ -63,7 +63,7 @@
 
                         <div
                             class="form-group mr-r1 max-width-500 d-initial flex-column"
-                            *ngIf="selectedType === 'quater'"
+                            *ngIf="selectedType === selectedTypeEnum.QUATER"
                         >
                             <label>{{ localeData?.select_quarter_label }}</label>
                             <sh-select
@@ -95,16 +95,16 @@
             </div>
         </div>
         <ng-container *ngIf="!isLoading">
-            <div class="d-flex month-wrapper" *ngIf="selectedType === 'month'">
+            <div class="d-flex month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.clients }}
@@ -112,9 +112,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ commonLocaleData?.app_amount }}
@@ -122,9 +122,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.no_invoices }}
@@ -135,9 +135,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-totalSales-quater'
-                                    : 'newVsOldInvoicesData-totalSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-total-sales-quater'
+                                    : 'new-vs-old-invoices-data-total-sales-month'
                             "
                         >
                             <a
@@ -163,9 +163,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-totalSales-quater'
-                                    : 'newVsOldInvoicesData-totalSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-total-sales-quater'
+                                    : 'new-vs-old-invoices-data-total-sales-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -180,9 +180,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-totalSales-quater'
-                                    : 'newVsOldInvoicesData-totalSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-total-sales-quater'
+                                    : 'new-vs-old-invoices-data-total-sales-month'
                             "
                         >
                             <a
@@ -208,7 +208,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex month-wrapper" *ngIf="selectedType === 'month'">
+            <div class="d-flex month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table bg-gray-color">
                     <div>
                         <h3 class="h3-heading">{{ bifurcationClients }}</h3>
@@ -218,9 +218,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-newSales-quater'
-                                    : 'newVsOldInvoicesData-newSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-new-sales-quater'
+                                    : 'new-vs-old-invoices-data-new-sales-month'
                             "
                         >
                             <a
@@ -246,9 +246,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-newSales-quater'
-                                    : 'newVsOldInvoicesData-newSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-new-sales-quater'
+                                    : 'new-vs-old-invoices-data-new-sales-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -263,9 +263,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-newSales-quater'
-                                    : 'newVsOldInvoicesData-newSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-new-sales-quater'
+                                    : 'new-vs-old-invoices-data-new-sales-month'
                             "
                         >
                             <a
@@ -294,9 +294,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             <a
@@ -322,9 +322,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -339,9 +339,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             <a
@@ -370,9 +370,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -398,9 +398,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -415,9 +415,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -446,9 +446,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -474,9 +474,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -491,9 +491,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -522,9 +522,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-2-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
                         >
                             <a
@@ -550,9 +550,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-2-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -567,9 +567,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-2-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
                         >
                             <a
@@ -598,9 +598,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-3-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-3-month'
                             "
                         >
                             <a
@@ -626,9 +626,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-3-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-3-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -643,9 +643,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-3-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-3-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-3-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-3-month'
                             "
                         >
                             <a
@@ -676,9 +676,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-4-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-4-month'
                             "
                         >
                             <a
@@ -704,9 +704,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-4-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-4-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -721,9 +721,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-4-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-4-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-4-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-4-month'
                             "
                         >
                             <a
@@ -749,16 +749,16 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3 month-wrapper" *ngIf="selectedType === 'month'">
+            <!-- <div class="d-flex mr-t3 month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.clients }}
@@ -766,9 +766,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ commonLocaleData?.app_amount }}
@@ -776,9 +776,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.no_invoices }}
@@ -789,9 +789,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -817,9 +817,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -834,9 +834,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -862,16 +862,16 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3 month-wrapper" *ngIf="selectedType === 'month'">
+            <div class="d-flex mr-t3 month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.clients }}
@@ -879,9 +879,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ commonLocaleData?.app_amount }}
@@ -889,9 +889,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.no_invoices }}
@@ -900,18 +900,18 @@
                     <div
                         class="div-row"
                         [attr.data-reference]="
-                            selectedType === 'quater'
-                                ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                : 'newVsOldInvoicesData-carriedSales-1-month'
+                            selectedType === selectedTypeEnum.QUATER
+                                ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                : 'new-vs-old-invoices-data-carried-sales-1-month'
                         "
                     >
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -937,9 +937,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -954,9 +954,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -981,17 +981,17 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex quarter-wrapper" *ngIf="selectedType === 'quater'">
+            </div> -->
+            <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.clients }}
@@ -999,9 +999,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ commonLocaleData?.app_amount }}
@@ -1009,9 +1009,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.no_invoices }}
@@ -1020,18 +1020,18 @@
                     <div
                         class="div-row"
                         [attr.data-reference]="
-                            selectedType === 'quater'
-                                ? 'newVsOldInvoicesData-totalSales-quater'
-                                : 'newVsOldInvoicesData-totalSales-month'
+                            selectedType === selectedTypeEnum.QUATER
+                                ? 'new-vs-old-invoices-data-total-sales-quater'
+                                : 'new-vs-old-invoices-data-total-sales-month'
                         "
                     >
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-totalSales-quater'
-                                    : 'newVsOldInvoicesData-totalSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-total-sales-quater'
+                                    : 'new-vs-old-invoices-data-total-sales-month'
                             "
                         >
                             <a
@@ -1057,9 +1057,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-totalSales-quater'
-                                    : 'newVsOldInvoicesData-totalSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-total-sales-quater'
+                                    : 'new-vs-old-invoices-data-total-sales-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1074,9 +1074,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-totalSales-quater'
-                                    : 'newVsOldInvoicesData-totalSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-total-sales-quater'
+                                    : 'new-vs-old-invoices-data-total-sales-month'
                             "
                         >
                             <a
@@ -1102,7 +1102,7 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex quarter-wrapper" *ngIf="selectedType === 'quater'">
+            <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
                 <div class="div-table bg-gray-color">
                     <div>
                         <h3 class="h3-heading">{{ bifurcationClients }}</h3>
@@ -1110,18 +1110,18 @@
                     <div
                         class="div-row mr-t3 mr-b3"
                         [attr.data-reference]="
-                            selectedType === 'quater'
-                                ? 'newVsOldInvoicesData-newSales-quater'
-                                : 'newVsOldInvoicesData-newSales-month'
+                            selectedType === selectedTypeEnum.QUATER
+                                ? 'new-vs-old-invoices-data-new-sales-quater'
+                                : 'new-vs-old-invoices-data-new-sales-month'
                         "
                     >
                         <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-newSales-quater'
-                                    : 'newVsOldInvoicesData-newSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-new-sales-quater'
+                                    : 'new-vs-old-invoices-data-new-sales-month'
                             "
                         >
                             <a
@@ -1147,9 +1147,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-newSales-quater'
-                                    : 'newVsOldInvoicesData-newSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-new-sales-quater'
+                                    : 'new-vs-old-invoices-data-new-sales-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1164,9 +1164,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-newSales-quater'
-                                    : 'newVsOldInvoicesData-newSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-new-sales-quater'
+                                    : 'new-vs-old-invoices-data-new-sales-month'
                             "
                         >
                             <a
@@ -1195,9 +1195,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             <a
@@ -1223,9 +1223,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1240,9 +1240,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             <a
@@ -1271,9 +1271,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -1299,9 +1299,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1316,9 +1316,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -1347,9 +1347,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -1375,9 +1375,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1392,9 +1392,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -1423,9 +1423,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-2-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
                         >
                             <a
@@ -1451,9 +1451,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-2-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1468,9 +1468,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-2-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-2-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-2-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-2-month'
                             "
                         >
                             <a
@@ -1496,16 +1496,16 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3 quarter-wrapper" *ngIf="selectedType === 'quater'">
+            <!-- <div class="d-flex mr-t3 quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.clients }}
@@ -1513,9 +1513,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ commonLocaleData?.app_amount }}
@@ -1523,22 +1523,22 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
-                    <div class="div-row quarter-carriedSales-0-quarter">
+                    <div class="div-row quarter-carried-sales-0-quarter">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }} {{ reportYear }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -1564,9 +1564,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1581,9 +1581,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-0-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-0-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-0-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-0-month'
                             "
                         >
                             <a
@@ -1609,16 +1609,16 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex mr-t3 quarter-wrapper" *ngIf="selectedType === 'quater'">
+            <div class="d-flex mr-t3 quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
                 <div class="div-table">
                     <div class="head-row">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.clients }}
@@ -1626,9 +1626,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ commonLocaleData?.app_amount }}
@@ -1636,22 +1636,22 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-oldSales-quater'
-                                    : 'newVsOldInvoicesData-oldSales-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-old-sales-quater'
+                                    : 'new-vs-old-invoices-data-old-sales-month'
                             "
                         >
                             {{ localeData?.no_invoices }}
                         </div>
                     </div>
-                    <div class="div-row quarter-carriedSales-1-quarter">
+                    <div class="div-row quarter-carried-sales-1-quarter">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }} {{ reportYear }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -1677,9 +1677,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <span class="d-inline-flex">
@@ -1694,9 +1694,9 @@
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
-                                selectedType === 'quater'
-                                    ? 'newVsOldInvoicesData-carriedSales-1-quater'
-                                    : 'newVsOldInvoicesData-carriedSales-1-month'
+                                selectedType === selectedTypeEnum.QUATER
+                                    ? 'new-vs-old-invoices-data-carried-sales-1-quater'
+                                    : 'new-vs-old-invoices-data-carried-sales-1-month'
                             "
                         >
                             <a
@@ -1721,7 +1721,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </ng-container>
     </div>
     <ng-container *ngIf="isLoading || monthOptions?.length === 0">

@@ -14,21 +14,19 @@ dayjs.extend(isBetween);
 import { Dayjs } from 'dayjs';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil, debounceTime, take } from 'rxjs/operators';
 import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { ServiceConfig } from '../../services/service.config';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
-import { ServiceConfig } from '../../services/service.config';
 
 export enum DateType {
     start = 'start',
@@ -114,7 +112,6 @@ export interface DateRangeClicked {
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
-    modalRef: BsModalRef;
     chosenLabel: string;
     calendarVariables: CalendarVariables = { start: {}, end: {} };
     calendarMonths: any[] = [];
@@ -208,8 +205,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @Output() choosedDate: EventEmitter<DateRangeClicked>;
     @Output() rangeClicked: EventEmitter<DateRangeClicked>;
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
+    /** his will emit event when calender is closed */
+    @Output() closeCalender: EventEmitter<void> = new EventEmitter();
     @ViewChild('pickerContainer', { static: true }) pickerContainer: ElementRef;
-    public isMobileScreen: boolean = false;
     public dropdownShow: boolean = false;
     public rangeDropdownShow: number = -1;
     public goToPreviousMonthDisabled: boolean = false;
@@ -222,8 +220,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public numberOfScrolls: number = 0;
     public isPreviousMonth: boolean = false;
     public allowedYears: any[] = [];
-    public scrollPosition: string = 'bottom';
-    public openMobileDatepickerPopup: boolean = false;
     public viewOnlyStartDate: any;
     public viewOnlyEndDate: any;
     public inlineStartDate: any;
@@ -265,16 +261,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public commonLocaleData: any = {};
 
     constructor(
-        private _ref: ChangeDetectorRef, 
-        private modalService: BsModalService, 
-        private _localeService: NgxDaterangepickerLocaleService, 
-        private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, 
+        @Inject(ServiceConfig) private serviceConfig,
+        private _ref: ChangeDetectorRef,
+        private _localeService: NgxDaterangepickerLocaleService,
+        public settingsFinancialYearService: SettingsFinancialYearService,
         private router: Router, 
         private store: Store<AppState>, 
         private settingsFinancialYearActions: SettingsFinancialYearActions, 
         private dialog: MatDialog, 
-        private generalService: GeneralService,
-        @Inject(ServiceConfig) private serviceConfig
+        private generalService: GeneralService
     ) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
@@ -338,13 +333,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
         });
 
-        this._breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-            this.closeCalender();
-        });
-
         this._buildLocale();
         this.renderRanges();
         this.emptyWeekRowClass = 'hideMe';
@@ -373,17 +361,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.rangeDropdownShow = -1;
             this.dropdownShow = false;
         });
-
-        this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isInlineDateFieldsShowing = true;
-        });
-
-        this.modalService.onHide.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isInlineDateFieldsShowing = false;
-            this.invalidInlineStartDate = "";
-            this.invalidInlineEndDate = "";
-            this.invalidInlineDate = "";
-        });
+        this.isInlineDateFieldsShowing = true;
 
         this.scrollTopSubject$.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((response) => {
             if (this.allowMouseScroll) {
@@ -408,8 +386,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.updateMonthsInView();
 
         this.initCalendar();
-
-        document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
     }
 
     /**
@@ -441,32 +417,20 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
-    public closeCalender(): void {
-        this.openMobileDatepickerPopup = false;
-        document.querySelector('body').classList.remove('hide-scroll-body');
-        document.querySelector("body").style.overflowY = null;
+    /**
+     * Sends output to the parent component on close calender
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
+    public handleCloseCalender(): void {
+        this.closeCalender.emit();
     }
 
     public closeMobileDatePicker(): void {
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
-        this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
         document.querySelector("body").style.overflowY = null;
         this.hide();
-    }
-
-    public openModalWithClass(template: TemplateRef<any>): void {
-        this.inlineStartDate = _.cloneDeep(this.startDate);
-        this.inlineEndDate = _.cloneDeep(this.endDate);
-
-
-        this.viewOnlyStartDate = this.inlineStartDate.format(GIDDH_DATE_FORMAT);
-        this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
-
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'edit-modal modal-small' }),
-
-        );
     }
 
     /**
@@ -983,11 +947,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.updateView();
         }
         this.hide();
-
-        if (this.isMobileScreen) {
-            this.closeCalender();
-        }
-
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
     }
 
@@ -1217,11 +1176,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.calculateChosenLabel();
         this.updateView();
-
-        if (this.isMobileScreen) {
-            this.emitSelectedDates(false);
-            this.hide();
-        }
     }
 
     public uptoYesterday(e: Event, days: number): void {
@@ -1231,11 +1185,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.calculateChosenLabel();
         this.updateView();
-
-        if (this.isMobileScreen) {
-            this.emitSelectedDates(false);
-            this.hide();
-        }
     }
 
     /**
@@ -1742,6 +1691,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-scroll-body');
         document.querySelector("body").style.overflowY = null;
+        this.isInlineDateFieldsShowing = false;
+        this.invalidInlineStartDate = "";
+        this.invalidInlineEndDate = "";
+        this.invalidInlineDate = "";
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2005,23 +1958,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             if (!this.invalidInlineStartDate && !this.invalidInlineEndDate) {
                 this.startDate = this.inlineStartDate;
                 this.endDate = this.inlineEndDate;
-                this.modalRef.hide();
+                this.handleCloseCalender();
                 this.handleDateChange('apply');
             }
         } else {
             this.invalidInlineDate = this.commonLocaleData?.app_datepicker?.date_error;
         }
-    }
-
-    /**
-     * This is used to mobile datepicker in mobile
-     *
-     * @memberof NgxDaterangepickerComponent
-     */
-    public openMobileDatepicker(): void {
-        this.allowMouseScroll = true;
-        this.openMobileDatepickerPopup = true;
-        document.querySelector('body').classList.add('hide-scroll-body');
     }
 
     /**
@@ -2075,12 +2017,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
     }
 
-    /**
+     /**
      * Once scrolling reaches to top, this will set calendar to 1st available month
      *
      * @memberof NgxDaterangepickerComponent
      */
-    public setCalendarToActiveMonth(position: string): void {
+     public setCalendarToActiveMonth(position: string): void {
         let index = 0;
         if (position === "end") {
             if (this.calendarMonths && this.calendarMonths.length > 0) {
@@ -2212,15 +2154,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
-        if (!this.isMobileScreen) {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
-            this.hide();
-        }
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
+        this.hide();
     }
 
     @HostListener('window:orientationchange', ['$event'])
     onOrientationChange(event) {
-        this.isMobileScreen = false;
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
         this.hide();
     }
@@ -2409,11 +2348,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 configuration: this.generalService.deleteConfiguration(this.confirmationMessage, this.commonLocaleData)
             }
         });
-        dialogRef.afterOpened().pipe(take(1)).subscribe(() => {
-           document.body.classList.add('datepicker-confirmation-open');
-        });
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
-            document.body.classList.remove('datepicker-confirmation-open');
             if (response === this.commonLocaleData?.app_yes) {
                 this.switch(type, event, range);
             } else {

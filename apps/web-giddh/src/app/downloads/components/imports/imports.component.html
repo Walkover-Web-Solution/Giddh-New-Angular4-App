@@ -3,86 +3,107 @@
     [file]="'downloads/imports'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
-    (translationComplete)="translationComplete($event)"
 >
     <div class="import-table-container overflow-visible">
-        <div class="d-flex pd-t15 pd-b15">
-            <div
-                class="activity-filter-wrap"
-                *ngIf="
-                    currentCompanyBranches?.length > 2 &&
-                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                "
-            >
-                <div class="clearfix">
-                    <div class="col-xs-12 col-sm-12">
-                        <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
-                            <div class="input-group flex-nowrap mr-b15">
-                                <div class="form-group linked-entities mr-r15 mb-0">
-                                    <sh-select
-                                        [options]="currentCompanyBranches"
-                                        [(ngModel)]="currentBranch.uniqueName"
-                                        [showClear]="false"
-                                        [ItemHeight]="33"
-                                        width="100%"
-                                        (selected)="handleBranchChange($event)"
-                                        [isFilterEnabled]="true"
-                                        [placeholder]="commonLocaleData?.app_select_entity"
-                                        [fixedValue]="currentBranch?.name"
-                                        class="entity-dropdown"
-                                    >
-                                        <ng-template #optionTemplate let-option="option">
-                                            <ng-container>
-                                                <a href="javascript:void(0)" class="list-item d-flex">
-                                                    <span class="entity-icon">
-                                                        <i
-                                                            class="pull-right"
-                                                            [ngClass]="{
-                                                                'icon-company-profile': option.consolidatedBranch,
-                                                                'icon-branch-icon': !option.consolidatedBranch
-                                                            }"
-                                                            *ngIf="!option.isCompany"
-                                                            tooltip="{{ commonLocaleData?.app_branch }}"
-                                                        ></i>
-                                                        <i
-                                                            class="icon-company-profile pull-right"
-                                                            *ngIf="option.isCompany"
-                                                            tooltip="{{ commonLocaleData?.app_company }}"
-                                                        ></i>
-                                                    </span>
-                                                    <span class="entity-details">
-                                                        <div class="item giddh-limit single-line-clamp">
-                                                            {{ option.label || "-" }}
-                                                        </div>
-                                                        <div class="item-unique giddh-limit single-line-clamp">
-                                                            {{ option.name || "-" }}
-                                                        </div>
-                                                    </span>
-                                                </a>
-                                            </ng-container>
-                                        </ng-template>
-                                    </sh-select>
+        <div class="d-flex pd-t15 pd-b15 justify-content-between">
+            <div class="d-flex">
+                <div
+                    class="activity-filter-wrap"
+                    *ngIf="
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
+                >
+                    <div class="clearfix">
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
+                                <div class="input-group flex-nowrap mr-b15">
+                                    <div class="form-group linked-entities mr-r15 mb-0">
+                                        <sh-select
+                                            [options]="currentCompanyBranches"
+                                            [(ngModel)]="currentBranch.uniqueName"
+                                            [showClear]="false"
+                                            [ItemHeight]="33"
+                                            width="100%"
+                                            (selected)="handleBranchChange($event)"
+                                            [isFilterEnabled]="true"
+                                            [placeholder]="commonLocaleData?.app_select_entity"
+                                            [fixedValue]="currentBranch?.name"
+                                            class="entity-dropdown"
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <ng-container>
+                                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                                        <span class="entity-icon">
+                                                            <i
+                                                                class="pull-right"
+                                                                [ngClass]="{
+                                                                    'icon-company-profile': option.consolidatedBranch,
+                                                                    'icon-branch-icon': !option.consolidatedBranch
+                                                                }"
+                                                                *ngIf="!option.isCompany"
+                                                                matTooltip="{{ commonLocaleData?.app_branch }}"
+                                                            ></i>
+                                                            <i
+                                                                class="icon-company-profile pull-right"
+                                                                *ngIf="option.isCompany"
+                                                                matTooltip="{{ commonLocaleData?.app_company }}"
+                                                            ></i>
+                                                        </span>
+                                                        <span class="entity-details">
+                                                            <div class="item giddh-limit single-line-clamp">
+                                                                {{ option.label || "-" }}
+                                                            </div>
+                                                            <div class="item-unique giddh-limit single-line-clamp">
+                                                                {{ option.name || "-" }}
+                                                            </div>
+                                                        </span>
+                                                    </a>
+                                                </ng-container>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="pd-l05 d-flex">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
+                <div class="pd-l05 d-flex">
+                    <div 
+                        class="custom-datepicker" 
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        tabindex="0"
+                        aria-haspopup="true"
+                        aria-controls="universal-datepicker-menu">
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            class="form-control"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            readonly
+                        />
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
+                        <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        </button>
+                    </div>
                 </div>
-                <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                    <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
-                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
-                    </button>
-                </div>
             </div>
+            <div>
+                <a
+                    class="cursor-pointer pd-1 mr-r1 bdr d-flex"
+                    (click)="getImports()"
+                    [matTooltip]="commonLocaleData?.app_refresh"
+                    [matTooltipPosition]="'above'"
+                >
+                    <span class="icon-refresh"></span>
+                </a>
+        </div>
         </div>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
@@ -112,7 +133,7 @@
                             target="_blank"
                             *ngIf="!isElectron"
                             [href]="element.path"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -121,7 +142,7 @@
                         <a
                             *ngIf="isElectron"
                             (click)="downloadFile(element.path)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -156,7 +177,7 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -179,7 +200,7 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="import-button-status"
                         >
@@ -204,43 +225,34 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="pagination-wrapper mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
-    <pagination
-        [totalItems]="importRequest?.totalItems"
-        [(ngModel)]="importRequest.page"
-        [maxSize]="5"
-        class="pagination-sm"
-        [boundaryLinks]="true"
-        [itemsPerPage]="importRequest.count"
-        [rotate]="false"
-        (pageChanged)="pageChanged($event)"
-        [firstText]="commonLocaleData?.app_first"
-        [previousText]="commonLocaleData?.app_previous"
-        [nextText]="commonLocaleData?.app_next"
-        [lastText]="commonLocaleData?.app_last"
-    ></pagination>
+<div class="mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
+    <mat-paginator
+        [length]="importRequest?.totalItems"
+        [pageSize]="importRequest.count"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="importRequest.page - 1"
+        (page)="handlePageEvent($event)"
+        [showFirstLastButtons]="true">
+    </mat-paginator>
 </div>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

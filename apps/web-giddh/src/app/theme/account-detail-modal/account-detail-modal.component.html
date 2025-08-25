@@ -3,7 +3,6 @@
     [file]="'account-detail-modal'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
 >
     <!-- AccountInfo -->
     <div
@@ -48,16 +47,6 @@
                                     commonLocaleData?.app_generate_invoice
                                 }}</a>
                             </li>
-
-                            <!-- <li class="li-link">
-                                <a href="javascript:;" (click)="performActions(3, $event)">{{commonLocaleData?.app_send_sms}}</a>
-                            </li> -->
-
-                            <!-- <li class="li-link">
-                                <a href="javascript:;" (click)="performActions(4, $event)">{{
-                                    commonLocaleData?.app_send_email
-                                }}</a>
-                            </li> -->
                         </ul>
                     </div>
                 </div>
@@ -65,78 +54,6 @@
         </div>
     </div>
 
-    <!--Modal for Mail/SMS-->
-    <div
-        class="modal account-detail-modal fade border-radius-0"
-        tabindex="-1"
-        bsModal
-        #mailModal="bs-modal"
-        role="dialog"
-        aria-hidden="true"
-        (click)="$event.stopPropagation()"
-    >
-        <div class="modal-dialog modal-md" style="margin: auto; margin-top: 200px">
-            <div class="modal-content">
-                <div class="border-radius-0">
-                    <div class="modal-header theme-bg pd-l2 pd-r2">
-                        <h3 class="modal-title bg" id="modal-title">{{ messageBody.header.set }}</h3>
-                        <button
-                            aria-hidden="true"
-                            class="close"
-                            data-dismiss="modal"
-                            [attr.aria-label]="commonLocaleData?.app_close"
-                            (click)="mailModal.hide()"
-                        >
-                            ×
-                        </button>
-                    </div>
-
-                    <div class="modal-body pd-l2 pd-r2 clearfix">
-                        <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top: 15px">
-                            {{ localeData?.enter_subject }}:
-                        </h1>
-                        <input
-                            *ngIf="messageBody.type == 'Email'"
-                            class="form-control mr-b1"
-                            #subject
-                            [(ngModel)]="messageBody.subject"
-                            type="text"
-                            [placeholder]="localeData?.enter_subject_placeholder"
-                        />
-                        <h1 class="mr-b1" style="margin-top: 15px">{{ localeData?.message_body_label }}:</h1>
-                        <textarea
-                            #messageBox
-                            [(ngModel)]="messageBody.msg"
-                            class="form-control"
-                            rows="4"
-                            style="resize: none"
-                            [placeholder]="localeData?.message_body_placeholder"
-                        ></textarea>
-                        <small class="mr-t05 mr-b05 grey" style="margin-top: 15px; display: block">{{
-                            localeData?.message_body_note
-                        }}</small>
-
-                        <div class="row mr-t2" style="border: unset; margin-top: 20px">
-                            <ul class="list-inline pills">
-                                <li
-                                    *ngFor="let val of dataVariables"
-                                    (click)="addValueToMsg(val)"
-                                    style="padding: 5px 10px !important"
-                                >
-                                    {{ val.name }}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="mr-t4">
-                            <button class="btn btn-sm btn-success pull-right mr-l1" (click)="send()">
-                                {{ messageBody.btn.set }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <div *ngIf="accountAsideMenuState === 'in'">
         <aside-menu-account

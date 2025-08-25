@@ -4,20 +4,6 @@ dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 
-export const Configuration = {
-    'AppUrl': AppUrl,
-    'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
-    'UkApiUrl': UkApiUrl,
-    'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY,
-};
-
 /** Add Company business type*/
 export enum BusinessTypes {
     Registered = 'Registered',
@@ -309,7 +295,7 @@ export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
 /** ZIP Code supported country codes */
 export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
 
-export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
+export const API_POSTMAN_DOC_URL = 'https://giddh.com/api';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -698,4 +684,37 @@ export const PaymentProvider = {
     GOCARDLESS: 'GOCARDLESS',
     PAYPAL: 'PAYPAL',
     PAYU: 'PAYU'
+};
+
+/** Weekdays enum */
+export enum WeekdaysEnum {
+    DAILY = 'daily',
+    SUNDAY = 'sunday',
+    MONDAY = 'monday',
+    TUESDAY = 'tuesday',
+    WEDNESDAY = 'wednesday',
+    THURSDAY = 'thursday',
+    FRIDAY = 'friday',
+    SATURDAY = 'saturday'
+}
+
+/** Get Bifurcation Type */
+export enum GetBifurcationType {
+    MONTH = 'month',
+    QUATER = 'quater',
+    QUARTER = 'quarter'
+}
+/** Configuration */
+export const Configuration = {
+    'AppUrl': AppUrl,
+    'ApiUrl': ApiUrl,
+    'PORTAL_URL': PORTAL_URL,
+    'OTP_WIDGET_ID': OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
+    'UkApiUrl': UkApiUrl,
+    'isElectron': isElectron,
+    'APP_FOLDER': APP_FOLDER,
+    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY
 };

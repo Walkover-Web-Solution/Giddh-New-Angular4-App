@@ -60,14 +60,14 @@
                             <div class="d-flex column-gap1">
                                 <button
                                     *ngIf="!transportEditMode"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="generateTransporter(transportedCreateEditForm.value)"
                                 >
                                     {{ commonLocaleData?.app_save }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="transportEditMode"
                                     (click)="updateTransporter(transportedCreateEditForm.value)"
@@ -114,23 +114,18 @@
                         </table>
                     </div>
                     <div
-                        class="pagination-wrapper mt-4"
+                        class="mt-4"
                         *ngIf="transporterObj?.totalItems > transporterObj.count && !isLoading"
                     >
-                        <pagination
-                            [totalItems]="transporterObj?.totalItems"
-                            [(ngModel)]="transporterObj.page"
-                            [maxSize]="5"
-                            class="pagination-sm"
-                            [boundaryLinks]="true"
-                            [itemsPerPage]="transporterObj.count"
-                            [rotate]="false"
-                            (pageChanged)="pageChanged($event)"
-                            [firstText]="commonLocaleData?.app_first"
-                            [previousText]="commonLocaleData?.app_previous"
-                            [nextText]="commonLocaleData?.app_next"
-                            [lastText]="commonLocaleData?.app_last"
-                        ></pagination>
+                        <mat-paginator
+                            [length]="transporterObj?.totalItems"
+                            [pageSize]="transporterObj.count"
+                            [pageIndex]="transporterObj.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
                     </div>
                 </div>
             </div>

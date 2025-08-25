@@ -228,12 +228,12 @@
                                                                         }"
                                                                         class="pull-right"
                                                                         *ngIf="item?.entity === 'BRANCH'"
-                                                                        [tooltip]="commonLocaleData?.app_branch"
+                                                                        [matTooltip]="commonLocaleData?.app_branch"
                                                                     ></i>
                                                                     <i
                                                                         class="icon-warehouse-icon pull-right"
                                                                         *ngIf="item?.entity === 'WAREHOUSE'"
-                                                                        [tooltip]="commonLocaleData?.app_warehouse"
+                                                                        [matTooltip]="commonLocaleData?.app_warehouse"
                                                                     ></i>
                                                                 </span>
                                                                 <span class="entity-details">
@@ -384,12 +384,12 @@
                                                                         }"
                                                                         class="pull-right"
                                                                         *ngIf="item?.entity === 'BRANCH'"
-                                                                        [tooltip]="commonLocaleData?.app_branch"
+                                                                        [matTooltip]="commonLocaleData?.app_branch"
                                                                     ></i>
                                                                     <i
                                                                         class="icon-warehouse-icon pull-right"
                                                                         *ngIf="item?.entity === 'WAREHOUSE'"
-                                                                        [tooltip]="commonLocaleData?.app_warehouse"
+                                                                        [matTooltip]="commonLocaleData?.app_warehouse"
                                                                     ></i>
                                                                 </span>
                                                                 <span class="entity-details">
@@ -499,12 +499,12 @@
                                                                         }"
                                                                         class="pull-right"
                                                                         *ngIf="item?.entity === 'BRANCH'"
-                                                                        [tooltip]="commonLocaleData?.app_branch"
+                                                                        [matTooltip]="commonLocaleData?.app_branch"
                                                                     ></i>
                                                                     <i
                                                                         class="icon-warehouse-icon pull-right"
                                                                         *ngIf="item?.entity === 'WAREHOUSE'"
-                                                                        [tooltip]="commonLocaleData?.app_warehouse"
+                                                                        [matTooltip]="commonLocaleData?.app_warehouse"
                                                                     ></i>
                                                                 </span>
                                                                 <span class="entity-details">
@@ -555,7 +555,7 @@
                                     <div class="col-xs-12 col-sm-12 text-left">
                                         <div>
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 [ladda]="showLoader"
                                                 [disabled]="addressForm?.invalid"

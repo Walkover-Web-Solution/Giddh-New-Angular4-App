@@ -8,15 +8,14 @@
             <h3 class="pd-b1">{{ localeData?.share_with }}</h3>
             <!--share account from-->
             <form
-                name="shareGroupForm"
-                #shareAccountForm="ngForm"
+                [formGroup]="shareAccountForm"
                 novalidate
                 autocomplete="off"
             >
                 <div class="row pd-b2">
                     <div class="col-md-6">
                         <input-field
-                            [(ngModel)]="email"
+                            formControlName="email"
                             [placeholder]="commonLocaleData?.app_email_id"
                             [name]="'userEmail'"
                             [required]="true"
@@ -24,9 +23,9 @@
                             [pattern]="giddhEmailRegex"
                         ></input-field>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 d-flex align-items-center justify-content-between">
                         <reactive-dropdown-field
-                            class="pull-left w-100"
+                            class="pull-left w-75"
                             [label]="localeData?.permission_role_name"
                             [placeholder]="commonLocaleData?.app_select"
                             [disabled]="isUserRestricted"
@@ -34,20 +33,19 @@
                             [options]="allPermissions"
                             [name]="'selectedPermission'"
                             [required]="true"
-                            [inputReadonly]="true"
-                            (selectedOption)="$event && selectedPermission = $event.value"
+                            formControlName="permission"
+                            [labelValue]="selectedPermission"
+                            (selectedOption)="$event && selectedPermission = $event.label"
                         >
                         </reactive-dropdown-field>
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            [disabled]="shareAccountForm.invalid || isUserRestricted"
+                            (click)="shareAccount()">
+                            {{ commonLocaleData?.app_share }}
+                        </button>
                     </div>
-                </div>
-                <div class="pull-right">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        [disabled]="shareAccountForm.invalid || isUserRestricted" 
-                        (click)="shareAccount()">
-                        {{ commonLocaleData?.app_share }}
-                    </button>
                 </div>
             </form>
         </div>
@@ -76,7 +74,6 @@
                                     [placeholder]="commonLocaleData?.app_select"
                                     [options]="allPermissions"
                                     [name]="'selectedPermission' + i"
-                                    [inputReadonly]="true"
                                     [labelValue]="val?.roleName"
                                     (selectedOption)="$event && updatePermission(val, $event)"
                                 >
@@ -84,7 +81,6 @@
 
                                 <button
                                     mat-stroked-button
-                                    color="primary"
                                     (click)="unShareAccount(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"
                                 >

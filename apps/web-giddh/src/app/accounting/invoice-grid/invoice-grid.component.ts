@@ -15,7 +15,8 @@ import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } fr
 import * as dayjs from 'dayjs';
 import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
@@ -63,12 +64,14 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
+    @ViewChild('quickAccountTemplate', { static: true }) public quickAccountTemplate: TemplateRef<any>;
+    /** Dialog reference for quick account modal */
+    private quickAccountDialogRef: MatDialogRef<any>;
 
     @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
     @ViewChild('particular', { static: true }) public accountField: any;
     @ViewChild('dateField', { static: true }) public dateField: ElementRef;
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: any;
     @ViewChild('partyAccNameInputField', { static: true }) public partyAccNameInputField: ElementRef;
     @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
@@ -148,6 +151,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private inventoryService: InventoryService,
         private inventoryAction: InventoryAction,
         private invoiceActions: InvoiceActions,
+        private dialog: MatDialog
     ) {
         this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
@@ -971,10 +975,18 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         });
     }
 
+    /**
+     * Shows the quick account modal dialog
+     *
+     * @memberof InvoiceGridComponent
+     */
     public showQuickAccountModal() {
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal?.show();
+            this.quickAccountDialogRef = this.dialog.open(this.quickAccountTemplate, {
+                panelClass: 'mat-dialog-sm',
+                disableClose: true
+            });
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
             // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
@@ -983,8 +995,13 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         }
     }
 
+    /**
+     * Hides the quick account modal dialog
+     *
+     * @memberof InvoiceGridComponent
+     */
     public hideQuickAccountModal() {
-        this.quickAccountModal.hide();
+        this.quickAccountDialogRef?.close();
     }
 
 

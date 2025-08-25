@@ -1,5 +1,6 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ToasterService } from '../../../services/toaster.service';
@@ -13,13 +14,13 @@ import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { CopyType } from '../../../shared/Enums/common.enum';
+import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -48,16 +49,14 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Reference to universal date picker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -66,8 +65,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** To hold export request object */
     public exportRequest: ExportBodyRequest = {
         from: '',
@@ -102,9 +99,9 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
     public fileFormatList = [
-        { value: 'DATE', key: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
-        { value: 'ENTRY_NO', key: 'Entry No', showValue: "3824" },
-        { value: 'ACC_NAME', key: 'Account Name', showValue: "Walkover" }
+        { value: 'Voucher Date', label: 'Voucher Date', key: 'DATE', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'Entry No', label: 'Entry No', key: 'ENTRY_NO', showValue: "3824" },
+        { value: 'Account Name', label: 'Account Name', key: 'ACC_NAME', showValue: "Walkover" }
     ];
     /** List of selected file formats */
     public selectedFormatList: string = "";
@@ -114,6 +111,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public fileFormatPrefix: string = "AS";
     /* Will check if form is valid */
     public isValidForm: boolean = true;
+    /** Tribute config */
+    public tributeConfig: TributeConfig = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+    };
 
     constructor(
         private ledgerService: LedgerService,
@@ -124,7 +127,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
         private changeDetectorRef: ChangeDetectorRef,
-        private modalService: BsModalService,
         private router: Router,
         private componentStore: VoucherComponentStore
     ) {
@@ -207,40 +209,44 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.from = this.fromDate;
         exportRequest.to = this.toDate;
 
-        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
-        if (body && body.dataToSend) {
-            body.dataToSend.type = this.emailTypeSelected;
-            body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
-            body.dataToSend.sort = this.exportRequest.sort ? 'ASC' : 'DESC';
-            body.dataToSend.from = this.fromDate;
-            body.dataToSend.to = this.toDate;
-            body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
-            body.dataToSend.exportType = this.exportRequest.exportType;
-            body.dataToSend.fileType = this.fileType;
-            if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
-                body.dataToSend.showInAccountCurrency = this.exportRequest.showInAccountCurrency;
-            }
-            if (this.emailTypeSelected === this.emailTypeDetail) {
-                body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
-                if (!this.exportRequest.ledgerView) {
-                    body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
-                    body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
-                    body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
-                    body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
-                    body.dataToSend.showDescription = this.exportRequest.showDescription;
-                }
+        let ledgerRequest: any = {
+            type: this.emailTypeSelected,
+            balanceTypeAsSign: this.balanceTypeAsSign,
+            sort: this.exportRequest.sort ? 'ASC' : 'DESC',
+            from: this.fromDate,
+            to: this.toDate,
+            accountUniqueName: this.inputData?.accountUniqueName,
+            exportType: this.exportRequest.exportType,
+            fileType: this.fileType,
+            q: this.inputData?.searchText
+        }
+        if (this.inputData?.advanceSearchRequest?.isAdvanceSearchImplemented) {
+            ledgerRequest['ledgerAdvanceFilter'] = this.inputData?.advanceSearchRequest?.dataToSend;
+        }
+        if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
+            ledgerRequest['showInAccountCurrency'] = this.exportRequest.showInAccountCurrency;
+        }
+        if (this.emailTypeSelected === this.emailTypeDetail) {
+            ledgerRequest['ledgerView'] = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
+            if (!this.exportRequest.ledgerView) {
+                ledgerRequest['showEntryVoucherNo'] = this.exportRequest.showEntryVoucherNo;
+                ledgerRequest['showVoucherNumber'] = this.exportRequest.showVoucherNumber;
+                ledgerRequest['showVoucherTotal'] = this.exportRequest.showVoucherTotal;
+                ledgerRequest['showEntryVoucher'] = this.exportRequest.showEntryVoucher;
+                ledgerRequest['showDescription'] = this.exportRequest.showDescription;
             }
         }
+
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
-                        this.toaster.showSnackBar("success", response.body.file);
+                        this.toaster.showSnackBar("success", response.body.name);
                     } else {
-                        let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
-                        return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
+                        let blob = this.generalService.base64ToBlob(response?.body?.data, 'application/vnd.ms-excel', 512);
+                        return download(response.body.name, blob, 'application/vnd.ms-excel');
                     }
                 } else if (response?.message) {
                     this.toaster.showSnackBar("error", response?.message);
@@ -259,7 +265,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
                 if (this.exportRequest.attachmentExport) {
-                    postRequest.fileNameFormat = this.selectedFormatList.trim().length ? this.selectedFormatList.trim().replaceAll("{", "${") : ("-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}");
+                    let fileNameFormat = this.selectedFormatList?.trim();
+                    if (fileNameFormat?.length) {
+                        this.fileFormatList.forEach(format => {
+                            const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
+                            fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
+                        });
+                        postRequest.fileNameFormat = fileNameFormat;
+                    } else {
+                        postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+                    }
                 }
                 if (this.exportRequest.voucherExport) {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
@@ -273,7 +288,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
-            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, ledgerRequest, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
@@ -291,10 +306,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 if (response?.body?.status === "success") {
                                     if (response.queryString.fileType === 'xlsx') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                                        return download(response.body.fileName, blob, 'application/vnd.ms-excel');
                                     } else if (response.queryString.fileType === 'pdf') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                                        return download(response.body.fileName, blob, 'application/pdf');
                                     }
                                 } else {
                                     this.toaster.showSnackBar("success", response.body.message);
@@ -344,28 +359,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         });
     }
     /**
-    *To show the datepicker
-    *
-    * @param {*} element
-    * @memberof ExportLedgerComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
+     * This will show the datepicker
      *
+     * @param {boolean} isOpen
      * @memberof ExportLedgerComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
     }
 
     /**
@@ -376,7 +380,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -384,7 +388,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -412,7 +416,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public getFileFormat() {
         let fileNameFormat = this.selectedFormatList;
         this.fileFormatList.forEach((format) => {
-            if(this.selectedFormatList.includes(`{${format.value}}`)) {
+            if (this.selectedFormatList.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }
         });

@@ -6,9 +6,10 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
@@ -95,7 +96,7 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         ReactiveFormsModule,
         Daterangepicker,
         FinancialReportsRoutingModule,
-        TabsModule.forRoot(),
+        MatTabsModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
@@ -106,7 +107,6 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         ClickOutsideModule,
         BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -114,13 +114,15 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule.forRoot(),
         AsideMenuAccountModule,
         FinancialSearchPipe,
         MatButtonModule,
         CompareWithDateRangePickerComponent,
         MatCheckboxModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
 })
 export class FinancialReportsModule {

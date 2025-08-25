@@ -111,7 +111,7 @@
                         <div class="col-12 mt-4">
                             <div class="d-flex justify-content-end column-gap1">
                                 <button mat-stroked-button class="min-width-100">Clear</button>
-                                <button mat-stroked-button color="primary" class="min-width-100" disabled>
+                                <button mat-raised-button color="primary" class="min-width-100" disabled>
                                     Convert to Adjust
                                 </button>
                             </div>
@@ -268,23 +268,8 @@
         <div class="action-button-wrapper">
             <div class="d-flex justify-content-end column-gap1">
                 <button mat-stroked-button class="min-width-100">Clear</button>
-                <button mat-stroked-button color="primary" class="min-width-100" disabled>Convert to Adjust</button>
+                <button mat-raised-button color="primary" class="min-width-100" disabled>Convert to Adjust</button>
             </div>
         </div>
     </div>
 </ng-container>
-
-<!-- Datepicker template -->
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>

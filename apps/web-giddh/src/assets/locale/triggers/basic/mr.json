@@ -6,5 +6,7 @@
     "trigger_module": "ट्रिगर मॉड्यूल",
     "execution_time": "अंमलबजावणी वेळ",
     "conditions": "अटी",
-    "disabled": "अक्षम"
+    "disabled": "अक्षम",
+    "due_by": "देय रक्कम",
+    "due_amount": "देय रक्कम"
 }

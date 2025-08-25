@@ -60,8 +60,8 @@
                         {{ acc.siteName }}
                         <button
                             class="btn btn-link mr-l1"
-                            [tooltip]="commonLocaleData?.app_refresh"
-                            placement="top"
+                            [matTooltip]="commonLocaleData?.app_refresh"
+                            matTooltipPosition="above"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
                             *ngIf="acc?.status !== 'FAILED'"
                         >
@@ -69,8 +69,8 @@
                         </button>
                         <button
                             class="btn btn-link mr-l1"
-                            [tooltip]="commonLocaleData?.app_refresh"
-                            placement="top"
+                            [matTooltip]="commonLocaleData?.app_refresh"
+                            matTooltipPosition="above"
                             (click)="
                                 connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)
                             "
@@ -169,8 +169,8 @@
                                 >
                                     <i
                                         class="icon-trash text-gray"
-                                        [tooltip]="localeData?.delete_bank"
-                                        placement="top"
+                                        [matTooltip]="localeData?.delete_bank"
+                                        matTooltipPosition="above"
                                     ></i>
                                 </button>
                             </ng-container>
@@ -193,7 +193,7 @@
                                     class="no-btn font-16 pos-abs bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
-                                    <i class="icon-trash" [tooltip]="localeData?.delete_bank" placement="top"></i>
+                                    <i class="icon-trash" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
                                 </button>
                             </ng-container>
 
@@ -249,34 +249,29 @@
         </div>
     </div>
     <!-- Connect-Bank-Modal -->
-
-    <div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog" tabindex="-1">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <connect-bank-modal
-                    (modalCloseEvent)="closeModal()"
-                    [providerId]="selectedProvider"
-                    [isRefreshWithCredentials]="isRefreshWithCredentials"
-                    (refreshAccountEvent)="onRefreshToken($event, true)"
-                    [providerAccountId]="providerAccountId"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                >
-                </connect-bank-modal>
-            </div>
+    <ng-template #connectBankTemplate>
+        <div mat-dialog-content>
+            <connect-bank-modal
+                (modalCloseEvent)="closeModal()"
+                [providerId]="selectedProvider"
+                [isRefreshWithCredentials]="isRefreshWithCredentials"
+                (refreshAccountEvent)="onRefreshToken($event, true)"
+                [providerAccountId]="providerAccountId"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+            >
+            </connect-bank-modal>
         </div>
-    </div>
+    </ng-template>
 
     <!-- Confirmation Modal -->
-    <div bsModal #confirmationModal="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <setting-l-acc-confirmation-modal
-                    [message]="confirmationMessage"
-                    [commonLocaleData]="commonLocaleData"
-                    (closeModelEvent)="closeConfirmationModal($event)"
-                ></setting-l-acc-confirmation-modal>
-            </div>
+    <ng-template #confirmationTemplate>
+        <div mat-dialog-content>
+            <setting-l-acc-confirmation-modal
+                [message]="confirmationMessage"
+                [commonLocaleData]="commonLocaleData"
+                (closeModelEvent)="closeConfirmationModal($event)"
+            ></setting-l-acc-confirmation-modal>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

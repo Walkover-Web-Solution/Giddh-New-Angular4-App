@@ -7,7 +7,6 @@ import { IServiceConfigArgs, ServiceConfig } from "../../../services/service.con
 import { GeneralService } from "../../../services/general.service";
 import { SALES_BIFURCATION_API } from "./sales-bifurcation-details.api";
 
-
 @Injectable()
 export class SalesBifurcationDetailsService {
     constructor(
@@ -32,7 +31,7 @@ export class SalesBifurcationDetailsService {
             ?.replace(':dataType', params?.dataType?.toString())
             ?.replace(':page', params?.page?.toString())
             ?.replace(':count', params?.count?.toString())
-            ?.replace(':q', params?.q?.toString())
+            ?.replace(':q', encodeURIComponent(params?.q || ''))
             ?.replace(':sort', params?.sort?.toString())
             ?.replace(':sortBy', params?.sortBy?.toString())
             ?.replace(':fromDate', params?.fromDate?.toString() ?? '')

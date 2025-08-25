@@ -84,6 +84,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public isCompany: boolean = true;
     /** Hold broadcast event */
     public broadcast: any;
+    /** True if show clear filter */
+    public showClearFilter : boolean = false;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -219,6 +221,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrDocumentsRequestParams.branchUniqueName = res.branchUniqueName;
                 this.ocrDocumentsRequestParams.from = res.from;
                 this.ocrDocumentsRequestParams.to = res.to;
+                this.showClearFilter = false;
                 this.getAllOcrDocuments(false);
             }
         });
@@ -378,9 +381,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public handlePageChange(event: any): void {
-        this.pageIndex = event.pageIndex;
+        if (this.ocrDocumentsRequestParams.count !== event.pageSize) {
+            this.ocrDocumentsRequestParams.page = 1;
+            this.pageIndex = 0;
+        } else {
+            this.ocrDocumentsRequestParams.page = event.pageIndex + 1;
+            this.pageIndex = event.pageIndex;
+        }
         this.ocrDocumentsRequestParams.count = event.pageSize;
-        this.ocrDocumentsRequestParams.page = event.pageIndex + 1;
         this.getAllOcrDocuments(false);
     }
 
@@ -393,6 +401,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.showStatus = false;
         this.showUploadedBy = false;
         this.showFileName = false;
+        this.showClearFilter = false;
         this.ocrDocumentListForm.patchValue({
             status: null,
             fileName: null,
@@ -447,6 +456,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public dateSelectedCallback(event: any): void {
+        this.showClearFilter = true;
         this.ocrDocumentsRequestParams.from = event.from;
         this.ocrDocumentsRequestParams.to = event.to;
         this.getAllOcrDocuments(true);

@@ -4,9 +4,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -41,11 +40,14 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 
 @NgModule({
@@ -62,13 +64,12 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         PurchaseRoutingModule,
         InvoiceModule,
         CollapseModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         BsDropdownModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
-        TooltipModule.forRoot(),
         ClickOutsideModule,
         TabsModule.forRoot(),
         ElementViewChildModule,
@@ -81,6 +82,8 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         DiscountControlModule,
         NoDataModule,
         MatSlideToggleModule,
+        MatTooltipModule,
+        MatTabsModule,
         VoucherAddBulkItemsModule,
         TranslateDirectiveModule,
         KeyboardShortutModule,
@@ -102,6 +105,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         FormFieldsModule,
         MatFormFieldModule,
         MatInputModule,
+        MatMenuModule,
         PurchaseSettingModule
     ]
 })

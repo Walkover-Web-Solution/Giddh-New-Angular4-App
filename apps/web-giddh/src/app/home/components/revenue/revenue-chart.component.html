@@ -34,7 +34,7 @@
                                     <span class="this-week pull-right"
                                         ><span
                                             class="icon-collapse-icon mr-l1"
-                                            [tooltip]="commonLocaleData?.app_expand"
+                                            [matTooltip]="commonLocaleData?.app_expand"
                                             (click)="showLineChart()"
                                         ></span>
                                     </span>
@@ -208,7 +208,7 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="page-title">
                         <div class="collapse-close" (click)="showColumnChart()">
-                            <span class="icon-collapse-icon" [tooltip]="commonLocaleData?.app_collapse"></span>
+                            <span class="icon-collapse-icon" [matTooltip]="commonLocaleData?.app_collapse"></span>
                         </div>
                         <h1>{{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] | titlecase }}</h1>
                     </div>

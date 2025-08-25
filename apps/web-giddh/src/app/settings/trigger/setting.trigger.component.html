@@ -239,7 +239,7 @@
                                         <i
                                             class="icon-edit-pencil"
                                             aria-hidden="true"
-                                            [tooltip]="commonLocaleData?.app_edit"
+                                            [matTooltip]="commonLocaleData?.app_edit"
                                         ></i>
                                     </button>
                                     <button
@@ -251,7 +251,7 @@
                                         <i
                                             class="fa fa-trash"
                                             aria-hidden="true"
-                                            [tooltip]="commonLocaleData?.app_delete"
+                                            [matTooltip]="commonLocaleData?.app_delete"
                                         ></i>
                                     </button>
                                     <button
@@ -263,7 +263,7 @@
                                         <i
                                             class="fa fa-check"
                                             aria-hidden="true"
-                                            [tooltip]="commonLocaleData?.app_save"
+                                            [matTooltip]="commonLocaleData?.app_save"
                                         ></i>
                                     </button>
                                     <button
@@ -275,7 +275,7 @@
                                         <i
                                             class="icon-cross"
                                             aria-hidden="true"
-                                            [tooltip]="commonLocaleData?.app_reset"
+                                            [matTooltip]="commonLocaleData?.app_reset"
                                         ></i>
                                     </button>
                                 </td>
@@ -296,23 +296,15 @@
             </div>
         </div>
     </div>
-    <!-- Trigger Confirmation Model model -->
-    <div
-        bsModal
-        #triggerConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ ignoreBackdropClick: true }"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-tax-confirmation-model
-                    [message]="confirmationMessage"
-                    [commonLocaleData]="commonLocaleData"
-                    (userConfirmationEvent)="userConfirmation($event)"
-                >
-                </delete-tax-confirmation-model>
-            </div>
+    <!-- Trigger Confirmation Model template -->
+    <ng-template #triggerConfirmationTemplate>
+        <div mat-dialog-content>
+            <delete-tax-confirmation-model
+                [message]="confirmationMessage"
+                [commonLocaleData]="commonLocaleData"
+                (userConfirmationEvent)="userConfirmation($event)"
+            >
+            </delete-tax-confirmation-model>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

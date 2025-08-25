@@ -210,57 +210,51 @@
         </div>
         <div class="modal-footer d-flex justify-content-start">
             <button
-                class="btn btn-success"
+                mat-raised-button color="primary"
                 (click)="updateBulkInvoice()"
                 [ladda]="updateInProcess"
                 [disabled]="bulkUpdateForm.invalid"
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button class="btn btn-danger" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </form>
 </div>
 
 <!--InfoModel-->
-<div bsModal #bulkUpdateImageSlogan="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div>
-                <div class="modal-header">
-                    <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
-                    <button
-                        aria-hidden="true"
-                        class="close"
-                        data-dismiss="modal"
-                        (click)="onCancelBulkUpdateImageSloganModal()"
-                    >
-                        ×
-                    </button>
-                </div>
-                <div class="model-body clearfix pd-2">
-                    <h3>{{ localeData?.bulk_image_note }}</h3>
-                    <h4 class="mr-t2">
-                        <b> {{ localeData?.want_proceed }}</b>
-                    </h4>
-                    <div class="text-left mr-t2 clearfix">
-                        <button
-                            type="submit"
-                            class="btn btn-sm btn-success"
-                            (click)="onConfirmationUpdateImageSlogan()"
-                        >
-                            {{ commonLocaleData?.app_yes }}
-                        </button>
-                        <button
-                            type="submit"
-                            class="btn btn-sm btn-danger"
-                            (click)="onCancelBulkUpdateImageSloganModal()"
-                        >
-                            {{ commonLocaleData?.app_no }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<ng-template #bulkUpdateImageSloganTemplate>
+    <div mat-dialog-title class="modal-header">
+        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
+        <button
+            mat-dialog-close
+            aria-hidden="true"
+            class="close"
+            (click)="onCancelBulkUpdateImageSloganModal()"
+        >
+            ×
+        </button>
     </div>
-</div>
+    <div mat-dialog-content class="model-body clearfix pd-2">
+        <h3>{{ localeData?.bulk_image_note }}</h3>
+        <h4 class="mr-t2">
+            <b> {{ localeData?.want_proceed }}</b>
+        </h4>
+    </div>
+    <div mat-dialog-actions class="text-left mr-t2 clearfix">
+        <button
+            type="submit"
+            class="btn btn-sm btn-success"
+            (click)="onConfirmationUpdateImageSlogan()"
+        >
+            {{ commonLocaleData?.app_yes }}
+        </button>
+        <button
+            type="submit"
+            class="btn btn-sm btn-danger"
+            (click)="onCancelBulkUpdateImageSloganModal()"
+        >
+            {{ commonLocaleData?.app_no }}
+        </button>
+    </div>
+</ng-template>

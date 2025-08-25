@@ -1,11 +1,10 @@
 import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, Inject, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
 import { GstReconcileActions } from '../../../../../actions/gst-reconcile/gst-reconcile.actions';
@@ -56,7 +55,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public gstr2entityType = [];
     public filterParam: GStTransactionRequest = new GStTransactionRequest();
     public imgPath: string = '';
-    public modalRef: BsModalRef;
     public modalConfig = {
         animated: true,
         keyboard: false,
@@ -199,19 +197,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
-    /**
-     * Handle page change
-     *
-     * @param {*} event
-     * @memberof SubscriptionComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.filterParam.count = event.pageSize;
-            this.pageIndex = event.pageIndex;
-            this.viewFilteredTxn('page', event.pageIndex + 1);
-        }
-    }
+
 
     /**
      * This will handle invoice selection

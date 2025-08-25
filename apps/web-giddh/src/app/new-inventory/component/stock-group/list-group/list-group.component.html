@@ -37,7 +37,7 @@
                     <div class="cursor-pointer mx-2">
                         <strong
                             [routerLink]="['/pages/inventory/v2/about-group-detail']"
-                            tooltip="Group Unique Name"
+                            matTooltip="Group Unique Name"
                             class="text-black"
                         >
                             {{ element.group }}</strong
@@ -53,7 +53,7 @@
             <th mat-header-cell *matHeaderCellDef>Opening Value</th>
             <td data-title="Opening Value" mat-cell *matCellDef="let element">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
@@ -70,7 +70,7 @@
             <th mat-header-cell *matHeaderCellDef>Inward Value</th>
             <td data-title="Inward Value" mat-cell *matCellDef="let element">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
@@ -87,7 +87,7 @@
             <th mat-header-cell *matHeaderCellDef>Outward Value</th>
             <td data-title="Outward Value" mat-cell *matCellDef="let element">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"
@@ -102,7 +102,7 @@
             <th mat-header-cell *matHeaderCellDef>Closing Value</th>
             <td data-title="Closing Value" mat-cell *matCellDef="let element">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     class="bdr-radius-50 font-15"
                     (click)="showValue()"
                     *ngIf="!showValueCondition"

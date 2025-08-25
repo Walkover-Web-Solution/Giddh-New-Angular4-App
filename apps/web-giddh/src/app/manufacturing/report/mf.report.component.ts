@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
@@ -18,6 +18,8 @@ import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from './../../app.constant';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
@@ -60,16 +62,14 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public endDate: Date;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** MatMenuTrigger directive to get reference of element */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -78,11 +78,11 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
     public activeStockGroup: string;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     private universalDate: Date[];
     private lastPage: number = 0;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -111,8 +111,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** This will hold warehouses list based on branch */
     public allWarehouses: any[] = [];
-
-    constructor(
+constructor(
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
@@ -120,7 +119,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
         public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private warehouseActions: WarehouseActions
     ) {
@@ -249,7 +247,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.mfStockSearchRequest.searchBy = '';
         this.mfStockSearchRequest.searchOperation = '';
         this.mfStockSearchRequest.page = 1;
-        this.mfStockSearchRequest.count = 20;
+        this.mfStockSearchRequest.count = this.pageSizeOptions[2];
     }
 
     public goToCreateNewPage() {
@@ -264,14 +262,24 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));
     }
 
-    public pageChanged(event: any): void {
-        if (event.page !== this.lastPage) {
-            this.lastPage = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof MfReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if ((event.pageIndex + 1) !== this.lastPage || this.mfStockSearchRequest.count !== event.pageSize) {
             let data = cloneDeep(this.mfStockSearchRequest);
-            data.page = event.page;
+            data.page = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.lastPage = this.mfStockSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            data.count = event.pageSize;
+            this.mfStockSearchRequest.count = event.pageSize;
             this.store.dispatch(this.manufacturingActions.GetMfReport(data));
         }
     }
+    
+
 
     public editMFItem(item) {
         if (item?.uniqueName) {
@@ -331,30 +339,19 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
+    
     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -365,7 +362,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -373,7 +370,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

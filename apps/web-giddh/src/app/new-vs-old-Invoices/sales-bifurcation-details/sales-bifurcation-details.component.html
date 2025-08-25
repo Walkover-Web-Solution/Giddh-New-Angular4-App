@@ -7,7 +7,7 @@
     <div class="dialog-header">
         <h3 class="modal-title">
             {{
-                salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.client
+                salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client
                     ? commonLocaleData?.app_client
                     : commonLocaleData?.app_invoice
             }}
@@ -31,7 +31,7 @@
                         [autofocus]="true"
                         [formControl]="searchValue"
                         [placeholder]="
-                            salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.client
+                            salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client
                                 ? commonLocaleData?.app_search_by_name_and_unique_name
                                 : commonLocaleData?.app_search_by_invoice_number_customer_name_and_amount
                         "
@@ -48,9 +48,9 @@
                 </mat-form-field>
                 <div *ngIf="showClearFilter">
                     <a
-                        class="cursor-pointer refresh-button"
+                        class="cursor-pointer refresh-button pd-1 mr-l1"
                         (click)="resetFilter()"
-                        tooltip="{{ commonLocaleData?.app_reset_filter }}"
+                        matTooltip="{{ commonLocaleData?.app_reset_filter }}"
                     >
                         <span class="icon-refresh"></span>
                     </a>
@@ -61,7 +61,7 @@
                 class="table-responsive mt-3"
                 *ngIf="
                     !(salesBifurcationDetailsListInProgress$ | async) &&
-                    salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.client &&
+                    salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client &&
                     (salesBifurcationDetailsList$ | async)?.clientDetails?.length > 0
                 "
             >
@@ -100,8 +100,8 @@
                                 [rowIndex]="i"
                                 [useRowIndexVisibility]="true"
                                 (editAccount)="updateAccount()"
-                                [fromDate]="requestParams.fromDate"
-                                [toDate]="requestParams.toDate"
+                                [fromDate]="goToLedgerDateRangeFrom"
+                                [toDate]="goToLedgerDateRangeTo"
                             >
                             </app-action-menu>
                         </td>
@@ -134,7 +134,7 @@
                 class="table-responsive mt-3"
                 *ngIf="
                     !(salesBifurcationDetailsListInProgress$ | async) &&
-                    salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.invoice &&
+                    salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Invoice &&
                     (salesBifurcationDetailsList$ | async)?.invoiceDetails?.length > 0
                 "
             >
@@ -177,7 +177,10 @@
                         <th mat-header-cell *matHeaderCellDef width="20%" mat-sort-header>
                             {{ commonLocaleData?.app_amount }}
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+                        <td mat-cell *matCellDef="let element">
+                            <amount-field [amount]="element.amount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="invoiceDisplayedColumns; sticky: true"></tr>
                     <tr

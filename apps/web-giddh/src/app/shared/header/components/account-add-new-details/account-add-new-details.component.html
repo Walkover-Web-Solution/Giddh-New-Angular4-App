@@ -287,9 +287,9 @@
                                             </button>
                                         </span>
                                         <span
-                                            [tooltip]="localeData?.address_tooltip"
+                                            [matTooltip]="localeData?.address_tooltip"
                                             class="pull-right is-default-address"
-                                            placement="left"
+                                            matTooltipPosition="left"
                                         >
                                             <mat-slide-toggle
                                                 aria-label="address"
@@ -427,7 +427,7 @@
                             "
                         >
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="text-left w-50 pd-r2"
                                 (click)="showMoreGst()"
@@ -436,7 +436,7 @@
                                 }})
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="text-left w-50"
                                 (click)="showLessGst()"
@@ -446,7 +446,6 @@
                         <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -792,7 +791,7 @@
                                 [maxlength]="3"
                                 [allowDigitsOnly]="true"
                                 formControlName="duePeriod"
-                                class="settings-field d-block"
+                                class="settings-field d-block expiry-days-input-width"
                                 [matSuffix]="commonLocaleData?.app_days"
                             ></input-field>
                         </div>
@@ -916,7 +915,7 @@
     <div class="row pd-t2">
         <div class="col-sm-12">
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 aria-label="save"
                 type="submit"

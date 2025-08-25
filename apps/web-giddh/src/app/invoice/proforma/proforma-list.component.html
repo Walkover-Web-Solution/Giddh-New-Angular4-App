@@ -10,19 +10,19 @@
                 <div class="d-flex more-filter">
                     <div class="d-flex btn-wrapper">
                         <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-r15">
-                            <!-- <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
+                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" mat-raised-button color="primary" class="m-0" (click)="goToInvoice('proformas')">
                                 {{ localeData?.new_proforma }}
-                            </button> -->
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/proformas/create']">
+                            </button>
+                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" mat-raised-button color="primary" class="m-0" [routerLink]="['/pages/vouchers/proformas/create']">
                                 {{ localeData?.new_proforma }}
                             </button>
                         </div>
 
                         <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
-                            <!-- <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
+                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1" mat-raised-button color="primary" class="m-0" (click)="goToInvoice('estimates')">
                                 {{ localeData?.new_estimate }}
-                            </button> -->
-                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/estimates/create']">
+                            </button>
+                            <button *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2" mat-raised-button color="primary" class="m-0" [routerLink]="['/pages/vouchers/estimates/create']">
                                 {{ localeData?.new_estimate }}
                             </button>
                         </div>
@@ -34,12 +34,21 @@
                     >
                         <div class="d-flex">
                             <div class="form-group mr-r1 d-flex">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                         class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                                 <div class="search-icon-block" (click)="openModal(template)">
@@ -61,7 +70,7 @@
                                     advance-search-mobile
                                 "
                                 (click)="toggleAdvanceSearchPopup()"
-                                [tooltip]="commonLocaleData?.app_advance_search"
+                                [matTooltip]="commonLocaleData?.app_advance_search"
                             >
                                 <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
@@ -125,7 +134,7 @@
                     <div
                         class="advance-icon cursor-pointer align-items-center btn btn-primary mr-0"
                         (click)="toggleAdvanceSearchPopup()"
-                        [tooltip]="commonLocaleData?.app_advance_search"
+                        [matTooltip]="commonLocaleData?.app_advance_search"
                     >
                         <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                         <span class="icon-advance-filter"></span>
@@ -470,7 +479,7 @@
                                 <td
                                     width="12%"
                                     class="text-right"
-                                    [tooltip]="
+                                    [matTooltip]="
                                         voucherType === 'proformas' || voucherType === 'estimates'
                                             ? grandTotalPopupTemplate
                                             : ''
@@ -587,27 +596,23 @@
                         </tbody>
 
                         <tfoot
-                            *ngIf="voucherData && voucherData?.totalItems > 20"
+                            *ngIf="voucherData && voucherData?.totalItems > advanceSearchFilter.count"
                             [hidden]="isGetAllInProcess$ | async"
                         >
                             <tr>
                                 <td colspan="100%" class="border-none mt-4">
-                                    <div class="text-center unbold pagination-wrapper mt-4">
-                                        <pagination
-                                            [totalItems]="voucherData.totalItems"
-                                            [(ngModel)]="voucherData.page"
-                                            [maxSize]="5"
-                                            class="pagination-sm"
-                                            [boundaryLinks]="true"
-                                            [itemsPerPage]="20"
-                                            [rotate]="false"
-                                            (pageChanged)="pageChanged($event)"
-                                            [firstText]="commonLocaleData?.app_first"
-                                            [previousText]="commonLocaleData?.app_previous"
-                                            [nextText]="commonLocaleData?.app_next"
-                                            [lastText]="commonLocaleData?.app_last"
-                                        >
-                                        </pagination>
+                                    <div class="mt-4">
+                                        <ng-container *ngIf="voucherData.totalItems > advanceSearchFilter.count">
+                                            <mat-paginator
+                                                [length]="voucherData.totalItems"
+                                                [pageSize]="advanceSearchFilter.count"
+                                                [pageIndex]="advanceSearchFilter.page - 1"
+                                                [pageSizeOptions]="pageSizeOptions"
+                                                [showFirstLastButtons]="true"
+                                                [hidePageSize]="false"
+                                                (page)="handlePageEvent($event)">
+                                            </mat-paginator>
+                                        </ng-container>
                                     </div>
                                 </td>
                             </tr>
@@ -707,72 +712,49 @@
             <!-- endregion -->
 
             <!--advance_search Modal-->
-            <div
-                bsModal
-                #advanceSearch="bs-modal"
-                class="modal fade"
-                role="dialog"
-                [config]="modalConfig"
-                tabindex="-1"
-            >
-                <div class="modal-dialog" *ngIf="showAdvanceSearchModal">
-                    <div class="modal-content">
-                        <invoice-advance-search-component
-                            [type]="'proforma'"
-                            [request]="advanceSearchFilter"
-                            [localeData]="localeData"
-                            [commonLocaleData]="commonLocaleData"
-                            (applyFilterEvent)="applyAdvanceSearch($event)"
-                            (closeModelEvent)="toggleAdvanceSearchPopup()"
-                        >
-                        </invoice-advance-search-component>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Delete Proforma/Estimate confirmation model -->
-            <div
-                bsModal
-                #deleteConfirmationModel="bs-modal"
-                class="modal fade"
-                role="dialog"
-                [config]="{ keyboard: true }"
-                tabindex="-1"
-            >
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <delete-voucher-confirmation-modal
-                            [module]="voucherType + 'list'"
-                            (confirmDeleteEvent)="deleteVoucher()"
-                            (closeModelEvent)="toggleConfirmationModel()"
-                        >
-                        </delete-voucher-confirmation-modal>
-                    </div>
-                </div>
-            </div>
-            <ng-template #datepickerTemplate>
-                <div class="datepicker-modal">
-                    <div class="modal-body">
-                        <app-datepicker-wrapper
-                            [inputStartDate]="selectedDateRange?.startDate"
-                            [inputEndDate]="selectedDateRange?.endDate"
-                            [alwaysShowCalendars]="true"
-                            [ranges]="datePickerOption"
-                            [selectedRangeLabel]="selectedRangeLabel"
-                            [showCustomRangeLabel]="true"
-                            [showClearButton]="false"
-                            [showCancel]="true"
-                            [linkedCalendars]="true"
-                            [showDropdowns]="true"
-                            (rangeClicked)="dateSelectedCallback($event)"
-                            (datesUpdated)="dateSelectedCallback($event)"
-                            [keepCalendarOpeningWithRange]="false"
-                            [showRangeLabelOnInput]="false"
-                            [dateFieldPosition]="dateFieldPosition"
-                        ></app-datepicker-wrapper>
-                    </div>
+            <ng-template #advanceSearchTemplate>
+                <div *ngIf="showAdvanceSearchModal">
+                    <invoice-advance-search-component
+                        [type]="'proforma'"
+                        [request]="advanceSearchFilter"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        (applyFilterEvent)="applyAdvanceSearch($event)"
+                        (closeModelEvent)="toggleAdvanceSearchPopup()"
+                    >
+                    </invoice-advance-search-component>
                 </div>
             </ng-template>
+
+            <!-- Delete Proforma/Estimate confirmation model -->
+            <ng-template #deleteConfirmationTemplate>
+                <delete-voucher-confirmation-modal
+                    [module]="voucherType + 'list'"
+                    (confirmDeleteEvent)="deleteVoucher()"
+                    (closeModelEvent)="toggleConfirmationModel()"
+                >
+                </delete-voucher-confirmation-modal>
+            </ng-template>
+            <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                <ng-template matMenuContent>
+                    <app-datepicker-wrapper
+                        [inputStartDate]="selectedDateRange?.startDate"
+                        [inputEndDate]="selectedDateRange?.endDate"
+                        [alwaysShowCalendars]="true"
+                        [ranges]="datePickerOption"
+                        [selectedRangeLabel]="selectedRangeLabel"
+                        [showCustomRangeLabel]="true"
+                        [showClearButton]="false"
+                        [showCancel]="true"
+                        [linkedCalendars]="true"
+                        [showDropdowns]="true"
+                        (rangeClicked)="dateSelectedCallback($event)"
+                        (datesUpdated)="dateSelectedCallback($event)"
+                        [keepCalendarOpeningWithRange]="false"
+                        [showRangeLabelOnInput]="false"
+                    ></app-datepicker-wrapper>
+                </ng-template>
+            </mat-menu>
         </div>
     </div>
 </ng-container>

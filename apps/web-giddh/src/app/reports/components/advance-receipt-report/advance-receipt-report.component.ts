@@ -1,13 +1,15 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, SubVoucher } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
@@ -23,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -48,24 +51,31 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
     @ViewChild('receiptAdvanceSearchFilterModal', { static: false }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
-    /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer', { static: false }) public receiptAdvanceSearchModalContainer: ModalDirective;
-    /** Instance of receipt confirmation modal */
-    @ViewChild('receiptConfirmationModel', { static: false }) public receiptConfirmationModel: ModalDirective;
+    /** Receipt advance search modal template */
+    @ViewChild('receiptAdvanceSearchTemplate', { static: false }) public receiptAdvanceSearchTemplate: TemplateRef<any>;
+    /** Receipt confirmation modal template */
+    @ViewChild('receiptConfirmationTemplate', { static: false }) public receiptConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for receipt advance search modal */
+    private receiptAdvanceSearchDialogRef: MatDialogRef<any>;
+    /** Dialog reference for receipt confirmation modal */
+    private receiptConfirmationDialogRef: MatDialogRef<any>;
     /** dayjs method */
     public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
     /** Modal reference */
     public modalRef: BsModalRef;
-    /** Modal bulk export reference */
-    public bulkExportModalRef: BsModalRef;
+    /** Reference to bulk export dialog */
+    private bulkExportDialogRef: MatDialogRef<any>;
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Stores the list of all receipts */
     public allReceipts: Array<any>;
     /** Stores summary data of all receipts based on filters applied */
     public receiptsSummaryData: any;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the value of pagination limit for template use */
-    public paginationLimit: number = PAGINATION_LIMIT;
+    public paginationLimit: number = PAGE_SIZE_OPTIONS[1];
     /** Stores the current page number */
     public pageConfiguration: { currentPage: number, totalPages: number, totalItems: number } = {
         currentPage: 1,
@@ -131,14 +141,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private activeCompanyUniqueName: string;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store selected date range to use in api */
+    /** Reference to universal datepicker trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -147,8 +157,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -194,11 +202,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private toastService: ToasterService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private invoiceService: InvoiceService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog,
+        private modalService: BsModalService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -320,7 +329,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             (componentRef.instance as ReceiptAdvanceSearchComponent).closeModal,
             (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                 // Listener for close and cancel event of modal
-                this.receiptAdvanceSearchModalContainer.hide();
+                if (this.receiptAdvanceSearchDialogRef) {
+                    this.receiptAdvanceSearchDialogRef.close();
+                    this.receiptAdvanceSearchDialogRef = null;
+                }
             });
         (componentRef.instance as ReceiptAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: ReceiptAdvanceSearchModel) => {
             // Listener for confirm event of modal
@@ -337,9 +349,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 unUsedAmount: data.unusedAmountFilter.amount,
                 unUsedAmountOperation: data.unusedAmountFilter.selectedValue
             }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-            this.receiptAdvanceSearchModalContainer.hide();
+            if (this.receiptAdvanceSearchDialogRef) {
+                this.receiptAdvanceSearchDialogRef.close();
+                this.receiptAdvanceSearchDialogRef = null;
+            }
         });
-        this.receiptAdvanceSearchModalContainer.show();
+        this.receiptAdvanceSearchDialogRef = this.dialog.open(this.receiptAdvanceSearchTemplate, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
     }
     /**
      * Opens/Closes the respective search bar based on parameters provided
@@ -391,13 +409,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-     * Pagination change handler
+     * Handles pagination events and updates API parameters
      *
-     * @param {*} event Selected page details
+     * @param {PageEvent} event - Contains pagination details
      * @memberof AdvanceReceiptReportComponent
      */
-    public onPageChanged(event: any): void {
-        this.fetchAllReceipts({ page: event.page, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+    public handlePageEvent(event: PageEvent): void {
+        this.pageConfiguration.currentPage = this.paginationLimit !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.paginationLimit = event.pageSize;
+        this.fetchAllReceipts({ page: this.pageConfiguration.currentPage, count: event.pageSize, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     /**
@@ -686,30 +706,19 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
         }
     }
-
+    
     /**
-    *To show the datepicker
+    * Toggles the datepicker menu
     *
-    * @param {*} element
-    * @memberof AuditLogsFormComponent
+    * @param {boolean} isOpen - True if datepicker needs to be opened
+    * @memberof AdvanceReceiptReportComponent
     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+         } else {
+            this.universalDatepickerTrigger?.closeMenu();
+         }
     }
 
     /**
@@ -720,7 +729,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -728,7 +737,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -871,21 +880,27 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-     * This will open delete confirmation modal
+     * This will open delete confirmation dialog
      *
      * @memberof AdvanceReceiptReportComponent
      */
-    public openConfirmationPopup() {
-        this.receiptConfirmationModel?.show();
+    public openConfirmationPopup(): void {
+        this.receiptConfirmationDialogRef = this.dialog.open(this.receiptConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
-     * This will close delete confirmation modal
+     * This will close delete confirmation dialog
      *
      * @memberof AdvanceReceiptReportComponent
      */
-    public closeConfirmationPopup() {
-        this.receiptConfirmationModel?.hide();
+    public closeConfirmationPopup(): void {
+        if (this.receiptConfirmationDialogRef) {
+            this.receiptConfirmationDialogRef.close();
+            this.receiptConfirmationDialogRef = null;
+        }
     }
 
     /**
@@ -916,9 +931,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     this.allReceipts.forEach((item) => {
                         item.isSelected = false;
                     });
-                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName = `${isAllItemsSelected ? this.localeData?.all_receipts : this.localeData?.receipts}.xls`;
-                    return saveAs(blob, fileName);
+                    let blob = this.generalService.base64ToBlob(response.body.data, 'application/xls', 512);
+                    return saveAs(blob, response.body.name);
                 } else {
                     this.toastService.errorToast(response.message);
                 }
@@ -927,12 +941,26 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
-    * This will open the bulk export modal
-    *
-    * @param {TemplateRef<any>} template
-    * @memberof AdvanceReceiptReportComponent
-    */
+     * Opens the bulk export dialog using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof AdvanceReceiptReportComponent
+     */
     public openBulkExport(template: TemplateRef<any>): void {
-        this.bulkExportModalRef = this.modalService.show(template);
+        this.bulkExportDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Closes the bulk export dialog
+     *
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public closeBulkExportDialog(): void {
+        if (this.bulkExportDialogRef) {
+            this.bulkExportDialogRef.close();
+        }
     }
 }

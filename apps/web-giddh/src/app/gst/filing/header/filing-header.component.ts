@@ -1,11 +1,10 @@
 import * as dayjs from 'dayjs';
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -21,9 +20,9 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { ServiceConfig } from '../../../services/service.config';
 import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -34,9 +33,6 @@ import { ServiceConfig } from '../../../services/service.config';
         {
             provide: BsDropdownConfig, useValue: { autoClose: true },
         },
-        {
-            provide: AlertConfig, useValue: {}
-        }
     ],
     animations: [
         trigger('slideInOut', [
@@ -401,8 +397,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.currentPeriod.to;
             this.gstReconcileService.downloadGSTRJSON(request).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === "success") {
-                    let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
-                    return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
+                    let blobData = this.generalService.base64ToBlob(res?.body.data, "json", 512);
+                    return saveAs(blobData, res?.body.name);
                 } else {
                     this.toasty.showSnackBar('error', res?.message);
                 }

@@ -4,8 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
@@ -79,7 +78,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         ReportsDetailsComponent,
         BsDropdownModule,
         Daterangepicker,
-        PaginationModule
+
     ],
     providers: [SalesPersonService],
     imports: [
@@ -87,14 +86,13 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         CommonModule,
         Daterangepicker,
         BsDropdownModule.forRoot(),
-        PaginationModule.forRoot(),
+
         ShSelectModule,
         FormsModule,
         CurrencyModule,
         AccountDetailModalModule,
         ReactiveFormsModule,
         ClickOutsideModule,
-        TooltipModule.forRoot(),
         ElementViewChildModule,
         ModalModule.forRoot(),
         SharedModule,

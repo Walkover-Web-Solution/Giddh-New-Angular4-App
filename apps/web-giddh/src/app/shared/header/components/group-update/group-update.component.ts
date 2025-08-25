@@ -6,7 +6,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -21,7 +21,6 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'group-update',
@@ -64,9 +63,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public taxPopOverTemplate: string = '';
     public showEditTaxSection: boolean = false;
     public accountList: any[];
-    public showTaxes: boolean = false;
-    @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
-    public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
+    public showTaxes: boolean = true;
+    @ViewChild('deleteGroupTemplate', { static: true }) public deleteGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for delete group modal */
+    private deleteGroupDialogRef: MatDialogRef<any>;
+    @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
@@ -97,6 +98,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public defaultTaxLabel: string[] = [];
     /** Stores the list of selected discount labels to display in the UI. */
     public defaultDiscountLabel: string[] = [];
+    /** Stores the current tax to display in the UI. */
+    public currentTax: any;
+    /** Stores the current discount to display in the UI. */
+    public currentDiscount: any;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -135,12 +140,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.taxPopOverTemplate = '<div class="popover-content"><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
+        this.taxPopOverTemplate = '<div><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
             description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [0, digitsOnly],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
         this.moveGroupForm = this._fb.group({
@@ -151,11 +156,17 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.discountGroupForm = this._fb.group({
-            discounts: ['']
+            discounts: [[]]
         });
 
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
+        });
+
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+                this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
+            }
         });
 
         this.activeGroup$.subscribe((activeGroup) => {
@@ -368,24 +379,24 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Open delete group dialog
-     * @returns void
+     * Shows the delete group modal dialog
+     *
      * @memberof GroupUpdateComponent
      */
-    public openDeleteGroupDialog(): void {
-        this.deleteGroupConfirmationDialogRef = this.dialog.open(this.deleteGroupConfirmationDialog, {
-            panelClass: ['mat-dialog-md'],
+    public showDeleteGroupModal() {
+        this.deleteGroupDialogRef = this.dialog.open(this.deleteGroupTemplate, {
+            panelClass: 'mat-dialog-md',
             disableClose: true
         });
     }
 
     /**
-     * Close delete group dialog
-     * @returns void
+     * Hides the delete group modal dialog
+     *
      * @memberof GroupUpdateComponent
      */
-    public closeDeleteGroupDialog(): void {
-        this.deleteGroupConfirmationDialogRef?.close();
+    public hideDeleteGroupModal() {
+        this.deleteGroupDialogRef?.close();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -442,7 +453,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
-        this.closeDeleteGroupDialog();
+        this.hideDeleteGroupModal();
     }
 
     public updateGroup() {
@@ -455,23 +466,22 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public async taxHierarchy() {
-        if (this.showTaxes) {
-            let activeAccount: AccountResponseV2 = null;
-            let activeGroupUniqueName: string = null;
-            this.store.pipe(take(1)).subscribe(s => {
-                if (s.groupwithaccounts) {
-                    activeAccount = s.groupwithaccounts.activeAccount;
-                    activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
-                }
-            });
-            if (activeAccount) {
-                this.store.dispatch(this.companyActions.getTax());
-                this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
-            } else {
-                this.store.dispatch(this.companyActions.getTax());
-                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
-                this.showEditTaxSection = true;
+        this.showTaxes = false;
+        let activeAccount: AccountResponseV2 = null;
+        let activeGroupUniqueName: string = null;
+        this.store.pipe(take(1)).subscribe(s => {
+            if (s.groupwithaccounts) {
+                activeAccount = s.groupwithaccounts.activeAccount;
+                activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
             }
+        });
+        if (activeAccount) {
+            this.store.dispatch(this.companyActions.getTax());
+            this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
+        } else {
+            this.store.dispatch(this.companyActions.getTax());
+            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
+            this.showEditTaxSection = true;
         }
     }
 

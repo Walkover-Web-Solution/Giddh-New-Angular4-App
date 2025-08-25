@@ -2,7 +2,7 @@
     <ng-container *ngIf="breadcrumbPath?.length > 0">
         <!--breadcrumbs-->
         <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100 d-flex justify-content-space-between">
-            <div class="col-lg-8">
+            <div class="col-lg-8 full-width">
                 <ol class="breadcrumb row">
                     <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
                         <a href="javascript:void(0)"> {{ value }}</a>
@@ -10,11 +10,11 @@
                 </ol>
             </div>
             <!--share group/account-->
-            <div class="col-lg-4 pr-0 pl-0" *ngIf="showEditGroup$ | async">
+            <div class="col-lg-4 pr-0 pl-0 full-width" *ngIf="showEditGroup$ | async">
                 <!--group-->
                 <div class="pull-right text-right">
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
@@ -23,7 +23,7 @@
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         aria-label="share" 
                         class="pull-right" 
                         (click)="openShareGroupDialog()"
@@ -32,7 +32,7 @@
                         {{ commonLocaleData?.app_share }}
                     </button>
                     <div
-                        class="primary-color text-right pull-right mr-t1 clearfix"
+                        class="primary-color text-right mr-r1 clearfix"
                         *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
                     >
                         {{ groupSharedWith }}
@@ -40,18 +40,18 @@
                 </div>
             </div>
             <!--account-->
-            <div class="col-lg-4 pull-right pr-0 pl-0" *ngIf="showEditAccount$ | async">
+            <div class="col-lg-4 pull-right pr-0 pl-0 full-width" *ngIf="showEditAccount$ | async">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     aria-label="share" 
-                    class="pull-right" 
+                    class="pull-right"
                     (click)="openShareAccountDialog()"
                     color="primary"
                 >
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
-                    class="primary-color text-right pull-right mr-t1 clearfix"
+                    class="primary-color text-right mr-r1 clearfix"
                     *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
                 >
                     {{ accountSharedWith }}
@@ -226,7 +226,7 @@
         )
     "
 >
-    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">
+    <button mat-raised-button color="primary" (click)="exportMasterDialog()">
         {{ commonLocaleData?.app_export }}
     </button>
 </div>

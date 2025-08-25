@@ -17,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { CurrencyModule } from '../../../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { MatSortModule } from '@angular/material/sort';
@@ -45,7 +45,7 @@ import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-        PaginationModule.forRoot(),
+
         GiddhPageLoaderModule,
         CurrencyModule,
         MatSortModule,

@@ -353,6 +353,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** Holds transaction details */
     private transactionDetails: LedgerResponse;
+    /** Selected entry details */
+    public selectedItem: any;
+    /** True if adjustment info is open */
+    public isAdjustmentInfoOpen: boolean = false;
+    /** True if last adjustment info is open */
+    public isLastAdjustmentInfoOpen: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -811,8 +817,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.confirm_delete_file,
                 ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                cancel: this.commonLocaleData?.app_no
             }
         });
 
@@ -987,6 +992,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             delete requestObj.referenceVoucher.number;
             delete requestObj.referenceVoucher.date;
             delete requestObj.referenceVoucher.voucherType;
+        }
+
+        if (requestObj.salesPerson) {
+            delete requestObj.salesPerson;
         }
 
         // if no petty cash mode then do normal update ledger request
@@ -1808,6 +1817,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
+     * To open adjustment info
+     *
+     * @param {boolean} isOpen True if adjustment info is open
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public openAdjustmentInfo(isOpen: boolean): void {
+        this.isLastAdjustmentInfoOpen = isOpen;
+        if (isOpen) {
+            this.isAdjustmentInfoOpen = isOpen;
+        } else {
+            setTimeout(() => {
+                if (!this.isLastAdjustmentInfoOpen) {
+                    this.isAdjustmentInfoOpen = isOpen;
+                }
+            }, 100);
+        }
+    }
+
+    /**
      * To calculate total amount of adjusted Invoices.
      *
      * @param {*} event Change value of an Invoices
@@ -2583,11 +2611,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Shows the attachments popup
      *
      * @param {TemplateRef<any>} templateRef
+     * @param {boolean} [isAttachment=false]
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
+    public openAttachmentsDialog(templateRef: TemplateRef<any>, isAttachment: boolean = false): void {
         document.querySelector(".cdk-global-overlay-wrapper")?.classList?.add("double-popup-zindex");
-
+        this.selectedItem = this.vm.selectedLedger;
+        this.selectedItem['isAttachment'] = isAttachment;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '650px'

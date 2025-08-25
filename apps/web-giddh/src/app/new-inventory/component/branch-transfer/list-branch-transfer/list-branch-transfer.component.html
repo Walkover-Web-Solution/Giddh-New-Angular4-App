@@ -32,12 +32,14 @@
                                     [defaultValue]="currentBranch?.name"
                                 ></dropdown-field>
                             </div>
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                                 <input
+                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker"
+                                    readonly
                                 />
                             </div>
                             <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
@@ -53,7 +55,7 @@
                                     matTooltipPosition="left"
                                     type="button"
                                     (click)="openAdvanceFilterDialog()"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                 >
                                     {{ commonLocaleData?.app_filter }}
@@ -274,23 +276,18 @@
             </form>
 
             <div
-                class="pagination-wrapper mt-4"
+                class="mt-4"
                 *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
             >
-                <pagination
-                    [totalItems]="branchTransferPaginationObject?.totalItems"
-                    [(ngModel)]="branchTransferPaginationObject.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="branchTransferPaginationObject.count"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+                <mat-paginator
+                    [length]="branchTransferPaginationObject?.totalItems"
+                    [pageSize]="branchTransferPaginationObject.count"
+                    [pageIndex]="branchTransferPaginationObject.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)"
+                ></mat-paginator>
             </div>
         </section>
 
@@ -372,7 +369,7 @@
 
                     <div class="d-flex justify-content-end mt-4">
                         <div class="mr-2">
-                            <button type="button" class="mr-0" mat-stroked-button color="primary" (click)="search()">
+                            <button type="button" class="mr-0" mat-raised-button color="primary" (click)="search()">
                                 {{ commonLocaleData?.app_search }}
                             </button>
                         </div>
@@ -403,29 +400,27 @@
             </div>
         </div>
     </ng-template>
-    <!-- Date Picker  -->
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                >
-                </app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <!-- Date Picker Menu -->
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            >
+        </app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
 </ng-container>

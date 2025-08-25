@@ -21,13 +21,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
@@ -61,20 +58,16 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
-import { MatDividerModule } from '@angular/material/divider';
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
-import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
-import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -85,6 +78,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 @NgModule({
     declarations: [
@@ -112,14 +106,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         FormsModule,
         CommonModule,
         MatDividerModule,
-        TabsModule.forRoot(),
+        MatTabsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        TooltipModule.forRoot(),
-        PaginationModule.forRoot(),
-        InvoiceTemplatesModule,
         KeyboardShortutModule,
-        CollapseModule.forRoot(),
         SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
@@ -168,7 +158,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         GenerateEWayBillModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        DeleteTemplateConfirmationModalModule,
         MatTableModule,
         MatFormFieldModule,
         FormFieldsModule,
@@ -182,7 +171,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ],
     exports: [
         InvoiceRoutingModule,
-        TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent
     ],

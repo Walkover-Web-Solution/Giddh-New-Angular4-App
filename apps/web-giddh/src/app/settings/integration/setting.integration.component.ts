@@ -30,7 +30,6 @@ import { CommonActions } from '../../actions/common.actions';
 import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ServiceConfig } from '../../services/service.config';
-
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
@@ -1010,17 +1009,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
     }
 
-    /**
-     * This will navigate to selected tab
-     *
-     * @param {string} tab
-     * @memberof SettingIntegrationComponent
-     */
-    public tabChanged(event: any): void {
-        let tab = event?.tab?.textLabel?.toLocaleLowerCase();
-        this.router.navigateByUrl('/pages/settings/integration/' + tab);
-        this.loadTabData(event?.index);
-    }
+
 
     /**
      * Search query change handler

@@ -1,9 +1,9 @@
 import { Observable, of, ReplaySubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime, take } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl, NgForm } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as dayjs from 'dayjs';
@@ -22,6 +22,8 @@ import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 
 @Component({
     selector: 'app-invoice-generate',
@@ -30,10 +32,14 @@ import { Router } from '@angular/router';
 })
 
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild(DaterangePickerComponent, { static: true }) public dp: DaterangePickerComponent;
     @ViewChild('particularSearch', { static: true }) public particularSearch: ElementRef;
     @ViewChild('accountUniqueNameSearch', { static: true }) public accountUniqueNameSearch: ElementRef;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     @Input() public selectedVoucher: string = 'invoice';
 
     public dayjs = dayjs;
@@ -49,7 +55,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public showParticularSearch = false;
     public showAccountSearch = false;
     public showDescSearch = false;
-    public modalRef: BsModalRef;
     public modalConfig = {
         animated: true,
         keyboard: false,
@@ -94,15 +99,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    public isDatePickerOpen: boolean = false;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** True if consolidated branch */
@@ -143,8 +146,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
     /** Instance of modal */
     public modalDialogRef: any;
-
-    constructor(
+constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _cdRef: ChangeDetectorRef,
@@ -152,7 +154,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         private generalActions: GeneralActions,
         private _breakPointObservar: BreakpointObserver,
         private commonActions: CommonActions,
-        private modalService: BsModalService,
         public dialog: MatDialog,
         private router: Router
     ) {
@@ -386,8 +387,15 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public pageChanged(event: any): void {
-        this.ledgerSearchRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InvoiceGenerateComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.ledgerSearchRequest.page = this.ledgerSearchRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.ledgerSearchRequest.count = event.pageSize;
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
         this.togglePrevGenBtn = false;
@@ -769,28 +777,17 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof InvoiceGenerateComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof InvoiceGenerateComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -801,7 +798,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -809,7 +806,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

@@ -3,11 +3,11 @@
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
-            <button type="button" class="no-btn clear-filter" (click)="clearFilters()">Clear Filter</button>
+            <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
-            <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">
+            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-raised-button color="primary" class="pull-right mr-0" (click)="goToCreateNewPage()" type="button">
                 Create Manufacture
             </button>
         </div>
@@ -49,12 +49,12 @@
                                                     }"
                                                     class="pull-right"
                                                     *ngIf="!option.isCompany"
-                                                    tooltip="Branch"
+                                                    matTooltip="Branch"
                                                 ></i>
                                                 <i
                                                     class="icon-company-profile pull-right"
                                                     *ngIf="option.isCompany"
-                                                    tooltip="Company"
+                                                    matTooltip="Company"
                                                 ></i>
                                             </span>
                                             <span class="entity-details">
@@ -80,14 +80,44 @@
                         "
                     >
                         <label class="d-block font-15 pb-1">From - To</label>
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div 
+                            class="custom-datepicker" 
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker"
+                                readonly
                             />
                         </div>
+                        <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                            <ng-template matMenuContent>
+                                <app-datepicker-wrapper
+                                    [inputStartDate]="selectedDateRange?.startDate"
+                                    [inputEndDate]="selectedDateRange?.endDate"
+                                    [alwaysShowCalendars]="true"
+                                    [ranges]="datePickerOptions"
+                                    [selectedRangeLabel]="selectedRangeLabel"
+                                    [showCustomRangeLabel]="true"
+                                    [showClearButton]="false"
+                                    [showCancel]="true"
+                                    [linkedCalendars]="true"
+                                    [showDropdowns]="true"
+                                    (rangeClicked)="dateSelectedCallback($event)"
+                                    (datesUpdated)="dateSelectedCallback($event)"
+                                    (closeCalender)="toggleGiddhDatepicker(false)"
+                                    [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false"
+                                ></app-datepicker-wrapper>
+                            </ng-template>
+                        </mat-menu>
                     </div>
                     <div
                         class="col-md-6"
@@ -104,7 +134,7 @@
                         >
                             <div *ngIf="showClearFilter()">
                                 <label class="d-block">&nbsp;</label>
-                                <button type="button" class="no-btn clear-filter" (click)="clearFilters()">
+                                <button mat-stroked-button type="button" (click)="clearFilters()">
                                     Clear Filter
                                 </button>
                             </div>
@@ -112,7 +142,9 @@
                                 <label class="d-block">&nbsp;</label>
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    class="btn isActive pull-right mr-0 mobile-none"
+                                    mat-raised-button
+                                    color="primary"
+                                    class="pull-right mr-0 mobile-none"
                                     (click)="goToCreateNewPage()"
                                     type="button"
                                 >
@@ -276,44 +308,20 @@
                         </tr>
                     </tbody>
                 </table>
-                <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper mt-4">
+                <div *ngIf="reportData?.totalPages > 1" class="mt-4">
                     <div class="text-center">
-                        <pagination
-                            [totalItems]="reportData.totalItems"
-                            [(ngModel)]="reportData.page"
-                            [maxSize]="5"
-                            class="pagination-sm"
-                            [boundaryLinks]="true"
-                            [itemsPerPage]="20"
-                            [rotate]="false"
-                            (pageChanged)="pageChanged($event)"
-                        ></pagination>
+                        <mat-paginator
+                            [length]="reportData.totalItems"
+                            [pageSize]="mfStockSearchRequest.count"
+                            [pageIndex]="reportData.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </section>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>

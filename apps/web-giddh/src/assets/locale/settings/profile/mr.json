@@ -91,5 +91,9 @@
     "company_sales_tax_list": "कंपनीमध्ये तयार केलेल्या आणि लिंक केलेल्या सर्व विक्रीकरांची यादी",
     "ledger_default_view": "लेजर डीफॉल्ट दृश्य",
     "select_view": "वियु निवडा",
-    "set_as_default_address": "डीफॉल्ट पत्ता सेट करा"
+    "set_as_default_address": "डीफॉल्ट पत्ता सेट करा",
+    "default_address": "डीफॉल्ट पत्ता",
+    "module_file_format": "हा [module_name] मॉड्यूल [file_format] प्रमाणे फाइल नाव एक्सपोर्ट करण्यासाठी वापरला जाईल",
+    "export_setting_description": "निर्यात केलेल्या फाईलसाठी फॉरमॅट सेट करा. आपण यात तारीख, खाते नाव, नोंद क्रमांक यांसारखे व्हेरिएबल्स समाविष्ट करू शकता किंवा कस्टम मजकूर वापरू शकता.",
+    "default_file_format": "Walkover_123_14-08-2025"
 }

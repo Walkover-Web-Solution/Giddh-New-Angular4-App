@@ -91,5 +91,9 @@
     "company_sales_tax_list": "List of all the Sales Tax's created and linked in the company",
     "ledger_default_view": "Ledger Default View",
     "select_view": "Select View",
-    "set_as_default_address": "Set as Default Address"
+    "set_as_default_address": "Set as Default Address",
+    "default_address": "Default Address",
+    "module_file_format": "This [module_name] module will be used to export the file name like [file_format]",
+    "export_setting_description": "Set the format for exported file names. You can include variables such as the date, account name, entry number, or use custom text",
+    "default_file_format": "Walkover_123_14-08-2025"
 }

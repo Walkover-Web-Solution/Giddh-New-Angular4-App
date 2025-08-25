@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -12,7 +12,8 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 
 @Component({
     selector: 'group-add',
-    templateUrl: 'group-add.component.html'
+    templateUrl: 'group-add.component.html',
+    styleUrls: ['group-add.component.scss']
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
@@ -25,7 +26,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     /** Observable stream of the currently active group's unique name */
     public activeGroupUniqueName$: Observable<string>;
     /** Reactive form group for managing group creation form data */
-    public groupDetailForm: UntypedFormGroup;
+    public groupDetailForm: FormGroup;
     /** Observable indicating whether the add new group form should be displayed */
     public showAddNewGroup$: Observable<boolean>;
     /** Observable indicating whether group creation is currently in progress */
@@ -38,8 +39,8 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _fb: UntypedFormBuilder, 
-        private store: Store<AppState>, 
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private accountsAction: AccountsAction
     ) {
@@ -50,23 +51,25 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.groupDetailForm = this._fb.group({
-            name: ['', Validators.required],
-            uniqueName: ['', Validators.required],
-            description: [''],
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT']
-        });
+        this.initForm();
 
         this.groupDetailForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.groupDetailForm.dirty));
         });
 
+        this.groupDetailForm.get('closingBalanceTriggerAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(amount => {
+            if (!this.groupDetailForm.get('closingBalanceTriggerAmountType')?.value) {
+                this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue('CREDIT');
+            }
+        });
+
         this.isCreateGroupSuccess$.subscribe(a => {
             if (a) {
-                this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
-                this.groupDetailForm.reset();
                 this.groupDetailForm?.markAsPristine();
+                this.groupDetailForm.reset();
+                setTimeout(() => {
+                    this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
+                }, 500);
             }
         });
 
@@ -82,6 +85,22 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.autoFocus?.nativeElement.focus();
         }, 50);
+    }
+
+    /**
+     * Initializes the reactive form group for adding or editing an account.
+     * 
+     * @returns FormGroup
+     * @memberof GroupAddComponent
+     */
+    public initForm(): void {
+        this.groupDetailForm = this.formBuilder.group({
+            name: ['', Validators.required],
+            uniqueName: ['', Validators.required],
+            description: [''],
+            closingBalanceTriggerAmount: [0, digitsOnly],
+            closingBalanceTriggerAmountType: ['CREDIT']
+        });
     }
 
     public addNewGroup() {

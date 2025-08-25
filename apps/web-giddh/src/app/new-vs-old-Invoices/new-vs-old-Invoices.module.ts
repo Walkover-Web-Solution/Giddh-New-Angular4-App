@@ -5,9 +5,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
@@ -27,10 +26,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
-import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+
 
 @NgModule({
     declarations: [
@@ -50,11 +50,10 @@ import { MatIconModule } from '@angular/material/icon';
         ShSelectModule,
         TabsModule.forRoot(),
         BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
         ModalModule,
-        PaginationModule.forRoot(),
+
         CurrencyModule,
         FormFieldsModule,
         MatButtonModule,

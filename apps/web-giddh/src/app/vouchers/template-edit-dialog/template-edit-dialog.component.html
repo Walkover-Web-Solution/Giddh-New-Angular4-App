@@ -1,16 +1,29 @@
 <ng-container>
-  <div class="create-discount-aside p-3">
-    <div class="d-flex column-gap1">
-      <div class="template-left-side">
-        <app-template-edit-filter></app-template-edit-filter>
-      </div>
-      <div class="template-right-side">
-        <app-gst-template-a></app-gst-template-a>
-      </div>
+    <div class="create-template-aside d-flex flex-column h-100">
+        <!-- Sticky header with buttons -->
+        <div class="sticky-header position-sticky top-0 d-flex column-gap1 p-3 border-bottom align-items-center">
+            <span>{{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}</span>
+            <button
+                class="ml-auto"
+                mat-raised-button
+                color="primary"
+                (click)="templateData?.mode === templateModeEnum.Create ? createTemplate() : updateTemplate()"
+            >
+                {{ templateData?.mode === templateModeEnum.Create ? localeData?.create_template : localeData?.update_template }}
+            </button>
+            <button mat-stroked-button (click)="closeDialog()">{{ commonLocaleData?.app_close }}</button>
+        </div>
+        
+        <!-- Scrollable content -->
+        <div class="scrollable-content p-3 overflow-auto">
+            <div class="d-flex column-gap1">
+                <div class="template-left-side">
+                    <template-edit-filter [dialogData]="templateData"></template-edit-filter>
+                </div>
+                <div class="template-right-side">
+                    <all-templates></all-templates>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="d-flex column-gap1 justify-content-end mt-3">
-      <button mat-stroked-button color="primary">Update Template</button>
-      <button mat-stroked-button (click)="deleteVoucherDialog()">Close</button>
-    </div>
-  </div>
 </ng-container>

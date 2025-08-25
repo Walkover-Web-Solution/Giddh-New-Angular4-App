@@ -11,7 +11,7 @@
         >
             <div class="aging-form-inline">
                 <div class="btn-group pull-left on-desktop-view">
-                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
+                    <button mat-raised-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="advance-icon"
                         (click)="showAdvanceSearchPopup()"
@@ -114,7 +114,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="exportReport()"
                         aria-label="export"
@@ -135,7 +135,7 @@
             </div>
             <div class="btn-group mr-t15 pull-left mobile-view">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     class="w-100"
                     (click)="createNewCustomerEvent.emit(true)"
@@ -213,7 +213,7 @@
                 <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="createNewCustomerEvent.emit(true)"
                         aria-label="new customer"
@@ -287,10 +287,10 @@
                     <aging-dropdown
                         (close)="onCloseMenu()"
                         [options]="agingDropDownoptions"
-                        *ngIf="setDueRangeOpen$ | async"
+        *ngIf="setDueRangeOpen$ | async"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
+            ></aging-dropdown>
                 </ng-template>
             </mat-menu>
         </div>
@@ -592,14 +592,18 @@
 
     <div
         *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
-        class="pagination-wrapper mt-4"
+        class="mt-4"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
-        <div class="xs-pl-0">
-            <div class="text-center unbold pagination-sm">
-                <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
-            </div>
-        </div>
+        <mat-paginator
+            [length]="(dueAmountReportData$ | async)?.totalItems"
+            [pageSize]="dueAmountReportRequest.count"
+            [pageSizeOptions]="pageSizeOptions"
+            [pageIndex]="dueAmountReportRequest.page - 1"
+            [showFirstLastButtons]="true"
+            (page)="handlePageEvent($event)"
+            aria-label="Select page of aging report results">
+        </mat-paginator>
     </div>
 </ng-template>
 <ng-template

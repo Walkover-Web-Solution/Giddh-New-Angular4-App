@@ -535,16 +535,6 @@ textarea {
     }
 }
 
-#tab-integration {
-    .mat-tab-label-content {
-        color: var(--color-nero) !important;
-    }
-
-    .mat-tab-label-active {
-        background-color: var(--color-discount-search-bar-background) !important;
-    }
-}
-
 .sub-entity-trigger {
     .mat-select-placeholder {
         color: var(--color-common-senary-background-for-all-components) !important;
@@ -2066,52 +2056,6 @@ ul.sub-list {
     text-transform: capitalize;
 }
 
-/* file upload css end */
-.tab-integration .nav-tabs {
-    padding: 40px;
-    border-bottom: 0px;
-}
-
-.tab-integration .nav-tabs > li > a {
-    width: 120px;
-    height: 120px !important;
-    background: var(--color-white);
-    display: flex;
-    flex-direction: column;
-    vertical-align: middle;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-16);
-    border: 1px solid var(--color-gray) !important;
-}
-
-.tab-integration .nav-tabs > li > a:hover {
-    border: 1px solid var(--color-gray) !important;
-}
-
-.tab-integration .nav-tabs > li.active a {
-    background: var(--color-rectangular-tab-primary-background) !important;
-    box-shadow: 0 6px 7px var(--color-primary-common-box-shadow);
-    border: 1px solid var(--color-common-primary-blue-border) !important;
-    color: var(--color-nero) !important;
-    border-radius: 3px;
-}
-
-.tab-integration .nav-tabs > li.active a span {
-    opacity: 1;
-}
-
-.tab-integration .nav-tabs > li > a > span {
-    font-size: var(--font-size-32);
-    color: var(--color-rectangular-tab-inactive-primary-icon);
-    opacity: 0.4;
-    margin-bottom: 6px;
-}
-
-.tab-integration .nav-tabs > li {
-    margin-right: 25px;
-}
-
 .customer-footer-box .number-total {
     font-size: var(--font-size-24);
     color: var(--color-blue);
@@ -2550,18 +2494,6 @@ ul.sub-list {
 
 modal-container.modal.fade.show {
     opacity: 1;
-}
-
-.modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
-    z-index: 999999 !important;
-}
-
-body {
-    &.datepicker-confirmation-open {
-        .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
-            z-index: 999 !important;
-        }
-    }
 }
 
 modal-container.modal {
@@ -8221,14 +8153,6 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding-right: 0;
 }
 
-.pagination-wrapper {
-    padding: 20px 0 0 0;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 3rem;
-}
-
 .pagination > li > a,
 .pagination > li > span {
     padding: 6px 10px;
@@ -9492,10 +9416,6 @@ input.checkbox-custom[type="checkbox"] {
     }
 }
 
-#setting-tab > .tab-container > .tab-content {
-    padding-top: 55px;
-}
-
 /*datepicker common css*/
 .giddh-datepicker-modal .modal-content {
     background: none !important;
@@ -9505,15 +9425,6 @@ input.checkbox-custom[type="checkbox"] {
     padding: 0 !important;
 }
 
-ngx-daterangepicker-material {
-    position: absolute;
-    z-index: 1000;
-    overflow: hidden;
-    box-shadow: 0 2px 4px 0 var(--color-primary-common-box-shadow), 0 2px 8px 0 var(--color-primary-common-box-shadow);
-    z-index: 1;
-    width: 100% !important;
-    max-width: 560px !important;
-}
 
 .edit-modal {
     max-width: 300px;
@@ -9888,30 +9799,6 @@ span#HW_badge_cont:nth-child(3) {
     z-index: 9999 !important;
 }
 
-.manage-group-account-form .button-group .btn {
-    margin-right: 15px;
-}
-
-.inventory-page {
-    .daterangepicker {
-        z-index: 9992 !important;
-    }
-
-    .inventory-main {
-        #giddh-page-heading {
-            aside-inventory-stock-group {
-                .aside-pane-form {
-                    .btn-danger {
-                        .ladda-label {
-                            color: var(--color-danger);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 .item-wise-page,
 .variant-wise-page {
     .item-wise-wrapper,
@@ -10112,10 +9999,6 @@ span#HW_badge_cont:nth-child(3) {
         padding-left: 10px;
         border-bottom: none !important;
     }
-}
-
-.giddh-calendar.show {
-    margin-top: 0;
 }
 
 .table-amount[disabled] {
@@ -10871,26 +10754,6 @@ body {
     z-index: 991 !important;
 }
 
-.primary-sidebar {
-    .giddh-primary-items {
-        .main-item {
-            .bs-tooltip-top {
-                display: none;
-            }
-        }
-    }
-
-    &.sidebar-collapse {
-        .giddh-primary-items {
-            .main-item {
-                .bs-tooltip-top {
-                    display: block;
-                }
-            }
-        }
-    }
-}
-
 .gst-sidebar-open {
     .nav-left-bar {
         -moz-transition: all 100ms linear;
@@ -11101,14 +10964,6 @@ body.update-scroll-hidden {
                         color: var(--color-nav-item-icon-company-icon-branch1-before);
                     }
                 }
-            }
-        }
-    }
-
-    .company-branch-opt-1 {
-        .branch-hide-tab {
-            ul.nav.nav-tabs {
-                display: none;
             }
         }
     }
@@ -11436,66 +11291,6 @@ body {
 
     .auto-save {
         top: 96px;
-    }
-
-    #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 4px;
-        padding: 10px 0px 0;
-        white-space: nowrap;
-        display: inline-block;
-        width: 100%;
-        overflow-y: hidden;
-    }
-
-    #setting-tab .tab-container .nav-tabs > li {
-        float: none;
-        display: inline-block;
-        cursor: grab;
-    }
-
-    #setting-tab .nav-tabs > li {
-        float: left;
-        margin-bottom: 0px;
-    }
-
-    #setting-tab .tab-integration .nav.nav-tabs {
-        overflow: auto;
-        white-space: initial;
-        width: 100%;
-        margin: 0 auto;
-        display: block;
-    }
-
-    #setting-tab .tab-integration .nav-tabs > li {
-        width: 100px;
-        margin-bottom: 20px;
-        margin-right: 10px;
-    }
-
-    #setting-tab .tab-integration .nav-tabs > li > a {
-        width: 90px;
-        height: 90px !important;
-        font-size: var(--font-size-15);
-    }
-
-    .groups-buttons {
-        height: auto;
-    }
-
-    #setting-tab-wrapper .tab-integration .nav-tabs {
-        display: inline-block;
-        width: 100%;
-        white-space: nowrap;
-    }
-
-    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
-        display: inline-flex;
-    }
-
-    #setting-tab-wrapper .tab-integration .nav-tabs > li > a {
-        width: 90px;
-        height: 90px !important;
-        font-size: var(--font-size-15);
     }
 
     .right-bar {
@@ -12195,18 +11990,6 @@ body.prevent-body-scroll {
 @media (min-height: 300px) and (max-height: 730px) {
     .linked-address sh-select-menu .total-padding {
         height: 257px !important;
-    }
-}
-
-/*media query for height resolution end*/
-.modal.fade.giddh-calendar.show {
-    z-index: 999999;
-}
-body {
-    &.datepicker-confirmation-open {
-        .modal.fade.giddh-calendar.show {
-            z-index: 999;
-        }
     }
 }
 
@@ -14079,4 +13862,36 @@ mat-list {
 .only-right-radius {
     border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
+}
+
+.universal-datepicker-menu-panel {
+    max-width: 100% !important;
+
+    .mat-mdc-menu-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+.hide-mat-tab-header {
+    .mat-mdc-tab-header {
+        display: none !important;
+    }
+}
+
+.primary-sidebar {
+    .company-branch-nav {
+        .mat-mdc-tab-header {
+            --mdc-secondary-navigation-tab-container-height: 34px !important;
+        }
+    }
+}
+
+.overlay {
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: var(--mat-menu-box-shadow);
+    max-width: 300px;
+    z-index: 1000;
+    background-color: var(--color-dark-fog);
 }

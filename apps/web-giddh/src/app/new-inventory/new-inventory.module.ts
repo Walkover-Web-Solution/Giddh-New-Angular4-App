@@ -3,7 +3,7 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
-import { TabsModule } from "ngx-bootstrap/tabs";
+import { MatTabsModule } from "@angular/material/tabs";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { CreateNewGroupComponent } from "./component/create-new-group/create-new-group.component";
 import { CreateNewItemComponent } from "./component/create-new-item/create-new-item.component";
@@ -13,7 +13,7 @@ import { AboutGroupDetailComponent } from "./component/about-group-detail/about-
 import { InventoryGroupListSidebar } from "./component/inventory-group-list-sidebar/inventory-group-list-sidebar.component";
 import { StockGroupListComponent } from "./component/stock-group-list/stock-group-list.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
-import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
+
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
@@ -45,19 +45,15 @@ import { MatTableModule } from "@angular/material/table";
 import { MatSortModule } from "@angular/material/sort";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { MatRadioModule } from "@angular/material/radio";
-import { MatTabsModule } from "@angular/material/tabs";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-sidebar.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
-import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
-import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
-import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
-import { PaginationModule } from "ngx-bootstrap/pagination";
+
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -102,7 +98,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         InventoryGroupListSidebar,
         StockGroupListComponent,
         ProductServiceListComponent,
-        AboutProductServiceDetailComponent,
         InventoryComboListComponent,
         AboutComboDetailComponent,
         CreateComboComponent,
@@ -127,9 +122,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         DashboardSellingReport,
         ListGroupComponent,
         StockBalanceComponent,
-        GroupwiseComponent,
-        ItemWiseComponent,
-        VariantWiseComponent,
         ReportFiltersComponent,
         ReportsComponent,
         AsideCreateNewUnitComponent,
@@ -147,7 +139,7 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
     imports: [
         NewInventoryRoutingModule,
         SharedModule,
-        TabsModule.forRoot(),
+
         BsDropdownModule.forRoot(),
         CommonModule,
         ModalModule.forRoot(),
@@ -170,7 +162,7 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         StockCreateEditModule,
         NgxMatSelectSearchModule,
         GiddhPageLoaderModule,
-        PaginationModule.forRoot(),
+
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
@@ -200,7 +192,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         InventoryGroupListSidebar,
         StockGroupListComponent,
         ProductServiceListComponent,
-        AboutProductServiceDetailComponent,
         InventoryComboListComponent,
         AboutComboDetailComponent,
         CreateComboComponent,

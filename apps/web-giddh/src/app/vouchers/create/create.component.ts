@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostListener,
+    Inject,
+    OnDestroy,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -89,13 +100,13 @@ import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { TitleCasePipe } from "@angular/common";
 import { MatSelectChange } from "@angular/material/select";
-import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ServiceConfig } from "../../services/service.config";
+import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
+import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
 import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
-import { SalesPersonComponent } from "../../shared/sales-person/sales-person.component";
-import { SalesPersonComponentStore } from "../../shared/sales-person/utility/sales-person.store";
+import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 
 @Component({
     selector: "create",
@@ -134,8 +145,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("sendEmailModal", { static: true }) public sendEmailModal: any;
     /* Selector for print modal */
     @ViewChild("printVoucherModal", { static: true }) public printVoucherModal: any;
-    /** Date change confirmation modal */
-    @ViewChild("dateChangeConfirmationModel", { static: true }) public dateChangeConfirmationModel: any;
     /* Selector for adjustment modal */
     @ViewChild("adjustmentModal", { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
@@ -1205,7 +1214,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.invoiceForm.get('salesPersonName').patchValue(voucherDetails?.salesPerson?.name || '');
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(voucherDetails?.salesPerson?.uniqueName || null);
-                    
+
                     const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
                     entriesFormArray.clear();
 
@@ -1838,13 +1847,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm
-                            .get("salesPurchaseAsReceiptPayment")
-                            .patchValue(
-                                this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
-                                    ? profile.purchaseAsPayment
-                                    : profile.salesAsReceipt
-                            );
+                        const isCashSalesPurchaseInvoice =
+                            this.invoiceType.isCashInvoice &&
+                            ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote && !this.invoiceType.isReceiptInvoice && !this.invoiceType.isPaymentInvoice) ||
+                                this.invoiceType.isPurchaseInvoice);
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm
+                                .get("salesPurchaseAsReceiptPayment")
+                                .patchValue(
+                                    this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice
+                                        ? profile.purchaseAsPayment
+                                        : profile.salesAsReceipt
+                                );
+                        }
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -3527,12 +3543,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
             this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-
-            if (this.invoiceForm.get("isRcmEntry")?.value) {
-                this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-            } else {
-                this.invoiceForm.get("subVoucher")?.patchValue("");
-            }
+            this.checkRcm();
         }
     }
 
@@ -3740,13 +3751,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (entries?.length > 1) {
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
-            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-                this.localeData,
-                this.commonLocaleData,
-                false
-            );
-            this.dialog.open(this.dateChangeConfirmationModel, {
-                width: "650px",
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+               panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
+                },
+            });
+    
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
             });
         }
     }
@@ -3783,14 +3796,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.dateChangeType = "voucher";
 
-        this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-            this.localeData,
-            this.commonLocaleData,
-            true
-        );
-        this.dialog.open(this.dateChangeConfirmationModel, {
-            width: "650px",
-        });
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: "mat-dialog-sm",
+             data: {
+                 configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+             },
+         });
+ 
+         dialogRef.afterClosed().subscribe((response) => {
+             this.handleDateChangeConfirmation(response);
+         });
     }
 
     /**
@@ -4598,6 +4613,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Checks RCM
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public checkRcm(): void {
+        if (this.invoiceForm.get("isRcmEntry")?.value) {
+            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+        } else {
+            this.invoiceForm.get("subVoucher")?.patchValue("");
+        }
+    }
+
+    /**
      * Saves voucher
      *
      * @param {Function} [callback]
@@ -4608,7 +4636,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const entries = this.getEntries();
         const deposits = this.getDeposits();
-
+        this.checkRcm();
         let invoiceForm = cloneDeep(this.invoiceForm.value);
 
         invoiceForm.entries = entries;
@@ -5088,7 +5116,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.changeDetection.detectChanges();
     }
 
-    
+
 
     /**
      * Toggles between create and list

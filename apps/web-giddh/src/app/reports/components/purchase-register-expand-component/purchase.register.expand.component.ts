@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
+import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
@@ -15,10 +16,10 @@ import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as dayjs from 'dayjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
+import { CompanyActions } from '../../../actions/company.actions';
 
 @Component({
     selector: "purchase-register-expand",
@@ -44,8 +45,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Directive to get reference of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
@@ -79,16 +80,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Modal reference */
-    public modalRef: BsModalRef;
-    /** Hold initial params data */
+/** Hold initial params data */
     private params: any = { from: '', to: '' };
     /**True if API called on single time */
     public isDefaultLoaded: boolean = false;
@@ -111,7 +108,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
         private dialog: MatDialog,
-        private modalService: BsModalService
+        private companyActions: CompanyActions
     ) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(
             select((appState) => appState.receipt.PurchaseRegisteDetailedResponse),
@@ -156,14 +153,16 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.isDefaultLoaded = true;
             }
         });
-
-        this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
+        
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
                 this.getDetailedPurchaseRequestFilter.from = this.from;
                 this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
@@ -315,6 +314,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {
@@ -555,39 +560,30 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-    *To show the datepicker
-    *
-    * @param {*} element
-    * @memberof PurchaseRegisterExpandComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
+     * This will toggle the datepicker
      *
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
      * @memberof PurchaseRegisterExpandComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger?.openMenu();
+            } else {
+                this.universalDatepickerTrigger?.closeMenu();
+            }
+        }
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value Selected date range object
      * @memberof PurchaseRegisterExpandComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -595,7 +591,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

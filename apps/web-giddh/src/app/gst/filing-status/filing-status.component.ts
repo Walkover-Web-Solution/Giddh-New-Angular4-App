@@ -149,20 +149,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.getGstrReferences();
     }
 
-    /**
-     * Handle Page Change Event
-     *
-     * @param {*} event
-     * @memberof FilingStatusComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.pageIndex = event.pageIndex;
-            this.pagination.page = event.pageIndex + 1;
-            this.pagination.count = event.pageSize;
-            this.getGstrReferences();
-        }
-    }
+
 
     /**
      * Get GST Filing Status form API

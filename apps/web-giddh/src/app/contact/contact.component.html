@@ -19,7 +19,6 @@
         >
             <mat-tab
                 [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
-                [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index">
@@ -51,24 +50,31 @@
                                         class="form-inline input-grp-date-range-picker position-relative"
                                     >
                                         <div class="form-group d-flex flex-fill">
-                                            <div
-                                                class="form-group custom-datepicker"
-                                                (click)="showGiddhDatepicker($event)"
-                                            >
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    name="selectedDateRange"
-                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                    class="giddh-datepicker form-control date-range-picker"
-                                                />
+                                            <div class="custom-datepicker-wrapper">
+                                                <div 
+                                                    class="custom-datepicker" 
+                                                    [matMenuTriggerFor]="universalDatepicker"
+                                                    #universalDatepickerTrigger="matMenuTrigger"
+                                                    role="button"
+                                                    aria-haspopup="true"
+                                                    aria-controls="universalDatepicker"
+                                                >
+                                                    <input
+                                                        matInput
+                                                        type="text"
+                                                        name="selectedDateRange"
+                                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                        class="giddh-datepicker date-range-picker"
+                                                        readonly
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
                                     <div class="dis pull-left on-desktop-view align-items-center">
                                         <div class="btn-group pull-right d-flex column-gap15">
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 *ngIf="activeTab == 'customer'"
                                                 class="mr-0"
@@ -78,7 +84,7 @@
                                                 {{ localeData?.new_customer }}
                                             </button>
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 *ngIf="activeTab == 'vendor'"
                                                 class="mr-0"
@@ -333,10 +339,19 @@
                             class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
                             *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
                         >
-                            <p (click)="showGiddhDatepicker($event)">
+                            <div class="custom-datepicker-wrapper">
+                            <div 
+                                class="custom-datepicker" 
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
                                 <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
                                 <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                            </p>
+                            </div>
+                        </div>
                         </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
@@ -357,7 +372,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab [label]="localeData?.aging_report" [id]="activeTab === 'aging-report' ? 'giddh-page-heading' : ''">
+            <mat-tab [label]="localeData?.aging_report">
                 <aging-report
                     *ngIf="activeTab === 'aging-report'"
                     [localeData]="localeData"
@@ -417,7 +432,7 @@
                 </div>
                 <div class="mr-t4">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrycreditors')"
@@ -1476,7 +1491,7 @@
                                 >
                                     <div class="d-flex column-gap15 justify-content-center">
                                         <button
-                                            mat-stroked-button
+                                            mat-raised-button
                                             color="primary"
                                             *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
                                             class="btn-small min-width-150 contact-ipad-responsive"
@@ -1539,8 +1554,8 @@
             </ng-container>
         </div>
 
-        <div colspan="100%" class="xs-pl-0 pagination-wrapper mt-4">
-            <div
+        <div class="mt-4">
+            <ng-container
                 *ngIf="
                     activeTab === 'customer' &&
                     sundryDebtorsAccountsBackup.results &&
@@ -1548,26 +1563,18 @@
                     totalCustomers >= paginationLimit
                 "
             >
-                <div class="text-center">
-                    <pagination
-                        [totalItems]="sundryDebtorsAccountsBackup.totalItems"
-                        [(ngModel)]="sundryDebtorsAccountsBackup.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="sundryDebtorsAccountsBackup.count"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    >
-                    </pagination>
-                </div>
-            </div>
+                <mat-paginator
+                    [length]="sundryDebtorsAccountsBackup.totalItems"
+                    [pageSize]="sundryDebtorsAccountsBackup.count"
+                    [pageIndex]="sundryDebtorsAccountsBackup.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event, sundryDebtorsAccountsBackup);">
+                </mat-paginator>
+            </ng-container>
 
-            <div
+            <ng-container
                 *ngIf="
                     activeTab === 'vendor' &&
                     sundryCreditorsAccountsBackup.results &&
@@ -1575,24 +1582,16 @@
                     totalVendors >= paginationLimit
                 "
             >
-                <div class="text-center">
-                    <pagination
-                        [totalItems]="sundryCreditorsAccountsBackup.totalItems"
-                        [(ngModel)]="sundryCreditorsAccountsBackup.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="sundryCreditorsAccountsBackup.count"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    >
-                    </pagination>
-                </div>
-            </div>
+                <mat-paginator
+                    [length]="sundryCreditorsAccountsBackup.totalItems"
+                    [pageSize]="sundryCreditorsAccountsBackup.count"
+                    [pageIndex]="pageIndex"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event, sundryCreditorsAccountsBackup)">
+                </mat-paginator>
+            </ng-container>
         </div>
         <div
             class="no-data"
@@ -1647,29 +1646,27 @@
     </ng-template>
     <!-- endregion -->
 
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="selectedDate($event)"
-                    (datesUpdated)="selectedDate($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="selectedDate($event)"
+                (datesUpdated)="selectedDate($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
 
     <ng-template
         #searchTemplate

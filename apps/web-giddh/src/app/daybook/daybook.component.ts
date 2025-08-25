@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
@@ -11,7 +11,8 @@ import { TaxResponse } from '../models/api-models/Company';
 import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
@@ -54,6 +55,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isAllExpanded: boolean = false;
     public daybookQueryRequest: DaybookQueryRequest;
     public daybookExportRequestType: 'get' | 'post';
+    /** Page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
@@ -71,16 +74,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isEntryExpanded: boolean = false;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -89,8 +90,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -156,7 +155,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private ledgerActions: LedgerActions,
         private daybookService: DaybookService,
@@ -369,11 +367,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
     }
 
-    public pageChanged(event: any): void {
-        if (this.daybookQueryRequest.page !== event.page) {
-            this.daybookQueryRequest.page = event.page;
-            this.getDaybook(this.searchFilterData);
-        }
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof DaybookComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.daybookQueryRequest.page = this.daybookData.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.daybookQueryRequest.count = event.pageSize;
+        this.getDaybook(this.searchFilterData);
     }
 
     public exportDaybook() {
@@ -421,9 +424,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                                 if (response?.body?.type === "message") {
                                     this.toasterService.showSnackBar("success", response?.body?.file);
                                 } else {
-                                    let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                                    let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                                    saveAs(blob, 'Daybook' + type);
+                                    let blob = this.generalService.base64ToBlob(response?.body?.data, response?.queryString?.requestType, 512);
+                                    saveAs(blob, response?.body?.name);
                                 }
                             } else {
                                 this.toasterService.showSnackBar("error", response?.message);
@@ -436,9 +438,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                             if (response?.body?.type === "message") {
                                 this.toasterService.showSnackBar("success", response?.body?.file);
                             } else {
-                                let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                                let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                                saveAs(blob, 'response' + type);
+                                let blob = this.generalService.base64ToBlob(response?.body?.data, response?.queryString?.requestType, 512);
+                                saveAs(blob, response?.body?.name);
                             }
                         } else {
                             this.toasterService.showSnackBar("error", response?.message);
@@ -531,14 +532,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof DaybookComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
@@ -546,9 +545,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
      *
      * @memberof DaybookComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      * Call back function for date/range selection in datepicker
@@ -558,7 +554,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -567,7 +563,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
         this.todaySelected = false;
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

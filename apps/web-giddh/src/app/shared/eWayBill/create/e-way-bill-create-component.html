@@ -220,13 +220,13 @@
                     </div>
                     <div class="row clearfix d-flex justify-content-end column-gap15">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             (click)="onSubmitEwaybill()"
                         >
                             {{ localeData?.save_generate }}
                         </button>
-                        <button mat-stroked-button color="primary" (click)="onResetGenerateBillForm()">
+                        <button mat-raised-button color="primary" (click)="onResetGenerateBillForm()">
                             {{ commonLocaleData?.app_reset }}
                         </button>
                     </div>
@@ -234,7 +234,6 @@
             </form>
         </div>
     </div>
-</ng-container>
 
 <!-- Account Aside Menu -->
 <ng-template #accountAsideMenu>
@@ -285,7 +284,7 @@
                 <div class="form-group mt-3">
                     <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="!transportEditMode">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
                             (click)="generateTransporter()"
@@ -293,13 +292,13 @@
                         >
                             {{ commonLocaleData?.app_save }}
                         </button>
-                        <button mat-stroked-button color="primary" (click)="clearTransportForm()" type="submit">
+                        <button mat-raised-button color="primary" (click)="clearTransportForm()" type="submit">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
                     <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="transportEditMode">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
                             (click)="updateTransporter()"
@@ -307,7 +306,7 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-stroked-button color="primary" (click)="clearTransportForm()">
+                        <button mat-raised-button color="primary" (click)="clearTransportForm()">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
@@ -372,10 +371,10 @@
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
                     <td class="nowrap d-flex column-gap15 border-top-0">
-                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
+                        <button mat-raised-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
                             <i class="icon-edit"></i>
                         </button>
-                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
+                        <button mat-raised-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -392,11 +391,8 @@
                 [itemsPerPage]="1"
                 [rotate]="false"
                 (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
             ></mat-paginator>
         </div>
     </div>
 </ng-template>
+</ng-container>

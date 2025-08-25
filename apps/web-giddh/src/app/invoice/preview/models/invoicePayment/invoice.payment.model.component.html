@@ -209,10 +209,10 @@
             </div>
 
             <div class="pull-right">
-                <button type="submit" class="btn btn-success" [disabled]="f.invalid">
+                <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button type="button" class="btn btn-danger" (click)="onCancel()">
+                <button type="button" mat-stroked-button (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

@@ -157,21 +157,17 @@
 
 <div
     *ngIf="pettyCashRejectedReportResponse?.totalItems > pettyCashRejectedReportResponse?.count"
-    class="pagination-wrapper mt-4"
+    class="mt-4"
 >
-    <pagination
-        [totalItems]="pettyCashRejectedReportResponse?.totalItems"
-        [maxSize]="5"
-        class="pagination-sm"
-        [boundaryLinks]="true"
-        [itemsPerPage]="20"
-        [rotate]="false"
-        (pageChanged)="pageChanged($event)"
-        [firstText]="commonLocaleData?.app_first"
-        [previousText]="commonLocaleData?.app_previous"
-        [nextText]="commonLocaleData?.app_next"
-        [lastText]="commonLocaleData?.app_last"
-    ></pagination>
+    <mat-paginator
+        [length]="pettyCashRejectedReportResponse?.totalItems"
+        [pageSize]="pettycashRequest.count"
+        [pageIndex]="pettycashRequest.page - 1"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        [hidePageSize]="false"
+        (page)="handlePageEvent($event)"
+    ></mat-paginator>
 </div>
 
 <div *ngIf="isPettyCashRejectedReportLoading">

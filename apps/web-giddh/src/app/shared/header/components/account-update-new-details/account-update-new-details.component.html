@@ -280,9 +280,9 @@
                                     <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                     <div class="inputRadio">
                                         <span
-                                            [tooltip]="localeData?.address_tooltip"
+                                            [matTooltip]="localeData?.address_tooltip"
                                             class="pull-right is-default-address"
-                                            placement="left"
+                                            matTooltipPosition="left"
                                         >
                                             <mat-slide-toggle
                                                 formControlName="isDefault"
@@ -428,7 +428,6 @@
                         >
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="text-left w-50 pd-r2"
                                 (click)="showMoreGst()"
                             > {{ commonLocaleData?.app_show_all }} ({{
@@ -437,7 +436,6 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 class="text-left w-50"
                                 (click)="showLessGst()"
                             > {{ commonLocaleData?.app_show_less }}
@@ -446,7 +444,6 @@
                         <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             > + {{ localeData?.add_address }}
                             </button>
@@ -585,7 +582,6 @@
                         <div class="pl-2 mr-t05">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="removePortalUser(domain, i)"
                                 aria-label="delete icon"
                             >
@@ -799,7 +795,7 @@
                                 [maxlength]="3"
                                 [allowDigitsOnly]="true"
                                 formControlName="duePeriod"
-                                class="settings-field d-block"
+                                class="settings-field d-block expiry-days-input-width"
                                 [matSuffix]="commonLocaleData?.app_days"
                             ></input-field>
                         </div>
@@ -949,7 +945,7 @@
                                     >
                                     </reactive-dropdown-field>
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         type="submit"
                                         [disabled]="moveAccountForm.invalid"
@@ -984,7 +980,7 @@
                             >
                             </reactive-dropdown-field>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 type="submit"
                                 (click)="mergeAccounts()"
@@ -1031,7 +1027,7 @@
                             (onClear)="discountSelected()"
                         ></reactive-dropdown-field>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             [disabled]="isDiscountSaveDisable$ | async"
                             (click)="applyDiscounts()"
@@ -1048,22 +1044,37 @@
                         <label>{{ localeData?.all_inherited_discounts }}</label>
                     </div>
                     <div *ngFor="let item of (activeAccount$ | async)?.inheritedDiscounts">
-                        <ng-template #popTemplate>
-                            <div class="popover-content">
-                                <label>{{ localeData?.discounts_inherited_from }}:</label>
-                                <ul>
-                                    <li>{{ item?.name }}</li>
-                                </ul>
-                            </div>
-                        </ng-template>
-                        <span
-                            class="tax-bullet"
-                            *ngFor="let inAppDiscount of item.applicableDiscounts"
-                            [popover]="popTemplate"
-                            placement="right"
-                            triggers="mouseenter:mouseleave"
-                            >{{ inAppDiscount.name }}
-                        </span>
+                        <ng-container *ngFor="let inAppDiscount of item.applicableDiscounts">
+                            <span
+                                cdkOverlayOrigin
+                                #discountTrigger="cdkOverlayOrigin"
+                                class="tax-bullet"
+                                (mouseenter)="currentDiscount = inAppDiscount"
+                                (mouseleave)="currentDiscount = null"
+                            >
+                                {{ inAppDiscount?.name }}
+                            </span>
+                            <ng-template
+                                cdkConnectedOverlay
+                                [cdkConnectedOverlayOrigin]="discountTrigger"
+                                [cdkConnectedOverlayOpen]="currentDiscount === inAppDiscount"
+                                [cdkConnectedOverlayPositions]="[
+                                    {
+                                        originX: 'end',
+                                        originY: 'center',
+                                        overlayX: 'start',
+                                        overlayY: 'center',
+                                        offsetX: 8
+                                    }
+                                ]">
+                                <div class="tax-tooltip bg-gray font-14 overlay">
+                                    <div>
+                                        <p>{{ localeData?.discounts_inherited_from }}:</p>
+                                        <p>{{ item?.name }}</p>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-container>
                     </div>
                     <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts?.length">
                         {{ localeData?.no_inherited_discounts }}
@@ -1095,7 +1106,7 @@
                             <button
                                 [disabled]="isTaxesSaveDisable$ | async"
                                 type="submit"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 aria-label="save"
                             >
@@ -1110,24 +1121,37 @@
                                 <label>{{ localeData?.all_inherited_taxes }}</label>
                             </div>
                             <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
-                                <ng-template #popTemplate>
-                                    <div>
-                                        <div class="popover-content">
-                                            <label>{{ localeData?.tax_inherited }}:</label>
-                                            <ul>
-                                                <li>{{ inTax?.name }}</li>
-                                            </ul>
+                                <ng-container *ngFor="let inAppTax of inTax.applicableTaxes">
+                                    <span
+                                        cdkOverlayOrigin
+                                        #taxTrigger="cdkOverlayOrigin"
+                                        class="tax-bullet"
+                                        (mouseenter)="currentTax = inAppTax"
+                                        (mouseleave)="currentTax = null"
+                                    >
+                                        {{ inAppTax?.name }}
+                                    </span>
+                                    <ng-template
+                                        cdkConnectedOverlay
+                                        [cdkConnectedOverlayOrigin]="taxTrigger"
+                                        [cdkConnectedOverlayOpen]="currentTax === inAppTax"
+                                        [cdkConnectedOverlayPositions]="[
+                                            {
+                                                originX: 'end',
+                                                originY: 'center',
+                                                overlayX: 'start',
+                                                overlayY: 'center',
+                                                offsetX: 8
+                                            }
+                                        ]">
+                                        <div class="tax-tooltip font-14 overlay">
+                                            <div>
+                                                <p>{{ localeData?.tax_inherited }}:</p>
+                                                <p>{{ inTax?.name }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </ng-template>
-                                <span
-                                    class="tax-bullet"
-                                    *ngFor="let inAppTax of inTax.applicableTaxes"
-                                    [popover]="popTemplate"
-                                    placement="right"
-                                    triggers="mouseenter:mouseleave"
-                                    >{{ inAppTax?.name }}
-                                </span>
+                                    </ng-template>
+                                </ng-container>
                             </div>
                             <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes?.length">
                                 {{ localeData?.no_inherited_taxes }}
@@ -1138,55 +1162,40 @@
             </div>
         </ng-container>
         <div class="d-flex column-gap15" *ngIf="isOtherSelectedTab">
-            <button
-                (click)="submit()"
-                mat-stroked-button
-                color="primary"
-                aria-label="update"
-            >
-                {{ commonLocaleData?.app_update }}
-            </button>
+        <button
+            (click)="submit()"
+            mat-raised-button
+            color="primary"
+            aria-label="update"
+        >
+            {{ commonLocaleData?.app_update }}
+        </button>
 
-            <button
-                class="ml-auto"
-                mat-stroked-button
-                color="primary"
-                (click)="accountArchiveUnarchive()"
-            >
-                {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
-            </button>
-            <button
-                type="button"
-                *ngIf="showDeleteButton"
-                mat-stroked-button
-                color="primary"
-                (click)="deleteClicked.emit(true)"
-                aria-label="delete"
-            >
-                {{ commonLocaleData?.app_delete }}
-            </button>
+        <button
+            class="ml-auto"
+            mat-raised-button
+            color="primary"
+            (click)="accountArchiveUnarchive()"
+        >
+            {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
+        </button>
+        <button
+            type="button"
+            *ngIf="showDeleteButton"
+            mat-stroked-button
+            (click)="deleteClicked.emit(true)"
+            aria-label="delete"
+        >
+            {{ commonLocaleData?.app_delete }}
+        </button>
         </div>
-        <!--moveMergedAccount account modal  not used in present time-->
-        <!-- <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <confirm-modal
-                        [title]="localeData?.move_merged_account_title"
-                        [body]="moveMergedAccountModalBody"
-                        (cancelCallBack)="hideMoveMergedAccountModal()"
-                        (successCallBack)="moveMergeAccountTo()"
-                    >
-                    </confirm-modal>
-                </div>
-            </div>
-        </div> -->
     </div>
 </ng-container>
 <ng-template #templateForDeleteAndUpdate>
     <div class="d-flex column-gap15 pd-t2">
         <button
         (click)="submit()"
-        mat-stroked-button
+        mat-raised-button
         color="primary"
         aria-label="update"
         >
@@ -1194,7 +1203,7 @@
     </button>
     <button
         class="ml-auto"
-        mat-stroked-button
+        mat-raised-button
         color="primary"
         (click)="accountArchiveUnarchive()"
     >

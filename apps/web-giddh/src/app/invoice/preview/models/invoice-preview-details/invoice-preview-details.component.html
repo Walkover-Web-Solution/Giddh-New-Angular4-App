@@ -50,7 +50,8 @@
                         </div>
 
                         <button
-                            class="btn btn-sky-blue mr-0"
+                            mat-raised-button color="primary"
+                            class="mr-0"
                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherType !== 'sales'"
                             (click)="goToInvoice()"
                         >
@@ -236,7 +237,7 @@
                                                     *ngIf="voucherType === 'sales' || voucherType === 'debit note' || voucherType === 'credit note'"
                                                     class="cursor-pointer"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                                    (click)="invokeLoadPaymentModes(); openReceivePaymentDialog()"
                                                 >
                                                     <a class="dropdown-item">{{
                                                         commonLocaleData?.app_payment_status?.paid
@@ -313,7 +314,7 @@
                                                 <li
                                                     class="cursor-pointer"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                                    (click)="invokeLoadPaymentModes(); openReceivePaymentDialog()"
                                                 >
                                                     <a class="dropdown-item">
                                                         {{ commonLocaleData?.app_payment_status?.paid }}
@@ -335,7 +336,7 @@
                                                 <li
                                                     class="cursor-pointer"
                                                     role="menuitem"
-                                                    (click)="deleteConfirmationModel.toggle()"
+                                                    (click)="openDeleteConfirmationDialog()"
                                                 >
                                                     <a class="dropdown-item">{{ commonLocaleData?.app_delete }}</a>
                                                 </li>
@@ -347,8 +348,8 @@
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_edit"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        matTooltipPosition="above"
                                                         (click)="(isCompany || isConsolidatedBranch) ? '' : toggleEditMode()"
                                                         aria-label="edit icon"
                                                         ><i class="icon-edit-pencil"></i
@@ -358,9 +359,9 @@
                                                 <span *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_send_email"
-                                                        placement="top"
-                                                        (click)="showEmailSendModal.toggle()"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        matTooltipPosition="above"
+                                                        (click)="openEmailSendDialog()"
                                                         aria-label="envelope icon"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
@@ -369,9 +370,9 @@
                                                 <span *ngIf="selectedItem?.voucherType === 'purchase'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_send_email"
-                                                        placement="top"
-                                                        (click)="openSendMailModal(sendEmailModal)"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        matTooltipPosition="above"
+                                                        (click)="openSendEmailModalDialog()"
                                                         aria-label="envelope icon"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
@@ -390,8 +391,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_print"
+                                                        matTooltipPosition="above"
                                                         (click)="printVoucher()"
                                                         aria-label="print icon"
                                                         ><i class="fa fa-print"></i
@@ -401,8 +402,8 @@
                                                 <span *ngIf="thermalTemplate?.templateType === 'thermal_template'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print_thermal"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_print_thermal"
+                                                        matTooltipPosition="above"
                                                         (click)="printThermal()"
                                                         aria-label="print icon"
                                                         ><i class="fa fa-print"></i
@@ -418,8 +419,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_download_pdf"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_download_pdf"
+                                                        matTooltipPosition="above"
                                                         (click)="downloadPurchaseBillPDF()"
                                                         aria-label="download"
                                                         ><i class="icon-download-circle"></i
@@ -440,8 +441,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_download_pdf"
-                                                        placement="top"
+                                                        [matTooltip]="commonLocaleData?.app_download_pdf"
+                                                        matTooltipPosition="above"
                                                         (click)="downloadPdf()"
                                                         aria-label="download"
                                                         ><i class="icon-download-circle"></i
@@ -465,8 +466,8 @@
                                                 >
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="localeData?.download_attachment"
-                                                        placement="top"
+                                                        [matTooltip]="localeData?.download_attachment"
+                                                        matTooltipPosition="above"
                                                         (click)="downloadFile()"
                                                         aria-label="download"
                                                         ><i class="icon-download-circle"></i
@@ -476,9 +477,9 @@
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_delete"
-                                                        placement="top"
-                                                        (click)="deleteConfirmationModel.toggle()"
+                                                        [matTooltip]="commonLocaleData?.app_delete"
+                                                        matTooltipPosition="above"
+                                                        (click)="openDeleteConfirmationDialog()"
                                                         aria-label="delete icon"
                                                         ><i class="icon-trash"></i
                                                     ></a>
@@ -495,7 +496,7 @@
                                             >
                                             <!-- voucherApiVersion !== 2 && selectedItem?.voucherType === 'purchase' ||-->
                                                 <button
-                                                    class="btn btn-primary history-button"
+                                                    mat-raised-button color="primary"
                                                     (click)="toggleActivityHistoryAsidePane()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
@@ -528,7 +529,7 @@
                                         <p class="payment-content">{{ localeData?.record_payment }}</p>
                                         <a
                                             href="javascript:;"
-                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                            (click)="invokeLoadPaymentModes(); openReceivePaymentDialog()"
                                             >{{ localeData?.receipt_payment }}</a
                                         >
                                     </div>
@@ -538,7 +539,7 @@
                                     <div class="single-payment-detail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg" alt="send-icon" /></div>
                                         <p class="payment-content">{{ localeData?.email_invoice }}</p>
-                                        <a href="javascript:;" (click)="showEmailSendModal?.show()">
+                                        <a href="javascript:;" (click)="openEmailSendDialog()">
                                             {{
                                                 selectedItem?.voucherType === "credit note" ||
                                                 selectedItem?.voucherType === "debit note"
@@ -594,7 +595,7 @@
                                     href="javascript:;"
                                     class="aqua-color"
                                     (click)="
-                                        openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order?.uniqueName)
+                                        openPurchaseOrderPreviewPopup(null, order?.uniqueName)
                                     "
                                     *ngFor="let order of purchaseOrderNumbers; let i = index"
                                     >{{ order.number }}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a
@@ -818,118 +819,85 @@
     </div>
 </ng-template>
 
-<!-- region send email modal-->
-<div
-    bsModal
-    #showEmailSendModal="bs-modal"
-    class="modal fade"
-    role="dialog"
-    [config]="{ keyboard: true, ignoreBackdropClick: true }"
-    tabindex="-1"
->
-    <div *ngIf="showEmailSendModal?.isShown" class="modal-dialog send-mail-modal">
-        <div class="modal-content">
-            <app-send-email-invoice-component
-                [voucherType]="voucherType"
-                (successEvent)="sendEmail.emit($event); showEmailSendModal?.hide()"
-                [selectedItem]="selectedItem"
-                (cancelEvent)="showEmailSendModal?.hide()"
-            >
-            </app-send-email-invoice-component>
-        </div>
+<!-- region send email dialog-->
+<ng-template #showEmailSendDialog>
+    <div mat-dialog-content class="modal-body send-mail-modal">
+        <app-send-email-invoice-component
+            [voucherType]="voucherType"
+            (successEvent)="sendEmail.emit($event); closeEmailSendDialog()"
+            [selectedItem]="selectedItem"
+            (cancelEvent)="closeEmailSendDialog()"
+        >
+        </app-send-email-invoice-component>
     </div>
-</div>
+</ng-template>
 <!-- endregion -->
 
-<!-- region download modal-->
-<div
-    bsModal
-    #downloadVoucherModal="bs-modal"
-    class="modal fade"
-    role="dialog"
-    [config]="{ keyboard: true, ignoreBackdropClick: true }"
-    tabindex="-1"
->
-    <div *ngIf="downloadVoucherModal?.isShown" class="modal-dialog send-mail-modal">
-        <div class="modal-content">
-            <download-voucher
-                [selectedItem]="selectedItem"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (cancelEvent)="downloadVoucherModal?.hide()"
-            >
-            </download-voucher>
-        </div>
+<!-- region download dialog-->
+<ng-template #downloadVoucherDialog>
+    <div mat-dialog-content class="modal-body send-mail-modal">
+        <download-voucher
+            [selectedItem]="selectedItem"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (cancelEvent)="closeDownloadVoucherDialog()"
+        >
+        </download-voucher>
     </div>
-</div>
+</ng-template>
 <!-- endregion -->
 
 <!-- region delete confirmation model -->
-<div
-    bsModal
-    #deleteConfirmationModel="bs-modal"
-    class="modal fade"
-    role="dialog"
-    [config]="{ keyboard: true }"
-    tabindex="-1"
->
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <confirm-modal
-                [body]="
-                    only4ProformaEstimates
-                        ? localeData?.delete_voucher
-                        : selectedItem?.voucherType === 'purchase'
-                        ? localeData?.delete_record
-                        : localeData?.delete_voucher_invoice
-                "
-                (cancelCallBack)="deleteConfirmationModel.toggle()"
-                (successCallBack)="deleteVoucher.emit(selectedItem); deleteConfirmationModel.toggle()"
-            ></confirm-modal>
-        </div>
+<ng-template #deleteConfirmationDialog>
+    <div mat-dialog-content class="modal-body">
+        <confirm-modal
+            [body]="
+                only4ProformaEstimates
+                    ? localeData?.delete_voucher
+                    : selectedItem?.voucherType === 'purchase'
+                    ? localeData?.delete_record
+                    : localeData?.delete_voucher_invoice
+            "
+            [title]="commonLocaleData?.app_delete"
+            (cancelCallBack)="closeDeleteConfirmationDialog()"
+            (successCallBack)="deleteVoucher.emit(selectedItem); closeDeleteConfirmationDialog()"
+        >
+        </confirm-modal>
     </div>
-</div>
+</ng-template>
 <!-- endregion -->
 
 <!-- region receive payment popup -->
-<div
-    bsModal
-    #receivePaymentPopup="bs-modal"
-    class="modal fade"
-    role="dialog"
-    [config]="{ keyboard: true }"
-    tabindex="-1"
->
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <invoice-payment-model
-                *ngIf="receivePaymentPopup.isShown"
-                [selectedInvoiceForPayment]="selectedItem"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (performActionPopup)="processPaymentEvent.emit($event)"
-                (closeModelEvent)="closePerformActionPopup(); receivePaymentPopup.hide()"
-            >
-            </invoice-payment-model>
-        </div>
-    </div>
-</div>
+<ng-template #receivePaymentDialog>
+    <invoice-payment-model
+        [selectedInvoiceForPayment]="selectedItem"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (performActionPopup)="processPaymentEvent.emit($event)"
+        (closeModelEvent)="closePerformActionPopup(); closeReceivePaymentDialog()"
+    >
+    </invoice-payment-model>
+</ng-template>
 <!-- endregion -->
 
-<ng-template #purchaseOrderPreviewModal>
-    <purchase-order-preview-modal
-        [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"
-        [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName"
-        [purchaseOrderCompanyUniqueName]="companyUniqueName"
-        (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"
-    >
-    </purchase-order-preview-modal>
+<ng-template #purchaseOrderPreviewDialog>
+    <div mat-dialog-content>
+        <purchase-order-preview-modal
+            [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"
+            [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName"
+            [purchaseOrderCompanyUniqueName]="companyUniqueName"
+            (closeModelEvent)="closePurchaseOrderPreviewDialog()"
+        >
+        </purchase-order-preview-modal>
+    </div>
 </ng-template>
 
-<ng-template #sendEmailModal>
-    <purchase-send-email-modal
-        [module]="'purchase-bill'"
-        [sendEmailRequest]="sendEmailRequest"
-        (closeModelEvent)="closeSendMailPopup($event)"
-    ></purchase-send-email-modal>
+<ng-template #sendEmailModalDialog>
+    <div mat-dialog-content>
+        <purchase-send-email-modal
+            [module]="'purchase-bill'"
+            [sendEmailRequest]="sendEmailRequest"
+            (closeModelEvent)="closeSendMailDialog()"
+        ></purchase-send-email-modal>
+    </div>
 </ng-template>

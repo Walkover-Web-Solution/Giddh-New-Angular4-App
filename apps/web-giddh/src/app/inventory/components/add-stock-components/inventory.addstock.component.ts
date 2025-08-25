@@ -22,8 +22,7 @@ import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 import { SalesService } from '../../../services/sales.service';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
@@ -69,7 +68,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public forceClearStockUnit$: Observable<IForceClear> = of({ status: false });
     public disableStockButton: boolean = false;
     public createGroupSuccess$: Observable<boolean>;
-    public showOtherDetails: boolean;
     public addNewStock: boolean = false;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public isManageInventory$: Observable<boolean>;
@@ -328,7 +326,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             this.allowReset = false;
             if (a && !this.addStock) {
                 this.addStockForm.reset();
-                this.showOtherDetails = false;
                 this.stockUniqueName = a?.uniqueName;
                 this.isUpdatingStockForm = true;
                 this.addStockForm?.patchValue({
@@ -896,8 +893,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             });
         }
 
-        this.showOtherDetails = false;
-
         if (!formObj.parentGroup) {
             let stockRequest = {
                 name: 'Main Group',
@@ -1010,8 +1005,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         } else {
             stockObj.manufacturingDetails = null;
         }
-
-        this.showOtherDetails = false;
 
         this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
     }
@@ -1344,7 +1337,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public toggleOtherDetails(): void {
-        this.showOtherDetails = !this.showOtherDetails;
         this.updateHsnSac();
     }
 

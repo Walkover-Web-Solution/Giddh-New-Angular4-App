@@ -21,7 +21,6 @@
                         *ngIf="showClearFilter"
                         mat-stroked-button
                         class="min160 mr-l1"
-                        color="primary"
                         (click)="clearFilter()"
                         aria-label="clear"
                     >
@@ -34,7 +33,7 @@
                         inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
                     "
                     (click)="createCompanyInSubscription()"
-                    mat-stroked-button
+                    mat-raised-button
                     [matTooltip]="localeData?.add_company_subscription"
                     [matTooltipPosition]="'above'"
                     matTooltipClass="tooltip-black"

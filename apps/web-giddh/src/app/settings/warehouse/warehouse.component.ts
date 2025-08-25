@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -18,7 +17,8 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
+import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SettingsWarehouseService } from '../../services/settings.warehouse.service';
@@ -33,6 +33,7 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
+import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 
 /**
  * Warehouse component
@@ -63,6 +64,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public paginationConfig: any;
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the list of warehouses */
     public warehouses: Array<any> = [];
     /** Warehouse search query */
@@ -118,6 +121,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True if address info is open */
+    public isAddressInfoOpen: string = '';
+    /** True if last address info is open */
+    public isLastAddressInfoOpen: boolean = false;
 
     /** @ignore */
     constructor(
@@ -311,11 +318,25 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {PageChangedEvent} event Page changed event
      * @memberof WarehouseComponent
      */
-    public pageChanged(event: PageChangedEvent): void {
+    /**
+     * Handles the page change event from mat-paginator
+     *
+     * @param {PageEvent} event Page event
+     * @memberof WarehouseComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
         this.showLoader = true;
-        this.currentPage = event.page;
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page, count: PAGINATION_LIMIT }));
+        if (event.pageSize !== this.paginationLimit) {
+            this.paginationLimit = event.pageSize;
+            this.currentPage = 1;
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: event.pageSize }));
+        } else {
+            this.currentPage = event.pageIndex + 1;
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.pageIndex + 1, count: this.paginationLimit }));
+        }
     }
+
+
 
     /**
      * Resets the on boarding form
@@ -605,5 +626,25 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.statusModalRef?.close();
         });
+    }
+
+    /**
+     * Opens the address info
+     *
+     * @param {boolean} isOpen
+     * @param {string} [uniqueName='']
+     * @memberof BranchComponent
+     */
+    public openAddressInfo(isOpen: boolean, uniqueName: string = ''): void {
+        this.isLastAddressInfoOpen = isOpen;
+        if (isOpen) {
+            this.isAddressInfoOpen = uniqueName;
+        } else {
+            setTimeout(() => {
+                if (!this.isLastAddressInfoOpen) {
+                    this.isAddressInfoOpen = '';
+                }
+            }, 100);
+        }
     }
 }

@@ -9,7 +9,7 @@
         <hamburger-menu [pageHeading]="isMobileScreen ? localeData?.page_heading_single : ''"></hamburger-menu>
         <div class="report-breadcrum d-md-none d-lg-none">
             <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active" id="giddh-page-heading-link">
+                <li class="active">
                     <a href="javascript:void(0)" (click)="goToDashboard()">{{ commonLocaleData?.app_report }}</a>
                     <span class="d-inline-block pl-1"> ></span>
                 </li>
@@ -47,8 +47,9 @@
                         [placeholder]="commonLocaleData?.app_select"
                         [options]="groupByOptions"
                         formControlName="groupBy"
-                        [labelValue]="groupByOptions?.[0]?.label"
+                        [labelValue]="reportForm?.get('groupBy')?.value === groupByEnum.Duration ? groupByOptions?.[0]?.label : groupByOptions?.[1]?.label"
                         [required]="true"
+                        (selectedOption)="handleGroupByChange($event)"
                     >
                     </reactive-dropdown-field>
                 </div>
@@ -133,12 +134,21 @@
                         </mat-form-field>
                     </div>
                     <div class="custom-datepicker-wrapper">
-                        <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div 
+                            class="custom-datepicker" 
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            aria-label="Date range picker"
+                            role="button"
+                            tabindex="0"
+                        >
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker border-radius-2"
+                                class="giddh-datepicker date-range-picker"
+                                readonly
                             />
                         </div>
                     </div>
@@ -171,7 +181,7 @@
                 </div>
             </div>
             <button 
-                mat-stroked-button  
+                mat-raised-button  
                 (click)="export()"
                 color="primary"
                 [matTooltip]="commonLocaleData?.app_export"
@@ -194,28 +204,26 @@
 </ng-container>
 
 
-<!-- Universal Datepicker  -->
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
+<!-- Universal Datepicker Menu -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
             >
-            </app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+        </app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

@@ -12,7 +12,7 @@
 
             <p class="mr-t1" [innerHTML]="localeData?.aadhar_required_note"></p>
             <div class="pull-left mr-t1">
-                <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation(eSign)">
+                <button type="submit" mat-raised-button color="primary" (click)="onConfirmation(eSign)">
                     {{ localeData?.go }}
                 </button>
             </div>

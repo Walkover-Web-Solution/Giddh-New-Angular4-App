@@ -151,20 +151,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This function will change the page of vat report
-     *
-     * @param {*} event
-     * @memberof VatReportTransactionsComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.vatReportTransactionsRequest.page = event.pageIndex + 1;
-            this.vatReportTransactionsRequest.count = event.pageSize;
-            this.vatReportTransactions.results = [];
-            this.getVatReportTransactions(false);
-        }
-    }
+
 
     /**
      * This will get called and open the invoice in popup if we click on any invoice number

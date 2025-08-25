@@ -8,8 +8,6 @@ import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -45,7 +43,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { ContactPreviewComponent } from './preview/preview.component';
 import { AccountStatementComponent } from './account-statement/account-statement.component';
 import { LedgerStatementModule } from '../shared/ledger-statement-t-view/ledger-statement.module';
@@ -53,7 +50,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { LedgerModule } from '../ledger/ledger.module';
 import { MatCardModule } from '@angular/material/card';
-import { AttachmentsModule } from '../theme/attachments/attachments.module';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -78,12 +75,10 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         }),
         ShSelectModule,
         BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
         ModalModule.forRoot(),
-        PaginationModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,

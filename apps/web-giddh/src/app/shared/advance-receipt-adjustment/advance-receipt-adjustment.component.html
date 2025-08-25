@@ -486,7 +486,7 @@
                                 </amount-field>
                             </span>
 
-                            <i class="icon-info pointer" [tooltip]="localeData?.adjustment_amount_error"></i>
+                            <i class="icon-info pointer" [matTooltip]="localeData?.adjustment_amount_error"></i>
                         </span>
                         <div class="note-message mt-3" *ngIf="isVoucherModule && isModal">
                             <p>{{ commonLocaleData?.app_note }}:</p>
@@ -494,7 +494,7 @@
                         </div>
                         <div class="mt-auto" *ngIf="isModal">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 *ngIf="!isUpdateMode"
                                 class="mr-r1"
@@ -504,7 +504,7 @@
                                 {{ commonLocaleData?.app_save }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 *ngIf="isUpdateMode"
                                 class="mr-r1"

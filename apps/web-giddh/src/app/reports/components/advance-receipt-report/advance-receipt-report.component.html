@@ -17,7 +17,9 @@
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
                     <button
                         type="button"
-                        class="btn btn-sky-blue dropdown-btn-new"
+                        mat-raised-button
+                        color="primary"
+                        class="dropdown-btn-new"
                         [routerLink]="'/pages/vouchers/receipt/create'"
                         *ngIf="(voucherApiVersion === 2) && !isProdMode"
                     >
@@ -47,12 +49,12 @@
                                              [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
                                                 class="pull-right"
                                                 *ngIf="!option.isCompany"
-                                                tooltip="{{ commonLocaleData?.app_branch }}"
+                                                matTooltip="{{ commonLocaleData?.app_branch }}"
                                             ></i>
                                             <i
                                                 class="icon-company-profile pull-right"
                                                 *ngIf="option.isCompany"
-                                                tooltip="{{ commonLocaleData?.app_company }}"
+                                                matTooltip="{{ commonLocaleData?.app_company }}"
                                             ></i>
                                         </span>
                                         <span class="entity-details">
@@ -69,13 +71,27 @@
                         </sh-select>
                     </div>
                     <div class="d-flex">
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div 
+                            class="custom-datepicker" 
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker"
+                                readonly
                             />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" (click)="toggleGiddhDatepicker(true)">
+                                    <i class="icon-calender"></i>
+                                </button>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -90,7 +106,8 @@
                 <div *ngIf="selectedReceipts?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
                     <button
                         class="btn btn-default mr-r15"
-                        [tooltip]="commonLocaleData?.app_export"
+                        [matTooltip]="commonLocaleData?.app_export"
+                        matTooltipPosition="above"
                         (click)="exportCsvDownload()"
                     >
                         <span class="icon-export-icon"></span>
@@ -125,7 +142,8 @@
                 <div>
                     <div
                         class="advance-icon cursor-pointer btn btn-primary mr-0"
-                        [tooltip]="commonLocaleData?.app_advance_search"
+                        [matTooltip]="commonLocaleData?.app_advance_search"
+                        matTooltipPosition="above"
                         (click)="openModal()"
                     >
                         <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
@@ -567,8 +585,8 @@
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_total_amount"
-                                [tooltip]="grandTotalPopupTemplate"
-                                container="body"
+                                [matTooltip]="grandTotalPopupTemplate"
+                                matTooltipPosition="above"
                             >
                                 <span class="d-inline-flex">
                                     <amount-field
@@ -592,8 +610,8 @@
                             </td>
                             <td
                                 [attr.data-title]="localeData?.unused_amount"
-                                [tooltip]="balanceDuePopupTemplate"
-                                container="body"
+                                [matTooltip]="balanceDuePopupTemplate"
+                                matTooltipPosition="above"
                             >
                                 <span class="d-inline-flex">
                                     <amount-field
@@ -628,25 +646,20 @@
             </div>
 
             <div
-                [hidden]="isLoading"
-                *ngIf="pageConfiguration.totalItems > paginationLimit"
-                class="pagination-wrapper mt-2"
+                *ngIf="pageConfiguration.totalItems > paginationLimit && !isLoading"
+                class="mt-4"
             >
-                <pagination
-                    [totalItems]="pageConfiguration.totalItems"
-                    [(ngModel)]="pageConfiguration.currentPage"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="paginationLimit"
-                    [rotate]="false"
-                    (pageChanged)="onPageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                >
-                </pagination>
+                <ng-container>
+                    <mat-paginator
+                        [length]="pageConfiguration.totalItems"
+                        [pageSize]="paginationLimit"
+                        [pageIndex]="pageConfiguration.currentPage - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
             <div class="no-data" *ngIf="!allReceipts?.length && !isLoading">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
@@ -655,21 +668,12 @@
     </div>
 
     <!-- Adjust Payment modal start -->
-    <div
-        bsModal
-        #receiptAdvanceSearchModalContainer="bs-modal"
-        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
-        tabindex="-1"
-        class="modal fade open-popup"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
-                </ng-template>
-            </div>
+    <ng-template #receiptAdvanceSearchTemplate>
+        <div class="modal-content">
+            <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
+            </ng-template>
         </div>
-    </div>
+    </ng-template>
     <!-- Adjust Payment modal End-->
 
     <!-- region sort icon template -->
@@ -695,49 +699,38 @@
             }"
         ></div>
     </ng-template>
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
+    <!-- Delete confirmation model -->
+    <ng-template #receiptConfirmationTemplate>
+        <div class="modal-content">
+            <confirm-modal
+                [body]="localeData?.delete_vouchers"
+                (successCallBack)="deleteReceipts()"
+                (cancelCallBack)="closeConfirmationPopup()"
+            >
+            </confirm-modal>
         </div>
     </ng-template>
-    <!-- Delete confirmation model -->
-    <div
-        bsModal
-        #receiptConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content" *ngIf="receiptConfirmationModel?.isShown">
-                <confirm-modal
-                    [body]="localeData?.delete_vouchers"
-                    (successCallBack)="deleteReceipts()"
-                    (cancelCallBack)="closeConfirmationPopup()"
-                >
-                </confirm-modal>
-            </div>
-        </div>
-    </div>
 </ng-container>
 <preview
     *ngIf="previewVoucherParams?.uniqueName"
@@ -748,17 +741,19 @@
 
 <!-- Bulk export modal -->
 <ng-template #bulkExport>
-    <bulk-export-voucher
-        [type]="'receipt'"
-        [dateRange]="{ from: fromDate, to: toDate }"
-        [advanceSearch]="lastListingFilters"
-        [voucherUniqueNames]="selectedReceipts"
-        [totalItems]="
-            selectedReceipts && selectedReceipts.length > 0
-                ? selectedReceipts.length
-                : allReceipts && allReceipts.length
-        "
-        (closeModelEvent)="bulkExportModalRef.hide()"
-    >
-    </bulk-export-voucher>
+    <div mat-dialog-content>
+        <bulk-export-voucher
+            [type]="'receipt'"
+            [dateRange]="{ from: fromDate, to: toDate }"
+            [advanceSearch]="lastListingFilters"
+            [voucherUniqueNames]="selectedReceipts"
+            [totalItems]="
+                selectedReceipts && selectedReceipts.length > 0
+                    ? selectedReceipts.length
+                    : allReceipts && allReceipts.length
+            "
+            (closeModelEvent)="closeBulkExportDialog()"
+        >
+        </bulk-export-voucher>
+    </div>
 </ng-template>

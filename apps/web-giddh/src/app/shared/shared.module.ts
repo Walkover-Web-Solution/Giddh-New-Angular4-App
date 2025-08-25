@@ -7,13 +7,10 @@ import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directiv
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -64,6 +61,21 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { OverlayModule } from '@angular/cdk/overlay';
+
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
+    }
+], false);
+
+export function provideConfig() {
+    return SOCIAL_CONFIG || { id: null, providers: [] };
+}
+
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -86,8 +98,6 @@ import { MatListModule } from '@angular/material/list';
         FormsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        TypeaheadModule.forRoot(),
-        TooltipModule.forRoot(),
         BsDropdownModule.forRoot(),
         PopoverModule.forRoot(),
         SocialLoginModule,
@@ -103,7 +113,7 @@ import { MatListModule } from '@angular/material/list';
         DecimalDigitsModule,
         DigitsOnlyModule,
         BsDatepickerModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
         HighlightModule,
@@ -134,7 +144,9 @@ import { MatListModule } from '@angular/material/list';
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
         MatMenuModule,
-        MatListModule
+        MatListModule,
+        MatExpansionModule,
+        OverlayModule
     ],
     exports: [
         CommonModule,
@@ -148,7 +160,6 @@ import { MatListModule } from '@angular/material/list';
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
         SelectModule,
-        PaginationModule,
         ClickOutsideModule,
         ScrollingModule,
         ConfirmModalModule,
@@ -158,7 +169,6 @@ import { MatListModule } from '@angular/material/list';
         TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
-        TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
         CurrencyModule,

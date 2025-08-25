@@ -51,12 +51,21 @@
                         <div class="d-flex form-group mobile-width-100 flex-none">
                             <div class="form-group date-advance-search pending-advance-search flex-fill">
                                 <div class="input-group mr-r1 mb-0" id="dp-parent">
-                                    <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <div 
+                                        class="custom-datepicker" 
+                                        [matMenuTriggerFor]="universalDatepicker"
+                                        #universalDatepickerTrigger="matMenuTrigger"
+                                        role="button"
+                                        aria-haspopup="true"
+                                        aria-controls="universalDatepicker"
+                                    >
                                         <input
+                                            matInput
                                             type="text"
                                             name="selectedDateRange"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                            class="giddh-datepicker date-range-picker border-radius-2"
+                                            class="giddh-datepicker date-range-picker"
+                                            readonly
                                         />
                                     </div>
                                     <button
@@ -69,18 +78,18 @@
                                 </div>
                                 <span>
                                     <button
+                                        mat-raised-button color="primary"
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
-                                        class="btn btn-primary"
                                         (click)="generateBulkInvoice(false)"
                                         type="button"
                                     >
                                         {{ localeData?.generate_multiple }}
                                     </button>
                                     <button
+                                        mat-raised-button color="primary"
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                         [hidden]="selectedLedgerItems?.length === 0"
-                                        class="btn btn-primary"
                                         (click)="generateBulkInvoice(true)"
                                         type="button"
                                     >
@@ -89,8 +98,8 @@
                                     <button
                                         type="button"
                                         *ngIf="(!isCompany && !isConsolidatedBranch) && !isMobileView"
-                                        placement="top"
-                                        [tooltip]="localeData?.works_for_single_entry"
+                                        [matTooltip]="localeData?.works_for_single_entry"
+                                        matTooltipPosition="above"
                                         [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"
                                         class="btn btn-primary"
                                         (click)="previewInvoice()"
@@ -107,7 +116,7 @@
                                 *ngIf="customDateSelected && !isMobileView"
                                 (click)="resetDateSearch()"
                             >
-                                <button class="btn btn-filter mr-0">
+                                <button mat-stroked-button class="mr-0">
                                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                 </button>
                             </div>
@@ -236,7 +245,7 @@
                                         />
                                     </div>
                                     <div *ngIf="item.hasGenerationErr">
-                                        <i class="fa fa-info-circle" placement="right" [tooltip]="item.errMsg"></i>
+                                        <i class="fa fa-info-circle" [matTooltip]="item.errMsg" matTooltipPosition="right"></i>
                                     </div>
                                 </td>
 
@@ -332,7 +341,8 @@
                                 <td
                                     class="text-right"
                                     [attr.data-title]="commonLocaleData?.app_total"
-                                    [tooltip]="totalPopupTemplate"
+                                    [matTooltip]="totalPopupTemplate"
+                                    matTooltipPosition="above"
                                 >
                                     <span class="d-inline-flex">
                                         <amount-field
@@ -378,23 +388,20 @@
                 [hidden]="
                     (isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async) || generateVoucherInProcess
                 "
-                class="pagination-wrapper mt-4"
+                class="mt-4"
             >
-                <div class="text-center">
-                    <pagination
-                        [totalItems]="ledgersData.totalItems"
-                        [(ngModel)]="ledgersData.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="20"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    ></pagination>
+                <div class="mt-4">
+                    <ng-container *ngIf="ledgersData.totalItems > pageSizeOptions[1]">
+                        <mat-paginator
+                            [length]="ledgersData.totalItems"
+                            [pageSize]="ledgerSearchRequest.count"
+                            [pageIndex]="ledgerSearchRequest.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)">
+                        </mat-paginator>
+                    </ng-container>
                 </div>
             </div>
 
@@ -425,28 +432,25 @@
         </div>
         <!-- endregion -->
 
-        <ng-template #datepickerTemplate>
-            <div class="datepicker-modal">
-                <div class="modal-body">
-                    <app-datepicker-wrapper
-                        [inputStartDate]="selectedDateRange?.startDate"
-                        [inputEndDate]="selectedDateRange?.endDate"
-                        [alwaysShowCalendars]="true"
-                        [ranges]="datePickerOption"
-                        [selectedRangeLabel]="selectedRangeLabel"
-                        [showCustomRangeLabel]="true"
-                        [showClearButton]="false"
-                        [showCancel]="true"
-                        [linkedCalendars]="true"
-                        [showDropdowns]="true"
-                        (rangeClicked)="dateSelectedCallback($event)"
-                        (datesUpdated)="dateSelectedCallback($event)"
-                        [keepCalendarOpeningWithRange]="false"
-                        [showRangeLabelOnInput]="false"
-                        [dateFieldPosition]="dateFieldPosition"
-                    ></app-datepicker-wrapper>
-                </div>
-            </div>
-        </ng-template>
+        <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+            <ng-template matMenuContent>
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOptions"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                ></app-datepicker-wrapper>
+            </ng-template>
+        </mat-menu>
     </div>
 </ng-container>

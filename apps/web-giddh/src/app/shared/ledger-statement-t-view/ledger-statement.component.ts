@@ -497,18 +497,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * To change pagination page number
-     *
-     * @param {*} event Pagination change event
-     * @memberof LedgerStatementComponent
-     */
-    public pageChanged(event: any): void {
-        if (typeof event === 'string') {
-            this.trxRequest.paginationToken = event;
-            this.getTransactionData();
-        }
-    }
+
 
     /**
     * Angular lifecycle hook: Called once just before the component is destroyed

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, EventEmitter, Output, Input, OnDestroy, TemplateRef } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
+import { Component, OnInit, ViewChild, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { IOption } from '../../theme/ng-select/ng-select';
 import * as dayjs from 'dayjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -29,13 +29,10 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /* Emitter for filters */
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-    /* Datepicker template */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-
+    /** Universal datepicker trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -46,8 +43,6 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* Selected grand total operator */
     public selectedGrandTotalOperator: any = "";
     /* This will hold the default input search values */
@@ -55,7 +50,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private modalService: BsModalService, private breakPointObservar: BreakpointObserver, private generalService: GeneralService) {
+    constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService) {
 
     }
 
@@ -101,32 +96,19 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the datepicker
+     * Toggles the universal datepicker menu
      *
+     * @param {boolean} isOpen
      * @memberof PurchaseAdvanceSearchComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
-
-        this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.hideGiddhDatepicker();
-        });
     }
 
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof PurchaseAdvanceSearchComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      * Call back function for date/range selection in datepicker
@@ -136,7 +118,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -145,7 +127,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
 
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

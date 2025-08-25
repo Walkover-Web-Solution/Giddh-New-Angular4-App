@@ -15,9 +15,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ReplacePipeModule } from '../helpers/pipes/replace/replace.module';
 import { A11yModule } from '@angular/cdk/a11y';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 
 @NgModule({
   imports: [
@@ -38,9 +37,8 @@ import { EditorModule } from '@tinymce/tinymce-angular';
         MatSelectModule,
         MatCheckboxModule,
         ClickOutsideModule,
-        ReplacePipeModule,
-        A11yModule,
-        EditorModule
+        ReplaceAllPipeModule,
+        A11yModule
     ],
     exports: [
         TemplateFroalaComponent

@@ -28,11 +28,14 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -57,7 +60,10 @@ import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
     ]
 })
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy {
-    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
+    /** Dialog reference for advance search modal */
+    private advanceSearchDialogRef: MatDialogRef<any>;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: any;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
@@ -250,15 +256,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public asideTransferPaneState: string = 'out';
     /** Hold branch transfer mode */
     public branchTransferMode: string = '';
-    /** Modal Reference */
-    public modalRef: BsModalRef;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store selected date range to use in api */
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+/* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -266,10 +270,10 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True if stock report API is in progress */
     public stockReportInProcess: boolean = false;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     /**
      * TypeScript public modifiers
@@ -281,11 +285,12 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
-        private modalService: BsModalService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
         this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
+        this.stockReportRequest.count = this.pageSizeOptions[2];
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.entityAndInventoryTypeForm = this.fb.group({
             selectedEntity: ['allEntity'],
@@ -571,10 +576,19 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
-    public pageChanged(event: any): void {
-        this.stockReportRequest.page = event.page;
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof InventoryStockReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.stockReportRequest.page = this.stockReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.stockReportRequest.count = event.pageSize;
         this.getStockReport(false);
     }
+    
+
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
         if (this.stockReportRequest.sort !== type || this.stockReportRequest.sortBy !== columnName) {
@@ -699,16 +713,27 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.initVoucherType();
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
         //Reset Date with universal date
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
-                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.universalDate$.subscribe(response => {
+            if (response) {
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: response[0], endDate: response[1], chosenLabel: response[2] };
+                this.selectedRangeLabel = "";
+
+                if (response && response.length > 0) {
+                    this.selectedRangeLabel = response[2];
+                }
+                this.toggleGiddhDatepicker(false);
+                if (response && response.length > 0) {
+                    this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                    this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                    this.pickerSelectedFromDate = this.fromDate;
+                    this.pickerSelectedToDate = this.toDate;
+                    if (!isReset) {
+                        this.isFilterCorrect = true;
+                        this.getStockReport(true);
+                    }
+                }
             }
         });
         //Reset Date
@@ -718,35 +743,53 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
     }
 
-    public onOpenAdvanceSearch() {
+    /**
+     * Opens the advance search dialog
+     *
+     * @memberof InventoryStockReportComponent
+     */
+    public onOpenAdvanceSearch(): void {
         this.advanceSearchModalShow = true;
-        this.advanceSearchModel?.show();
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
-    public advanceSearchAction(type?: string) {
+    /**
+     * Handles advance search dialog actions
+     *
+     * @param {string} type Action type
+     * @memberof InventoryStockReportComponent
+     */
+    public advanceSearchAction(type?: string): void {
         if (type === 'cancel') {
             this.advanceSearchModalShow = true;
-            this.clearModal()
-            this.advanceSearchModel.hide();
+            this.clearModal();
+            if (this.advanceSearchDialogRef) {
+                this.advanceSearchDialogRef.close();
+                this.advanceSearchDialogRef = null;
+            }
             return;
         } else if (type === 'clear') {
-            this.clearModal()
+            this.clearModal();
             return;
         }
 
         if (this.isFilterCorrect) {
-
             this.datePickerOptions = {
                 ...this.datePickerOptions, startDate: dayjs(this.pickerSelectedFromDate).toDate(),
                 endDate: dayjs(this.pickerSelectedToDate).toDate()
             };
 
             this.advanceSearchModalShow = false;
-            this.advanceSearchModel.hide();
+            if (this.advanceSearchDialogRef) {
+                this.advanceSearchDialogRef.close();
+                this.advanceSearchDialogRef = null;
+            }
             this.getStockReport(true);
         }
     }
-
 
     public clearModal() {
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {
@@ -890,19 +933,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public openBranchTransferPopup(event: any): void {
         this.branchTransferMode = event;
         this.toggleTransferAsidePane();
-        this.openModal();
-    }
-
-    /**
-     * Open's modal
-     *
-     * @memberof InventoryStockReportComponent
-     */
-    public openModal(): void {
-        this.modalRef = this.modalService.show(
-            this.template,
-            Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
-        );
     }
 
     /**
@@ -912,26 +942,23 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * @memberof InventoryStockReportComponent
      */
     public hideModal(isNoteCreatedSuccessfully?: boolean): void {
-        this.modalRef.hide();
         if (isNoteCreatedSuccessfully) {
             this.getStockReport(true);
         }
     }
 
     /**
-     *To show the datepicker
+     * To show/hide the datepicker
      *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
+     * @param {boolean} isOpen
+     * @memberof InventoryStockReportComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
@@ -939,9 +966,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      *
      * @memberof AuditLogsFormComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      * Call back function for date/range selection in datepicker
@@ -951,21 +975,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.pickerSelectedFromDate = this.fromDate;
             this.pickerSelectedToDate = this.toDate;
             if (!from) {
                 this.isFilterCorrect = true;

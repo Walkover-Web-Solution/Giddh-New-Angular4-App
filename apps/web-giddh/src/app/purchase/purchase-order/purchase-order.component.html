@@ -27,13 +27,20 @@
                 </div>
                 <form #invoiceForm="ngForm" novalidate class="form-inline">
                     <div class="form-group mr-r1 d-flex">
-                        <div class="input-group custom-datepicker">
+                        <div class="custom-datepicker"
+                             [matMenuTriggerFor]="universalDatepicker"
+                             #universalDatepickerTrigger="matMenuTrigger"
+                             role="button"
+                             aria-haspopup="true"
+                             aria-controls="universalDatepicker">
                             <input
+                                matInput
                                 type="text"
                                 name="dateRange"
-                                (click)="showGiddhDatepicker($event)"
+                                aria-label="Select date range"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker form-control date-range-picker"
+                                readonly
                             />
                         </div>
                     </div>
@@ -101,7 +108,8 @@
                 </div>
                 <div
                     class="d-flex align-items-center advance-icon btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search"
+                    [matTooltip]="commonLocaleData?.app_advance_search"
+                    matTooltipPosition="above"
                     (click)="openAdvanceSearchModal(purchaseAdvanceSearch)"
                 >
                     <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
@@ -357,8 +365,8 @@
                         </td>
                         <td
                             [attr.data-title]="localeData?.total_amount"
-                            [tooltip]="grandTotalPopupTemplate"
-                            container="body"
+                            [matTooltip]="grandTotalPopupTemplate"
+                            matTooltipPosition="above"
                         >
                             <span class="d-flex justify-content-end">
                                 <amount-field
@@ -395,7 +403,8 @@
                                 "
                             >
                                 <a
-                                    [tooltip]="localeData?.convert_tobill"
+                                    [matTooltip]="localeData?.convert_tobill"
+                                    matTooltipPosition="above"
                                     *ngIf="item?.status === 'open' && (!isCompany && !isConsolidatedBranch)"
                                     (click)="
                                         voucherApiVersion === 2
@@ -406,21 +415,24 @@
                                     <span class="icon-tick font-12"></span>
                                 </a>
                                 <a
-                                    [tooltip]="commonLocaleData?.app_send_email"
+                                    [matTooltip]="commonLocaleData?.app_send_email"
+                                    matTooltipPosition="above"
                                     (click)="openSendMailModal(item, sendEmailModal)"
                                 >
                                     <span class="icon-envelope font-12"></span>
                                 </a>
                                 <a
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    [tooltip]="commonLocaleData?.app_copy"
+                                    [matTooltip]="commonLocaleData?.app_copy"
+                                    matTooltipPosition="above"
                                     [routerLink]="['/pages/purchase-management/purchase-order/new/' + item?.uniqueName]"
                                 >
                                     <span class="icon-copy-small font-15"></span>
                                 </a>
                                 <a
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    [tooltip]="commonLocaleData?.app_delete"
+                                    [matTooltip]="commonLocaleData?.app_delete"
+                                    matTooltipPosition="above"
                                     (click)="confirmDelete(item)"
                                 >
                                     <i class="icon-trash"></i>
@@ -438,24 +450,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="pagination-wrapper">
-            <pagination
-                [hidden]="isLoading"
-                *ngIf="purchaseOrders.totalPages > 1"
-                class="pagination"
-                [(ngModel)]="purchaseOrderGetRequest.page"
-                [totalItems]="purchaseOrders.totalItems"
-                [itemsPerPage]="purchaseOrderGetRequest.count"
-                [maxSize]="5"
-                [boundaryLinks]="true"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
-        </div>
+        <ng-container *ngIf="purchaseOrders?.totalPages > 1 && !isLoading">
+            <mat-paginator [length]="purchaseOrders?.totalItems" [pageSize]="purchaseOrderGetRequest.count" [pageSizeOptions]="pageSizeOptions" [pageIndex]="purchaseOrderGetRequest.page - 1" (page)="handlePageEvent($event)" [showFirstLastButtons]="true">
+            </mat-paginator>
+        </ng-container>
         <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
             <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
@@ -464,7 +462,7 @@
         <div class="purchase-order-bulk-update">
             <div class="modal-header">
                 <h4 class="modal-title pull-left">{{ localeData?.bulk_update }}</h4>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="bulkUpdateDialogRef?.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -532,7 +530,7 @@
                             <button class="btn btn-success" (click)="validateBulkUpdateFields()">
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button class="btn btn-cancel" (click)="modalRef.hide()">
+                            <button class="btn btn-cancel" (click)="bulkUpdateDialogRef?.close()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -550,29 +548,29 @@
             (closeModelEvent)="advanceSearchCallback($event)"
         ></purchase-advance-search>
     </ng-template>
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <!-- Date Picker Menu -->
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            >
+        </app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
     <ng-template #sortTemplate let-column="column">
         <div
             class="icon-sort-asc"
@@ -600,26 +598,16 @@
             }"
         ></div>
     </ng-template>
-    <div
-        bsModal
-        #poConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-voucher-confirmation-modal
-                    *ngIf="poConfirmationModel.isShown"
-                    [module]="deleteModule"
-                    (confirmDeleteEvent)="processDelete()"
-                    (closeModelEvent)="closeConfirmationPopup()"
-                >
-                </delete-voucher-confirmation-modal>
-            </div>
+    <ng-template #poConfirmationTemplate>
+        <div class="modal-content">
+            <delete-voucher-confirmation-modal
+                [module]="deleteModule"
+                (confirmDeleteEvent)="processDelete()"
+                (closeModelEvent)="closeConfirmationPopup()"
+            >
+            </delete-voucher-confirmation-modal>
         </div>
-    </div>
+    </ng-template>
     <purchase-order-preview
         *ngIf="purchaseOrderUniqueName && translationLoaded"
         [purchaseOrders]="purchaseOrders"

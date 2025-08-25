@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<!--*ngIf="templateId == 'common_template_a'"-->
+<html id="default" lang="en">
+    <head>
+        <title></title>
+
+        <style>
+            /* Importing Inter, Lato, Roboto, and Open Sans fonts */
+            @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+        </style>
+    </head>
+
+    <body
+        *ngIf="contentTemplate.sections && contentTemplate.sections"
+        [style.font-family]="(contentTemplate.font ? contentTemplate.font : 'Inter') + ' !important'"
+        [style.padding-top]="contentTemplate.topMargin + 'px !important'"
+        [style.padding-bottom]="contentTemplate.bottomMargin + 'px !important'"
+        [style.padding-right]="contentTemplate.rightMargin + 'px !important'"
+        [style.padding-left]="contentTemplate.leftMargin + 'px !important'"
+        [style.font-size]="contentTemplate.fontDefault + 'px !important'"
+    >
+        <!--class="disabled-area"-->
+        <div>
+            <div
+                id="Template-header"
+                [ngClass]="{
+                    'disabled-area': !templateSectionsVisible.header,
+                    ' ': templateSectionsVisible.header
+                }"
+                (click)="onClickSection('header')"
+            >
+                <a
+                    href="javascript:void(0);"
+                    class="edit-template"
+                    *ngIf="!templateSectionsVisible.header"
+                    aria-label="edit icon"
+                >
+                    <i class="icon-edit-pencil"></i>
+                </a>
+                <header>
+                    <table class="mr-b05" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr class="header-table">
+                                <td class="pd-b05">
+                                    <figure class="clearfix">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-md-12 col-sm-12">
+                                                <img
+                                                    [hidden]="!showLogo"
+                                                    [src]="logoSrc"
+                                                    class="pull-left"
+                                                    alt="brand-logo"
+                                                    [ngStyle]="{ 'height': contentTemplate.logoSize + 'px' }"
+                                                />
+                                            </div>
+                                            <!--<div class="col-md-6 col-sm-6" *ngIf="voucherType==='sales'">
+                                        <img src="assets/images/duplicate.svg" class="pull-right" alt="">
+                                        </div>-->
+                                        </div>
+                                    </figure>
+                                    <figure *ngIf="sectionSettings.header.companyName?.display">
+                                        <strong *ngIf="sectionSettings.header.companyName?.display">
+                                            <h2
+                                                [ngStyle]="{
+                                                    'color': contentTemplate.templateColor,
+                                                    'font-size': contentTemplate.fontDefault + 'px'
+                                                }"
+                                            >
+                                                {{ sectionSettings.header.companyName?.label || "Walkover Web Solutions Pvt" }}
+                                            </h2>
+                                        </strong>
+                                    </figure>
+                                    <table class="number-detail-series">
+                                        <tbody>
+                                            <tr [hidden]="!sectionSettings.header.gstin?.display">
+                                                <td>
+                                                    <strong>{{ sectionSettings.header.gstin?.label }}</strong>
+                                                    {{ companyGSTIN ? companyGSTIN : "12BAUCS7548A1Z4" }}
+                                                </td>
+                                            </tr>
+                                            <!-- <tr [hidden]="!sectionSettings.header.pan?.display">
+                  <td><strong>{{sectionSettings.header.pan?.label}}</strong> {{companyPAN ? companyPAN : 'AAACW9768L'}}</td>
+              </tr> -->
+                                        </tbody>
+                                    </table>
+                                    <p
+                                        class="word-break"
+                                        *ngIf="
+                                            voucherType === 'sales' &&
+                                            showGstComposition &&
+                                            sectionSettings.header.gstComposition?.display
+                                        "
+                                    >
+                                    {{
+                                        sectionSettings.header.gstComposition?.label
+                                            ? sectionSettings.header.gstComposition?.label
+                                            : "Registered under Composition Scheme"
+                                    }}
+                                    </p>
+                                </td>
+
+                                <td class="pull-right">
+                                    <table>
+                                        <tbody>
+                                            <tr [class.pull-right]="!sectionSettings.header.showQrCode?.display">
+                                                <td
+                                                    class="align-bottom pd-b05"
+                                                    [class.pull-right]="!sectionSettings.header.showQrCode?.display"
+                                                >
+                                                    <table class="w-100">
+                                                        <tbody>
+                                                            <ng-container *ngIf="voucherType === 'sales'">
+                                                                <tr
+                                                                    *ngIf="
+                                                                        sectionSettings.header.invoiceDate?.display
+                                                                    "
+                                                                >
+                                                                    <td
+                                                                        [class.pull-left]="
+                                                                            sectionSettings.header.showQrCode
+                                                                                ?.display
+                                                                        "
+                                                                        class="word-break"
+                                                                    >
+                                                                        <strong>{{
+                                                                            sectionSettings.header.invoiceDate
+                                                                                ?.label?.length > 0
+                                                                                ? sectionSettings.header.invoiceDate
+                                                                                      ?.label
+                                                                                : "Invoice Date"
+                                                                        }}</strong>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p>11/09/2017</p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr
+                                                                    *ngIf="
+                                                                        sectionSettings.header.invoiceNumber
+                                                                            ?.display
+                                                                    "
+                                                                >
+                                                                    <td
+                                                                        [class.pull-left]="
+                                                                            sectionSettings.header.showQrCode
+                                                                                ?.display
+                                                                        "
+                                                                        class="word-break"
+                                                                    >
+                                                                        <strong>{{
+                                                                            sectionSettings.header.invoiceNumber
+                                                                                ?.label?.length > 0
+                                                                                ? sectionSettings.header
+                                                                                      .invoiceNumber?.label
+                                                                                : "Invoice No."
+                                                                        }}</strong>
+                                                                    </td>
+                                                                    <td class="invoice-head">20170911-1</td>
+                                                                </tr>
+                                                            </ng-container>
+                                                            <!-- <tr *ngIf="sectionSettings.header.dueDate?.display">
+                  <td><strong>{{(sectionSettings.header.dueDate?.label?.length > 0) ? sectionSettings.header.dueDate?.label : 'Due Date'}}</strong></td>
+                  <td>30/06/2017</td>
+              </tr> -->
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    voucherType === 'credit note' ||
+                                                                    voucherType === 'debit note'
+                                                                "
+                                                            >
+                                                                <tr
+                                                                    *ngIf="
+                                                                        sectionSettings.header.voucherDate?.display
+                                                                    "
+                                                                >
+                                                                    <td class="word-break">
+                                                                        <strong>{{
+                                                                            sectionSettings.header.voucherDate
+                                                                                ?.label?.length > 0
+                                                                                ? sectionSettings.header.voucherDate
+                                                                                      ?.label
+                                                                                : "Voucher Date"
+                                                                        }}</strong>
+                                                                    </td>
+                                                                    <td>
+                                                                        <p>11-09-2017</p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr
+                                                                    *ngIf="
+                                                                        sectionSettings.header.voucherNumber
+                                                                            ?.display
+                                                                    "
+                                                                >
+                                                                    <td class="word-break">
+                                                                        <strong>{{
+                                                                            sectionSettings.header.voucherNumber
+                                                                                ?.label?.length > 0
+                                                                                ? sectionSettings.header
+                                                                                      .voucherNumber?.label
+                                                                                : "Voucher No."
+                                                                        }}</strong>
+                                                                    </td>
+                                                                    <td>20170911-1</td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td
+                                                    *ngIf="
+                                                        showGstComposition &&
+                                                        sectionSettings.header.showQrCode?.display
+                                                    "
+                                                    class="width-40"
+                                                >
+                                                    <div class="qr-image">
+                                                        <img
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                                            alt="qr image"
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-container
+                        *ngIf="
+                            (!sectionSettings.header.formNameInvoice?.label &&
+                                sectionSettings.header.formNameTaxInvoice?.label) ||
+                            (sectionSettings.header.formNameInvoice?.label &&
+                                sectionSettings.header.formNameTaxInvoice?.label)
+                        "
+                    >
+                        <div class="docTitle" *ngIf="sectionSettings.header.formNameTaxInvoice?.display">
+                            <h2
+                                [ngStyle]="{
+                                    'color': contentTemplate.templateColor,
+                                    'font-size': contentTemplate.fontDefault + 'px'
+                                }"
+                                [title]="sectionSettings.header.formNameTaxInvoice?.label"
+                            >
+                                <hr [ngStyle]="{ 'background-color': contentTemplate.templateColor }" />
+                            </h2>
+                        </div>
+                        <ng-container *ngIf="!sectionSettings.header.formNameTaxInvoice?.display">
+                            <div
+                                class="green-row"
+                                [ngStyle]="{
+                                    'border-color': contentTemplate.templateColor,
+                                    'font-size': contentTemplate.fontDefault + 'px'
+                                }"
+                            ></div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container
+                        *ngIf="
+                            (sectionSettings.header.formNameInvoice?.label &&
+                                !sectionSettings.header.formNameTaxInvoice?.label) ||
+                            (!sectionSettings.header.formNameInvoice?.label &&
+                                !sectionSettings.header.formNameTaxInvoice?.label)
+                        "
+                    >
+                        <div class="docTitle" *ngIf="sectionSettings.header.formNameInvoice?.display">
+                            <h2
+                                [ngStyle]="{
+                                    'color': contentTemplate.templateColor,
+                                    'font-size': contentTemplate.fontDefault + 'px'
+                                }"
+                                [title]="sectionSettings.header.formNameInvoice?.label"
+                            >
+                                <hr [ngStyle]="{ 'background-color': contentTemplate.templateColor }" />
+                            </h2>
+                        </div>
+                        <ng-container *ngIf="!sectionSettings.header.formNameInvoice?.display">
+                            <div
+                                class="green-row"
+                                [ngStyle]="{
+                                    'border-color': contentTemplate.templateColor,
+                                    'font-size': contentTemplate.fontDefault + 'px'
+                                }"
+                            ></div>
+                        </ng-container>
+                    </ng-container>
+                </header>
+                <ng-container *ngIf="sectionSettings?.header?.showEInvoiceDetails?.display && showGstComposition">
+                    <table class="warehouse-table" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <p class="mb-2">
+                                        <strong>IRN:&nbsp;</strong
+                                        >def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p><strong>Ack No:&nbsp;</strong>152410022936999</p>
+                                </td>
+                                <td align="right">
+                                    <p><strong>Ack Date:&nbsp;</strong>2024-01-01 10:08:00</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+                <table
+                    class="warehouse-table"
+                    cellspacing="0"
+                    cellpadding="0"
+                    *ngIf="
+                        sectionSettings?.header?.warehouseAddress?.display ||
+                        sectionSettings?.header?.showCompanyAddress?.display
+                    "
+                >
+                    <tbody>
+                        <tr>
+                            <td *ngIf="sectionSettings?.header?.showCompanyAddress?.display">
+                                <p>Company Details:</p>
+                                <p><strong>Walkover Web Solutions Pvt</strong></p>
+                                <p>
+                                    Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near Greater Kailash
+                                    Hospital, Indore 452001(M. P.)
+                                </p>
+                                <p>GSTIN:23AAAAAA000A1Z0</p>
+                            </td>
+
+                            <td *ngIf="sectionSettings?.header?.warehouseAddress?.display">
+                                <p>Shipped From:</p>
+                                <p><strong>Walkover Web Solutions Pvt</strong></p>
+                                <p>405 Agrawal Traders, 10/2, Old Palasia, MG Road, Ujjain 456001 (M. P.)</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="meta cargoDetail">
+                    <tbody>
+                        <tr>
+                            <td *ngIf="sectionSettings.header.customerName?.display">
+                                    <p>Customer Name </p>
+                                    <p>Green Soft Solutions</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.billingAddress?.display">
+                                <p class="strong">
+                                    {{
+                                        sectionSettings.header.billingAddress?.label?.length > 0
+                                            ? sectionSettings.header.billingAddress?.label
+                                            : "To"
+                                    }}
+                                </p>
+                                <p>5 A.B. Road</p>
+                                <p>Indore (M.P.) 452000</p>
+                                <p *ngIf="sectionSettings.header.billingState?.display">Madhya Pradesh</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.shippingAddress?.display">
+                                <p class="strong">
+                                    {{
+                                        sectionSettings.header.shippingAddress?.label?.length > 0
+                                            ? sectionSettings.header.shippingAddress?.label
+                                            : "Shipping Address"
+                                    }}
+                                </p>
+                                <p>5 A.B. Road</p>
+                                <p>Indore (M.P.) 452000</p>
+                                <p *ngIf="sectionSettings.header.shippingState?.display">Madhya Pradesh</p>
+                            </td>
+                            <td
+                                *ngIf="
+                                    sectionSettings.header.customerEmail?.display ||
+                                    sectionSettings.header.customerMobileNumber?.display ||
+                                    sectionSettings.header.attentionTo?.display
+                                "
+                            >
+                                <p *ngIf="sectionSettings.header.attentionTo?.display">
+                                    <strong>Mr. Alok Gangrade</strong>
+                                </p>
+                                <p *ngIf="sectionSettings.header.customerEmail?.display">alokgangrade@gmail.com</p>
+                                <p *ngIf="sectionSettings.header.customerMobileNumber?.display">+91 901212XXXX</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="meta" cellpadding="0 " cellspacing="0 ">
+                    <tbody>
+                        <tr>
+                            <!-- <td *ngIf="sectionSettings.header.customerName?.display || sectionSettings.header.customerEmail?.display || sectionSettings.header.customerMobileNumber?.display ">&nbsp;</td> -->
+
+                            <td *ngIf="sectionSettings.header.billingAddress?.display">
+                                <ng-container
+                                    *ngIf="
+                                        sectionSettings.header.billingAddress?.display &&
+                                        sectionSettings.header.billingGstin?.display
+                                    "
+                                >
+                                    <p>
+                                        {{
+                                            sectionSettings.header.billingGstin?.label?.length > 0
+                                                ? sectionSettings.header.billingGstin?.label
+                                                : "GSTIN"
+                                        }}
+                                    </p>
+                                    <p>11AAAAAA000Z0A1</p>
+                                </ng-container>
+                            </td>
+                            <td *ngIf="sectionSettings.header.shippingAddress?.display">
+                                <ng-container
+                                    *ngIf="
+                                        sectionSettings.header.shippingAddress?.display &&
+                                        sectionSettings.header.shippingGstin?.display
+                                    "
+                                >
+                                    <p>
+                                        {{
+                                            sectionSettings.header.shippingGstin?.label?.length > 0
+                                                ? sectionSettings.header.shippingGstin?.label
+                                                : "GSTIN"
+                                        }}
+                                    </p>
+                                    <p>11AAAAAA000Z0A1</p>
+                                </ng-container>
+                            </td>
+                            <td>
+                                <ng-container *ngIf="sectionSettings.header.dueDate?.display">
+                                    <p>
+                                        {{
+                                            sectionSettings.header.dueDate?.label?.length > 0
+                                                ? sectionSettings.header.dueDate?.label
+                                                : "Due Date"
+                                        }}
+                                    </p>
+                                    <p>10/09/2018</p>
+                                </ng-container>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="meta" cellpadding="0 " cellspacing="0 ">
+                    <tbody>
+                        <tr>
+                            <td *ngIf="sectionSettings.header.shippingDate?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.shippingDate?.label?.length > 0
+                                            ? sectionSettings.header.shippingDate?.label
+                                            : "Ship Date"
+                                    }}
+                                </p>
+                                <p>10/09/2018</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.shippedVia?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.shippedVia?.label?.length > 0
+                                            ? sectionSettings.header.shippedVia?.label
+                                            : "Ship Via"
+                                    }}
+                                </p>
+                                <p>FedEx</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.trackingNumber?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.trackingNumber?.label?.length > 0
+                                            ? sectionSettings.header.trackingNumber?.label
+                                            : "Tracking No"
+                                    }}
+                                </p>
+                                <p>00115467</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.customField1?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.customField1?.label?.length > 0
+                                            ? sectionSettings.header.customField1?.label
+                                            : "Field 1"
+                                    }}
+                                </p>
+                                <p>Custom</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.customField2?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.customField2?.label?.length > 0
+                                            ? sectionSettings.header.customField2?.label
+                                            : "Field 2"
+                                    }}
+                                </p>
+                                <p>Custom</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.customField3?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.customField3?.label?.length > 0
+                                            ? sectionSettings.header.customField3?.label
+                                            : "Field 3"
+                                    }}
+                                </p>
+                                <p>Custom</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="meta" cellpadding="0 " cellspacing="0 ">
+                    <tbody>
+                        <tr>
+                            <td *ngIf="sectionSettings.header.displayExchangeRate?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.displayExchangeRate?.label?.length > 0
+                                            ? sectionSettings.header.displayExchangeRate?.label
+                                            : "Exchange/Conversion Rate"
+                                    }}
+                                </p>
+                                <p>83.4</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.displayPlaceOfSupply?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.displayPlaceOfSupply?.label?.length > 0
+                                            ? sectionSettings.header.displayPlaceOfSupply?.label
+                                            : "Place Of Supply"
+                                    }}
+                                </p>
+                                <p>Madhya Pradesh (MP)</p>
+                            </td>
+                            <td *ngIf="sectionSettings.header.displayPlaceOfCountry?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.displayPlaceOfCountry?.label?.length > 0
+                                            ? sectionSettings.header.displayPlaceOfCountry?.label
+                                            : " Country of Supply"
+                                    }}
+                                </p>
+                                <p>India</p>
+                            </td>
+                            <td *ngIf="isIndianCompany && sectionSettings.header.displayLutNumber?.display">
+                                <p>
+                                    {{
+                                        sectionSettings.header.displayLutNumber?.label?.length > 0
+                                            ? sectionSettings.header.displayLutNumber?.label
+                                            : "LUT Number"
+                                    }}
+                                </p>
+                                <p>AD330123123123F</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div
+                id="template-table "
+                [ngClass]="{
+                    'disabled-area': !templateSectionsVisible.table,
+                    ' ': templateSectionsVisible.table
+                }"
+                (click)="onClickSection('table')"
+            >
+                <a
+                    href="javascript:void(0); "
+                    class="edit-template"
+                    *ngIf="!templateSectionsVisible.table"
+                    aria-label="edit icon"
+                >
+                    <i class="icon-edit-pencil"></i>
+                </a>
+                <article class="table-item" tabindex="0">
+                    <table id="item " class="item" cellpadding="0 " cellspacing="0 ">
+                        <thead>
+                            <tr>
+                                <th
+                                    *ngIf="sectionSettings.table.sNo?.display"
+                                    class="text-left"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.sNo?.label?.length > 0
+                                            ? sectionSettings.table.sNo?.label
+                                            : "#"
+                                    }}
+                                </th>
+                                <th *ngIf="sectionSettings.table.showVariantImage?.display"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }">
+                                    {{
+                                    sectionSettings.table.showVariantImage?.label?.length > 0
+                                    ? sectionSettings.table.showVariantImage?.label
+                                    : "Display Image"
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="
+                                        sectionSettings.table.item?.display ||
+                                        sectionSettings.table.date?.display
+                                    "
+                                    class="text-left word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.item?.display &&
+                                        sectionSettings.table.item?.label?.length > 0
+                                            ? sectionSettings.table.item?.label
+                                            : sectionSettings.table.date?.display &&
+                                              sectionSettings.table.date?.label?.length > 0
+                                            ? sectionSettings.table.date?.label
+                                            : sectionSettings.table.item?.display
+                                            ? "Item"
+                                            : "Date"
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.hsnSac?.display"
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.hsnSac?.label?.length > 0
+                                            ? sectionSettings.table.hsnSac?.label
+                                            : "HSN/SAC"
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.quantity?.display"
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.quantity?.label?.length > 0
+                                            ? sectionSettings.table.quantity?.label
+                                            : "Qty."
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.rate?.display"
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.rate?.label?.length > 0
+                                            ? sectionSettings.table.rate?.label
+                                            : "Rate"
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.amountBeforeDiscount?.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.amountBeforeDiscount?.label?.length > 0
+                                            ? sectionSettings.table.amountBeforeDiscount?.label
+                                            : "Total before Dis."
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.discount?.display"
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.discount?.label?.length > 0
+                                            ? sectionSettings.table.discount?.label
+                                            : "Disc."
+                                    }}
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.taxableValue?.display"
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.taxableValue?.label?.length > 0
+                                            ? sectionSettings.table.taxableValue?.label
+                                            : "Taxable Value"
+                                    }}
+                                </th>
+                                <th
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.sgst?.label?.length > 0
+                                            ? sectionSettings.table.sgst?.label
+                                            : "SGST"
+                                    }}
+                                </th>
+                                <th
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.cgst?.label?.length > 0
+                                            ? sectionSettings.table.cgst?.label
+                                            : "CGST"
+                                    }}
+                                </th>
+                                <th
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.cess?.label?.length > 0
+                                            ? sectionSettings.table.cess?.label
+                                            : "CESS"
+                                    }}
+                                </th>
+                                <th
+                                    class="text-right word-break"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    {{
+                                        sectionSettings.table.total?.label?.length > 0
+                                            ? sectionSettings.table.total?.label
+                                            : "Total"
+                                    }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                class="text-right"
+                                *ngIf="sectionSettings.table.previousDue?.display && voucherType === 'sales'"
+                            >
+                                <td colspan="100%">
+                                    {{
+                                        sectionSettings.table.previousDue?.label?.length > 0
+                                            ? sectionSettings.table.previousDue?.label
+                                            : "Previous Due"
+                                    }}<span class="pl-2" [innerHTML]="rupeeSymbol"></span>5000.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="sectionSettings.table.sNo?.display" class="text-left">1</td>
+                                <td *ngIf="sectionSettings.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
+                                <td
+                                    class="text-left"
+                                    *ngIf="
+                                        sectionSettings.table.item?.display ||
+                                        sectionSettings.table.date?.display
+                                    "
+                                >
+                                    <span *ngIf="sectionSettings.table.item?.display"
+                                        >Dummy Product Edition 1
+                                    </span>
+                                    <p
+                                        *ngIf="
+                                            sectionSettings.table.item?.display &&
+                                            !sectionSettings.table.showDescriptionInRows?.display
+                                        "
+                                    >
+                                        Dummy Product Description 1
+                                    </p>
+
+                                    <p
+                                        *ngIf="sectionSettings.table.date?.display"
+                                        [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }"
+                                    >
+                                        10-09- 2017
+                                    </p>
+                                </td>
+                                <td *ngIf="sectionSettings.table.hsnSac?.display" class="text-right">
+                                    12345
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">(H)</p>
+                                </td>
+                                <td *ngIf="sectionSettings.table.quantity?.display" class="text-right nowrap">
+                                    2 No.
+                                </td>
+                                <td *ngIf="sectionSettings.table.rate?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                    <p *ngIf="sectionSettings.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>14.28
+                                    </p>
+                                </td>
+                                <td *ngIf="sectionSettings.table.amountBeforeDiscount?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"> </span>2000.00
+                                </td>
+                                <td *ngIf="sectionSettings.table.discount?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>300.00
+                                </td>
+                                <td *ngIf="sectionSettings.table.taxableValue?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>1700.00
+                                    <p *ngIf="sectionSettings.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>24.28
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>153.00
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">@9.00%</p>
+                                </td>
+                                <td class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>153.00
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">@9.00%</p>
+                                </td>
+                                <td class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>0.00
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">@0%</p>
+                                </td>
+                                <td colspan="3 " class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                    <p *ngIf="sectionSettings.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>28.65
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr
+                                *ngIf="
+                                    sectionSettings.table.item?.display &&
+                                    sectionSettings.table.showDescriptionInRows?.display
+                                "
+                            >
+                                <td class="border-none">&nbsp;</td>
+                                <td class="border-none" [attr.colspan]="columnsVisibled - 1">
+                                    Dummy Product Description 1
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="sectionSettings.table.sNo?.display" class="text-left">2</td>
+                                <td *ngIf="sectionSettings.table.showVariantImage?.display">
+                                    <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="image" height="50px"
+                                        width="50px" />
+                                </td>
+                                <td
+                                    class="text-left"
+                                    *ngIf="
+                                        sectionSettings.table.item?.display ||
+                                        sectionSettings.table.date?.display
+                                    "
+                                >
+                                    <span *ngIf="sectionSettings.table.item?.display"
+                                        >Dummy Product Edition 2
+                                    </span>
+                                    <p
+                                        *ngIf="
+                                            sectionSettings.table.item?.display &&
+                                            !sectionSettings.table.showDescriptionInRows?.display
+                                        "
+                                    >
+                                        Dummy Product Description 2
+                                    </p>
+                                    <p
+                                        *ngIf="sectionSettings.table.date?.display"
+                                        [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }"
+                                    >
+                                        10-09- 2017
+                                    </p>
+                                </td>
+                                <td *ngIf="sectionSettings.table.hsnSac?.display" class="text-right">
+                                    54321
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">(H)</p>
+                                </td>
+                                <td *ngIf="sectionSettings.table.quantity?.display" class="text-right">2 No.</td>
+                                <td *ngIf="sectionSettings.table.rate?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>300.00
+                                    <p *ngIf="sectionSettings.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>4.28
+                                    </p>
+                                </td>
+                                <td *ngIf="sectionSettings.table.amountBeforeDiscount?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>600.00
+                                </td>
+                                <td *ngIf="sectionSettings.table.discount?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>500.00
+                                </td>
+                                <td *ngIf="sectionSettings.table.taxableValue?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>100.00
+                                    <p *ngIf="sectionSettings.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>1.42
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>9.00
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">@9.00%</p>
+                                </td>
+                                <td class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>9.00
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">@9.00%</p>
+                                </td>
+                                <td class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>0.00
+                                    <p [ngStyle]="{ 'font-size': contentTemplate.fontSmall + 'px' }">@0%</p>
+                                </td>
+                                <td colspan="3 " class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>118.00
+                                    <p *ngIf="sectionSettings.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>1.68
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr
+                                *ngIf="
+                                    sectionSettings.table.item?.display &&
+                                    sectionSettings.table.showDescriptionInRows?.display
+                                "
+                            >
+                                <td class="border-none">&nbsp;</td>
+                                <td class="border-none" [attr.colspan]="columnsVisibled - 1">
+                                    Dummy Product Description 2
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr *ngIf="sectionSettings.table.total?.display">
+                                <th
+                                    *ngIf="sectionSettings.table.sNo?.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    &nbsp;
+                                </th>
+                                <th
+                                    *ngIf="
+                                        sectionSettings.table.item?.display ||
+                                        sectionSettings.table.date?.display
+                                    "
+                                    class="text-left"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    &nbsp;
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.hsnSac?.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    &nbsp;
+                                </th>
+                                <th
+                                    *ngIf="sectionSettings.table.quantity?.display"
+                                    class="text-right text-right nowrap"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    &nbsp; <span *ngIf="sectionSettings.table.totalQuantity?.display">4 No.</span>
+                                </th>
+                                <!-- added by sadique -->
+                                <th
+                                    *ngIf="sectionSettings.table.rate?.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                ></th>
+                                <th
+                                    *ngIf="sectionSettings.table.amountBeforeDiscount.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                ></th>
+                                <th
+                                    *ngIf="sectionSettings.table.discount?.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                ></th>
+                                <!--<th *ngIf="sectionSettings.table.rate?.display " class="text-right "
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>7000.00
+                                </th>
+                                <th *ngIf="sectionSettings.table.discount?.display " class="text-right "
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor} "><span [innerHTML]='rupeeSymbol'></span>800.00
+                                </th>-->
+                                <th
+                                    *ngIf="sectionSettings.table.taxableValue?.display"
+                                    class="text-right"
+                                    [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                >
+                                    <span [innerHTML]="rupeeSymbol"></span>1800.00
+                                </th>
+                                <!--SGST-->
+                                <th class="text-right" [ngStyle]="{ 'background-color': contentTemplate.tableColor }">
+                                    <span [innerHTML]="rupeeSymbol"></span>162.00
+                                </th>
+                                <!--CGST-->
+                                <th class="text-right" [ngStyle]="{ 'background-color': contentTemplate.tableColor }">
+                                    <span [innerHTML]="rupeeSymbol"></span>162.00
+                                </th>
+                                <!--CESS-->
+                                <th class="text-right" [ngStyle]="{ 'background-color': contentTemplate.tableColor }">
+                                    <span [innerHTML]="rupeeSymbol"></span>0.00
+                                </th>
+                                <th class="text-right" [ngStyle]="{ 'background-color': contentTemplate.tableColor }">
+                                    <span [innerHTML]="rupeeSymbol"></span>2124.00
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </article>
+            </div>
+            <div
+                id="template-footer "
+                [ngClass]="{
+                    'disabled-area': !templateSectionsVisible.footer,
+                    ' ': templateSectionsVisible.footer
+                }"
+                (click)="onClickSection('footer')"
+            >
+                <div class="clearfix">
+                    <a
+                        href="javascript:void(0); "
+                        class="edit-template"
+                        *ngIf="!templateSectionsVisible.footer"
+                        aria-label="edit icon"
+                    >
+                        <i class="icon-edit-pencil"></i>
+                    </a>
+                    <article tabindex="0">
+                        <table>
+                            <tbody>
+                                <td class="v-align-middle pd-l4" width="25%">
+                                    <img *ngIf="contentTemplate.showBankQrCode" src="{{ imgPath }}bank-qr-code.png" alt="image" width="150px"/>
+                                </td>
+                                <td width="75%">
+                                    <table class="balance w-auto">
+                                        <tr *ngIf="sectionSettings.footer.taxableAmount?.display">
+                                            <th>
+                                                <!-- {{sectionSettings.footer.taxableAmount?.label}}-->
+                                                Taxable Amount
+                                            </th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span> 1800.00</td>
+                                        </tr>
+                                        <tr *ngIf="sectionSettings.footer.totalTax?.display">
+                                            <th>
+                                                {{ sectionSettings.footer.totalTax?.label }}
+                                            </th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span> 324.00</td>
+                                        </tr>
+                                        <!--<tr>
+                    <th>
+                        {{sectionSettings.table.otherTaxBifurcation?.label}}{{sectionSettings.table.otherTaxBifurcation?.label ? sectionSettings.footer.otherTaxBifurcation?.label : 'TCS' }}
+                    </th>
+                    <td>
+                        <span [innerHTML]="rupeeSymbol "></span> 2000.00
+                    </td>
+                    </tr>-->
+                                        <tr *ngIf="sectionSettings.footer.grandTotal?.display">
+                                            <th class="strong">{{ sectionSettings.footer.grandTotal?.label }} (INR)</th>
+                                            <td class="strong"><span [innerHTML]="rupeeSymbol"></span>2124.00</td>
+                                        </tr>
+                                        <tr *ngIf="sectionSettings.footer.totalInWords?.display">
+                                            <th>
+                                                <!--            {{sectionSettings.footer.totalInWords?.label}}-->
+                                                Total (In words)
+                                            </th>
+                                            <td>
+                                                Two Thousand One Hundred Twenty Four Only
+                                                <div class="inner mr-0">&nbsp;</div>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="
+                                                sectionSettings.footer.grandTotal?.display &&
+                                                sectionSettings.table.displayBaseCurrency.display
+                                            "
+                                        >
+                                            <th class="strong">{{ sectionSettings.footer.grandTotal?.label }}(USD)</th>
+                                            <td class="strong"><span [innerHTML]="dollarSymbol"></span>30.34</td>
+                                        </tr>
+                                        <tr
+                                            *ngIf="
+                                                sectionSettings.footer.totalInWords?.display &&
+                                                sectionSettings.table.displayBaseCurrency.display
+                                            "
+                                        >
+                                            <th>
+                                                <!--            {{sectionSettings.footer.totalInWords?.label}}-->
+                                                Total (In words)
+                                            </th>
+                                            <td>
+                                                Thirty dollars & thirty four cents
+                                                <div class="inner mr-0">&nbsp;</div>
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="sectionSettings.footer.tcs?.display">
+                                            <th>{{ sectionSettings.footer.tcs?.label }}</th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span>0.00</td>
+                                        </tr>
+                                        <tr *ngIf="sectionSettings.footer.tds?.display">
+                                            <th>{{ sectionSettings.footer.tds?.label }}</th>
+                                            <td><span [innerHTML]="rupeeSymbol"></span>0.00</td>
+                                        </tr>
+                                        <tr *ngIf="sectionSettings.footer.totalDue?.display">
+                                            <th class="strong">{{ sectionSettings.footer.totalDue?.label }}</th>
+                                            <td><span [innerHTML]="rupeeSymbol" class="strong"></span>7124.00</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tbody>
+                        </table>
+                        <table
+                            class="tax-table item text-right"
+                            cellspacing="0"
+                            cellpadding="0"
+                            *ngIf="sectionSettings.footer.taxBifurcation?.display"
+                        >
+                            <thead>
+                                <tr>
+                                    <th
+                                        class="text-left"
+                                        [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'"
+                                    >
+                                        HSN/SAC
+                                    </th>
+                                    <th
+                                        class="text-left"
+                                        [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                    >
+                                        Tax %
+                                    </th>
+                                    <ng-container>
+                                        <th
+                                            class="text-right"
+                                            [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        >
+                                            Taxable Amt.
+                                        </th>
+                                        <th
+                                            class="text-right"
+                                            [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        >
+                                            CGST %
+                                        </th>
+                                        <th
+                                            class="text-right"
+                                            [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        >
+                                            CGST Amt.
+                                        </th>
+                                        <th
+                                            class="text-right"
+                                            [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        >
+                                            SGST %
+                                        </th>
+                                        <th
+                                            class="text-right"
+                                            [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        >
+                                            SGST Amt.
+                                        </th>
+                                    </ng-container>
+                                    <th
+                                        class="text-right"
+                                        [ngStyle]="{ 'background-color': contentTemplate.tableColor }"
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                    >
+                                        Total Amt.
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'">
+                                    <td class="text-left">12345</td>
+                                    <td>1700.00</td>
+                                    <td>
+                                        <p>9%</p>
+                                    </td>
+                                    <td class="text-right">153.00</td>
+                                    <td>
+                                        <p>9%</p>
+                                    </td>
+                                    <td class="text-right">153.00</td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        class="text-left"
+                                        *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'"
+                                    >
+                                        54321
+                                    </td>
+                                    <td
+                                        class="text-left"
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                    >
+                                        GST 18%
+                                    </td>
+                                    <td
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                    >
+                                        1800.00
+                                    </td>
+                                    <td *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'">
+                                        100.00
+                                    </td>
+                                    <td>
+                                        <p>9%</p>
+                                    </td>
+                                    <td
+                                        *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'"
+                                        class="text-right"
+                                    >
+                                        9.00
+                                    </td>
+                                    <td
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                        class="text-right"
+                                    >
+                                        162.00
+                                    </td>
+                                    <td>
+                                        <p>9%</p>
+                                    </td>
+                                    <td
+                                        *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'"
+                                        class="text-right"
+                                    >
+                                        9.00
+                                    </td>
+                                    <td
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                        class="text-right"
+                                    >
+                                        162.00
+                                    </td>
+                                    <td
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                    >
+                                        2124.00
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-right">
+                                        <span *ngIf="sectionSettings?.footer?.taxBifurcation?.label === 'hsnSac'"
+                                            >Total</span
+                                        >
+                                    </th>
+                                    <th class="text-right">1800.00</th>
+                                    <th></th>
+                                    <th class="text-right">162.00</th>
+                                    <th></th>
+                                    <th class="text-right">162.00</th>
+                                    <th
+                                        class="text-right"
+                                        *ngIf="
+                                            sectionSettings?.footer?.taxBifurcation?.label === 'taxRateBifurcation'
+                                        "
+                                    >
+                                        2124
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </article>
+                </div>
+
+                <div class="clearfix">
+                    <a
+                        href="javascript:void(0);"
+                        class="edit-template"
+                        *ngIf="!templateSectionsVisible.footer"
+                        aria-label="edit icon"
+                    >
+                        <i class="icon-edit-pencil"></i>
+                    </a>
+                    <aside>
+                        <p
+                            class="pd-1"
+                            [ngStyle]="{ 'font-size': contentTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
+                            *ngIf="sectionSettings.footer.showNotesAtLastPage?.display"
+                        >
+                            {{ sectionSettings.footer.message1?.label }}
+                        </p>
+                        <p
+                            class="pd-1"
+                            [ngStyle]="{ 'font-size': contentTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
+                            *ngIf="sectionSettings.footer.displayExportMessage?.display"
+                        >
+                            {{
+                                activeCompany?.withPay
+                                    ? "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITH PAYMENT OF INTEGRATED TAX"
+                                    : "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX"
+                            }}
+                        </p>
+                        <p
+                            class="pd-1"
+                            [ngStyle]="{ 'font-size': contentTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
+                            *ngIf="
+                                voucherType === 'sales' &&
+                                sectionSettings.footer.showNotesAtLastPage?.display &&
+                                sectionSettings.footer.showMessage2?.display
+                            "
+                        >
+                            Notes provided in the invoice will appear here
+                        </p>
+                        <table cellpadding="0" cellspacing="0" class="subfooter">
+                            <tbody>
+                                <br />
+                                <tr>
+                                    <td class="accc" [ngStyle]="{ 'font-size': contentTemplate.fontMedium + 'px' }">
+                                        <ng-container
+                                            *ngIf="
+                                                !sectionSettings.footer.showNotesAtLastPage?.display &&
+                                                sectionSettings.footer.message1?.display
+                                            "
+                                        >
+                                            <p *ngIf="sectionSettings.footer.message1?.display">
+                                                <span
+                                                    ><br />
+                                                    <strong>Notes</strong> <br />
+                                                    <span style="white-space: pre-line">
+                                                        <ng-container
+                                                            *ngIf="sectionSettings?.footer?.message1?.label"
+                                                        >
+                                                            {{ sectionSettings.footer.message1?.label }}
+                                                        </ng-container>
+                                                    </span>
+                                                </span>
+                                            </p>
+                                        </ng-container>
+                                        <p
+                                            *ngIf="
+                                                voucherType === 'sales' &&
+                                                !sectionSettings.footer.showNotesAtLastPage?.display &&
+                                                sectionSettings.footer.showMessage2?.display
+                                            "
+                                        >
+                                            <span
+                                                ><br />
+                                                <strong>Notes 2</strong> <br />
+                                                <span class="notes2-default-text">
+                                                    Notes provided in the invoice will appear here
+                                                </span>
+                                            </span>
+                                        </p>
+                                        <!--<p *ngIf="sectionSettings.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="sectionSettings.footer.thanks?.label "></p>-->
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td
+                                        class="text-center"
+                                        [ngStyle]="{
+                                            'font-size': contentTemplate.fontMedium,
+                                            'vertical-align': 'bottom',
+                                            'width': '35%'
+                                        }"
+                                        *ngIf="!showImageSignature"
+                                    >
+                                        <strong class="slogan-pre-line">
+                                            <small
+                                                class="font-12"
+                                                *ngIf="
+                                                    sectionSettings.footer.slogan?.label ||
+                                                    sectionSettings.footer.slogan?.label === ''
+                                                "
+                                            >
+                                                {{ sectionSettings.footer.slogan?.label }}
+                                            </small>
+                                        </strong>
+                                        <hr
+                                            *ngIf="
+                                                sectionSettings.footer.textUnderSlogan?.display ||
+                                                sectionSettings.footer.slogan?.label
+                                            "
+                                        />
+                                        <ng-container *ngIf="sectionSettings.footer.textUnderSlogan?.display">
+                                            <strong>
+                                                <small class="word-break">
+                                                    {{ sectionSettings.footer.textUnderSlogan?.label }}
+                                                </small>
+                                            </strong>
+                                        </ng-container>
+                                    </td>
+
+                                    <td class="img-signature" *ngIf="showImageSignature">
+                                        <ng-container>
+                                            <img
+                                                [hidden]="!showImageSignature || !imageSignatureSrc"
+                                                [src]="imageSignatureSrc"
+                                                class="inner-img-signature"
+                                                alt="signature img"
+                                            />
+                                            <hr
+                                                *ngIf="
+                                                    sectionSettings.footer.textUnderSlogan?.display ||
+                                                    sectionSettings.footer.slogan?.label
+                                                "
+                                            />
+                                            <strong *ngIf="sectionSettings.footer.textUnderSlogan?.display">
+                                                <small class="word-break">
+                                                    {{ sectionSettings.footer.textUnderSlogan?.label }}
+                                                </small>
+                                            </strong>
+                                        </ng-container>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="sectionSettings.footer.thanks?.display">
+                                    <td [ngStyle]="{ 'font-size': contentTemplate.fontDefault + 'px' }">
+                                        <strong>
+                                            <h2
+                                                *ngIf="sectionSettings.footer.thanks?.label"
+                                                [ngStyle]="{
+                                                    'color': contentTemplate.templateColor,
+                                                    'font-size': contentTemplate.fontDefault + 'px'
+                                                }"
+                                                [innerHTML]="sectionSettings.footer.thanks?.label"
+                                            ></h2>
+                                            <h2
+                                                *ngIf="!sectionSettings.footer.thanks?.label"
+                                                [ngStyle]="{
+                                                    'color': contentTemplate.templateColor,
+                                                    'font-size': contentTemplate.fontDefault + 'px'
+                                                }"
+                                            >
+                                                Thank You for your business.
+                                            </h2>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </aside>
+                    <footer style="text-align: center" [ngStyle]="{ 'border-color': contentTemplate.templateColor }">
+                        <p class="font-12" *ngIf="sectionSettings.footer.companyName?.display">
+                            <strong>{{ sectionSettings.footer.companyName?.label || "Walkover Web Solutions Pvt" }}</strong>
+                        </p>
+                        <p
+                            class="abc"
+                            [ngStyle]="{ 'font-size': contentTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
+                            *ngIf="sectionSettings.footer.companyAddress?.display"
+                        >
+                            {{
+                                sectionSettings.footer.companyAddress?.label
+                                    ? sectionSettings.footer.companyAddress?.label
+                                    : ""
+                            }}
+                        </p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

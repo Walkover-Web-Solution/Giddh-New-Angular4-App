@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { ClipboardModule } from 'ngx-clipboard';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
@@ -67,6 +67,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
     declarations: [
@@ -95,7 +96,7 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         TaxControlModule,
         LedgerRoutingModule,
         ModalModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         ClipboardModule,
         LaddaModule.forRoot({
             style: 'slide-left',
@@ -151,7 +152,8 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         AsideMenuCreateTaxModule,
         AsideMenuAccountModule,
         TributeMentionModule,
-        MatDividerModule
+        MatDividerModule,
+        NgxMatSelectSearchModule
     ]
 })
 export class LedgerModule {

@@ -11,13 +11,13 @@
   <div class="account-detail-custom-header">
     <div class="d-flex p-0">
       <div class="account-detail-padding flex-fill border-right-0">
-        <h3 class="account-detail-custom-title word-break">
+        <h3 class="account-detail-custom-title word-break font-15 mr-t05">
           <span (click)="performActions(4, account)">
             {{ account?.name }}
           </span>
         </h3>
       </div>
-      <a (click)="performActions(4, account)" class="edit-icon pl-1 pd-t05">
+      <a (click)="performActions(4, account)" class="cursor-pointer pl-1 pd-t05">
         <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
       </a>
     </div>
@@ -71,6 +71,7 @@
         [commonLocaleData]="commonLocaleData"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)"
+        [isActionMenu]="isActionMenu"
     >
     </aside-menu-account>
 </div>

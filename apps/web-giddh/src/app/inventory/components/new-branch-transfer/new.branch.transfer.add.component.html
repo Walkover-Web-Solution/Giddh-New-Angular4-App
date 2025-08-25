@@ -185,7 +185,7 @@
                                         senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
                                         allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length
                                     "
-                                    [tooltip]="branchTransferInfoText"
+                                    [matTooltip]="branchTransferInfoText"
                                 ></i>
                             </div>
                         </div>
@@ -273,7 +273,7 @@
                                         destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length !==
                                         allWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length
                                     "
-                                    [tooltip]="branchTransferInfoText"
+                                    [matTooltip]="branchTransferInfoText"
                                 ></i>
                             </div>
                         </div>
@@ -470,7 +470,7 @@
                                         senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
                                         allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length
                                     "
-                                    [tooltip]="branchTransferInfoText"
+                                    [matTooltip]="branchTransferInfoText"
                                 ></i>
                             </div>
                         </div>
@@ -567,7 +567,7 @@
                                         destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length !==
                                         allWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length
                                     "
-                                    [tooltip]="branchTransferInfoText"
+                                    [matTooltip]="branchTransferInfoText"
                                 ></i>
                             </div>
                         </div>
@@ -1076,7 +1076,7 @@
                                                     destinationWarehouses[destination?.uniqueName]?.length !==
                                                     allWarehouses[destination?.uniqueName]?.length
                                                 "
-                                                [tooltip]="branchTransferInfoText"
+                                                [matTooltip]="branchTransferInfoText"
                                             ></i>
                                         </div>
                                     </td>
@@ -1229,7 +1229,7 @@
                                                     senderWarehouses[source?.uniqueName]?.length !==
                                                     allWarehouses[source?.uniqueName]?.length
                                                 "
-                                                [tooltip]="branchTransferInfoText"
+                                                [matTooltip]="branchTransferInfoText"
                                             ></i>
                                         </div>
                                     </td>
@@ -1567,16 +1567,15 @@
             </table>
         </div>
         <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
-            <pagination
-                [totalItems]="transporterListDetails.totalPages"
-                [(ngModel)]="transporterListDetails.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="1"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-            ></pagination>
+            <mat-paginator
+                [length]="transporterListDetails.totalPages"
+                [pageSize]="transporterFilterRequest.count"
+                [pageIndex]="transporterListDetails.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
         </div>
     </div>
 </div>

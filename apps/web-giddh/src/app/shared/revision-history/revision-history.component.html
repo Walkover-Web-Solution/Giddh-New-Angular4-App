@@ -36,23 +36,17 @@
                     </p>
                 </div>
             </ng-container>
-            <div class="pagination-wrapper">
-                <pagination
-                    *ngIf="purchaseVersions.totalPages > 1"
-                    class="pagination mt-4"
-                    [(ngModel)]="purchaseVersions.page"
-                    [totalItems]="purchaseVersions.totalItems"
-                    [itemsPerPage]="purchaseVersions.count"
-                    [maxSize]="5"
-                    [boundaryLinks]="true"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
+            <ng-container *ngIf="purchaseVersions.totalPages > 1">
+                <mat-paginator
+                    [length]="purchaseVersions.totalItems"
+                    [pageSize]="purchaseVersions.count"
+                    [pageIndex]="purchaseVersions.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)">
+                </mat-paginator>
+            </ng-container>
         </div>
         <div
             class="aside-pane-form"

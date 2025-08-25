@@ -9,7 +9,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
@@ -17,8 +17,11 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'jobwork',
@@ -39,12 +42,16 @@ import { GeneralService } from '../../services/general.service';
 })
 export class JobworkComponent implements OnInit, OnDestroy {
     public asideTransferPaneState: string = 'out';
-    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
+    /** Dialog reference for advance search modal */
+    private advanceSearchDialogRef: MatDialogRef<any>;
     @ViewChild('senderName', { static: false }) public senderName: ElementRef;
     @ViewChild('receiverName', { static: false }) public receiverName: ElementRef;
     @ViewChild('productName', { static: false }) public productName: ElementRef;
     @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
     public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
@@ -94,22 +101,17 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public reportType: string;
     public nameStockOrPerson: string;
     public universalDate$: Observable<any>;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private inventoryReport$: Observable<InventoryReport>;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Modal reference */
-    public modalRef: BsModalRef;
 
     constructor(
         private inventoryReportActions: InventoryReportActions,
@@ -119,8 +121,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         private invViewService: InvViewService,
         private _store: Store<AppState>,
         private cdr: ChangeDetectorRef,
-        private generalService: GeneralService,
-        private modalService: BsModalService) {
+        private dialog: MatDialog) {
 
         this.stocksList$ = this._store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
         this.inventoryUsers$ = this._store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
@@ -277,7 +278,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
         });
 
-
     }
 
     public ngOnDestroy() {
@@ -293,6 +293,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.filter.jobWorkTransactionType.push(element.value);
         });
     }
+
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     /**
      * updateDescription
@@ -331,7 +336,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }, 100);
         }
     }
-
 
     public compareChanged(option: IOption) {
         switch (option.value) {
@@ -413,6 +417,29 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof JobworkComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (!this.uniqueName) {
+            return;
+        }
+        
+        let page: number;
+        let pageSize: number = event.pageSize;
+        
+        if (pageSize !== 6) { // Current itemsPerPage is 6
+            page = 1;
+        } else {
+            page = event.pageIndex + 1;
+        }
+        
+        this.applyFilters(page, true);
+    }
+
     public applyFilters(page: number, applyFilter: boolean = true) {
         if (!this.uniqueName) {
             return;
@@ -467,8 +494,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.applyFilters(1, true);
     }
 
-    public onOpenAdvanceSearch() {
-        this.advanceSearchModel?.show();
+    /**
+     * Opens the advance search dialog
+     *
+     * @memberof JobworkComponent
+     */
+    public onOpenAdvanceSearch(): void {
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public advanceSearchAction(type: string) {
@@ -489,17 +524,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
             } else {
                 this.isFilterCorrect = false;
             }
-            this.advanceSearchModel.hide();
+            this.advanceSearchDialogRef?.close();
             return;
 
         } else {
             if (this.advanceSearchForm.controls['filterAmount'].value) {
                 this.filter.quantity = this.advanceSearchForm.controls['filterAmount'].value;
             }
-            this.advanceSearchModel.hide();
+            this.advanceSearchDialogRef?.close();
             this.applyFilters(1, true);
         }
-
 
     }
 
@@ -623,29 +657,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
             });
     }
 
-    /**
-    *To show the datepicker
+   /**
+    * This will show the datepicker
     *
-    * @param {*} element
+    * @param {boolean} isOpen
     * @memberof JobworkComponent
     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof JobworkComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -656,7 +679,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -664,7 +687,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
