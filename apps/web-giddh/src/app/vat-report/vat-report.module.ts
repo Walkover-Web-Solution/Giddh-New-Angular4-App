@@ -10,7 +10,6 @@ import { LiabilityDetailedReportComponent } from "./liability-detailed-report/li
 import { VatReportFiltersComponent } from "./vat-report-filters/vat-report-filters.component";
 import { VatLiabilitiesPayments } from "./vat-liabilities-payments/vat-liabilities-payments.component";
 import { VatReportRoutingModule } from "./vat-report.routing.module";
-import { TabsModule } from "ngx-bootstrap/tabs";
 import { CommonModule } from "@angular/common";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
@@ -51,7 +50,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
     ],
     imports: [
         VatReportRoutingModule,
-        TabsModule.forRoot(),
         CommonModule,
         CurrencyModule,
         BsDropdownModule.forRoot(),

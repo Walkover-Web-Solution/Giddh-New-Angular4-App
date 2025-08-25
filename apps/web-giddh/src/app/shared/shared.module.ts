@@ -9,7 +9,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -113,7 +112,6 @@ export function provideConfig() {
         Daterangepicker,
         TextCaseChangeModule,
         HighlightModule,
-        TabsModule.forRoot(),
         NgxMaskModule.forRoot(),
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
@@ -160,7 +158,6 @@ export function provideConfig() {
         TextCaseChangeModule,
         KeyboardShortutModule,
         MfReportComponent,
-        TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
         NgxDaterangepickerMd,

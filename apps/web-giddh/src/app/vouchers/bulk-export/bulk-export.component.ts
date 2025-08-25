@@ -148,9 +148,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                     const mimeType = this.exportForm.get('exportType').value === ExportTypeEnum.csv
                         ? 'text/csv'
                         : 'application/vnd.ms-excel';
-                    const blob = this.generalService.base64ToBlob(response, mimeType, 512);
-                    const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('exportType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
-                    saveAs(blob, fileName);
+                    const blob = this.generalService.base64ToBlob(response.data, mimeType, 512);
+                    saveAs(blob, response.name);
                 }
                 this.dialogRef?.close(true);
             }

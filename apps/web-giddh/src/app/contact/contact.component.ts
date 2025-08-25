@@ -19,7 +19,6 @@ import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PageEvent } from '@angular/material/paginator';
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
@@ -125,7 +124,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: TemplateRef<any>;
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {
@@ -177,11 +176,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
     public universalDate: any;
-    /** model reference to open/close bulk payment model */
-    // public bulkPaymentModalRef: BsModalRef;
-    public modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /**True, if get accounts request in process */
     public isGetAccountsInProcess: boolean = false;
     /** This will hold the current page number */
@@ -273,7 +268,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
+        private breakPointObservar: BreakpointObserver, private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -1003,7 +998,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public selectedDate(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1012,7 +1007,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
 
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
@@ -1379,32 +1374,17 @@ export class ContactComponent implements OnInit, OnDestroy {
 
 
     /**
-     * This will show datepicker
+     * This will toggle datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen
      * @memberof ContactComponent
      */
-    public showGiddhDatepicker(element): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, {
-                class: "modal-xl giddh-datepicker-modal",
-                backdrop: false,
-                ignoreBackdropClick: this.isMobileScreen,
-            }),
-        );
-    }
-
-    /**
-     * This will hide datepicker
-     *
-     * @memberof ContactComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**

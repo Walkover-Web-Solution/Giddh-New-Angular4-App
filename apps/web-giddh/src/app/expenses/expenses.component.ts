@@ -7,7 +7,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults, PettyCashReportResponse } from '../models/api-models/Expences';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
@@ -30,7 +30,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public todaySelected$: Observable<boolean> = observableOf(false);
     public universalFrom: string;
     public universalTo: string;
-    public modalRef: BsModalRef;
     public isClearFilter: boolean = false;
     public isFilterSelected: boolean = false;
     public currentSelectedTab: string = 'pending';
@@ -54,14 +53,14 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     };
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+/* This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -70,8 +69,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -92,7 +89,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private route: ActivatedRoute,
-        private modalService: BsModalService,
         private cdRf: ChangeDetectorRef,
         private generalService: GeneralService,
         private router: Router,
@@ -322,28 +318,17 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker
+     * This will show the datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen
      * @memberof ExpensesComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof ExpensesComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -354,7 +339,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -362,7 +347,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

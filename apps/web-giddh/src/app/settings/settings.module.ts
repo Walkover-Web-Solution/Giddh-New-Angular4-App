@@ -60,7 +60,7 @@ import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMa
 import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { CreateAddressModule } from '../shared/create-address/create-address.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -75,6 +75,9 @@ import { TallyIntegrationComponent } from './tally-integration/tally.intergation
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
+import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
+import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
 
 @NgModule({
     declarations: [
@@ -102,7 +105,8 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        InstitutionsListComponent
+        InstitutionsListComponent,
+        ExportFileNameComponent
     ],
     imports: [
         CommonModule,
@@ -158,7 +162,10 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         BankIntegrationModule,
         SerialNumberPipe,
         NewConfirmModalModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        TributeMentionModule,
+        ReplaceAllPipeModule,
+        TitleCasePipe
     ],
 })
 

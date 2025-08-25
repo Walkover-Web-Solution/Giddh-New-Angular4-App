@@ -2,7 +2,6 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LaddaModule } from 'angular2-ladda';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
@@ -77,7 +76,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         BsDropdownModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
-        TabsModule.forRoot(),
         ModalModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,

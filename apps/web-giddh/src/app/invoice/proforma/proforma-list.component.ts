@@ -27,6 +27,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -58,9 +59,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;
-    public modalRef: any;
-    /** Modal service reference */
-    public modalService: any;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     public showAdvanceSearchModal: boolean = false;
     public showResetAdvanceSearchIcon: boolean = false;
     public selectedItems: string[] = [];
@@ -75,13 +75,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
-
-    public modalConfig: any = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public datePickerOptions: any = {
         hideOnEsc: true,
         locale: {
@@ -174,7 +167,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    public isDatePickerOpen: boolean = false;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
@@ -187,8 +180,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will hold if updated is account in master to refresh the list of vouchers */
     public isAccountUpdated: boolean = false;
     /* This will hold local JSON data */
@@ -222,10 +213,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
     }
 
     ngOnInit() {
@@ -487,6 +474,19 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.selectedVoucher = null;
         }
+    }
+
+    /**
+     * Opens dialogs using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof ProformaListComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialog.open(template, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
     }
 
     public getAll() {
@@ -778,12 +778,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * Displays the confirmation model
-     *
-     * @param {boolean} shouldOpenModal True, if the modal needs to opened
-     * @memberof ProformaListComponent
-     */
-    /**
      * Toggles the delete confirmation modal dialog
      *
      * @param {boolean} shouldOpenModal Whether to open the modal
@@ -865,28 +859,18 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     *To show the datepicker
+     * Toggle datepicker visibility
      *
-     * @param {*} element
+     * @param {boolean} isOpen - Whether to open or close the datepicker
+     * @param {*} element - The element that triggered the datepicker
      * @memberof ProformaListComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean, element?: any): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof ProformaListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -897,7 +881,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -905,7 +889,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChild, EventEmitter, Output, Inject } from '@angular/core';
-import { SharedModule } from '../../../shared/shared.module'
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { Component, OnInit, EventEmitter, Output, Inject } from '@angular/core';
 import { ServiceConfig } from '../../../services/service.config';
 @Component({
     selector: 'aside-create-new-item',
@@ -22,7 +20,6 @@ export class CreateNewItemComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = '';
 
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     constructor(@Inject(ServiceConfig) private serviceConfig ){}
     public ngOnInit() {
         /* added image path */
