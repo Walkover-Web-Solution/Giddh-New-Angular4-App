@@ -5,7 +5,7 @@
         <h4 class="modal-title pull-left">
             {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
         </h4>
-        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+        <button mat-stroked-button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
             (click)="closeModal()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="row mr-b15">
                     <div class="col-sm-12">
-                        <button class="btn btn-success"
+                        <button mat-raised-button color="primary"
                             [disabled]="(type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading"
                             (click)="exportVouchers(false)">
                             {{ commonLocaleData?.app_download }}
@@ -64,13 +64,13 @@
                     <textarea type="text" [placeholder]="localeData?.recipients_email"
                         class="form-control mr-b15 multiple-email" name="recipients"
                         [(ngModel)]="recipients"></textarea>
-                    <button class="btn btn-success" [disabled]="
+                    <button mat-raised-button color="primary" [disabled]="
                         !recipients || recipients?.length === 0 || (type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading
                     " (click)="exportVouchers(true)">
                         {{ commonLocaleData?.app_send_email }}
                     </button>
 
-                    <button *ngIf="type !== 'sales'" class="btn btn-success" (click)="exportVouchers(false)">
+                    <button *ngIf="type !== 'sales'" mat-raised-button color="primary" (click)="exportVouchers(false)">
                         {{ commonLocaleData?.app_download }}
                     </button>
                 </div>

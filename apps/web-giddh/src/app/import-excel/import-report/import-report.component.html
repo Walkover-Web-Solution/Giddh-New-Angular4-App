@@ -8,7 +8,7 @@
     <div class="padd15">
         <div class="d-flex flex-column">
             <div class="text-right">
-                <button class="btn btn-sky-blue mr-0" (click)="importFiles()">{{ localeData?.import_files }}</button>
+                <button mat-raised-button color="primary" (click)="importFiles()">{{ localeData?.import_files }}</button>
             </div>
             <div class="mr-t15 import-data-table" *ngIf="!isLoading">
                 <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">

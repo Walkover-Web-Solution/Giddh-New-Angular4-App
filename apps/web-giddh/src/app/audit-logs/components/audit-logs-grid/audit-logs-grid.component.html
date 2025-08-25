@@ -319,7 +319,7 @@
         </div>
     </section>
     <button
-        class="btn btn-success pull-left mr-t2 mr-b2"
+        mat-raised-button color="primary" class="pull-left mr-t2 mr-b2"
         [ladda]="loadMoreInProcess$ | async"
         (click)="loadMoreLogs()"
         *ngIf="(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)"

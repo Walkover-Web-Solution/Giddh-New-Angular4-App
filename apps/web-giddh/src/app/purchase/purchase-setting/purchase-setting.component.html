@@ -64,7 +64,8 @@
                                                     class="btn-wrapper d-flex align-items-center justify-content-center ml-3"
                                                 >
                                                     <button
-                                                        class="btn btn-success mr-r15"
+                                                        mat-raised-button color="primary"
+                                                        class="mr-r15"
                                                         (click)="
                                                             verifyEmail(invoiceSettings.purchaseBillSettings.email)
                                                         "
@@ -520,10 +521,10 @@
     </section>
     <ng-template #buttonsSection>
         <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-success mr-r1" (click)="updateForm()">
+            <button mat-raised-button color="primary" type="button" (click)="updateForm()">
                 {{ commonLocaleData?.app_save }}
             </button>
-            <button type="button" class="btn btn-cancel" (click)="resetForm()">
+            <button mat-stroked-button type="button" (click)="resetForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

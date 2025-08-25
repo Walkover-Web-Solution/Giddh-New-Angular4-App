@@ -20,6 +20,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -41,13 +42,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     providers: [],
     imports: [InventoryInOutRoutingModule,
         CommonModule,
+        MatButtonModule,
         ShSelectModule,
-
         Daterangepicker,
         ReactiveFormsModule,
         FormsModule,
         BsDatepickerModule.forRoot(), 
-        CommonModule, 
         SelectModule, 
         LaddaModule.forRoot({
             style: 'slide-left',

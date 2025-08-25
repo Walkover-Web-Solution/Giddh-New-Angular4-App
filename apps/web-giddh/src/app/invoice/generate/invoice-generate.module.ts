@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -9,12 +10,10 @@ import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
-
 import { NoDataModule } from '../../shared/no-data/no-data.module';
 import { VoucherModule } from '../../voucher/voucher.module';
 import { DatepickerWrapperModule } from '../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
-import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 
 @NgModule({

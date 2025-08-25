@@ -61,7 +61,7 @@
                         <div class="col-sm-8 col-lg-6">
                             <sh-select id="reason" placeholder="Select Reason"></sh-select>
                             <!-- button for add new reason aside pane, button is show in sh-select option
-                                <button (click)="addAdjustment()">add reason</button> -->
+                                <button mat-stroked-button (click)="addAdjustment()">add reason</button> -->
                         </div>
                     </div>
                 </div>
@@ -126,8 +126,8 @@
     <div class="inner-content-footer">
         <div class="d-flex">
             <div class="button-group">
-                <button id="adjust-group-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button id="adjust-group-convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
+                <button id="adjust-group-btn" mat-stroked-button class="min-width-100 bdr-radius-50">Clear</button>
+                <button id="adjust-group-convert-btn" mat-raised-button color="primary" class="min-width-100 bdr-radius-50" disabled>
                     Convert to Adjust
                 </button>
             </div>

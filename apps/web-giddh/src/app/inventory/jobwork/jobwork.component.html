@@ -47,18 +47,12 @@
                             </div>
                         </div>
                         <div class="clear-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
-                            <button class="btn btn-filter"><span class="icon-cross"></span> Clear Filter</button>
+                            <button mat-stroked-button><span class="icon-cross"></span> Clear Filter</button>
                         </div>
                         <div >
                             <div class="pull-right">
                                 <div class="btn-group" dropdown placement="bottom right">
-                                    <button
-                                        id="buttonalignment"
-                                        dropdownToggle
-                                        type="button"
-                                        class="btn btn-sky-blue mr-b05 cp mr-1 dropdown-toggle"
-                                        aria-controls="dropdown-alignment"
-                                    >
+                                    <button mat-stroked-button class="mr-b05 cp mr-1 dropdown-toggle" id="buttonalignment" dropdownToggle type="button" aria-controls="dropdown-alignment">
                                         <i class="icon-download"></i> Download
                                     </button>
                                     <ul
@@ -77,8 +71,7 @@
                                     </ul>
                                 </div>
 
-                                <button
-                                    class="btn btn-sky-blue mr-0"
+                                <button mat-raised-button color="primary" class="mr-0"
                                     matTooltip="Alt+i"
                                     (click)="toggleTransferAsidePane()"
                                 >
@@ -156,7 +149,8 @@
                                                 id="button-alignment"
                                                 dropdownToggle
                                                 type="button"
-                                                class="btn-link btn cp p-0 dropdown-toggle c-3"
+                                                mat-stroked-button
+                                                class="cp p-0 dropdown-toggle c-3"
                                                 aria-controls="dropdown-alignment"
                                             >
                                                 Voucher Type
@@ -342,7 +336,7 @@
 <ng-template #advanceSearchTemplate>
     <div mat-dialog-title class="theme-bg clearfix">
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-        <button aria-hidden="true" class="close" mat-dialog-close (click)="advanceSearchAction('cancel')">
+        <button aria-hidden="true" mat-stroked-button class="close" mat-dialog-close (click)="advanceSearchAction('cancel')">
             ×
         </button>
     </div>
@@ -380,14 +374,14 @@
     </div>
     <div mat-dialog-actions class="text-right">
         <button
-            class="btn btn-success"
+            mat-raised-button color="primary"
             type="button"
             [disabled]="!isFilterCorrect && !filter.quantity"
             (click)="advanceSearchAction('search')"
         >
             Search
         </button>
-        <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">
+        <button mat-stroked-button type="button" (click)="advanceSearchAction('clear')">
             Clear
         </button>
     </div>

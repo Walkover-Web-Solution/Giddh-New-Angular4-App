@@ -32,7 +32,7 @@
                                 <label class="d-block">&nbsp;</label>
                                 <button
                                     type="button"
-                                    class="btn btn-default"
+                                    mat-stroked-button
                                     (click)="moveStock()"
                                     [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                                 >
@@ -121,8 +121,8 @@
                                 <div class="form-group col-sm-4 col-12">
                                     <label>Tax</label>
 
-                                    <div class="btn-group btn-block" dropdown>
-                                        <button
+                                    <div class="btn-group" dropdown>
+                                        <button mat-stroked-button
                                             dropdownToggle
                                             type="button"
                                             class="dropdown-toggle form-control text-left"
@@ -383,14 +383,15 @@
                                         </div>
                                         <div class="pull-right unit-add">
                                             <button
-                                                class="btn-link btn mr-0"
+                                                mat-stroked-button
+                                                class="mr-0"
                                                 (click)="addPurchaseUnitRates(i)"
                                                 *ngIf="l"
                                             >
                                                 <i class="icon-plus add-row"></i>
                                             </button>
                                             <button
-                                                class="btn-link btn"
+                                                mat-stroked-button
                                                 (click)="removePurchaseUnitRates(i)"
                                                 *ngIf="!l"
                                             >
@@ -468,10 +469,10 @@
                                             />
                                         </div>
                                         <div class="pull-right unit-add">
-                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
+                                            <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
                                                 <i class="icon-plus add-row"></i>
                                             </button>
-                                            <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l">
+                                            <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
                                                 <i class="icon-cross delete"></i>
                                             </button>
                                         </div>
@@ -611,7 +612,7 @@
                                             </td>
                                             <td>
                                                 <button
-                                                    class="btn-link btn"
+                                                    mat-stroked-button
                                                     (click)="addItemInLinkedStocks(list, i, i)"
                                                     *ngIf="l"
                                                     [disabled]="disableStockButton"
@@ -619,7 +620,7 @@
                                                     <i class="icon-plus add-row"></i>
                                                 </button>
                                                 <button
-                                                    class="btn-link btn"
+                                                    mat-stroked-button
                                                     (click)="removeItemInLinkedStocks(i)"
                                                     *ngIf="!l"
                                                 >
@@ -641,7 +642,7 @@
                                     *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async"
                                     (click)="submit()"
-                                    class="btn btn-success"
+                                    mat-raised-button color="primary"
                                     [disabled]="addStockForm.invalid || disableStockButton"
                                 >
                                     Save
@@ -650,7 +651,7 @@
                                     type="button"
                                     *ngIf="isUpdatingStockForm"
                                     [ladda]="isStockUpdateInProcess$ | async"
-                                    class="btn btn-success"
+                                    mat-raised-button color="primary"
                                     (click)="update()"
                                     [disabled]="addStockForm.invalid || disableStockButton"
                                 >
@@ -659,7 +660,7 @@
                                 <button
                                     *ngIf="isUpdatingStockForm"
                                     [ladda]="isStockDeleteInProcess$ | async"
-                                    class="btn btn-danger"
+                                    mat-stroked-button
                                     (click)="openModal(deleteGroupStockTemplate)"
                                 >
                                     Delete Stock
@@ -668,7 +669,7 @@
                                     type="button"
                                     *ngIf="!isUpdatingStockForm"
                                     (click)="resetStockForm()"
-                                    class="btn btn-default"
+                                    mat-stroked-button
                                 >
                                     Reset
                                 </button>

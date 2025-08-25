@@ -49,8 +49,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
@@ -117,6 +117,7 @@ import { MatRadioModule } from '@angular/material/radio';
     ],
     providers: [ExceptionLogService],
     imports: [
+        MatButtonModule,
         InventoryRoutingModule,
         SharedModule,
         Daterangepicker,
@@ -140,7 +141,6 @@ import { MatRadioModule } from '@angular/material/radio';
         MatMenuModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatButtonModule,
         MatTableModule,
         MatCheckboxModule,
         MatRadioModule

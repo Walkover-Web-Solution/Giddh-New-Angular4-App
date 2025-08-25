@@ -17,10 +17,11 @@
                     <div class="btn-group" dropdown>
                         <button
                             id="more-btn-inventory"
+                            mat-raised-button color="primary"
                             *ngIf="!isMobileScreen"
                             dropdownToggle
                             type="button"
-                            class="btn btn-primary dropdown-toggle bdr-radius-50"
+                            class="dropdown-toggle bdr-radius-50"
                             aria-controls="more-inventory-dropdown"
                         >
                             More <span class="caret"></span>
@@ -53,7 +54,8 @@
                     </div>
                     <button
                         id="combo-create-inventory"
-                        class="btn btn-sky-blue bdr-radius-50"
+                        mat-raised-button color="primary"
+                        class="bdr-radius-50"
                         [routerLink]="['/pages/inventory/v2/create-inventory/v2']"
                     >
                         + Add Inventory
@@ -154,8 +156,8 @@
     <div class="sticky-footer create-group-footer">
         <div class="footer-wrapper">
             <div class="button-group">
-                <button id="about-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
-                <button id="about-update-group" class="btn btn-success disable bdr-radius-50">Update Group</button>
+                <button id="about-clear-btn" mat-stroked-button class="bdr-radius-50 min-width-100">Clear</button>
+                <button id="about-update-group" mat-raised-button color="primary" class="disable bdr-radius-50">Update Group</button>
             </div>
         </div>
     </div>

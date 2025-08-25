@@ -5,7 +5,7 @@
                 <h3 *ngIf="addGroup">Create Group</h3>
                 <h3 *ngIf="!addGroup">Update Group</h3>
             </div>
-            <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+            <button mat-stroked-button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
 
             <div>
                 <div class="aside-pane-form col-sm-12 col-md-12 col-lg-12 col-xs-12">
@@ -94,13 +94,13 @@
                                 <div class="form-group col-xs-6 col-sm-6">
                                     <label>Tax</label>
                                     <div
-                                        class="btn-group btn-block"
+                                        class="btn-group"
                                         dropdown
                                         #taxDropDownWeb="bs-dropdown"
                                         [attachOutsideOnClick]="true"
                                         (clickOutside)="taxDropDownWeb.hide()"
                                     >
-                                        <button
+                                        <button mat-stroked-button
                                             dropdownToggle
                                             type="button"
                                             class="dropdown-toggle form-control text-left"
@@ -136,29 +136,30 @@
                             <div class="clearfix text-left mt-2">
                                 <div *ngIf="addGroup">
                                     <button
+                                        mat-stroked-button
                                         type="submit"
-                                        class="btn btn-success"
                                         [ladda]="isAddNewGroupInProcess$ | async"
                                         (click)="addNewGroup()"
                                         [disabled]="addGroupForm.invalid"
                                     >
                                         Save
                                     </button>
-                                    <button type="reset" class="btn btn-primary">Cancel</button>
+                                    <button mat-raised-button color="primary" type="reset">Cancel</button>
                                 </div>
                                 <div *ngIf="!addGroup">
                                     <button
+                                        mat-raised-button
+                                        color="primary"
                                         type="submit"
                                         [disabled]="addGroupForm.invalid || defaultGrpActive"
                                         [ladda]="isUpdateGroupInProcess$ | async"
-                                        class="btn btn-success"
                                         (click)="updateGroup()"
                                     >
                                         Update
                                     </button>
                                     <button
+                                        mat-stroked-button
                                         type="submit"
-                                        class="btn btn-danger"
                                         [ladda]="isDeleteGroupInProcess$ | async"
                                         (click)="openModal(deleteGroupModalTemplate)"
                                     >

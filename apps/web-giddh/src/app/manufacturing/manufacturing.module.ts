@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MfEditComponent } from './edit/mf.edit.component';
@@ -6,7 +7,6 @@ import { DeleteManufacturingConfirmationModelComponent } from './edit/modal/conf
 import { ManufacturingComponent } from './manufacturing.component';
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -17,11 +17,11 @@ import { MatButtonModule } from '@angular/material/button';
     exports: [RouterModule],
     providers: [],
     imports: [
+        MatButtonModule,
         ManufacturingRoutingModule,
         SharedModule,
         RouterModule,
-        MatTableModule,
-        MatButtonModule
+        MatTableModule
     ],
 })
 export class ManufacturingModule {

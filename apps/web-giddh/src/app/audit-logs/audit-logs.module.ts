@@ -9,6 +9,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { MatButtonModule } from '@angular/material/button';
 import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
@@ -46,7 +47,8 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         AuditLogsServiceModule,
         CurrencyModule,
         SharedModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        MatButtonModule
     ],
 })
 export class AuditLogsModule {

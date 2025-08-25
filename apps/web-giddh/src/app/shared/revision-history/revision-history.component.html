@@ -13,7 +13,7 @@
             </h3>
         </div>
     </div>
-    <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+    <button mat-stroked-button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading || !translationLoaded"></giddh-page-loader>
         <div

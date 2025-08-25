@@ -873,7 +873,7 @@
                         <div class="gst-return-date">
                             <img src="assets/images/return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
-                            <button class="btn-2 btn-lg file-your-return" (click)="returnGstr3B = { via: 'TAXPRO' }">
+                            <button mat-raised-button color="primary" (click)="returnGstr3B = { via: 'TAXPRO' }">
                                 {{ localeData?.gstr3b?.push_to_portal }}
                             </button>
                         </div>

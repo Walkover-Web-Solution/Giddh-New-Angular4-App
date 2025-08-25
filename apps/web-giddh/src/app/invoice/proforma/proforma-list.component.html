@@ -99,7 +99,7 @@
                 </div>
                 <!-- need to add functionality-->
                 <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-                    <button class="btn btn-filter mr-0">
+                    <button mat-stroked-button>
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
@@ -109,9 +109,10 @@
                     <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                         <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
                             <button
+                                mat-raised-button color="primary"
                                 dropdownToggle
                                 type="button"
-                                class="btn btn-primary more-btn-dropdown dropdown-toggle"
+                                class="more-btn-dropdown dropdown-toggle"
                                 aria-controls="dropdown-basic"
                             >
                                 {{ commonLocaleData?.app_more }}
@@ -132,7 +133,7 @@
                     </div>
                     <!-- endregion -->
                     <div
-                        class="advance-icon cursor-pointer align-items-center btn btn-primary mr-0"
+                        class="advance-icon cursor-pointer align-items-center mr-0"
                         (click)="toggleAdvanceSearchPopup()"
                         [matTooltip]="commonLocaleData?.app_advance_search"
                     >
@@ -174,13 +175,13 @@
                 </div>
                 <div class="d-flex mt-1">
                     <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-r15">
-                        <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
+                        <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-raised-button color="primary" (click)="goToInvoice('proformas')">
                             {{ localeData?.new_proforma }}
                         </button>
                     </div>
 
                     <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
-                        <button *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
+                        <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-raised-button color="primary" (click)="goToInvoice('estimates')">
                             {{ localeData?.new_estimate }}
                         </button>
                     </div>
@@ -214,7 +215,7 @@
             <ng-template #searchTemplate>
                 <div class="modal-header">
                     <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
-                    <button
+                    <button mat-stroked-button
                         type="button"
                         class="pull-right"
                         [attr.aria-label]="commonLocaleData?.app_close"

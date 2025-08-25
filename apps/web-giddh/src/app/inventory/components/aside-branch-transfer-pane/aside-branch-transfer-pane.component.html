@@ -1,5 +1,5 @@
 <div class="aside-pane">
-    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <button mat-stroked-button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="branch-modal-wrap">
         <ng-container>
             <div class="form-header">
@@ -11,10 +11,10 @@
             </div>
             <div class="form-body white-bg clearfix margin-child-label modal-height">
                 <div class="branch-transfer">
-                    <button class="btn btn-light-gray" (click)="openBranchTransferPopup('receiptnote')">
+                    <button mat-raised-button color="primary" (click)="openBranchTransferPopup('receiptnote')">
                         Receipt Note
                     </button>
-                    <button class="btn btn-light-gray" (click)="openBranchTransferPopup('deliverynote')">
+                    <button mat-raised-button color="primary" (click)="openBranchTransferPopup('deliverynote')">
                         Delivery Challan
                     </button>
                 </div>
