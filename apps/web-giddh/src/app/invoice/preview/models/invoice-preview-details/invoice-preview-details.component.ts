@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { FILE_ATTACHMENT_TYPE } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE } from 'apps/web-giddh/src/app/app.constant';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
@@ -70,6 +70,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
+    /** Template reference for revision history aside pane */
+    @ViewChild('revisionHistoryAsideTemplate', { static: true }) revisionHistoryAsideTemplate: TemplateRef<any>;
+    /** Reference to revision history aside dialog */
+    private revisionHistoryAsideDialogRef: MatDialogRef<any>;
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
     /** Emits the selected item to the parent for updating the current selected item in parent component */
@@ -128,8 +132,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
     public proformaListComponent: ProformaListComponent;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
-    /* This will hold revision history aside popup state */
-    public revisionHistoryAsideState: string = 'out';
     /* This will hold company unique name */
     public companyUniqueName: string = '';
     /* This will hold PO numbers */
@@ -343,17 +345,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
     }
 
     /**
-     * This will toggle aside popup for revision history
+     * This will open aside pane dialog for revision history
      *
-     * @param {*} [event]
      * @memberof InvoicePreviewDetailsComponent
      */
-    public toggleActivityHistoryAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    public openActivityHistoryAsidePaneDialog(): void {
+        this.revisionHistoryAsideDialogRef = this.dialog.open(this.revisionHistoryAsideTemplate, ASIDE_PANE_CONFIG);
     }
 
     public toggleEditMode(): void {
@@ -387,14 +384,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
         this.performActionAfterClose();
         this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
-    }
-
-    public toggleBodyClass() {
-        if (!this.showEditMode || this.revisionHistoryAsideState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
     }
 
     /**

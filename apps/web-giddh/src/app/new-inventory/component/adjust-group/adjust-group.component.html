@@ -73,7 +73,7 @@
                         <div class="col-sm-8 col-lg-6">
                             <sh-select id="reason" placeholder="Select Reason"></sh-select>
                             <!-- button for add new reason aside pane, button is show in sh-select option
-                                <button (click)="addAdjustment()">add reason</button> -->
+                                <button (click)="openAdjustmentDialog()">add reason</button> -->
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
             </div>
             <div class="add-line-bulk-item font-15">
                 <a href="javascript:void(0)">+ Add New Line</a> |
-                <a href="javascript:void(0)" (click)="openModal(template)">+ Add Bulk Entries</a>
+                <a href="javascript:void(0)" (click)="openDialog(template)">+ Add Bulk Entries</a>
             </div>
         </div>
     </div>
@@ -147,9 +147,10 @@
     </div>
 </div>
 <!-- adjust inventory aside pane -->
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<inventory-adjustment-aside *ngIf="asideMenuState === 'in'" (closeAsideEvent)="addAdjustment()">
-</inventory-adjustment-aside>
+<ng-template #asideMenuStateForInventoryAdjustmentTemplate>
+    <inventory-adjustment-aside (closeAsideEvent)="asideMenuStateForInventoryAdjustmentDialogRef.close()">
+    </inventory-adjustment-aside>
+</ng-template>
 
 <!-- adjust bulk entry modal -->
 <ng-template #template>

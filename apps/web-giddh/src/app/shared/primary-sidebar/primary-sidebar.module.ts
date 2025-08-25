@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { CheckPermissionModule } from "../../permissions/check-permission.module";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { AuthServiceConfig, GoogleLoginProvider } from "../../theme/ng-social-login-module";
@@ -15,7 +16,6 @@ import { PrimarySidebarComponent } from "./primary-sidebar.component";
 import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import {CdkTreeModule} from '@angular/cdk/tree';
 import { MatInputModule } from "@angular/material/input";
@@ -32,6 +32,7 @@ import { MatInputModule } from "@angular/material/input";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ClickOutsideModule,
+        MatTooltipModule,
         RouterModule,
         CheckPermissionModule,
         CommandKModule,
@@ -40,7 +41,6 @@ import { MatInputModule } from "@angular/material/input";
         MatDialogModule,
         MatTabsModule,
         MatMenuModule,
-        MatTooltipModule,
         MatButtonModule,
         CdkTreeModule,
         MatInputModule

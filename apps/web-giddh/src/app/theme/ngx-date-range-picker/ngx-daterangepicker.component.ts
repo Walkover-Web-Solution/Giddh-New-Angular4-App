@@ -264,7 +264,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         @Inject(ServiceConfig) private serviceConfig,
         private _ref: ChangeDetectorRef,
         private _localeService: NgxDaterangepickerLocaleService,
-        public settingsFinancialYearService: SettingsFinancialYearService,
+        public settingsFinancialYearService: SettingsFinancialYearService, 
         private router: Router, 
         private store: Store<AppState>, 
         private settingsFinancialYearActions: SettingsFinancialYearActions, 

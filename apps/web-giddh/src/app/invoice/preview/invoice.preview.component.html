@@ -152,7 +152,7 @@
                                         readonly
                                     />
                                 </div>
-                                <div class="search-icon-block" (click)="openModal(template)">
+                                <div class="search-icon-block" (click)="openModal(searchTemplate)">
                                     <i class="icon-search"></i>
                                 </div>
                             </div>
@@ -674,7 +674,7 @@
                 <!-- Invoice E-way bill, export to excel for a single selected item along with
                     New Sales Invoice, Cash Invoice, Credit Note and Debit Note ends -->
                 <!-- For mobile screen sizes -->
-                <ng-template #template>
+                <ng-template #searchTemplate>
                     <div mat-dialog-title>
                         <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
                         <button

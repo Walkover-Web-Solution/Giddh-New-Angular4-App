@@ -27,7 +27,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -59,12 +58,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;
-    /** Modal service reference */
-    public modalRef: BsModalRef;
-    @ViewChild('datePickerMenuTrigger') datePickerMenuTrigger: MatMenuTrigger;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-public showAdvanceSearchModal: boolean = false;
+    public showAdvanceSearchModal: boolean = false;
     public showResetAdvanceSearchIcon: boolean = false;
     public selectedItems: string[] = [];
     public selectedCustomerUniqueName: string;
@@ -78,13 +74,6 @@ public showAdvanceSearchModal: boolean = false;
     public isConsolidatedBranch: boolean;
     /** Current branches */
     public branches: Array<any>;
-
-    public modalConfig: any = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public datePickerOptions: any = {
         hideOnEsc: true,
         locale: {
@@ -207,7 +196,7 @@ public showAdvanceSearchModal: boolean = false;
     /** Dialog reference for delete confirmation modal */
     private deleteConfirmationDialogRef: MatDialogRef<any>;
 
-    constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private dialog: MatDialog, private commonActions: CommonActions, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private dialog: MatDialog, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
         this.advanceSearchFilter.from = dayjs(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
@@ -223,10 +212,6 @@ public showAdvanceSearchModal: boolean = false;
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
     }
 
     ngOnInit() {
@@ -488,6 +473,19 @@ public showAdvanceSearchModal: boolean = false;
             }
             this.selectedVoucher = null;
         }
+    }
+
+    /**
+     * Opens dialogs using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof ProformaListComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialog.open(template, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
     }
 
     public getAll() {
@@ -779,9 +777,9 @@ public showAdvanceSearchModal: boolean = false;
     }
 
     /**
-     * Displays the confirmation model
+     * Toggles the delete confirmation modal dialog
      *
-     * @param {boolean} shouldOpenModal True, if the modal needs to opened
+     * @param {boolean} shouldOpenModal Whether to open the modal
      * @memberof ProformaListComponent
      */
     /**

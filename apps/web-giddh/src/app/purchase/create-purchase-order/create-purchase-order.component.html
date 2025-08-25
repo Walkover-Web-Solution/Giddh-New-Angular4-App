@@ -8,7 +8,6 @@
     <hamburger-menu *ngIf="!isUpdateMode" [pageHeading]="localeData?.new_po"></hamburger-menu>
     <hamburger-menu *ngIf="isUpdateMode" [pageHeading]="localeData?.edit_po"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-
     <form
         #poForm="ngForm"
         novalidate
@@ -3632,6 +3631,7 @@
         "
         (click)="closeAsideMenuStateForOtherTaxes()"
     ></div>
+    <!-- this component is not used -->
     <generic-aside-menu-account
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"

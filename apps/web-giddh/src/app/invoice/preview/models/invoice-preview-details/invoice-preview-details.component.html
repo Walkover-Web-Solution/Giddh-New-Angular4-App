@@ -497,7 +497,7 @@
                                             <!-- voucherApiVersion !== 2 && selectedItem?.voucherType === 'purchase' ||-->
                                                 <button
                                                     mat-raised-button color="primary"
-                                                    (click)="toggleActivityHistoryAsidePane()"
+                                                    (click)="openActivityHistoryAsidePaneDialog()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
                                                     {{ commonLocaleData?.app_history }}
@@ -780,14 +780,14 @@
     </div>
     <!-- endregion -->
 </div>
-<div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>
-<div *ngIf="revisionHistoryAsideState === 'in'">
+
+<ng-template #revisionHistoryAsideTemplate>
     <aside-revision-history
-        (closeAsideEvent)="toggleActivityHistoryAsidePane()"
+        (closeAsideEvent)="revisionHistoryAsideDialogRef.close()"
         [companyUniqueName]="companyUniqueName"
         [selectedVoucher]="selectedItem"
     ></aside-revision-history>
-</div>
+</ng-template>
 
 <ng-template #template>
     <div class="relative header-close-btn">
@@ -795,7 +795,6 @@
             type="button"
             class="close pull-right cursor-pointer"
             [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="modalRef.hide()"
         >
             <span aria-hidden="true">&times;</span>
         </button>

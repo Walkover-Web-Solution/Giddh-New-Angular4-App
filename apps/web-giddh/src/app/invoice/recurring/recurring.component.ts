@@ -7,41 +7,31 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as dayjs from 'dayjs';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
     selector: 'app-recurring',
     templateUrl: './recurring.component.html',
-    styleUrls: ['./recurring.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./recurring.component.scss']
 })
 
 export class RecurringComponent implements OnInit, OnDestroy {
     public currentPage = 1;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    public modalRef: BsModalRef;
-    public asideMenuStateForRecurringEntry: string = 'out';
+    /** Reference to aside pane template */
+    @ViewChild('asideMenuStateForRecurringEntryTemplate') asideMenuStateForRecurringEntryTemplate: TemplateRef<any>;
+    /** Reference to aside pane dialog */
+    public asideMenuStateForRecurringEntryDialogRef: MatDialogRef<any>;
     public invoiceTypeOptions: IOption[];
     public intervalOptions: IOption[];
     public recurringData$: Observable<RecurringInvoices>;
@@ -55,12 +45,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
         voucherNumber: '',
         duration: '',
         lastInvoiceDate: ''
-    };
-    public modalConfig = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
     };
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
     @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
@@ -95,12 +79,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
+        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private dialog: MatDialog) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
     }
 
     public ngOnInit() {
@@ -166,9 +146,22 @@ export class RecurringComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Opens dialogs using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof RecurringComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialog.open(template, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
+        });
+    }
+
     public openUpdatePanel(invoice: RecurringInvoice) {
         this.selectedInvoice = invoice;
-        this.toggleRecurringAsidePane();
+        this.openRecurringEntryDialog();
     }
 
     /**
@@ -184,23 +177,17 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, this.currentPage));
     }
 
-    public toggleRecurringAsidePane(toggle?: string): void {
-        if (toggle) {
+    /**
+     * Opens recurring entry dialog
+     * 
+     * @memberof RecurringComponent
+     */
+    public openRecurringEntryDialog(): void {
+        this.asideMenuStateForRecurringEntryDialogRef = this.dialog.open(this.asideMenuStateForRecurringEntryTemplate, ASIDE_PANE_CONFIG);
+        this.asideMenuStateForRecurringEntryDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             this.isLoading = true;
-            this.asideMenuStateForRecurringEntry = toggle;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
-        } else {
-            this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
-        }
-        this.toggleBodyClass();
-    }
-
-    public toggleBodyClass() {
-        if (this.asideMenuStateForRecurringEntry === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        });
     }
 
     public toggleAllItems(type: boolean) {

@@ -220,7 +220,7 @@
                                             <div class="history-btn">
                                                 <button
                                                     class="btn btn-primary"
-                                                    (click)="toggleActivityHistoryAsidePane()"
+                                                    (click)="openActivityHistoryAsidePaneDialog()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
                                                     {{ commonLocaleData?.app_history }}
@@ -267,11 +267,10 @@
         (closeModelEvent)="closeSendMailPopup($event)"
     ></purchase-send-email-modal>
 </ng-template>
-<div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>
-<div *ngIf="revisionHistoryAsideState === 'in'">
-    <aside-revision-history (closeAsideEvent)="toggleActivityHistoryAsidePane()" [purchaseOrder]="purchaseOrder">
+<ng-template #revisionHistoryTemplate>
+    <aside-revision-history (closeAsideEvent)="revisionHistoryDialogRef.close()" [purchaseOrder]="purchaseOrder">
     </aside-revision-history>
-</div>
+</ng-template>
 <ng-template #poConfirmationTemplate>
     <div class="modal-content">
         <delete-voucher-confirmation-modal

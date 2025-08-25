@@ -210,11 +210,11 @@
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn"
                     matTooltip="Alt+N"
-                    (click)="toggleTransferAsidePane()"
+                    (click)="openBranchTransferDialog()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" matTooltip="Alt+i" (click)="toggleAsidePane()">
+                <button class="btn btn-sky-blue mr-0" matTooltip="Alt+i" (click)="openAsidePaneDialog()">
                     Create New
                 </button>
             </div>
@@ -945,24 +945,18 @@
     </section>
 </section>
 <!-- aside new stock/group/unit pane -->
-<div class="aside-overlay" *ngIf="asidePaneState === 'in'"></div>
-<aside-pane
-    *ngIf="asidePaneState === 'in'"
-    [class]="asidePaneState"
-    [@slideInOut]="asidePaneState"
-    (closeAsideEvent)="toggleAsidePane()"
-></aside-pane>
+<ng-template #asidePaneTemplate>
+    <aside-pane (closeAsideEvent)="asidePaneDialogRef.close()"></aside-pane>
+</ng-template>
 <!-- aside new stock/group/unit -->
 
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-branch-transfer-pane
-    *ngIf="asideTransferPaneState === 'in'"
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (transferType)="openBranchTransferPopup($event)"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-branch-transfer-pane>
+<ng-template #asideBranchTransferPaneTemplate>
+    <aside-branch-transfer-pane
+        (transferType)="openBranchTransferPopup($event)"
+        (closeAsideEvent)="asideBranchTransferPaneDialogRef.close()"
+    ></aside-branch-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->

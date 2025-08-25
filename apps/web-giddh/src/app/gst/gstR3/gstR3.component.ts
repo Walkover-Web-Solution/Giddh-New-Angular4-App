@@ -35,10 +35,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     /** Holds cancel confirmation dialog template ref */
     @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
-    /** Aside pane state*/
-    public asideMenuState: string = 'out';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
     public selectedGstr: string = null;
@@ -118,7 +116,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private generalService: GeneralService,
-        public modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
         private componentStore: GstComponentStore

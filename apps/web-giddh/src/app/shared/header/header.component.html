@@ -684,7 +684,7 @@
                 type="button"
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="modelRefExpirePlan.hide()"
+                (click)="dialogRefExpirePlanRef?.close()"
             >
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -711,7 +711,7 @@
                             href="javascript:void(0);"
                             class="cursor-pointer"
                             aria-label="contact us"
-                            (click)="openScheduleModel(); modelRefExpirePlan.hide()"
+                            (click)="openScheduleModel(); dialogRefExpirePlanRef?.close()"
                             >{{ localeData?.contact_us }}</a
                         >
                     </li>
@@ -727,7 +727,7 @@
                 type="button"
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="modelRefCrossLimit.hide()"
+                (click)="dialogRefCrossLimitRef?.close()"
             >
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -750,7 +750,7 @@
                             href="javascript:void(0);"
                             class="cursor-pointer"
                             aria-label="schedule"
-                            (click)="openScheduleModel(); modelRefCrossLimit.hide()"
+                            (click)="openScheduleModel(); dialogRefCrossLimitRef?.close()"
                             >{{ localeData?.contact_us }}</a
                         >
                     </li>

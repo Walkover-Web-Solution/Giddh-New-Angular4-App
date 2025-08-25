@@ -74,10 +74,10 @@ import { ShopifyIntegrationComponent } from './shopify-integration/shopify.inter
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
-import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
     declarations: [
@@ -162,10 +162,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
         BankIntegrationModule,
         SerialNumberPipe,
         NewConfirmModalModule,
+        OverlayModule,
         TributeMentionModule,
         ReplaceAllPipeModule,
-        TitleCasePipe,
-        OverlayModule
+        TitleCasePipe
     ],
 })
 

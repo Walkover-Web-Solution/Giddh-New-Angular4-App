@@ -8,7 +8,6 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ToasterService } from '../../services/toaster.service';
 import { Organization, States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
-import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { animate, style, transition, trigger, state } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/Common";
@@ -683,15 +682,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
-    }
-
-    public typeaheadOnSelect(e: TypeaheadMatch): void {
-        this.dataSourceBackup.forEach(item => {
-            if (item.city === e.item) {
-                this.companyProfileObj.country = item.country;
-                this.patchProfile({ city: this.companyProfileObj.city });
-            }
-        });
     }
 
     public pushToUpdate(event) {

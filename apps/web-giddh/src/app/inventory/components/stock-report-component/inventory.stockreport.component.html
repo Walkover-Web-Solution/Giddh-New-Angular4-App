@@ -68,11 +68,11 @@
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     class="btn btn-sky-blue transfer-btn"
                     matTooltip="Alt+N"
-                    (click)="toggleTransferAsidePane()"
+                    (click)="openTransferAsidePaneDialog()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" matTooltip="Alt+i">
+                <button class="btn btn-sky-blue mr-0" (click)="openAsidePaneDialog()" matTooltip="Alt+i">
                     Create New
                 </button>
             </div>
@@ -126,7 +126,7 @@
                                             [showRangeLabelOnInput]="false"
                                         ></app-datepicker-wrapper>
                                     </ng-template>
-                                </mat-menu>    
+                                </mat-menu>
                             </div>
                         </th>
                         <th
@@ -678,13 +678,9 @@
     </section>
 </section>
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-pane
-    *ngIf="asideMenuState === 'in'"
-    [class]="asideMenuState"
-    [@slideInOut]="asideMenuState"
-    (closeAsideEvent)="toggleAsidePane()"
-></aside-pane>
+<ng-template #asideMenuTemplate>
+    <aside-pane (closeAsideEvent)="asideMenuDialogRef.close()"></aside-pane>
+</ng-template>
 <!-- aside menu section -->
 
 <!-- Advance search popup -->
@@ -737,7 +733,7 @@
                                 [showRangeLabelOnInput]="false"
                             ></app-datepicker-wrapper>
                         </ng-template>
-                    </mat-menu>                    
+                    </mat-menu>
                 </div>
             </div>
                     <div class="row mr-t2">
@@ -831,14 +827,12 @@
             </div>
 <!-- Advance  search popup -->
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-branch-transfer-pane
-    *ngIf="asideTransferPaneState === 'in'"
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (transferType)="openBranchTransferPopup($event)"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-branch-transfer-pane>
+<ng-template #asideTransferPaneTemplate>
+    <aside-branch-transfer-pane
+        (transferType)="openBranchTransferPopup($event)"
+        (closeAsideEvent)="asideTransferPaneDialogRef.close()"
+    ></aside-branch-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->

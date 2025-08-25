@@ -23,7 +23,6 @@ import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationT
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
-import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonActions } from '../../actions/common.actions';

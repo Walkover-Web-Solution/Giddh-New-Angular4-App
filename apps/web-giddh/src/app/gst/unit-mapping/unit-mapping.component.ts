@@ -19,8 +19,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 })
 
 export class UnitMappingComponent implements OnInit, OnDestroy {
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds active company GST number */
@@ -79,7 +79,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         document.querySelector('body').classList.remove('unit-mapping-page');
-        this.asideGstSidebarMenuState = 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
     /**

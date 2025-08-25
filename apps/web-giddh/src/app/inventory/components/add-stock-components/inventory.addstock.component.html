@@ -670,7 +670,7 @@
                                     *ngIf="isUpdatingStockForm"
                                     [ladda]="isStockDeleteInProcess$ | async"
                                     class="btn btn-danger"
-                                    (click)="openModal(deleteGroupStockTemplate)"
+                                    (click)="openDialog(deleteGroupStockTemplate)"
                                 >
                                     Delete Stock
                                 </button>
@@ -704,8 +704,8 @@
         "
         [ok]="'Yes'"
         [cancel]="'No'"
-        (cancelCallBack)="hideModal()"
-        (successCallBack)="deleteStock(); hideModal()"
+        (cancelCallBack)="closeDialog()"
+        (successCallBack)="deleteStock(); closeDialog()"
     >
     </confirm-modal>
 </ng-template>

@@ -11,7 +11,6 @@ import { InventoryEntryActions } from '../../../actions/inventory/inventory.entr
 import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { createSelector } from "reselect";
 import { each, find, orderBy } from '../../../lodash-optimized';
@@ -19,19 +18,7 @@ import { each, find, orderBy } from '../../../lodash-optimized';
 @Component({
     selector: 'aside-branch-transfer-pane',
     templateUrl: './aside-branch-transfer-pane.component.html',
-    styleUrls: ['./aside-branch-transfer-pane.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0);'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0);'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./aside-branch-transfer-pane.component.scss']
 })
 
 export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {

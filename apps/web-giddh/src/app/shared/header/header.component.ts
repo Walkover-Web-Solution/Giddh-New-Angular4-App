@@ -6,7 +6,6 @@ import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
@@ -49,7 +48,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ServiceConfig } from '../../services/service.config';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -106,7 +105,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
     /** Switch branch dropdown */
     @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
-    @ViewChild('supportTab', { static: true }) public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox', { static: true }) public searchCmpTextBox: ElementRef;
     @ViewChild('expiredPlan', { static: true }) public expiredPlan: ModalDirective;
     @ViewChild('expiredPlanModel', { static: true }) public expiredPlanModel: TemplateRef<any>;
@@ -120,6 +118,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /** Stores the current visible on boarding modal instance */
+    private dialogRefExpirePlanRef: MatDialogRef<any>;
+    private dialogRefCrossLimitRef: MatDialogRef<any>;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -165,9 +166,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public totalNumberOfcompanies: number;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private subscriptions: Subscription[] = [];
-    public modelRef: BsModalRef;
-    public modelRefExpirePlan: BsModalRef;
-    public modelRefCrossLimit: BsModalRef;
 
     private activeCompanyForDb: ICompAidata;
     public isMobileSite: boolean;
@@ -282,8 +280,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isErrorMessageListenerAdded: boolean = false;
     /** True if command dialog is open */
     public showCommandDialog: boolean = false;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -308,7 +304,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _generalActions: GeneralActions,
         private authService: AuthenticationService,
         private _dbService: DbService,
-        private modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
@@ -1303,16 +1298,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-        if (!this.modalService.getModalsCount()) {
-            this.modelRefExpirePlan = this.modalService.show(template,
-                Object.assign({}, { class: 'subscription-upgrade' })
-            );
-        }
+        this.dialogRefExpirePlanRef = this.dialog.open(template,{
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
-        this.modelRefCrossLimit = this.modalService.show(template);
-
+        this.dialogRefCrossLimitRef = this.dialog.open(template,{
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -1331,12 +1325,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public goToSelectPlan(): void {
-        if (this.modelRefExpirePlan) {
-            this.modelRefExpirePlan.hide();
-        }
-        if (this.modelRefCrossLimit) {
-            this.modelRefCrossLimit.hide();
-        }
+        this.dialogRefExpirePlanRef?.close();
+        this.dialogRefCrossLimitRef?.close();
         document.querySelector('body').classList.remove('modal-open');
         if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
             this.router.navigate(['/pages/user-details/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);

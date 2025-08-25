@@ -15,7 +15,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -34,6 +34,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('trans', { static: true }) public transport: any;
     /** Element reference for transaction sub type */
     @ViewChild('transSubType', { static: true }) public transSubType: any;
+    /** Transporter template reference */
+    @ViewChild('transporterTemplate', { static: true }) public transporterTemplate: TemplateRef<any>;
+    /** Transporter dialog reference */
+    public transporterDialogRef: MatDialogRef<any>;
 
     public invoiceNumber: string = '';
     public invoiceBillingGstinNo: string = '';
@@ -48,7 +52,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public isLoggedInUserEwayBill$: Observable<boolean>;
     public transporterDropdown$: Observable<IOption[]>;
     public keydownClassAdded: boolean = false;
-    public status: boolean = false;
     public transportEditMode: boolean = false;
     public transporterList$: Observable<IEwayBillTransporter[]>;
     public transporterListDetails$: Observable<IAllTransporterDetails>;
@@ -262,14 +265,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.keydownClassAdded = true;
         } else if (e.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
-            this.OpenTransporterModel();
+            this.openTransporterDialog();
         } else {
             this.keydownClassAdded = false;
         }
     }
 
-    public OpenTransporterModel() {
-        this.status = !this.status;
+    /**
+     * Opens the transporter dialog
+     * 
+     * @memberof EWayBillCreateComponent
+     */
+    public openTransporterDialog(): void {
+        this.transporterDialogRef = this.dialog.open(this.transporterTemplate, ASIDE_PANE_CONFIG);
         this.generateNewTransporterForm.reset();
         this.transportEditMode = false;
     }
@@ -309,7 +317,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.OpenTransporterModel();
+        this.openTransporterDialog();
         this.detectChanges();
     }
 

@@ -32,8 +32,8 @@ export const MY_FORMATS = {
     ]
 })
 export class FilingStatusComponent implements OnInit, OnDestroy {
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -216,7 +216,6 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.asideGstSidebarMenuState = 'out';
         document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 

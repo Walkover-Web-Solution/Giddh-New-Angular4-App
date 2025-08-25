@@ -17,7 +17,7 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { cloneDeep, map, orderBy } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -79,7 +79,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public showReportTally = new EventEmitter<boolean>();
     @ViewChild('createTagTemplate', { static: true }) public createTagTemplate: TemplateRef<any>;
     public universalDate$: Observable<any>;
-    public newTagForm: UntypedFormGroup;
+    public newTagForm: UntypedFormGroup;    
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Instance of universal datepicker menu trigger */
