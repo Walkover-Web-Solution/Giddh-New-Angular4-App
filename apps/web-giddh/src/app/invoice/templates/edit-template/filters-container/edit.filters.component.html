@@ -1,7 +1,7 @@
-<div class="btn-group btn-group-lg" role="group" aria-label="">
+<div mat-raised-button color="primary" role="group" aria-label="">
     <button
         type="button"
-        class="btn btn-default"
+        mat-stroked-button
         [ngClass]="{ 'active-tab': ifDesignSelected, 'inactive-tab': ifContentSelected }"
         (click)="openTab('design')"
         id="defaultOpen"
@@ -10,7 +10,7 @@
     </button>
     <button
         type="button"
-        class="btn btn-default content-tab"
+        mat-stroked-button
         [ngClass]="{ 'active-tab': ifContentSelected, 'inactive-tab': ifDesignSelected }"
         (click)="openTab('content')"
     >

@@ -135,7 +135,8 @@
                         <button
                             *ngIf="showDeleteButton"
                             type="button"
-                            class="start-upload-btn btn btn-danger"
+                            mat-raised-button color="primary"
+                            class="start-upload-btn"
                             (click)="deleteLogo()"
                             matTooltip="Clicking on this, will delete image from server"
                         >

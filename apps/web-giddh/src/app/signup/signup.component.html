@@ -45,9 +45,9 @@
                                                 required
                                             />
                                             <button
+                                                mat-raised-button color="primary"
                                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
-                                                class="btn btn-blue btn-block btn-lg"
                                                 (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                             >
                                                 Submit
@@ -63,9 +63,9 @@
                                             />
                                             <div class="clearfix mr-b2">
                                                 <button
+                                                    mat-raised-button color="primary"
                                                     [disabled]="!emailVerifyForm.controls['token'].valid"
-                                                    class="btn btn-blue btn-block btn-lg"
-                                                    [ladda]="isVerifyEmailInProcess$ | async"
+                                                        [ladda]="isVerifyEmailInProcess$ | async"
                                                     (click)="
                                                         VerifyEmail(
                                                             emailVerifyForm.controls['email']?.value,
@@ -76,7 +76,8 @@
                                                     Verify Email
                                                 </button>
                                                 <a
-                                                    class="btn btn-link cp pull-right"
+                                                    mat-stroked-button
+                                                    class="cp pull-right"
                                                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                                     href="javascript:void(0);"
                                                     >Resend code</a
@@ -114,7 +115,8 @@
                                                 autocomplete="false"
                                             />
                                             <button
-                                                class="btn btn-blue btn-lg btn-block mr-t1"
+                                                mat-raised-button color="primary"
+                                                class="mr-t1"
                                                 type="submit"
                                                 [disabled]="
                                                     !signUpWithPasswdForm.controls['email'].valid ||
@@ -143,9 +145,9 @@
                                             />
                                             <div class="clearfix mr-b2">
                                                 <button
+                                                    mat-raised-button color="primary"
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
-                                                    class="btn btn-blue btn-block btn-lg"
-                                                    (click)="
+                                                        (click)="
                                                         VerifyEmail(
                                                             signupVerifyForm.controls['email']?.value,
                                                             signupVerifyForm.controls['verificationCode']?.value
@@ -155,7 +157,8 @@
                                                     Verify Email
                                                 </button>
                                                 <a
-                                                    class="btn btn-link cp pull-right"
+                                                    mat-stroked-button
+                                                    class="cp pull-right"
                                                     (click)="LoginWithEmail(signupVerifyForm.controls['email']?.value)"
                                                     href="javascript:void(0);"
                                                     >Resend code</a
@@ -185,7 +188,7 @@
                                 </ul>
                                 <div class="d-flex align-items-center account mt-1">
                                     <p class="mb-0 mr-2 bold">Already have an account?</p>
-                                    <a routerLink="/login" class="btn btn-sm btn-secondary" href="javascript:void(0);">Login</a>
+                                    <a mat-raised-button color="primary" routerLink="/login" class="btn-sm" href="javascript:void(0);">Login</a>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +218,9 @@
                 <button
                     [disabled]="!emailVerifyForm.controls['email'].valid"
                     [ladda]="isLoginWithEmailInProcess$ | async"
-                    class="btn sharp btn-block btn-blue btn-lg mr-t1"
+                    mat-raised-button
+    color="primary"
+    class="sharp mr-t1"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                 >
                     Submit
@@ -232,7 +237,9 @@
                 <small>We have sent a verification code to your registered email.</small>
                 <button
                     [disabled]="!emailVerifyForm.controls['token'].valid"
-                    class="btn sharp btn-block btn-blue btn-lg mr-t1"
+                    mat-raised-button
+    color="primary"
+    class="sharp mr-t1"
                     [ladda]="isVerifyEmailInProcess$ | async"
                     (click)="
                         VerifyEmail(
@@ -244,7 +251,8 @@
                     Last step to go
                 </button>
                 <a
-                    class="btn btn-link cp pull-right"
+                    mat-stroked-button
+                    class="cp pull-right"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     href="javascript:void(0);"
                     >Resend code</a
@@ -288,7 +296,9 @@
             </div>
             <button
                 *ngIf="!(isLoginWithMobileSubmited$ | async)"
-                class="btn sharp btn-block btn-blue btn-lg mr-t1"
+                mat-raised-button
+    color="primary"
+    class="sharp mr-t1"
                 (click)="
                     getOtp(
                         mobileVerifyForm.controls['mobileNumber']?.value,
@@ -305,7 +315,9 @@
                 <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
                 <button
                     type="login"
-                    class="btn sharp btn-block btn-blue btn-lg mr-t1"
+                    mat-raised-button
+    color="primary"
+    class="sharp mr-t1"
                     [ladda]="isVerifyMobileInProcess$ | async"
                     (click)="
                         VerifyCode(
@@ -345,7 +357,9 @@
                 <small>We have sent an OTP to your registered mobile number.</small>
                 <button
                     type="login"
-                    class="btn sharp btn-block btn-blue btn-lg mr-t1"
+                    mat-raised-button
+    color="primary"
+    class="sharp mr-t1"
                     [ladda]="isTwoWayAuthInProcess$ | async"
                     (click)="verifyTwoWayCode()"
                     [disabled]="twoWayOthForm.get('otp').invalid"

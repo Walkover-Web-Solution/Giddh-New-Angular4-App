@@ -49,6 +49,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -113,6 +114,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     ],
     providers: [ExceptionLogService],
     imports: [
+        MatButtonModule,
         InventoryRoutingModule,
         SharedModule,
         Daterangepicker,

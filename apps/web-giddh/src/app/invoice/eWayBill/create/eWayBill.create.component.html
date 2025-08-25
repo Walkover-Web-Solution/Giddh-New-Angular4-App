@@ -363,14 +363,14 @@
                     <div class="row">
                         <div class="col-md-12 mt-4">
                             <button
-                                class="btn btn-success"
+                                mat-raised-button color="primary"
                                 [disabled]="generateInvForm.invalid"
                                 [ladda]="isEwaybillGenerateInProcess$ | async"
                                 (click)="onSubmitEwaybill(generateInvForm)"
                             >
                                 {{ localeData?.save_generate }}
                             </button>
-                            <button class="btn btn-danger" (click)="onCancelGenerateBill()">
+                            <button mat-stroked-button (click)="onCancelGenerateBill()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -397,7 +397,7 @@
                                 ><span>{{ invoice?.grandTotal?.amountForAccount }}</span>
                             </div>
                             <div>
-                                <button (click)="removeInvoice(invoice)" class="btn btn-danger">
+                                <button (click)="removeInvoice(invoice)" mat-stroked-button>
                                     {{ commonLocaleData?.app_remove }}
                                 </button>
                             </div>
@@ -423,7 +423,7 @@
     <div class="right-modal account-aside-menu-state">
         <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
         <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-            <button type="button" class="btn btn-sm btn-primary" id="closedialog" (click)="OpenTransporterModel()">
+            <button type="button" mat-stroked-button id="closedialog" (click)="OpenTransporterModel()">
                 <i class="icon-cross"></i>
             </button>
             <div class="form-header">
@@ -498,7 +498,7 @@
                     <div class="form-group mt-3">
                         <div class="clearfix" *ngIf="!transportEditMode">
                             <button
-                                class="btn btn-md btn-success mr-r1"
+                                mat-raised-button color="primary"
                                 [disabled]="generateTransporterForm.invalid"
                                 [ladda]="isGenarateTransporterInProcess$ | async"
                                 (click)="generateTransporter(generateTransporterForm)"
@@ -506,13 +506,13 @@
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">
+                            <button mat-stroked-button (click)="clearTransportForm()" type="submit">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                         </div>
                         <div class="clearfix" *ngIf="transportEditMode">
                             <button
-                                class="btn btn-md btn-green mr-r1"
+                                mat-raised-button color="primary"
                                 [disabled]="generateTransporterForm.invalid"
                                 [ladda]="updateTransporterInProcess$ | async"
                                 (click)="updateTransporter(generateTransporterForm)"
@@ -520,7 +520,7 @@
                             >
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button class="btn btn-md btn-danger" (click)="clearTransportForm()">
+                            <button mat-stroked-button (click)="clearTransportForm()">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                         </div>
@@ -585,8 +585,8 @@
                         <td>{{ item?.transporterName }}</td>
                         <td>{{ item?.transporterId }}</td>
                         <td class="nowrap">
-                            <button (click)="editTransporter(item)"><i class="icon-edit"></i></button>
-                            <button (click)="deleteTransporter(item)"><i class="fa fa-trash"></i></button>
+                            <button mat-stroked-button (click)="editTransporter(item)"><i class="icon-edit"></i></button>
+                            <button mat-stroked-button (click)="deleteTransporter(item)"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                 </table>

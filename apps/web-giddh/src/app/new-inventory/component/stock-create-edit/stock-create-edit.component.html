@@ -163,7 +163,7 @@
                                                     </div>
                                                 </mat-select>
                                             </mat-form-field>
-                                            <button
+                                            <button 
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
                                                 mat-raised-button
@@ -2425,7 +2425,6 @@
                                                     aria-label="delete icon"
                                                     class="delete-tb-tr-icon"
                                                     mat-icon-button
-                                                    color="warn"
                                                     role="button"
                                                     type="button"
                                                 >
@@ -2467,7 +2466,6 @@
                                                     aria-label="delete icon"
                                                     class="delete-tb-tr-icon"
                                                     mat-icon-button
-                                                    color="warn"
                                                     role="button"
                                                     type="button"
                                                 >
@@ -3916,7 +3914,6 @@
                     aria-label="clear"
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
-                    color="warn"
                     (click)="resetForm(stockCreateEditForm)"
                 >
                     {{ commonLocaleData?.app_clear }}
@@ -3945,7 +3942,6 @@
                     aria-label="delete icon"
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    color="warn"
                     class="min-width-100"
                     (click)="deleteStock()"
                     [disabled]="uploadAttachmentInProgress$ | async"
