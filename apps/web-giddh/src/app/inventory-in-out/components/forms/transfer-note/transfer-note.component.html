@@ -99,8 +99,8 @@
 
             <div class="row">
                 <div class="col-xs-12 text-left mr-t1">
-                    <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

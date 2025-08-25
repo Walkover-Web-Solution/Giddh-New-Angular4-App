@@ -4,6 +4,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -59,6 +60,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         BulkConvertComponent
     ],
     imports: [
+        MatButtonModule,
         PurchaseRoutingModule,
         InvoiceModule,
         CollapseModule.forRoot(),

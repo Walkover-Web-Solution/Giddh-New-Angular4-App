@@ -19,6 +19,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
@@ -40,8 +41,8 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
     providers: [],
     imports: [InventoryInOutRoutingModule,
         CommonModule,
+        MatButtonModule,
         ShSelectModule,
-
         Daterangepicker,
         ReactiveFormsModule,
         FormsModule,

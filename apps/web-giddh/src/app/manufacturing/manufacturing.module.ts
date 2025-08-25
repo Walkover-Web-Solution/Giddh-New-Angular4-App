@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MfEditComponent } from './edit/mf.edit.component';
 import { DeleteManufacturingConfirmationModelComponent } from './edit/modal/confirmation.model.component';
@@ -15,6 +16,7 @@ import { SharedModule } from '../shared/shared.module';
     exports: [RouterModule],
     providers: [],
     imports: [
+        MatButtonModule,
         ManufacturingRoutingModule,
         SharedModule,
         RouterModule

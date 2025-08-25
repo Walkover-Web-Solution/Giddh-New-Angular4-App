@@ -96,7 +96,7 @@
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <h3 mat-dialog-title>{{ localeData?.create_user_permission }}</h3>
-                <button class="close" (click)="closeEditUserModal(true)" aria-label="close">×</button>
+                <button mat-stroked-button class="close" (click)="closeEditUserModal(true)" aria-label="close">×</button>
             </div>
             <div class="modal-body pt-4">
                 <setting-permission-form [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true"

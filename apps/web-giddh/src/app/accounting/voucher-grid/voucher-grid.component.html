@@ -256,7 +256,7 @@
                         <h1>Accept?</h1>
                         <div class="pd-t2">
                             <button
-                                class="btn btn-primary"
+                                mat-raised-button color="primary"
                                 #submitButton
                                 (keyup)="keyUpOnSubmitButton($event)"
                                 (click)="saveEntry()"
@@ -264,7 +264,7 @@
                                 Yes
                             </button>
                             <button
-                                class="btn btn-default"
+                                mat-stroked-button
                                 #resetButton
                                 (keyup)="keyUpOnResetButton($event)"
                                 (click)="acceptCancel()"
@@ -272,7 +272,7 @@
                                 No
                             </button>
                             <br />
-                            <button class="btn btn-link mr-t1" (click)="refreshEntry()">Reset</button>
+                            <button mat-stroked-button class="mr-t1" (click)="refreshEntry()">Reset</button>
                         </div>
                     </div>
                 </div>

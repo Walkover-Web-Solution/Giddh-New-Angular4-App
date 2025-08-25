@@ -29,21 +29,22 @@
                 </div>
             </div>
             <div class="clear-filter">
-                <button class="btn btn-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
+                <button mat-stroked-button *ngIf="isFilterCorrect" (click)="resetFilter()">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
 
             <div class="right-inventory">
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
+                    <button mat-stroked-button class="icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
+                        mat-stroked-button
                         id="button-alignment"
                         dropdownToggle
                         type="button"
-                        class="btn-link cp mr-r15 dropdown-toggle icon-btn"
+                        class="cp mr-r15 dropdown-toggle icon-btn"
                         aria-controls="dropdown-alignment"
                         matTooltip="Download"
                     >
@@ -66,13 +67,13 @@
                 </div>
                 <button
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
-                    class="btn btn-sky-blue transfer-btn"
+                    mat-raised-button color="primary" class="transfer-btn"
                     matTooltip="Alt+N"
                     (click)="toggleTransferAsidePane()"
                 >
                     New Transfer
                 </button>
-                <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" matTooltip="Alt+i">
+                <button mat-raised-button color="primary" class="mr-0" (click)="toggleAsidePane()" matTooltip="Alt+i">
                     Create New
                 </button>
             </div>
@@ -219,7 +220,7 @@
                                     id="button-alignment"
                                     dropdownToggle
                                     type="button"
-                                    class="btn-link btn cp p-0 dropdown-toggle c-3 p-0"
+                                    mat-raised-button color="primary" class="cp dropdown-toggle c-3"
                                     aria-controls="dropdown-alignment"
                                 >
                                     Voucher Type
@@ -691,7 +692,7 @@
 <ng-template #advanceSearchTemplate>
     <div mat-dialog-title class="theme-bg">
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
+        <button mat-stroked-button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
             ×
         </button>
     </div>
@@ -810,7 +811,7 @@
                     <div class="row mr-t4">
                         <div class="col-12 text-right">
                             <button
-                                class="btn btn-success"
+                                mat-raised-button color="primary"
                                 type="button"
                                 [disabled]="
                                     !isFilterCorrect ||
@@ -822,7 +823,7 @@
                             >
                                 Search
                             </button>
-                            <button class="btn btn-danger mr-0" type="button" (click)="advanceSearchAction('clear')">
+                            <button mat-stroked-button class="mr-0" type="button" (click)="advanceSearchAction('clear')">
                                 Clear
                             </button>
                         </div>

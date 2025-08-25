@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { SignupComponent } from './signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +11,7 @@ import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
+        MatButtonModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
