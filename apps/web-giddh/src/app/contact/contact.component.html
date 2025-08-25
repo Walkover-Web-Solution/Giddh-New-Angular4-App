@@ -601,7 +601,6 @@
                                             color="primary"
                                             class="mr-2 checkbox-left-side-in-table"
                                             [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
-                                            type="checkbox"
                                             [(ngModel)]="account.isSelected"
                                             (change)="selectAccount($event, account)"
                                         >
@@ -1015,7 +1014,6 @@
                                     <div class="select-single-checkbox-wrapper">
                                         <mat-checkbox
                                             [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
-                                            type="checkbox"
                                             color="primary"
                                             class="mr-2 checkbox-left-side-in-table"
                                             (change)="selectAccount($event, account)"

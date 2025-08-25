@@ -56,6 +56,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public productUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    /**
+     * Flag to indicate if component is initialized
+     * @memberof JobworkComponent
+     */
+    public isComponentInitialized: boolean = false;
     public showWelcomePage: boolean = true;
     public showSenderSearch: boolean = false;
     public showReceiverSearch: boolean = false;
@@ -154,6 +159,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        // Mark component as initialized
+        this.isComponentInitialized = true;
+        
         // get view from sidebar while clicking on person/stock
 
         this.invViewService.getJobworkActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
@@ -302,6 +310,31 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+
+    /**
+     * Displayed columns for the jobwork mat-table
+     * @memberof JobworkComponent
+     */
+    public displayedColumns: string[] = [];
+
+    /**
+     * Gets the displayed columns based on the current type (person/stock)
+     * @returns {string[]} Array of column names to display
+     * @memberof JobworkComponent
+     */
+    public getDisplayedColumns(): string[] {
+        const baseColumns = ['date'];
+        
+        if (this.type === 'person') {
+            baseColumns.push('productName');
+        } else if (this.type === 'stock') {
+            baseColumns.push('voucherType');
+        }
+        
+        baseColumns.push('senderName', 'receiverName', 'description', 'tradingQty');
+        
+        return baseColumns;
+    }
 
     /**
      * updateDescription
@@ -455,7 +488,11 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
         this._store.dispatch(this.inventoryReportActions
             .genReport(this.uniqueName, this.startDate, this.endDate, page, 6, applyFilter ? this.filter : null));
-        this.cdr.detectChanges();
+        
+        // Only trigger change detection if component is initialized
+        if (this.cdr) {
+            this.cdr.detectChanges();
+        }
     }
 
     // ******* Advance search modal *******//

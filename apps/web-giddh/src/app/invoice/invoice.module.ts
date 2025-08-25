@@ -57,7 +57,6 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -67,7 +66,6 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
-import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -79,7 +77,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 
 @NgModule({
@@ -111,7 +111,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatTabsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        InvoiceTemplatesModule,
         KeyboardShortutModule,
         SelectModule,
         LaddaModule.forRoot({
@@ -168,11 +167,12 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         GenerateEWayBillModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        DeleteTemplateConfirmationModalModule,
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatSortModule,
+        NewConfirmationModalModule
     ],
     exports: [
         InvoiceRoutingModule,

@@ -8,6 +8,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ServiceConfig } from '../../../services/service.config';
+declare var isElectron: any;
+declare var AppUrl: any;
+declare var APP_FOLDER: any;
 @Component({
     selector: 'about-group-detail',
     templateUrl: './about-group-detail.component.html',
@@ -40,6 +43,35 @@ export class AboutGroupDetailComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+
+    /**
+     * Displayed columns for the stock details mat-table
+     * @memberof AboutGroupDetailComponent
+     */
+    public displayedColumns: string[] = ['name', 'type', 'purRate', 'saleRate', 'closingQty'];
+
+    /**
+     * Sample data source for the stock details table
+     * @memberof AboutGroupDetailComponent
+     */
+    public dataSource: any[] = [
+        {
+            name: 'Product Name 1 Dummy',
+            type: 'Product',
+            purRate: '₹10,00,000.00',
+            saleRate: '₹17,48,242.86',
+            closingQty: '21,200 nos.',
+            hasImage: true
+        },
+        {
+            name: 'Product Name 2 Dummy',
+            type: 'Product',
+            purRate: '₹10,00,000.00',
+            saleRate: '₹17,48,242.86',
+            closingQty: '21,200 nos.',
+            hasImage: true
+        }
+    ];
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,

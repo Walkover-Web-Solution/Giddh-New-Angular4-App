@@ -373,11 +373,10 @@
                                                             <div class="d-flex align-items-start pb-1">
                                                                 <div class="d-flex align-items-start pd-r15">
                                                                     <div class="pt-1">
-                                                                        <input
-                                                                            type="checkbox"
+                                                                        <mat-checkbox
                                                                             autocomplete="None"
-                                                                            name="autoFillVendorShipping"
                                                                             [(ngModel)]="autoFillVendorShipping"
+                                                                            color="primary"
                                                                             (change)="autoFillShippingDetails('vendor')"
                                                                         />
                                                                     </div>
@@ -903,11 +902,10 @@
                                                     <div class="d-flex align-items-start pb-1">
                                                         <div class="d-flex align-items-start pd-r15">
                                                             <div class="pt-1">
-                                                                <input
-                                                                    type="checkbox"
+                                                                <mat-checkbox
                                                                     autocomplete="None"
-                                                                    name="autoFillCompanyShipping"
                                                                     [(ngModel)]="autoFillCompanyShipping"
+                                                                    color="primary"
                                                                     (change)="autoFillShippingDetails('company')"
                                                                 />
                                                             </div>
@@ -1833,36 +1831,14 @@
                                                 </div>
                                                 <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                     <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                        <span>
-                                                            <input
-                                                                type="radio"
-                                                                class="radio-custom radio-theme"
-                                                                name="showCodeType{{ entryIdx }}"
-                                                                id="hsnCodeType{{ entryIdx }}"
-                                                                [(ngModel)]="transaction.showCodeType"
-                                                                value="hsn"
-                                                            />
-                                                            <label
-                                                                for="hsnCodeType{{ entryIdx }}"
-                                                                class="radio-custom-label"
-                                                                >{{ commonLocaleData?.app_hsn_code }}</label
-                                                            >
-                                                        </span>
-                                                        <span>
-                                                            <input
-                                                                type="radio"
-                                                                class="radio-custom radio-theme"
-                                                                name="showCodeType{{ entryIdx }}"
-                                                                id="sacCodeType{{ entryIdx }}"
-                                                                [(ngModel)]="transaction.showCodeType"
-                                                                value="sac"
-                                                            />
-                                                            <label
-                                                                for="sacCodeType{{ entryIdx }}"
-                                                                class="radio-custom-label"
-                                                                >{{ commonLocaleData?.app_sac_code }}</label
-                                                            >
-                                                        </span>
+                                                        <mat-radio-group name="showCodeType{{ entryIdx }}" [(ngModel)]="transaction.showCodeType" class="d-flex">
+                                                            <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                                                {{ commonLocaleData?.app_hsn_code }}
+                                                            </mat-radio-button>
+                                                            <mat-radio-button color="primary" value="sac">
+                                                                {{ commonLocaleData?.app_sac_code }}
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
                                                     </div>
                                                     <input
                                                         type="text"
@@ -2089,11 +2065,11 @@
                                     />
 
                                     <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
-                                        <input
-                                            type="checkbox"
+                                        <mat-checkbox
                                             class="other-taxes-checkbox"
                                             [(ngModel)]="entry.isOtherTaxApplicable"
                                             *ngIf="!entry.isOtherTaxApplicable"
+                                            color="primary"
                                             (click)="tcsTdsIndex = entryIdx"
                                             name="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                             id="entry.isOtherTaxApplicable_{{ entryIdx }}"
@@ -2903,36 +2879,14 @@
                                                             </div>
                                                             <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="hsnCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="hsn"
-                                                                        />
-                                                                        <label
-                                                                            for="hsnCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_hsn_code }}</label
-                                                                        >
-                                                                    </span>
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="sacCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="sac"
-                                                                        />
-                                                                        <label
-                                                                            for="sacCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_sac_code }}</label
-                                                                        >
-                                                                    </span>
+                                                                    <mat-radio-group name="showCodeType{{ entryIdx }}" [(ngModel)]="transaction.showCodeType" class="d-flex">
+                                                                        <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                                                            {{ commonLocaleData?.app_hsn_code }}
+                                                                        </mat-radio-button>
+                                                                        <mat-radio-button color="primary" value="sac">
+                                                                            {{ commonLocaleData?.app_sac_code }}
+                                                                        </mat-radio-button>
+                                                                    </mat-radio-group>
                                                                 </div>
                                                                 <input
                                                                     type="text"
@@ -3202,11 +3156,11 @@
                                                 [mask]="inputMaskFormat"
                                             />
                                             <div class="wrap-other-tax" *ngIf="isTcsTdsApplicable">
-                                                <input
-                                                    type="checkbox"
+                                                <mat-checkbox
                                                     class="other-taxes-checkbox"
                                                     [(ngModel)]="entry.isOtherTaxApplicable"
                                                     *ngIf="!entry.isOtherTaxApplicable"
+                                                    color="primary"
                                                     (click)="tcsTdsIndex = entryIdx"
                                                     name="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                     id="entry.isOtherTaxApplicable_{{ entryIdx }}"

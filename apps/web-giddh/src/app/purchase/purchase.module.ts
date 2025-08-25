@@ -47,6 +47,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 
 @NgModule({
@@ -104,6 +106,8 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         MatFormFieldModule,
         MatInputModule,
         MatMenuModule,
+        MatCheckboxModule,
+        MatRadioModule,
         PurchaseSettingModule
     ]
 })

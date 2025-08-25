@@ -205,60 +205,24 @@
                     <div class="d-flex column-gap15 mr-b15">
                         <!-- Mode of Transportation -->
                         <label>{{ commonLocaleData?.app_transportation_mode }}</label>
-                        <ul class="list-icon-group column-gap1">
-                            <li>
-                                <input
-                                    id="transMode1"
-                                    type="radio"
-                                    name="transMode"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    value="1"
-                                />
-                                <label for="transMode1">
-                                    <img src="assets/icon/4.svg " alt="road img" />
-                                    {{ commonLocaleData?.app_road }}
-                                </label>
-                            </li>
-                            <li>
-                                <input
-                                    id="transMode2"
-                                    type="radio"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode"
-                                    value="2"
-                                />
-                                <label for="transMode2"
-                                    ><img src="assets/icon/3.svg " alt="rail img" />
-                                    {{ commonLocaleData?.app_rail }}
-                                </label>
-                            </li>
-                            <li>
-                                <input
-                                    id="transMode3"
-                                    type="radio"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode"
-                                    value="3"
-                                />
-                                <label for="transMode3"
-                                    ><img src="assets/icon/1.svg " alt="air img" />
-                                    {{ commonLocaleData?.app_air }}
-                                </label>
-                            </li>
-                            <li>
-                                <input
-                                    id="transMode4"
-                                    type="radio"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode"
-                                    value="4"
-                                />
-                                <label for="transMode4">
-                                    <img src="assets/icon/2.svg " alt="ship img" />
-                                    {{ commonLocaleData?.app_ship }}
-                                </label>
-                            </li>
-                        </ul>
+                        <mat-radio-group name="transMode" [(ngModel)]="updateEwayVehicleform.transMode" class="d-flex flex-wrap">
+                            <mat-radio-button color="primary" value="1" class="mr-3 mb-2">
+                                <img src="assets/icon/4.svg" alt="road img" class="mr-1" />
+                                {{ commonLocaleData?.app_road }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="2" class="mr-3 mb-2">
+                                <img src="assets/icon/3.svg" alt="rail img" class="mr-1" />
+                                {{ commonLocaleData?.app_rail }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="3" class="mr-3 mb-2">
+                                <img src="assets/icon/1.svg" alt="air img" class="mr-1" />
+                                {{ commonLocaleData?.app_air }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="4" class="mb-2">
+                                <img src="assets/icon/2.svg" alt="ship img" class="mr-1" />
+                                {{ commonLocaleData?.app_ship }}
+                            </mat-radio-button>
+                        </mat-radio-group>
                     </div>
                     <div class="d-flex flex-column row-gap15">
                         <!-- Vehicle Type -->

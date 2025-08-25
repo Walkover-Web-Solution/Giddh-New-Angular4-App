@@ -78,7 +78,7 @@
                                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
-                                <span>
+                                <span class="d-flex column-gap1">
                                     <button
                                         mat-raised-button color="primary"
                                         *ngIf="!isCompany && !isConsolidatedBranch"
@@ -127,175 +127,115 @@
                 </form>
 
                 <div class="table-responsive" [hidden]="!ledgersData?.results?.length">
-                    <table class="table basic giddh-table pending-table on-mobile-view">
-                        <thead class="thead-background1">
-                            <tr>
-                                <th width="4%" *ngIf="selectedInvoices?.length > 0">
-                                    <div class="check-image d-flex justify-content-center">
-                                        <img
-                                            src="assets/images/unchecked.png"
-                                            *ngIf="!allItemsSelected"
-                                            (click)="toggleAllItems(true)"
-                                        />
-                                        <img
-                                            src="assets/images/checked.png"
-                                            *ngIf="allItemsSelected"
-                                            (click)="toggleAllItems(false)"
-                                        />
-                                    </div>
-                                </th>
+                    <table
+                        mat-table
+                        [dataSource]="ledgersData?.results || []"
+                        class="giddh-table table pending-table on-mobile-view"
+                    >
+                        <!-- Selection Column -->
+                        <ng-container matColumnDef="selection">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" width="100px">
+                                <div class="check-image d-flex justify-content-center" *ngIf="selectedInvoices?.length > 0">
+                                    <img
+                                        src="assets/images/unchecked.png"
+                                        *ngIf="!allItemsSelected"
+                                        (click)="toggleAllItems(true)"
+                                    />
+                                    <img
+                                        src="assets/images/checked.png"
+                                        *ngIf="allItemsSelected"
+                                        (click)="toggleAllItems(false)"
+                                    />
+                                </div>
+                                <div class="check-image d-flex justify-content-center" *ngIf="selectedInvoices?.length === 0">#</div>
+                            </th>
+                            <td mat-cell *matCellDef="let item; let i = index" class="check-image" data-title="#" width="100px">
+                                <div class="check-image d-flex justify-content-center" 
+                                     *ngIf="hoveredItemForAction === item?.uniqueName || item.isSelected || selectedInvoices?.length > 0"
+                                     data-title="#">
+                                    <img
+                                        *ngIf="!item.isSelected"
+                                        src="assets/images/unchecked.png"
+                                        (click)="toggleItem(item, true)"
+                                    />
+                                    <img
+                                        *ngIf="item.isSelected"
+                                        src="assets/images/checked.png"
+                                        (click)="toggleItem(item, false)"
+                                    />
+                                </div>
+                                <div *ngIf="item.hasGenerationErr">
+                                    <i class="fa fa-info-circle" [matTooltip]="item.errMsg" matTooltipPosition="right"></i>
+                                </div>
+                                <div class="d-flex justify-content-center"
+                                     *ngIf="!item.isSelected && hoveredItemForAction !== item?.uniqueName && selectedInvoices?.length === 0">
+                                    {{ i + 1 }}
+                                </div>
+                            </td>
+                        </ng-container>
 
-                                <th *ngIf="selectedInvoices?.length === 0" width="4%">
-                                    <div class="check-image d-flex justify-content-center">#</div>
-                                </th>
+                        <!-- Date Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">
+                                {{ commonLocaleData?.app_date }}
+                            </th>
+                            <td mat-cell *matCellDef="let item" [attr.data-title]="commonLocaleData?.app_date">
+                                {{ item.entryDate }}
+                            </td>
+                        </ng-container>
 
-                                <th width="12%">
-                                    <div class="d-flex">
-                                        <div class="flex-fill">{{ commonLocaleData?.app_date }}</div>
-                                    </div>
-                                </th>
-                                <th width="20%" class="td-search-box" #searchParticularContainer>
-                                    <div [hidden]="showParticularSearch">
-                                        <span> {{ commonLocaleData?.app_particular }}</span>
-                                    </div>
+                        <!-- Particular Column -->
+                        <ng-container matColumnDef="particular">
+                            <th mat-header-cell *matHeaderCellDef class="text-center td-search-box" #searchParticularContainer>
+                                <div [hidden]="showParticularSearch">
+                                    <span>{{ commonLocaleData?.app_particular }}</span>
+                                </div>
+                                <div class="input-container" [hidden]="!showParticularSearch">
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_particular"
+                                        class="w100"
+                                        [formControl]="particularInput"
+                                        #particularSearch
+                                    />
+                                    <i class="icon-search" (click)="showParticularSearch = false"></i>
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let item" [attr.data-title]="commonLocaleData?.app_particular" class="hide-on-mobile">
+                                <table class="table nested-table particular-nested-table">
+                                    <tr *ngFor="let transaction of item.transactions">
+                                        <td class="p-0 border-none">
+                                            {{ transaction.particular.name }}
+                                            <span *ngIf="transaction.inventory && transaction.inventory.stock">
+                                                ({{ transaction.inventory.stock.name }})
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </ng-container>
 
-                                    <div class="input-container" [hidden]="!showParticularSearch">
-                                        <input
-                                            type="text"
-                                            [placeholder]="localeData?.search_particular"
-                                            class="w100"
-                                            [formControl]="particularInput"
-                                            #particularSearch
-                                        />
-                                        <i class="icon-search" (click)="showParticularSearch = false"></i>
-                                    </div>
-                                </th>
-
-                                <th width="13%">
-                                    <div class="d-flex">
-                                        <div class="flex-fill text-right">{{ commonLocaleData?.app_amount }}</div>
-                                    </div>
-                                </th>
-
-                                <th width="20%" class="td-search-box" #searchAccountContainer>
-                                    <div [hidden]="showAccountSearch">
-                                        <span> {{ commonLocaleData?.app_account }}</span>
-                                    </div>
-
-                                    <div class="input-container" [hidden]="!showAccountSearch">
-                                        <input
-                                            type="text"
-                                            [placeholder]="commonLocaleData?.app_search_account"
-                                            class="w100"
-                                            [formControl]="accountUniqueNameInput"
-                                            #accountUniqueNameSearch
-                                        />
-                                    </div>
-                                </th>
-
-                                <th width="13%">
-                                    <div class="d-flex">
-                                        <div class="flex-fill text-right">{{ commonLocaleData?.app_total }}</div>
-                                    </div>
-                                </th>
-
-                                <th width="20%" class="td-search-box" #searchDescContainer>
-                                    <div [hidden]="showDescSearch">
-                                        <span> {{ commonLocaleData?.app_description }}</span>
-                                    </div>
-
-                                    <div class="input-container" [hidden]="!showDescSearch">
-                                        <input
-                                            type="text"
-                                            [placeholder]="localeData?.search_description"
-                                            class="w100"
-                                        />
-                                        <i class="icon-search" (click)="showDescSearch = false"></i>
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody
-                            *ngIf="!(getLedgerDataInProcess$ | async) && !generateVoucherInProcess"
-                            (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-                            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-                        >
-                            <tr
-                                *ngFor="let item of ledgersData?.results; let i = index"
-                                [ngClass]="{ 'danger': item.hasGenerationErr }"
-                                (mouseover)="hoveredItemForAction = item?.uniqueName"
-                            >
-                                <td
-                                    class="check-image"
-                                    data-title="#"
-                                    *ngIf="
-                                        hoveredItemForAction === item?.uniqueName ||
-                                        item.isSelected ||
-                                        selectedInvoices?.length > 0
-                                    "
-                                >
-                                    <div class="check-image d-flex justify-content-center" data-title="#">
-                                        <img
-                                            *ngIf="!item.isSelected"
-                                            src="assets/images/unchecked.png"
-                                            (click)="toggleItem(item, true)"
-                                        />
-                                        <img
-                                            *ngIf="item.isSelected"
-                                            src="assets/images/checked.png"
-                                            (click)="toggleItem(item, false)"
-                                        />
-                                    </div>
-                                    <div *ngIf="item.hasGenerationErr">
-                                        <i class="fa fa-info-circle" [matTooltip]="item.errMsg" matTooltipPosition="right"></i>
-                                    </div>
-                                </td>
-
-                                <td
-                                    *ngIf="
-                                        !item.isSelected &&
-                                        hoveredItemForAction !== item?.uniqueName &&
-                                        selectedInvoices?.length === 0
-                                    "
-                                    data-title="#"
-                                >
-                                    <div class="d-flex justify-content-center">
-                                        {{ i + 1 }}
-                                    </div>
-                                </td>
-
-                                <td [attr.data-title]="commonLocaleData?.app_date">{{ item.entryDate }}</td>
-
-                                <td [attr.data-title]="commonLocaleData?.app_particular" class="hide-on-mobile">
-                                    <table class="table nested-table particular-nested-table">
-                                        <tr *ngFor="let transaction of item.transactions">
-                                            <td class="p-0 border-none">
-                                                {{ transaction.particular.name }}
-                                                <span *ngIf="transaction.inventory && transaction.inventory.stock"
-                                                    >({{ transaction.inventory.stock.name }})
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-
-                                <td [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
-                                    <table class="table nested-table amount-nested-table">
-                                        <tr *ngFor="let transaction of item.transactions">
-                                            <td class="text-right p-0 border-none">
-                                                <span class="d-inline-flex">
-                                                    <amount-field
-                                                        [amount]="transaction.amount"
-                                                        [currencySymbol]="item.accountCurrencySymbol"
-                                                        [currencyCode]="activeCompany?.baseCurrency"
-                                                    >
-                                                    </amount-field>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td id="mobile-nested-table">
+                        <!-- Amount Column -->
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef class="text-center text-right">
+                                {{ commonLocaleData?.app_amount }}
+                            </th>
+                            <td mat-cell *matCellDef="let item" [attr.data-title]="commonLocaleData?.app_amount" class="hide-on-mobile">
+                                <table class="table nested-table amount-nested-table">
+                                    <tr *ngFor="let transaction of item.transactions">
+                                        <td class="text-right p-0 border-none">
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="transaction.amount"
+                                                    [currencySymbol]="item.accountCurrencySymbol"
+                                                    [currencyCode]="activeCompany?.baseCurrency"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div id="mobile-nested-table">
                                     <table>
                                         <tr>
                                             <th>{{ commonLocaleData?.app_particular }}</th>
@@ -304,8 +244,8 @@
                                         <tr *ngFor="let transaction of item.transactions">
                                             <td>
                                                 {{ transaction.particular.name }}
-                                                <span *ngIf="transaction.inventory && transaction.inventory.stock"
-                                                    >({{ transaction.inventory.stock.name }})
+                                                <span *ngIf="transaction.inventory && transaction.inventory.stock">
+                                                    ({{ transaction.inventory.stock.name }})
                                                 </span>
                                             </td>
                                             <td class="text-right">
@@ -320,67 +260,104 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </td>
+                                </div>
+                            </td>
+                        </ng-container>
 
-                                <td
-                                    (dblclick)="modalUniqueName = item?.uniqueName"
-                                    class="cp no-dbl-click-select"
-                                    [attr.data-title]="commonLocaleData?.app_account"
-                                >
-                                    {{ item?.account?.name }}
-                                    <div
-                                        *ngIf="modalUniqueName === item?.uniqueName"
-                                        account-detail-modal-component
-                                        [accountUniqueName]="item?.account?.uniqueName"
-                                        [from]="ledgerSearchRequest.from"
-                                        [to]="ledgerSearchRequest.to"
-                                        [isModalOpen]="modalUniqueName === item?.uniqueName"
-                                        [voucherType]="selectedVoucher"
-                                        (modalClosed)="modalUniqueName = ''"
-                                    ></div>
-                                </td>
+                        <!-- Account Column -->
+                        <ng-container matColumnDef="account">
+                            <th mat-header-cell *matHeaderCellDef class="text-center td-search-box" #searchAccountContainer>
+                                <div [hidden]="showAccountSearch">
+                                    <span>{{ commonLocaleData?.app_account }}</span>
+                                </div>
+                                <div class="input-container" [hidden]="!showAccountSearch">
+                                    <input
+                                        type="text"
+                                        [placeholder]="commonLocaleData?.app_search_account"
+                                        class="w100"
+                                        [formControl]="accountUniqueNameInput"
+                                        #accountUniqueNameSearch
+                                    />
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let item"
+                                (dblclick)="modalUniqueName = item?.uniqueName"
+                                class="cp no-dbl-click-select"
+                                [attr.data-title]="commonLocaleData?.app_account">
+                                {{ item?.account?.name }}
+                                <div
+                                    *ngIf="modalUniqueName === item?.uniqueName"
+                                    account-detail-modal-component
+                                    [accountUniqueName]="item?.account?.uniqueName"
+                                    [from]="ledgerSearchRequest.from"
+                                    [to]="ledgerSearchRequest.to"
+                                    [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                    [voucherType]="selectedVoucher"
+                                    (modalClosed)="modalUniqueName = ''"
+                                ></div>
+                            </td>
+                        </ng-container>
 
-                                <td
-                                    class="text-right"
-                                    [attr.data-title]="commonLocaleData?.app_total"
-                                    [matTooltip]="totalPopupTemplate"
-                                    matTooltipPosition="above"
-                                >
-                                    <span class="d-inline-flex">
-                                        <amount-field
-                                            [amount]="item.total.amount"
-                                            [currencySymbol]="item.accountCurrencySymbol"
-                                            [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
-                                    </span>
-                                </td>
-                                <ng-template #totalPopupTemplate
-                                    ><span [innerHTML]="item.totalTooltipText"></span>
+                        <!-- Total Column -->
+                        <ng-container matColumnDef="total">
+                            <th mat-header-cell *matHeaderCellDef class="text-center text-right">
+                                {{ commonLocaleData?.app_total }}
+                            </th>
+                            <td mat-cell *matCellDef="let item"
+                                class="text-right"
+                                [attr.data-title]="commonLocaleData?.app_total"
+                                [matTooltip]="totalPopupTemplate"
+                                matTooltipPosition="above">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="item.total.amount"
+                                        [currencySymbol]="item.accountCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <ng-template #totalPopupTemplate>
+                                    <span [innerHTML]="item.totalTooltipText"></span>
                                 </ng-template>
-                                <td
-                                    [attr.data-title]="commonLocaleData?.app_description"
-                                    class="pending-table-description"
-                                >
-                                    {{ item.description ? item.description : "-" }}
-                                </td>
-                            </tr>
-                        </tbody>
+                            </td>
+                        </ng-container>
 
-                        <tbody
-                            *ngIf="
-                                (isGetAllRequestInProcess$ | async) ||
-                                (getLedgerDataInProcess$ | async) ||
-                                generateVoucherInProcess
-                            "
-                            id="centerAlign"
-                        >
-                            <tr>
-                                <td colspan="8">
-                                    <giddh-page-loader></giddh-page-loader>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <!-- Description Column -->
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef class="text-center td-search-box" #searchDescContainer>
+                                <div [hidden]="showDescSearch">
+                                    <span>{{ commonLocaleData?.app_description }}</span>
+                                </div>
+                                <div class="input-container" [hidden]="!showDescSearch">
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_description"
+                                        class="w100"
+                                    />
+                                    <i class="icon-search" (click)="showDescSearch = false"></i>
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let item"
+                                [attr.data-title]="commonLocaleData?.app_description"
+                                class="pending-table-description">
+                                {{ item.description ? item.description : "-" }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="invoiceDisplayedColumns" class="thead-background1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: invoiceDisplayedColumns"
+                            [ngClass]="{ 'danger': row.hasGenerationErr }"
+                            (mouseover)="hoveredItemForAction = row?.uniqueName"
+                            (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                            (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+                        </tr>
+
+                        <!-- Loading Row -->
+                        <tr *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async) || generateVoucherInProcess">
+                            <td [attr.colspan]="invoiceDisplayedColumns.length" class="text-center">
+                                <giddh-page-loader></giddh-page-loader>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>

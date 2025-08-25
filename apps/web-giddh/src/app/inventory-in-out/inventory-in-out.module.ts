@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
@@ -57,6 +58,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         InventoryModule,
         MatTabsModule,
         DecimalDigitsModule,
+        MatCheckboxModule,
         GiddhDatepickerModule
     ],
 })

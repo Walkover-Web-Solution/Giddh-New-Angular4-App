@@ -267,25 +267,14 @@
                                         <div class="col-sm-12 col-md-12 col-lg-7">
                                             <div class="select-estimate mr-r3">
                                                 <div class="col-md-12 col-xs-12 p-0">
-                                                    <span class="p-0 mr-r3">
-                                                        <input id="radio-5" class="radio-custom cp ml-0"
-                                                            name="signatureType" type="radio"
-                                                            [(ngModel)]="estimateSetting.nextStepToEstimate"
-                                                            [value]="'salesorder'" />
-                                                        <label for="radio-5" class="radio-custom-label">{{
-                                                            localeData?.proforma
-                                                            }}</label>
-                                                    </span>
-
-                                                    <span class="p-0 mr-r3">
-                                                        <input id="radio-6" class="radio-custom cp ml-0"
-                                                            name="signatureType" type="radio"
-                                                            [(ngModel)]="estimateSetting.nextStepToEstimate"
-                                                            [value]="'invoice'" />
-                                                        <label for="radio-6" class="radio-custom-label">{{
-                                                            commonLocaleData?.app_invoice
-                                                            }}</label>
-                                                    </span>
+                                                    <mat-radio-group name="signatureType" [(ngModel)]="estimateSetting.nextStepToEstimate" class="d-flex">
+                                                        <mat-radio-button color="primary" value="salesorder" class="mr-3">
+                                                            {{ localeData?.proforma }}
+                                                        </mat-radio-button>
+                                                        <mat-radio-button color="primary" value="invoice">
+                                                            {{ commonLocaleData?.app_invoice }}
+                                                        </mat-radio-button>
+                                                    </mat-radio-group>
                                                 </div>
                                             </div>
                                         </div>
@@ -353,33 +342,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="estimateSetting.sendSms"
-                                                class="pull-left"
-                                                name="invoiceCreatePaymentEntry"
-                                                class="show-on-mobile"
-                                            /><label>{{ localeData?.enable_sms_estimate }}</label
-                                            >
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9">
-                                            <div class="form-group clearfix">
-                                                <input
-                                                    type="checkbox"
-                                                    [(ngModel)]="estimateSetting.sendSms"
-                                                    class="pull-left"
-                                                    name="invoiceCreatePaymentEntry"
-                                                    class="hide-on-mobile"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
                                     <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
                             </div>
@@ -505,23 +467,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left"
-                                                name="proformaCreatePaymentEntry" class="show-on-mobile" />
-                                            <label>{{localeData?.enable_sms_proforma}}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9">
-                                            <div class="form-group clearfix">
-                                                <input type="checkbox" [(ngModel)]="proformaSetting.sendSms"
-                                                    class="pull-left" name="proformaCreatePaymentEntry"
-                                                    class="hide-on-mobile" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
                                     <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
                             </div>
@@ -623,35 +568,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- <div class="clearfix pd-t1">
-                                    <div class="row">
-
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-
-                                            <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
-                                                (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
-                                                name="invoiceSetting.sendInvLinkOnSms" class="pull-left show-on-mobile" />
-
-                                            <label>{{localeData?.enable_sms_invoice}}</label>
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-9">
-                                            <div class="form-group clearfix">
-                                                <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
-                                                    (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
-                                                    name="invoiceSetting.sendInvLinkOnSms"
-                                                    class="pull-left hide-on-mobile" />
-
-                                                <div class="pull-left sms-textarea" *ngIf="invoiceSetting.sendInvLinkOnSms">
-                                                    <textarea [(ngModel)]="invoiceSetting.smsContent"
-                                                        class="pull-left form-control"
-                                                        name="invoiceSetting.sendInvLinkOnSms" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                                     <div class="clearfix pt-4">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3 flex-container">

@@ -8,39 +8,15 @@
     </div>
     <div class="receipt-note-content">
         <div class="receipt-note-radio-btn pd-r15 pd-l15 mr-b15" *ngIf="!editBranchTransferUniqueName">
-            <span class="p-0 mr-r3">
-                <input
-                    id="multipleProducts"
-                    class="radio-custom cp ml-0"
-                    type="radio"
-                    [ngClass]="{ 'radio-theme': 1 === 1, 'transfer-type-checked': transferType === 'products' }"
-                    name="transferType"
-                    (click)="changeTransferType()"
-                    [(ngModel)]="transferType"
-                    [value]="'products'"
-                />
-                <label for="multipleProducts" class="radio-custom-label">Multiple Products</label>
-            </span>
-
-            <span class="p-0 mr-r3">
-                <input
-                    id="multipleSenders"
-                    class="radio-custom cp ml-0"
-                    type="radio"
-                    [ngClass]="{ 'radio-theme': 1 === 1, 'transfer-type-checked': transferType === 'senders' }"
-                    name="transferType"
-                    type="radio"
-                    (click)="changeTransferType()"
-                    [(ngModel)]="transferType"
-                    [value]="'senders'"
-                />
-                <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'receiptnote'"
-                    >Multiple Senders</label
-                >
-                <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'deliverynote'"
-                    >Multiple Receivers</label
-                >
-            </span>
+            <mat-radio-group name="transferType" [(ngModel)]="transferType" (change)="changeTransferType()" class="d-flex">
+                <mat-radio-button color="primary" value="products" class="mr-3">
+                    Multiple Products
+                </mat-radio-button>
+                <mat-radio-button color="primary" value="senders">
+                    <span *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</span>
+                    <span *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</span>
+                </mat-radio-button>
+            </mat-radio-group>
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
         <div class="multiple-products-wrapper">
@@ -104,28 +80,14 @@
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     <div class="d-flex wrap-hsn-sac align-items-center">
-                                        <span class="mr-r15 d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                class="radio-custom radio-theme"
-                                                name="showCodeType"
-                                                id="hsnCodeType"
-                                                [(ngModel)]="branchTransfer.products[0].showCodeType"
-                                                value="hsn"
-                                            />
-                                            <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                class="radio-custom radio-theme"
-                                                name="showCodeType"
-                                                id="sacCodeType"
-                                                [(ngModel)]="branchTransfer.products[0].showCodeType"
-                                                value="sac"
-                                            />
-                                            <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
-                                        </span>
+                                        <mat-radio-group name="showCodeType" [(ngModel)]="branchTransfer.products[0].showCodeType" class="d-flex">
+                                            <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                                HSN Code
+                                            </mat-radio-button>
+                                            <mat-radio-button color="primary" value="sac">
+                                                SAC Code
+                                            </mat-radio-button>
+                                        </mat-radio-group>
                                     </div>
                                 </label>
                             </div>
@@ -393,28 +355,14 @@
                             <div class="col-12">
                                 <label>
                                     <div class="d-flex wrap-hsn-sac align-items-center">
-                                        <span class="mr-r15 d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                class="radio-custom radio-theme"
-                                                name="showCodeType"
-                                                id="hsnCodeType"
-                                                [(ngModel)]="branchTransfer.products[0].showCodeType"
-                                                value="hsn"
-                                            />
-                                            <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <input
-                                                type="radio"
-                                                class="radio-custom radio-theme"
-                                                name="showCodeType"
-                                                id="sacCodeType"
-                                                [(ngModel)]="branchTransfer.products[0].showCodeType"
-                                                value="sac"
-                                            />
-                                            <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
-                                        </span>
+                                        <mat-radio-group name="showCodeType2" [(ngModel)]="branchTransfer.products[0].showCodeType" class="d-flex">
+                                            <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                                HSN Code
+                                            </mat-radio-button>
+                                            <mat-radio-button color="primary" value="sac">
+                                                SAC Code
+                                            </mat-radio-button>
+                                        </mat-radio-group>
                                     </div>
                                 </label>
                             </div>
@@ -777,34 +725,14 @@
                                             <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
                                                 <label>
                                                     <div class="d-flex wrap-hsn-sac mb-2 align-items-center">
-                                                        <span class="mr-r15 d-flex align-items-center">
-                                                            <input
-                                                                type="radio"
-                                                                class="radio-custom radio-theme"
-                                                                name="showCodeType"
-                                                                id="hsnCodeType"
-                                                                [(ngModel)]="product.showCodeType"
-                                                                value="hsn"
-                                                                (ngModelChange)="focusHsnNumber()"
-                                                            />
-                                                            <label for="hsnCodeType" class="radio-custom-label"
-                                                                >HSN Code</label
-                                                            >
-                                                        </span>
-                                                        <span class="d-flex align-items-center">
-                                                            <input
-                                                                type="radio"
-                                                                class="radio-custom radio-theme"
-                                                                name="showCodeType"
-                                                                id="sacCodeType"
-                                                                [(ngModel)]="product.showCodeType"
-                                                                value="sac"
-                                                                (ngModelChange)="focusHsnNumber()"
-                                                            />
-                                                            <label for="sacCodeType" class="ml-1 radio-custom-label"
-                                                                >SAC Code</label
-                                                            >
-                                                        </span>
+                                                        <mat-radio-group name="showCodeType3" [(ngModel)]="product.showCodeType" (ngModelChange)="focusHsnNumber()" class="d-flex">
+                                                            <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                                                HSN Code
+                                                            </mat-radio-button>
+                                                            <mat-radio-button color="primary" value="sac">
+                                                                SAC Code
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
                                                     </div>
                                                 </label>
                                                 <input

@@ -234,14 +234,13 @@
                                     aria-labelledby="button-alignment"
                                 >
                                     <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                        <label
-                                            ><input
-                                                type="checkbox"
-                                                [(ngModel)]="item.checked"
-                                                (click)="filterByCheck(item.value, $event.target?.checked)"
-                                            />
-                                            {{ item.label }}</label
+                                        <mat-checkbox
+                                            [(ngModel)]="item.checked"
+                                            (click)="filterByCheck(item.value, $event.target?.checked)"
+                                            color="primary"
                                         >
+                                            {{ item.label }}
+                                        </mat-checkbox>
                                     </li>
                                 </ul>
                             </div>

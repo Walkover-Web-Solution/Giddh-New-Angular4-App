@@ -51,6 +51,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
@@ -139,7 +142,10 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         GiddhDatepickerModule,
         MatMenuModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatRadioModule
     ]
 })
 export class InventoryModule { }
