@@ -58,10 +58,14 @@ export class TemplateEditFilterComponent implements OnInit {
     ];
     /** Available image sizes for selection */
     public imageSizes = [
-        { label: 'S', value: 'S', px: '60' },
-        { label: 'M', value: 'M', px: '80' },
-        { label: 'L', value: 'L', px: '100' }
+        { label: 'S', value: '60' },
+        { label: 'M', value: '80' },
+        { label: 'L', value: '100' }
     ];
+    /** List of preset font options */
+    public presetFonts = this.templateFonts;
+    /** List of preset font size options */
+    public presetFontsSize = this.templateFontsSize;
     /** True, if file has been uploaded */
     public isFileUploaded: boolean = false;
     /** True, if file upload is in progress */
@@ -1130,6 +1134,18 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * Handles pattern validation for input fields
+     *
+     * @param {object} validation Validation result with isValid and value
+     * @memberof TemplateEditFilterComponent
+     */
+    public onPatternValidation(validation: {isValid: boolean, value: string}): void {
+        if (!validation.isValid) {
+            this.toasty.showSnackBar("error", `Invalid UPI ID: ${validation.value}`);
+        }
+    }
+
+    /**
      * Updates the primary and secondary colors of the template.
      *
      * @param {string} primaryColor The new primary color
@@ -1178,7 +1194,7 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public resetPrintSetting(): void {
         const template = cloneDeep(this.customTemplate);
-        template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
+        template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 25;
         this.customTemplate = cloneDeep(template)
         this.setFontAndFontSize();
         this.onValueChange(null, null);
@@ -1336,10 +1352,12 @@ export class TemplateEditFilterComponent implements OnInit {
         if (!this.customTemplate) return;
         if (this.customTemplate.font) {
             if (this.customTemplate.templateType === TemplateTypeEnum.TallyTemplate) {
-                this.templateFonts = [
+                this.presetFonts = [
                     { label: 'Open Sans', value: 'Open Sans' },
                     { label: 'Roboto', value: 'Roboto' }
                 ];
+            } else {
+                this.presetFonts = this.templateFonts;
             }
             this.templateFonts.forEach(font => {
                 if (font?.value === this.customTemplate.font) this.selectedFont = font.label;

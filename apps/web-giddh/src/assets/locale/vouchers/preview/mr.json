@@ -34,7 +34,6 @@
 	"send_invoice": "बीजक पाठवा",
 	"less_details": "कमी तपशील",
 	"more_details": "अधिक माहितीसाठी",
-	"estimate": "अंदाज",
     "voucher_log": "[USER] द्वारे [TOTAL] साठी [ACTION]",
     "linked_po": "दुवा साधलेला खरेदी ऑर्डर:",
     "invoice_preview_unavailable": "बीजक पूर्वावलोकन आत्ता उपलब्ध नाही! कृपया पुन्हा प्रयत्न करा...",

@@ -140,21 +140,42 @@ export class InvoiceTemplatesService {
     }
 
     /**
-     * Get template preview according to template type
+     * Get template preview or save template settings based on editMode
      *
      * @param {*} templateType
+     * @param {boolean} editMode - true for POST (save), false for GET (preview)
+     * @param {*} model - Required when editMode is true for POST request
+     * @param {string} templateUniqueName - Optional, only needed for GET requests
      * @return {*}  {Observable<BaseResponse<any, string>>}
      * @memberof InvoiceTemplatesService
      */
-    public getTemplatePreview(templateType: any, templateUniqueName: string): Observable<BaseResponse<any, string>> {
+    public getTemplatePreview(templateType: any, editMode: boolean, model?: any, templateUniqueName?: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':templateUniqueName', encodeURIComponent(templateUniqueName))
-            ?.replace(':voucherType', encodeURIComponent(templateType))
-        ).pipe(map((res) => {
-            let data: BaseResponse<any, string> = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+        
+        if (editMode) {
+            // POST method for saving template settings
+            const postUrl = this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
+                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                ?.replace(':templateUniqueName', '')
+                ?.replace(':voucherType', encodeURIComponent(templateType));
+                
+            return this.http.post(postUrl, model).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        } else {
+            // GET method for template preview
+            const getUrl = this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
+                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                ?.replace(':templateUniqueName', encodeURIComponent(templateUniqueName || ''))
+                ?.replace(':voucherType', encodeURIComponent(templateType));
+                
+            return this.http.get(getUrl).pipe(map((res) => {
+                let data: BaseResponse<any, string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
+        }
     }
 }
