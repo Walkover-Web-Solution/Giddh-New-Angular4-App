@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { InvoiceGenerateComponent } from './invoice.generate.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
@@ -27,7 +26,6 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         MatMenuModule,
         ClickOutsideModule,
         TranslateDirectiveModule,
-        BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
 
         NoDataModule,

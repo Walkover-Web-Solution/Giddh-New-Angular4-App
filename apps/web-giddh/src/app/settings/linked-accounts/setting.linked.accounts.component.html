@@ -109,14 +109,14 @@
                                         />
                                     </a>
                                     <div class="position-absolute datepicker-account">
-                                        <bs-datepicker-inline
+                                        <giddh-datepicker
                                             *ngIf="card.isDatePickerOpen"
-                                            name="fromDate"
+                                            name="transactionDate"
+                                            [placeholder]="'Transaction Date'"
                                             [(ngModel)]="card.transactionDate"
-                                            (selectionDone)="onUpdateDate($event, card)"
-                                            [bsConfig]="{ startView: 'week' }"
-                                        >
-                                        </bs-datepicker-inline>
+                                            (dateSelected)="onUpdateDate($event, card)"
+                                            [appearance]="'outline'"
+                                        ></giddh-datepicker>
                                     </div>
                                 </div>
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>

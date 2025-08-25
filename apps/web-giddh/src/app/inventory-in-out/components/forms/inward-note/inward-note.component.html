@@ -27,16 +27,13 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input
-                        name="dateRange"
+                    <giddh-datepicker
+                        name="entryDate"
                         formControlName="inventoryEntryDate"
-                        type="text"
-                        autocomplete="off"
-                        class="form-control"
-                        bsDatepicker
                         [minDate]="today"
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                        [appearance]="'outline'"
+                        class="form-control"
+                    ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
                     >

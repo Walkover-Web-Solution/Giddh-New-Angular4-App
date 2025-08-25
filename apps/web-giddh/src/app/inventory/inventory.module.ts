@@ -51,6 +51,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -135,6 +136,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         MatSlideToggleModule,
         MatDialogModule,
         MatPaginatorModule,
+        GiddhDatepickerModule,
         MatMenuModule,
         MatDatepickerModule,
         MatNativeDateModule

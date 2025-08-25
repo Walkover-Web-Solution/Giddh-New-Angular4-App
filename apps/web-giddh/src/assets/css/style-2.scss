@@ -1216,6 +1216,14 @@ body {
     }
 }
 
+.custom-giddh-datepicker {
+    .mat-datepicker-toggle {
+        position: absolute;
+        right: -11%;
+        top: 0px;
+    }
+}
+
 body {
     div > a[href*="froala.com/wysiwyg-editor"] {
         display: none !important;

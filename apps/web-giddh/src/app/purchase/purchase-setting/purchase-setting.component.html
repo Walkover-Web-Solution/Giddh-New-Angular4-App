@@ -360,18 +360,12 @@
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group mb-0 bill-lock-date">
-                                                <input
-                                                    type="text"
-                                                    class="form-control invoice-lock-date"
+                                                <giddh-datepicker
                                                     name="lockDate"
-                                                    bsDatepicker
-                                                    #dp="bsDatepicker"
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate"
-                                                    [bsConfig]="{
-                                                        adaptivePosition: true,
-                                                        dateInputFormat: giddhDateFormat
-                                                    }"
-                                                />
+                                                    [appearance]="'outline'"
+                                                    class="form-control invoice-lock-date"
+                                                ></giddh-datepicker>
                                             </div>
                                         </div>
                                     </div>

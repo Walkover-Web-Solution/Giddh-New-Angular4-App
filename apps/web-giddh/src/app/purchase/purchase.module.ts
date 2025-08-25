@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
@@ -90,7 +89,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         DecimalDigitsModule,
         ModalModule.forRoot(),
         HamburgerMenuModule,
-        BsDatepickerModule.forRoot(),
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,
         PurchaseSendEmailModule,
