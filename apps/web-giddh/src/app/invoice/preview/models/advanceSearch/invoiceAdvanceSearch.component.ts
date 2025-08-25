@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { Observable } from 'rxjs';
 
@@ -36,10 +36,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** MatMenuTrigger directive for datepicker */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -54,14 +52,12 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Stores the E-invoice status */
+/** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
 
-    constructor(private generalService: GeneralService, private modalService: BsModalService) {
+    constructor(private generalService: GeneralService) {
 
     }
 
@@ -282,31 +278,18 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         }
     }
 
-
-
     /**
-     *To show the datepicker
+     * Toggles the datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen
      * @memberof InvoiceAdvanceSearchComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof InvoiceAdvanceSearchComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -317,7 +300,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -325,7 +308,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

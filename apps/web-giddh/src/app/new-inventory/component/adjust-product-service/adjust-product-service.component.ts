@@ -1,4 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
+import * as dayjs from 'dayjs';
+import { GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { InventoryAdjustmentReasonAside } from '../inventory-adjustment-aside/inventory-adjustment-aside.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from '../../../services/service.config';
@@ -10,6 +14,8 @@ import { ServiceConfig } from '../../../services/service.config';
 })
 
 export class AdjustProductServiceComponent implements OnInit {
+    /** MatMenuTrigger reference for the date picker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /* this will store image path*/
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -23,8 +29,19 @@ export class AdjustProductServiceComponent implements OnInit {
     ]
     public mode: boolean = true;
     public closingQty: Number = 23;
+    /** The selected date range used in API requests */
+    public selectedDateRange: any;
+    /** The selected date range displayed on the user interface */
+    public selectedDateRangeUi: any;
+    /** The selected range label for the date picker */
+    public selectedRangeLabel: string;
+    /** This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private dialog: MatDialog) { }
+    constructor(
+        @Inject(ServiceConfig) private serviceConfig,
+        private dialog: MatDialog
+    ) { }
 
     public ngOnInit() {
         /* added image path */
@@ -51,5 +68,44 @@ export class AdjustProductServiceComponent implements OnInit {
             },
             width: 'auto'
         })
+    }
+
+    /**
+     * Toggles the datepicker menu
+     *
+     * @param {boolean} isOpen
+     * @memberof AdjustProductServiceComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+         } else {
+            this.universalDatepickerTrigger?.closeMenu();
+         }
+    }
+
+    /**
+     * Callback function for date/range selection in the datepicker
+     *
+     * @param {any} [value] - Selected date/range value
+     * @returns {void}
+     * @memberof AdjustProductServiceComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.toggleGiddhDatepicker(false);
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.toggleGiddhDatepicker(false);
+
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
     }
 }

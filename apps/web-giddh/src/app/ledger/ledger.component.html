@@ -180,14 +180,24 @@
                                     id="giddh-datepicker-mobile-view mr-r05"
                                     container="body"
                                     *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #mobileUniversalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
                                 >
                                     <img
-                                        (click)="showGiddhDatepicker($event)"
                                         src="{{ imgPath }}calender-icon.svg"
                                         alt="calender-icon"
                                     />
                                 </div>
-                                <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
+                                <span class="input-wrapper ipad-view-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #ipadUniversalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <mat-form-field appearance="fill" class="w-100">
                                         <input
                                             matInput
@@ -196,6 +206,7 @@
                                             name="selectedDateRange"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                             class="giddh-datepicker date-range-picker"
+                                            readonly
                                         />
                                     </mat-form-field>
                                 </span>
@@ -346,12 +357,16 @@
                         >
                             <div
                                 class="advance-search-by-date date-advance-search ledger-date"
-                                (click)="showGiddhDatepicker($event)"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #desktopUniversalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
                             >
                                 <span class="input-wrapper">
                                     <mat-form-field
                                         appearance="fill"
-                                        class="w-100 custom-input-field share-input-width"
+                                        class="w-100 custom-input-field"
                                     >
                                         <input
                                             matInput
@@ -364,6 +379,27 @@
                                     </mat-form-field>
                                 </span>
                             </div>
+                            <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                                <ng-template matMenuContent>
+                                    <app-datepicker-wrapper
+                                        [inputStartDate]="selectedDateRange?.startDate"
+                                        [inputEndDate]="selectedDateRange?.endDate"
+                                        [alwaysShowCalendars]="true"
+                                        [ranges]="datePickerRanges"
+                                        [selectedRangeLabel]="selectedRangeLabel"
+                                        [showCustomRangeLabel]="true"
+                                        [showClearButton]="false"
+                                        [showCancel]="true"
+                                        [linkedCalendars]="true"
+                                        [showDropdowns]="true"
+                                        (rangeClicked)="dateSelectedCallback($event)"
+                                        (datesUpdated)="dateSelectedCallback($event)"
+                                        (closeCalender)="toggleGiddhDatepicker(false)"
+                                        [keepCalendarOpeningWithRange]="false"
+                                        [showRangeLabelOnInput]="false"
+                                    ></app-datepicker-wrapper>
+                                </ng-template>
+                            </mat-menu>
                         </div>
                         <!-- endregion -->
                         <div
@@ -2808,29 +2844,6 @@
                 ></advance-search-model>
             </ng-template>
             <!-- endregion -->
-            <ng-template #datepickerTemplate>
-                <div class="datepicker-modal">
-                    <div class="modal-body">
-                        <app-datepicker-wrapper
-                            [inputStartDate]="selectedDateRange?.startDate"
-                            [inputEndDate]="selectedDateRange?.endDate"
-                            [alwaysShowCalendars]="true"
-                            [ranges]="datePickerRanges"
-                            [selectedRangeLabel]="selectedRangeLabel"
-                            [showCustomRangeLabel]="true"
-                            [showClearButton]="false"
-                            [showCancel]="true"
-                            [linkedCalendars]="true"
-                            [showDropdowns]="true"
-                            (rangeClicked)="dateSelectedCallback($event)"
-                            (datesUpdated)="dateSelectedCallback($event)"
-                            [keepCalendarOpeningWithRange]="false"
-                            [showRangeLabelOnInput]="false"
-                            [dateFieldPosition]="dateFieldPosition"
-                        ></app-datepicker-wrapper>
-                    </div>
-                </div>
-            </ng-template>
 
             <ng-template #entryConfirmModal>
                 <div class="modal-dialog modal-md">

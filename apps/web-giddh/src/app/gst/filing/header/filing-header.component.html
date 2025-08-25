@@ -177,6 +177,7 @@
 <ng-template #pushToPortalDialog>
     <push-to-portal
         [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
         (downloadExcel)="onDownloadSheetGSTR('main')"
         (downloadJson)="onDownloadJsonGSTR('main')"
     ></push-to-portal>

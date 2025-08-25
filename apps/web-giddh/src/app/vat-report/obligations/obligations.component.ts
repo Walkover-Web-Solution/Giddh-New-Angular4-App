@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { merge, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GeneralService } from '../../services/general.service';
@@ -27,8 +27,8 @@ export interface ObligationsStatus {
 })
 
 export class ObligationsComponent implements OnInit, OnDestroy {
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Directive to get reference of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
@@ -50,15 +50,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** This will store selected date ranges */
     public selectedDateRange: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** This will store selected date range to show on UI */
+/** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Instance of bootstrap modal */
-    public modalRef: BsModalRef;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Holds true if multiple branches in the company */
@@ -94,7 +90,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         public dialog: MatDialog,
         private route: Router,
         private componentStore: VatReportComponentStore
@@ -390,39 +385,30 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will be use for show datepicker
-    *
-    * @param {*} element
-    * @memberof ObligationsComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+     * This will toggle the datepicker
+     *
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
+     * @memberof ObligationsComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger?.openMenu();
+            } else {
+                this.universalDatepickerTrigger?.closeMenu();
+            }
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
-    * This will be use for hide datepicker
-    *
-    * @memberof ObligationsComponent
-    */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
-
-    /**
-    * Call back function for date/range selection in datepicker
-    *
-    * @param {*} value
-    * @memberof ObligationsComponent
-    */
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value Selected date range object
+     * @memberof ObligationsComponent
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -430,7 +416,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
