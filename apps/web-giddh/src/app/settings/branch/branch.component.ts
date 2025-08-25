@@ -118,6 +118,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public activeTab: string;
     /** This will hold tree response data */
     public data: any[] = [];
+    /** True, if address info is open */
+    public isAddressInfoOpen: string = '';
+    /** True, if last address info is open */
+    public isLastAddressInfoOpen: boolean = false;
 
     constructor(
         private router: Router,
@@ -616,5 +620,25 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             this.statusDialogRef?.close();
         });
+    }
+    
+    /**
+     * Opens the address info
+     *
+     * @param {boolean} isOpen
+     * @param {string} [uniqueName='']
+     * @memberof BranchComponent
+     */
+    public openAddressInfo(isOpen: boolean, uniqueName: string = ''): void {
+        this.isLastAddressInfoOpen = isOpen;
+        if (isOpen) {
+            this.isAddressInfoOpen = uniqueName;
+        } else {
+            setTimeout(() => {
+                if (!this.isLastAddressInfoOpen) {
+                    this.isAddressInfoOpen = '';
+                }
+            }, 100);
+        }
     }
 }

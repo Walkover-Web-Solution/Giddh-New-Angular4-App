@@ -355,6 +355,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private transactionDetails: LedgerResponse;
     /** Selected entry details */
     public selectedItem: any;
+    /** True if adjustment info is open */
+    public isAdjustmentInfoOpen: boolean = false;
+    /** True if last adjustment info is open */
+    public isLastAdjustmentInfoOpen: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -1810,6 +1814,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public openAdjustInvoiceEditMode(): void {
         this.handleVoucherAdjustment(true);
+    }
+
+    /**
+     * To open adjustment info
+     *
+     * @param {boolean} isOpen True if adjustment info is open
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public openAdjustmentInfo(isOpen: boolean): void {
+        this.isLastAdjustmentInfoOpen = isOpen;
+        if (isOpen) {
+            this.isAdjustmentInfoOpen = isOpen;
+        } else {
+            setTimeout(() => {
+                if (!this.isLastAdjustmentInfoOpen) {
+                    this.isAdjustmentInfoOpen = isOpen;
+                }
+            }, 100);
+        }
     }
 
     /**

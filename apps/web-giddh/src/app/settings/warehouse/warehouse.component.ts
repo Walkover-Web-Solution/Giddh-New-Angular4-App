@@ -121,6 +121,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True if address info is open */
+    public isAddressInfoOpen: string = '';
+    /** True if last address info is open */
+    public isLastAddressInfoOpen: boolean = false;
 
     /** @ignore */
     constructor(
@@ -622,5 +626,25 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.statusModalRef?.close();
         });
+    }
+
+    /**
+     * Opens the address info
+     *
+     * @param {boolean} isOpen
+     * @param {string} [uniqueName='']
+     * @memberof BranchComponent
+     */
+    public openAddressInfo(isOpen: boolean, uniqueName: string = ''): void {
+        this.isLastAddressInfoOpen = isOpen;
+        if (isOpen) {
+            this.isAddressInfoOpen = uniqueName;
+        } else {
+            setTimeout(() => {
+                if (!this.isLastAddressInfoOpen) {
+                    this.isAddressInfoOpen = '';
+                }
+            }, 100);
+        }
     }
 }

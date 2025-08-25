@@ -95,19 +95,37 @@
                                 <div>
                                     <div *ngFor="let address of warehouse?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
-                                            <label
+                                            <span
                                                 class="cursor-pointer"
-                                                [popover]="popTemplate"
-                                                popoverTitle="{{ address?.name }}"
-                                                placement="right"
-                                                triggers="mouseenter:mouseleave"
-                                                >{{ address?.name }}</label
+                                                cdkOverlayOrigin
+                                                #addressTemplate="cdkOverlayOrigin"
+                                                (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                (mouseleave)="openAddressInfo(false)"
                                             >
-                                            <ng-template #popTemplate>
-                                                {{ address?.address }} {{ address?.stateCode }}
-                                                <p *ngIf="address?.taxType && address?.taxNumber">
-                                                    {{ address?.taxType }} : {{ address?.taxNumber }}
-                                                </p>
+                                                {{ address?.name }}
+                                            </span>
+
+                                            <ng-template
+                                                cdkConnectedOverlay
+                                                [cdkConnectedOverlayOrigin]="addressTemplate"
+                                                [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + warehouse.uniqueName)"
+                                                [cdkConnectedOverlayPositions]="[
+                                                    {
+                                                        originX: 'end',
+                                                        originY: 'center',
+                                                        overlayX: 'start',
+                                                        overlayY: 'center',
+                                                        offsetX: 8
+                                                    }
+                                                ]"
+                                            >
+                                                <div class="tax-tooltip font-14 overlay" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                (mouseleave)="openAddressInfo(false)">
+                                                    {{ address?.address }} {{ address?.stateCode }}
+                                                    <p *ngIf="address?.taxType && address?.taxNumber">
+                                                        {{ address?.taxType }} : {{ address?.taxNumber }}
+                                                    </p>
+                                                </div>
                                             </ng-template>
                                         </ng-container>
                                         <!-- static pin code  -->

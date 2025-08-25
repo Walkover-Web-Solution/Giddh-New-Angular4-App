@@ -6,7 +6,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -115,7 +114,6 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule.forRoot(),
         AsideMenuAccountModule,
         FinancialSearchPipe,
         MatButtonModule,
