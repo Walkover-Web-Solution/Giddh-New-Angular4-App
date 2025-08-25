@@ -111,6 +111,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
     /** Emits on suffix icon click */
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emits validation status on blur or model change */
+    @Output() public patternValidation: EventEmitter<{isValid: boolean, value: string}> = new EventEmitter<{isValid: boolean, value: string}>();
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -263,7 +265,21 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public emitBlurEvent(): void {
+        this.validatePatternOnBlur();
         this.onChange.emit(this.value);
+    }
+
+    /**
+     * Validates pattern on blur event (when user finishes input)
+     *
+     * @memberof InputFieldComponent
+     */
+    private validatePatternOnBlur(): void {
+        if (this.pattern && this.ngModel) {
+            const regex = new RegExp(this.pattern);
+            const isValid = regex.test(this.ngModel);
+            this.patternValidation.emit({ isValid, value: this.ngModel });
+        }
     }
 
     /**
