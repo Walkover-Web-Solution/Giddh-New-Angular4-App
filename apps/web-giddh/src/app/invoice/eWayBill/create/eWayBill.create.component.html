@@ -498,20 +498,6 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
             </div>
-<<<<<<< HEAD
-            <div class="mt-4 mb-5">
-                <ng-container *ngIf="transporterListDetails?.totalPages > 1">
-                    <mat-paginator
-                        [length]="transporterListDetails.totalPages"
-                        [pageSize]="1"
-                        [pageIndex]="transporterListDetails.page - 1"
-                        [pageSizeOptions]="[1]"
-                        [showFirstLastButtons]="true"
-                        [hidePageSize]="true"
-                        (page)="handlePageEvent($event)">
-                    </mat-paginator>
-                </ng-container>
-=======
             <div class="mt-4 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
                 <mat-paginator
                     [length]="transporterListDetails.totalItems"
@@ -522,7 +508,6 @@
                     [hidePageSize]="false"
                     (page)="handlePageEvent($event)">
                 </mat-paginator>
->>>>>>> 5b75a12c7dbef768f1bf061e1a8397fa03253d3c
             </div>
         </div>
     </div>

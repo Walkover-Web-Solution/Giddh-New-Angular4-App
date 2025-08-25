@@ -54,6 +54,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [
@@ -143,7 +144,8 @@ import { MatRadioModule } from '@angular/material/radio';
         MatNativeDateModule,
         MatTableModule,
         MatCheckboxModule,
-        MatRadioModule
+        MatRadioModule,
+        MatExpansionModule
     ]
 })
 export class InventoryModule { }

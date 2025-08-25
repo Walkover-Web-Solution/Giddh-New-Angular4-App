@@ -10,6 +10,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [InventoryAddStockComponent],
@@ -24,7 +25,8 @@ import { MatRadioModule } from '@angular/material/radio';
         MatSlideToggleModule,
         MatCheckboxModule,
         MatRadioModule,
-        LaddaModule
+        LaddaModule,
+        MatExpansionModule
     ],
     exports: [InventoryAddStockComponent]
 })
