@@ -1,6 +1,6 @@
 <div class="aside-pane">
     <div class="header-create-group">
-        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <button mat-stroked-button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="form-header">
             <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
             <!-- funcation of back to main aside (click)="backToMainAside()" -->
@@ -16,24 +16,14 @@
                             <div class="d-flex flex-column">
                                 <p class="font-15 mb-1">Select if its a physical good or a service.</p>
                                 <div class="select-type">
-                                    <span class="mr-r15">
-                                        <input
-                                            type="radio"
-                                            class="radio-custom"
-                                            name="product-type"
-                                            id="product-type"
-                                        />
-                                        <label for="product-type" class="radio-custom-label">Product</label>
-                                    </span>
-                                    <span>
-                                        <input
-                                            type="radio"
-                                            class="radio-custom"
-                                            name="service-type"
-                                            id="service-type"
-                                        />
-                                        <label for="service-type" class="radio-custom-label">Service</label>
-                                    </span>
+                                    <mat-radio-group name="itemType" class="d-flex">
+                                        <mat-radio-button color="primary" value="product" class="mr-3">
+                                            Product
+                                        </mat-radio-button>
+                                        <mat-radio-button color="primary" value="service">
+                                            Service
+                                        </mat-radio-button>
+                                    </mat-radio-group>
                                 </div>
                             </div>
                             <img src="{{ imgPath }}add-image.svg" />
@@ -156,15 +146,17 @@
                                         </form>
                                         <div class="sales-purchase-details mt-5">
                                             <p class="mr-b15">
-                                                <input type="checkbox" id="check-product-sale" checked />Is the
-                                                Product/Service eligible for Sale or Purchase?
+                                                <mat-checkbox id="check-product-sale" [checked]="true" color="primary">
+                                                    Is the Product/Service eligible for Sale or Purchase?
+                                                </mat-checkbox>
                                             </p>
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="purchase-information">
                                                         <div class="select-puchase-info mr-b15">
-                                                            <input type="checkbox" id="purchase-info" />
-                                                            <span>Purchase Information</span>
+                                                            <mat-checkbox id="purchase-info" color="primary">
+                                                                Purchase Information
+                                                            </mat-checkbox>
                                                         </div>
                                                         <form>
                                                             <div class="mr-b15">
@@ -185,8 +177,9 @@
                                                                     placeholder="Select Tax"
                                                                 />
                                                                 <p class="mt-1 font-15">
-                                                                    <input type="checkbox" id="tax-price" />Price
-                                                                    Inclusive of Tax ?
+                                                                    <mat-checkbox id="tax-price-purchase" color="primary">
+                                                                        Price Inclusive of Tax ?
+                                                                    </mat-checkbox>
                                                                 </p>
                                                             </div>
                                                             <div class="mr-b15">
@@ -229,8 +222,9 @@
                                                 <div class="col-sm-6">
                                                     <div class="purchase-information">
                                                         <div class="select-puchase-info mr-b15">
-                                                            <input type="checkbox" id="sales-info" />
-                                                            <span>Sales Information</span>
+                                                            <mat-checkbox id="sales-info" color="primary">
+                                                                Sales Information
+                                                            </mat-checkbox>
                                                         </div>
                                                         <form>
                                                             <div class="mr-b15">
@@ -251,8 +245,9 @@
                                                                     placeholder="Select Tax"
                                                                 />
                                                                 <p class="mt-1 font-15">
-                                                                    <input type="checkbox" id="tax-price" />Price
-                                                                    Inclusive of Tax ?
+                                                                    <mat-checkbox id="tax-price-sales" color="primary">
+                                                                        Price Inclusive of Tax ?
+                                                                    </mat-checkbox>
                                                                 </p>
                                                             </div>
                                                             <div class="mr-b15">
@@ -304,11 +299,11 @@
                                     <div>
                                         <p class="mr-b15">
                                             <span>
-                                                <input
-                                                    type="checkbox"
+                                                <mat-checkbox
                                                     class="checkbox-custom"
                                                     name="product-service"
                                                     id="product-service"
+                                                    color="primary"
                                                 />
                                                 <label for="product-service" class="checkbox-custom-label"
                                                     >Is the Product/Service a manufactured entity?</label
@@ -375,11 +370,11 @@
                                         </div>
                                         <p class="mr-b15">
                                             <span>
-                                                <input
-                                                    type="checkbox"
+                                                <mat-checkbox
                                                     class="checkbox-custom"
                                                     name="stock"
                                                     id="stock"
+                                                    color="primary"
                                                 />
                                                 <label for="stock" class="checkbox-custom-label"
                                                     >Continue selling when out of stock?</label
@@ -388,11 +383,11 @@
                                         </p>
                                         <p class="mr-b15">
                                             <span>
-                                                <input
-                                                    type="checkbox"
+                                                <mat-checkbox
                                                     class="checkbox-custom"
                                                     name="return-policy"
                                                     id="return-policy"
+                                                    color="primary"
                                                 />
                                                 <label for="return-policy" class="checkbox-custom-label"
                                                     >Is this stock eligible for return policy?</label
@@ -401,11 +396,11 @@
                                         </p>
                                         <p class="mr-b15">
                                             <span>
-                                                <input
-                                                    type="checkbox"
-                                                    checked
+                                                <mat-checkbox
+                                                    [checked]="true"
                                                     class="checkbox-custom"
                                                     name="variant"
+                                                    color="primary"
                                                     id="variant"
                                                 />
                                                 <label for="variant" class="checkbox-custom-label"
@@ -481,29 +476,14 @@
                                                 />
                                             </div>
                                             <div class="col-sm-4 mr-b15">
-                                                <span class="p-0 mr-3" (click)="selectCode(true)">
-                                                    <input
-                                                        id="combo-hsn-code-option"
-                                                        class="radio-custom cp ml-0"
-                                                        type="radio"
-                                                        name="selectCode"
-                                                        [value]=""
-                                                    />
-                                                    <label for="combo-hsn-code-option" class="radio-custom-label"
-                                                        >HSN</label
-                                                    >
-                                                </span>
-                                                <span class="p-0" (click)="selectCode(false)">
-                                                    <input
-                                                        id="combo-sac-code-option"
-                                                        class="radio-custom cp ml-0"
-                                                        type="radio"
-                                                        name="selectCode"
-                                                    />
-                                                    <label for="combo-sac-code-option" class="radio-custom-label"
-                                                        >SAC</label
-                                                    >
-                                                </span>
+                                                <mat-radio-group name="selectCode" class="d-flex">
+                                                    <mat-radio-button color="primary" [value]="true" (click)="selectCode(true)" class="mr-3">
+                                                        HSN
+                                                    </mat-radio-button>
+                                                    <mat-radio-button color="primary" [value]="false" (click)="selectCode(false)">
+                                                        SAC
+                                                    </mat-radio-button>
+                                                </mat-radio-group>
                                                 <input
                                                     *ngIf="isHSN"
                                                     id="product-name"
@@ -553,10 +533,10 @@
                                 </mat-tab>
                             </mat-tab-group>
                             <div class="button-group mt-5">
-                                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">
+                                <button id="clear-btn" mat-stroked-button class="bdr-radius-50 min-width-100">
                                     Clear
                                 </button>
-                                <button id="create-btn" class="btn btn-success bdr-radius-50 min-width-100">
+                                <button id="create-btn" mat-raised-button color="primary" class="bdr-radius-50 min-width-100">
                                     Create
                                 </button>
                             </div>

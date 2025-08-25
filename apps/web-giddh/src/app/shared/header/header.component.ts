@@ -6,7 +6,6 @@ import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
@@ -106,7 +105,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
     /** Switch branch dropdown */
     @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
-    @ViewChild('supportTab', { static: true }) public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox', { static: true }) public searchCmpTextBox: ElementRef;
     @ViewChild('expiredPlan', { static: true }) public expiredPlan: ModalDirective;
     @ViewChild('expiredPlanModel', { static: true }) public expiredPlanModel: TemplateRef<any>;
@@ -280,10 +278,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
-    /** True if command dialog is open */
+/** True if command dialog is open */
     public showCommandDialog: boolean = false;
-    /** True if datepicker menu is open */
-    public isDatepickerMenuOpen: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not

@@ -18,7 +18,8 @@
                                 id="button-basic2"
                                 dropdownToggle
                                 type="button"
-                                class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0"
+                                mat-raised-button color="primary"
+                                class="dropdown-toggle dropdown-btn-new mr-0"
                                 aria-controls="dropdown-basic3"
                             >
                                 {{ localeData?.new_invoice }} <span class="caret"></span>
@@ -139,7 +140,8 @@
                                                 id="button-basic"
                                                 dropdownToggle
                                                 type="button"
-                                                class="btn btn-sky-blue dropdown-toggle"
+                                                mat-raised-button color="primary"
+                                                class="dropdown-toggle"
                                                 aria-controls="dropdown-basic"
                                             >
                                                 {{ localeData?.change_status }}
@@ -218,7 +220,8 @@
                                                 id="button-basic2"
                                                 dropdownToggle
                                                 type="button"
-                                                class="btn btn-sky-blue dropdown-toggle"
+                                                mat-raised-button color="primary"
+                                                class="dropdown-toggle"
                                                 aria-controls="dropdown-basic2"
                                                 *ngIf="selectedItem?.voucherStatus !== 'cancel'"
                                             >
@@ -298,7 +301,8 @@
                                                 id="button-basic2"
                                                 dropdownToggle
                                                 type="button"
-                                                class="btn btn-pink dropdown-toggle"
+                                                mat-raised-button color="primary"
+                                                class="dropdown-toggle"
                                                 aria-controls="dropdown-basic2"
                                             >
                                                 {{ localeData?.change_status }} <span class="caret"></span>
@@ -791,7 +795,7 @@
 
 <ng-template #template>
     <div class="relative header-close-btn">
-        <button
+        <button mat-stroked-button
             type="button"
             class="close pull-right cursor-pointer"
             [attr.aria-label]="commonLocaleData?.app_close"

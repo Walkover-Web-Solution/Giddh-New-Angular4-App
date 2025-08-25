@@ -321,10 +321,10 @@ export class ImportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Branch change handler
-     *
-     * @memberof EWayBillComponent
-     */
+   * Branch change handler
+   *
+   * @memberof EWayBillComponent
+   */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.importRequest.branchUniqueName = selectedEntity?.value;

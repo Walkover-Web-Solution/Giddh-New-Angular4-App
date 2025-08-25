@@ -17,10 +17,11 @@
                     <div class="btn-group" dropdown>
                         <button
                             id="more-btn-inventory"
+                            mat-raised-button color="primary"
                             *ngIf="!isMobileScreen"
                             dropdownToggle
                             type="button"
-                            class="btn btn-primary dropdown-toggle bdr-radius-50"
+                            class="dropdown-toggle bdr-radius-50"
                             aria-controls="more-inventory-dropdown"
                         >
                             More <span class="caret"></span>
@@ -53,7 +54,8 @@
                     </div>
                     <button
                         id="combo-create-inventory"
-                        class="btn btn-sky-blue bdr-radius-50"
+                        mat-raised-button color="primary"
+                        class="bdr-radius-50"
                         [routerLink]="['/pages/inventory/v2/create-inventory/v2']"
                     >
                         + Add Inventory
@@ -96,41 +98,55 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table combo-table mt-5 font-15">
-                    <thead>
-                        <th width="3%">&nbsp;</th>
-                        <th width="20%">Stock Name <span class="red-text">*</span></th>
-                        <th width="20%">Unit <span class="red-text">*</span></th>
-                        <th width="16%">Qty <span class="red-text">*</span></th>
-                        <th width="20%">Selling Price</th>
-                        <th width="20%">Purchase Price</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td width="3%">
-                                <img src="{{ imgPath }}Login-Page-Image.png" width="40" height="40" />
-                            </td>
-                            <td width="20%">
-                                <input type="text" class="form-control" value="Product Name/Service" readonly />
-                            </td>
-                            <td width="20%"><input type="text" class="form-control" value="Unit" readonly /></td>
-                            <td width="16%"><input type="text" class="form-control" value="2" readonly /></td>
-                            <td width="20%">0.00</td>
-                            <td width="20%">0.00</td>
-                        </tr>
-                        <tr>
-                            <td width="3%">
-                                <img src="{{ imgPath }}Login-Page-Image.png" width="40" height="40" />
-                            </td>
-                            <td width="20%">
-                                <input type="text" class="form-control" value="Product Name/Service" readonly />
-                            </td>
-                            <td width="20%"><input type="text" class="form-control" value="Unit" readonly /></td>
-                            <td width="16%"><input type="text" class="form-control" value="2" readonly /></td>
-                            <td width="20%">0.00</td>
-                            <td width="20%">0.00</td>
-                        </tr>
-                    </tbody>
+                <!-- Mat Table for combo products -->
+                <table mat-table [dataSource]="dataSource" class="table combo-table mt-5 font-15">
+                    <!-- Image Column -->
+                    <ng-container matColumnDef="image">
+                        <th mat-header-cell *matHeaderCellDef width="3%">&nbsp;</th>
+                        <td mat-cell *matCellDef="let element" width="3%">
+                            <img [src]="imgPath + element.image" width="40" height="40" />
+                        </td>
+                    </ng-container>
+
+                    <!-- Stock Name Column -->
+                    <ng-container matColumnDef="stockName">
+                        <th mat-header-cell *matHeaderCellDef width="20%">Stock Name <span class="red-text">*</span></th>
+                        <td mat-cell *matCellDef="let element" width="20%">
+                            <input type="text" class="form-control" [value]="element.stockName" readonly />
+                        </td>
+                    </ng-container>
+
+                    <!-- Unit Column -->
+                    <ng-container matColumnDef="unit">
+                        <th mat-header-cell *matHeaderCellDef width="20%">Unit <span class="red-text">*</span></th>
+                        <td mat-cell *matCellDef="let element" width="20%">
+                            <input type="text" class="form-control" [value]="element.unit" readonly />
+                        </td>
+                    </ng-container>
+
+                    <!-- Quantity Column -->
+                    <ng-container matColumnDef="quantity">
+                        <th mat-header-cell *matHeaderCellDef width="16%">Qty <span class="red-text">*</span></th>
+                        <td mat-cell *matCellDef="let element" width="16%">
+                            <input type="text" class="form-control" [value]="element.quantity" readonly />
+                        </td>
+                    </ng-container>
+
+                    <!-- Selling Price Column -->
+                    <ng-container matColumnDef="sellingPrice">
+                        <th mat-header-cell *matHeaderCellDef width="20%">Selling Price</th>
+                        <td mat-cell *matCellDef="let element" width="20%">{{ element.sellingPrice }}</td>
+                    </ng-container>
+
+                    <!-- Purchase Price Column -->
+                    <ng-container matColumnDef="purchasePrice">
+                        <th mat-header-cell *matHeaderCellDef width="20%">Purchase Price</th>
+                        <td mat-cell *matCellDef="let element" width="20%">{{ element.purchasePrice }}</td>
+                    </ng-container>
+
+                    <!-- Header and Row Definitions -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </div>
             </div>
@@ -140,8 +156,8 @@
     <div class="sticky-footer create-group-footer">
         <div class="footer-wrapper">
             <div class="button-group">
-                <button id="about-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
-                <button id="about-update-group" class="btn btn-success disable bdr-radius-50">Update Group</button>
+                <button id="about-clear-btn" mat-stroked-button class="bdr-radius-50 min-width-100">Clear</button>
+                <button id="about-update-group" mat-raised-button color="primary" class="disable bdr-radius-50">Update Group</button>
             </div>
         </div>
     </div>

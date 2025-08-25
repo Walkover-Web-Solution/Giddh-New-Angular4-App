@@ -5,8 +5,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
@@ -48,7 +46,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
             spinnerSize: 30
         }),
         ShSelectModule,
-        TabsModule.forRoot(),
         BsDropdownModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),

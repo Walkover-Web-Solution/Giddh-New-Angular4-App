@@ -17,10 +17,11 @@
                     <div class="btn-group" dropdown>
                         <button
                             id="more-btn-inventory"
+                            mat-raised-button color="primary"
                             *ngIf="!isMobileScreen"
                             dropdownToggle
                             type="button"
-                            class="btn btn-primary dropdown-toggle bdr-radius-50"
+                            class="dropdown-toggle bdr-radius-50"
                             aria-controls="more-inventory-dropdown"
                         >
                             More <span class="caret"></span>
@@ -52,7 +53,8 @@
                         </ul>
                     </div>
                     <button
-                        class="btn btn-sky-blue bdr-radius-50"
+                        mat-raised-button color="primary"
+                        class="bdr-radius-50"
                         *ngIf="!isMobileScreen"
                         [routerLink]="['/pages/inventory/v2/create-inventory/v2']"
                     >
@@ -99,26 +101,14 @@
                         </div>
                         <div class="row mr-b15">
                             <div class="col-sm-6">
-                                <span class="p-0 mr-3" (click)="selectCode(true)">
-                                    <input
-                                        id="group-hsn-code-option"
-                                        class="radio-custom cp ml-0"
-                                        type="radio"
-                                        name="selectCode"
-                                        [value]=""
-                                    />
-                                    <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
-                                </span>
-                                <span class="p-0" (click)="selectCode(false)">
-                                    <input
-                                        id="group-sac-code-option"
-                                        class="radio-custom cp ml-0"
-                                        type="radio"
-                                        name="selectCode"
-                                        [value]=""
-                                    />
-                                    <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
-                                </span>
+                                <mat-radio-group name="selectCode" class="d-flex">
+                                    <mat-radio-button color="primary" value="hsn" (click)="selectCode(true)" class="mr-3">
+                                        HSN
+                                    </mat-radio-button>
+                                    <mat-radio-button color="primary" value="sac" (click)="selectCode(false)">
+                                        SAC
+                                    </mat-radio-button>
+                                </mat-radio-group>
                             </div>
                             <div class="col-sm-6">
                                 <input
@@ -136,9 +126,9 @@
                                     placeholder="Enter SAC Code"
                                 />
                                 <div>
-                                    <input id="usb-group" type="checkbox" /><span class="font-15 ml-1"
-                                        >Is it Sub-group?</span
-                                    >
+                                    <mat-checkbox id="usb-group" color="primary">
+                                        <span class="font-15 ml-1">Is it Sub-group?</span>
+                                    </mat-checkbox>
                                 </div>
                             </div>
                         </div>
@@ -156,10 +146,11 @@
                         </ng-template>
                         <div class="pd-t15 pd-b15">
                         <div class="other-tab-content d-flex">
-                            <input type="checkbox" id="out-of-stock" />
-                            <span class="font-15 ml-1"
-                                >Continue selling when out of stock? (Will be applicable on all the subsequent
-                                group/stock)</span
+                            <mat-checkbox id="out-of-stock" color="primary">
+                                <span class="font-15 ml-1"
+                                    >Continue selling when out of stock? (Will be applicable on all the subsequent
+                                    group/stock)</span>
+                            </mat-checkbox
                             >
                         </div>
                         </div>
@@ -193,47 +184,49 @@
                             />
                         </div>
                     </div>
-                    <!-- table for sub detail content of about group -->
-                    <table class="table giddh-table on-mobile-view">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Type</th>
-                                <th class="text-right">Pur Rate</th>
-                                <th class="text-right">Sale Rate</th>
-                                <th class="text-right">Closing Qty.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-title="Name">
-                                    <div class="d-flex align-items-center">
-                                        <span class="image-thumbnail mr-2"
-                                            ><img src="{{ imgPath }}Login-Page-Image.png"
-                                        /></span>
-                                        <span>Product Name 1 Dummy</span>
-                                    </div>
-                                </td>
-                                <td data-title="Type">Product</td>
-                                <td data-title="Pur Rate" class="text-right">₹10,00,000.00</td>
-                                <td data-title="Sale Rate" class="text-right">₹17,48,242.86</td>
-                                <td data-title="Closing Qty." class="text-right">21,200 nos.</td>
-                            </tr>
-                            <tr>
-                                <td data-title="Name">
-                                    <div class="d-flex align-items-center">
-                                        <span class="image-thumbnail mr-2"
-                                            ><img src="{{ imgPath }}add-image.svg" class="add-image-filter"
-                                        /></span>
-                                        <span>Product Name 2 Dummy</span>
-                                    </div>
-                                </td>
-                                <td data-title="Type">Product</td>
-                                <td data-title="Pur Rate" class="text-right">₹10,00,000.00</td>
-                                <td data-title="Sale Rate" class="text-right">₹17,48,242.86</td>
-                                <td data-title="Closing Qty." class="text-right">21,200 nos.</td>
-                            </tr>
-                        </tbody>
+                    <!-- Mat Table for sub detail content of about group -->
+                    <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Name</th>
+                            <td mat-cell *matCellDef="let element" data-title="Name">
+                                <div class="d-flex align-items-center">
+                                    <span class="image-thumbnail mr-2">
+                                        <img [src]="imgPath + (element.name === 'Product Name 1 Dummy' ? 'Login-Page-Image.png' : 'add-image.svg')" 
+                                             [class]="element.name === 'Product Name 2 Dummy' ? 'add-image-filter' : ''"/>
+                                    </span>
+                                    <span>{{ element.name }}</span>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Type Column -->
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element" data-title="Type">{{ element.type }}</td>
+                        </ng-container>
+
+                        <!-- Purchase Rate Column -->
+                        <ng-container matColumnDef="purRate">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Pur Rate</th>
+                            <td mat-cell *matCellDef="let element" data-title="Pur Rate" class="text-right">{{ element.purRate }}</td>
+                        </ng-container>
+
+                        <!-- Sale Rate Column -->
+                        <ng-container matColumnDef="saleRate">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Sale Rate</th>
+                            <td mat-cell *matCellDef="let element" data-title="Sale Rate" class="text-right">{{ element.saleRate }}</td>
+                        </ng-container>
+
+                        <!-- Closing Quantity Column -->
+                        <ng-container matColumnDef="closingQty">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Closing Qty.</th>
+                            <td mat-cell *matCellDef="let element" data-title="Closing Qty." class="text-right">{{ element.closingQty }}</td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
 
                     <!-- table for stock list -->
@@ -248,8 +241,8 @@
 <div class="sticky-footer create-group-footer">
     <div class="footer-wrapper">
         <div class="button-group">
-            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
-            <button id="about-under-btn" class="btn btn-success disable bdr-radius-50">Update Group</button>
+            <button id="about-group-clear-btn" mat-stroked-button class="bdr-radius-50 min-width-100">Clear</button>
+            <button id="about-under-btn" mat-raised-button color="primary" class="disable bdr-radius-50">Update Group</button>
         </div>
     </div>
 </div>

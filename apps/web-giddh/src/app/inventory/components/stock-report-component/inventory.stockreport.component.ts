@@ -27,7 +27,6 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { InvViewService } from '../../inv.view.service';
@@ -63,7 +62,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
     /** Dialog reference for advance search modal */
     private advanceSearchDialogRef: MatDialogRef<any>;
-    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: any;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
@@ -282,7 +280,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         private stockReportActions: StockReportActions,
         private _toasty: ToasterService,
         private inventoryService: InventoryService, private fb: UntypedFormBuilder, private inventoryAction: InventoryAction,
-        private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
         private generalService: GeneralService,

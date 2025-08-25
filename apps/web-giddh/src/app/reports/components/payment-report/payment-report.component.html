@@ -17,7 +17,8 @@
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
                     <button
                         type="button"
-                        class="btn btn-sky-blue dropdown-btn-new"
+                        mat-raised-button color="primary"
+                        class="dropdown-btn-new"
                         [routerLink]="'/pages/vouchers/payment/create'"
                         *ngIf="voucherApiVersion === 2"
                     >
@@ -97,13 +98,14 @@
                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter"
                 >
-                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
+                    <button mat-stroked-button (click)="resetAdvanceSearch()" aria-label="filter">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
                 <div *ngIf="selectedPayments?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
                     <button
-                        class="btn btn-default mr-r15"
+                        mat-stroked-button
+                        class="mr-r15"
                         [matTooltip]="commonLocaleData?.app_export"
                         matTooltipPosition="above"
                         (click)="exportCsvDownload()"
@@ -112,9 +114,10 @@
                     </button>
                     <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                         <button
+                            mat-raised-button color="primary"
                             dropdownToggle
                             type="button"
-                            class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
+                            class="more-btn-dropdown dropdown-toggle mr-0"
                             aria-controls="dropdown-basic"
                         >
                             {{ commonLocaleData?.app_more }}
@@ -139,7 +142,7 @@
                 </div>
                 <div>
                     <div
-                        class="advance-icon cursor-pointer btn btn-primary mr-0"
+                        class="advance-icon cursor-pointer mr-0"
                         [matTooltip]="commonLocaleData?.app_advance_search"
                         matTooltipPosition="above"
                         (click)="openModal()"
@@ -148,7 +151,7 @@
                         <span class="icon-advance-filter"></span>
                     </div>
                     <div class="btn-group ml-3" *ngIf="selectedPayments?.length > 0 || allPayments?.length > 0">
-                        <button class="btn btn-primary" (click)="openBulkExport(bulkExport)">
+                        <button mat-raised-button color="primary" (click)="openBulkExport(bulkExport)">
                             {{ commonLocaleData?.app_export }}
                         </button>
                     </div>

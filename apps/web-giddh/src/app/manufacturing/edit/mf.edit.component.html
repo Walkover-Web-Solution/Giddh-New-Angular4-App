@@ -186,6 +186,7 @@
                                     </td>
                                     <td class="action">
                                         <button
+                                            mat-stroked-button
                                             [disabled]="
                                                 linkedStockQuantity.invalid ||
                                                 linkedStockRate.invalid ||
@@ -202,12 +203,14 @@
                                 <tr>
                                     <td colspan="7">
                                         <button
+                                            mat-raised-button
+                                            color="primary"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     (currentCompanyBranches$ | async)?.length === 1) ||
                                                 currentOrganizationType === 'BRANCH'
                                             "
-                                            class="btn-link btn px-0"
+                                            class="px-0"
                                             (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks"
                                         >
                                             Add New
@@ -255,7 +258,7 @@
                                                 (currentCompanyBranches$ | async)?.length === 1) ||
                                             currentOrganizationType === 'BRANCH'
                                         "
-                                        class="cp btn-link"
+                                        mat-raised-button color="primary" class="cp"
                                         (click)="onToggleAddExpensesBlock(toggleAddExpenses)"
                                         matTooltip="Add A/C where expense entries will be done."
                                         matTooltipPosition="above"
@@ -411,6 +414,7 @@
                                     </td>
                                     <td>
                                         <button
+                                            mat-stroked-button
                                             [disabled]="transactionAmount.invalid"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&

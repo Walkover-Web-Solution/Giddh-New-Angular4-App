@@ -16,7 +16,8 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: 'app-recurring',
@@ -40,7 +41,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public currentPage = 1;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    public modalRef: BsModalRef;
     public asideMenuStateForRecurringEntry: string = 'out';
     public invoiceTypeOptions: IOption[];
     public intervalOptions: IOption[];
@@ -56,12 +56,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
         duration: '',
         lastInvoiceDate: ''
     };
-    public modalConfig = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
     @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
 
@@ -70,6 +64,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public allItemsSelected: boolean = false;
     public recurringVoucherDetails: RecurringInvoice[];
     public selectedItems: string[] = [];
+    public recurringDisplayedColumns: string[] = ['serialNumber', 'invoiceNumber', 'customerName', 'interval', 'lastInvoiceDate', 'nextInvoiceDate', 'status', 'invoiceAmount'];
+    /** Mat table data source for recurring invoices */
+    public recurringDataSource = new MatTableDataSource<RecurringInvoice>();
     public customerNameInput: UntypedFormControl = new UntypedFormControl();
     public invoiceNumberInput: UntypedFormControl = new UntypedFormControl();
     public hoveredItemForAction: string = '';
@@ -95,12 +92,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService) {
+        private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver, private dialog: MatDialog) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
-    }
-
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
     }
 
     public ngOnInit() {
@@ -163,6 +156,19 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.invoice.hasRecurringVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasRecurringVoucherListPermissions = response;
+        });
+    }
+
+    /**
+     * Opens dialogs using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog
+     * @memberof RecurringComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialog.open(template, {
+            panelClass: 'mat-dialog-lg',
+            disableClose: true
         });
     }
 
@@ -347,7 +353,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Returns the search field text
+     * This will return the search field text
      *
      * @param {*} title
      * @returns {string}
@@ -357,5 +363,17 @@ export class RecurringComponent implements OnInit, OnDestroy {
         let searchField = this.localeData?.search_field;
         searchField = searchField?.replace("[FIELD]", title);
         return searchField;
+    }
+
+    /**
+     * Updates the recurring data source for mat-table
+     *
+     * @private
+     * @memberof RecurringComponent
+     */
+    private updateRecurringDataSource(): void {
+        if (this.recurringVoucherDetails) {
+            this.recurringDataSource.data = this.recurringVoucherDetails;
+        }
     }
 }

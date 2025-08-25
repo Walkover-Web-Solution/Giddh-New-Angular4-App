@@ -65,6 +65,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public stockUnitsList = [...StockUnits];
     /** Holds list of create units */
     public stockMappedUnits: any;
+    /** Displayed columns for custom stock units mat-table */
+    public displayedColumns: string[] = ['unitName', 'mappedUnit', 'actions'];
 
     constructor(
         private store: Store<AppState>,

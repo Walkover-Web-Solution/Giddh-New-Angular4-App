@@ -78,7 +78,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     declarations: [
@@ -167,7 +169,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatSortModule,
+        NewConfirmationModalModule
     ],
     exports: [
         InvoiceRoutingModule,

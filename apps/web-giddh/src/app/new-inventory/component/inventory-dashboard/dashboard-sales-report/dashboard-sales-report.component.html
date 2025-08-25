@@ -40,36 +40,59 @@
             </div>
             <div class="table-wrapper">
                 <div class="table-responsive">
-                    <table class="table giddh-table purchase-report-table on-mobile-view">
-                        <thead>
-                            <th>Date</th>
-                            <th>Inv #</th>
-                            <th>Customer</th>
-                            <th>Total Amt.</th>
-                            <th>Packed</th>
-                            <th>Shipped</th>
-                            <th>Delivered</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-title="Date">2-11-2020</td>
-                                <td data-title="Bill">20181030-6</td>
-                                <td data-title="Vendor">CA Abhay Sharma</td>
-                                <td data-title="Total Amount">₹12,300</td>
-                                <td data-title="Packed"><input type="checkbox" id="checkbox-packed" /></td>
-                                <td data-title="Shipped"><input type="checkbox" id="checkbox-shipped" /></td>
-                                <td data-title="Delivered"><input type="checkbox" id="checkbox-delivered" /></td>
-                            </tr>
-                            <tr>
-                                <td data-title="Date">2-11-2020</td>
-                                <td data-title="Bill">20181030-6</td>
-                                <td data-title="Vendor">CA Abhay Sharma</td>
-                                <td data-title="Total Amount">₹12,300</td>
-                                <td data-title="Packed"><input type="checkbox" id="checkbox-packed" /></td>
-                                <td data-title="Shipped"><input type="checkbox" id="checkbox-shipped" /></td>
-                                <td data-title="Delivered"><input type="checkbox" id="checkbox-delivered" /></td>
-                            </tr>
-                        </tbody>
+                    <!-- Mat Table for sales report -->
+                    <table mat-table [dataSource]="dataSource" class="table giddh-table purchase-report-table on-mobile-view">
+                        <!-- Date Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Date</th>
+                            <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
+                        </ng-container>
+
+                        <!-- Invoice Column -->
+                        <ng-container matColumnDef="invoice">
+                            <th mat-header-cell *matHeaderCellDef>Inv #</th>
+                            <td mat-cell *matCellDef="let element" data-title="Bill">{{ element.invoice }}</td>
+                        </ng-container>
+
+                        <!-- Customer Column -->
+                        <ng-container matColumnDef="customer">
+                            <th mat-header-cell *matHeaderCellDef>Customer</th>
+                            <td mat-cell *matCellDef="let element" data-title="Vendor">{{ element.customer }}</td>
+                        </ng-container>
+
+                        <!-- Total Amount Column -->
+                        <ng-container matColumnDef="totalAmount">
+                            <th mat-header-cell *matHeaderCellDef>Total Amt.</th>
+                            <td mat-cell *matCellDef="let element" data-title="Total Amount">{{ element.totalAmount }}</td>
+                        </ng-container>
+
+                        <!-- Packed Column -->
+                        <ng-container matColumnDef="packed">
+                            <th mat-header-cell *matHeaderCellDef>Packed</th>
+                            <td mat-cell *matCellDef="let element" data-title="Packed">
+                                <mat-checkbox [id]="'checkbox-packed-' + element.id" [(ngModel)]="element.packed" color="primary"></mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <!-- Shipped Column -->
+                        <ng-container matColumnDef="shipped">
+                            <th mat-header-cell *matHeaderCellDef>Shipped</th>
+                            <td mat-cell *matCellDef="let element" data-title="Shipped">
+                                <mat-checkbox [id]="'checkbox-shipped-' + element.id" [(ngModel)]="element.shipped" color="primary"></mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <!-- Delivered Column -->
+                        <ng-container matColumnDef="delivered">
+                            <th mat-header-cell *matHeaderCellDef>Delivered</th>
+                            <td mat-cell *matCellDef="let element" data-title="Delivered">
+                                <mat-checkbox [id]="'checkbox-delivered-' + element.id" [(ngModel)]="element.delivered" color="primary"></mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
             </div>

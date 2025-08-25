@@ -111,6 +111,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** This will hold warehouses list based on branch */
     public allWarehouses: any[] = [];
+    /** Displayed columns for manufacturing report mat-table */
+    public displayedColumns: string[] = ['date', 'voucherNumber', 'stockName', 'manufacturingQuantity', 'manufacturingUnit', 'materialData', 'warehouse'];
+
 constructor(
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,

@@ -113,14 +113,18 @@
                 <div>
                     <a
                         href="javascript:;"
-                        class="btn btn-sm btn-link m-0 pl-0 font-14"
+                        mat-raised-button
+                        color="primary"
+                        class="m-0 pl-0 font-14"
                         (click)="downloadSampleFile(selectStatement)"
                     >
                         {{ inputData?.localeData?.download_sample_xls }}
                     </a>
                     <a
                         href="javascript:;"
-                        class="btn btn-sm btn-link m-0 font-14"
+                        mat-raised-button
+                        color="primary"
+                        class="m-0 font-14"
                         (click)="downloadSampleFile(selectStatement, true)"
                     >
                         {{ inputData?.localeData?.download_sample_csv }}

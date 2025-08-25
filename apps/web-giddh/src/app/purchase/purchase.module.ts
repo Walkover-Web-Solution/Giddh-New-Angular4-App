@@ -5,7 +5,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MatButtonModule } from '@angular/material/button';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -48,6 +48,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 
 @NgModule({
@@ -61,6 +63,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         BulkConvertComponent
     ],
     imports: [
+        MatButtonModule,
         PurchaseRoutingModule,
         InvoiceModule,
         CollapseModule.forRoot(),
@@ -71,7 +74,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
             spinnerSize: 30
         }),
         ClickOutsideModule,
-        TabsModule.forRoot(),
         ElementViewChildModule,
         ScrollingModule,
         ShSelectModule,
@@ -106,6 +108,8 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         MatFormFieldModule,
         MatInputModule,
         MatMenuModule,
+        MatCheckboxModule,
+        MatRadioModule,
         PurchaseSettingModule
     ]
 })

@@ -8,7 +8,8 @@ import { InventoryAddStockComponent } from './inventory.addstock.component';
 import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { LaddaModule } from 'angular2-ladda';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     declarations: [InventoryAddStockComponent],
@@ -21,8 +22,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
         ConfirmModalModule,
         DecimalDigitsModule,
         MatSlideToggleModule,
-        LaddaModule,
-        MatExpansionModule
+        MatCheckboxModule,
+        MatRadioModule,
+        LaddaModule
     ],
     exports: [InventoryAddStockComponent]
 })

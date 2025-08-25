@@ -7,14 +7,14 @@
                         <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
                         <!-- <button
                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                            class="btn btn-sky-blue"
+                            mat-raised-button color="primary"
                             [routerLink]="['/pages/purchase-management/purchase-order/new']"
                         >
                             {{ localeData?.new_order }}
                         </button> -->
                         <button
                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                            class="btn btn-sky-blue"
+                            mat-raised-button color="primary"
                             [routerLink]="['/pages/vouchers/purchase-order/create']"
                         >
                             {{ localeData?.new_order }}
@@ -88,7 +88,8 @@
                                                 id="button-basic"
                                                 dropdownToggle
                                                 type="button"
-                                                class="btn btn-sky-blue dropdown-toggle"
+                                                mat-raised-button color="primary"
+                                                class="dropdown-toggle"
                                                 aria-controls="dropdown-basic"
                                             >
                                                 {{ localeData?.change_status }}
@@ -219,7 +220,7 @@
 
                                             <div class="history-btn">
                                                 <button
-                                                    class="btn btn-primary"
+                                                    mat-raised-button color="primary"
                                                     (click)="toggleActivityHistoryAsidePane()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>

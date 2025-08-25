@@ -205,10 +205,10 @@
                 </span>
                 <span class="and-text" *ngIf="i < selectedFields?.length - 1">&</span>
             </div>
-            <button mat-button (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
+                                <button mat-button (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
         </div>
         <div class="button-wrapper">
-            <button mat-stroked-button class="min160 mr-l1" (click)="getActivityLogs(true)" aria-label="get logs">
+            <button mat-raised-button color="primary" class="min160 mr-l1" (click)="getActivityLogs(true)" aria-label="get logs">
                 {{ localeData?.get_logs }}
             </button>
         </div>
@@ -218,7 +218,7 @@
         <div *ngIf="!isLoading" class="table-header-sticky">
             <table
                 mat-table
-                [dataSource]="dataSource"
+                                [dataSource]="dataSource"
                 multiTemplateDataRows
                 *ngIf="dataSource?.length"
                 class="giddh-table table activity-table"

@@ -31,6 +31,29 @@ export class DashboardPurchaseReport implements OnInit {
     public selectedRangeLabel: any = "";
 /** MatMenuTrigger directive for datepicker */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Displayed columns for the purchase report mat-table */
+    public displayedColumns: string[] = ['date', 'bill', 'vendor', 'expectedDelivery', 'totalAmount', 'received'];
+    /** Sample data source for the purchase report table */
+    public dataSource: any[] = [
+        {
+            id: 1,
+            date: '2-11-2020',
+            bill: '20181030-6',
+            vendor: 'CA Abhay Sharma',
+            expectedDelivery: '15-12-2018',
+            totalAmount: '₹12,300',
+            received: false
+        },
+        {
+            id: 2,
+            date: '2-11-2020',
+            bill: '20181030-6',
+            vendor: 'CA Abhay Sharma',
+            expectedDelivery: '15-12-2018',
+            totalAmount: '₹12,300',
+            received: false
+        }
+    ];
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig) {
@@ -76,7 +99,7 @@ export class DashboardPurchaseReport implements OnInit {
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = 'assets/images/';
     }
 
 }

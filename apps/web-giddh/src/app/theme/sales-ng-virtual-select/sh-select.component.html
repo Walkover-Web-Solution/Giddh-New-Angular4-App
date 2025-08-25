@@ -70,7 +70,7 @@
         <div *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
-                    <button class="form-control label-btn text-left" *ngIf="showLabelOnly">
+                    <button mat-stroked-button class="form-control text-left" *ngIf="showLabelOnly">
                         {{ selectedValues[0]?.label }}
                     </button>
                     <input

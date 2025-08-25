@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <button
-                    class="btn btn-primary"
+                    mat-raised-button color="primary"
                     *ngIf="mode === 'export'"
                     (click)="save()"
                     [ladda]="isExportInProcess$ | async"
@@ -111,7 +111,7 @@
                 </div>
                 <div>
                     <button
-                        class="btn btn-success"
+                        mat-raised-button color="primary"
                         *ngIf="mode === 'import'"
                         (click)="save()"
                         [ladda]="isImportInProcess$ | async"
@@ -123,7 +123,7 @@
             </div>
             <div>
                 <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right back-to-import" (click)="backButtonPressed()">
+                <button mat-stroked-button class="pull-right back-to-import" (click)="backButtonPressed()">
                     {{commonLocaleData?.app_back}}
                 </button>
             </div>
