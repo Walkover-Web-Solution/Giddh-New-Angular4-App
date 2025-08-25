@@ -30,7 +30,6 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from "@angular/router";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { BsModalRef, BsModalService, ModalDirective } from "ngx-bootstrap/modal";
 
 @Component({
     selector: "new-branch-transfer-list",

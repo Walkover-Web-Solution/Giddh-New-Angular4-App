@@ -345,13 +345,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             this.filterDropDownList.hide();
         }
     }
-    public goToDashboard(val: boolean) {
-        if (val) {
-            this.router.navigate(['/pages/reports']);
-        } else {
-            this.router.navigate(['/pages/reports', 'sales-register']);
-        }
-    }
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
@@ -378,15 +371,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             }
             this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
         }
-
-    }
-    public selectedFilterMonth(monthYridx: string, i) {
-        let date = this.getDateFromMonth(i);
-        this.getDetailedsalesRequestFilter.from = date.firstDay;
-        this.getDetailedsalesRequestFilter.to = date.lastDay;
-        this.getDetailedsalesRequestFilter.q = '';
-        this.selectedMonth = monthYridx;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
 
     }
 

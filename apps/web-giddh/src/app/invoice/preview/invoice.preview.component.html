@@ -13,67 +13,51 @@
                     <!-- Invoice filter section -->
                     <div class="d-flex">
                         <div>
-                            <div
-                                class="btn-group desktop-view-btn"
-                                dropdown
-                                *ngIf="(!isCompany && !isConsolidatedBranch) && selectedVoucher === 'sales'"
-                                [autoClose]="true"
-                            >
+                            <div class="btn-group d-inline-block mr-b1">
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                    id="ddl-newinv"
-                                    dropdownToggle
                                     type="button"
                                     mat-raised-button color="primary"
-                                    class="dropdown-toggle dropdown-btn-new"
-                                    aria-controls="dropdown-ddl-newinv"
+                                    class="dropdown-btn-new"
+                                    [matMenuTriggerFor]="newInvoiceMenu"
                                 >
                                     {{ localeData?.new_invoice }}
-                                    <span class="caret"></span>
+                                    <i class="caret"></i>
                                 </button>
-                                <ul
-                                    id="dropdown-ddl-newinv"
-                                    *dropdownMenu
-                                    class="dropdown-menu"
-                                    role="menu"
-                                    aria-labelledby="ddl-newinv"
-                                >
-                                    <li role="menuitem">
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            aria-label="invoice"
-                                            (click)="goToInvoice('cash')"
-                                            *ngIf="voucherApiVersion === 1"
-                                            >{{ localeData?.cash_invoice }}</a
-                                        >
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            aria-label="invoice"
-                                            [routerLink]="['/pages/vouchers/cash/create']"
-                                            *ngIf="voucherApiVersion === 2"
-                                            >{{ localeData?.cash_invoice }}</a>
-                                    </li>
-                                    <li role="menuitem">
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            aria-label="sales invoice"
-                                            (click)="goToInvoice('sales')"
-                                            *ngIf="voucherApiVersion === 1"
-                                            >{{ localeData?.sales_invoice }}</a
-                                        >
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            aria-label="sales invoice"
-                                            [routerLink]="['/pages/vouchers/sales/create']"
-                                            *ngIf="voucherApiVersion === 2"
-                                            >{{ localeData?.sales_invoice }}</a
-                                        >
-                                    </li>
-                                </ul>
+                                <mat-menu #newInvoiceMenu="matMenu">
+                                    <button
+                                        mat-menu-item
+                                        (click)="goToInvoice('cash')"
+                                        *ngIf="voucherApiVersion === 1"
+                                        aria-label="invoice"
+                                    >
+                                        {{ localeData?.cash_invoice }}
+                                    </button>
+                                    <a
+                                        mat-menu-item
+                                        [routerLink]="['/pages/vouchers/cash/create']"
+                                        *ngIf="voucherApiVersion === 2"
+                                        aria-label="invoice"
+                                    >
+                                        {{ localeData?.cash_invoice }}
+                                    </a>
+                                    <button
+                                        mat-menu-item
+                                        (click)="goToInvoice('sales')"
+                                        *ngIf="voucherApiVersion === 1"
+                                        aria-label="sales invoice"
+                                    >
+                                        {{ localeData?.sales_invoice }}
+                                    </button>
+                                    <a
+                                        mat-menu-item
+                                        [routerLink]="['/pages/vouchers/sales/create']"
+                                        *ngIf="voucherApiVersion === 2"
+                                        aria-label="sales invoice"
+                                    >
+                                        {{ localeData?.sales_invoice }}
+                                    </a>
+                                </mat-menu>
                             </div>
                             <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                                 <button
@@ -192,78 +176,57 @@
                             >
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
-                            <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group visible-center d-none" dropdown #dp="bs-dropdown">
+                            <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group visible-center d-none">
                                 <button
-                                    dropdownToggle
                                     type="button"
-                                    class="btn btn-primary more-btn-dropdown dropdown-toggle"
-                                    aria-controls="dropdown-basic"
+                                    class="btn btn-primary more-btn-dropdown"
+                                    [matMenuTriggerFor]="moreActionsMenu"
                                 >
                                     {{ commonLocaleData?.app_more }}
-                                    <span class="caret"></span>
+                                    <i class="caret"></i>
                                 </button>
-                                <ul
-                                    *dropdownMenu
-                                    class="dropdown-menu fixed-dropdown-plus"
-                                    role="menu"
-                                    aria-labelledby="button-basic"
-                                >
-                                    <li
-                                        role="menuitem"
+                                <mat-menu #moreActionsMenu="matMenu">
+                                    <button
+                                        mat-menu-item
                                         *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length"
+                                        (click)="toggleBulkUpdatePopup(false)"
+                                        aria-label="bulk update"
                                     >
-                                        <a
-                                            class="dropdown-item cursor-pointer"
-                                            href="javascript:;"
-                                            aria-label="bulk update"
-                                            (click)="toggleBulkUpdatePopup(false)"
-                                            >{{ localeData?.bulk_update }}</a
-                                        >
-                                    </li>
-                                    <li role="menuitem" *ngIf="selectedItems?.length === 1">
-                                        <a
-                                            class="dropdown-item cursor-pointer"
-                                            href="javascript:;"
-                                            aria-label="eway bill"
-                                            (click)="toggleEwayBillPopup()"
-                                            *ngIf="selectedVoucher === 'sales'"
-                                        >
-                                            {{ localeData?.generate_eway_bill }}</a
-                                        >
-                                    </li>
-                                    <li
+                                        {{ localeData?.bulk_update }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        *ngIf="selectedItems?.length === 1 && selectedVoucher === 'sales'"
+                                        (click)="toggleEwayBillPopup()"
+                                        aria-label="eway bill"
+                                    >
+                                        {{ localeData?.generate_eway_bill }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
                                         *ngIf="
                                             gstEInvoiceEnable &&
                                             (selectedVoucher === 'credit note' ||
                                                 selectedVoucher === 'debit note' ||
                                                 selectedVoucher === 'sales')
                                         "
+                                        (click)="createBulkEInvoice()"
+                                        aria-label="e invoice"
                                     >
-                                        <a
-                                            class="dropdown-item cursor-pointer"
-                                            href="javascript:;"
-                                            aria-label="e invoice"
-                                            (click)="createBulkEInvoice()"
-                                        >
-                                            {{ localeData?.create_e_invoice }}
-                                        </a>
-                                    </li>
-                                    <li
-                                        role="menuitem"
+                                        {{ localeData?.create_e_invoice }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
                                         *ngIf="
                                             selectedVoucher !== 'purchase' ||
                                             (selectedItems?.length === 1 && selectedVoucher === 'purchase')
                                         "
+                                        (click)="onDeleteBtnClick()"
+                                        aria-label="delete"
                                     >
-                                        <a
-                                            class="dropdown-item cursor-pointer"
-                                            href="javascript:;"
-                                            aria-label="delete"
-                                            (click)="onDeleteBtnClick()"
-                                            >{{ commonLocaleData?.app_delete }}</a
-                                        >
-                                    </li>
-                                </ul>
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                </mat-menu>
                             </div>
                             <button
                                 class="btn btn-default desktop-view-btn"
@@ -289,72 +252,46 @@
                                     (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "
                             >
-                                <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group" dropdown #dp="bs-dropdown">
+                                <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                                     <button
-                                        dropdownToggle
                                         type="button"
-                                        class="btn btn-primary more-btn-dropdown desktop-view-btn dropdown-toggle"
-                                        aria-controls="dropdown-basic"
+                                        class="btn btn-primary more-btn-dropdown desktop-view-btn"
+                                        [matMenuTriggerFor]="moreMenuDesktop"
                                     >
                                         {{ commonLocaleData?.app_more }}
-                                        <span class="caret"></span>
+                                        <i class="caret"></i>
                                     </button>
-                                    <ul
-                                        *dropdownMenu
-                                        class="dropdown-menu fixed-dropdown-plus"
-                                        role="menu"
-                                        aria-labelledby="button-basic"
-                                    >
-                                        <li
-                                            role="menuitem"
+                                    <mat-menu #moreMenuDesktop="matMenu" class="fixed-dropdown-plus">
+                                        <button
+                                            mat-menu-item
                                             *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length"
+                                            (click)="toggleBulkUpdatePopup(false)"
                                         >
-                                            <a
-                                                class="dropdown-item cursor-pointer"
-                                                href="javascript:;"
-                                                aria-label="bulk update"
-                                                (click)="toggleBulkUpdatePopup(false)"
-                                                >{{ localeData?.bulk_update }}</a
-                                            >
-                                        </li>
-                                        <li role="menuitem" *ngIf="selectedItems?.length === 1">
-                                            <a
-                                                class="dropdown-item cursor-pointer"
-                                                href="javascript:;"
-                                                aria-label="generate bill"
-                                                (click)="toggleEwayBillPopup()"
-                                                *ngIf="selectedVoucher === 'sales'"
-                                            >
-                                                {{ localeData?.generate_eway_bill }}</a
-                                            >
-                                        </li>
-                                        <li
+                                            {{ localeData?.bulk_update }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            *ngIf="selectedItems?.length === 1 && selectedVoucher === 'sales'"
+                                            (click)="toggleEwayBillPopup()"
+                                        >
+                                            {{ localeData?.generate_eway_bill }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
                                             *ngIf="
                                                 gstEInvoiceEnable &&
                                                 (selectedVoucher === 'credit note' ||
                                                     selectedVoucher === 'debit note' ||
                                                     selectedVoucher === 'sales')
                                             "
+                                            (click)="createBulkEInvoice()"
                                         >
-                                            <a
-                                                class="dropdown-item cursor-pointer"
-                                                href="javascript:;"
-                                                aria-label="create invoice"
-                                                (click)="createBulkEInvoice()"
-                                            >
-                                                {{ localeData?.create_e_invoice }}
-                                            </a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a
-                                                class="dropdown-item cursor-pointer"
-                                                href="javascript:;"
-                                                aria-label="delete"
-                                                (click)="onDeleteBtnClick()"
-                                                >{{ commonLocaleData?.app_delete }}</a
-                                            >
-                                        </li>
-                                    </ul>
+                                            {{ localeData?.create_e_invoice }}
+                                        </button>
+                                        <button mat-menu-item (click)="onDeleteBtnClick()">
+                                            {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                    </mat-menu>
                                 </div>
                             </div>
                             <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
@@ -415,67 +352,32 @@
                                 </div>
                                 <div>
                                     <div
-                                        class="btn-group"
-                                        dropdown
                                         *ngIf="(!isCompany && !isConsolidatedBranch) && selectedVoucher === 'sales'"
-                                        [autoClose]="true"
                                     >
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                            id="ddl-newinv-invoice"
-                                            dropdownToggle
                                             type="button"
                                             mat-raised-button color="primary"
-                                            class="dropdown-toggle dropdown-btn-new"
-                                            aria-controls="dropdown-ddl-newinv"
+                                            class="dropdown-btn-new"
+                                            [matMenuTriggerFor]="newInvoiceMenu2"
                                         >
                                             {{ localeData?.new_invoice }}
-                                            <span class="caret"></span>
+                                            <i class="caret"></i>
                                         </button>
-                                        <ul
-                                            id="dropdown-ddl-newinv"
-                                            *dropdownMenu
-                                            class="dropdown-menu"
-                                            role="menu"
-                                            aria-labelledby="ddl-newinv"
-                                        >
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="javascript:;"
-                                                    aria-label="cash invoice"
-                                                    (click)="goToInvoice('cash')"
-                                                    *ngIf="voucherApiVersion === 1"
-                                                    >{{ localeData?.cash_invoice }}</a
-                                                >
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="javascript:;"
-                                                    aria-label="cash invoice"
-                                                    [routerLink]="['/pages/vouchers/cash/create']"
-                                                    *ngIf="voucherApiVersion === 2"
-                                                    >{{ localeData?.cash_invoice }}</a
-                                                >
-                                            </li>
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="javascript:;"
-                                                    aria-label="sales invoice"
-                                                    (click)="goToInvoice('sales')"
-                                                    *ngIf="voucherApiVersion === 1"
-                                                    >{{ localeData?.sales_invoice }}</a
-                                                >
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="javascript:;"
-                                                    aria-label="sales invoice"
-                                                    [routerLink]="['/pages/vouchers/sales/create']"
-                                                    *ngIf="voucherApiVersion === 2"
-                                                    >{{ localeData?.sales_invoice }}</a
-                                                >
-                                            </li>
-                                        </ul>
+                                        <mat-menu #newInvoiceMenu2="matMenu" class="new-invoice-menu">
+                                            <button mat-menu-item (click)="goToInvoice('cash')" *ngIf="voucherApiVersion === 1">
+                                                {{ localeData?.cash_invoice }}
+                                            </button>
+                                            <a mat-menu-item [routerLink]="['/pages/vouchers/cash/create']" *ngIf="voucherApiVersion === 2">
+                                                {{ localeData?.cash_invoice }}
+                                            </a>
+                                            <button mat-menu-item (click)="goToInvoice('sales')" *ngIf="voucherApiVersion === 1">
+                                                {{ localeData?.sales_invoice }}
+                                            </button>
+                                            <a mat-menu-item [routerLink]="['/pages/vouchers/sales/create']" *ngIf="voucherApiVersion === 2">
+                                                {{ localeData?.sales_invoice }}
+                                            </a>
+                                        </mat-menu>
                                     </div>
                                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                         <button
@@ -540,50 +442,27 @@
                                         {{ localeData?.cancel_e_invoice }}
                                     </button>
                                     <div *ngIf="selectedItems?.length === 1">
-                                        <div
-                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                            class="btn-group"
-                                            dropdown
-                                            triggers="mouseover"
-                                            #dp="bs-dropdown"
-                                            (mouseleave)="dp.hide()"
-                                        >
+                                        <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                                             <button
-                                                dropdownToggle
                                                 type="button"
-                                                class="btn mr-r15 more-btn-dropdown btn-default dropdown-toggle"
-                                                aria-controls="dropdown-basic"
+                                                class="btn mr-r15 more-btn-dropdown btn-default"
+                                                [matMenuTriggerFor]="moreMenuMobile1"
                                             >
                                                 {{ commonLocaleData?.app_more }}
-                                                <span class="caret"></span>
+                                                <i class="caret"></i>
                                             </button>
-                                            <ul
-                                                *dropdownMenu
-                                                class="dropdown-menu fixed-dropdown-plus"
-                                                role="menu"
-                                                aria-labelledby="button-basic"
-                                            >
-                                                <li role="menuitem">
-                                                    <a
-                                                        class="dropdown-item cursor-pointer"
-                                                        href="javascript:void(0)"
-                                                        aria-label="eway bill"
-                                                        (click)="toggleEwayBillPopup()"
-                                                        *ngIf="selectedVoucher === 'sales' && !isMobileView"
-                                                    >
-                                                        {{ localeData?.generate_eway_bill }}</a
-                                                    >
-                                                </li>
-                                                <li role="menuitem">
-                                                    <a
-                                                        class="dropdown-item cursor-pointer"
-                                                        href="javascript:void(0)"
-                                                        aria-label="delete"
-                                                        (click)="onDeleteBtnClick()"
-                                                        >{{ commonLocaleData?.app_delete }}</a
-                                                    >
-                                                </li>
-                                            </ul>
+                                            <mat-menu #moreMenuMobile1="matMenu" class="fixed-dropdown-plus">
+                                                <button
+                                                    mat-menu-item
+                                                    *ngIf="selectedVoucher === 'sales' && !isMobileView"
+                                                    (click)="toggleEwayBillPopup()"
+                                                >
+                                                    {{ localeData?.generate_eway_bill }}
+                                                </button>
+                                                <button mat-menu-item (click)="onDeleteBtnClick()">
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
+                                            </mat-menu>
                                         </div>
                                     </div>
                                 </div>
@@ -621,50 +500,27 @@
                                     {{ localeData?.cancel_e_invoice }}
                                 </button>
                                 <div *ngIf="selectedItems?.length === 1">
-                                    <div
-                                        *ngIf="(!isCompany && !isConsolidatedBranch)"
-                                        class="btn-group"
-                                        dropdown
-                                        triggers="mouseover"
-                                        #dp="bs-dropdown"
-                                        (mouseleave)="dp.hide()"
-                                    >
+                                    <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                                         <button
-                                            dropdownToggle
                                             type="button"
-                                            class="btn mr-r15 more-btn-dropdown btn-default dropdown-toggle"
-                                            aria-controls="dropdown-basic"
+                                            class="btn mr-r15 more-btn-dropdown btn-default"
+                                            [matMenuTriggerFor]="moreMenuMobile2"
                                         >
                                             {{ commonLocaleData?.app_more }}
-                                            <span class="caret"></span>
+                                            <i class="caret"></i>
                                         </button>
-                                        <ul
-                                            *dropdownMenu
-                                            class="dropdown-menu fixed-dropdown-plus"
-                                            role="menu"
-                                            aria-labelledby="button-basic"
-                                        >
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cursor-pointer"
-                                                    href="javascript:;"
-                                                    aria-label="eway bill"
-                                                    (click)="toggleEwayBillPopup()"
-                                                    *ngIf="selectedVoucher === 'sales' && !isMobileView"
-                                                >
-                                                    {{ localeData?.generate_eway_bill }}</a
-                                                >
-                                            </li>
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cursor-pointer"
-                                                    href="javascript:;"
-                                                    aria-label="delete"
-                                                    (click)="onDeleteBtnClick()"
-                                                    >{{ commonLocaleData?.app_delete }}</a
-                                                >
-                                            </li>
-                                        </ul>
+                                        <mat-menu #moreMenuMobile2="matMenu" class="fixed-dropdown-plus">
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="selectedVoucher === 'sales' && !isMobileView"
+                                                (click)="toggleEwayBillPopup()"
+                                            >
+                                                {{ localeData?.generate_eway_bill }}
+                                            </button>
+                                            <button mat-menu-item (click)="onDeleteBtnClick()">
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                        </mat-menu>
                                     </div>
                                 </div>
                             </div>
@@ -1257,59 +1113,40 @@
                                         <div>
                                             <div
                                                 *ngIf="(!isCompany && !isConsolidatedBranch) && item.balanceStatus !== 'cancel'"
-                                                dropdown
-                                                container="body"
                                                 class="icon-ellipse select-action"
                                             >
-                                                <a
-                                                    href="javascript:;"
-                                                    aria-label="menu"
+                                                <button
+                                                    type="button"
+                                                    mat-icon-button
                                                     [id]="'edit-model' + i"
-                                                    dropdownToggle
-                                                    class="dropdown-toggle icon-dots-three-vertical pull-right"
-                                                    aria-controls="dropdown-basic"
+                                                    class="icon-dots-three-vertical pull-right"
+                                                    [matMenuTriggerFor]="actionsMenu"
                                                     (click)="showActionsMenu($event)"
-                                                ></a>
-                                                <div
-                                                    id="dropdown-basic"
-                                                    *dropdownMenu
-                                                    class="dropdown-menu dropdown-menu-right width-150"
-                                                    role="menu"
-                                                    aria-label="paid status"
-                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
+                                                    aria-label="menu"
                                                 >
-                                                    <!-- add "dropup-menu" with above div on line 1166 -->
-                                                    <ul class="select-action-dropdown">
-                                                        <li (click)="onPerformAction(item, 'paid')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">{{
-                                                                commonLocaleData?.app_payment_status?.paid
-                                                            }}</a>
-                                                        </li>
-                                                        <li
-                                                            *ngIf="selectedVoucher === 'sales'"
-                                                            (click)="onPerformAdjustPaymentAction(item)"
-                                                        >
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="adjust amount">{{
-                                                                commonLocaleData?.app_payment_status?.adjust_amount
-                                                            }}</a>
-                                                        </li>
-                                                        <li (click)="onPerformAction(item, 'unpaid')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="unpaid">{{
-                                                                commonLocaleData?.app_payment_status?.unpaid
-                                                            }}</a>
-                                                        </li>
-                                                        <li (click)="onPerformAction(item, 'hold')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="hold">{{
-                                                                commonLocaleData?.app_payment_status?.hold
-                                                            }}</a>
-                                                        </li>
-                                                        <li (click)="onPerformAction(item, 'cancel')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="cancel">{{
-                                                                commonLocaleData?.app_payment_status?.cancel
-                                                            }}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                </button>
+                                                <mat-menu #actionsMenu="matMenu" [ngClass]="{ 'dropup-menu': isDropUp }">
+                                                    <button mat-menu-item (click)="onPerformAction(item, 'paid')" aria-label="payment paid">
+                                                        {{ commonLocaleData?.app_payment_status?.paid }}
+                                                    </button>
+                                                    <button
+                                                        mat-menu-item
+                                                        *ngIf="selectedVoucher === 'sales'"
+                                                        (click)="onPerformAdjustPaymentAction(item)"
+                                                        aria-label="adjust amount"
+                                                    >
+                                                        {{ commonLocaleData?.app_payment_status?.adjust_amount }}
+                                                    </button>
+                                                    <button mat-menu-item (click)="onPerformAction(item, 'unpaid')" aria-label="unpaid">
+                                                        {{ commonLocaleData?.app_payment_status?.unpaid }}
+                                                    </button>
+                                                    <button mat-menu-item (click)="onPerformAction(item, 'hold')" aria-label="hold">
+                                                        {{ commonLocaleData?.app_payment_status?.hold }}
+                                                    </button>
+                                                    <button mat-menu-item (click)="onPerformAction(item, 'cancel')" aria-label="cancel">
+                                                        {{ commonLocaleData?.app_payment_status?.cancel }}
+                                                    </button>
+                                                </mat-menu>
                                             </div>
                                         </div>
                                     </div>
@@ -1333,52 +1170,50 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <div
-                                                dropdown
-                                                container="body"
-                                                class="icon-ellipse select-action"
-                                            >
-                                                <a
-                                                    href="javascript:;"
-                                                    aria-label="menu"
+                                            <div class="icon-ellipse select-action">
+                                                <button
+                                                    type="button"
+                                                    mat-icon-button
                                                     [id]="'billAction' + i"
-                                                    dropdownToggle
-                                                    class="dropdown-toggle icon-dots-three-vertical pull-right"
-                                                    aria-controls="dropdown-basic"
+                                                    class="icon-dots-three-vertical pull-right"
+                                                    [matMenuTriggerFor]="billActionsMenu"
                                                     (click)="showActionsMenu($event)"
-                                                ></a>
-                                                <div
-                                                    id="dropdown-basic"
-                                                    *dropdownMenu
-                                                    class="dropdown-menu dropdown-menu-right width-150"
-                                                    role="menu"
-                                                    aria-label="list of action"
-                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
+                                                    aria-label="menu"
                                                 >
-                                                    <ul class="select-action-dropdown">
-                                                        <li *ngIf="item?.balanceStatus !== 'cancel'" (click)="onPerformAction(item, 'paid')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">
-                                                                {{ commonLocaleData?.app_payment_status?.paid }}
-                                                            </a>
-                                                        </li>
-                                                        <li (click)="openSendMailModal(sendEmailModal, item)">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="envelope">
-                                                                {{ commonLocaleData?.app_send_email }}
-                                                            </a>
-                                                        </li>
-                                                        <li *ngIf="(!isCompany && !isConsolidatedBranch)" [routerLink]="['/pages/proforma-invoice/invoice/purchase/' +
-                                                            item?.account?.uniqueName + '/' + item?.uniqueName + '/copy']">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="copy">
-                                                                {{ commonLocaleData?.app_copy }}
-                                                            </a>
-                                                        </li>
-                                                        <li *ngIf="(!isCompany && !isConsolidatedBranch)" (click)="deletePurchaseBill(item?.uniqueName)">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="trash">
-                                                                {{ commonLocaleData?.app_delete }}
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                </button>
+                                                <mat-menu #billActionsMenu="matMenu" [ngClass]="{ 'dropup-menu': isDropUp }">
+                                                    <button
+                                                        mat-menu-item
+                                                        *ngIf="item?.balanceStatus !== 'cancel'"
+                                                        (click)="onPerformAction(item, 'paid')"
+                                                        aria-label="payment paid"
+                                                    >
+                                                        {{ commonLocaleData?.app_payment_status?.paid }}
+                                                    </button>
+                                                    <button
+                                                        mat-menu-item
+                                                        (click)="openSendMailModal(sendEmailModal, item)"
+                                                        aria-label="envelope"
+                                                    >
+                                                        {{ commonLocaleData?.app_send_email }}
+                                                    </button>
+                                                    <a
+                                                        mat-menu-item
+                                                        *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                                        [routerLink]="['/pages/proforma-invoice/invoice/purchase/' + item?.account?.uniqueName + '/' + item?.uniqueName + '/copy']"
+                                                        aria-label="copy"
+                                                    >
+                                                        {{ commonLocaleData?.app_copy }}
+                                                    </a>
+                                                    <button
+                                                        mat-menu-item
+                                                        *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                                        (click)="deletePurchaseBill(item?.uniqueName)"
+                                                        aria-label="trash"
+                                                    >
+                                                        {{ commonLocaleData?.app_delete }}
+                                                    </button>
+                                                </mat-menu>
                                             </div>
                                         </div>
                                     </div>
@@ -1558,45 +1393,6 @@
                                                     ? item.balanceStatus
                                                     : commonLocaleData?.app_select_action
                                             }}</span>
-                                        </div>
-
-                                        <div>
-                                            <div
-                                                *ngIf="(!isCompany && !isConsolidatedBranch) && item.balanceStatus !== 'cancel'"
-                                                dropdown
-                                                container="body"
-                                                class="icon-ellipse select-action"
-                                            >
-                                                <a
-                                                    href="javascript:;"
-                                                    [id]="'debitoption' + i"
-                                                    dropdownToggle
-                                                    class="dropdown-toggle icon-dots-three-vertical pull-right"
-                                                    aria-label="dropdown-basic"
-                                                    (click)="showActionsMenu($event)"
-                                                ></a>
-                                                <div
-                                                    id="dropdown-basic"
-                                                    *dropdownMenu
-                                                    class="dropdown-menu dropdown-menu-right width-150"
-                                                    role="menu"
-                                                    aria-label="payment status"
-                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
-                                                >
-                                                    <ul class="select-action-dropdown">
-                                                        <li (click)="onPerformAction(item, 'paid')" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">{{
-                                                                commonLocaleData?.app_payment_status?.paid
-                                                            }}</a>
-                                                        </li>
-                                                        <li (click)="onPerformAction(item, 'cancel')">
-                                                            <a class="cursor-pointer" href="javascript:;" aria-label="cancel">{{
-                                                                commonLocaleData?.app_payment_status?.cancel
-                                                            }}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </td>

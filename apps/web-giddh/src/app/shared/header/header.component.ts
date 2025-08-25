@@ -1384,29 +1384,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isGoToBranch = true;
     }
 
-    public onRight(nodes) {
-        if (nodes.currentVertical) {
-            if (!this.isDropdownOpen(nodes.currentVertical)) {
-                nodes.currentVertical.click();
-            }
-        }
-    }
-
-    public onLeft(nodes, navigator) {
-        navigator.remove();
-        if (navigator.currentVertical) {
-            if (this.isDropdownOpen(nodes.currentVertical)) {
-                navigator.currentVertical.click();
-            }
-        }
-    }
-
-    public isDropdownOpen(node) {
-        const attrs = node.attributes;
-        return (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
-            && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
-    }
-
     public mouseEnteredOnCompanyName(i: number) {
         this.hoveredIndx = i;
     }

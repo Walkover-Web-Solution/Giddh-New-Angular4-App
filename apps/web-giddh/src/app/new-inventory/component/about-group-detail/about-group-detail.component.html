@@ -14,42 +14,34 @@
             </div>
             <div class="col-3 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
-                    <div class="btn-group" dropdown>
+                    <div>
                         <button
-                            id="more-btn-inventory"
                             *ngIf="!isMobileScreen"
-                            dropdownToggle
                             type="button"
-                            class="btn btn-primary dropdown-toggle bdr-radius-50"
-                            aria-controls="more-inventory-dropdown"
+                            class="btn btn-primary bdr-radius-50"
+                            [matMenuTriggerFor]="moreMenu"
                         >
-                            More <span class="caret"></span>
+                            More <i class="caret"></i>
                         </button>
-                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
-                        <ul
-                            id="more-inventory-dropdown"
-                            *dropdownMenu
-                            class="dropdown-menu"
-                            role="menu"
-                            aria-labelledby="more-btn-inventory"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0);"
-                                    [routerLink]="['/pages/inventory/v2/adjust-inventory']"
-                                    >Adjust Group</a
-                                >
-                            </li>
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-                            <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
-                            <li role="menuitem">
-                                <a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);"
-                                    >+ Add Inventory</a
-                                >
-                            </li>
-                        </ul>
+                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" [matMenuTriggerFor]="moreMenu"></i>
+                        <mat-menu #moreMenu="matMenu">
+                            <a
+                                mat-menu-item
+                                [routerLink]="['/pages/inventory/v2/adjust-inventory']"
+                            >
+                                Adjust Group
+                            </a>
+                            <button mat-menu-item>
+                                Archive
+                            </button>
+                            <button mat-menu-item>
+                                Delete
+                            </button>
+                            <mat-divider *ngIf="isMobileScreen"></mat-divider>
+                            <a mat-menu-item class="text-primary" *ngIf="isMobileScreen">
+                                + Add Inventory
+                            </a>
+                        </mat-menu>
                     </div>
                     <button
                         class="btn btn-sky-blue bdr-radius-50"

@@ -51,30 +51,22 @@
                         </div>
                         <div >
                             <div class="pull-right">
-                                <div class="btn-group" dropdown placement="bottom right">
+                                <div>
                                     <button
-                                        id="buttonalignment"
-                                        dropdownToggle
                                         type="button"
-                                        class="btn btn-sky-blue mr-b05 cp mr-1 dropdown-toggle"
-                                        aria-controls="dropdown-alignment"
+                                        class="btn btn-sky-blue mr-b05 cp mr-1"
+                                        [matMenuTriggerFor]="downloadMenu"
                                     >
                                         <i class="icon-download"></i> Download
                                     </button>
-                                    <ul
-                                        id="dropdown-alignment"
-                                        *dropdownMenu
-                                        class="dropdown-menu dropdown-menu-right"
-                                        role="menu"
-                                        aria-labelledby="button-alignment"
-                                    >
-                                        <li role="menuitem" (click)="downloadJobworkReport('csv')">
-                                            <a class="dropdown-item">Download CSV</a>
-                                        </li>
-                                        <li role="menuitem" (click)="downloadJobworkReport('xls')">
-                                            <a class="dropdown-item">Download XLS</a>
-                                        </li>
-                                    </ul>
+                                    <mat-menu #downloadMenu="matMenu" class="dropdown-menu-right">
+                                        <button mat-menu-item (click)="downloadJobworkReport('csv')">
+                                            Download CSV
+                                        </button>
+                                        <button mat-menu-item (click)="downloadJobworkReport('xls')">
+                                            Download XLS
+                                        </button>
+                                    </mat-menu>
                                 </div>
 
                                 <button
@@ -141,13 +133,11 @@
                                         </div>
                                     </th>
                                     <th class="bd-rr bd-rb" *ngIf="type === 'stock'" width="15%">
-                                        <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
+                                        <div class="btn-group-voucher-type">
                                             <button
-                                                id="button-alignment"
-                                                dropdownToggle
                                                 type="button"
-                                                class="btn-link btn cp p-0 dropdown-toggle c-3"
-                                                aria-controls="dropdown-alignment"
+                                                class="btn-link btn cp p-0 c-3"
+                                                [matMenuTriggerFor]="voucherTypeMenu"
                                             >
                                                 Voucher Type
                                                 <i
@@ -155,24 +145,18 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </button>
-                                            <ul
-                                                id="dropdown-alignment"
-                                                *dropdownMenu
-                                                class="dropdown-menu dropdown-menu-right voucher-type"
-                                                role="menu"
-                                                aria-labelledby="button-alignment"
-                                            >
-                                                <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                                    <label
-                                                        ><input
+                                            <mat-menu #voucherTypeMenu="matMenu" class="dropdown-menu-right voucher-type">
+                                                <div *ngFor="let item of VOUCHER_TYPES" class="mat-menu-item">
+                                                    <label>
+                                                        <input
                                                             type="checkbox"
                                                             [(ngModel)]="item.checked"
-                                                            (click)="filterByCheck(item.value, $event.target?.checked)"
+                                                            (ngModelChange)="onVoucherTypeChange(item)"
                                                         />
-                                                        {{ item.label }}</label
-                                                    >
-                                                </li>
-                                            </ul>
+                                                        {{ item.name }}
+                                                    </label>
+                                                </div>
+                                            </mat-menu>
                                         </div>
                                     </th>
                                     <th

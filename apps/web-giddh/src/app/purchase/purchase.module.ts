@@ -3,7 +3,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -64,7 +64,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         InvoiceModule,
         CollapseModule.forRoot(),
         MatPaginatorModule,
-        BsDropdownModule.forRoot(),
+        
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

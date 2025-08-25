@@ -1,7 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { StockCreateEditModule } from "../../new-inventory/component/stock-create-edit/stock-create-edit.module";
 import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
@@ -26,7 +25,6 @@ import { MatButtonModule } from "@angular/material/button";
         UniqueNameModule,
         TextCaseChangeModule,
         DecimalDigitsModule,
-        BsDropdownModule.forRoot(),
         StockCreateEditModule,
         MatButtonModule 
     ],

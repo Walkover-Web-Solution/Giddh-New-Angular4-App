@@ -7,7 +7,7 @@ import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directiv
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
@@ -97,7 +97,7 @@ export function provideConfig() {
         FormsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        BsDropdownModule.forRoot(),
+        
         PopoverModule.forRoot(),
         SocialLoginModule,
         SelectModule,
@@ -164,7 +164,6 @@ export function provideConfig() {
         TextCaseChangeModule,
         KeyboardShortutModule,
         MfReportComponent,
-        BsDropdownModule,
         ElementViewChildModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,

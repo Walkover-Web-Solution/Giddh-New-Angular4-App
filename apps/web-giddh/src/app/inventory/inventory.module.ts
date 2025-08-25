@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
@@ -50,6 +51,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -117,7 +119,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        BsDropdownModule.forRoot(),
+        
         CurrencyModule,
         MatTabsModule,
         ReactiveFormsModule,
@@ -134,8 +136,10 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         MatDialogModule,
         MatPaginatorModule,
         MatMenuModule,
+        MatButtonModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatCheckboxModule
     ]
 })
 export class InventoryModule { }

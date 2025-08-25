@@ -35,34 +35,26 @@
             </div>
 
             <div class="right-inventory">
-                <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
+                <div class="btn-group" dropdown placement="bottom right">
                     <button class="btn-link icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
-                        id="button-alignment"
-                        dropdownToggle
                         type="button"
-                        class="btn-link cp mr-r15 dropdown-toggle icon-btn"
-                        aria-controls="dropdown-alignment"
+                        class="btn-link cp mr-r15 icon-btn"
+                        [matMenuTriggerFor]="downloadMenu"
                         matTooltip="Download"
                     >
                         <i class="icon-download-circle strong"></i>
                     </button>
-                    <ul
-                        id="dropdown-alignment"
-                        *dropdownMenu
-                        class="dropdown-menu dropdown-menu-right dropdown-menu-download"
-                        role="menu"
-                        aria-labelledby="button-alignment"
-                    >
-                        <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'csv')">
-                            <a class="dropdown-item">CSV</a>
-                        </li>
-                        <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'xlsx')">
-                            <a class="dropdown-item">XLS</a>
-                        </li>
-                    </ul>
+                    <mat-menu #downloadMenu="matMenu" class="dropdown-menu-right dropdown-menu-download">
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'csv')">
+                            CSV
+                        </button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'xlsx')">
+                            XLS
+                        </button>
+                    </mat-menu>
                 </div>
                 <button
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
@@ -216,33 +208,25 @@
                                 container="body"
                             >
                                 <button
-                                    id="button-alignment"
-                                    dropdownToggle
                                     type="button"
-                                    class="btn-link btn cp p-0 dropdown-toggle c-3 p-0"
-                                    aria-controls="dropdown-alignment"
+                                    class="btn-link btn cp p-0 c-3 p-0"
+                                    [matMenuTriggerFor]="voucherTypeMenu"
                                 >
                                     Voucher Type
                                     <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
                                 </button>
-                                <ul
-                                    id="dropdown-alignment"
-                                    *dropdownMenu
-                                    class="dropdown-menu dropdown-menu-right voucher-type"
-                                    role="menu"
-                                    aria-labelledby="button-alignment"
-                                >
-                                    <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                        <label
-                                            ><input
+                                <mat-menu #voucherTypeMenu="matMenu" class="dropdown-menu-right voucher-type">
+                                    <div *ngFor="let item of VOUCHER_TYPES" class="mat-menu-item">
+                                        <label>
+                                            <input
                                                 type="checkbox"
                                                 [(ngModel)]="item.checked"
-                                                (click)="filterByCheck(item.value, $event.target?.checked)"
+                                                (ngModelChange)="onVoucherTypeChange(item)"
                                             />
-                                            {{ item.label }}</label
-                                        >
-                                    </li>
-                                </ul>
+                                            {{ item.name }}
+                                        </label>
+                                    </div>
+                                </mat-menu>
                             </div>
                         </th>
                         <th class="td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'account')">

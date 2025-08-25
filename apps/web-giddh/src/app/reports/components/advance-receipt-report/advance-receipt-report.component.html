@@ -106,7 +106,7 @@
                 <div *ngIf="selectedReceipts?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
                     <button
                         class="btn btn-default mr-r15"
-                        [matTooltip]="commonLocaleData?.app_export"
+                        matTooltip="{{ commonLocaleData?.app_export }}"
                         matTooltipPosition="above"
                         (click)="exportCsvDownload()"
                     >
@@ -114,35 +114,27 @@
                     </button>
                     <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                         <button
-                            dropdownToggle
                             type="button"
-                            class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
-                            aria-controls="dropdown-basic"
+                            class="btn btn-primary more-btn-dropdown mr-0"
+                            [matMenuTriggerFor]="moreMenu"
                         >
                             {{ commonLocaleData?.app_more }}
-                            <span class="caret"></span>
+                            <i class="caret"></i>
                         </button>
-                        <ul
-                            *dropdownMenu
-                            class="dropdown-menu fixed-dropdown-plus"
-                            role="menu"
-                            aria-labelledby="button-basic"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item cp"
-                                    href="javascript:void(0)"
-                                    (click)="openConfirmationPopup()"
-                                    >{{ commonLocaleData?.app_delete }}</a
-                                >
-                            </li>
-                        </ul>
+                        <mat-menu #moreMenu="matMenu" class="fixed-dropdown-plus">
+                            <button
+                                mat-menu-item
+                                (click)="openConfirmationPopup()"
+                            >
+                                {{ commonLocaleData?.app_delete }}
+                            </button>
+                        </mat-menu>
                     </ng-container>
                 </div>
                 <div>
                     <div
                         class="advance-icon cursor-pointer btn btn-primary mr-0"
-                        [matTooltip]="commonLocaleData?.app_advance_search"
+                        matTooltip="{{ commonLocaleData?.app_advance_search }}"
                         matTooltipPosition="above"
                         (click)="openModal()"
                     >
@@ -350,31 +342,23 @@
                                         container="body"
                                         placement="bottom right"
                                     >
-                                        <a
-                                            href="javascript:void(0);"
-                                            id="button-basic-type"
-                                            dropdownToggle
-                                            class="btn dropdown-toggle text-light-2"
+                                        <button
+                                            type="button"
+                                            class="btn text-light-2"
+                                            [matMenuTriggerFor]="receiptTypeMenu"
                                             aria-label="dropdown-alignment"
                                         >
                                             <i class="fa fa-ellipsis-v"></i>
-                                        </a>
-                                        <ul
-                                            id="dropdown-alignment"
-                                            *dropdownMenu
-                                            class="dropdown-menu dropdown-menu-right"
-                                            role="menu"
-                                            aria-labelledby="button-alignment"
-                                        >
-                                            <li *ngFor="let type of receiptType" role="menuitem">
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="javascript:;"
-                                                    (click)="onReceiptTypeChanged(type?.value)"
-                                                    >{{ type?.label }}</a
-                                                >
-                                            </li>
-                                        </ul>
+                                        </button>
+                                        <mat-menu #receiptTypeMenu="matMenu" class="dropdown-menu-right">
+                                            <button
+                                                mat-menu-item
+                                                *ngFor="let type of receiptType"
+                                                (click)="onReceiptTypeChanged(type?.value)"
+                                            >
+                                                {{ type?.label }}
+                                            </button>
+                                        </mat-menu>
                                     </div>
                                 </div>
                             </th>

@@ -22,7 +22,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { MatInputModule } from '@angular/material/input';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { SharedModule } from '../shared/shared.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
@@ -59,7 +59,7 @@ import { MatMenuModule } from '@angular/material/menu';
         Daterangepicker,
         DatepickerWrapperModule,
         MatInputModule,
-        BsDropdownModule.forRoot(),
+        
         SharedModule,
         GiddhPageLoaderModule,
         NoDataModule,

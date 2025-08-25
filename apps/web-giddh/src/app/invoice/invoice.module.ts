@@ -22,7 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
@@ -123,7 +123,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        BsDropdownModule.forRoot(),
+        
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,
         Daterangepicker,

@@ -1,45 +1,35 @@
 <div class="selling-product-block mr-t15">
     <div class="box">
         <div class="top-selling-heading d-flex justify-content-between">
-            <div class="btn-group" dropdown>
+            <div>
                 <button
-                    id="button-basic"
-                    dropdownToggle
                     type="button"
-                    class="btn font-15 top-selling-btn no-btn dropdown-toggle p-0 mr-0"
-                    aria-controls="dropdown-basic"
+                    class="btn font-15 top-selling-btn no-btn p-0 mr-0"
+                    [matMenuTriggerFor]="topSellingMenu"
                 >
-                    Top 5 Selling <span class="caret"></span>
+                    Top 5 Selling <i class="caret"></i>
                 </button>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Selling</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="#">Top 15 Selling</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="#">Top 50 Selling</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="#">Top 100 Selling</a></li>
-                </ul>
+                <mat-menu #topSellingMenu="matMenu">
+                    <button mat-menu-item>Top 10 Selling</button>
+                    <button mat-menu-item>Top 15 Selling</button>
+                    <button mat-menu-item>Top 50 Selling</button>
+                    <button mat-menu-item>Top 100 Selling</button>
+                </mat-menu>
             </div>
             <div class="d-flex align-items-center">
                 <span>
-                    <div class="btn-group" dropdown>
+                    <div>
                         <button
-                            id="month-btn"
-                            dropdownToggle
                             type="button"
-                            class="btn font-15 no-btn dropdown-toggle p-0 text-primary"
-                            aria-controls="month-dropdown"
+                            class="btn font-15 no-btn p-0 text-primary"
+                            [matMenuTriggerFor]="monthMenu"
                         >
-                            This Month <span class="caret"></span>
+                            This Month <i class="caret"></i>
                         </button>
-                        <ul
-                            id="month-dropdown"
-                            *dropdownMenu
-                            class="dropdown-menu"
-                            role="menu"
-                            aria-labelledby="month-btn"
-                        >
-                            <li role="menuitem"><a class="dropdown-item" href="#">This Week</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Last Month</a></li>
-                        </ul>
+                        <mat-menu #monthMenu="matMenu">
+                            <button mat-menu-item>This Week</button>
+                            <button mat-menu-item>Last Month</button>
+                        </mat-menu>
                     </div>
                 </span>
                 <span

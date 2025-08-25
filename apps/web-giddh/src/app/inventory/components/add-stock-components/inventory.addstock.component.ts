@@ -22,8 +22,8 @@ import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 import { SalesService } from '../../../services/sales.service';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
     selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',

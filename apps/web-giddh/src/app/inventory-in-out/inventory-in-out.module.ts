@@ -18,8 +18,10 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
@@ -52,9 +54,11 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
             style: 'slide-left',
             spinnerSize: 30
         }),
-        BsDropdownModule.forRoot(),
+        
         InventoryModule,
         MatTabsModule,
+        MatMenuModule,
+        MatIconModule,
         DecimalDigitsModule
     ],
 })

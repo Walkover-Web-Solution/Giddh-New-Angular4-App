@@ -4,25 +4,24 @@
             <label class="mr-b05 font-16">Select Design for</label>
 
             <div class="select-design">
-                <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
-                    <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                        aria-controls="dropdown-basic">
+                <div class="btn-group d-inline-block mr-b1">
+                    <button type="button" class="btn more-btn-dropdown"
+                        [matMenuTriggerFor]="voucherTypeMenu">
                         {{
                         voucherType === "debit note" || voucherType === "credit note"
                         ? "Credit/Debit Note"
                         : (voucherType | titlecase)
                         }}
-                        <span class="caret"></span>
+                        <i class="caret"></i>
                     </button>
-                    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                        <li role="menuitem" (click)="voucherTypeChanged('sales')">
-                            <a class="dropdown-item cp" href="javascript:void(0);" aria-label="sales">Sales</a>
-                        </li>
-
-                        <li role="menuitem" (click)="voucherTypeChanged('debit note')">
-                            <a class="dropdown-item cp" href="javascript:void(0);" aria-label="creadit note">Credit/Debit Note</a>
-                        </li>
-                    </ul>
+                    <mat-menu #voucherTypeMenu="matMenu">
+                        <button mat-menu-item (click)="voucherTypeChanged('sales')" aria-label="sales">
+                            Sales
+                        </button>
+                        <button mat-menu-item (click)="voucherTypeChanged('debit note')" aria-label="credit note">
+                            Credit/Debit Note
+                        </button>
+                    </mat-menu>
                 </div>
             </div>
 

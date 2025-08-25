@@ -1,64 +1,46 @@
 <div class="inline pull-right">
     <div >
         <div class="pull-right">
-            <div class="btn-group" dropdown>
+            <div class="btn-group">
                 <button
-                    id="button-basic"
-                    dropdownToggle
                     type="button"
-                    class="btn btn-default btn-sm dropdown-toggle"
-                    aria-controls="dropdown-basic"
+                    class="btn btn-default btn-sm"
+                    [matMenuTriggerFor]="newMenu"
                 >
-                    New <span class="caret"></span>
+                    New <i class="caret"></i>
                 </button>
-                <ul
-                    id="dropdown-basic"
-                    *dropdownMenu
-                    class="dropdown-menu dropdown-option dropdown-menu-right"
-                    role="menu"
-                    aria-labelledby="button-basic"
-                >
-                    <li role="menuitem">
-                        <a
-                            class="dropdown-item"
-                            href="javascript:void(0);"
-                            (click)="openGroupStockAsidePaneDialog('inward')"
-                            >Inward Note</a
-                        >
-                    </li>
-                    <li role="menuitem">
-                        <a
-                            class="dropdown-item"
-                            href="javascript:void(0);"
-                            (click)="openGroupStockAsidePaneDialog('outward')"
-                            >Outward Note</a
-                        >
-                    </li>
-                    <li role="menuitem">
-                        <a
-                            class="dropdown-item"
-                            href="javascript:void(0);"
-                            (click)="openGroupStockAsidePaneDialog('transfer')"
-                            >Transfer Note</a
-                        >
-                    </li>
-                    <li role="menuitem">
-                        <a
-                            class="dropdown-item"
-                            href="javascript:void(0);"
-                            (click)="openGroupStockAsidePaneDialog('createStock')"
-                            >Create Stock</a
-                        >
-                    </li>
-                    <li role="menuitem">
-                        <a
-                            class="dropdown-item"
-                            href="javascript:void(0);"
-                            (click)="openGroupStockAsidePaneDialog('createAccount')"
-                            >Create Account</a
-                        >
-                    </li>
-                </ul>
+                <mat-menu #newMenu="matMenu" class="dropdown-option dropdown-menu-right">
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('inward')"
+                    >
+                        Inward Note
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('outward')"
+                    >
+                        Outward Note
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('transfer')"
+                    >
+                        Transfer Note
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('createStock')"
+                    >
+                        Create Stock
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="openGroupStockAsidePaneDialog('createAccount')"
+                    >
+                        Create Account
+                    </button>
+                </mat-menu>
             </div>
         </div>
     </div>

@@ -6,7 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'new-inventory',
     templateUrl: './new-inventory.component.html',

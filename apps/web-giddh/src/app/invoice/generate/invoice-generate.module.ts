@@ -6,7 +6,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { InvoiceGenerateComponent } from './invoice.generate.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
 
@@ -27,7 +27,7 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         ClickOutsideModule,
         TranslateDirectiveModule,
         BsDatepickerModule.forRoot(),
-        BsDropdownModule.forRoot(),
+        
 
         NoDataModule,
         VoucherModule,

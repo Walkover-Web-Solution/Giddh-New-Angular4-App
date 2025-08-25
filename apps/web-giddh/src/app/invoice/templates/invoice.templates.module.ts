@@ -10,7 +10,9 @@ import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-foc
 import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/thermal-template/thermal-template.component';
 import { EditInvoiceComponent } from './edit-template/edit.invoice.component';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { InvoiceTemplateModalComponent } from './edit-template/modals/template-modal/template-modal.component';
 import { EditFiltersContainersComponent } from './edit-template/filters-container/edit.filters.component';
@@ -30,14 +32,15 @@ import { TributeMentionModule } from '../../shared/helpers/directives/tributeMen
         ReactiveFormsModule,
         CollapseModule.forRoot(),
         HasFocusDirectiveModule,
-        BsDropdownModule,
         ShSelectModule,
         ModalModule,
         ClickOutsideModule,
         DecimalDigitsModule,
         ValidateSectionPermissionDirectiveModule,
         DeleteTemplateConfirmationModalModule,
-        TributeMentionModule
+        TributeMentionModule,
+        MatMenuModule,
+        MatButtonModule
     ],
     declarations: [
         InvoiceTemplatePreviewModelComponent,

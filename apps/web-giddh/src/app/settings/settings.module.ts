@@ -42,7 +42,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
@@ -136,7 +136,7 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
         MatDialogModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        BsDropdownModule.forRoot(),
+        
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,

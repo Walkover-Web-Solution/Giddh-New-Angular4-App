@@ -3,7 +3,6 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { ServiceConfig } from '../../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
     selector: 'adjust-group',
     templateUrl: './adjust-group.component.html',
