@@ -65,7 +65,7 @@
                         </li>
                     </ul>
                 </div>
-                <button mat-stroked-button
+                <button
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     mat-raised-button color="primary" class="transfer-btn"
                     matTooltip="Alt+N"
@@ -192,7 +192,7 @@
                                     id="button-alignment"
                                     dropdownToggle
                                     type="button"
-                                    mat-stroked-button class="cp dropdown-toggle c-3"
+                                    mat-raised-button color="primary" class="cp dropdown-toggle c-3"
                                     aria-controls="dropdown-alignment"
                                 >
                                     Voucher Type
@@ -753,7 +753,7 @@
                     <div class="row mr-t4">
                         <div class="col-12 text-right">
                             <button
-                                mat-stroked-button
+                                mat-raised-button color="primary"
                                 type="button"
                                 [disabled]="
                                     !isFilterCorrect ||

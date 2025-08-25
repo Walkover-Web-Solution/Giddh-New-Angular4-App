@@ -523,7 +523,7 @@
                         </div>
                         <p class="mb-3">{{ localeData?.bulk_update_note }}</p>
                         <div class="btn-group">
-                            <button mat-stroked-button (click)="validateBulkUpdateFields()">
+                            <button mat-raised-button color="primary" (click)="validateBulkUpdateFields()">
                                 {{ commonLocaleData?.app_update }}
                             </button>
                             <button mat-stroked-button (click)="bulkUpdateDialogRef?.close()">

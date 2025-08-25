@@ -468,7 +468,7 @@
             </form>
         </div>
         <div mat-dialog-actions>
-            <button mat-stroked-button color="accent" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
+            <button mat-raised-button color="primary" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
                 {{ commonLocaleData?.app_create }}
             </button>
             <button mat-stroked-button (click)="toggleTagsModal()">

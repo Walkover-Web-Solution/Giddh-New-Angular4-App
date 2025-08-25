@@ -92,7 +92,6 @@
                                         <button
                                             aria-label="delete"
                                             mat-stroked-button
-                                            color="warn"
                                             [disabled]="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
@@ -109,13 +108,11 @@
 
                                         <button
                                             aria-label="generate"
-                                            mat-stroked-button
                                             [disabled]="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
-                                            mat-raised-button color="primary"
-                                            color="accent"
+                                            mat-stroked-button
                                             id="generate-invoice-mobile-view"
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"

@@ -81,7 +81,8 @@
     </div>
     <div class="modal-footer">
         <button
-            mat-stroked-button
+            mat-raised-button
+            color="primary"
             [ladda]="isQuickAccountInProcess$ | async"
             (click)="submit()"
             [disabled]="newAccountForm.invalid"

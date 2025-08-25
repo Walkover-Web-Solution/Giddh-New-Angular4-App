@@ -162,7 +162,8 @@
                                 </div>
                                 <div *ngIf="!addGroup">
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
+                                        color="primary"
                                         type="submit"
                                         [disabled]="addGroupForm.invalid || defaultGrpActive"
                                         [ladda]="isUpdateGroupInProcess$ | async"
@@ -171,7 +172,7 @@
                                         Update
                                     </button>
                                     <button
-                                        mat-stroked-button color="warn"
+                                        mat-stroked-button
                                         type="submit"
                                         [ladda]="isDeleteGroupInProcess$ | async"
                                         (click)="openModal(deleteGroupModalTemplate)"

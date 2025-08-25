@@ -1893,14 +1893,14 @@
 
                                                     <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button
-                                                            mat-stroked-button
+                                                            mat-raised-button color="primary"
                                                             type="button"
                                                             (click)="hsnSacDropdownShow = !hsnSacDropdownShow"
                                                         >
                                                             {{ commonLocaleData?.app_save }}
                                                         </button>
                                                         <button
-                                                            mat-raised-button color="primary"
+                                                            mat-stroked-button
                                                             type="button"
                                                             (click)="hideHsnSacEditPopup(transaction)"
                                                         >
@@ -2962,7 +2962,7 @@
                                                                 />
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
                                                                     <button
-                                                                        mat-stroked-button
+                                                                        mat-raised-button color="primary"
                                                                         type="button"
                                                                         (click)="
                                                                             hsnSacDropdownShow = !hsnSacDropdownShow
@@ -2971,7 +2971,7 @@
                                                                         {{ commonLocaleData?.app_save }}
                                                                     </button>
                                                                     <button
-                                                                        mat-raised-button color="primary"
+                                                                        mat-stroked-button
                                                                         type="button"
                                                                         (click)="hideHsnSacEditPopup(transaction)"
                                                                     >
@@ -3592,7 +3592,8 @@
                     <span class="d-inline-block v-align-middle">
                         <button
                             type="button"
-                            mat-stroked-button
+                            mat-raised-button
+                            color="primary"
                             [disabled]="isFormSaveInProgress"
                             (click)="savePurchaseOrder('create')"
                         >
@@ -3610,7 +3611,8 @@
                     </button>
                     <button
                         type="button"
-                        mat-stroked-button
+                        mat-raised-button
+                        color="primary"
                         [disabled]="isFormSaveInProgress"
                         (click)="savePurchaseOrder('update')"
                     >

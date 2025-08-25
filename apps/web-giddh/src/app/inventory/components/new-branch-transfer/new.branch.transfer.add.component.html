@@ -714,14 +714,14 @@
                                                     />
                                                     <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button
-                                                            mat-stroked-button
+                                                            mat-raised-button color="primary"
                                                             type="button"
                                                             (click)="saveSkuNumberPopup(product)"
                                                         >
                                                             Save
                                                         </button>
                                                         <button
-                                                            mat-raised-button color="primary"
+                                                            mat-stroked-button
                                                             type="button"
                                                             (click)="hideSkuNumberPopup()"
                                                         >
@@ -836,7 +836,7 @@
                                                         Save
                                                     </button>
                                                     <button
-                                                        mat-raised-button color="primary" class="mr-0"
+                                                        mat-stroked-button class="mr-0"
                                                         type="button"
                                                         (click)="hideHsnNumberPopup()"
                                                     >
@@ -1385,7 +1385,7 @@
                             <button
                                 *ngIf="isBranch || isCompanyWithSingleBranch"
                                 type="button"
-                                mat-stroked-button class="d-inline-block v-align-middle {{
+                                mat-raised-button color="primary" class="d-inline-block v-align-middle {{
                                     newBranchTransferForm.invalid
                                 }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
                                 [disabled]="

@@ -2542,13 +2542,14 @@
                                             >
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
-                                            <button mat-stroked-button
+                                            <button 
                                                 *ngIf="
                                                     !isDaybook &&
                                                     !((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1)
                                                 "
                                                 aria-label="Duplicate entry button"
-                                                mat-stroked-button
+                                                mat-raised-button
+                                                color="primary"
                                                 (click)="duplicateEntry()"
                                             >
                                                 {{ localeData?.duplicate }}
@@ -2556,8 +2557,8 @@
 
                                             <button
                                                 class="ml-auto"
-                                                mat-stroked-button
-                                                color="warn"
+                                                mat-raised-button
+                                                color="primary"
                                                 id="update-ledger-delete-button"
                                                 (click)="showDeleteEntryModal()"
                                             >

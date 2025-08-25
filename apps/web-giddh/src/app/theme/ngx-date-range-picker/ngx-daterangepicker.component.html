@@ -43,7 +43,7 @@
                                 class="sub-ranges-cal menu-drawer"
                             >
                                 <li *ngFor="let subRange of range.ranges">
-                                    <button mat-stroked-button
+                                    <button
                                         type="button"
                                         (click)="handleDateChange('range', $event, subRange)"
                                         [ngClass]="{
@@ -72,7 +72,7 @@
                                 *ngIf="dropdownShow && financialYears && financialYears.length > 0"
                             >
                                 <li *ngFor="let financialYear of financialYears">
-                                    <button mat-stroked-button
+                                    <button
                                         type="button"
                                         (click)="handleDateChange('financialYear', financialYear)"
                                         [ngClass]="{
@@ -91,7 +91,7 @@
                 <div class="days-upto-select">
                     <ul>
                         <li>
-                            <button mat-stroked-button>
+                            <button>
                                 <input
                                     matInput
                                     type="tel"

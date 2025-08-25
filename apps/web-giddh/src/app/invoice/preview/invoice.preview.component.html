@@ -78,14 +78,14 @@
                             <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                    mat-stroked-button class="desktop-view-btn"
+                                    mat-raised-button color="primary" class="desktop-view-btn"
                                     (click)="goToInvoice('purchase')"
                                 >
                                     {{ localeData?.new_bill }}
                                 </button>
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                    mat-stroked-button class="desktop-view-btn"
+                                    mat-raised-button color="primary" class="desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/purchase/create']"
                                 >
                                     {{ localeData?.new_bill }}
@@ -94,14 +94,14 @@
                             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                    mat-stroked-button class="desktop-view-btn"
+                                    mat-raised-button color="primary" class="desktop-view-btn"
                                     (click)="goToInvoice('credit note')"
                                 >
                                     {{ localeData?.new_cr_note }}
                                 </button>
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                    mat-stroked-button class="desktop-view-btn"
+                                    mat-raised-button color="primary" class="desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/credit-note/create']"
                                 >
                                     {{ localeData?.new_cr_note }}
@@ -110,14 +110,14 @@
                             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                    mat-stroked-button class="desktop-view-btn"
+                                    mat-raised-button color="primary" class="desktop-view-btn"
                                     (click)="goToInvoice('debit note')"
                                 >
                                     {{ localeData?.new_dr_note }}
                                 </button>
                                 <button
                                     *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                    mat-stroked-button class="desktop-view-btn"
+                                    mat-raised-button color="primary" class="desktop-view-btn"
                                     [routerLink]="['/pages/vouchers/debit-note/create']"
                                 >
                                     {{ localeData?.new_dr_note }}
@@ -247,7 +247,7 @@
                                 </ul>
                             </div>
                             <button
-                                mat-raised-button color="primary"
+                                mat-stroked-button
                                 *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
                                 [matTooltip]="commonLocaleData?.app_export"
                                 matTooltipPosition="above"
@@ -460,14 +460,14 @@
                                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                            mat-stroked-button class="m-0"
+                                            mat-raised-button color="primary" class="m-0"
                                             (click)="goToInvoice('credit note')"
                                         >
                                             {{ localeData?.new_cr_note }}
                                         </button>
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                            mat-stroked-button class="m-0"
+                                            mat-raised-button color="primary" class="m-0"
                                             [routerLink]="['/pages/vouchers/credit-note/create']"
                                         >
                                             {{ localeData?.new_cr_note }}
@@ -476,14 +476,14 @@
                                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
-                                            mat-stroked-button class="m-0"
+                                            mat-raised-button color="primary" class="m-0"
                                             (click)="goToInvoice('debit note')"
                                         >
                                             {{ localeData?.new_dr_note }}
                                         </button>
                                         <button
                                             *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
-                                            mat-stroked-button class="m-0"
+                                            mat-raised-button color="primary" class="m-0"
                                             [routerLink]="['/pages/vouchers/debit-note/create']"
                                         >
                                             {{ localeData?.new_dr_note }}
@@ -695,7 +695,7 @@
                         </div>
                     </div>
                     <div mat-dialog-actions class="text-right">
-                        <button mat-stroked-button>{{ commonLocaleData?.app_submit }}</button>
+                        <button mat-raised-button color="primary">{{ commonLocaleData?.app_submit }}</button>
                     </div>
                 </ng-template>
 
@@ -2125,7 +2125,7 @@
         </form>
     </div>
     <div mat-dialog-actions class="button-group text-right">
-        <button mat-stroked-button
+        <button
             [disabled]="
                 !eInvoiceCancel.cancellationReason || !(eInvoiceCancel.cancellationRemarks | trim)
                     ? 'disabled'

@@ -42,7 +42,7 @@
                     placeholer="Extra Params"
                     id="extraParams"
                 />
-                <button mat-stroked-button type="submit">{{ commonLocaleData?.app_submit }}</button>
+                <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_submit }}</button>
             </form>
         </div>
     </div>
@@ -156,7 +156,7 @@
                                         {{ localeData?.link_account }}
                                     </button>
                                     <button
-                                        mat-stroked-button color="warn"
+                                        mat-stroked-button
                                         class="mr-t1"
                                         *ngIf="card.giddhAccount && card.giddhAccount.name?.length > 0"
                                         (click)="onUnlinkBankAccount(card)"

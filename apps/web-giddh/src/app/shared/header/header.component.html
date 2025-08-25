@@ -2,7 +2,7 @@
 <div class="message-wrapper" *ngIf="showDepreciationMessage">
     <p class="text-center py-2">
         {{ localeData?.depreciation_message }}
-        <a href="mailto:support@giddh.com" aria-label="email" mat-stroked-button>
+        <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">
             support
             <span>&#64;</span>
             <!-- This &#64; Html Code for @ symbol  -->
@@ -13,7 +13,7 @@
         <a
             href="javascript:void(0);"
             aria-label="dismiss"
-            mat-stroked-button
+            class="text-underline"
             (click)="removeDepreciationMessage()"
             >{{ localeData?.depreciation_dismiss }}</a
         >
@@ -63,7 +63,6 @@
                         *ngIf="companyList?.length && isSubscriptionModule"
                         class="min160 company-button"
                         mat-raised-button
-                        color="primary"
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
@@ -76,7 +75,7 @@
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
                         class="min160 company-button ml-3"
-                        mat-stroked-button
+                        mat-raised-button
                         (click)="backToSubscription()"
                         aria-label="back"
                     >
@@ -356,7 +355,7 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
-                                            <div mat-stroked-button class="p-1" mr-t2 mr-b05 d-flex align-items-center>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-estimate-new mr-r1"></i>
                                                 </span>
@@ -369,7 +368,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-proforma mr-r1"></i>
                                                 </span>
@@ -382,7 +381,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-purchase-order mr-r1"></i>
                                                 </span>
@@ -397,7 +396,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new mr-r1"></i>
                                                 </span>
@@ -410,7 +409,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-invoice-new mr-r1"></i>
                                                 </span>
@@ -423,7 +422,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div mat-stroked-button class="p-1" mr-t1 mr-b05 d-flex align-items-center>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
                                                 </span>
@@ -454,7 +453,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button mat-stroked-button class="p-1" (click)="dateSelectedCallback()">
+                            <button mat-raised-button color="primary" class="p-1" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -708,12 +707,12 @@
             <div class="clearfix">
                 <ul class="list-inline upgrade-plan">
                     <li>
-                        <button mat-stroked-button *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
                             {{ localeData?.renew_plan }}
                         </button>
                     </li>
                     <li>
-                        <button mat-stroked-button (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
                             {{ localeData?.change_plan }}
                         </button>
                     </li>
@@ -752,7 +751,7 @@
             <div class="clearfix">
                 <ul class="list-inline">
                     <li>
-                        <button mat-stroked-button (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
                             {{ commonLocaleData?.app_buy_plan }}
                         </button>
                     </li>

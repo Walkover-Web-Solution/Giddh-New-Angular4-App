@@ -5,7 +5,8 @@
 
             <div class="select-design">
                 <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown">
-                    <button dropdownToggle type="button" mat-stroked-button
+                    <button dropdownToggle type="button" mat-raised-button
+                        color="primary"
                         aria-controls="dropdown-basic">
                         {{
                         voucherType === "debit note" || voucherType === "credit note"
@@ -115,26 +116,26 @@
             <!--<button mat-stroked-button>Preview</button>-->
             <div class="pull-right mr-r4" *ngIf="voucherType === 'sales' && voucherApiVersion === 2">
                 <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
-                    mat-stroked-button color="accent" (click)="createTemplate('invoice')" aria-label="save">
+                    mat-raised-button color="primary" (click)="createTemplate('invoice')" aria-label="save">
                     Save
                 </button>
                 <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update' && voucherApiVersion === 2"
-                    mat-stroked-button color="accent" (click)="updateTemplate('invoice')" aria-label="update template">
+                    mat-raised-button color="primary" (click)="updateTemplate('invoice')" aria-label="update template">
                     Update Template
                 </button>
-                <button mat-stroked-button color="warn" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
+                <button mat-stroked-button (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
             <div class="pull-right mr-r4" *ngIf="(voucherType === 'credit note' || voucherType === 'debit note') && voucherApiVersion === 2">
-                <button *ngIf="transactionMode == 'create'" mat-stroked-button color="accent" (click)="createTemplate('voucher')" aria-label="save">
+                <button *ngIf="transactionMode == 'create'" mat-raised-button color="primary" (click)="createTemplate('voucher')" aria-label="save">
                     Save
                 </button>
-                <button *ngIf="transactionMode == 'update' && voucherApiVersion === 2" mat-stroked-button color="accent" (click)="updateTemplate('voucher')" aria-label="update template">
+                <button *ngIf="transactionMode == 'update' && voucherApiVersion === 2" mat-raised-button color="primary" (click)="updateTemplate('voucher')" aria-label="update template">
                     Update Template
                 </button>
-                <button mat-stroked-button color="warn" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
+                <button mat-stroked-button (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
             <div class="pull-right mr-r4" *ngIf="voucherApiVersion === 1">
-                <button mat-stroked-button color="warn" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
+                <button mat-stroked-button (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
         </div>
     </ng-template>

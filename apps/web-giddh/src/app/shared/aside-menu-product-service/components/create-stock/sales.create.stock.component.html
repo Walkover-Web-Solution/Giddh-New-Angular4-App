@@ -32,7 +32,8 @@
                                     <label class="d-block">&nbsp;</label>
                                     <button
                                         type="button"
-                                        mat-stroked-button
+                                        mat-raised-button
+                                        color="primary"
                                         (click)="moveStock()"
                                         [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                                     >
@@ -715,7 +716,7 @@
                                     [disabled]="addStockForm.invalid || disableStockButton">Update
                                 </button>
                                 <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async"
-                                    mat-stroked-button color="warn" (click)="deleteStock()">Delete Stock
+                                    mat-stroked-button (click)="deleteStock()">Delete Stock
                                 </button> -->
                                 <button
                                     type="button"
