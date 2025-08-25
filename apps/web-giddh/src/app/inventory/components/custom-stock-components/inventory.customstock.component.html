@@ -200,54 +200,61 @@
                     </div>
                 </form>
                 <div class="mr-t2 clearfix">
-                    <table class="table basic mb-0">
-                        <thead>
-                            <tr>
-                                <th>Custom Unit</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <th>Name</th>
-                                <th>Mapped</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of stockMappedUnits$ | async" class="inventory-units-mapped">
-                                <td>{{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})</td>
-                                <td>
-                                    {{ item?.quantity ? (item?.quantity | giddhRoundOff: giddhDecimalPlaces) : "-" }}
-                                    <span *ngIf="item?.stockUnitY?.name">
-                                        {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})</span
+                    <table mat-table [dataSource]="stockMappedUnits$ | async" class="table basic mb-0">
+                        <!-- Unit Name Column -->
+                        <ng-container matColumnDef="unitName">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">
+                                Name
+                            </th>
+                            <td mat-cell *matCellDef="let item">
+                                {{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})
+                            </td>
+                        </ng-container>
+
+                        <!-- Mapped Unit Column -->
+                        <ng-container matColumnDef="mappedUnit">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">
+                                Mapped
+                            </th>
+                            <td mat-cell *matCellDef="let item">
+                                {{ item?.quantity ? (item?.quantity | giddhRoundOff: giddhDecimalPlaces) : "-" }}
+                                <span *ngIf="item?.stockUnitY?.name">
+                                    {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})
+                                </span>
+                                <span *ngIf="!item?.stockUnitY?.name">-</span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let item" class="action ico-btn">
+                                <div class="icon-visibility">
+                                    <button
+                                        class="btn-default btn-xs"
+                                        [disabled]="editMode"
+                                        (click)="editUnit(item)"
                                     >
-                                    <span *ngIf="!item?.stockUnitY?.name">-</span>
-                                </td>
-                                <td class="action ico-btn">
-                                    <div class="icon-visibility">
-                                        <button
-                                            class="btn-default btn-xs"
-                                            [disabled]="editMode"
-                                            (click)="editUnit(item)"
-                                        >
-                                            <i class="icon-edit-pencil"></i>
-                                        </button>
-                                        <button
-                                            class="btn-default btn-xs delete-btn"
-                                            [disabled]="editMode"
-                                            [ladda]="
-                                                (deleteCustomStockInProcessCode$ | async)?.indexOf(
-                                                    item?.stockUnitX?.code
-                                                ) > -1
-                                            "
-                                            (click)="deleteUnit(item?.stockUnitX?.uniqueName)"
-                                        >
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button
+                                        class="btn-default btn-xs delete-btn"
+                                        [disabled]="editMode"
+                                        [ladda]="
+                                            (deleteCustomStockInProcessCode$ | async)?.indexOf(
+                                                item?.stockUnitX?.code
+                                            ) > -1
+                                        "
+                                        (click)="deleteUnit(item?.stockUnitX?.uniqueName)"
+                                    >
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="inventory-units-mapped"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="inventory-units-mapped"></tr>
                     </table>
                 </div>
             </div>

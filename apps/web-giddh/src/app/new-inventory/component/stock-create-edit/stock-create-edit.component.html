@@ -2497,7 +2497,6 @@
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="purchase-info-check"
-                                                            type="checkbox"
                                                             checked="true"
                                                             >Purchase Information
                                                         </mat-checkbox>
@@ -2514,21 +2513,6 @@
                                                                 [placeholder]="localeData?.all_accounts"
                                                             ></textarea>
                                                         </div>
-                                                        <!-- <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select id="applicable-tax" placeholder="Select Tax">
-                                                                </sh-select>
-                                                                <p class="mt-1 font-15">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="purchase-price-tax"
-                                                                        type="checkbox"
-                                                                        >Price Inclusive of Tax ?
-                                                                    </mat-checkbox>
-                                                                </p>
-                                                            </div> -->
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>{{ localeData?.unit_price }} </label>
                                                         </div>
@@ -2597,7 +2581,6 @@
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="sales-info-check"
-                                                            type="checkbox"
                                                         >
                                                             Sales Information
                                                         </mat-checkbox>
@@ -2616,25 +2599,6 @@
                                                                 disabled
                                                             ></textarea>
                                                         </div>
-                                                        <!-- <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
-                                                                    id="sales-applicable-tax"
-                                                                    placeholder="Select Tax"
-                                                                    disabled
-                                                                >
-                                                                </sh-select>
-                                                                <p class="mt-1 font-15">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="sales-price-tax"
-                                                                        type="checkbox"
-                                                                        >Price Inclusive of Tax ?
-                                                                    </mat-checkbox>
-                                                                </p>
-                                                            </div> -->
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>{{ localeData?.unit_price }} </label>
                                                         </div>
@@ -2899,7 +2863,6 @@
                                                             <mat-checkbox
                                                                 color="primary"
                                                                 id="purchase-info-check"
-                                                                type="checkbox"
                                                                 checked="true"
                                                                 >Purchase Information
                                                             </mat-checkbox>
@@ -2929,7 +2892,6 @@
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-price-tax"
-                                                                        type="checkbox"
                                                                     >
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
@@ -3001,7 +2963,6 @@
                                                             <mat-checkbox
                                                                 color="primary"
                                                                 id="sales-info-check"
-                                                                type="checkbox"
                                                             >
                                                                 Sales Information
                                                             </mat-checkbox>
@@ -3034,7 +2995,6 @@
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="sales-price-tax"
-                                                                        type="checkbox"
                                                                     >
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
@@ -3097,7 +3057,6 @@
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
-                                                    type="checkbox"
                                                     checked
                                                     name="product-service"
                                                     id="product-service"
@@ -3179,7 +3138,7 @@
                                         </div>
                                         <p class="mr-b15 font-15">
                                             <span>
-                                                <mat-checkbox color="primary" type="checkbox" name="stock" id="stock">
+                                                <mat-checkbox color="primary" name="stock" id="stock">
                                                     Continue selling when out of Combo?</mat-checkbox
                                                 >>
                                             </span>
@@ -3288,29 +3247,6 @@
                                                                 >SAC Code
                                                             </mat-radio-button>
                                                         </mat-radio-group>
-                                                        <!--                                                <span class="p-0 mr-3" (click)="selectCode(true)">-->
-                                                        <!--                                                <input-->
-                                                        <!--                                                    id="combo-hsn-code-option"-->
-                                                        <!--                                                    class="radio-custom cp ml-0"-->
-                                                        <!--                                                    type="radio"-->
-
-                                                        <!--                                                    [value]=""-->
-                                                        <!--                                                />-->
-                                                        <!--                                                <label for="combo-hsn-code-option" class="radio-custom-label"-->
-                                                        <!--                                                >HSN Code</label-->
-                                                        <!--                                                >-->
-                                                        <!--                                            </span>-->
-                                                        <!--                                                <span class="p-0" (click)="selectCode(false)">-->
-                                                        <!--                                                <input-->
-                                                        <!--                                                    id="combo-sac-code-option"-->
-                                                        <!--                                                    class="radio-custom cp ml-0"-->
-                                                        <!--                                                    type="radio"-->
-                                                        <!--                                                    c-->
-                                                        <!--                                                />-->
-                                                        <!--                                                <label for="combo-sac-code-option" class="radio-custom-label"-->
-                                                        <!--                                                >SAC Code</label-->
-                                                        <!--                                                >-->
-                                                        <!--                                            </span>-->
                                                     </div>
 
                                                     <div class="col-sm-6 col-lg-6" *ngIf="isHSN">

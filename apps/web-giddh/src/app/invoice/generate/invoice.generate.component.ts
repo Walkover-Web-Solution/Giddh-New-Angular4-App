@@ -146,6 +146,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
     /** Instance of modal */
     public modalDialogRef: any;
+
+    /** Mat-table column definitions for main invoice table */
+    public invoiceDisplayedColumns: string[] = ['selection', 'date', 'particular', 'amount', 'account', 'total', 'description'];
 constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,

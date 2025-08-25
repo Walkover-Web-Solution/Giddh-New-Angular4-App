@@ -1,4 +1,4 @@
-<div class="jobwork-main">
+<div class="jobwork-main" *ngIf="isComponentInitialized">
     <!--sidebar-->
 
     <jobwork-sidebar></jobwork-sidebar>
@@ -91,56 +91,66 @@
 
                 <section class="mr-t15">
                     <div class="table-responsive">
-                        <table class="table basic table-border m-0">
-                            <thead>
-                                <tr>
-                                    <th class="bd-rr" width="120">
-                                        <div class="d-flex">
-                                            <div >Date</div>
-                                            <div class="icon-pointer">
-                                                <!-- default -->
-                                                <div
-                                                    class="icon-sort-asc text-right"
-                                                    *ngIf="filter.sortBy !== 'entry_date'"
-                                                    (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{
-                                                        'active-text-color':
-                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc'
-                                                    }"
-                                                ></div>
-                                                <!-- after sort click -->
-                                                <div
-                                                    class="icon-sort-asc text-right"
-                                                    *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
-                                                    (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{
-                                                        'active-text-color':
-                                                            filter.sortBy === 'entry_date' && filter.sort === 'desc'
-                                                    }"
-                                                ></div>
-                                                <div
-                                                    class="icon-sort-asc text-right"
-                                                    *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'asc'"
-                                                    (click)="sortButtonClicked('desc', 'entry_date')"
-                                                    [ngClass]="{
-                                                        'active-text-color':
-                                                            filter.sortBy === 'entry_date' && filter.sort === 'asc'
-                                                    }"
-                                                ></div>
-                                            </div>
+                        <table mat-table [dataSource]="inventoryReport?.transactions || []" class="table basic m-0">
+                            <!-- Date Column -->
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef class="bd-rr" width="120">
+                                    <div class="d-flex">
+                                        <div>Date</div>
+                                        <div class="icon-pointer">
+                                            <!-- default -->
+                                            <div
+                                                class="icon-sort-asc text-right"
+                                                *ngIf="filter.sortBy !== 'entry_date'"
+                                                (click)="sortButtonClicked('asc', 'entry_date')"
+                                                [ngClass]="{
+                                                    'active-text-color':
+                                                        filter.sortBy === 'entry_date' && filter.sort === 'asc'
+                                                }"
+                                            ></div>
+                                            <!-- after sort click -->
+                                            <div
+                                                class="icon-sort-asc text-right"
+                                                *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
+                                                (click)="sortButtonClicked('asc', 'entry_date')"
+                                                [ngClass]="{
+                                                    'active-text-color':
+                                                        filter.sortBy === 'entry_date' && filter.sort === 'desc'
+                                                }"
+                                            ></div>
+                                            <div
+                                                class="icon-sort-asc text-right"
+                                                *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'asc'"
+                                                (click)="sortButtonClicked('desc', 'entry_date')"
+                                                [ngClass]="{
+                                                    'active-text-color':
+                                                        filter.sortBy === 'entry_date' && filter.sort === 'asc'
+                                                }"
+                                            ></div>
                                         </div>
-                                    </th>
-                                    <th
-                                        class="bd-rr td-search-box"
-                                        *ngIf="type === 'person'"
-                                        width="15%"
-                                        (clickOutside)="clickedOutside($event, null, 'product')"
-                                    >
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let txn" class="bd-rr" data-title="Date">{{ txn.date }}</td>
+                            </ng-container>
+
+                            <!-- Product Name Column (only for person type) -->
+                            <ng-container matColumnDef="productName">
+                                <ng-container *ngIf="type === 'person'">
+                                    <th mat-header-cell *matHeaderCellDef class="bd-rr td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'product')">
                                         <div [hidden]="showProductSearch">
                                             <span>Product Name</span>
                                         </div>
                                     </th>
-                                    <th class="bd-rr bd-rb" *ngIf="type === 'stock'" width="15%">
+                                </ng-container>
+                                <ng-container *ngIf="type === 'person'">
+                                    <td mat-cell *matCellDef="let txn" class="bd-rr" data-title="Product Name">{{ txn.stock.name }}</td>
+                                </ng-container>
+                            </ng-container>
+
+                            <!-- Voucher Type Column (only for stock type) -->
+                            <ng-container matColumnDef="voucherType">
+                                <ng-container *ngIf="type === 'stock'">
+                                    <th mat-header-cell *matHeaderCellDef class="bd-rr bd-rb" width="15%">
                                         <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
                                             <button
                                                 id="button-alignment"
@@ -163,159 +173,155 @@
                                                 aria-labelledby="button-alignment"
                                             >
                                                 <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                                    <label
-                                                        ><input
-                                                            type="checkbox"
-                                                            [(ngModel)]="item.checked"
-                                                            (click)="filterByCheck(item.value, $event.target?.checked)"
-                                                        />
-                                                        {{ item.label }}</label
+                                                    <mat-checkbox
+                                                        [(ngModel)]="item.checked"
+                                                        (click)="filterByCheck(item.value, $event.target?.checked)"
+                                                        color="primary"
                                                     >
+                                                        {{ item.label }}
+                                                    </mat-checkbox>
                                                 </li>
                                             </ul>
                                         </div>
                                     </th>
-                                    <th
-                                        class="bd-rr bd-rb td-search-box"
-                                        width="15%"
-                                        (clickOutside)="clickedOutside($event, null, 'sender')"
-                                    >
-                                        <div [hidden]="showSenderSearch">
-                                            <span>Sender's Name</span>
-                                            <i class="icon-search" (click)="showSearchBox('sender')"></i>
-                                        </div>
-                                        <div class="input-container" [hidden]="!showSenderSearch">
-                                            <input
-                                                type="text"
-                                                #senderName
-                                                placeholder="Sender's Name"
-                                                class="w100"
-                                                [formControl]="senderUniqueNameInput"
-                                            />
-                                        </div>
-                                    </th>
-                                    <th
-                                        class="bd-rr bd-rb td-search-box"
-                                        width="15%"
-                                        (clickOutside)="clickedOutside($event, null, 'receiver')"
-                                    >
-                                        <div [hidden]="showReceiverSearch">
-                                            <span>Receiver's Name</span>
-                                            <i class="icon-search" (click)="showSearchBox('receiver')"></i>
-                                        </div>
-                                        <div class="input-container" [hidden]="!showReceiverSearch">
-                                            <input
-                                                type="text"
-                                                #receiverName
-                                                placeholder="Receiver's Name"
-                                                class="w100"
-                                                [formControl]="receiverUniqueNameInput"
-                                            />
-                                        </div>
-                                    </th>
-                                    <th class="bd-rr bd-rb">Description</th>
-                                    <th class="text-right bd-rb" width="140">
-                                        <div class="d-flex">
-                                            <div class="flex-fill mr-1">Trading Qty</div>
-                                            <div class="icon-pointer">
-                                                <!-- default -->
-                                                <div
-                                                    class="icon-sort-asc text-right"
-                                                    *ngIf="filter.sortBy !== 'QUANTITY'"
-                                                    (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{
-                                                        'active-text-color':
-                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
-                                                    }"
-                                                ></div>
-                                                <!-- after sort click -->
-                                                <div
-                                                    class="icon-sort-asc text-right"
-                                                    *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
-                                                    (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{
-                                                        'active-text-color':
-                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'desc'
-                                                    }"
-                                                ></div>
-                                                <div
-                                                    class="icon-sort-asc text-right"
-                                                    *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'asc'"
-                                                    (click)="sortButtonClicked('desc', 'QUANTITY')"
-                                                    [ngClass]="{
-                                                        'active-text-color':
-                                                            filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
-                                                    }"
-                                                ></div>
-                                            </div>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody *ngIf="inventoryReport && inventoryReport.transactions?.length > 0">
-                                <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
-                                    <td class="bd-rr">{{ txn.date }}</td>
-                                    <td class="bd-rr" *ngIf="type === 'person'">{{ txn.stock.name }}</td>
-                                    <td class="bd-rr" *ngIf="type === 'stock'">
+                                </ng-container>
+                                <ng-container *ngIf="type === 'stock'">
+                                    <td mat-cell *matCellDef="let txn" class="bd-rr" data-title="Voucher Type">
                                         <!-- in case of stock type -->
-                                        <span class="{{ txn.jobWorkTransactionType }}">{{
-                                            txn.jobWorkTransactionType
-                                        }}</span>
+                                        <span class="{{ txn.jobWorkTransactionType }}">{{ txn.jobWorkTransactionType }}</span>
                                     </td>
-                                    <td class="bd-rr">{{ txn.sender.name }}</td>
-                                    <td class="bd-rr">{{ txn.receiver.name }}</td>
-                                    <td class="bd-rr" (click)="updateDescriptionIdx = idx">
-                                        <ng-container *ngIf="updateDescriptionIdx != idx">
-                                            <div class="stock-description">{{ txn.description }}</div>
-                                        </ng-container>
-                                        <ng-container *ngIf="updateDescriptionIdx === idx">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                maxlength="100"
-                                                autofocus="true"
-                                                placeholder="Enter Description"
-                                                [(ngModel)]="txn.description"
-                                                (blur)="updateDescription(txn)"
-                                            />
-                                        </ng-container>
-                                    </td>
-                                    <td class="text-right bd-rr">
-                                        {{ txn?.quantity }}<span class="unit-badge">{{ txn?.stockUnit?.code }}</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody
-                                *ngIf="
-                                    (inventoryReport && inventoryReport.transactions?.length <= 0) || !inventoryReport
-                                "
-                            >
-                                <tr>
-                                    <td colspan="7" class="text-center empty-table">
-                                        <img src="assets/images/search-data-not-found.svg" />
-                                        <h1>No Report Found !!</h1>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot *ngIf="inventoryReport?.totalPages > 1">
-                                <tr>
-                                    <td colspan="7">
-                                        <div class="text-center">
-                                            <mat-paginator
-                                                [length]="inventoryReport.totalItems"
-                                                [pageSize]="6"
-                                                [pageIndex]="inventoryReport.page - 1"
-                                                [pageSizeOptions]="pageSizeOptions"
-                                                [showFirstLastButtons]="true"
-                                                [hidePageSize]="false"
-                                                (page)="handlePageEvent($event)"
-                                            ></mat-paginator>
+                                </ng-container>
+                            </ng-container>
+
+                            <!-- Sender Name Column -->
+                            <ng-container matColumnDef="senderName">
+                                <th mat-header-cell *matHeaderCellDef class="bd-rr bd-rb td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'sender')">
+                                    <div [hidden]="showSenderSearch">
+                                        <span>Sender's Name</span>
+                                        <i class="icon-search" (click)="showSearchBox('sender')"></i>
+                                    </div>
+                                    <div class="input-container" [hidden]="!showSenderSearch">
+                                        <input
+                                            type="text"
+                                            #senderName
+                                            placeholder="Sender's Name"
+                                            class="w100"
+                                            [formControl]="senderUniqueNameInput"
+                                        />
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let txn" class="bd-rr" data-title="Sender's Name">{{ txn.sender.name }}</td>
+                            </ng-container>
+
+                            <!-- Receiver Name Column -->
+                            <ng-container matColumnDef="receiverName">
+                                <th mat-header-cell *matHeaderCellDef class="bd-rr bd-rb td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'receiver')">
+                                    <div [hidden]="showReceiverSearch">
+                                        <span>Receiver's Name</span>
+                                        <i class="icon-search" (click)="showSearchBox('receiver')"></i>
+                                    </div>
+                                    <div class="input-container" [hidden]="!showReceiverSearch">
+                                        <input
+                                            type="text"
+                                            #receiverName
+                                            placeholder="Receiver's Name"
+                                            class="w100"
+                                            [formControl]="receiverUniqueNameInput"
+                                        />
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let txn; let idx = index" class="bd-rr" data-title="Receiver's Name">{{ txn.receiver.name }}</td>
+                            </ng-container>
+
+                            <!-- Description Column -->
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef class="bd-rr bd-rb">Description</th>
+                                <td mat-cell *matCellDef="let txn; let idx = index" class="bd-rr" data-title="Description" (click)="updateDescriptionIdx = idx">
+                                    <ng-container *ngIf="updateDescriptionIdx != idx">
+                                        <div class="stock-description">{{ txn.description }}</div>
+                                    </ng-container>
+                                    <ng-container *ngIf="updateDescriptionIdx === idx">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            maxlength="100"
+                                            autofocus="true"
+                                            placeholder="Enter Description"
+                                            [(ngModel)]="txn.description"
+                                            (blur)="updateDescription(txn)"
+                                        />
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+
+                            <!-- Trading Qty Column -->
+                            <ng-container matColumnDef="tradingQty">
+                                <th mat-header-cell *matHeaderCellDef class="text-right bd-rb" width="140">
+                                    <div class="d-flex">
+                                        <div class="flex-fill mr-1">Trading Qty</div>
+                                        <div class="icon-pointer">
+                                            <!-- default -->
+                                            <div
+                                                class="icon-sort-asc text-right"
+                                                *ngIf="filter.sortBy !== 'QUANTITY'"
+                                                (click)="sortButtonClicked('asc', 'QUANTITY')"
+                                                [ngClass]="{
+                                                    'active-text-color':
+                                                        filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
+                                                }"
+                                            ></div>
+                                            <!-- after sort click -->
+                                            <div
+                                                class="icon-sort-asc text-right"
+                                                *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
+                                                (click)="sortButtonClicked('asc', 'QUANTITY')"
+                                                [ngClass]="{
+                                                    'active-text-color':
+                                                        filter.sortBy === 'QUANTITY' && filter.sort === 'desc'
+                                                }"
+                                            ></div>
+                                            <div
+                                                class="icon-sort-asc text-right"
+                                                *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'asc'"
+                                                (click)="sortButtonClicked('desc', 'QUANTITY')"
+                                                [ngClass]="{
+                                                    'active-text-color':
+                                                        filter.sortBy === 'QUANTITY' && filter.sort === 'asc'
+                                                }"
+                                            ></div>
                                         </div>
-                                    </td>
-                                </tr>
-                            </tfoot>
+                                    </div>
+                                </th>
+                                <td mat-cell *matCellDef="let txn" class="text-right bd-rr" data-title="Trading Qty">
+                                    {{ txn?.quantity }}<span class="unit-badge">{{ txn?.stockUnit?.code }}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Header and Row Definitions -->
+                            <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()" class="thead-background1"></tr>
+                            <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()"></tr>
+
+                            <!-- No Data Row -->
+                            <tr class="mat-row" *ngIf="!inventoryReport || inventoryReport.transactions?.length <= 0">
+                                <td class="mat-cell text-center empty-table" [attr.colspan]="getDisplayedColumns().length">
+                                    <img src="assets/images/search-data-not-found.svg" />
+                                    <h1>No Report Found !!</h1>
+                                </td>
+                            </tr>
                         </table>
+
+                        <!-- Pagination -->
+                        <div class="text-center" *ngIf="inventoryReport?.totalPages > 1">
+                            <mat-paginator
+                                [length]="inventoryReport.totalItems"
+                                [pageSize]="6"
+                                [pageIndex]="inventoryReport.page - 1"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [showFirstLastButtons]="true"
+                                [hidePageSize]="false"
+                                (page)="handlePageEvent($event)"
+                            ></mat-paginator>
+                        </div>
                     </div>
                 </section>
             </section>

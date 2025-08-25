@@ -38,28 +38,14 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-xs-6 col-sm-6">
-                                    <span class="mr-r15">
-                                        <input
-                                            type="radio"
-                                            class="radio-custom radio-theme"
-                                            name="showCodeType"
-                                            id="hsnCodeType"
-                                            formControlName="showCodeType"
-                                            value="hsn"
-                                        />
-                                        <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
-                                    </span>
-                                    <span>
-                                        <input
-                                            type="radio"
-                                            class="radio-custom radio-theme"
-                                            name="showCodeType"
-                                            id="sacCodeType"
-                                            formControlName="showCodeType"
-                                            value="sac"
-                                        />
-                                        <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
-                                    </span>
+                                    <mat-radio-group formControlName="showCodeType" class="d-flex mb-2">
+                                        <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                            HSN Code
+                                        </mat-radio-button>
+                                        <mat-radio-button color="primary" value="sac">
+                                            SAC Code
+                                        </mat-radio-button>
+                                    </mat-radio-group>
                                     <input
                                         type="text"
                                         class="form-control"
@@ -128,12 +114,12 @@
                                                 *ngFor="let tax of companyTaxesList$ | async"
                                                 [ngClass]="{ 'opacity': tax.isDisabled }"
                                             >
-                                                <a class="dropdown-item" (click)="$event.stopPropagation()"
-                                                    ><input
-                                                        type="checkbox"
+                                                <a class="dropdown-item" (click)="$event.stopPropagation()">
+                                                    <mat-checkbox
                                                         [disabled]="tax.isDisabled"
                                                         [checked]="tax.isChecked"
                                                         (click)="selectTax($event, tax)"
+                                                        color="primary"
                                                     />
                                                     {{ tax.name }}
                                                 </a>

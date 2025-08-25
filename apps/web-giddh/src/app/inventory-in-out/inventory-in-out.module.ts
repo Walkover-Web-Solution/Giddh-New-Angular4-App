@@ -22,6 +22,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         BsDropdownModule.forRoot(),
         InventoryModule,
         MatTabsModule,
-        DecimalDigitsModule
+        DecimalDigitsModule,
+        MatCheckboxModule
     ],
 })
 export class InventoryInOutModule {

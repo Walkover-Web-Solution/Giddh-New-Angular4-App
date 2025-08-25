@@ -14,6 +14,8 @@ import { NoDataModule } from '../../shared/no-data/no-data.module';
 import { VoucherModule } from '../../voucher/voucher.module';
 import { DatepickerWrapperModule } from '../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
     declarations: [
@@ -28,13 +30,14 @@ import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-
         TranslateDirectiveModule,
         BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
-
         NoDataModule,
         VoucherModule,
         DatepickerWrapperModule,
         AmountFieldComponentModule,
         GiddhPageLoaderModule,
-        ValidateSectionPermissionDirectiveModule
+        ValidateSectionPermissionDirectiveModule,
+        MatButtonModule,
+        MatTableModule
     ],
     exports: [
         InvoiceGenerateComponent

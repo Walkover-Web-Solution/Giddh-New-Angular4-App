@@ -91,8 +91,12 @@
     </div>
     <div class="max-width-500 center-block mr-t05 clearfix">
         <div class="checkbox mt-1">
-            <input type="checkbox" name="isHeaderProvided" id="is-header-provided" [(ngModel)]="isHeaderProvided" />
-            {{ localeData?.header_provided }}
+            <mat-checkbox
+                [(ngModel)]="isHeaderProvided"
+                color="primary"
+            >
+                {{ localeData?.header_provided }}
+            </mat-checkbox>
             <div class="mr-t1">
                 <reactive-dropdown-field
                     *ngIf="entity === voucherType.AccountWise"

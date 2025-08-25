@@ -33,6 +33,31 @@ export class DashboardProfitStockList implements OnInit {
     public selectedRangeLabel: any = "";
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Displayed columns for the profit stock mat-table */
+    public displayedColumns: string[] = ['stockName', 'sale', 'product', 'purchaseCost', 'tax', 'profit'];
+    /** Sample data source for the profit stock table */
+    public dataSource: any[] = [
+        {
+            id: 1,
+            stockName: 'Polyster Fabric Product',
+            sale: '₹6,00,000',
+            product: '₹2,00,000',
+            purchaseCost: '₹50,000',
+            tax: '₹3,50,000',
+            profit: '₹3,50,000',
+            image: 'Login-Page-Image.png'
+        },
+        {
+            id: 2,
+            stockName: 'Polyster Fabric Product',
+            sale: '₹6,00,000',
+            product: '₹2,00,000',
+            purchaseCost: '₹50,000',
+            tax: '₹3,50,000',
+            profit: '₹3,50,000',
+            image: 'Login-Page-Image.png'
+        }
+    ];
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig) {

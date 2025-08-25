@@ -28,6 +28,29 @@ export class StockGroupListComponent implements OnInit {
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
+    /**
+     * Displayed columns for the stock group list mat-table
+     * @memberof StockGroupListComponent
+     */
+    public displayedColumns: string[] = ['date', 'voucherType', 'accountName', 'inwards', 'outwards', 'rate', 'value', 'qty'];
+
+    /**
+     * Sample data source for the stock group list table
+     * @memberof StockGroupListComponent
+     */
+    public dataSource: any[] = [
+        {
+            date: '09-10-2020',
+            voucherType: 'SALES',
+            accountName: 'USD Account',
+            inwards: '-',
+            outwards: '1.00 Box',
+            rate: '1,02,378.60',
+            value: '1,02,378.60',
+            qty: '432.00box'
+        }
+    ];
+
     constructor() { }
 
     /**

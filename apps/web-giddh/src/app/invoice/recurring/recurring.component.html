@@ -310,162 +310,188 @@
                 class="table-responsive"
                 [hidden]="!(recurringData$ | async)?.totalItems && !filter?.voucherNumber && !filter?.customerName"
             >
-                <table class="table basic giddh-table table-bordered on-mobile-view">
-                    <thead class="thead-background1">
-                        <tr>
-                            <th width="4%">
-                                <div class="check-image d-flex justify-content-center">#</div>
-                            </th>
+                <table mat-table [dataSource]="recurringDataSource" class="basic giddh-table table-bordered on-mobile-view">
+                    <!-- Serial Number Column -->
+                    <ng-container matColumnDef="serialNumber">
+                       <th *matHeaderCellDef width="4%">
+                            <div class="check-image d-flex justify-content-center">#</div>
+                        </th>
+                        <td *matCellDef="let element; let i = index" width="4%" data-title="#">
+                            <div class="justify-content-sm d-flex justify-content-center">{{ i + 1 }}</div>
+                        </td>
+                    </ng-container>
 
-                            <th
-                                width="20%"
-                                class="td-search-box"
-                                #searchInvoiceContainer
-                                (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')"
+                    <!-- Invoice Number Column -->
+                    <ng-container matColumnDef="invoiceNumber">
+                        <th
+                            *matHeaderCellDef
+                            width="20%"
+                            class="td-search-box"
+                            #searchInvoiceContainer
+                            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')"
+                        >
+                            <div [hidden]="showInvoiceNumberSearch">
+                                <i
+                                    class="icon-search"
+                                    (click)="showInvoiceNumberSearch = true; showCustomerNameSearch = false"
+                                ></i>
+                                <span> {{ commonLocaleData?.app_invoice_number }}</span>
+                            </div>
+
+                            <div class="input-container" [hidden]="!showInvoiceNumberSearch">
+                                <input
+                                    type="text"
+                                    [placeholder]="localeData?.search_invoice_no"
+                                    class="w100"
+                                    [formControl]="invoiceNumberInput"
+                                    #invoiceSearch
+                                />
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" width="20%" [attr.data-title]="commonLocaleData?.app_invoice_number">
+                            <a
+                                *ngIf="!isMobileScreen"
+                                class="cp btn-link-2"
+                                (click)="element?.status !== 'inactive' && openUpdatePanel(element)"
+                                >{{ element.voucherNumber || "-" }}</a
                             >
-                                <div [hidden]="showInvoiceNumberSearch">
-                                    <i
-                                        class="icon-search"
-                                        (click)="showInvoiceNumberSearch = true; showCustomerNameSearch = false"
-                                    ></i>
-                                    <span> {{ commonLocaleData?.app_invoice_number }}</span>
-                                </div>
+                            <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ element.voucherNumber || "-" }}</a>
+                        </td>
+                    </ng-container>
 
-                                <div class="input-container" [hidden]="!showInvoiceNumberSearch">
-                                    <input
-                                        type="text"
-                                        [placeholder]="localeData?.search_invoice_no"
-                                        class="w100"
-                                        [formControl]="invoiceNumberInput"
-                                        #invoiceSearch
-                                    />
-                                </div>
-                            </th>
+                    <!-- Customer Name Column -->
+                    <ng-container matColumnDef="customerName">
+                        <th
+                            *matHeaderCellDef
+                            width="20%"
+                            class="td-search-box"
+                            #searchCustomerContainer
+                            (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showCustomerNameSearch,
+                                        title: commonLocaleData?.app_customer_name,
+                                        fieldName: 'customerName',
+                                        formControl: customerNameInput
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td *matCellDef="let element" width="20%" [attr.data-title]="commonLocaleData?.app_customer_name">
+                            {{ element.customerName || "-" }}
+                        </td>
+                    </ng-container>
 
-                            <th
-                                width="20%"
-                                class="td-search-box"
-                                #searchCustomerContainer
-                                (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
-                                        searchTemplate;
-                                        context: {
-                                            $implicit: showCustomerNameSearch,
-                                            title: commonLocaleData?.app_customer_name,
-                                            fieldName: 'customerName',
-                                            formControl: customerNameInput
-                                        }
-                                    "
-                                ></ng-container>
-                            </th>
+                    <!-- Interval Column -->
+                    <ng-container matColumnDef="interval">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ localeData?.interval }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'duration' }">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.interval">
+                            {{ element.duration || "-" }}
+                        </td>
+                    </ng-container>
 
-                            <th>
-                                <div class="d-flex">
-                                    <div >{{ localeData?.interval }}</div>
+                    <!-- Last Invoice Date Column -->
+                    <ng-container matColumnDef="lastInvoiceDate">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ localeData?.last_invoice_date }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container
+                                        *ngTemplateOutlet="sortTemplate; context: { column: 'lastinvoicedate' }"
+                                    >
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.last_invoice_date">
+                            {{ element.lastInvoiceDate || "-" }}
+                        </td>
+                    </ng-container>
 
-                                    <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'duration' }">
-                                        </ng-container>
-                                    </div>
+                    <!-- Next Invoice Date Column -->
+                    <ng-container matColumnDef="nextInvoiceDate">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ localeData?.next_invoice_date }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container
+                                        *ngTemplateOutlet="sortTemplate; context: { column: 'nextcrondate' }"
+                                    >
+                                    </ng-container>
                                 </div>
-                            </th>
-                            <th>
-                                <div class="d-flex">
-                                    <div>{{ localeData?.last_invoice_date }}</div>
-                                    <div class="icon-pointer">
-                                        <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'lastinvoicedate' }"
-                                        >
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex">
-                                    <div>{{ localeData?.next_invoice_date }}</div>
-                                    <div class="icon-pointer">
-                                        <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'nextcrondate' }"
-                                        >
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex">
-                                    <div>{{ commonLocaleData?.app_status }}</div>
-                                    <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'status' }">
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex text-right">
-                                    <div class="flex-fill">{{ localeData?.invoice_amount }}</div>
-                                    <div class="icon-pointer">
-                                        <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'vouchertotal' }"
-                                        >
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.next_invoice_date">
+                            {{ element.nextCronDate || "-" }}
+                        </td>
+                    </ng-container>
 
-                    <tbody
-                        *ngIf="!isLoading && (recurringData$ | async)?.totalItems > 0"
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ commonLocaleData?.app_status }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'status' }">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_status">
+                            {{ element?.status || "-" | titlecase }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Invoice Amount Column -->
+                    <ng-container matColumnDef="invoiceAmount">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex text-right">
+                                <div class="flex-fill">{{ localeData?.invoice_amount }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container
+                                        *ngTemplateOutlet="sortTemplate; context: { column: 'vouchertotal' }"
+                                    >
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.invoice_amount" class="text-right">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element.voucherTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="recurringDisplayedColumns"></tr>
+                    <tr mat-row 
+                        *matRowDef="let row; columns: recurringDisplayedColumns;"
+                        (mouseover)="hoveredItemForAction = row?.uniqueName"
                         (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                         (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-                    >
-                        <tr
-                            *ngFor="let col of recurringVoucherDetails; let i = index"
-                            (mouseover)="hoveredItemForAction = col?.uniqueName"
-                        >
-                            <td width="4%" data-title="#">
-                                <div class="justify-content-sm d-flex justify-content-center">{{ i + 1 }}</div>
-                            </td>
+                    ></tr>
 
-                            <td width="20%" [attr.data-title]="commonLocaleData?.app_invoice_number">
-                                <a
-                                    *ngIf="!isMobileScreen"
-                                    class="cp btn-link-2"
-                                    (click)="col?.status !== 'inactive' && openUpdatePanel(col)"
-                                    >{{ col.voucherNumber || "-" }}</a
-                                >
-                                <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || "-" }}</a>
-                            </td>
-                            <td width="20%" [attr.data-title]="commonLocaleData?.app_customer_name">
-                                {{ col.customerName || "-" }}
-                            </td>
-                            <td [attr.data-title]="localeData?.interval">{{ col.duration || "-" }}</td>
-                            <td [attr.data-title]="localeData?.last_invoice_date">{{ col.lastInvoiceDate || "-" }}</td>
-                            <td [attr.data-title]="localeData?.next_invoice_date">{{ col.nextCronDate || "-" }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_status">
-                                {{ col?.status || "-" | titlecase }}
-                            </td>
-                            <td [attr.data-title]="localeData?.invoice_amount" class="text-right">
-                                <span class="d-inline-flex">
-                                    <amount-field
-                                        [amount]="col.voucherTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody *ngIf="isLoading">
-                        <tr>
-                            <td colspan="8">
-                                <giddh-page-loader></giddh-page-loader>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <!-- Loading Row -->
+                    <tr mat-row *matNoDataRow class="loading-row">
+                        <td mat-cell colspan="8" *ngIf="isLoading">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
                 </table>
             </div>
 

@@ -40,33 +40,49 @@
             </div>
             <div class="table-wrapper">
                 <div class="table-responsive">
-                    <table class="table giddh-table purchase-report-table on-mobile-view">
-                        <thead>
-                            <th>Date</th>
-                            <th>Bill#</th>
-                            <th>Vendor</th>
-                            <th>Expected Delivery</th>
-                            <th>Total Amt.</th>
-                            <th>Received</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td data-title="Date">2-11-2020</td>
-                                <td data-title="Bill">20181030-6</td>
-                                <td data-title="Vendor">CA Abhay Sharma</td>
-                                <td data-title="Expected Delivery">15-12-2018</td>
-                                <td data-title="Total Amount">₹12,300</td>
-                                <td data-title="Received"><input type="checkbox" id="received-checkbox" /></td>
-                            </tr>
-                            <tr>
-                                <td data-title="Date">2-11-2020</td>
-                                <td data-title="Bill">20181030-6</td>
-                                <td data-title="Vendor">CA Abhay Sharma</td>
-                                <td data-title="Expected Delivery">15-12-2018</td>
-                                <td data-title="Total Amount">₹12,300</td>
-                                <td data-title="Received"><input type="checkbox" id="received-checkbox" /></td>
-                            </tr>
-                        </tbody>
+                    <!-- Mat Table for purchase report -->
+                    <table mat-table [dataSource]="dataSource" class="table giddh-table purchase-report-table on-mobile-view">
+                        <!-- Date Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Date</th>
+                            <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
+                        </ng-container>
+
+                        <!-- Bill Column -->
+                        <ng-container matColumnDef="bill">
+                            <th mat-header-cell *matHeaderCellDef>Bill#</th>
+                            <td mat-cell *matCellDef="let element" data-title="Bill">{{ element.bill }}</td>
+                        </ng-container>
+
+                        <!-- Vendor Column -->
+                        <ng-container matColumnDef="vendor">
+                            <th mat-header-cell *matHeaderCellDef>Vendor</th>
+                            <td mat-cell *matCellDef="let element" data-title="Vendor">{{ element.vendor }}</td>
+                        </ng-container>
+
+                        <!-- Expected Delivery Column -->
+                        <ng-container matColumnDef="expectedDelivery">
+                            <th mat-header-cell *matHeaderCellDef>Expected Delivery</th>
+                            <td mat-cell *matCellDef="let element" data-title="Expected Delivery">{{ element.expectedDelivery }}</td>
+                        </ng-container>
+
+                        <!-- Total Amount Column -->
+                        <ng-container matColumnDef="totalAmount">
+                            <th mat-header-cell *matHeaderCellDef>Total Amt.</th>
+                            <td mat-cell *matCellDef="let element" data-title="Total Amount">{{ element.totalAmount }}</td>
+                        </ng-container>
+
+                        <!-- Received Column -->
+                        <ng-container matColumnDef="received">
+                            <th mat-header-cell *matHeaderCellDef>Received</th>
+                            <td mat-cell *matCellDef="let element" data-title="Received">
+                                <mat-checkbox [id]="'received-checkbox-' + element.id" [(ngModel)]="element.received" color="primary"></mat-checkbox>
+                            </td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
             </div>

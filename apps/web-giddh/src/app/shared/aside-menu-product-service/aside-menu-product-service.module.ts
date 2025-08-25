@@ -12,6 +12,8 @@ import { UniqueNameModule } from "../helpers/directives/uniqueName/uniqueName.mo
 import { AsideMenuProductServiceComponent } from "./aside-menu-product-service.component";
 import { SalesAddStockComponent } from "./components/create-stock/sales.create.stock.component";
 import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
     declarations: [
@@ -30,7 +32,9 @@ import { MatButtonModule } from "@angular/material/button";
         DecimalDigitsModule,
         BsDropdownModule.forRoot(),
         StockCreateEditModule,
-        MatButtonModule 
+        MatButtonModule,
+        MatCheckboxModule,
+        MatRadioModule 
     ],
     exports: [
         AsideMenuProductServiceComponent,

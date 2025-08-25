@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { NgForm } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -114,6 +115,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     private eWayBillCredentialsDialogRef: MatDialogRef<any>;
     /** Dialog reference for invoice remove confirmation */
     private invoiceRemoveConfirmationDialogRef: MatDialogRef<any>;
+    /** Data source for transporter table */
+    public transporterDataSource = new MatTableDataSource<IEwayBillTransporter>();
+    /** Displayed columns for transporter table */
+    public displayedColumns: string[] = ['transporterName', 'transporterId', 'actions'];
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
@@ -153,7 +158,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.transporterFilterRequest.page = 1;
-        this.transporterFilterRequest.count = 10;
+        this.transporterFilterRequest.count = this.pageSizeOptions[0];
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;
@@ -169,7 +174,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
-        })
+        });
+        
+        this.transporterList$.subscribe(transporters => {
+            if (transporters) {
+                this.transporterDataSource.data = transporters;
+            }
+        });
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let transporterDropdown = null;
@@ -365,14 +376,25 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public handlePageEvent(event: PageEvent): void {
         // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
-        this.transporterFilterRequest.page = event.pageIndex + 1;
+        if (this.transporterFilterRequest.count !== event.pageSize) {
+            this.transporterFilterRequest.page = 1;
+        } else {
+            this.transporterFilterRequest.page = event.pageIndex + 1;
+        }
+        this.transporterFilterRequest.count = event.pageSize;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
 
-    public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
-        this.transporterFilterRequest.sort = type;
-        this.transporterFilterRequest.sortBy = columnName;
+    /**
+     * Handles sorting events and updates API parameters
+     * 
+     * @param {any} event - Contains sorting details
+     * @memberof EWayBillCreateComponent
+     */
+    public sortChange(event: any): void {
+        this.transporterFilterRequest.sort = event?.direction;
+        this.transporterFilterRequest.sortBy = event?.active;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 

@@ -27,46 +27,66 @@
         <div class="col-12">
             <div class="product-list-container">
                 <div class="table-responsive">
-                    <table class="table giddh-table on-mobile-view">
-                        <thead>
-                            <tr>
-                                <th width="3%">&nbsp;</th>
-                                <th>Stock Name</th>
-                                <th>Unit</th>
-                                <th>Qty</th>
-                                <th>Selling Price</th>
-                                <th>Purchase Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td width="3%" data-title="Select">
-                                    <div class="d-block text-center text-left-sm">
-                                        <input type="checkbox" id="select-group" />
+                    <!-- Mat Table for inventory combo list -->
+                    <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
+                        <!-- Select Column -->
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef width="3%">&nbsp;</th>
+                            <td mat-cell *matCellDef="let element" width="3%" data-title="Select">
+                                <div class="d-block text-center text-left-sm">
+                                    <mat-checkbox [id]="'select-group-' + element.id" [(ngModel)]="element.selected" color="primary"></mat-checkbox>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Stock Name Column -->
+                        <ng-container matColumnDef="stockName">
+                            <th mat-header-cell *matHeaderCellDef>Stock Name</th>
+                            <td mat-cell *matCellDef="let element" data-title="Stock Name">
+                                <div class="product-name-image d-flex">
+                                    <div>
+                                        <img [src]="imgPath + 'add-image.svg'" />
                                     </div>
-                                </td>
-                                <td data-title="Stock Name">
-                                    <div class="product-name-image d-flex">
-                                        <div>
-                                            <img src="{{ imgPath }}add-image.svg" />
-                                        </div>
-                                        <div class="cursor-pointer mx-2">
-                                            <a
-                                                href="javascript:void(0)"
-                                                [routerLink]="['/pages/inventory/v2/about-group-detail']"
-                                            >
-                                                <p>Product Name</p>
-                                                <p class="text-gray">(34 Items)</p>
-                                            </a>
-                                        </div>
+                                    <div class="cursor-pointer mx-2">
+                                        <a
+                                            href="javascript:void(0)"
+                                            [routerLink]="['/pages/inventory/v2/about-group-detail']"
+                                        >
+                                            <p>{{ element.stockName }}</p>
+                                            <p class="text-gray">({{ element.itemCount }})</p>
+                                        </a>
                                     </div>
-                                </td>
-                                <td data-title="Unit">KG</td>
-                                <td data-title="Qty">500</td>
-                                <td data-title="Selling Price">23124</td>
-                                <td data-title="Purchase Price">12345</td>
-                            </tr>
-                        </tbody>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Unit Column -->
+                        <ng-container matColumnDef="unit">
+                            <th mat-header-cell *matHeaderCellDef>Unit</th>
+                            <td mat-cell *matCellDef="let element" data-title="Unit">{{ element.unit }}</td>
+                        </ng-container>
+
+                        <!-- Qty Column -->
+                        <ng-container matColumnDef="qty">
+                            <th mat-header-cell *matHeaderCellDef>Qty</th>
+                            <td mat-cell *matCellDef="let element" data-title="Qty">{{ element.qty }}</td>
+                        </ng-container>
+
+                        <!-- Selling Price Column -->
+                        <ng-container matColumnDef="sellingPrice">
+                            <th mat-header-cell *matHeaderCellDef>Selling Price</th>
+                            <td mat-cell *matCellDef="let element" data-title="Selling Price">{{ element.sellingPrice }}</td>
+                        </ng-container>
+
+                        <!-- Purchase Price Column -->
+                        <ng-container matColumnDef="purchasePrice">
+                            <th mat-header-cell *matHeaderCellDef>Purchase Price</th>
+                            <td mat-cell *matCellDef="let element" data-title="Purchase Price">{{ element.purchasePrice }}</td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
             </div>

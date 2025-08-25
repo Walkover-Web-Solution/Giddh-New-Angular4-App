@@ -39,7 +39,6 @@ import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdv
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
 import { ReceiptService } from "../../services/receipt.service";
@@ -115,7 +114,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
     public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
     public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
     public innerWidth: any;
-    public isMobileView = false;
     public isExported: boolean = false;
     public showCustomerSearch = false;
     public showProformaSearch = false;
@@ -274,7 +272,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
         private generalActions: GeneralActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
-        private _breakPointObservar: BreakpointObserver,
         private _router: Router,
         private _receiptServices: ReceiptService,
         private purchaseRecordActions: PurchaseRecordActions,
@@ -342,12 +339,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector("body")?.classList?.add("invoice-preview-page");
-        this._breakPointObservar.observe([
-            '(max-width: 1023px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
-        });
-
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
