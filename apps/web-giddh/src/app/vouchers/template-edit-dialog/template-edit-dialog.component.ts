@@ -127,7 +127,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         this.dialogRef.close(true);
       } else {
         this.toasty.errorToast(res?.message, res?.code);
-        this.dialogRef.close(false);
       }
     });
   }

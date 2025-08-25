@@ -49,9 +49,7 @@
                                         "
                                         *ngIf="
                                             template.type === voucherTypeEnum.invoice &&
-                                            templateType === voucherTypeEnum.invoice &&
-                                            templateType !== voucherTypeEnum.purchase_order &&
-                                            templateType !== voucherTypeEnum.purchase_bill
+                                            templateType === voucherTypeEnum.invoice
                                         "
                                     >
                                         <img
@@ -72,9 +70,7 @@
                                         "
                                         *ngIf="
                                             template.type === voucherTypeEnum.voucher &&
-                                            templateType === voucherTypeEnum.voucher &&
-                                            templateType !== voucherTypeEnum.purchase_order &&
-                                            templateType !== voucherTypeEnum.purchase_bill
+                                            templateType === voucherTypeEnum.voucher
                                         "
                                     >
                                         <img
@@ -94,9 +90,7 @@
                                                 : onDesignChange('uniqueName', template?.uniqueName)
                                         "
                                         *ngIf="
-                                            template?.templateType === templateTypeEnum.ThermalTemplate &&
-                                            templateType !== voucherTypeEnum.purchase_order &&
-                                            templateType !== voucherTypeEnum.purchase_bill
+                                            template?.templateType === templateTypeEnum.ThermalTemplate
                                         "
                                     >
                                         <img
@@ -167,10 +161,10 @@
                                                 <button
                                                     *ngFor="let size of imageSizes"
                                                     mat-mini-fab
-                                                    [color]="defaultImageSize === size?.value ? 'primary' : ''"
+                                                    [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
-                                                        defaultImageSize = size?.value;
-                                                        onValueChange('logoSize', size.px)
+                                                        defaultImageSize = size?.label;
+                                                        onValueChange('logoSize', size.value)
                                                     "
                                                 >
                                                     <span>{{ size.label }}</span>
@@ -419,16 +413,26 @@
                                                         "
                                                         (ngModelChange)="onChangeFieldVisibility()"
                                                     >
-                                                    </mat-checkbox>
-                                                    <div class="w-100 ml-2">
-                                                        <div
+                                                        <span
                                                             *ngIf="
                                                                 customTemplate?.templateType ===
-                                                                    templateTypeEnum.GstTemplateA ||
-                                                                customTemplate?.templateType ===
-                                                                    templateTypeEnum.TallyTemplate
+                                                                templateTypeEnum.ThermalTemplate
                                                             "
+                                                            class="ml-2"
                                                         >
+                                                            {{ localeData?.company_name }}</span
+                                                        >
+                                                    </mat-checkbox>
+                                                    <div
+                                                        class="w-100 ml-2"
+                                                        *ngIf="
+                                                            customTemplate?.templateType ===
+                                                                templateTypeEnum.GstTemplateA ||
+                                                            customTemplate?.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                        "
+                                                    >
+                                                        <div>
                                                             <input-field
                                                                 type="text"
                                                                 name="headerCompanyName"
@@ -2070,6 +2074,48 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div
+                                                *ngIf="customTemplate.templateType === templateTypeEnum.ThermalTemplate"
+                                            >
+                                                <div class="w-100 ml-2">
+                                                    <div>
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [label]="localeData?.item"
+                                                            [name]="'item'"
+                                                            [cssClass]="'form-control'"
+                                                            [maxlength]="
+                                                                customTemplate.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                                    ? 20
+                                                                    : 12
+                                                            "
+                                                            name="it1"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['table'].data['item'].label
+                                                            "
+                                                            (ngModelChange)="onFieldChange()"
+                                                            [readonly]="
+                                                                !customTemplate.sections['table'].data['item'].display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mt-1">
+                                                            <span class="light-gray font-12">{{
+                                                                localeData?.characters_left
+                                                            }}</span>
+                                                            {{
+                                                                (customTemplate.templateType === "tally_template"
+                                                                    ? 20
+                                                                    : 12) -
+                                                                    customTemplate.sections["table"].data["item"].label
+                                                                        ?.length
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             *ngIf="
@@ -2200,6 +2246,49 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div
+                                                *ngIf="customTemplate.templateType === templateTypeEnum.ThermalTemplate"
+                                            >
+                                                <div class="w-100 ml-2">
+                                                    <div>
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [label]="localeData?.quantity"
+                                                            [name]="'quantity'"
+                                                            [cssClass]="'form-control'"
+                                                            [maxlength]="
+                                                                customTemplate.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                                    ? 8
+                                                                    : 6
+                                                            "
+                                                            name="qt1"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['table'].data['quantity'].label
+                                                            "
+                                                            (ngModelChange)="onFieldChange()"
+                                                            [readonly]="
+                                                                !customTemplate.sections['table'].data['quantity']
+                                                                    .display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mt-1">
+                                                            <span class="light-gray font-12">{{
+                                                                localeData?.characters_left
+                                                            }}</span>
+                                                            {{
+                                                                (customTemplate.templateType === "tally_template"
+                                                                    ? 8
+                                                                    : 6) -
+                                                                    customTemplate.sections["table"].data["quantity"]
+                                                                        .label?.length
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div [hidden]="true">
                                             <div class="d-flex">
@@ -2290,6 +2379,40 @@
                                                                 }}
                                                             </p>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                *ngIf="customTemplate.templateType === templateTypeEnum.ThermalTemplate"
+                                            >
+                                                <div class="w-100 ml-2">
+                                                    <div>
+                                                        <input-field
+                                                            [label]="localeData?.rate"
+                                                            [type]="'text'"
+                                                            [cssClass]="'form-control'"
+                                                            maxlength="10"
+                                                            name="rt1"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['table'].data['rate'].label
+                                                            "
+                                                            (ngModelChange)="onFieldChange()"
+                                                            [readonly]="
+                                                                !customTemplate.sections['table'].data['rate'].display
+                                                            "
+                                                        ></input-field>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mt-1">
+                                                            <span class="light-gray font-12">{{
+                                                                localeData?.characters_left
+                                                            }}</span>
+                                                            {{
+                                                                10 -
+                                                                    customTemplate.sections["table"].data["rate"].label
+                                                                        ?.length
+                                                            }}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2417,8 +2540,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings?.table.tax" class="mr-t1">
-                                            <div class="d-flex">
+                                        <div *ngIf="sectionSettings?.table.tax">
+                                            <div class="d-flex mr-t1">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="ta"
@@ -2458,8 +2581,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings?.table.total" class="mr-t1">
-                                            <div class="d-flex">
+                                        <div *ngIf="sectionSettings?.table.total">
+                                            <div class="d-flex mr-t1">
                                                 <div
                                                     *ngIf="
                                                         customTemplate.templateType !== templateTypeEnum.ThermalTemplate
@@ -2523,9 +2646,8 @@
                                                 customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                 voucherType === voucherTypeEnum.sales
                                             "
-                                            class="mr-t1"
                                         >
-                                            <div class="d-flex">
+                                            <div class="d-flex mr-t1">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="preDue"
@@ -2630,12 +2752,10 @@
                                         </div>
                                         <ng-container
                                             *ngIf="
-                                                customTemplate?.templateType === templateTypeEnum.TallyTemplate &&
-                                                templateType !== voucherTypeEnum.purchase_order &&
-                                                templateType !== voucherTypeEnum.purchase_bill
+                                                customTemplate?.templateType === templateTypeEnum.TallyTemplate
                                             "
                                         >
-                                            <div class="mr-t1">
+                                            <div class="mr-t1" *ngIf="templateType !== voucherTypeEnum.purchase_order && templateType !== voucherTypeEnum.purchase_bill">
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -2654,7 +2774,8 @@
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
                                                             (ngModelChange)="onValueChange('qrCodeId', $event)"
-                                                            pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                                            [pattern]="'^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'"
+                                                            (patternValidation)="onPatternValidation($event)"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3122,7 +3243,7 @@
                                                         <div>
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [label]="localeData.vouchers.preview.discount"
+                                                                [label]="localeData.discount"
                                                                 maxlength="10"
                                                                 [cssClass]="'form-control'"
                                                                 name="ds1"
@@ -3328,8 +3449,10 @@
                                                             [cssClass]="'form-control'"
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             (ngModelChange)="onFieldChange()"
+                                                            [(ngModel)]="customTemplate.qrCodeId"
                                                             [disabled]="!customTemplate.showBankQrCode"
-                                                            pattern="^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$"
+                                                            [pattern]="'^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'"
+                                                            (patternValidation)="onPatternValidation($event)"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3716,7 +3839,7 @@
                                                             color="warn"
                                                             [matTooltip]="localeData?.delete_image_from_server"
                                                         >
-                                                            {{ localeData?.delete }}
+                                                            {{ commonLocaleData?.app_delete }}
                                                         </button>
                                                     </div>
                                                 </div>
