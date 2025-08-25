@@ -12,27 +12,23 @@
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
     <label>{{ localeData?.from_date }}</label>
-    <input
-        type="text"
+    <giddh-datepicker
         name="from"
         [placeholder]="giddhDateFormat"
-        #fromdp="bsDatepicker"
-        bsDatepicker
         [(ngModel)]="vm.selectedFromDate"
+        [appearance]="'outline'"
         class="form-control"
-    />
+    ></giddh-datepicker>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
     <label>{{ localeData?.to_date }}</label>
-    <input
-        type="text"
+    <giddh-datepicker
         name="to"
         [placeholder]="giddhDateFormat"
-        #todp="bsDatepicker"
-        bsDatepicker
         [(ngModel)]="vm.selectedToDate"
+        [appearance]="'outline'"
         class="form-control"
-    />
+    ></giddh-datepicker>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '0'">
     <div class="mb-2 select-log">
@@ -47,16 +43,13 @@
         <br />
     </div>
     <div class="input-group">
-        <input
-            type="text"
+        <giddh-datepicker
             name="logdate"
             [placeholder]="giddhDateFormat"
-            #logdate="bsDatepicker"
-            bsDatepicker
             [(ngModel)]="vm.selectedLogDate"
+            [appearance]="'outline'"
             class="form-control"
-            [placement]="'right'"
-        />
+        ></giddh-datepicker>
     </div>
 </div>
 

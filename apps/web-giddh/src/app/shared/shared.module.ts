@@ -6,7 +6,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -111,7 +110,6 @@ export function provideConfig() {
         ShSelectModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
-        BsDatepickerModule.forRoot(),
         MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
@@ -166,7 +164,6 @@ export function provideConfig() {
         MfReportComponent,
         BsDropdownModule,
         ElementViewChildModule,
-        BsDatepickerModule,
         NgxDaterangepickerMd,
         CurrencyModule,
         TranslateDirectiveModule,

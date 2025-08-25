@@ -50,16 +50,13 @@
                         <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8 p-0">
-                                <input
-                                    type="text"
+                                <giddh-datepicker
                                     name="invoiceDateRange"
-                                    bsDatepicker
-                                    required
-                                    class="form-control w-100"
                                     [(ngModel)]="manufacturingDetails.date"
-                                    [bsValue]="bsValue"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                />
+                                    [appearance]="'outline'"
+                                    class="form-control w-100"
+                                    required
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>

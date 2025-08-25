@@ -5,7 +5,7 @@ import { PurchaseSettingComponent } from './purchase-setting.component';
 import { CommonModule } from '@angular/common';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { FormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -16,8 +16,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         FormsModule,
         MatTabsModule,
         TranslateDirectiveModule,
-        BsDatepickerModule.forRoot(),
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        GiddhDatepickerModule
     ],
     exports: [
         PurchaseSettingComponent

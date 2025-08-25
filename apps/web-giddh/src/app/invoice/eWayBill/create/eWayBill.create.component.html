@@ -283,20 +283,15 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <div class="input position-relative">
-                                <input
+                            <div class="w200">
+                                <giddh-datepicker
                                     name="transDocDate"
                                     [placeholder]="localeData?.transporter_doc_date_required_placeholder"
-                                    type="text"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                     [(ngModel)]="generateEwayBillform.transDocDate"
-                                    class="form-control pd-r3"
-                                    bsDatepicker
-                                />
-                                <img
-                                    class="text-light-2 position-absolute date-input-icon"
-                                    src="assets/icon/date.svg "
-                                />
+                                    [appearance]="'outline'"
+                                    class="pd-r3"
+                                    [label]="localeData?.transporter_doc_date_required_placeholder"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>
