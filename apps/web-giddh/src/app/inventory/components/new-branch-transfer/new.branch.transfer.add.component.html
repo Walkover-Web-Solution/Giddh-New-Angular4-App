@@ -1410,7 +1410,7 @@
         <div class="form-header">
             <h3 class="aside-title">Manage Transporter</h3>
         </div>
-        <button type="button" class="mr-t05" id="closedialog" (click)="transporterPopupDialogRef.close()">
+        <button type="button" class="mr-t05" id="closedialog" (click)="transporterPopupDialogRef?.close()">
             <i class="icon-cross"></i>
         </button>
         <form #generateTransporterForm="ngForm" autocomplete="off">

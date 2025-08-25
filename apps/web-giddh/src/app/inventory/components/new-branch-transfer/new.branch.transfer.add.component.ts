@@ -1407,7 +1407,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public deleteTransporter(transporter: IEwayBillTransporter): void {
         this.store.dispatch(this.invoiceActions.deleteTransporter(transporter.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.transporterPopupDialogRef.close();
+        this.transporterPopupDialogRef?.close();
         this.detectChanges();
     }
 

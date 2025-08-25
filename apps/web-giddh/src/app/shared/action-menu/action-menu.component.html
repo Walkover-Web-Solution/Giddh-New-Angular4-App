@@ -65,7 +65,7 @@
         [activeAccountDetails]="activeAccountDetails"
         [isUpdateAccount]="isUpdateAccount"
         [commonLocaleData]="commonLocaleData"
-        (closeAsideEvent)="asideMenuDialogRef.close()"
+        (closeAsideEvent)="asideMenuDialogRef?.close()"
         (getUpdateList)="getUpdatedList($event)"
         [isActionMenu]="isActionMenu"
     >

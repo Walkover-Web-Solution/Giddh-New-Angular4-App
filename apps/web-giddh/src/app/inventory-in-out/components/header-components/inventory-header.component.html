@@ -65,7 +65,7 @@
 </div>
 <ng-template #asideMenuTemplate>
     <aside-menu
-        (closeAsideEvent)="asideMenuDialogRef.close()"
+        (closeAsideEvent)="asideMenuDialogRef?.close()"
         [selectedAsideView]="selectedAsideView"
     ></aside-menu>
 </ng-template>

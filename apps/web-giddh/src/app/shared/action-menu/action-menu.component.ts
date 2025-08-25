@@ -222,7 +222,7 @@ export class ActionMenuComponent {
     public getUpdatedList(grpName?: any): void {
         if (grpName) {
             this.editAccount.emit();
-            this.asideMenuDialogRef.close();
+            this.asideMenuDialogRef?.close();
         }
     }
 }

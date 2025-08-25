@@ -243,7 +243,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     public getUpdatedList(event: any): void {
-        this.openAccountAsidePaneDialog();
+        this.accountAsideMenuDialogRef?.close();
     }
 
     /**

@@ -452,11 +452,12 @@
 <ng-template #genericAsideMenuAccountTemplate>
     <generic-aside-menu-account
         [allGroups]="allGroups"
+        [keyboardShortcut]="'esc'"
         (closeAsideEvent)="closeAccountAsidePane()"
         [selectedGrpUniqueName]="categoryOfAccounts"
         [selectedAccountUniqueName]="null"
         [createAccountFromCommandK]="true"
-        (onShortcutPress)="openAccountAsidePaneDialog()"
+        (onShortcutPress)="closeAccountAsidePane()"
         (addEvent)="addNewSidebarAccount($event)"
         (updateEvent)="updateSidebarAccount($event)"
         (updateViaPatchApi)="updateSidebarAccount($event, true)"

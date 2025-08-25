@@ -22,8 +22,8 @@ import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GeneralService } from '../../services/general.service';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -37,19 +37,7 @@ const CustomShortcode = [
 @Component({
     selector: 'voucher-grid',
     templateUrl: './voucher-grid.component.html',
-    styleUrls: ['../accounting.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['../accounting.component.scss']
 })
 
 export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -78,6 +66,10 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: any;
     @ViewChild('byAmountField', { static: true }) public byAmountField: ElementRef;
     @ViewChild('toAmountField', { static: true }) public toAmountField: ElementRef;
+    /** Template reference for aside menu stock group modal */
+    @ViewChild('asideMenuStockGroupTemplate', { static: true }) public asideMenuStockGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu stock group modal */
+    public asideMenuStockGroupDialogRef: MatDialogRef<any>;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
@@ -115,9 +107,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public selectedField: 'account' | 'stock';
 
     public chequeDetailForm: UntypedFormGroup;
-    public asideMenuStateForProductService: string = 'out';
     public isFirstRowDeleted: boolean = false;
-    public autoFocusStockGroupField: boolean = false;
     public createStockSuccess$: Observable<boolean>;
 
     private selectedAccountInputField: any;
@@ -230,8 +220,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
             if (yesOrNo) {
-                this.asideMenuStateForProductService = 'out';
-                this.autoFocusStockGroupField = false;
+                this.asideMenuStockGroupDialogRef?.close();
                 this.getStock(null, null, true);
                 setTimeout(() => {
                     this.dateField?.nativeElement.focus();
@@ -991,9 +980,17 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 disableClose: true
             });
         } else if (this.selectedField === 'stock') {
-            this.asideMenuStateForProductService = 'in';
-            this.autoFocusStockGroupField = true;
+            this.openStockGroupAsidePane();
         }
+    }
+
+    /**
+     * Opens the aside menu stock group dialog
+     *
+     * @memberof VoucherGridComponent
+     */
+    public openStockGroupAsidePane(): void {
+        this.asideMenuStockGroupDialogRef = this.dialog.open(this.asideMenuStockGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -1011,8 +1008,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public closeCreateStock() {
-        this.asideMenuStateForProductService = 'out';
-        this.autoFocusStockGroupField = false;
+        this.asideMenuStockGroupDialogRef?.close();
         // after creating stock, get all stocks again
         this.filterByText = '';
         this.dateField?.nativeElement.focus();
