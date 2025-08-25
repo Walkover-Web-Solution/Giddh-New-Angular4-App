@@ -21,7 +21,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -152,7 +151,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         AmountFieldComponentModule,
         HamburgerMenuModule,
         GiddhDatepickerModule,
-        BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
         MatDialogModule,

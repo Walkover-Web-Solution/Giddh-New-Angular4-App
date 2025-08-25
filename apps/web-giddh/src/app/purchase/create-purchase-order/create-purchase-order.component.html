@@ -1198,28 +1198,24 @@
                                     <div class="invoice-due-date column-gap2">
                                         <div class="d-flex">
                                             <label>{{ localeData?.order_date }}<span class="red-text">*</span></label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                [placeholder]="localeData?.select_date"
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            <giddh-datepicker
                                                 name="purchaseOrderDate"
+                                                [placeholder]="localeData?.select_date"
                                                 [(ngModel)]="purchaseOrder.voucherDetails.voucherDate"
-                                                bsDatepicker
-                                                (ngModelChange)="onUpdateOrderDate()"
-                                            />
+                                                (dateSelected)="onUpdateOrderDate()"
+                                                [appearance]="'outline'"
+                                                class="form-control"
+                                            ></giddh-datepicker>
                                         </div>
                                         <div class="d-flex">
                                             <label>{{ localeData?.expected_delivery }}</label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                [placeholder]="localeData?.select_date"
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                            <giddh-datepicker
                                                 name="purchaseDueDate"
+                                                [placeholder]="localeData?.select_date"
                                                 [(ngModel)]="purchaseOrder.voucherDetails.dueDate"
-                                                bsDatepicker
-                                            />
+                                                [appearance]="'outline'"
+                                                class="form-control"
+                                            ></giddh-datepicker>
                                         </div>
                                     </div>
                                 </div>
@@ -1233,15 +1229,13 @@
                             <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            [placeholder]="localeData?.select_date"
-                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                        <giddh-datepicker
                                             name="purchaseOrderDate"
+                                            [placeholder]="localeData?.select_date"
                                             [(ngModel)]="purchaseOrder.voucherDetails.voucherDate"
-                                            bsDatepicker
-                                        />
+                                            [appearance]="'outline'"
+                                            class="form-control"
+                                        ></giddh-datepicker>
                                     </div>
                                 </div>
                             </div>
@@ -1253,15 +1247,13 @@
                             <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            [placeholder]="localeData?.select_date"
-                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                        <giddh-datepicker
                                             name="purchaseDueDate"
+                                            [placeholder]="localeData?.select_date"
                                             [(ngModel)]="purchaseOrder.voucherDetails.dueDate"
-                                            bsDatepicker
-                                        />
+                                            [appearance]="'outline'"
+                                            class="form-control"
+                                        ></giddh-datepicker>
                                     </div>
                                 </div>
                             </div>

@@ -54,6 +54,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -138,6 +139,7 @@ import { MatRadioModule } from '@angular/material/radio';
         MatSlideToggleModule,
         MatDialogModule,
         MatPaginatorModule,
+        GiddhDatepickerModule,
         MatMenuModule,
         MatDatepickerModule,
         MatNativeDateModule,

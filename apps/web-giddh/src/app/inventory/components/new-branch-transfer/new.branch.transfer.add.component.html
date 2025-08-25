@@ -31,21 +31,16 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input
-                                    type="text"
-                                    placeholder="{{
-                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
-                                    }}"
-                                    class="form-control"
+                                <giddh-datepicker
                                     name="dateOfSupply"
+                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
                                     [(ngModel)]="tempDateParams.dateOfSupply"
-                                    (bsValueChange)="selectDateOfSupply($event)"
-                                    required
-                                    bsDatepicker
-                                    [readonly]="!editBranchTransferUniqueName"
-                                    [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
-                                    [bsConfig]="bsConfig"
-                                />
+                                    (dateSelected)="selectDateOfSupply($event)"
+                                    [required]="true"
+                                    [disabled]="!editBranchTransferUniqueName"
+                                    [appearance]="'outline'"
+                                    class="form-control"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
@@ -309,20 +304,16 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input
-                                    type="text"
-                                    placeholder="{{
-                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
-                                    }}"
-                                    class="form-control"
+                                <giddh-datepicker
                                     name="dateOfSupply"
+                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
                                     [(ngModel)]="tempDateParams.dateOfSupply"
-                                    (bsValueChange)="selectDateOfSupply($event)"
-                                    required
-                                    [readonly]="!editBranchTransferUniqueName"
-                                    [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
-                                    bsDatepicker
-                                />
+                                    (dateSelected)="selectDateOfSupply($event)"
+                                    [required]="true"
+                                    [disabled]="!editBranchTransferUniqueName"
+                                    [appearance]="'outline'"
+                                    class="form-control"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
@@ -1215,19 +1206,15 @@
                         <h3 class="mr-b1">Transportation Details</h3>
                         <div class="row">
                             <div class="col-sm-6 mr-b2">
-                                <input
-                                    type="text"
-                                    #dispatchDate="bsDatepicker"
-                                    placeholder="Dispatched Date"
-                                    class="form-control"
+                                <giddh-datepicker
                                     name="dispatchedDate"
+                                    [placeholder]="'Dispatched Date'"
                                     [(ngModel)]="tempDateParams.dispatchedDate"
                                     [minDate]="tempDateParams.dateOfSupply"
-                                    readonly
-                                    bsDatepicker
-                                    [bsConfig]="bsConfig"
-                                    (bsValueChange)="focusTransportCompany()"
-                                />
+                                    [disabled]="true"
+                                    (dateSelected)="focusTransportCompany()"
+                                    [appearance]="'outline'"
+                                ></giddh-datepicker>
                             </div>
                             <div class="col-sm-6 mr-b2">
                                 <sh-select
