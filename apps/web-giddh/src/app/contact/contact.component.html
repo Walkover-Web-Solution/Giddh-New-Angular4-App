@@ -515,7 +515,7 @@
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="isUpdateAccount"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="accountAsideMenuDialogRef.close()"
+            (closeAsideEvent)="accountAsideMenuDialogRef?.close()"
             (getUpdateList)="getUpdatedList($event)"
         >
         </aside-menu-account>

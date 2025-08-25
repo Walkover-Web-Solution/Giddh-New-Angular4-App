@@ -419,7 +419,7 @@
 <ng-template #asideTransferPaneTemplate>
     <aside-branch-transfer-pane
         (transferType)="openBranchTransferPopup($event)"
-        (closeAsideEvent)="asideTransferPaneDialogRef.close()"
+        (closeAsideEvent)="asideTransferPaneDialogRef?.close()"
     ></aside-branch-transfer-pane>
 </ng-template>
 <!-- aside inwards/outwards/transfer pane -->

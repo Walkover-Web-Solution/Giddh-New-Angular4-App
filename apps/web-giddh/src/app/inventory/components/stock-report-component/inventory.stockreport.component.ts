@@ -447,7 +447,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         if (event.key === KEYS.ESC) {
             event.preventDefault();
             event.stopPropagation();
-            this.asideTransferPaneDialogRef.close();
+            this.asideTransferPaneDialogRef?.close();
         }
     }
 

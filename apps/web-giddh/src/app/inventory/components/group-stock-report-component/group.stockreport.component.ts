@@ -406,8 +406,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             this.openBranchTransferDialog();
         }
         if (event.which === ESCAPE) {
-            this.asideBranchTransferPaneDialogRef.close();
-            this.asidePaneDialogRef.close();
+            this.asideBranchTransferPaneDialogRef?.close();
+            this.asidePaneDialogRef?.close();
         }
     }
 

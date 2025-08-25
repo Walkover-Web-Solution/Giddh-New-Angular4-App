@@ -946,7 +946,7 @@
 </section>
 <!-- aside new stock/group/unit pane -->
 <ng-template #asidePaneTemplate>
-    <aside-pane (closeAsideEvent)="asidePaneDialogRef.close()"></aside-pane>
+    <aside-pane (closeAsideEvent)="asidePaneDialogRef?.close()"></aside-pane>
 </ng-template>
 <!-- aside new stock/group/unit -->
 
@@ -954,7 +954,7 @@
 <ng-template #asideBranchTransferPaneTemplate>
     <aside-branch-transfer-pane
         (transferType)="openBranchTransferPopup($event)"
-        (closeAsideEvent)="asideBranchTransferPaneDialogRef.close()"
+        (closeAsideEvent)="asideBranchTransferPaneDialogRef?.close()"
     ></aside-branch-transfer-pane>
 </ng-template>
 <!-- aside inwards/outwards/transfer pane -->

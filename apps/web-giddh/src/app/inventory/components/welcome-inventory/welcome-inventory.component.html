@@ -11,8 +11,8 @@
 <ng-template #asideMenuTemplate>
     <aside-pane
         [keyboardShortcut]="'esc'"
-        (onShortcutPress)="asideMenuDialogRef.close()"
-        (closeAsideEvent)="asideMenuDialogRef.close()"
+        (onShortcutPress)="asideMenuDialogRef?.close()"
+        (closeAsideEvent)="asideMenuDialogRef?.close()"
     ></aside-pane>
 </ng-template>
 

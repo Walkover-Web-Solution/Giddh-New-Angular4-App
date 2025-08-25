@@ -92,17 +92,21 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
         this.router.navigate(['/pages', 'inventory', 'add-group', groupName, 'add-stock']);
     }
 
-    public toggleCustomUnitAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
+    /**
+     * Toggles the custom unit aside pane
+     *
+     * @memberof InventoryHearderComponent
+     */
+    public toggleCustomUnitAsidePane(): void {
         this.openAccountAsideMenuDialog();
     }
 
-    public toggleGroupStockAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
+    /**
+     * Toggles the group stock aside pane
+     *
+     * @memberof InventoryHearderComponent
+     */
+    public toggleGroupStockAsidePane(): void {
         this.openCustomUnitAsideDialog();
     }
 
