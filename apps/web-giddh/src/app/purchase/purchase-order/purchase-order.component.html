@@ -33,7 +33,7 @@
                                 name="dateRange"
                                 (click)="showGiddhDatepicker($event)"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker form-control date-range-picker"
+                                class="giddh-datepicker date-range-picker"
                             />
                         </div>
                     </div>
@@ -444,15 +444,7 @@
             </table>
         </div>
         <ng-container *ngIf="purchaseOrders?.totalPages > 1 && !isLoading">
-            <mat-paginator
-                [length]="purchaseOrders?.totalItems"
-                [pageSize]="purchaseOrderGetRequest.count"
-                [pageSizeOptions]="pageSizeOptions"
-                [pageIndex]="purchaseOrderGetRequest.page - 1"
-                (page)="handlePageEvent($event)"
-                [showFirstLastButtons]="true"
-            >
-            </mat-paginator>
+            <mat-paginator [length]="purchaseOrders?.totalItems" [pageSize]="purchaseOrderGetRequest.count" [pageSizeOptions]="pageSizeOptions" [pageIndex]="purchaseOrderGetRequest.page - 1" (page)="handlePageEvent($event)" [showFirstLastButtons]="true"></mat-paginator>
         </ng-container>
         <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
             <no-data [secondaryMessageClass]="'p-0'"></no-data>

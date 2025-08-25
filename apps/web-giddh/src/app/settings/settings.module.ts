@@ -74,6 +74,7 @@ import { ShopifyIntegrationComponent } from './shopify-integration/shopify.inter
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -156,7 +157,8 @@ import { MatDividerModule } from '@angular/material/divider';
         D3TreeChartModule,
         BankIntegrationModule,
         SerialNumberPipe,
-        NewConfirmModalModule
+        NewConfirmModalModule,
+        GiddhDatepickerModule
     ],
 })
 
