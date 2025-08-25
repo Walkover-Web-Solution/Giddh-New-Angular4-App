@@ -2213,6 +2213,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             }
                         });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
+                        if (response) {
+                            this.addAccountForm.get('activeGroupUniqueName')?.setValue(response);
+                        }
                         if (response !== this.activeGroupUniqueName) {
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                         }
