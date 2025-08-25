@@ -352,14 +352,6 @@
         <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()">
         </app-eWayBill-credentials-modal>
     </ng-template>
-    <ng-template #invoiceRemoveConfirmationTemplate>
-        <delete-template-confirmation-modal
-            [message]="deleteTemplateConfirmationMessage"
-            [flag]="confirmationFlag"
-            (closeModelEvent)="onCloseConfirmationModal($event)"
-        >
-        </delete-template-confirmation-modal>
-    </ng-template>
 
     <div class="right-modal account-aside-menu-state">
         <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>

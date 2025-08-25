@@ -17,6 +17,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -57,8 +58,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public currenTransporterId: string;
     public isUserlogedIn: boolean;
-    public deleteTemplateConfirmationMessage: string;
-    public confirmationFlag: string;
     public showClear: boolean = false;
     public generateEwayBillform: GenerateEwayBill = {
         supplyType: null,
@@ -331,35 +330,22 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public removeInvoice(invoice: any[]): void {
-        this.confirmationFlag = 'closeConfirmation';
-
         let removeInvoice = this.localeData?.remove_invoice;
         removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0]?.voucherNumber);
-        this.deleteTemplateConfirmationMessage = removeInvoice;
-        
-        this.invoiceRemoveConfirmationDialogRef = this.dialog.open(this.invoiceRemoveConfirmationTemplate, {
-            panelClass: 'mat-dialog-md',
-            disableClose: true
-        });
-    }
-
-    /**
-     * Handles the close event of the confirmation modal
-     *
-     * @param {any} userResponse User response from the confirmation dialog
-     * @memberof EWayBillCreateComponent
-     */
-    public onCloseConfirmationModal(userResponse: any): void {
-        if (userResponse.response && userResponse.close === 'closeConfirmation') {
-            this.selectedInvoices?.splice(0, 1);
-            if (this.selectedInvoices?.length === 0) {
-                this.redirectToSalesInvoice();
+        this.invoiceRemoveConfirmationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(removeInvoice, this.commonLocaleData)
             }
-        }
-        if (this.invoiceRemoveConfirmationDialogRef) {
-            this.invoiceRemoveConfirmationDialogRef.close();
-            this.invoiceRemoveConfirmationDialogRef = null;
-        }
+        });
+        this.invoiceRemoveConfirmationDialogRef.afterClosed().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.selectedInvoices?.splice(0, 1);
+                if (this.selectedInvoices?.length === 0) {
+                    this.redirectToSalesInvoice();
+                }
+            }
+        });
     }
 
     detectChanges() {
