@@ -88,12 +88,6 @@ export class ListGroupComponent implements OnInit {
     selection = new SelectionModel<PeriodicElement>(true, []);
 
     constructor(@Inject(ServiceConfig) private serviceConfig ){}
-    // @ViewChild(MatSort) sort: MatSort;
-    //
-    // // tslint:disable-next-line:use-life-cycle-interface
-    // ngAfterViewInit() {
-    //     this.dataSource.sort = this.sort;
-    // }
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {

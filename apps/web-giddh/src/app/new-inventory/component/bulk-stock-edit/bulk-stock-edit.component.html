@@ -606,15 +606,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let x of stockGroups"
-                                                                [value]="x?.value"
-                                                                (onSelectionChange)="consoleIt(x)"
-                                                                >
-                                                                {{x?.label}}
-                                                            </mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!--  Stock Group Unique Name -->
@@ -631,15 +622,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let x of stockGroups"
-                                                                [value]="x?.value"
-                                                                (onSelectionChange)="consoleIt(x)"
-                                                                >
-                                                                {{x?.label}}
-                                                            </mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!-- Stock Unit -->
@@ -792,11 +774,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select  disabled="true" formControlName="purchaseUnits" class="vertical-margin">
-                                                        <mat-option
-                                                            *ngFor="let purchaseUnit of dropdownValues[i]?.purchaseUnits"
-                                                            [value]="purchaseUnit?.uniqueName">{{purchaseUnit?.name}}</mat-option>
-                                                    </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!--  Sales Account Name -->
@@ -873,11 +850,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="salesUnits" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let salesUnit of dropdownValues[i]?.salesUnits"
-                                                                [value]="salesUnit?.uniqueName">{{salesUnit?.name}}</mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Units (Menu)-->
@@ -897,11 +869,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="fixedAssetUnits" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let fixedAssetUnit of dropdownValues[i]?.fixedAssetUnits"
-                                                                [value]="fixedAssetUnit?.uniqueName">{{fixedAssetUnit?.name}}</mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Rate -->
@@ -983,8 +950,6 @@
                                                                     : commonLocaleData?.app_no
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- Tax (Menu)-->
@@ -1002,7 +967,7 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select
+                                                        <mat-select
                                                             class="vertical-margin"
                                                             name="taxes"
                                                             formControlName="taxes"
@@ -1050,8 +1015,6 @@
                                                                     : localeData?.exclusive
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'" formControlName="salesTaxInclusive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- Purchase Tax Inclusive -->
@@ -1078,9 +1041,6 @@
                                                                     : localeData?.exclusive
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'"
-                                                            formControlName="purchaseTaxInclusive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- FixedAsset Tax Inclusive -->
@@ -1107,9 +1067,6 @@
                                                                     : localeData?.exclusive
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'"
-                                                            formControlName="fixedAssetTaxInclusive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- Custom Fileds (Menu)-->

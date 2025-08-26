@@ -359,30 +359,6 @@
                                                     ></a>
                                                 </span>
 
-                                                <!-- <span
-                                                    class="download-file-text"
-                                                    *ngIf="
-                                                        selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type && 
-                                                        voucherApiVersion !== 2
-                                                    "
-                                                    [ngClass]="{
-                                                        'disabled':
-                                                            isVoucherDownloading ||
-                                                            isVoucherDownloadError ||
-                                                            isFileUploading ||
-                                                            shouldShowUploadAttachment
-                                                    }"
-                                                >
-                                                    <a
-                                                        href="javascript:;"
-                                                        [matTooltip]="localeData?.download_attachment"
-                                                        matTooltipPosition="above"
-                                                        (click)="downloadFile()"
-                                                        aria-label="download"
-                                                        ><i class="icon-download-circle"></i
-                                                    ></a>
-                                                </span> -->
 
                                                 <span *ngIf="(!isCompany && !isConsolidatedBranch)">
                                                     <a
@@ -395,7 +371,6 @@
                                                     ></a>
                                                 </span>
                                             </div>
-                                            <!-- voucherApiVersion !== 2 && selectedItem?.voucherType === 'purchase' ||-->
                                             <div
                                                 class="history-btn"
                                                 *ngIf="

@@ -31,10 +31,6 @@
                     ></sh-select>
                     <i class="icon-arrow-down" (click)="adjustmentTypesField?.show($event)"></i>
                 </div>
-                <!-- <div class="single-field" *ngIf="entry.type !== 'againstReference'">
-                    <label *ngIf="i === 0">Note</label>
-                    <input type="text" class="form-control" placeholder="Notes" name="notes" [(ngModel)]="entry.note">
-                </div> -->
                 <div class="single-field relative" *ngIf="entry.type !== 'againstReference'">
                     <label *ngIf="i === 0"
                         >{{ commonLocaleData?.app_tax }} ({{ commonLocaleData?.app_optional }})
@@ -51,7 +47,6 @@
                     ></sh-select>
                     <i class="icon-arrow-down"></i>
                 </div>
-                <!-- [ngClass]="{'set-width': entry.type === 'againstReference'}"  it will used on version -2  -->
                 <div class="single-field relative" *ngIf="entry.type === 'againstReference'">
                     <label *ngIf="i === 0">{{ localeData?.against_reference_placeholder }}</label>
                     <sh-select

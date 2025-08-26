@@ -2182,9 +2182,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
 
                         let voucherData = cloneDeep(res[0]);
                         if (voucherData.items?.length) {
-                            // this.totalSale = voucherData.items.reduce((c, p) => {
-                            //   return Number(c.grandTotal) + Number(p.grandTotal);
-                            // }, 0);
                             this.showExportButton = voucherData.items.every(s => s.account?.uniqueName === voucherData.items[0].account?.uniqueName);
                         } else {
                             if (voucherData.page > 1) {

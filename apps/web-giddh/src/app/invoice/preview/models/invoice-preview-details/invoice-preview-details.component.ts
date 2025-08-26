@@ -354,19 +354,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
     }
 
     public toggleEditMode(): void {
-        // if (this.voucherApiVersion === 1) {
-        //     if (!this.showEditMode) {
-        //         this.selectedItemVoucher = this.selectedItem;
-        //     } else {
-        //         this.selectedItem = this.selectedItemVoucher;
-        //     }
-        //     this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
-        //     this.showEditMode = !this.showEditMode;
-
-        //     if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
-        //         this.filterVouchers(this.searchElement.nativeElement.value);
-        //     }
-        // } else {
         // only for voucher version 2
         if (this.voucherApiVersion === 2) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate) {
@@ -377,7 +364,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
                 this.router.navigate(['/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.uniqueName + '/edit']);
             }
         }
-        // }
     }
 
     public onCancel(): void {
@@ -838,19 +824,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
         // only for voucher version 2
         if (this.voucherApiVersion === 2) {
             document.querySelector('body').classList.remove('fixed');
-        // if (this.voucherApiVersion === 1) {
-        //     if (type === 'cash') {
-        //         this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
-        //     } else {
-        //         this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
-        //     }
-        // } else {
             if (type === 'cash') {
                 this.router.navigate(['/pages/vouchers/cash/create']);
             } else {
                 this.router.navigate(['/pages/vouchers/'+ this.voucherType.replace(/\s+/g, "-") +'/create']);
             }
-        // }
         }
     }
 

@@ -407,40 +407,6 @@
                                                                             >
                                                                                 <i class="icon-trash"></i>
                                                                             </button>
-                                                                            <!-- <div class="col-sm-10 col-10 mr-t15">
-                                                                                <a
-                                                                                    href="javascript:;"
-                                                                                    disableRipple
-                                                                                    (click)="
-                                                                                        addNewVariantFixedAssetsUnitPrice(
-                                                                                            stockForm.variants[0]
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        j ===
-                                                                                        stockForm.variants[0]
-                                                                                            .fixedAssetsInformation
-                                                                                            ?.length -
-                                                                                            1
-                                                                                    "
-                                                                                    [disabled]="
-                                                                                        !stockForm
-                                                                                            ?.fixedAssetAccountDetails
-                                                                                            .accountUniqueName
-                                                                                    "
-                                                                                >
-                                                                                    <span
-                                                                                        *ngIf="
-                                                                                            stockForm
-                                                                                                ?.fixedAssetAccountDetails
-                                                                                                .accountUniqueName
-                                                                                        "
-                                                                                        class="add-new-text-container"
-                                                                                    >
-                                                                                        {{ localeData?.add_new }}
-                                                                                    </span>
-                                                                                </a>
-                                                                            </div> -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -608,44 +574,6 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <!-- <div class="col-sm-10 col-10 mr-t15">
-                                                                                    <a
-                                                                                        href="javascript:void(0);"
-                                                                                        class="bg-transparent px-0 pt-2"
-                                                                                        disableRipple
-                                                                                        (click)="
-                                                                                            addNewVariantPurchaseUnitPrice(
-                                                                                                stockForm.variants[0]
-                                                                                            )
-                                                                                        "
-                                                                                        *ngIf="
-                                                                                            j ===
-                                                                                            stockForm.variants[0]
-                                                                                                ?.purchaseInformation
-                                                                                                ?.length -
-                                                                                                1
-                                                                                        "
-                                                                                        [disabled]="
-                                                                                            !stockForm
-                                                                                                ?.purchaseAccountDetails
-                                                                                                .accountUniqueName
-                                                                                        "
-                                                                                    >
-                                                                                        <span
-                                                                                            *ngIf="
-                                                                                                stockForm
-                                                                                                    ?.purchaseAccountDetails
-                                                                                                    .accountUniqueName
-                                                                                            "
-                                                                                            class="
-                                                                                                add-new-text-container
-                                                                                                font-15
-                                                                                            "
-                                                                                        >
-                                                                                            {{ localeData?.add_new }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </div> -->
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -806,43 +734,6 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <!-- <div class="col-sm-10 col-10 mr-t15">
-                                                                                    <a
-                                                                                        href="javascript:void(0);"
-                                                                                        class="bg-transparent px-0 pt-2"
-                                                                                        disableRipple
-                                                                                        (click)="
-                                                                                            addNewVariantSalesUnitPrice(
-                                                                                                (stockForm?.variants)[0]
-                                                                                            )
-                                                                                        "
-                                                                                        *ngIf="
-                                                                                            j ===
-                                                                                            (stockForm?.variants)[0]
-                                                                                                ?.salesInformation
-                                                                                                ?.length -
-                                                                                                1
-                                                                                        "
-                                                                                        [disabled]="
-                                                                                            !stockForm
-                                                                                                ?.salesAccountDetails
-                                                                                                .accountUniqueName
-                                                                                        "
-                                                                                    >
-                                                                                        <span
-                                                                                            *ngIf="
-                                                                                                stockForm
-                                                                                                    ?.salesAccountDetails
-                                                                                                    .accountUniqueName
-                                                                                            "
-                                                                                            class="
-                                                                                                add-new-text-container
-                                                                                            "
-                                                                                        >
-                                                                                            {{ localeData?.add_new }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </div> -->
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -939,18 +830,6 @@
                                                                                     class="inventory-category-field-input"
                                                                                     [type]="'text'"
                                                                                 ></text-field>
-                                                                                <!-- <input-field
-                                                                                    [name]="
-                                                                                        'option-value-' + i + '-' + j
-                                                                                    "
-                                                                                    [(ngModel)]="optionValue.value"
-                                                                                    (ngModelChange)="
-                                                                                        validateOptionValue(i, j)
-                                                                                    "
-                                                                                    class="inventory-category-field-input"
-                                                                                    [type]="'text'"
-                                                                                >
-                                                                                </input-field> -->
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">
@@ -1111,18 +990,6 @@
                                                                 >
                                                                     {{ localeData?.fixed_assets_unit }}
                                                                 </th>
-                                                                <!-- <th
-                                                                    class="is-rate-inclusive table-heading-color"
-                                                                    *ngIf="
-                                                                        stockForm?.fixedAssetAccountDetails
-                                                                            .accountUniqueName ||
-                                                                        stockForm?.purchaseAccountDetails
-                                                                            .accountUniqueName ||
-                                                                        stockForm?.salesAccountDetails.accountUniqueName
-                                                                    "
-                                                                >
-                                                                    {{ localeData?.is_rate_inclusive }}
-                                                                </th> -->
                                                                 <ng-container
                                                                     *ngFor="let customField of variantCustomFields"
                                                                 >
@@ -1258,48 +1125,6 @@
                                                                                                                                                         ' unit-rates form-control'
                                                                                                                                                     ">
                                                                                 </select-field>
-                                                                                <!-- <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    role="button"
-                                                                                                                                                    class="icon-remove-sales"
-                                                                                                                                                    type="button"
-                                                                                                                                                    (click)="
-                                                                                                                                                        deleteVariantPurchaseUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            j
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        variant.purchaseInformation
-                                                                                                                                                            ?.length > 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <i class="icon-trash"></i>
-                                                                                                                                                </button>
-
-                                                                                                                                                <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    class="icon-button-add-sales"
-                                                                                                                                                    role="button"
-                                                                                                                                                    type="button"
-                                                                                                                                                    disableRipple
-                                                                                                                                                    (click)="
-                                                                                                                                                        addNewVariantPurchaseUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            i
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        j ===
-                                                                                                                                                        variant.purchaseInformation
-                                                                                                                                                            ?.length -
-                                                                                                                                                            1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <span class="add-new-text-container">
-                                                                                                                                                        <i class="icon-plus"></i>
-                                                                                                                                                    </span>
-                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
@@ -1344,45 +1169,6 @@
                                                                                                                                                             : '') +
                                                                                                                                                         'unit-rates form-control'
                                                                                                                                                     "></select-field>
-                                                                                <!-- <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    role="button"
-                                                                                                                                                    class="icon-remove-sales"
-                                                                                                                                                    type="button"
-                                                                                                                                                    (click)="
-                                                                                                                                                        deleteVariantSalesUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            j
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        variant.salesInformation?.length > 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <i class="icon-trash"></i>
-                                                                                                                                                </button>
-
-                                                                                                                                                <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    class="icon-button-add-sales"
-                                                                                                                                                    role="button"
-                                                                                                                                                    type="button"
-                                                                                                                                                    disableRipple
-                                                                                                                                                    (click)="
-                                                                                                                                                        addNewVariantSalesUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            i
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        j ===
-                                                                                                                                                        variant.salesInformation?.length - 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <span class="add-new-text-container">
-                                                                                                                                                        <i class="icon-plus"></i>
-                                                                                                                                                    </span>
-                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
@@ -1430,139 +1216,9 @@
                                                                                                                                                             : '') +
                                                                                                                                                         ' unit-rates form-control'
                                                                                                                                                     "></select-field>
-                                                                                <!-- <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    role="button"
-                                                                                                                                                    class="icon-remove-sales"
-                                                                                                                                                    type="button"
-                                                                                                                                                    (click)="
-                                                                                                                                                        deleteVariantFixedAssetsUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            j
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        variant.fixedAssetsInformation
-                                                                                                                                                            ?.length > 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <i class="icon-trash"></i>
-                                                                                                                                                </button>
-
-                                                                                                                                                <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    class="icon-button-add-sales"
-                                                                                                                                                    role="button"
-                                                                                                                                                    type="button"
-                                                                                                                                                    disableRipple
-                                                                                                                                                    (click)="
-                                                                                                                                                        addNewVariantFixedAssetsUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            i
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        j ===
-                                                                                                                                                        variant.fixedAssetsInformation
-                                                                                                                                                            ?.length -
-                                                                                                                                                            1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <span class="add-new-text-container">
-                                                                                                                                                        <i class="icon-plus"></i>
-                                                                                                                                                    </span>
-                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
-                                                                    <!-- <td
-                                                                                                                                        class="text-center is-rate-inclusive"
-                                                                                                                                        *ngIf="
-                                                                                                                                            stockForm?.salesAccountDetails
-                                                                                                                                                .accountUniqueName ||
-                                                                                                                                            stockForm?.purchaseAccountDetails
-                                                                                                                                                .accountUniqueName ||
-                                                                                                                                            stockForm?.fixedAssetAccountDetails
-                                                                                                                                                .accountUniqueName
-                                                                                                                                        "
-                                                                                                                                    >
-                                                                                                                                        <mat-checkbox
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm?.salesAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                            color="primary"
-                                                                                                                                            name="variantSalesTaxInclusive{{ i }}"
-                                                                                                                                            [(ngModel)]="variant.salesTaxInclusive"
-                                                                                                                                            [matTooltip]="localeData?.is_sales_inclusive"
-                                                                                                                                            matTooltipPosition="above"
-                                                                                                                                        ></mat-checkbox>
-                                                                                                                                        <mat-checkbox
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm?.purchaseAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                            class="mr-l2"
-                                                                                                                                            color="primary"
-                                                                                                                                            name="variantPurchaseTaxInclusive{{ i }}"
-                                                                                                                                            [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                                                                                            [matTooltip]="localeData?.is_purchase_inclusive"
-                                                                                                                                            matTooltipPosition="above"
-                                                                                                                                        ></mat-checkbox>
-                                                                                                                                        <ng-container
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm.type === 'FIXED_ASSETS' &&
-                                                                                                                                                stockForm?.fixedAssetAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                        >
-                                                                                                                                            <mat-checkbox
-                                                                                                                                                *ngIf="
-                                                                                                                                                    stockForm?.salesAccountDetails
-                                                                                                                                                        .accountUniqueName
-                                                                                                                                                "
-                                                                                                                                                color="primary"
-                                                                                                                                                name="variantSalesTaxInclusive{{ i }}"
-                                                                                                                                                [(ngModel)]="variant.salesTaxInclusive"
-                                                                                                                                                [matTooltip]="
-                                                                                                                                                    localeData?.is_sales_inclusive
-                                                                                                                                                "
-                                                                                                                                                matTooltipPosition="above"
-                                                                                                                                            ></mat-checkbox>
-                                                                                                                                            <mat-checkbox
-                                                                                                                                                *ngIf="
-                                                                                                                                                    stockForm?.purchaseAccountDetails
-                                                                                                                                                        .accountUniqueName
-                                                                                                                                                "
-                                                                                                                                                class="mr-l2"
-                                                                                                                                                color="primary"
-                                                                                                                                                name="variantPurchaseTaxInclusive{{ i }}"
-                                                                                                                                                [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                                                                                                [matTooltip]="
-                                                                                                                                                    localeData?.is_purchase_inclusive
-                                                                                                                                                "
-                                                                                                                                                matTooltipPosition="above"
-                                                                                                                                            ></mat-checkbox>
-                                                                                                                                        </ng-container>
-                                                                                                                                        <ng-container
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm.type === 'FIXED_ASSETS' &&
-                                                                                                                                                stockForm?.fixedAssetAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                        >
-                                                                                                                                            <mat-checkbox
-                                                                                                                                                color="primary"
-                                                                                                                                                name="variantFixedAssetsTaxInclusive{{ i }}"
-                                                                                                                                                [(ngModel)]="variant.fixedAssetTaxInclusive"
-                                                                                                                                                [checked]="variant.fixedAssetTaxInclusive"
-                                                                                                                                                [matTooltip]="
-                                                                                                                                                    localeData?.is_fixed_assets_inclusive
-                                                                                                                                                "
-                                                                                                                                                matTooltipPosition="above"
-                                                                                                                                            ></mat-checkbox>
-                                                                                                                                        </ng-container>
-                                                                                                                                    </td> -->
                                                                     <ng-container *ngFor="
                                                                                                                                             let customField of variant?.customFields;
                                                                                                                                             let k = index
@@ -2369,13 +2025,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
-                                        <div class="add-image-button">
-                                            <button mat-button role="button" type="button">
-                                                <img src="{{ imgPath }}add-image.svg" />
-                                            </button>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -3813,7 +3462,6 @@
                                                 ></input-field>
                                             </td>
                                             <td data-title="Expiry Date">
-                                                <!-- <input type="text" placeholder="Enter" class="from-control" id="expiry-date"> -->
                                                 <giddh-datepicker name="invoiceLockDate"></giddh-datepicker>
                                             </td>
                                         </tr>

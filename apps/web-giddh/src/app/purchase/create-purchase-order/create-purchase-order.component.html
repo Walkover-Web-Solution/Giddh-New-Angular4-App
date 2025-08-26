@@ -1341,7 +1341,6 @@
                     </tr>
                 </tbody>
                 <ng-template #entry let-entry let-entryIdx="entryIdx" let-transaction="transaction">
-                    <!-- <ng-container *ngFor="let transaction of entry.transactions;"> -->
                     <tr
                         (click)="setActiveIndex(entryIdx); $event.stopPropagation()"
                         *ngIf="activeIndex !== entryIdx"
@@ -1709,17 +1708,6 @@
                                 "
                             >
                                 <div *ngIf="variants?.length > 1" class="variant-name">
-                                    <!-- <select-field
-                                        [disabled]="isReadOnly"
-                                        [cssClass]="'form-control mat-field-border'"
-                                        [placeholder]="localeData?.select_variant"
-                                        (selectedOption)="variantChanged($event, transaction, entry)"
-                                        [options]="variants"
-                                        [required]="true"
-                                        [name]="'variant' + entryIdx"
-                                        [(ngModel)]="transaction.variant.uniqueName"
-                                    >
-                                    </select-field> -->
                                     <sh-select
                                         [placeholder]="localeData?.select_variant"
                                         [options]="variants"
@@ -2104,7 +2092,6 @@
                         </td>
                     </tr>
                     <!-- endregion -->
-                    <!-- </ng-container> -->
                 </ng-template>
                 <!-- region add bulk items -->
                 <div class="p-1 aqua-color add-line-bulk-item">

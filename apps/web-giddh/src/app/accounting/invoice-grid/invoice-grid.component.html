@@ -33,7 +33,6 @@
             <!-- invoice num -->
             <div class="clearfix form-inline mr-b05">
                 <div class="max-width-350 form-group" [hidden]="isSalesInvoiceSelected">
-                    <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label>
                     <input
                         type="text"
@@ -44,14 +43,6 @@
                     />
                 </div>
 
-                <!-- key not available in request
-    <div class="max-width-300 form-group" (clickOutside)="showInvoiceDate=false;">
-    <span>Date: </span>
-    <input type="text" [ngModel]="dayjs(entryDate).format(giddhDateFormat)" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
-    <div *ngIf="showInvoiceDate" style="position: absolute; z-index:10; min-height:290px;">
-        <datepicker [(ngModel)]="entryDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
-    </div>
-</div> -->
             </div>
             <!-- /invoice num -->
 
@@ -74,7 +65,6 @@
                         (blur)="onPartyAccBlur(); selectedField = null; focusedField = null; filterByText = ''"
                     />
                 </div>
-                <!-- [hidden]="!isPurchaseInvoiceSelected" -->
                 <div class="form-group" class="mr-t05" *ngIf="isPurchaseInvoiceSelected">
                     <label>Ledger name:<sup>*</sup></label>
                     <input
@@ -98,15 +88,6 @@
                 </div>
             </div>
             <!-- /party acc name -->
-
-            <!-- operating cost acc only -->
-            <!-- No need for purchase ledger, as discussed with alok
-    <div class="max-width-300 clearfix form-inline mr-b05">
-    <div class="form-group">
-        <label>Purchase Ledger:<sup>*</sup></label> <input type="text" #debtor placeholder="Purchase account" (focus)="accountType = 'debitor'" [(ngModel)]="debtorAcc.name" (focus)="getFlattenGrpAccounts('purchases', true)" (blur)="showAccountList=false;selectedInput=debtor"
-            class="form-control max-height28 appearance-none" style="max-width:200px" />
-    </div>
-</div> -->
             <!-- /operating cost acc only -->
 
             <!--  purchase as INVOICE -->
