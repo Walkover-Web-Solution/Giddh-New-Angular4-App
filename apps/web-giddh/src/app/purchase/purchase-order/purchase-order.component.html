@@ -58,13 +58,10 @@
                     *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0"
                     class="more-toggle"
                 >
-                    <div *ngIf="!isCompany && !isConsolidatedBranch" class="btn-group" dropdown #dp="bs-dropdown">
+                    <div *ngIf="!isCompany && !isConsolidatedBranch">
                         <button
                             mat-raised-button color="primary"
-                            dropdownToggle
                             type="button"
-                            class="desktop-view-btn dropdown-toggle"
-                            aria-controls="dropdown-basic"
                             [matMenuTriggerFor]="moreMenu1"
                         >
                             {{ commonLocaleData?.app_more }}
@@ -79,9 +76,22 @@
                             </button>
                             <button
                                 mat-menu-item
-                                (click)="openModalBulkDelete(templateBulkDelete)"
+                                (click)="confirmBulkDelete()"
                             >
-                                {{ localeData?.bulk_delete }}
+                               {{ commonLocaleData?.app_delete }}
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="voucherApiVersion === 2 ? openBulkConvert(purchaseBulkConvert)
+                                : bulkUpdate('create_purchase_bill')"
+                            >
+                                {{ localeData?.convert_tobill }}
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="bulkUpdate('expire')"
+                            >
+                               {{ localeData?.expired }}
                             </button>
                         </mat-menu>
                     </div>
@@ -104,20 +114,12 @@
                 </button>
             </div>
             <div>
-<<<<<<< HEAD
                 <div *ngIf="(!isCompany && !isConsolidatedBranch)">
-=======
-                <div *ngIf="!isCompany && !isConsolidatedBranch" class="btn-group" dropdown #dp="bs-dropdown">
->>>>>>> 8147e1936bc21b08bf5f7b0abbea5a138c74bb74
                     <button
                         type="button"
-<<<<<<< HEAD
-                        class="btn btn-primary desktop-view-btn"
+                        mat-raised-button 
+                        color="primary"
                         [matMenuTriggerFor]="moreMenu2"
-=======
-                        mat-raised-button color="primary"
-                        aria-controls="dropdown-basic"
->>>>>>> 8147e1936bc21b08bf5f7b0abbea5a138c74bb74
                     >
                         {{ commonLocaleData?.app_more }}
                         <i class="caret"></i>
@@ -131,9 +133,23 @@
                         </button>
                         <button
                             mat-menu-item
-                            (click)="openModalBulkDelete(templateBulkDelete)"
+                            (click)="confirmBulkDelete()"
                         >
-                            {{ localeData?.bulk_delete }}
+                           {{ commonLocaleData?.app_delete }}
+                        </button>
+                        <button
+                            mat-menu-item
+                            (click)="voucherApiVersion === 2
+                            ? openBulkConvert(purchaseBulkConvert)
+                            : bulkUpdate('create_purchase_bill')"
+                        >
+                            {{ localeData?.convert_tobill }}
+                        </button>
+                        <button
+                            mat-menu-item
+                            (click)="bulkUpdate('expire')"
+                        >
+                            {{ localeData?.expired }}
                         </button>
                     </mat-menu>
                 </div>

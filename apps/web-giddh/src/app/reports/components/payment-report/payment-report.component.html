@@ -102,7 +102,7 @@
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
-                <div *ngIf="selectedPayments?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
+                <div *ngIf="selectedPayments?.length > 0">
                     <button
                         mat-stroked-button
                         class="mr-r15"
@@ -116,8 +116,7 @@
                         <button
                             mat-raised-button color="primary"
                             type="button"
-                            class="more-btn-dropdown dropdown-toggle mr-0"
-                            aria-controls="dropdown-basic"
+                            class="mr-0"
                             [matMenuTriggerFor]="moreMenu"
                         >
                             {{ commonLocaleData?.app_more }}

@@ -11,8 +11,9 @@
                         <div *ngIf="(!isCompany && !isConsolidatedBranch) && voucherType === 'sales'">
                             <button
                                 type="button"
-                                class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0"
-                                aria-controls="dropdown-basic3"
+                                mat-raised-button 
+                                color="primary"
+                                [matMenuTriggerFor]="newInvoiceMenu"
                             >
                                 {{ localeData?.new_invoice }}
                                 <i class="caret"></i>
@@ -114,8 +115,9 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="btn btn-sky-blue dropdown-toggle"
-                                                aria-controls="dropdown-basic"
+                                                mat-stroked-button
+                                                color="primary"
+                                                [matMenuTriggerFor]="changeStatusProforma"
                                             >
                                                 {{ localeData?.change_status }}
                                                 <i class="caret"></i>
@@ -165,8 +167,9 @@
 
                                             <button
                                                 type="button"
-                                                class="btn btn-sky-blue dropdown-toggle"
-                                                aria-controls="dropdown-basic2"
+                                                mat-stroked-button
+                                                color="primary"
+                                                [matMenuTriggerFor]="changeStatusInvoice"
                                                 *ngIf="selectedItem?.voucherStatus !== 'cancel'"
                                             >
                                                 {{ localeData?.change_status }}
@@ -217,8 +220,9 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="btn btn-pink dropdown-toggle"
-                                                aria-controls="dropdown-basic2"
+                                                mat-stroked-button
+                                                color="primary"
+                                                [matMenuTriggerFor]="changeStatusPurchase"
                                             >
                                                 {{ localeData?.change_status }}
                                                 <i class="caret"></i>

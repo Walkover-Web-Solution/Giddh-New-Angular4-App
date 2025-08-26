@@ -35,13 +35,13 @@
             </div>
 
             <div class="right-inventory">
-                <div class="btn-group" dropdown placement="bottom right">
+                <div class="btn-group">
                     <button mat-stroked-button class="icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
                         type="button"
-                        class="cp mr-r15 icon-btn dropdown-toggle icon-btn"
+                        class="cp mr-r15 icon-btn icon-btn"
                         [matMenuTriggerFor]="downloadMenu"
                         matTooltip="Download"
                     >
@@ -64,7 +64,7 @@
                 >
                     New Transfer
                 </button>
-                <button mat-raised-button color="primary" class="mr-0" (click)="toggleAsidePane()" matTooltip="Alt+i">
+                <button mat-raised-button color="primary" class="mr-0" (click)="openAsidePaneDialog()" matTooltip="Alt+i">
                     Create New
                 </button>
             </div>
@@ -203,15 +203,11 @@
                         <th class="bd-rr bd-rb" width="14%">
                             <div
                                 class="btn-group btn-group-voucher-type"
-                                dropdown
-                                placement="bottom right"
-                                container="body"
                             >
                                 <button
                                     type="button"
                                     [matMenuTriggerFor]="voucherTypeMenu"
-                                    mat-raised-button color="primary" class="cp dropdown-toggle c-3"
-                                    aria-controls="dropdown-alignment"
+                                    mat-raised-button color="primary" class="cp c-3"
                                 >
                                     Voucher Type
                                     <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
@@ -227,23 +223,6 @@
                                         </mat-checkbox>
                                     </div>
                                 </mat-menu>
-                                <ul
-                                    id="dropdown-alignment"
-                                    *dropdownMenu
-                                    class="dropdown-menu dropdown-menu-right voucher-type"
-                                    role="menu"
-                                    aria-labelledby="button-alignment"
-                                >
-                                    <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                        <mat-checkbox
-                                            [(ngModel)]="item.checked"
-                                            (click)="filterByCheck(item.value, $event.target?.checked)"
-                                            color="primary"
-                                        >
-                                            {{ item.label }}
-                                        </mat-checkbox>
-                                    </li>
-                                </ul>
                             </div>
                         </th>
                         <th class="td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'account')">

@@ -51,13 +51,12 @@
                         </div>
                         <div >
                             <div class="pull-right">
-                                <div class="btn-group" dropdown placement="bottom right">
+                                <div class="btn-group">
                                     <button
-                                        id="buttonalignment"
-                                        dropdownToggle
                                         type="button"
-                                        class="btn btn-sky-blue mr-b05 cp mr-1 dropdown-toggle"
-                                        aria-controls="dropdown-alignment"
+                                        class="btn btn-sky-blue mr-b05 cp mr-1"
+                                        mat-stroked-button
+                                        [matMenuTriggerFor]="downloadMenu"
                                     >
                                         <i class="icon-download"></i> Download
                                     </button>
@@ -135,11 +134,11 @@
                                         </div>
                                     </th>
                                     <th class="bd-rr bd-rb" *ngIf="type === 'stock'" width="15%">
-                                        <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
+                                        <div class="btn-group-voucher-type">
                                             <button
                                                 type="button"
-                                                class="btn-link btn cp p-0 dropdown-toggle c-3"
-                                                aria-controls="dropdown-alignment"
+                                                class="btn-link btn cp p-0 c-3"
+                                                [matMenuTriggerFor]="voucherTypeMenu"
                                             >
                                                 Voucher Type
                                                 <i
@@ -147,24 +146,16 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </button>
-                                            <ul
-                                                id="dropdown-alignment"
-                                                *dropdownMenu
-                                                class="dropdown-menu dropdown-menu-right voucher-type"
-                                                role="menu"
-                                                aria-labelledby="button-alignment"
-                                            >
-                                                <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
-                                                    <label
-                                                        ><input
-                                                            type="checkbox"
-                                                            [(ngModel)]="item.checked"
-                                                            (click)="filterByCheck(item.value, $event.target?.checked)"
-                                                        />
-                                                        {{ item.label }}</label
+                                            <mat-menu #voucherTypeMenu="matMenu" class="voucher-type" xPosition="before">
+                                                <div mat-menu-item *ngFor="let item of VOUCHER_TYPES" (click)="$event.stopPropagation()">
+                                                    <mat-checkbox
+                                                        [(ngModel)]="item.checked"
+                                                        (change)="filterByCheck(item.value, $event.checked)"
                                                     >
-                                                </li>
-                                            </ul>
+                                                        {{ item.label }}
+                                                    </mat-checkbox>
+                                                </div>
+                                            </mat-menu>
                                         </div>
                                     </th>
                                 </ng-container>

@@ -86,8 +86,6 @@
                                             <button
                                                 type="button"
                                                 mat-raised-button color="primary"
-                                                class="dropdown-toggle"
-                                                aria-controls="dropdown-basic"
                                                 [matMenuTriggerFor]="changeStatusMenu"
                                             >
                                                 {{ localeData?.change_status }}
@@ -208,7 +206,7 @@
                                             <div class="history-btn">
                                                 <button
                                                     mat-raised-button color="primary"
-                                                    (click)="toggleActivityHistoryAsidePane()"
+                                                    (click)="openActivityHistoryAsidePaneDialog()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
                                                     {{ commonLocaleData?.app_history }}

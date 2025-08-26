@@ -103,7 +103,7 @@
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
-                <div *ngIf="selectedReceipts?.length > 0" class="ml-auto" dropdown #dp="bs-dropdown">
+                <div *ngIf="selectedReceipts?.length > 0">
                     <button
                         mat-stroked-button
                         class="mr-r15"
@@ -116,11 +116,9 @@
                     <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                         <button
                             mat-raised-button color="primary"
-                            dropdownToggle
                             type="button"
                             [matMenuTriggerFor]="moreMenu"
-                            class="more-btn-dropdown dropdown-toggle mr-0"
-                            aria-controls="dropdown-basic"
+                            class="mr-0"
                         >
                             {{ commonLocaleData?.app_more }}
                             <i class="caret"></i>

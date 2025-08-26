@@ -175,13 +175,14 @@
                             <div *ngIf="(!isCompany && !isConsolidatedBranch)" class="btn-group visible-center d-none">
                                 <button
                                     type="button"
-                                    class="btn btn-primary more-btn-dropdown dropdown-toggle"
-                                    aria-controls="dropdown-basic"
+                                    class="btn mr-r15"
+                                    mat-button
+                                    [matMenuTriggerFor]="moreActionsMenuDesktop"
                                 >
                                     {{ commonLocaleData?.app_more }}
                                     <i class="caret"></i>
                                 </button>
-                                <mat-menu #moreActionsMenu="matMenu">
+                                <mat-menu #moreActionsMenuDesktop="matMenu">
                                     <button
                                         mat-menu-item
                                         *ngIf="selectedVoucher !== 'purchase' && selectedInvoicesList?.length"
@@ -215,9 +216,9 @@
                                         >
                                             {{ localeData?.create_e_invoice }}
                                         </a>
-                                    </li>
-                                    <li
-                                        role="menuitem"
+                                    </button>
+                                    <button
+                                        mat-menu-item
                                         *ngIf="
                                             selectedVoucher !== 'purchase' ||
                                             (selectedItems?.length === 1 && selectedVoucher === 'purchase')
@@ -230,8 +231,8 @@
                                             (click)="onDeleteBtnClick()"
                                             >{{ commonLocaleData?.app_delete }}</a
                                         >
-                                    </li>
-                                </ul>
+                                    </button>
+                                </mat-menu>
                             </div>
                             <button
                                 mat-stroked-button
@@ -260,8 +261,9 @@
                                 <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                                     <button
                                         type="button"
-                                        class="btn btn-primary more-btn-dropdown desktop-view-btn dropdown-toggle"
-                                        aria-controls="dropdown-basic"
+                                        class="btn mr-r15"
+                                        mat-button
+                                        [matMenuTriggerFor]="moreMenuDesktop"
                                     >
                                         {{ commonLocaleData?.app_more }}
                                         <i class="caret"></i>
@@ -363,7 +365,6 @@
                                             *ngIf="(!isCompany && !isConsolidatedBranch)"
                                             type="button"
                                             mat-raised-button color="primary"
-                                            class="dropdown-toggle dropdown-btn-new"
                                             aria-controls="dropdown-ddl-newinv"
                                         >
                                             {{ localeData?.new_invoice }}
@@ -449,39 +450,28 @@
                                         <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                                             <button
                                                 type="button"
-                                                class="btn mr-r15 more-btn-dropdown btn-default dropdown-toggle"
-                                                aria-controls="dropdown-basic"
+                                                class="btn mr-r15"
+                                                mat-button
+                                                [matMenuTriggerFor]="moreActionsMenuMobile"
                                             >
                                                 {{ commonLocaleData?.app_more }}
                                                 <i class="caret"></i>
                                             </button>
-                                            <ul
-                                                *dropdownMenu
-                                                class="dropdown-menu fixed-dropdown-plus"
-                                                role="menu"
-                                                aria-labelledby="button-basic"
-                                            >
-                                                <li role="menuitem">
-                                                    <a
-                                                        class="dropdown-item cursor-pointer"
-                                                        href="javascript:void(0)"
-                                                        aria-label="eway bill"
-                                                        (click)="toggleEwayBillPopup()"
-                                                        *ngIf="selectedVoucher === 'sales' && !isMobileView"
-                                                    >
-                                                        {{ localeData?.generate_eway_bill }}</a
-                                                    >
-                                                </li>
-                                                <li role="menuitem">
-                                                    <a
-                                                        class="dropdown-item cursor-pointer"
-                                                        href="javascript:void(0)"
-                                                        aria-label="delete"
-                                                        (click)="onDeleteBtnClick()"
-                                                        >{{ commonLocaleData?.app_delete }}</a
-                                                    >
-                                                </li>
-                                            </ul>
+                                            <mat-menu #moreActionsMenuMobile="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="toggleEwayBillPopup()"
+                                                    *ngIf="selectedVoucher === 'sales' && !isMobileView"
+                                                >
+                                                    {{ localeData?.generate_eway_bill }}
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="onDeleteBtnClick()"
+                                                >
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
+                                            </mat-menu>
                                         </div>
                                     </div>
                                 </div>
@@ -522,39 +512,28 @@
                                     <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                                         <button
                                             type="button"
-                                            class="btn mr-r15 more-btn-dropdown btn-default dropdown-toggle"
-                                            aria-controls="dropdown-basic"
+                                            class="btn mr-r15"
+                                            mat-button
+                                            [matMenuTriggerFor]="moreActionsMenu3"
                                         >
                                             {{ commonLocaleData?.app_more }}
                                             <i class="caret"></i>
                                         </button>
-                                        <ul
-                                            *dropdownMenu
-                                            class="dropdown-menu fixed-dropdown-plus"
-                                            role="menu"
-                                            aria-labelledby="button-basic"
-                                        >
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cursor-pointer"
-                                                    href="javascript:;"
-                                                    aria-label="eway bill"
-                                                    (click)="toggleEwayBillPopup()"
-                                                    *ngIf="selectedVoucher === 'sales' && !isMobileView"
-                                                >
-                                                    {{ localeData?.generate_eway_bill }}</a
-                                                >
-                                            </li>
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cursor-pointer"
-                                                    href="javascript:;"
-                                                    aria-label="delete"
-                                                    (click)="onDeleteBtnClick()"
-                                                    >{{ commonLocaleData?.app_delete }}</a
-                                                >
-                                            </li>
-                                        </ul>
+                                        <mat-menu #moreActionsMenu3="matMenu">
+                                            <button
+                                                mat-menu-item
+                                                (click)="toggleEwayBillPopup()"
+                                                *ngIf="selectedVoucher === 'sales' && !isMobileView"
+                                            >
+                                                {{ localeData?.generate_eway_bill }}
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                (click)="onDeleteBtnClick()"
+                                            >
+                                                {{ commonLocaleData?.app_delete }}
+                                            </button>
+                                        </mat-menu>
                                     </div>
                                 </div>
                             </div>
@@ -1046,7 +1025,7 @@
                                     "
                                     class="no-dbl-click-select"
                                 >
-                                    <div dropdown container="body">
+                                    <div>
                                         {{ item?.account?.customerName || item?.account?.name }}
                                         <div
                                             *ngIf="modalUniqueName === item?.uniqueName"

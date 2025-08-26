@@ -14,10 +14,8 @@ export class InventoryWelcomeComponent implements OnDestroy {
     @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
     /** Dialog reference for aside menu */
     public asideMenuDialogRef: MatDialogRef<any>;
-    private dialog: MatDialog;
 
-    constructor(dialog: MatDialog) {
-        this.dialog = dialog;
+    constructor(private dialog: MatDialog) {
     }
 
     /**
