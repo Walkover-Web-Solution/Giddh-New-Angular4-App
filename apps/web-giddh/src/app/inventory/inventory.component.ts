@@ -4,7 +4,7 @@ import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
@@ -31,6 +31,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
 import { BranchHierarchyType } from '../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -57,6 +58,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
     /** Instance of branch transfer template */
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
+    /** Dialog reference */
+    public dialogRef: MatDialogRef<any>;
 
     public dataSyncOption = IsyncData;
     public companies$: Observable<CompanyResponse[]>;
@@ -104,8 +107,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public voucherApiVersion: 1 | 2;
     /** Hold branch transfer mode  */
     public branchTransferMode: string = "";
-    /** This will use for bootstrap modal refrence */
-    public modalRef: BsModalRef;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
@@ -126,7 +127,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private toastService: ToasterService,
         private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
-        private modalService: BsModalService
+        private dialog: MatDialog
     ) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)',
@@ -223,10 +224,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     this.branchTransferMode = params.type;
                 }
-                this.modalRef = this.modalService.show(
-                    this.branchtransfertemplate,
-                    Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
-                );
+                this.dialogRef = this.dialog.open(this.branchtransfertemplate, {
+                    panelClass: 'mat-dialog-md'
+                });
             }
         });
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
@@ -257,7 +257,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public hideModal(): void {
         this.router.navigate(['/pages/inventory/report']);
-        this.modalRef.hide();
+        this.dialogRef.close();
     }
     public ngOnDestroy() {
         if (this.voucherApiVersion === 2) {

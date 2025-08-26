@@ -68,8 +68,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public isPaymentMode: boolean;
     /** Stores the current company */
     public activeCompany: any = {};
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** True if current company or branch has tax number */
     public hasTaxNumber: boolean | null = null;
     /** Holds current branch information */
@@ -377,6 +377,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 }

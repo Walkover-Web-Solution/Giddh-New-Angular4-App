@@ -18,9 +18,8 @@ import { IOption } from '../../../theme/ng-select/ng-select';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { saveAs } from "file-saver";
@@ -35,19 +34,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 @Component({
     selector: "new-branch-transfer-list",
     templateUrl: "./new.branch.transfer.list.component.html",
-    styleUrls: ["./new.branch.transfer.component.scss"],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0);'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0);'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ["./new.branch.transfer.component.scss"]
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
@@ -59,6 +46,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     private deleteBranchTransferDialogRef: MatDialogRef<any>;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
     @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
+    /** Reference to aside transfer pane template */
+    @ViewChild('asideTransferPaneTemplate', { static: true }) public asideTransferPaneTemplate: TemplateRef<any>;
+    /** Reference to aside transfer pane dialog */
+    public asideTransferPaneDialogRef: MatDialogRef<any>;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
@@ -98,7 +89,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
+    public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
         page: 1,
@@ -220,7 +211,7 @@ public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -334,22 +325,14 @@ public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         this.closeSearchDialog();
     }
 
-    public toggleTransferAsidePane(event?): void {
+    /**
+     * Opens the transfer aside pane dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
+    public openTransferAsidePaneDialog(): void {
         this.editBranchTransferUniqueName = '';
-
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    public toggleBodyClass(): void {
-        if (this.asidePaneState === 'in' || this.asideTransferPaneState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        this.asideTransferPaneDialogRef = this.dialog.open(this.asideTransferPaneTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -413,7 +396,7 @@ public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
     public showDeleteBranchTransferModal(item): void {
         this.selectedBranchTransfer = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        
+
         // Open the dialog using Angular Material
         this.deleteBranchTransferDialogRef = this.dialog.open(this.deleteBranchTransferDialog, {
             panelClass: 'mat-dialog-md',
@@ -495,7 +478,7 @@ public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
 
     public openBranchTransferPopup(event): void {
         this.branchTransferMode = event;
-        this.toggleTransferAsidePane();
+        this.openTransferAsidePaneDialog();
         this.openModal();
     }
 
@@ -536,13 +519,12 @@ public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         if (event.altKey && event.which === 78) { // Alt + N
             event.preventDefault();
             event.stopPropagation();
-            this.toggleTransferAsidePane();
+            this.openTransferAsidePaneDialog();
         }
 
         if (event.which === ESCAPE) {
             this.editBranchTransferUniqueName = '';
-            this.asideTransferPaneState = 'out';
-            this.toggleBodyClass();
+            this.asideTransferPaneDialogRef?.close();
         }
     }
 
@@ -569,7 +551,7 @@ public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
     * @memberof NewBranchTransferListComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

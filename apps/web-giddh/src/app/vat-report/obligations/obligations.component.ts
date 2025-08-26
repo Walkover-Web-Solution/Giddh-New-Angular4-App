@@ -67,8 +67,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
     /** Observable to store the Tax Number */
@@ -463,6 +463,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState = false;
     }
 }

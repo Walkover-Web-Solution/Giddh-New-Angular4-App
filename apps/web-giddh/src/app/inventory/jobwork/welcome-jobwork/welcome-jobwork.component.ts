@@ -1,46 +1,30 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'welcome-jobwork',
-    templateUrl: './welcome-jobwork.component.html',
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0);'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0);'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    templateUrl: './welcome-jobwork.component.html'
 })
 export class JobworkWelcomeComponent implements OnDestroy {
-    public asideTransferPaneState: string = 'out';
+    /** Template reference for aside pane */
+    @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
+    /** Reference for aside pane dialog */
+    public asideMenuDialogRef: MatDialogRef<any>;
+    /** Subject to destroy subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {
-        
+    constructor(private dialog: MatDialog) {
     }
 
-    // new transfer aside pane
-    public toggleTransferAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-    
-    public toggleBodyClass() {
-        if (this.asideTransferPaneState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    /**
+     * Opens the aside pane dialog
+     *
+     * @memberof JobworkWelcomeComponent
+     */
+    public openTransferAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     public ngOnDestroy() {

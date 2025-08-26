@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -76,16 +76,14 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,
-        BsDropdownModule,
-        Daterangepicker,
-
+        Daterangepicker
     ],
     providers: [SalesPersonService],
     imports: [
         ReportsRoutingModule,
         CommonModule,
         Daterangepicker,
-        BsDropdownModule.forRoot(),
+        
 
         ShSelectModule,
         FormsModule,

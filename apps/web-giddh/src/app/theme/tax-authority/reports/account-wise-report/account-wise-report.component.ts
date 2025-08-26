@@ -36,8 +36,8 @@ export class AccountWiseReportComponent implements OnInit {
         totalItems: null,
         totalPages: null
     };
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Account Wise Report Observable */
@@ -208,6 +208,6 @@ export class AccountWiseReportComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 }

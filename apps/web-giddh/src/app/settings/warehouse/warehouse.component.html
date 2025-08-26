@@ -119,7 +119,7 @@
                                                     }
                                                 ]"
                                             >
-                                                <div class="tax-tooltip font-14 overlay" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
                                                 (mouseleave)="openAddressInfo(false)">
                                                     {{ address?.address }} {{ address?.stateCode }}
                                                     <p *ngIf="address?.taxType && address?.taxNumber">
@@ -166,15 +166,6 @@
         </div>
     </ng-container>
 
-    <!-- Warehouse on boarding modal (Step 1) -->
-    <ng-template #warehouseOnBoardingModal>
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </ng-template>
-
     <ng-template #asideAccountAsidePane>
         <ng-container
             appTranslate
@@ -194,15 +185,6 @@
             >
             </create-address>
         </ng-container>
-    </ng-template>
-    <!-- Welcome component (Step 2) -->
-    <ng-template #welcomeComponent>
-        <welcome-component
-            [itemDetails]="selectedWarehouse"
-            (backButtonClicked)="handleBackButtonClick(false)"
-            (nextButtonClicked)="handleFormSubmit($event)"
-        >
-        </welcome-component>
     </ng-template>
 
     <ng-template #statusModal>

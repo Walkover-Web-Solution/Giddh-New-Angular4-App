@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChildren, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChildren, TemplateRef, Inject, ViewChild } from '@angular/core';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { ServiceConfig } from '../../../services/service.config';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 @Component({
     selector: 'adjust-group',
     templateUrl: './adjust-group.component.html',
@@ -10,42 +11,37 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 
 export class AdjustGroupComponent implements OnInit {
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* this will store image path*/
     public imgPath: string = '';
-
+    /* This will store aside pane template reference */
+    @ViewChild('asideMenuStateForInventoryAdjustmentTemplate') public asideMenuStateForInventoryAdjustmentTemplate: TemplateRef<any>;
+    /* This will store aside pane dialog reference */
+    public asideMenuStateForInventoryAdjustmentDialogRef: MatDialogRef<any>;
+    /* This will store modal reference */
+    public dialogRef: MatDialogRef<any>;
     /* sh-select view child */
     @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
-        private modalService: BsModalService
+        private dialog: MatDialog
     ) { }
 
-    /* Aside pane toggle fixed class */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    /* Create combo aside pane open function */
+    public openAdjustmentDialog(): void {
+        this.asideMenuStateForInventoryAdjustmentDialogRef = this.dialog.open(this.asideMenuStateForInventoryAdjustmentTemplate, ASIDE_PANE_CONFIG);
     }
 
-    /* Create combo aside pane open function */
-    public addAdjustment(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'modal-xl' })
-        );
+    /**
+     * Opens the dialog with the provided template
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof AdjustGroupComponent
+     */
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-lg'
+        });
     }
 
     public ngOnInit() {

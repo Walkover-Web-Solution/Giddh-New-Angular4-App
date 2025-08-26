@@ -82,73 +82,58 @@
                                         <div
                                             *ngIf="(!isCompany && !isConsolidatedBranch)"
                                             class="btn-group change-status-dropdown pull-right"
-                                            dropdown
                                         >
                                             <button
-                                                id="button-basic"
-                                                dropdownToggle
                                                 type="button"
                                                 mat-raised-button color="primary"
-                                                class="dropdown-toggle"
-                                                aria-controls="dropdown-basic"
+                                                [matMenuTriggerFor]="changeStatusMenu"
                                             >
                                                 {{ localeData?.change_status }}
-                                                <span class="caret"></span>
+                                                <i class="caret"></i>
                                             </button>
 
-                                            <ul
-                                                id="dropdown-basic"
-                                                *dropdownMenu
-                                                class="dropdown-menu"
-                                                role="menu"
-                                                aria-labelledby="button-basic"
-                                            >
-                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder?.status === 'OPEN'">
-                                                    <a
-                                                        class="dropdown-item"
-                                                        (click)="
-                                                            voucherApiVersion === 2
-                                                                ? openBulkConvert(purchaseBulkConvert)
-                                                                : convertToBill()
-                                                        "
-                                                        >{{ localeData?.convert_tobill }}</a
-                                                    >
-                                                </li>
-                                                <li class="cp" role="menuitem">
-                                                    <a
-                                                        class="dropdown-item"
-                                                        [routerLink]="[
-                                                            '/pages/purchase-management/purchase-order/new/' +
-                                                                purchaseOrderUniqueName
-                                                        ]"
-                                                        >{{ commonLocaleData?.app_copy }}</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a
-                                                        class="cp"
-                                                        href="javascript:void(0)"
-                                                        (click)="statusUpdate('cancelled')"
-                                                        *ngIf="purchaseOrder?.status !== 'CANCELLED'"
-                                                        >{{ commonLocaleData?.app_cancel }}</a
-                                                    >
-                                                    <a
-                                                        class="cp"
-                                                        href="javascript:void(0)"
-                                                        (click)="statusUpdate('open')"
-                                                        *ngIf="
-                                                            purchaseOrder?.status === 'CANCELLED' ||
-                                                            purchaseOrder?.status === 'EXPIRED'
-                                                        "
-                                                        >{{ localeData?.open }}</a
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <a class="cp" href="javascript:void(0)" (click)="confirmDelete()">{{
-                                                        commonLocaleData?.app_delete
-                                                    }}</a>
-                                                </li>
-                                            </ul>
+                                            <mat-menu #changeStatusMenu="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    *ngIf="purchaseOrder?.status === 'OPEN'"
+                                                    (click)="
+                                                        voucherApiVersion === 2
+                                                            ? openBulkConvert(purchaseBulkConvert)
+                                                            : convertToBill()
+                                                    "
+                                                >
+                                                    {{ localeData?.convert_tobill }}
+                                                </button>
+                                                <a
+                                                    mat-menu-item
+                                                    [routerLink]="[
+                                                        '/pages/purchase-management/purchase-order/new/' +
+                                                            purchaseOrderUniqueName
+                                                    ]"
+                                                >
+                                                    {{ commonLocaleData?.app_copy }}
+                                                </a>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="statusUpdate('cancelled')"
+                                                    *ngIf="purchaseOrder?.status !== 'CANCELLED'"
+                                                >
+                                                    {{ commonLocaleData?.app_cancel }}
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="statusUpdate('open')"
+                                                    *ngIf="
+                                                        purchaseOrder?.status === 'CANCELLED' ||
+                                                        purchaseOrder?.status === 'EXPIRED'
+                                                    "
+                                                >
+                                                    {{ localeData?.open }}
+                                                </button>
+                                                <button mat-menu-item (click)="confirmDelete()">
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
+                                            </mat-menu>
                                         </div>
                                         <!-- endregion -->
 
@@ -221,7 +206,7 @@
                                             <div class="history-btn">
                                                 <button
                                                     mat-raised-button color="primary"
-                                                    (click)="toggleActivityHistoryAsidePane()"
+                                                    (click)="openActivityHistoryAsidePaneDialog()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
                                                     {{ commonLocaleData?.app_history }}
@@ -268,11 +253,10 @@
         (closeModelEvent)="closeSendMailPopup($event)"
     ></purchase-send-email-modal>
 </ng-template>
-<div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>
-<div *ngIf="revisionHistoryAsideState === 'in'">
-    <aside-revision-history (closeAsideEvent)="toggleActivityHistoryAsidePane()" [purchaseOrder]="purchaseOrder">
+<ng-template #revisionHistoryTemplate>
+    <aside-revision-history (closeAsideEvent)="revisionHistoryDialogRef.close()" [purchaseOrder]="purchaseOrder">
     </aside-revision-history>
-</div>
+</ng-template>
 <ng-template #poConfirmationTemplate>
     <div class="modal-content">
         <delete-voucher-confirmation-modal
