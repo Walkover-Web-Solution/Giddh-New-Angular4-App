@@ -94,68 +94,20 @@
                             <label>{{ localeData?.mode_of_transportation }}</label>
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 pd-t15">
-                            <ul class="list-icon-group list-style-none p-0 d-flex">
-                                <li class="d-flex align-items-center cursor-pointer">
-                                    <input
-                                        id="transMode1"
-                                        type="radio"
-                                        class="d-none"
-                                        name="transMode"
-                                        value="1"
-                                        formControlName="transMode"
-                                        (click)="updateField('vehType', null)"
-                                    />
-                                    <label for="transMode1"
-                                        ><img alt="Road icon" src="assets/icon/4.svg" /> {{ commonLocaleData?.app_road
-                                        }}</label
-                                    >
-                                </li>
-                                <li class="d-flex align-items-center cursor-pointer">
-                                    <input
-                                        id="transMode2"
-                                        type="radio"
-                                        class="d-none"
-                                        name="transMode"
-                                        value="2"
-                                        formControlName="transMode"
-                                        (click)="updateField('vehType', 'R')"
-                                    />
-                                    <label for="transMode2"
-                                        ><img alt="Railway icon" src="assets/icon/3.svg" /> {{
-                                        commonLocaleData?.app_rail }}</label
-                                    >
-                                </li>
-                                <li class="d-flex align-items-center cursor-pointer">
-                                    <input
-                                        id="transMode3"
-                                        type="radio"
-                                        class="d-none"
-                                        name="transMode"
-                                        value="3"
-                                        formControlName="transMode"
-                                        (click)="updateField('vehType', 'R')"
-                                    />
-                                    <label for="transMode3"
-                                        ><img alt="Airway icon" src="assets/icon/1.svg" /> {{ commonLocaleData?.app_air
-                                        }}</label
-                                    >
-                                </li>
-                                <li class="d-flex align-items-center cursor-pointer">
-                                    <input
-                                        id="transMode4"
-                                        type="radio"
-                                        class="d-none"
-                                        name="transMode"
-                                        value="4"
-                                        formControlName="transMode"
-                                        (click)="updateField('vehType', 'R')"
-                                    />
-                                    <label for="transMode4"
-                                        ><img alt="Ship icon" src="assets/icon/2.svg" /> {{ commonLocaleData?.app_ship
-                                        }}</label
-                                    >
-                                </li>
-                            </ul>
+                            <mat-radio-group formControlName="transMode" class="d-flex flex-wrap">
+                                <mat-radio-button color="primary" value="1" (click)="updateField('vehType', null)" class="mr-3 mb-2">
+                                    <img alt="Road icon" src="assets/icon/4.svg" class="mr-1" /> {{ commonLocaleData?.app_road }}
+                                </mat-radio-button>
+                                <mat-radio-button color="primary" value="2" (click)="updateField('vehType', 'R')" class="mr-3 mb-2">
+                                    <img alt="Railway icon" src="assets/icon/3.svg" class="mr-1" /> {{ commonLocaleData?.app_rail }}
+                                </mat-radio-button>
+                                <mat-radio-button color="primary" value="3" (click)="updateField('vehType', 'R')" class="mr-3 mb-2">
+                                    <img alt="Airway icon" src="assets/icon/1.svg" class="mr-1" /> {{ commonLocaleData?.app_air }}
+                                </mat-radio-button>
+                                <mat-radio-button color="primary" value="4" (click)="updateField('vehType', 'R')" class="mb-2">
+                                    <img alt="Ship icon" src="assets/icon/2.svg" class="mr-1" /> {{ commonLocaleData?.app_ship }}
+                                </mat-radio-button>
+                            </mat-radio-group>
                         </div>
                     </div>
                     <div class="row">

@@ -121,146 +121,162 @@
             </div>
             <div class="bg-white py-3 mt-4 mb-4">
                 <div class="table-responsive">
-                    <!-- Table For Stock -->
-                    <table class="table giddh-table">
-                        <thead>
-                            <tr>
-                                <th width="auto">Stock</th>
-                                <th width="20%">Method</th>
-                                <th width="12%" class="small-width" *ngIf="mode">Closing Qty</th>
-                                <th width="12%" class="small-width" *ngIf="!mode">Closing Value</th>
-                                <th width="20%" *ngIf="mode">Change in Qty</th>
-                                <th width="20%" *ngIf="!mode">Change in Value</th>
-                                <th width="20%" *ngIf="mode">New Qty</th>
-                                <th width="20%" *ngIf="!mode">New Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex mb-2 w-100">
-                                        <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
-                                            [name]="'fields'" [placeholder]="'Select Stock'" [options]="dummyOptions"
-                                            (selectedOption)="selectAccount($event)" [defaultValue]="''">
-                                        </select-field>
-                                    </div>
-                                    <!-- <textarea placeholder="Add Description" matInput class="form-control"></textarea> -->
-                                </td>
-                                <td>
-                                    <div class="mb-2 w-100">
-                                        <mat-select
-                                            [placeholder]="'Select Method'"
-                                            class="form-control"
-                                            (selectionChange)="selectAccount($event)"
-                                        >
-                                            <div class="select-quantity-option">
-                                                <mat-option [value]="'percentage'">Percentage</mat-option>
-                                                <mat-option [value]="'value'">Value</mat-option>
-                                            </div>
-                                        </mat-select>
-                                    </div>
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
-                                    </text-field>
-                                </td>
-                                <td class="small-width" *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
-                                    </text-field>
-                                </td>
-                                <td class="small-width" *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Qty'">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Value'">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'">
-                                    </text-field>
-                                </td>
-                            </tr>
-                        </tbody>
+                    <!-- Mat Table For Stock -->
+                    <table mat-table [dataSource]="stockDataSource" class="table giddh-table">
+                        <!-- Stock Column -->
+                        <ng-container matColumnDef="stock">
+                            <th mat-header-cell *matHeaderCellDef width="auto">Stock</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="d-flex mb-2 w-100">
+                                    <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
+                                        [name]="'fields'" [placeholder]="'Select Stock'" [options]="dummyOptions"
+                                        (selectedOption)="selectAccount($event)" [defaultValue]="''">
+                                    </select-field>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Method Column -->
+                        <ng-container matColumnDef="method">
+                            <th mat-header-cell *matHeaderCellDef width="20%">Method</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="mb-2 w-100">
+                                    <mat-select
+                                        [placeholder]="'Select Method'"
+                                        class="form-control"
+                                        (selectionChange)="selectAccount($event)"
+                                    >
+                                        <div class="select-quantity-option">
+                                            <mat-option [value]="'percentage'">Percentage</mat-option>
+                                            <mat-option [value]="'value'">Value</mat-option>
+                                        </div>
+                                    </mat-select>
+                                </div>
+                                <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Closing Qty/Value Column -->
+                        <ng-container matColumnDef="closingQty">
+                            <th mat-header-cell *matHeaderCellDef width="12%" class="small-width">
+                                <span *ngIf="mode">Closing Qty</span>
+                                <span *ngIf="!mode">Closing Value</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="small-width">
+                                <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Change in Qty/Value Column -->
+                        <ng-container matColumnDef="changeInQty">
+                            <th mat-header-cell *matHeaderCellDef width="20%">
+                                <span *ngIf="mode">Change in Qty</span>
+                                <span *ngIf="!mode">Change in Value</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <text-field [type]="'text'" [cssClass]="'form-control'"
+                                    [placeholder]="mode ? 'Change in Qty' : 'Change in Value'">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- New Qty/Value Column -->
+                        <ng-container matColumnDef="newQty">
+                            <th mat-header-cell *matHeaderCellDef width="20%">
+                                <span *ngIf="mode">New Qty</span>
+                                <span *ngIf="!mode">New Value</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <text-field [type]="'text'" [cssClass]="'form-control'" 
+                                    [placeholder]="mode ? 'New Qty' : 'New Value'">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="stockDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: stockDisplayedColumns"></tr>
                     </table>
 
-                    <!-- Table For Group -->
-                    <table class="table giddh-table">
-                        <thead>
-                            <tr>
-                                <th width="auto">Group</th>
-                                <th width="20%">Method</th>
-                                <th width="12%" class="small-width" *ngIf="mode">Closing Qty</th>
-                                <th width="12%" class="small-width" *ngIf="!mode">Closing Value</th>
-                                <th width="20%" *ngIf="mode">Change in Qty</th>
-                                <th width="20%" *ngIf="!mode">Change in Value</th>
-                                <th width="20%" *ngIf="mode">New Qty</th>
-                                <th width="20%" *ngIf="!mode">New Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex mb-2">
-                                        <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
-                                            [name]="'fields'" [placeholder]="'Select Group'" [options]="dummyOptions"
-                                            (selectedOption)="selectAccount($event)" [defaultValue]="''">
-                                        </select-field>
-                                    </div>
-                                    <!-- <textarea placeholder="Add Description" matInput class="form-control"></textarea> -->
-                                </td>
-                                <td>
-                                    <div class="mb-2 w-100">
-                                        <mat-select
-                                            [placeholder]="'Select Method'"
-                                            class="form-control"
-                                            (selectionChange)="selectAccount($event)"
-                                        >
-                                            <div class="select-quantity-option">
-                                                <mat-option [value]="'percentage'">Percentage</mat-option>
-                                                <mat-option [value]="'value'">Value</mat-option>
-                                            </div>
-                                        </mat-select>
-                                    </div>
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
-                                    </text-field>                  
-                                </td>
-                                <td class="small-width" *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
-                                    </text-field>
-                                </td>
-                                <td class="small-width" *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Qty'">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Value'">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'">
-                                    </text-field>
-                                </td>
-                                <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'">
-                                    </text-field>
-                                </td>
-                            </tr>
-                        </tbody>
+                    <!-- Mat Table For Group -->
+                    <table mat-table [dataSource]="groupDataSource" class="table giddh-table">
+                        <!-- Group Column -->
+                        <ng-container matColumnDef="group">
+                            <th mat-header-cell *matHeaderCellDef width="auto">Group</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="d-flex mb-2">
+                                    <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
+                                        [name]="'fields'" [placeholder]="'Select Group'" [options]="dummyOptions"
+                                        (selectedOption)="selectAccount($event)" [defaultValue]="''">
+                                    </select-field>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Method Column -->
+                        <ng-container matColumnDef="method">
+                            <th mat-header-cell *matHeaderCellDef width="20%">Method</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="mb-2 w-100">
+                                    <mat-select
+                                        [placeholder]="'Select Method'"
+                                        class="form-control"
+                                        (selectionChange)="selectAccount($event)"
+                                    >
+                                        <div class="select-quantity-option">
+                                            <mat-option [value]="'percentage'">Percentage</mat-option>
+                                            <mat-option [value]="'value'">Value</mat-option>
+                                        </div>
+                                    </mat-select>
+                                </div>
+                                <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Closing Qty/Value Column -->
+                        <ng-container matColumnDef="closingQty">
+                            <th mat-header-cell *matHeaderCellDef width="12%" class="small-width">
+                                <span *ngIf="mode">Closing Qty</span>
+                                <span *ngIf="!mode">Closing Value</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="small-width">
+                                <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Change in Qty/Value Column -->
+                        <ng-container matColumnDef="changeInQty">
+                            <th mat-header-cell *matHeaderCellDef width="20%">
+                                <span *ngIf="mode">Change in Qty</span>
+                                <span *ngIf="!mode">Change in Value</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <text-field [type]="'text'" [cssClass]="'form-control'"
+                                    [placeholder]="mode ? 'Change in Qty' : 'Change in Value'">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- New Qty/Value Column -->
+                        <ng-container matColumnDef="newQty">
+                            <th mat-header-cell *matHeaderCellDef width="20%">
+                                <span *ngIf="mode">New Qty</span>
+                                <span *ngIf="!mode">New Value</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <text-field [type]="'text'" [cssClass]="'form-control'" 
+                                    [placeholder]="mode ? 'New Qty' : 'New Value'">
+                                </text-field>
+                            </td>
+                        </ng-container>
+
+                        <!-- Header and Row Definitions -->
+                        <tr mat-header-row *matHeaderRowDef="groupDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: groupDisplayedColumns"></tr>
                     </table>
                 </div>
             </div>

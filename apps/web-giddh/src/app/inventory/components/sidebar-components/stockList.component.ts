@@ -23,7 +23,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
             <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item?.uniqueName">
          {{item.count}}</span>
           </a>
-          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item?.uniqueName">
+          <button mat-stroked-button class="pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item?.uniqueName">
             <i class="icon-edit-pencil"> </i>
             </button>
         </div>

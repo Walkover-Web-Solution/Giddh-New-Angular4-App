@@ -9,22 +9,28 @@
             <div class="mb-5">
                 <p class="mr-b1">{{ localeData?.tax_invoice_copies }}</p>
                 <p class="mr-b1">
-                    <label class="pointer"
-                        ><input type="checkbox" checked /> <strong>{{ localeData?.original_copy }}:</strong>
-                        {{ localeData?.buyer_copy }}</label
-                    >
+                    <label class="pointer">
+                        <mat-checkbox [checked]="true" color="primary">
+                            <strong>{{ localeData?.original_copy }}:</strong>
+                            {{ localeData?.buyer_copy }}
+                        </mat-checkbox>
+                    </label>
                 </p>
                 <p class="mr-b1">
-                    <label class="pointer"
-                        ><input type="checkbox" checked /> <strong>{{ localeData?.duplicate_copy }}:</strong>
-                        {{ localeData?.transporter_copy }}</label
-                    >
+                    <label class="pointer">
+                        <mat-checkbox [checked]="true" color="primary">
+                            <strong>{{ localeData?.duplicate_copy }}:</strong>
+                            {{ localeData?.transporter_copy }}
+                        </mat-checkbox>
+                    </label>
                 </p>
                 <p class="mr-b1">
-                    <label class="pointer"
-                        ><input type="checkbox" checked /> <strong>{{ localeData?.triplicate_copy }}:</strong>
-                        {{ localeData?.supplier_copy }}</label
-                    >
+                    <label class="pointer">
+                        <mat-checkbox [checked]="true" color="primary">
+                            <strong>{{ localeData?.triplicate_copy }}:</strong>
+                            {{ localeData?.supplier_copy }}
+                        </mat-checkbox>
+                    </label>
                 </p>
             </div>
 
@@ -36,22 +42,26 @@
                     ></a>
                 </p>
                 <p class="mr-b1">
-                    <label class="pointer"
-                        ><input type="checkbox" checked />
-                        <strong>{{ commonLocaleData?.app_account_currency }} </strong> {{ localeData?.usd }}</label
-                    >
+                    <label class="pointer">
+                        <mat-checkbox [checked]="true" color="primary">
+                            <strong>{{ commonLocaleData?.app_account_currency }} </strong> {{ localeData?.usd }}
+                        </mat-checkbox>
+                    </label>
                 </p>
                 <p class="mr-b1">
-                    <label class="pointer"
-                        ><input type="checkbox" checked />
-                        <strong>{{ commonLocaleData?.app_company_currency }} </strong> {{ localeData?.inr }}</label
-                    >
+                    <label class="pointer">
+                        <mat-checkbox [checked]="true" color="primary">
+                            <strong>{{ commonLocaleData?.app_company_currency }} </strong> {{ localeData?.inr }}
+                        </mat-checkbox>
+                    </label>
                 </p>
                 <p class="mr-b1">
-                    <label class="pointer"
-                        ><input type="checkbox" checked /> <strong>{{ localeData?.both_currency }}</strong>
-                        {{ localeData?.usd_conversion_inr }}</label
-                    >
+                    <label class="pointer">
+                        <mat-checkbox [checked]="true" color="primary">
+                            <strong>{{ localeData?.both_currency }}</strong>
+                            {{ localeData?.usd_conversion_inr }}
+                        </mat-checkbox>
+                    </label>
                 </p>
             </div>
         </div>
@@ -72,12 +82,12 @@
 
         <div class="checkbox pt-1" *ngIf="voucherApiVersion === 2">
             <label>
-                <input
+                <mat-checkbox
                     name="originalCopy"
-                    type="checkbox"
                     value="Original"
-                    checked
+                    [checked]="true"
                     [(ngModel)]="isOriginal"
+                    color="primary"
                     (change)="invoiceTypeChanged($event)"
                 />
                 {{
@@ -89,11 +99,11 @@
         </div>
         <div class="checkbox pt-1" *ngIf="selectedItem?.voucherType === 'sales'">
             <label>
-                <input
-                    type="checkbox"
+                <mat-checkbox
                     value="Transport"
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isTransport"
+                    color="primary"
                 />
                 {{ localeData?.transport }}
             </label>
@@ -101,18 +111,18 @@
 
         <div class="checkbox pt-1" *ngIf="selectedItem?.voucherType === 'sales'">
             <label>
-                <input
-                    type="checkbox"
+                <mat-checkbox
                     value="Customer"
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isCustomer"
+                    color="primary"
                 />
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>
         <div class="checkbox pt-1" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
             <label>
-                <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" />
+                <mat-checkbox name="attachment" value="Attachment" [(ngModel)]="isAttachment" color="primary"></mat-checkbox>
                 {{ localeData?.invoice_copy_options?.attachment }}
             </label>
         </div>

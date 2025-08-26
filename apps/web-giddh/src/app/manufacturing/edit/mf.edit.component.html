@@ -50,16 +50,13 @@
                         <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8 p-0">
-                                <input
-                                    type="text"
+                                <giddh-datepicker
                                     name="invoiceDateRange"
-                                    bsDatepicker
-                                    required
-                                    class="form-control w-100"
                                     [(ngModel)]="manufacturingDetails.date"
-                                    [bsValue]="bsValue"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                />
+                                    [appearance]="'outline'"
+                                    class="form-control w-100"
+                                    required
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>
@@ -186,6 +183,7 @@
                                     </td>
                                     <td class="action">
                                         <button
+                                            mat-stroked-button
                                             [disabled]="
                                                 linkedStockQuantity.invalid ||
                                                 linkedStockRate.invalid ||
@@ -202,12 +200,14 @@
                                 <tr>
                                     <td colspan="7">
                                         <button
+                                            mat-raised-button
+                                            color="primary"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     (currentCompanyBranches$ | async)?.length === 1) ||
                                                 currentOrganizationType === 'BRANCH'
                                             "
-                                            class="btn-link btn px-0"
+                                            class="px-0"
                                             (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks"
                                         >
                                             Add New
@@ -255,7 +255,7 @@
                                                 (currentCompanyBranches$ | async)?.length === 1) ||
                                             currentOrganizationType === 'BRANCH'
                                         "
-                                        class="cp btn-link"
+                                        mat-raised-button color="primary" class="cp"
                                         (click)="onToggleAddExpensesBlock(toggleAddExpenses)"
                                         matTooltip="Add A/C where expense entries will be done."
                                         matTooltipPosition="above"
@@ -411,6 +411,7 @@
                                     </td>
                                     <td>
                                         <button
+                                            mat-stroked-button
                                             [disabled]="transactionAmount.invalid"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&

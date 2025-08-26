@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <h3>{{ localeData?.perform_payment_action }}</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
+        <button mat-stroked-button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
 
     <div class="modal-body clearfix" id="export-body" autocomplete="off">
@@ -9,14 +9,13 @@
             <div class="row">
                 <div class="col-6 form-group payment-date">
                     <label>{{ localeData?.payment_date }} <sup>*</sup></label>
-                    <input
-                        type="text"
+                    <giddh-datepicker
                         name="invoiceDateRange"
-                        bsDatepicker
-                        class="form-control w-100"
                         [(ngModel)]="paymentActionFormObj.paymentDate"
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                        [appearance]="'outline'"
+                        class="w-100"
+                        [placeholder]="giddhDateFormat"
+                    ></giddh-datepicker>
                 </div>
 
                 <div class="col-6 form-group">
@@ -95,15 +94,11 @@
 
                 <div class="col-6 form-group">
                     <label>{{ commonLocaleData?.app_cheque_clearance_date }}</label>
-                    <input
-                        type="text"
-                        bsDatepicker
-                        class="form-control"
-                        [(ngModel)]="paymentActionFormObj.chequeClearanceDate"
+                    <giddh-datepicker
                         name="chequeClearance"
-                        [placeholder]="giddhDateFormat"
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                        [(ngModel)]="paymentActionFormObj.chequeClearanceDate"
+                        [appearance]="'outline'"
+                    ></giddh-datepicker>
                 </div>
             </div>
 

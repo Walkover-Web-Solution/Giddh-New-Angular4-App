@@ -368,7 +368,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-proforma mr-r1"></i>
                                                 </span>
@@ -381,7 +381,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-purchase-order mr-r1"></i>
                                                 </span>
@@ -396,36 +396,33 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <!-- NOTE - This code is only active for Test Environment - Start -->
-                                            <ng-container *ngIf="!isProdMode">
-                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                                    <span class="d-flex">
-                                                        <i class="icon-invoice-new mr-r1"></i>
-                                                    </span>
-                                                    <span>
-                                                        <a
-                                                            class="cursor-pointer"
-                                                            (click)="navigateToSubItemLink('/vouchers/receipt/create')"
-                                                        >
-                                                            {{ commonLocaleData?.app_voucher_types?.receipt }}
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                                    <span class="d-flex">
-                                                        <i class="icon-invoice-new mr-r1"></i>
-                                                    </span>
-                                                    <span>
-                                                        <a
-                                                            class="cursor-pointer"
-                                                            (click)="navigateToSubItemLink('/vouchers/payment/create')"
-                                                        >
-                                                            {{ commonLocaleData?.app_voucher_types?.payment }}
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                            </ng-container>
-                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                </span>
+                                                <span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                    >
+                                                        {{ commonLocaleData?.app_voucher_types?.receipt }}
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                </span>
+                                                <span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                    >
+                                                        {{ commonLocaleData?.app_voucher_types?.payment }}
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
                                                 </span>
@@ -456,7 +453,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button class="btn btn-link p-1" (click)="dateSelectedCallback()">
+                            <button mat-raised-button class="p-1" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -468,7 +465,7 @@
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker form-control date-range-picker"
+                                    class="giddh-datepicker date-range-picker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -680,7 +677,7 @@
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button
+            <button mat-stroked-button
                 type="button"
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
@@ -696,12 +693,12 @@
             <div class="clearfix">
                 <ul class="list-inline upgrade-plan">
                     <li>
-                        <button class="btn btn-green" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
                             {{ localeData?.renew_plan }}
                         </button>
                     </li>
                     <li>
-                        <button class="btn btn-green" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
                             {{ localeData?.change_plan }}
                         </button>
                     </li>
@@ -723,7 +720,7 @@
     <ng-template #crossedTxLimitModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button
+            <button mat-stroked-button
                 type="button"
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
@@ -740,7 +737,7 @@
             <div class="clearfix">
                 <ul class="list-inline">
                     <li>
-                        <button class="btn btn-sky-blue" (click)="goToSelectPlan()">
+                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
                             {{ commonLocaleData?.app_buy_plan }}
                         </button>
                     </li>
@@ -780,7 +777,7 @@
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
-                <button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
+                <button mat-stroked-button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
                     <i class="icon-cross"></i>
                 </button>
                 <object [data]="calendlyUrl" title="calendar"></object>

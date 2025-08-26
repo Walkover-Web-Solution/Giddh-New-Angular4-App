@@ -3480,14 +3480,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-    * This will show the datepicker
-    *
-    * @param {boolean} isOpen
-    * @memberof VoucherListComponent
-    */
-    public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+     /**
+     * This will show the datepicker
+     *
+     * @param {boolean} isOpen
+     * @memberof VoucherListComponent
+     */
+     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

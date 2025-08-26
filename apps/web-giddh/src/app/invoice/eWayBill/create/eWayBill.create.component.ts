@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { NgForm } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -16,6 +17,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -56,8 +58,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public currenTransporterId: string;
     public isUserlogedIn: boolean;
-    public deleteTemplateConfirmationMessage: string;
-    public confirmationFlag: string;
     public showClear: boolean = false;
     public generateEwayBillform: GenerateEwayBill = {
         supplyType: null,
@@ -114,6 +114,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     private eWayBillCredentialsDialogRef: MatDialogRef<any>;
     /** Dialog reference for invoice remove confirmation */
     private invoiceRemoveConfirmationDialogRef: MatDialogRef<any>;
+    /** Data source for transporter table */
+    public transporterDataSource = new MatTableDataSource<IEwayBillTransporter>();
+    /** Displayed columns for transporter table */
+    public displayedColumns: string[] = ['transporterName', 'transporterId', 'actions'];
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
@@ -153,7 +157,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.transporterFilterRequest.page = 1;
-        this.transporterFilterRequest.count = 10;
+        this.transporterFilterRequest.count = this.pageSizeOptions[0];
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;
@@ -169,7 +173,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
-        })
+        });
+        
+        this.transporterList$.subscribe(transporters => {
+            if (transporters) {
+                this.transporterDataSource.data = transporters;
+            }
+        });
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let transporterDropdown = null;
@@ -228,8 +238,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
-            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
-
+            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;     
+            
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
@@ -320,35 +330,22 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof EWayBillCreateComponent
      */
     public removeInvoice(invoice: any[]): void {
-        this.confirmationFlag = 'closeConfirmation';
-
         let removeInvoice = this.localeData?.remove_invoice;
         removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0]?.voucherNumber);
-        this.deleteTemplateConfirmationMessage = removeInvoice;
-        
-        this.invoiceRemoveConfirmationDialogRef = this.dialog.open(this.invoiceRemoveConfirmationTemplate, {
-            panelClass: 'mat-dialog-md',
-            disableClose: true
-        });
-    }
-
-    /**
-     * Handles the close event of the confirmation modal
-     *
-     * @param {any} userResponse User response from the confirmation dialog
-     * @memberof EWayBillCreateComponent
-     */
-    public onCloseConfirmationModal(userResponse: any): void {
-        if (userResponse.response && userResponse.close === 'closeConfirmation') {
-            this.selectedInvoices?.splice(0, 1);
-            if (this.selectedInvoices?.length === 0) {
-                this.redirectToSalesInvoice();
+        this.invoiceRemoveConfirmationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(removeInvoice, this.commonLocaleData)
             }
-        }
-        if (this.invoiceRemoveConfirmationDialogRef) {
-            this.invoiceRemoveConfirmationDialogRef.close();
-            this.invoiceRemoveConfirmationDialogRef = null;
-        }
+        });
+        this.invoiceRemoveConfirmationDialogRef.afterClosed().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.selectedInvoices?.splice(0, 1);
+                if (this.selectedInvoices?.length === 0) {
+                    this.redirectToSalesInvoice();
+                }
+            }
+        });
     }
 
     detectChanges() {
@@ -365,14 +362,25 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public handlePageEvent(event: PageEvent): void {
         // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
-        this.transporterFilterRequest.page = event.pageIndex + 1;
+        if (this.transporterFilterRequest.count !== event.pageSize) {
+            this.transporterFilterRequest.page = 1;
+        } else {
+            this.transporterFilterRequest.page = event.pageIndex + 1;
+        }
+        this.transporterFilterRequest.count = event.pageSize;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
 
-    public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
-        this.transporterFilterRequest.sort = type;
-        this.transporterFilterRequest.sortBy = columnName;
+    /**
+     * Handles sorting events and updates API parameters
+     * 
+     * @param {any} event - Contains sorting details
+     * @memberof EWayBillCreateComponent
+     */
+    public sortChange(event: any): void {
+        this.transporterFilterRequest.sort = event?.direction;
+        this.transporterFilterRequest.sortBy = event?.active;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 

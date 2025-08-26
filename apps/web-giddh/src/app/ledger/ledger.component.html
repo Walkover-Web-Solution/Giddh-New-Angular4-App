@@ -92,7 +92,6 @@
                                         <button
                                             aria-label="delete"
                                             mat-stroked-button
-                                            color="warn"
                                             [disabled]="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
@@ -109,12 +108,11 @@
 
                                         <button
                                             aria-label="generate"
-                                            mat-stroked-button
                                             [disabled]="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
-                                            class="btn btn-warning"
+                                            mat-stroked-button
                                             id="generate-invoice-mobile-view"
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
@@ -131,7 +129,7 @@
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
                                         "
-                                        class="btn btn-success mr-0 font-15"
+                                        class="mr-0 font-15"
                                         id="attach-file-mobile-view"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
@@ -2460,10 +2458,9 @@
                             </div>
                         </div>
                         <button
+                            mat-raised-button color="primary"
                             aria-label="reconciliation"
-                            mat-button
                             [hidden]="closingBalanceBeforeReconcile || showLoader"
-                            class="btn btn-primary btn-sm mr-0"
                             (click)="getReconciliation()"
                         >
                             {{ localeData?.reconciliation }}

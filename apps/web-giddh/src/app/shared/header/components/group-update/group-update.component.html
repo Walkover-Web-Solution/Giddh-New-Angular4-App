@@ -24,8 +24,6 @@
             <div class="col-xs-12 col-sm-6">
                 <input-field
                     [type]="'text'"
-                    UniqueNameDirective
-                    textCaseChangeDirective
                     [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                     [label]="commonLocaleData?.app_unique_name"
                     [name]="'uniqueName'"
@@ -328,14 +326,12 @@
     </div>
 </div>
 <!--delete Group modal  -->
-<ng-template #deleteGroupTemplate>
-    <div mat-dialog-content>
-        <confirm-modal
-            [title]="localeData?.delete_group_title"
-            [body]="localeData?.delete_group_content"
-            (cancelCallBack)="hideDeleteGroupModal()"
-            (successCallBack)="deleteGroup()"
-        >
-        </confirm-modal>
-    </div>
+<ng-template #deleteGroupModal>
+    <confirm-modal
+        [title]="localeData?.delete_group_title"
+        [body]="localeData?.delete_group_content"
+        (cancelCallBack)="closeDeleteGroupDialog()"
+        (successCallBack)="deleteGroup()"
+    >
+    </confirm-modal>
 </ng-template>

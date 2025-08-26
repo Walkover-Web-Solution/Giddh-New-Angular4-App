@@ -28,15 +28,12 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input
-                        name="dateRange"
+                    <giddh-datepicker
+                        name="entryDate"
                         formControlName="inventoryEntryDate"
-                        type="text"
-                        autocomplete="off"
+                        [appearance]="'outline'"
                         class="form-control"
-                        bsDatepicker
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                    ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
                     >
@@ -142,13 +139,13 @@
 
                             <div class="pull-right mr-t05 unit-add">
                                 <button
-                                    class="btn-link"
+                                    mat-stroked-button
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
                                     <i class="icon-plus add-row"></i>
                                 </button>
-                                <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
+                                <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross delete"></i>
                                 </button>
                             </div>
@@ -166,8 +163,8 @@
 
             <div class="row">
                 <div class="col-md-12 text-left mr-t1">
-                    <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

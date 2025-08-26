@@ -21,7 +21,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -78,7 +77,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     declarations: [
@@ -147,7 +148,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         AmountFieldComponentModule,
         HamburgerMenuModule,
         GiddhDatepickerModule,
-        BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
         MatDialogModule,
@@ -167,7 +167,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatSortModule,
+        NewConfirmationModalModule
     ],
     exports: [
         InvoiceRoutingModule,

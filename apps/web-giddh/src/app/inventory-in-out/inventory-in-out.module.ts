@@ -14,14 +14,16 @@ import { TransferNoteComponent } from './components/forms/transfer-note/transfer
 import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { LaddaModule } from 'angular2-ladda';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
 import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -40,12 +42,12 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     providers: [],
     imports: [InventoryInOutRoutingModule,
         CommonModule,
+        MatButtonModule,
         ShSelectModule,
-
         Daterangepicker,
         ReactiveFormsModule,
         FormsModule,
-        BsDatepickerModule.forRoot(), 
+ 
         CommonModule, 
         SelectModule, 
         LaddaModule.forRoot({
@@ -55,7 +57,9 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         BsDropdownModule.forRoot(),
         InventoryModule,
         MatTabsModule,
-        DecimalDigitsModule
+        DecimalDigitsModule,
+        MatCheckboxModule,
+        GiddhDatepickerModule
     ],
 })
 export class InventoryInOutModule {

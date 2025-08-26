@@ -574,6 +574,4 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.count = event.pageSize;
         this.getReport();
     }
-    
-
 }

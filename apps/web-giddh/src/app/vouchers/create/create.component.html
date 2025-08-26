@@ -294,7 +294,7 @@
                                         <div class="col-6"
                                             [style.visibility]="invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice ? 'hidden' : 'visible'"
                                             formGroupName="shippingDetails">
-                                            <mat-checkbox type="checkbox" color="primary"
+                                            <mat-checkbox color="primary"
                                                 [checked]="copyAccountBillingInShippingAddress"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice"
                                                 (change)="copyBillingInShipping('account',$event)">
@@ -541,7 +541,7 @@
                                     </div>
                                     <!-- Shipping Address -->
                                     <div class="col-6" formGroupName="shippingDetails">
-                                        <mat-checkbox type="checkbox" color="primary"
+                                        <mat-checkbox color="primary"
                                             [checked]="copyCompanyBillingInShippingAddress"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice"
                                             (change)="copyBillingInShipping('company',$event)">
@@ -1425,7 +1425,7 @@
                                                             (calculatedAmount)="updateEntryOtherTax(entry, $event)"
                                                             formGroupName="otherTax">
                                                             <ng-container *ngIf="!entry.get('otherTax.name')?.value">
-                                                                <mat-checkbox type="checkbox" color="primary"
+                                                                <mat-checkbox color="primary"
                                                                     formControlName="isChecked"
                                                                     (change)="openOtherTaxDialog(entry, entryIndex)">
                                                                 </mat-checkbox>

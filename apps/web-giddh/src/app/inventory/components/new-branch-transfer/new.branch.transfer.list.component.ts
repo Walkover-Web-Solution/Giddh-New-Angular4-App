@@ -6,6 +6,7 @@ import {
     ViewChild,
     HostListener
 } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -30,7 +31,6 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from "@angular/router";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -60,7 +60,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
     @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
     /** Instance of universal datepicker menu trigger */
-@ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
     // modalRef removed as part of Angular Material dialog migration
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

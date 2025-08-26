@@ -32,7 +32,7 @@
                                 <label class="d-block">&nbsp;</label>
                                 <button
                                     type="button"
-                                    class="btn btn-default"
+                                    mat-stroked-button
                                     (click)="moveStock()"
                                     [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                                 >
@@ -321,14 +321,12 @@
                     <div class="row">
                         <div class="col-sm-6 col-12">
                             <div class="checkbox">
-                                <label for="enablePurchase">
-                                    <input
-                                        type="checkbox"
-                                        formControlName="enablePurchase"
-                                        id="enablePurchase"
-                                        name="enablePurchase"
-                                    />
-                                    Purchase Information</label
+                                <mat-checkbox
+                                    formControlName="enablePurchase"
+                                    color="primary"
+                                >
+                                    Purchase Information
+                                </mat-checkbox
                                 >
                             </div>
                             <div class="form-group">
@@ -389,14 +387,15 @@
                                         </div>
                                         <div class="pull-right unit-add">
                                             <button
-                                                class="btn-link btn mr-0"
+                                                mat-stroked-button
+                                                class="mr-0"
                                                 (click)="addPurchaseUnitRates(i)"
                                                 *ngIf="l"
                                             >
                                                 <i class="icon-plus add-row"></i>
                                             </button>
                                             <button
-                                                class="btn-link btn"
+                                                mat-stroked-button
                                                 (click)="removePurchaseUnitRates(i)"
                                                 *ngIf="!l"
                                             >
@@ -410,14 +409,12 @@
 
                         <div class="col-sm-6 col-12">
                             <div class="checkbox">
-                                <label for="enableSales">
-                                    <input
-                                        type="checkbox"
-                                        formControlName="enableSales"
-                                        id="enableSales"
-                                        name="enableSales"
-                                    />
-                                    Sales Information</label
+                                <mat-checkbox
+                                    formControlName="enableSales"
+                                    color="primary"
+                                >
+                                    Sales Information
+                                </mat-checkbox
                                 >
                             </div>
                             <div class="form-group">
@@ -476,10 +473,10 @@
                                             />
                                         </div>
                                         <div class="pull-right unit-add">
-                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
+                                            <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
                                                 <i class="icon-plus add-row"></i>
                                             </button>
-                                            <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l">
+                                            <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
                                                 <i class="icon-cross delete"></i>
                                             </button>
                                         </div>
@@ -491,15 +488,13 @@
                     <div class="row pd-l05 pd-r05">
                         <div class="col-12 col-sm-12">
                             <div class="checkbox">
-                                <label for="isFsStock">
-                                    <input
-                                        type="checkbox"
-                                        formControlName="isFsStock"
-                                        id="isFsStock"
-                                        [disabled]=""
-                                        name="isFsStock"
-                                    />
-                                    Is it a finished stock? (Manufacturing/Combo)</label
+                                <mat-checkbox
+                                    formControlName="isFsStock"
+                                    [disabled]=""
+                                    color="primary"
+                                >
+                                    Is it a finished stock? (Manufacturing/Combo)
+                                </mat-checkbox
                                 >
                             </div>
                         </div>
@@ -621,7 +616,7 @@
                                             </td>
                                             <td>
                                                 <button
-                                                    class="btn-link btn"
+                                                    mat-stroked-button
                                                     (click)="addItemInLinkedStocks(list, i, i)"
                                                     *ngIf="l"
                                                     [disabled]="disableStockButton"
@@ -629,7 +624,7 @@
                                                     <i class="icon-plus add-row"></i>
                                                 </button>
                                                 <button
-                                                    class="btn-link btn"
+                                                    mat-stroked-button
                                                     (click)="removeItemInLinkedStocks(i)"
                                                     *ngIf="!l"
                                                 >
@@ -651,7 +646,7 @@
                                     *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async"
                                     (click)="submit()"
-                                    class="btn btn-success"
+                                    mat-raised-button color="primary"
                                     [disabled]="addStockForm.invalid || disableStockButton"
                                 >
                                     Save
@@ -660,7 +655,7 @@
                                     type="button"
                                     *ngIf="isUpdatingStockForm"
                                     [ladda]="isStockUpdateInProcess$ | async"
-                                    class="btn btn-success"
+                                    mat-raised-button color="primary"
                                     (click)="update()"
                                     [disabled]="addStockForm.invalid || disableStockButton"
                                 >
@@ -669,7 +664,7 @@
                                 <button
                                     *ngIf="isUpdatingStockForm"
                                     [ladda]="isStockDeleteInProcess$ | async"
-                                    class="btn btn-danger"
+                                    mat-stroked-button
                                     (click)="openModal(deleteGroupStockTemplate)"
                                 >
                                     Delete Stock
@@ -678,7 +673,7 @@
                                     type="button"
                                     *ngIf="!isUpdatingStockForm"
                                     (click)="resetStockForm()"
-                                    class="btn btn-default"
+                                    mat-stroked-button
                                 >
                                     Reset
                                 </button>

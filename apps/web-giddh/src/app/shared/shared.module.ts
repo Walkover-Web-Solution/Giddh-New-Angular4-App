@@ -6,11 +6,9 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -112,12 +110,10 @@ export function provideConfig() {
         ShSelectModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
-        BsDatepickerModule.forRoot(),
         MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
         HighlightModule,
-        TabsModule.forRoot(),
         NgxMaskModule.forRoot(),
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
@@ -166,10 +162,8 @@ export function provideConfig() {
         TextCaseChangeModule,
         KeyboardShortutModule,
         MfReportComponent,
-        TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
-        BsDatepickerModule,
         NgxDaterangepickerMd,
         CurrencyModule,
         TranslateDirectiveModule,

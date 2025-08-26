@@ -30,7 +30,6 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { BsModalService, BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
@@ -40,7 +39,6 @@ import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdv
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
 import { ReceiptService } from "../../services/receipt.service";
@@ -109,21 +107,13 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
     public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public voucherData: ReciptResponse;
     public dayjs = dayjs;
-    public modalRef: BsModalRef;
     public showInvoiceNoSearch = false;
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public modalUniqueName: string;
     public startDate: Date;
     public endDate: Date;
     public selectedInvoiceForDetails: InvoicePreviewDetailsVm;
     public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
     public innerWidth: any;
-    public isMobileView = false;
     public isExported: boolean = false;
     public showCustomerSearch = false;
     public showProformaSearch = false;
@@ -213,22 +203,20 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
     public invoiceSearch: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Reference to bulk export template ref */
     @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     /** Reference to bulk export dialog */
     private bulkExportDialogRef: MatDialogRef<any>;
     /** Reference to cancel E-invoice dialog */
     private cancelEInvoiceDialogRef: MatDialogRef<any>;
-    @ViewChild('template', { static: true }) public template: TemplateRef<any>;
+    /** Reference to search template ref */
+    @ViewChild('searchTemplate', { static: true }) public searchTemplate: TemplateRef<any>;
     /** Reference to search template dialog */
     private searchTemplateDialogRef: MatDialogRef<any>;
+    /** Reference to send email template ref */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: TemplateRef<any>;
     /** Reference to send email dialog */
     private sendEmailDialogRef: MatDialogRef<any>;
-    /** True if datepicker menu is open */
-    public isDatePickerOpen: boolean = false;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */
@@ -284,7 +272,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
         private generalActions: GeneralActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
-        private _breakPointObservar: BreakpointObserver,
         private _router: Router,
         private _receiptServices: ReceiptService,
         private purchaseRecordActions: PurchaseRecordActions,
@@ -292,7 +279,6 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
         private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private location: Location,
         private salesService: SalesService,
-        private modalService: BsModalService,
         private dialog: MatDialog,
         private generalService: GeneralService,
         private commonActions: CommonActions,
@@ -337,7 +323,7 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
                 panelClass: 'mat-dialog-md',
                 disableClose: true
             });
-        } else if (template === this.template) {
+        } else if (template === this.searchTemplate) {
             this.searchTemplateDialogRef = this.dialog.open(template, {
                 panelClass: 'mat-dialog-md',
                 disableClose: true
@@ -347,21 +333,12 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
                 panelClass: 'mat-dialog-md',
                 disableClose: true
             });
-        } else {
-            // Fallback for any remaining modals that haven't been migrated yet
-            this.modalRef = this.modalService.show(template);
         }
     }
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector("body")?.classList?.add("invoice-preview-page");
-        this._breakPointObservar.observe([
-            '(max-width: 1023px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
-        });
-
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
@@ -2310,7 +2287,7 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
             this.getVoucher(this.isUniversalDateApplicable);
             if (response?.status === 'success') {
                 this._toaster.successToast(response.body);
-                this.modalRef?.hide();
+                this.dialog.closeAll();
                 this.resetCancelEInvoice();
             } else if (response?.status === 'error') {
                 this._toaster.errorToast(response.message, response.code);

@@ -63,8 +63,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
-    /** Modal reference */
-    public modalRef: BsModalRef;
     /** Reference to bulk export dialog */
     private bulkExportDialogRef: MatDialogRef<any>;
     @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
@@ -206,8 +204,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private invoiceService: InvoiceService,
         private router: Router,
-        private dialog: MatDialog,
-        private modalService: BsModalService
+        private dialog: MatDialog
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {

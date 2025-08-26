@@ -3,21 +3,21 @@
         <h3>Create</h3>
     </div>
 
-    <button id="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen"><i class="icon-cross"></i></button>
-    <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
+    <button mat-stroked-button id="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen"><i class="icon-cross"></i></button>
+    <button mat-stroked-button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>
         <div class="pb-3 text-center">
-            <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Create Stock</button>
+            <button mat-raised-button color="primary" (click)="toggleStockPane()">Create Stock</button>
         </div>
         <div class="pb-3 text-center">
-            <button class="btn btn-lg btn-primary" (click)="toggleGroupPane()">Create Group</button>
+            <button mat-raised-button color="primary" (click)="toggleGroupPane()">Create Group</button>
         </div>
         <div class="pb-3 text-center">
-            <button class="btn btn-lg btn-primary" (click)="toggleUnitPane()">Create Unit</button>
+            <button mat-raised-button color="primary" (click)="toggleUnitPane()">Create Unit</button>
         </div>
         <!-- <div class="pb-3 text-center">
-            <button class="btn btn-lg btn-primary" (click)="toggleImport()">Import Stock</button>
+            <button mat-raised-button color="primary" (click)="toggleImport()">Import Stock</button>
         </div> -->
     </div>
 
