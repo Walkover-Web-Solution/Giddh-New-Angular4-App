@@ -19,7 +19,7 @@
                 <i class="icon-right"></i>
             </button>
         </div>
-        <div #tableContent class="plan-table mat-elevation-z8" *ngIf="!showLoader">
+        <div #tableContent class="plan-table" *ngIf="!showLoader">
             <div class="grid-list-div top-heading">
                 <div class="grid-title-left grid-title-left-top">
                     <span class="inner-name inner-name-bold mat-table-sticky">
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <div #tableContent class="plan-table-content mat-elevation-z8" *ngIf="showLoader">
+        <div #tableContent class="plan-table-content" *ngIf="showLoader">
             <div class="grid-list-div-changes">
                 <div
                     class="grid-title-left"
@@ -293,8 +293,7 @@
                                     <button
                                         *ngIf="!showLoader"
                                         class="mr-t1 pl-3 pr-3"
-                                        color="primary"
-                                        mat-raised-button
+                                        mat-raised-button color="primary"
                                         [disabled]="!licenceKey?.value"
                                         (click)="createCompanyViaActivationKey()"
                                     >

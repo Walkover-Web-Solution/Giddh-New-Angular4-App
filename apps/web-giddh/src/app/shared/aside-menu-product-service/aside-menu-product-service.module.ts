@@ -10,6 +10,8 @@ import { TextCaseChangeModule } from "../helpers/directives/textCaseChange/textC
 import { UniqueNameModule } from "../helpers/directives/uniqueName/uniqueName.module";
 import { AsideMenuProductServiceComponent } from "./aside-menu-product-service.component";
 import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
     declarations: [
@@ -26,7 +28,9 @@ import { MatButtonModule } from "@angular/material/button";
         TextCaseChangeModule,
         DecimalDigitsModule,
         StockCreateEditModule,
-        MatButtonModule 
+        MatButtonModule,
+        MatCheckboxModule,
+        MatRadioModule 
     ],
     exports: [
         AsideMenuProductServiceComponent

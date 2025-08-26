@@ -43,27 +43,17 @@
         <div class="box mr-t15">
             <div class="filter-top-selling d-flex flex-column flex-sm-row justify-content-between">
                 <div class="select-by-radio font-15">
-                    <span class="p-0 mr-3">
-                        <input id="location-wise" type="radio" name="selectOption" class="radio-custom cp ml-0" /><label
-                            for="location-wise"
-                            class="radio-custom-label"
-                            >Location wise</label
-                        >
-                    </span>
-                    <span class="p-0 mr-3">
-                        <input id="product-wise" type="radio" name="selectOption" class="radio-custom cp ml-0" /><label
-                            for="product-wise"
-                            class="radio-custom-label"
-                            >Product wise</label
-                        >
-                    </span>
-                    <span class="p-0 mr-3">
-                        <input id="service-wise" type="radio" name="selectOption" class="radio-custom cp ml-0" /><label
-                            for="service-wise"
-                            class="radio-custom-label"
-                            >Service wise</label
-                        >
-                    </span>
+                    <mat-radio-group name="selectOption" class="d-flex">
+                        <mat-radio-button color="primary" value="location" class="mr-3">
+                            Location wise
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" value="product" class="mr-3">
+                            Product wise
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" value="service" class="mr-3">
+                            Service wise
+                        </mat-radio-button>
+                    </mat-radio-group>
                 </div>
                 <div class="select-by-week">
                     <div>

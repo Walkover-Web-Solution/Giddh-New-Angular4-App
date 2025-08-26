@@ -16,6 +16,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuSalesOtherTaxesModule } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DiscountListComponent } from './discount-list/discountList.component';
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -44,7 +45,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         
         AsideMenuRecurringEntryModule,
         ClickOutsideModule,
-        AsideMenuSalesOtherTaxesModule
+        AsideMenuSalesOtherTaxesModule,
+        MatCheckboxModule
     ],
     exports: [
         DiscountListComponent

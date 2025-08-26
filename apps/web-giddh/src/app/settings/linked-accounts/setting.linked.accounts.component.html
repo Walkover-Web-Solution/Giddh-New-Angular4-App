@@ -7,7 +7,7 @@
     <div class="box clearfix">
         <h1 class="section-head pt-0">{{ localeData?.add_bank_account_form_heading }}</h1>
         <div>
-            <button (click)="connectBank()" class="btn btn-primary">{{ localeData?.connect_bank }}</button>
+            <button mat-raised-button color="primary" (click)="connectBank()">{{ localeData?.connect_bank }}</button>
         </div>
         <div class="mr-t1">
             <p>{{ localeData?.note }}</p>
@@ -42,7 +42,7 @@
                     placeholer="Extra Params"
                     id="extraParams"
                 />
-                <button type="submit">{{ commonLocaleData?.app_submit }}</button>
+                <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_submit }}</button>
             </form>
         </div>
     </div>
@@ -59,7 +59,7 @@
                     <h3 class="subHead bd-rb">
                         {{ acc.siteName }}
                         <button
-                            class="btn btn-link mr-l1"
+                            mat-stroked-button class="mr-l1"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
@@ -68,7 +68,7 @@
                             <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
                         </button>
                         <button
-                            class="btn btn-link mr-l1"
+                            mat-stroked-button class="mr-l1"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="
@@ -109,14 +109,14 @@
                                         />
                                     </a>
                                     <div class="position-absolute datepicker-account">
-                                        <bs-datepicker-inline
+                                        <giddh-datepicker
                                             *ngIf="card.isDatePickerOpen"
-                                            name="fromDate"
+                                            name="transactionDate"
+                                            [placeholder]="'Transaction Date'"
                                             [(ngModel)]="card.transactionDate"
-                                            (selectionDone)="onUpdateDate($event, card)"
-                                            [bsConfig]="{ startView: 'week' }"
-                                        >
-                                        </bs-datepicker-inline>
+                                            (dateSelected)="onUpdateDate($event, card)"
+                                            [appearance]="'outline'"
+                                        ></giddh-datepicker>
                                     </div>
                                 </div>
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
@@ -142,21 +142,22 @@
                                 </div>
                                 <div class="clearfix">
                                     <button
-                                        class="btn btn-default"
+                                        mat-stroked-button
                                         *ngIf="card.showAccList"
                                         (click)="card.showAccList = false"
                                     >
                                         {{ localeData?.not_now }}
                                     </button>
                                     <button
-                                        class="btn btn-primary"
+                                        mat-raised-button color="primary"
                                         *ngIf="card.giddhAccount == null && !card.showAccList"
                                         (click)="card.showAccList = true"
                                     >
                                         {{ localeData?.link_account }}
                                     </button>
                                     <button
-                                        class="btn btn-danger mr-t1"
+                                        mat-stroked-button
+                                        class="mr-t1"
                                         *ngIf="card.giddhAccount && card.giddhAccount.name?.length > 0"
                                         (click)="onUnlinkBankAccount(card)"
                                     >
@@ -164,7 +165,7 @@
                                     </button>
                                 </div>
                                 <button
-                                    class="no-btn font-16 pos-abs bank-delete"
+                                    mat-stroked-button class="font-16 pos-abs bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i
@@ -190,7 +191,7 @@
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
                                 <div class="clearfix mr-t2"></div>
                                 <button
-                                    class="no-btn font-16 pos-abs bank-delete"
+                                    mat-stroked-button class="font-16 pos-abs bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i class="icon-trash" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
@@ -211,14 +212,14 @@
                                 <p>{{ localeData?.reason }}: {{ acc.reason }}</p>
                                 <div class="clearfix mr-t2" *ngIf="acc?.status === 'ALREADY_ADDED'">
                                     <button
-                                        class="btn btn-default"
+                                        mat-stroked-button
                                         *ngIf="card?.status !== 'INCORRECT_CREDENTIALS'"
                                         (click)="onRefreshToken(card)"
                                     >
                                         {{ localeData?.reconnect }}
                                     </button>
                                     <button
-                                        class="btn btn-default"
+                                        mat-stroked-button
                                         *ngIf="card?.status === 'INCORRECT_CREDENTIALS'"
                                         (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)"
                                     >
@@ -227,14 +228,14 @@
                                 </div>
                                 <div class="clearfix mr-t2" *ngIf="acc?.status !== 'ALREADY_ADDED'">
                                     <button
-                                        class="btn btn-default"
+                                        mat-stroked-button
                                         *ngIf="acc?.status !== 'INCORRECT_CREDENTIALS'"
                                         (click)="onRefreshToken(card)"
                                     >
                                         {{ localeData?.reconnect }}
                                     </button>
                                     <button
-                                        class="btn btn-default"
+                                        mat-stroked-button
                                         *ngIf="acc?.status === 'INCORRECT_CREDENTIALS'"
                                         (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)"
                                     >

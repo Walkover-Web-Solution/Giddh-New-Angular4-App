@@ -270,6 +270,7 @@
                                         <div class="modal-header clearfix">
                                             <h3>{{ commonLocaleData?.app_confirmation }}</h3>
                                             <button
+                                                mat-stroked-button
                                                 aria-hidden="true"
                                                 class="close"
                                                 (click)="onUserConfirmation(false)"
@@ -284,14 +285,12 @@
                                                 mat-raised-button
                                                 color="primary"
                                                 (click)="onUserConfirmation(true)"
-                                                class="btn btn-sm btn-success"
                                             >
                                                 {{ commonLocaleData?.app_yes }}
                                             </button>
                                             <button
                                                 mat-stroked-button
                                                 (click)="onUserConfirmation(false)"
-                                                class="btn btn-sm btn-danger"
                                             >
                                                 {{ commonLocaleData?.app_no }}
                                             </button>

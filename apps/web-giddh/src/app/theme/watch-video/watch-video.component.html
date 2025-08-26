@@ -8,7 +8,7 @@
         <div *ngIf="showIcon">
             <i class="icon-info1" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass"  [matTooltip]="translatedText" matTooltipPosition="above"></i>
         </div>
-        <button *ngIf="!showIcon" class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass">
+        <button class="toggle-btn" *ngIf="!showIcon" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass">
             {{ translatedText }}
         </button>
     </span>

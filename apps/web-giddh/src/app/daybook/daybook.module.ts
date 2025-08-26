@@ -1,4 +1,3 @@
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -43,7 +42,6 @@ import { MatMenuModule } from '@angular/material/menu';
         DecimalDigitsModule,
         FormsModule,
         ModalModule.forRoot(),
-        BsDatepickerModule.forRoot(),
         Daterangepicker,
         DaybookRoutingModule,
         ShSelectModule,

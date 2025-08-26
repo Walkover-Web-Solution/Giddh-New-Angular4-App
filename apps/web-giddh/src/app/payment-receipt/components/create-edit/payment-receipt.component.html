@@ -512,7 +512,7 @@
                                 <button
                                     color="primary"
                                     type="button"
-                                    mat-raised-button
+                                    mat-raised-button color="primary"
                                     *ngIf="!isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="createVoucher(receiptForm)"
@@ -541,7 +541,7 @@
                                 <button
                                     color="primary"
                                     type="button"
-                                    mat-raised-button
+                                    mat-raised-button color="primary"
                                     *ngIf="isUpdateMode"
                                     [disabled]="isLoading || isFileUploading"
                                     (click)="updateVoucher()"

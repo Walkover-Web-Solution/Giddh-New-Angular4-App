@@ -4,19 +4,14 @@
             <div class="clearfix pd-t2">
                 <span class="btn label isActive">{{ requestObj.voucherType }}</span>
                 <div class="pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false">
-                    <input
-                        type="text"
-                        onReturn
-                        #dateField
-                        name="entryDate"
+                    <giddh-datepicker
+                        name="voucherDate"
                         [(ngModel)]="journalDate"
-                        (blur)="dateEntered()"
                         [placeholder]="giddhDateFormat"
+                        (focusOut)="onDateFieldFocus()"
+                        [appearance]="'outline'"
                         class="form-control text-right voucher-date-field"
-                        (focus)="onDateFieldFocus()"
-                        bsDatepicker
-                        [bsConfig]="bsConfig"
-                    />
+                    ></giddh-datepicker>
                     {{ displayDay }}
                 </div>
             </div>
@@ -261,7 +256,7 @@
                         <h1>Accept?</h1>
                         <div class="pd-t2">
                             <button
-                                class="btn btn-primary"
+                                mat-raised-button color="primary"
                                 #submitButton
                                 (keyup)="keyUpOnSubmitButton($event)"
                                 (click)="saveEntry()"
@@ -269,7 +264,7 @@
                                 Yes
                             </button>
                             <button
-                                class="btn btn-default"
+                                mat-stroked-button
                                 #resetButton
                                 (keyup)="keyUpOnResetButton($event)"
                                 (click)="acceptCancel()"
@@ -277,7 +272,7 @@
                                 No
                             </button>
                             <br />
-                            <button class="btn btn-link mr-t1" (click)="refreshEntry()">Reset</button>
+                            <button mat-stroked-button class="mr-t1" (click)="refreshEntry()">Reset</button>
                         </div>
                     </div>
                 </div>

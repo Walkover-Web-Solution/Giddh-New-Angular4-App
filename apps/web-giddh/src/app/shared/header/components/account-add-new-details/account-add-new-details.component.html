@@ -279,7 +279,6 @@
                                         <span class="pd-r1" *ngIf="!firstItem">
                                             <button
                                                 mat-stroked-button
-                                                color="warn"
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white"
                                             >
@@ -401,21 +400,6 @@
                                     >
                                     </reactive-dropdown-field>
                                 </div>
-
-                                <!-- <div
-                                    class="col-sm-4"
-                                    *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
-                                >
-                                    <div class="form-group">
-                                        <label class="d-block">&nbsp;</label>
-                                        <label>
-                                            <input type="checkbox" formControlName="isComposite" /><label
-                                                >&nbsp;
-                                                {{ localeData?.is_composite }}
-                                            </label></label
-                                        >
-                                    </div>
-                                </div> -->
                             </ng-container>
                         </div>
                         <div

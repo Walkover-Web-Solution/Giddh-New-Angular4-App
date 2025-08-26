@@ -5,7 +5,8 @@
                 <div class="clearfix d-flex">
                     <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
-                        class="btn btn-sky-blue mr-r1 pull-right mobile-none"
+                        mat-raised-button color="primary"
+                        class="mr-r1 pull-right mobile-none"
                         matTooltip="Alt+N"
                         (click)="openTransferAsidePaneDialog()"
                     >
@@ -81,13 +82,13 @@
                 </div>
                 <div class="text-center d-lg-flex d-none">
                     <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                        <button class="btn btn-filter mr-0" (click)="clearFilters()">
+                        <button mat-stroked-button class="mr-0" (click)="clearFilters()">
                             <span class="icon-cross"></span> Clear Filter
                         </button>
                     </div>
                 </div>
                 <div
-                    class="advance-icon pointer mobile-none btn btn-primary mr-0"
+                    class="advance-icon pointer mobile-none mr-0"
                     matTooltip="Advance Search"
                     (click)="openSearchModal(searchDialog)"
                 >
@@ -97,7 +98,7 @@
             </div>
             <div class="d-lg-none mr-b1">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button class="btn btn-filter mr-0" (click)="clearFilters()">
+                    <button mat-stroked-button class="mr-0" (click)="clearFilters()">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
                 </div>
@@ -278,6 +279,7 @@
                             <div class="btn-group">
                                 <button
                                     type="button"
+                                    mat-stroked-button
                                     class="select-action-button"
                                     [matMenuTriggerFor]="actionMenu"
                                 >
@@ -335,7 +337,7 @@
 <ng-template #searchDialog>
     <div mat-dialog-title class="modal-header">
         <h4 class="modal-title bg pull-left">Advance Search</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeSearchDialog()">
+        <button mat-stroked-button type="button" class="close pull-right" aria-label="Close" (click)="closeSearchDialog()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -378,9 +380,10 @@
                 </div>
             </div>
             <div class="pull-right mr-t1">
-                <button class="btn btn-md btn-success mr-r1" type="button" (click)="search()">Search</button>
+                <button mat-raised-button color="primary" class="mr-r1" type="button" (click)="search()">Search</button>
                 <button
-                    class="btn btn-md btn-cancel mr-0"
+                    mat-stroked-button
+                    class="mr-0"
                     type="button"
                     (click)="refreshTempPostParams(); hideModal(false)"
                 >

@@ -75,6 +75,7 @@ import { TallyIntegrationComponent } from './tally-integration/tally.intergation
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
@@ -163,6 +164,7 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
         SerialNumberPipe,
         NewConfirmModalModule,
         OverlayModule,
+        GiddhDatepickerModule,
         TributeMentionModule,
         ReplaceAllPipeModule,
         TitleCasePipe

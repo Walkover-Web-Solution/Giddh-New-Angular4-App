@@ -16,7 +16,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
     selector: 'app-recurring',
@@ -54,6 +54,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public allItemsSelected: boolean = false;
     public recurringVoucherDetails: RecurringInvoice[];
     public selectedItems: string[] = [];
+    public recurringDisplayedColumns: string[] = ['serialNumber', 'invoiceNumber', 'customerName', 'interval', 'lastInvoiceDate', 'nextInvoiceDate', 'status', 'invoiceAmount'];
+    /** Mat table data source for recurring invoices */
+    public recurringDataSource = new MatTableDataSource<RecurringInvoice>();
     public customerNameInput: UntypedFormControl = new UntypedFormControl();
     public invoiceNumberInput: UntypedFormControl = new UntypedFormControl();
     public hoveredItemForAction: string = '';
@@ -334,7 +337,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Returns the search field text
+     * This will return the search field text
      *
      * @param {*} title
      * @returns {string}
@@ -344,5 +347,17 @@ export class RecurringComponent implements OnInit, OnDestroy {
         let searchField = this.localeData?.search_field;
         searchField = searchField?.replace("[FIELD]", title);
         return searchField;
+    }
+
+    /**
+     * Updates the recurring data source for mat-table
+     *
+     * @private
+     * @memberof RecurringComponent
+     */
+    private updateRecurringDataSource(): void {
+        if (this.recurringVoucherDetails) {
+            this.recurringDataSource.data = this.recurringVoucherDetails;
+        }
     }
 }

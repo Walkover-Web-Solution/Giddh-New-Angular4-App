@@ -31,6 +31,31 @@ export class DashboardSalesReport implements OnInit {
     public selectedRangeLabel: any = "";
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Displayed columns for the sales report mat-table */
+    public displayedColumns: string[] = ['date', 'invoice', 'customer', 'totalAmount', 'packed', 'shipped', 'delivered'];
+    /** Sample data source for the sales report table */
+    public dataSource: any[] = [
+        {
+            id: 1,
+            date: '2-11-2020',
+            invoice: '20181030-6',
+            customer: 'CA Abhay Sharma',
+            totalAmount: '₹12,300',
+            packed: false,
+            shipped: false,
+            delivered: false
+        },
+        {
+            id: 2,
+            date: '2-11-2020',
+            invoice: '20181030-6',
+            customer: 'CA Abhay Sharma',
+            totalAmount: '₹12,300',
+            packed: false,
+            shipped: false,
+            delivered: false
+        }
+    ];
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig
@@ -76,7 +101,7 @@ export class DashboardSalesReport implements OnInit {
     }
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = 'assets/images/';
     }
 
 }

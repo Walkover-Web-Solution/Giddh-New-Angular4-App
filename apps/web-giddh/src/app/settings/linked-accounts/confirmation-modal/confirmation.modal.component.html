@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <h3 id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
+        <button mat-stroked-button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
@@ -11,9 +11,9 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation()">
+        <button mat-raised-button color="primary" type="submit" (click)="onConfirmation()">
             {{ commonLocaleData?.app_yes }}
         </button>
-        <button type="submit" class="btn btn-md btn-danger" (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
+        <button mat-stroked-button type="submit" (click)="onCancel()">{{ commonLocaleData?.app_no }}</button>
     </div>
 </div>

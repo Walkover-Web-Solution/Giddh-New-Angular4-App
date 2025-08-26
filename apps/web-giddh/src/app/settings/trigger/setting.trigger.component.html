@@ -118,8 +118,8 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-success">{{ commonLocaleData?.app_add }}</button>
-                        <button type="button" (click)="onCancel()" class="btn btn-cancel">
+                        <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_add }}</button>
+                        <button mat-stroked-button type="button" (click)="onCancel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -233,7 +233,7 @@
                                     <button
                                         *ngIf="!triggerToEdit[i]"
                                         type="button"
-                                        class="btn btn-xs"
+                                        mat-stroked-button
                                         (click)="triggerToEdit = []; triggerToEdit[i] = true"
                                     >
                                         <i
@@ -245,7 +245,7 @@
                                     <button
                                         *ngIf="!triggerToEdit[i]"
                                         type="button"
-                                        class="btn btn-xs"
+                                        mat-stroked-button
                                         (click)="deleteTax(trigger)"
                                     >
                                         <i
@@ -257,7 +257,7 @@
                                     <button
                                         *ngIf="triggerToEdit[i]"
                                         type="button"
-                                        class="btn btn-xs"
+                                        mat-stroked-button
                                         (click)="updateTrigger(i); triggerToEdit[i] = false"
                                     >
                                         <i
@@ -269,7 +269,7 @@
                                     <button
                                         *ngIf="triggerToEdit[i]"
                                         type="button"
-                                        class="btn btn-xs"
+                                        mat-stroked-button
                                         (click)="triggerToEdit[i] = false"
                                     >
                                         <i

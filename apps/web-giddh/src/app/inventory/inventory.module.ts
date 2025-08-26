@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -51,7 +50,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -115,6 +117,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ],
     providers: [ExceptionLogService],
     imports: [
+        MatButtonModule,
         InventoryRoutingModule,
         SharedModule,
         Daterangepicker,
@@ -135,11 +138,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatSlideToggleModule,
         MatDialogModule,
         MatPaginatorModule,
+        GiddhDatepickerModule,
         MatMenuModule,
         MatButtonModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatCheckboxModule
+        MatTableModule,
+        MatCheckboxModule,
+        MatRadioModule
     ]
 })
 export class InventoryModule { }

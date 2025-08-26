@@ -21,6 +21,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatSlideToggleModule,
         MatButtonModule,
         MatTooltipModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatCheckboxModule
     ],
 })
 export class ImportExcelModule {

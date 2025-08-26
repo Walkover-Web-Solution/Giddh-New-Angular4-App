@@ -11,8 +11,8 @@
                         <div *ngIf="(!isCompany && !isConsolidatedBranch) && voucherType === 'sales'">
                             <button
                                 type="button"
-                                class="btn btn-sky-blue dropdown-btn-new mr-0"
-                                [matMenuTriggerFor]="newInvoiceMenu"
+                                class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0"
+                                aria-controls="dropdown-basic3"
                             >
                                 {{ localeData?.new_invoice }}
                                 <i class="caret"></i>
@@ -114,8 +114,8 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="btn btn-sky-blue"
-                                                [matMenuTriggerFor]="changeStatusProforma"
+                                                class="btn btn-sky-blue dropdown-toggle"
+                                                aria-controls="dropdown-basic"
                                             >
                                                 {{ localeData?.change_status }}
                                                 <i class="caret"></i>
@@ -165,8 +165,8 @@
 
                                             <button
                                                 type="button"
-                                                class="btn btn-sky-blue"
-                                                [matMenuTriggerFor]="changeStatusInvoice"
+                                                class="btn btn-sky-blue dropdown-toggle"
+                                                aria-controls="dropdown-basic2"
                                                 *ngIf="selectedItem?.voucherStatus !== 'cancel'"
                                             >
                                                 {{ localeData?.change_status }}
@@ -217,8 +217,8 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="btn btn-pink"
-                                                [matMenuTriggerFor]="changeStatusPurchase"
+                                                class="btn btn-pink dropdown-toggle"
+                                                aria-controls="dropdown-basic2"
                                             >
                                                 {{ localeData?.change_status }}
                                                 <i class="caret"></i>
@@ -696,7 +696,7 @@
 
 <ng-template #template>
     <div class="relative header-close-btn">
-        <button
+        <button mat-stroked-button
             type="button"
             class="close pull-right cursor-pointer"
             [attr.aria-label]="commonLocaleData?.app_close"

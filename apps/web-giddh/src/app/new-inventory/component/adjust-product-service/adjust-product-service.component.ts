@@ -37,6 +37,34 @@ export class AdjustProductServiceComponent implements OnInit {
     public selectedRangeLabel: string;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Displayed columns for the stock adjustment mat-table */
+    public stockDisplayedColumns: string[] = ['stock', 'method', 'closingQty', 'changeInQty', 'newQty'];
+    /** Displayed columns for the group adjustment mat-table */
+    public groupDisplayedColumns: string[] = ['group', 'method', 'closingQty', 'changeInQty', 'newQty'];
+    /** Sample data source for the stock adjustment table */
+    public stockDataSource: any[] = [
+        {
+            id: 1,
+            stock: '',
+            method: '',
+            methodValue: '',
+            closingQty: this.closingQty,
+            changeInQty: '',
+            newQty: ''
+        }
+    ];
+    /** Sample data source for the group adjustment table */
+    public groupDataSource: any[] = [
+        {
+            id: 1,
+            group: '',
+            method: '',
+            methodValue: '',
+            closingQty: this.closingQty,
+            changeInQty: '',
+            newQty: ''
+        }
+    ];
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,
