@@ -40,7 +40,7 @@ export class AdjustGroupComponent implements OnInit {
      */
     public openDialog(template: TemplateRef<any>): void {
         this.dialogRef = this.dialog.open(template, {
-            panelClass: 'modal-xl'
+            panelClass: 'mat-dialog-lg'
         });
     }
 

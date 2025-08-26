@@ -2,7 +2,6 @@
     <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
 </div>
 <hamburger-menu></hamburger-menu>
-<!-- *ngIf="asideSettingMenuState === 'in'" -->
 
 <div class="relative new-inventory-page overflow-visible">
     <div class="container-fluid breadcrumbs overflow-visible">
@@ -11,27 +10,6 @@
         </div>
     </div>
 </div>
-
-<!-- Aside pane code -->
-
-<!-- create new aside pane  -->
-<!-- <aside-create-new-inventory (closeAsideEvent)="openAsidePaneDialog()"></aside-create-new-inventory> -->
-
-<!-- create new group aside pane -->
-<ng-template #asideMenuStateForCreateNewGroupTemplate>
-    <aside-create-new-group
-        (closeAsideEvent)="asideMenuStateForCreateNewGroupDialogRef.close()"
-    ></aside-create-new-group>
-</ng-template>
-
-<!-- create new item(product/service) aside pane -->
-<!-- <aside-create-new-item (closeAsideEvent)="createItemToggleAsidePane()"></aside-create-new-item> -->
-
-<!-- create new unit aside pane -->
-<!-- <aside-create-new-unit (closeAsideEvent)="createUnitToggleAsidePane()"></aside-create-new-unit> -->
-
-<!-- create new combo asie pane -->
-<!-- <aside-create-combo (closeAsideEvent)="createComboToggleAsidePane()"></aside-create-combo> -->
 
 <!-- inventory advance search  -->
 <ng-template #inventoryAdvanceSearch>

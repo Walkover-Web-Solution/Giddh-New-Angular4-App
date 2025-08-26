@@ -119,7 +119,7 @@
                                                     }
                                                 ]"
                                             >
-                                                <div class="tax-tooltip font-14 overlay" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
                                                 (mouseleave)="openAddressInfo(false)">
                                                     {{ address?.address }} {{ address?.stateCode }}
                                                     <p *ngIf="address?.taxType && address?.taxNumber">

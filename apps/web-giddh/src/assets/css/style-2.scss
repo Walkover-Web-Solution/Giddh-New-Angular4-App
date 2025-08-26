@@ -13885,11 +13885,9 @@ mat-list {
     }
 }
 
-.overlay {
+.custom-cdk-overlay-wrapper {
     padding: 4px 8px;
     border-radius: 4px;
     box-shadow: var(--mat-menu-box-shadow);
-    max-width: 300px;
-    z-index: 1000;
     background-color: var(--color-dark-fog);
 }
