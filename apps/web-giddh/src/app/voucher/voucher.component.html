@@ -2261,15 +2261,15 @@
                                                         "
                                                     >
                                                         <div *ngIf="variants?.length > 1" class="variant-name mt-2">
-                                                            <sh-select
+                                                            <reactive-dropdown-field
                                                                 [placeholder]="localeData?.select_variant"
                                                                 [options]="variants"
                                                                 [cssClass]="'cursor-pointer'"
-                                                                (selected)="variantChanged($event, transaction, entry)"
-                                                                [isRequired]="true"
-                                                                name="{{ 'variant' + entryIdx }}"
+                                                                (selectedOption)="variantChanged($event, transaction, entry)"
+                                                                [required]="true"
+                                                                [name]="'variant' + entryIdx"
                                                                 [(ngModel)]="transaction.variant.uniqueName"
-                                                            ></sh-select>
+                                                            ></reactive-dropdown-field>
                                                         </div>
                                                     </ng-container>
                                                     <div *ngIf="transaction.fakeAccForSelect2">

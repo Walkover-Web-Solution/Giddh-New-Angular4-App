@@ -6,9 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRoutingModule } from './login.routing.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { LoaderModule } from '../loader/loader.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     imports: [
@@ -22,9 +22,9 @@ import { LoaderModule } from '../loader/loader.module';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
         SharedModule,
-        LoaderModule
+        LoaderModule,
+        FormFieldsModule
     ],
     declarations: [LoginComponent]
 })

@@ -21,22 +21,18 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select
+                            <reactive-dropdown-field
                                 class="input"
-                                #subgrp
+                                #subgrp="ngModel"
                                 [options]="SubsupplyTypesList"
-                                (selected)="subTypeElementSelected($event)"
-                                required
-                                [isRequired]="true"
+                                (selectedOption)="subTypeElementSelected($event)"
+                                [required]="true"
                                 [placeholder]="localeData?.reason_placeholder"
-                                [isFilterEnabled]="true"
-                                name="subSupplyType"
+                                [name]="'subSupplyType'"
                                 [(ngModel)]="generateEwayBillform.subSupplyType"
-                                [ItemHeight]="33"
-                                disabled
-                                [defaultValue]="selectedSubType"
-                            >
-                            </sh-select>
+                                [disabled]="true"
+                                [labelValue]="selectedSubType">
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="row d-flex e-way-body">
@@ -45,21 +41,17 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select
+                            <reactive-dropdown-field
                                 class="input"
-                                #doctypes
-                                autocomplete="xyz"
+                                #doctypes="ngModel"
                                 [options]="TransporterDocType"
-                                required
-                                [isRequired]="true"
+                                [required]="true"
                                 [placeholder]="localeData?.reason_placeholder"
-                                [isFilterEnabled]="true"
-                                name="docType"
+                                [name]="'docType'"
                                 [(ngModel)]="generateEwayBillform.docType"
-                                [ItemHeight]="33"
-                                disabled
-                                [defaultValue]="selectedDocType"
-                            ></sh-select>
+                                [disabled]="true"
+                                [labelValue]="selectedDocType">
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="row d-flex e-way-body">
@@ -112,20 +104,15 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select
+                            <reactive-dropdown-field
                                 class="input"
-                                #transSubType
-                                [showClear]="showClear"
+                                #transSubType="ngModel"
                                 [options]="transactionSubType"
-                                (keydown)="keydownPressed($event)"
                                 [placeholder]="localeData?.transaction_type_placeholder"
-                                [multiple]="false"
-                                [isFilterEnabled]="false"
-                                name="transactionType"
+                                [name]="'transactionType'"
                                 [(ngModel)]="generateEwayBillform.transactionType"
-                                [ItemHeight]="33"
-                                [defaultValue]="transactionSubType?.[0]?.label"
-                            ></sh-select>
+                                [labelValue]="transactionSubType?.[0]?.label">
+                            </reactive-dropdown-field>
                         </div>
                     </div>
 
@@ -135,36 +122,26 @@
                         </div>
 
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
-                            <sh-select
+                            <reactive-dropdown-field
                                 class="input"
-                                #trans
-                                [showClear]="showClear"
+                                #trans="ngModel"
                                 [options]="transporterDropdown$ | async"
-                                (keydown)="keydownPressed($event)"
-                                (selected)="selectTransporter($event)"
+                                (selectedOption)="selectTransporter($event)"
                                 [placeholder]="localeData?.transporter_placeholder"
-                                [notFoundLink]="true"
-                                [multiple]="false"
-                                [isFilterEnabled]="true"
-                                name="transporterId"
-                                [(ngModel)]="generateEwayBillform.transporterId"
-                                [ItemHeight]="33"
-                            >
-                                <ng-template #notFoundLinkTemplate>
-                                    <a
-                                        [ngClass]="{ 'active': keydownClassAdded }"
-                                        class="notfound-option"
-                                        [keyboardShortcut]="'alt+c'"
-                                        (onShortcutPress)="keydownPressed()"
-                                    >
-                                        <span
-                                            (click)="OpenTransporterModel()"
-                                            [ngClass]="{ 'active': keydownClassAdded }"
-                                            >Create New</span
-                                        >
-                                    </a>
+                                [name]="'transporterId'"
+                                [(ngModel)]="generateEwayBillform.transporterId">
+                                <ng-template #optionTemplate let-option="option">
+                                    <div class="list-item">
+                                        <div class="item">{{ option.label }}</div>
+                                        <div class="item-unique">{{ option?.value }}</div>
+                                    </div>
                                 </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
+                            <div class="mt-2">
+                                <button mat-stroked-button (click)="OpenTransporterModel()" type="button">
+                                    Create New Transporter
+                                </button>
+                            </div>
                         </div>
                     </div>
 

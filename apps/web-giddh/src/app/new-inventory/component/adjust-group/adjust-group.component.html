@@ -51,7 +51,7 @@
                             <label>Account <span class="red-text">*</span></label>
                         </div>
                         <div class="col-sm-8 col-lg-6">
-                            <sh-select id="account-no" placeholder="Select Account"></sh-select>
+                            <reactive-dropdown-field [name]="'accountNo'" [placeholder]="'Select Account'"></reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="row mr-b15">
@@ -59,7 +59,7 @@
                             <label>Reason <span class="red-text">*</span></label>
                         </div>
                         <div class="col-sm-8 col-lg-6">
-                            <sh-select id="reason" placeholder="Select Reason"></sh-select>
+                            <reactive-dropdown-field [name]="'reason'" [placeholder]="'Select Reason'"></reactive-dropdown-field>
                             <!-- button for add new reason aside pane, button is show in sh-select option
                                 <button mat-stroked-button (click)="addAdjustment()">add reason</button> -->
                         </div>
@@ -87,11 +87,11 @@
                                     <span>
                                         <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
                                     </span>
-                                    <sh-select
-                                        id="select-group-product-service"
-                                        placeholder="Select Name"
+                                    <reactive-dropdown-field
+                                        [name]="'selectGroupProductService'"
+                                        [placeholder]="'Select Name'"
                                         class="mr-l15 w-100"
-                                    ></sh-select>
+                                    ></reactive-dropdown-field>
                                 </div>
                                 <textarea placeholder="Add Description" class="form-control"></textarea>
                             </td>
@@ -106,10 +106,10 @@
                                 <input type="text" id="percent-value" value="0%" class="form-control" />
                             </td>
                             <td>
-                                <sh-select id="select-subgroup" class="mb-2" value="12 Selected"></sh-select>
+                                <reactive-dropdown-field [name]="'selectSubgroup'" class="mb-2" [labelValue]="'12 Selected'"></reactive-dropdown-field>
                             </td>
                             <td>
-                                <sh-select id="select-product-service" class="mb-2" value="212 Selected"></sh-select>
+                                <reactive-dropdown-field [name]="'selectProductService'" class="mb-2" [labelValue]="'212 Selected'"></reactive-dropdown-field>
                             </td>
                         </tr>
                     </tbody>

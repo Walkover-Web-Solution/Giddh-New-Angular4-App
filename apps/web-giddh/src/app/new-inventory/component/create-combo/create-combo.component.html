@@ -29,7 +29,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label>Unit Code <span class="red-text">*</span></label>
-                        <sh-select placeholder="Select Unit" id="combo-unit-code"></sh-select>
+                        <reactive-dropdown-field [placeholder]="'Select Unit'" id="combo-unit-code" [name]="'combo-unit-code'"></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="table-responsive mt-5">
@@ -48,8 +48,8 @@
                                     <img src="{{ imgPath }}add-image.svg" width="40" height="40" />
                                 </td>
                                 <td width="25%">
-                                    <sh-select id="select-product-combo" placeholder="Select product/Service">
-                                    </sh-select>
+                                    <reactive-dropdown-field id="select-product-combo" [placeholder]="'Select product/Service'" [name]="'select-product-combo'">
+                                    </reactive-dropdown-field>
                                 </td>
                                 <td width="12%">
                                     <input id="combo-unit" type="text" class="form-control" value="Unit" />
@@ -65,8 +65,8 @@
                                     <img src="{{ imgPath }}add-image.svg" width="40" height="40" />
                                 </td>
                                 <td width="25%">
-                                    <sh-select id="select-product-combo" placeholder="Select product/Service">
-                                    </sh-select>
+                                    <reactive-dropdown-field id="select-product-combo" [placeholder]="'Select product/Service'" [name]="'select-product-combo'">
+                                    </reactive-dropdown-field>
                                 </td>
                                 <td width="12%"><input type="text" class="form-control" value="Unit" /></td>
                                 <td width="12%"><input type="text" class="form-control" value="2" /></td>

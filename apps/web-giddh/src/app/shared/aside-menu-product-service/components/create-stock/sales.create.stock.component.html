@@ -13,20 +13,15 @@
                             <div class="row">
                                 <div class="form-group col-5 col-sm-5">
                                     <label>Under Group</label>
-                                    <sh-select
-                                        #groupDDList
+                                    <reactive-dropdown-field
                                         [options]="groupsData$ | async"
                                         formControlName="parentGroup"
                                         [placeholder]="'Select Group'"
-                                        [multiple]="false"
-                                        [ItemHeight]="33"
-                                        (selected)="groupSelected($event)"
-                                        [isFilterEnabled]="true"
-                                        [forceClearReactive]="forceClear$ | async"
-                                        [notFoundLinkText]="'+ Add New'"
-                                        (noResultsClicked)="addNewGroupPane()"
-                                        [notFoundLink]="false"
-                                    ></sh-select>
+                                        (selectedOption)="groupSelected($event)"
+                                        [createNewText]="'+ Add New'"
+                                        (createNewClicked)="addNewGroupPane()"
+                                        [name]="'parentGroup'"
+                                    ></reactive-dropdown-field>
                                 </div>
                                 <div class="form-group col-5 col-sm-5" *ngIf="isUpdatingStockForm">
                                     <label class="d-block">&nbsp;</label>
@@ -60,15 +55,13 @@
                                 </div>
                                 <div class="form-group col-5 col-sm-5">
                                     <label>Stock Unit <sup>*</sup></label>
-                                    <sh-select
+                                    <reactive-dropdown-field
                                         [options]="stockUnitsDropDown$ | async"
                                         formControlName="stockUnitUniqueName"
                                         [placeholder]="'Choose a parent unit'"
-                                        [multiple]="false"
-                                        [ItemHeight]="33"
-                                        [forceClearReactive]="forceClear$ | async"
-                                        (selected)="openShowOtherDetailsSection()"
-                                    ></sh-select>
+                                        (selectedOption)="openShowOtherDetailsSection()"
+                                        [name]="'stockUnitUniqueName'"
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                             <!-- other details -->
@@ -342,17 +335,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="bold-head">Account Name</label>
-                                    <sh-select
+                                    <reactive-dropdown-field
                                         [options]="purchaseAccountsDropDown$ | async"
-                                        #purchaseAccountUniqueName
                                         formControlName="purchaseAccountUniqueName"
                                         [placeholder]="'select purchase account'"
-                                        [multiple]="false"
-                                        [ItemHeight]="33"
                                         [disabled]="!addStockForm.controls['enablePurchase']?.value"
-                                        [forceClearReactive]="forceClear$ | async"
-                                        (selected)="onSelectPurchaseAccount()"
-                                    ></sh-select>
+                                        (selectedOption)="onSelectPurchaseAccount()"
+                                        [name]="'purchaseAccountUniqueName'"
+                                    ></reactive-dropdown-field>
                                 </div>
 
                                 <div class="row">
@@ -375,21 +365,16 @@
                                     >
                                         <div [formGroupName]="i" class="row">
                                             <div class="form-group col-7 col-sm-7">
-                                                <sh-select
+                                                <reactive-dropdown-field
                                                     [options]="stockUnitsDropDown$ | async"
-                                                    #purchaseStockUnitCode
                                                     formControlName="stockUnitUniqueName"
-                                                    [multiple]="false"
-                                                    [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                                     [placeholder]="'Select Unit'"
-                                                    [ItemHeight]="33"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    [notFoundLinkText]="'+ Add New'"
-                                                    (noResultsClicked)="addNewStockUnit()"
-                                                    [notFoundLink]="true"
-                                                    (selected)="onSelectPurchaseStockUnitCode()"
-                                                >
-                                                </sh-select>
+                                                    [disabled]="!addStockForm.controls['enablePurchase']?.value"
+                                                    [createNewText]="'+ Add New'"
+                                                    (createNewClicked)="addNewStockUnit()"
+                                                    (selectedOption)="onSelectPurchaseStockUnitCode()"
+                                                    [name]="'stockUnitUniqueName'"
+                                                ></reactive-dropdown-field>
                                             </div>
                                             <div class="form-group row col-4 col-sm-4">
                                                 <input
@@ -437,18 +422,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label >Account Name</label>
-                                    <sh-select
+                                    <reactive-dropdown-field
                                         [options]="salesAccountsDropDown$ | async"
-                                        #salesAccountUniqueName
                                         formControlName="salesAccountUniqueName"
-                                        [multiple]="false"
                                         [disabled]="!addStockForm.controls['enableSales']?.value"
                                         [placeholder]="'select sales account'"
-                                        [ItemHeight]="33"
-                                        [forceClearReactive]="forceClear$ | async"
-                                        (selected)="onSelectSalesAccount()"
-                                    >
-                                    </sh-select>
+                                        (selectedOption)="onSelectSalesAccount()"
+                                        [name]="'salesAccountUniqueName'"
+                                    ></reactive-dropdown-field>
                                 </div>
                                 <div class="row">
                                     <div class="col-7 col-sm-7">
@@ -470,21 +451,16 @@
                                     >
                                         <div [formGroupName]="i" class="row">
                                             <div class="form-group col-7 col-sm-7">
-                                                <sh-select
+                                                <reactive-dropdown-field
                                                     [options]="stockUnitsDropDown$ | async"
-                                                    #salesStockUnitCode
                                                     formControlName="stockUnitUniqueName"
-                                                    [multiple]="false"
                                                     [disabled]="!addStockForm.controls['enableSales']?.value"
                                                     [placeholder]="'Select Unit'"
-                                                    [ItemHeight]="33"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    [notFoundLinkText]="'+ Add New'"
-                                                    (noResultsClicked)="addNewStockUnit()"
-                                                    [notFoundLink]="true"
-                                                    (selected)="onSelectSalesStockUnitCode()"
-                                                >
-                                                </sh-select>
+                                                    [createNewText]="'+ Add New'"
+                                                    (createNewClicked)="addNewStockUnit()"
+                                                    (selectedOption)="onSelectSalesStockUnitCode()"
+                                                    [name]="'stockUnitUniqueName'"
+                                                ></reactive-dropdown-field>
                                             </div>
                                             <div class="form-group row col-4 col-sm-4">
                                                 <input
@@ -560,15 +536,13 @@
                                             </td>
                                             <td class="form-group">
                                                 <label>Stock Unit <sup>*</sup></label>
-                                                <sh-select
+                                                <reactive-dropdown-field
                                                     [options]="stockUnitsDropDown$ | async"
                                                     formControlName="manufacturingUnitUniqueName"
                                                     [placeholder]="'Select Unit'"
-                                                    [multiple]="false"
-                                                    [ItemHeight]="33"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    (selected)="onSelectManufacturingStockUnitCode()"
-                                                ></sh-select>
+                                                    (selectedOption)="onSelectManufacturingStockUnitCode()"
+                                                    [name]="'manufacturingUnitUniqueName'"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td
                                                 *ngIf="
@@ -618,20 +592,16 @@
                                                 class="fsstock"
                                             >
                                                 <td>
-                                                    <sh-select
+                                                    <reactive-dropdown-field
                                                         [options]="stockListDropDown$ | async"
-                                                        #manufacturingStockUniqueName
                                                         formControlName="stockUniqueName"
-                                                        [multiple]="false"
-                                                        [placeholder]="'Select Stock Name'"
                                                         [placeholder]="'Select Stock'"
-                                                        [ItemHeight]="33"
-                                                        (selected)="
+                                                        (selectedOption)="
                                                             findAddedStock($event?.value, i);
                                                             manufacturingStockQuantity.focus()
                                                         "
-                                                        [forceClearReactive]="forceClearStock$ | async"
-                                                    ></sh-select>
+                                                        [name]="'stockUniqueName'"
+                                                    ></reactive-dropdown-field>
                                                 </td>
                                                 <td>
                                                     <input
@@ -647,15 +617,12 @@
                                                     />
                                                 </td>
                                                 <td>
-                                                    <sh-select
+                                                    <reactive-dropdown-field
                                                         [options]="stockUnitsDropDown$ | async"
-                                                        #manufacturingStockUnitCode
                                                         formControlName="stockUnitUniqueName"
-                                                        [multiple]="false"
                                                         [placeholder]="'Select Unit'"
-                                                        [ItemHeight]="33"
-                                                        [forceClearReactive]="forceClearStockUnit$ | async"
-                                                    ></sh-select>
+                                                        [name]="'stockUnitUniqueName'"
+                                                    ></reactive-dropdown-field>
                                                 </td>
                                                 <td>
                                                     <button

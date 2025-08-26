@@ -48,19 +48,16 @@
                                 <label> Product's Name <span class="red-text">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <sh-select
-                                    #defaultProduct
-                                    name="productName"
-                                    [notFoundLink]="true"
-                                    (noResultsClicked)="onProductNoResultsClicked(0)"
-                                    [isFilterEnabled]="true"
+                                <reactive-dropdown-field
+                                    [name]="'productName'"
+                                    [createNewText]="'Create New Product'"
+                                    (createNewClicked)="onProductNoResultsClicked(0)"
+                                    [enableDynamicSearch]="true"
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
-                                    [forceClearReactive]="forceClear$ | async"
-                                    (selected)="selectProduct($event, branchTransfer.products[0])"
-                                    required
-                                    [isRequired]="true"
-                                ></sh-select>
+                                    (selectedOption)="selectProduct($event, branchTransfer.products[0])"
+                                    [required]="true">
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
@@ -123,27 +120,16 @@
                                     required
                                     [disabled]="isBranch || isCompanyWithSingleBranch"
                                 />
-                                <sh-select
+                                <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
-                                    #defaultSource
-                                    name="sourceName"
-                                    [isFilterEnabled]="true"
+                                    [name]="'sourceName'"
+                                    [enableDynamicSearch]="true"
+                                    [options]="branchList"
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName"
-                                    [options]="branches$ | async"
-                                    [forceClearReactive]="sourceBranchClear$ | async"
-                                    (selected)="selectCompany($event, 'sources', 0); focusSourceWarehouse($event)"
-                                    required
-                                    [isRequired]="true"
-                                    [disabled]="isUpdateMode"
-                                ></sh-select>
-                                <i
-                                    class="icon-info"
-                                    *ngIf="
-                                        senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
-                                        allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length
-                                    "
-                                    [matTooltip]="branchTransferInfoText"
-                                ></i>
+                                    (selectedOption)="selectSource($event, branchTransfer.sources[0])"
+                                    [required]="true"
+                                    [disabled]="isBranch || isCompanyWithSingleBranch">
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -151,19 +137,13 @@
                                 <label class="nowrap"> Sender's Warehouse <span class="red-text">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <sh-select
-                                    #sourceWarehouse
-                                    name="sourceWarehouse"
+                                <reactive-dropdown-field
+                                    [name]="'sourceWarehouse'"
                                     [options]="senderWarehouses[branchTransfer.sources[0]?.uniqueName]"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="senderWarehouseClear$ | async"
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
-                                    (selected)="getWarehouseDetails('sources', 0); focusDestinationName()"
-                                    required
-                                    [isRequired]="true"
-                                    (onClear)="resetWarehouse('sources', 0)"
-                                >
-                                </sh-select>
+                                    (selectedOption)="selectSourceWarehouse($event, branchTransfer.sources[0])"
+                                    [required]="true">
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div
@@ -208,50 +188,28 @@
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
                                 <label> Receiver's Name <span class="red-text">*</span> </label>
-                            </div>
-                            <div class="col-xl-6 col-lg-8 position-relative">
-                                <sh-select
-                                    #destinationName
-                                    name="destinationName"
+                                <reactive-dropdown-field
+                                    *ngIf="isUpdateMode"
+                                    [name]="'destinationName'"
                                     [(ngModel)]="branchTransfer.destinations[0].uniqueName"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="destinationBranchClear$ | async"
-                                    [options]="branches$ | async"
-                                    (selected)="
-                                        selectCompany($event, 'destinations', 0); focusDestinationWarehouse($event)
-                                    "
-                                    required
-                                    [isRequired]="true"
-                                    [disabled]="isUpdateMode"
-                                ></sh-select>
-                                <i
-                                    class="icon-info"
-                                    *ngIf="
-                                        destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length !==
-                                        allWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length
-                                    "
-                                    [matTooltip]="branchTransferInfoText"
-                                ></i>
+                                    [enableDynamicSearch]="true"
+                                    [options]="branchList"
+                                    (selectedOption)="selectDestination($event, branchTransfer.destinations[0])"
+                                    [required]="true">
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4 nowrap">
                                 <label class="nowrap"> Receiver's Warehouse <span class="red-text">*</span> </label>
-                            </div>
-                            <div class="col-xl-6 col-lg-8">
-                                <sh-select
-                                    #destinationWarehouse
-                                    name="destinationWarehouse"
+                                <reactive-dropdown-field
+                                    [name]="'destinationWarehouse'"
+                                    [enableDynamicSearch]="true"
                                     [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="destinationWarehouseClear$ | async"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0, $event)"
-                                    required
-                                    [isRequired]="true"
-                                    (onClear)="resetWarehouse('destinations', 0)"
-                                >
-                                </sh-select>
+                                    (selectedOption)="selectDestinationWarehouse($event, branchTransfer.destinations[0])"
+                                    [required]="true">
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div
@@ -259,7 +217,6 @@
                             *ngIf="
                                 branchTransfer.destinations[0].warehouse.taxNumber &&
                                 branchTransfer.destinations[0].warehouse?.uniqueName &&
-                                transferType !== 'senders' &&
                                 formFields &&
                                 formFields['taxName']
                             "
@@ -321,21 +278,16 @@
                                 <label> Product's Name <span class="red-text">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <sh-select
-                                    #defaultProduct
-                                    name="productName"
-                                    [notFoundLink]="true"
-                                    (noResultsClicked)="onProductNoResultsClicked(0)"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="forceClear$ | async"
+                                <reactive-dropdown-field
+                                    [name]="'productName'"
+                                    [createNewText]="'Create New Product'"
+                                    (createNewClicked)="onProductNoResultsClicked(0)"
+                                    [enableDynamicSearch]="true"
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
-                                    (selected)="
-                                        selectProduct($event, branchTransfer.products[0]); focusDestinationWarehouse()
-                                    "
-                                    required
-                                    [isRequired]="true"
-                                ></sh-select>
+                                    (selectedOption)="selectProduct($event, branchTransfer.products[0])"
+                                    [required]="true">
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
@@ -388,23 +340,16 @@
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4 transfer-type-based">
                                 <label> Sender's Name <span class="red-text">*</span> </label>
-                            </div>
-                            <div class="col-xl-6 col-lg-8 position-relative">
-                                <sh-select
-                                    #defaultSource
-                                    name="sourceName"
-                                    [isFilterEnabled]="true"
+                                <reactive-dropdown-field
+                                    [name]="'sourceName'"
+                                    [enableDynamicSearch]="true"
+                                    [options]="branchList"
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName"
-                                    [options]="branches$ | async"
-                                    (selected)="selectCompany($event, 'sources', 0)"
-                                    required
-                                    [isRequired]="true"
-                                    [disabled]="isUpdateMode"
-                                    (selected)="focusSourceWarehouse($event)"
-                                    [forceClearReactive]="sourceBranchClear$ | async"
-                                ></sh-select>
+                                    (selectedOption)="selectSource($event, branchTransfer.sources[0])"
+                                    [required]="true">
+                                </reactive-dropdown-field>
                                 <i
-                                    class="icon-info"
+                                    class="icon-info text-gray"
                                     *ngIf="
                                         senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
                                         allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length

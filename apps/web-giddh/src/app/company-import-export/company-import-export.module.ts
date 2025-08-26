@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
@@ -21,7 +22,8 @@ import { SharedModule } from '../shared/shared.module';
             spinnerSize: 30
         }),
         SharedModule,
-        MatMenuModule
+        MatMenuModule,
+        FormFieldsModule
     ],
     exports: [],
     declarations: [

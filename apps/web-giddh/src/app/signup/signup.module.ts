@@ -5,9 +5,9 @@ import { SignupComponent } from './signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SignupRoutingModule } from './signup.routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     imports: [
@@ -21,8 +21,8 @@ import { SharedModule } from '../shared/shared.module';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
-        SharedModule
+        SharedModule,
+        FormFieldsModule
     ],
     declarations: [SignupComponent]
 })

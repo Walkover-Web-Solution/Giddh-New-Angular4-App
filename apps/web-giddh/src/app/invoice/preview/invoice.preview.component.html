@@ -1893,13 +1893,13 @@
             </div>
             <div class="mr-b15">
                 <label>{{ localeData?.cancel_reason }} <span class="red-text">*</span></label>
-                <sh-select
-                    name="cancellationReason"
+                <reactive-dropdown-field
+                    [name]="'cancellationReason'"
                     (onClear)="eInvoiceCancel.cancellationReason = ''"
                     [(ngModel)]="eInvoiceCancel.cancellationReason"
                     [options]="eInvoiceCancellationReasonOptions"
                 >
-                </sh-select>
+                </reactive-dropdown-field>
             </div>
             <div class="cancel-remarks-section">
                 <label>{{ localeData?.cancel_remarks }} <span class="red-text">*</span></label>

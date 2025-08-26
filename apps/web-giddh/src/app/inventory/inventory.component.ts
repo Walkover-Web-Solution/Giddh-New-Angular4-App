@@ -9,7 +9,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef, AfterViewInit, ElementRef } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -24,7 +24,6 @@ import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groups-w
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
@@ -54,7 +53,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Angular Material tab group reference for inventory navigation tabs */
     @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: MatTabGroup;
     /** Warehouse filter instance */
-    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
+    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ElementRef;
     /** Instance of branch transfer template */
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
 
@@ -518,9 +517,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     warehouse = warehouseData.formattedWarehouses[0]?.uniqueName;
                 }
                 const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data?.uniqueName === warehouse || data?.value === warehouse);
-                if (currentWarehouse && this.warehouseFilter) {
-                    this.warehouseFilter.filter = currentWarehouse.label;
-                }
                 this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails?.uniqueName, isCompany: branchDetails.isCompany };
             }
             this.warehouses = warehouseData.formattedWarehouses;
