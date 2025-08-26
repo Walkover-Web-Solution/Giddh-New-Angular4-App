@@ -324,6 +324,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public getProjectEntry(requestObject: any): void {
+        requestObject.category = 'expense';
         this.componentStore.searchEntry(requestObject);
     }
 
