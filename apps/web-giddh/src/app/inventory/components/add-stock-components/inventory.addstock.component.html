@@ -122,39 +122,35 @@
             
                                             <div class="form-group col-sm-4 col-12">
                                                 <label>Tax</label>
-            
-                                                <div class="btn-group btn-block" dropdown>
-                                                    <button
-                                                        dropdownToggle
-                                                        type="button"
-                                                        class="dropdown-toggle form-control text-left"
+                                                <button
+                                                    type="button"
+                                                    class="form-control text-left"
+                                                    [matMenuTriggerFor]="taxMenu"
+                                                    mat-button
+                                                >
+                                                    Selected ({{ taxTempArray?.length }})
+                                                    <span class="pull-right"><span class="caret"></span></span>
+                                                </button>
+                                                <mat-menu #taxMenu="matMenu" class="tax-selection-menu">
+                                                    <div
+                                                        *ngFor="let tax of companyTaxesList$ | async"
+                                                        [ngClass]="{ 'opacity': tax.isDisabled }"
+                                                        mat-menu-item
+                                                        (click)="$event.stopPropagation()"
                                                     >
-                                                        Selected ({{ taxTempArray?.length }})
-                                                        <span class="pull-right"><span class="caret"></span></span>
-                                                    </button>
-                                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                                                        <li
-                                                            role="menuitem"
-                                                            *ngFor="let tax of companyTaxesList$ | async"
-                                                            [ngClass]="{ 'opacity': tax.isDisabled }"
+                                                        <mat-checkbox
+                                                            [disabled]="tax.isDisabled"
+                                                            [checked]="tax.isChecked"
+                                                            (click)="selectTax($event, tax)"
+                                                            color="primary"
                                                         >
-                                                            <a class="dropdown-item" (click)="$event.stopPropagation()"
-                                                                ><input
-                                                                    type="checkbox"
-                                                                    [disabled]="tax.isDisabled"
-                                                                    [checked]="tax.isChecked"
-                                                                    (click)="selectTax($event, tax)"
-                                                                />
-                                                                {{ tax.name }}
-                                                            </a>
-                                                        </li>
-                                                        <li *ngIf="(companyTaxesList$ | async)?.length < 1">
-                                                            <a class="dropdown-item" (click)="$event.stopPropagation()"
-                                                                >No Tax Found</a
-                                                            >
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                            {{ tax.name }}
+                                                        </mat-checkbox>
+                                                    </div>
+                                                    <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
+                                                        No Tax Found
+                                                    </div>
+                                                </mat-menu>
                                             </div>
                                         </div>
             
@@ -699,8 +695,8 @@
         "
         [ok]="'Yes'"
         [cancel]="'No'"
-        (cancelCallBack)="hideModal()"
-        (successCallBack)="deleteStock(); hideModal()"
+        (cancelCallBack)="closeDialog()"
+        (successCallBack)="deleteStock(); closeDialog()"
     >
     </confirm-modal>
 </ng-template>

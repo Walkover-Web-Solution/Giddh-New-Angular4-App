@@ -8,7 +8,7 @@
     <div class="relative w-100">
         <div
             class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState === 'in'"
+            *ngIf="asideGstSidebarMenuState"
         >
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>

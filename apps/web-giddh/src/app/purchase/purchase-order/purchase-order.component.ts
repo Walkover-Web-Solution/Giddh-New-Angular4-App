@@ -21,7 +21,6 @@ import { WarehouseActions } from '../../settings/warehouse/action/warehouse.acti
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'purchase-order',

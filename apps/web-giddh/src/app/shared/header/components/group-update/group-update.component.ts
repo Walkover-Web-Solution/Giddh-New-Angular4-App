@@ -63,7 +63,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public taxPopOverTemplate: string = '';
     public showEditTaxSection: boolean = false;
     public accountList: any[];
-    public showTaxes: boolean = false;
+    public showTaxes: boolean = true;
     @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
     public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
     /** To check is groups belongs to debtor or creditors type  */
@@ -96,6 +96,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public defaultTaxLabel: string[] = [];
     /** Stores the list of selected discount labels to display in the UI. */
     public defaultDiscountLabel: string[] = [];
+    /** Stores the current tax to display in the UI. */
+    public currentTax: any;
+    /** Stores the current discount to display in the UI. */
+    public currentDiscount: any;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(

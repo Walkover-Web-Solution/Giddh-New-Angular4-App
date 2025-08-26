@@ -103,17 +103,14 @@
             </div>
         </div>
     </div>
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <div *ngIf="accountAsideMenuState === 'in'">
+    <ng-template #asideMenuTemplate>
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="false"
-            class="account-aside-menu-state transform-inherit"
-            [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="toggleAccountAsidePane($event)"
+            (closeAsideEvent)="asideMenuDialogRef?.close()"
         >
         </aside-menu-account>
-    </div>
+    </ng-template>
 </ng-container>

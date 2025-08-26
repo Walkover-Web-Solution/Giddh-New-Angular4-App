@@ -114,10 +114,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     private universalDate: Array<Date>;
     /** Subject to unsubscribe all the observables when the component destroys */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Modal reference */
-    public modalRef: any;
-    /** Modal service reference */
-    public modalService: any;
     /** Bulk export modal reference */
     /** Reference to bulk export dialog */
     private bulkExportDialogRef: MatDialogRef<any>;

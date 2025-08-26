@@ -34,7 +34,7 @@
                             [ngClass]="{ 'align-items-start': (node.name == localeData?.sidebar?.warehouse_balance),
                                          'align-items-center': !(node.name == localeData?.sidebar?.warehouse_balance)}"
                             *ngIf="!(node.onlyBranchMode && (isCompany || isConsolidatedBranch))"
-                            (click)="toggleAsidePane($event, node)"
+                            (click)="openAsidePaneDialog(node)"
                         >
                             <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="icon" />
                             <h2>{{ node.name }}</h2>
@@ -63,11 +63,9 @@
         </div>
     </div>
 </ng-container>
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-create-new-inventory
-    *ngIf="asideMenuState === 'in'"
-    [@slideInOut]="asideMenuState"
-    (closeAsideEvent)="closeAsideMenu()"
-    [class]="asideMenuState"
-    [moduleType]="moduleType"
-></aside-create-new-inventory>
+<ng-template #asideMenuStateForCreateNewInventoryTemplate>
+    <aside-create-new-inventory
+        (closeAsideEvent)="asideMenuStateForCreateNewInventoryDialogRef.close()"
+        [moduleType]="moduleType"
+    ></aside-create-new-inventory>
+</ng-template>

@@ -368,14 +368,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         }
     }
 
-    public goToDashboard(val: boolean) {
-        if (val) {
-            this.router.navigate(["/pages/reports"]);
-        } else {
-            this.router.navigate(["/pages/reports", "purchase-register"]);
-        }
-    }
-
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split("-");
         if (date?.length === 3) {
@@ -401,15 +393,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             }
             this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
         }
-    }
-
-    public selectedFilterMonth(monthYridx: string, i) {
-        let date = this.getDateFromMonth(i);
-        this.getDetailedPurchaseRequestFilter.from = date.firstDay;
-        this.getDetailedPurchaseRequestFilter.to = date.lastDay;
-        this.getDetailedPurchaseRequestFilter.q = "";
-        this.selectedMonth = monthYridx;
-        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 
     public getDateFromMonth(selectedMonth) {

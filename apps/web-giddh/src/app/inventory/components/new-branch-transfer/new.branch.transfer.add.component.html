@@ -1239,7 +1239,7 @@
                                             (onShortcutPress)="keydownPressed()"
                                         >
                                             <span
-                                                (click)="toggleTransporterModel()"
+                                                (click)="openTransporterPopupDialog()"
                                                 [ngClass]="{ 'active': keydownClassAdded }"
                                                 >Create New</span
                                             >
@@ -1320,9 +1320,8 @@
         </div>
     </div>
 </section>
-<div class="right-modal account-aside-menu-state" *ngIf="transporterPopupStatus">
-    <div class="aside-overlay" [ngClass]="transporterPopupStatus ? 'in' : 'out'"></div>
-    <div class="aside-pane aside-right" [ngClass]="transporterPopupStatus ? 'in' : 'out'">
+<ng-template #transporterPopupTemplate>
+    <div>
         <div class="form-header">
             <h3 class="aside-title">Manage Transporter</h3>
         </div>
@@ -1495,7 +1494,7 @@
             ></mat-paginator>
         </div>
     </div>
-</div>
+</ng-template>
 <ng-template #asideMenuProductService>
     <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()" [selectedVoucherType]="'sales'">
     </aside-menu-product-service>

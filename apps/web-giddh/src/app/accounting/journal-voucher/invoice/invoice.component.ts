@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
     Component,
@@ -42,6 +41,7 @@ import { QuickAccountComponent } from '../../../theme/quick-account-component/qu
 import { KeyboardService } from '../../keyboard.service';
 import { TallyModuleService } from '../../tally-service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -55,19 +55,7 @@ const CustomShortcode = [
 @Component({
     selector: 'account-as-invoice',
     templateUrl: './invoice.component.html',
-    styleUrls: ['./invoice.component.scss', '../../accounting.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
+    styleUrls: ['./invoice.component.scss', '../../accounting.component.scss']
 })
 export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
@@ -93,6 +81,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
     @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
+    /** Template reference for aside menu stock group modal */
+    @ViewChild('asideMenuStockGroupTemplate', { static: true }) public asideMenuStockGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu stock group modal */
+    public asideMenuStockGroupDialogRef: MatDialogRef<any>;
 
     // public showAccountList: boolean = true;
     public TransactionType: 'by' | 'to' = 'by';
@@ -138,9 +130,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     public invoiceNoHeading: string = 'Supplier Invoice No';
     public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
     public isPurchaseInvoiceSelected: boolean = false; // need to show `Ledger name` field in purchase
-    public asideMenuStateForProductService: string = 'out';
     public companyTaxesList$: Observable<TaxResponse[]>;
-    public autoFocusStockGroupField: boolean = false;
     public createStockSuccess$: Observable<boolean>;
     public isCustomInvoice: boolean = false;
 
@@ -291,8 +281,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 if (this.focusedField) {
                     this.showQuickAccountModal();
                 } else {
-                    this.asideMenuStateForProductService = 'in';
-                    this.autoFocusStockGroupField = true;
+                    this.openStockGroupAsidePane();
                 }
             }
         }
@@ -937,9 +926,17 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 disableClose: true
             });
         } else if (this.selectedField === 'stock') {
-            this.asideMenuStateForProductService = 'in';
-            this.autoFocusStockGroupField = true;
+            this.openStockGroupAsidePane();
         }
+    }
+
+    /**
+     * Opens the aside menu stock group dialog
+     *
+     * @memberof InvoiceComponent
+     */
+    public openStockGroupAsidePane(): void {
+        this.asideMenuStockGroupDialogRef = this.dialog.open(this.asideMenuStockGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -990,8 +987,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public closeCreateStock() {
-        this.asideMenuStateForProductService = 'out';
-        this.autoFocusStockGroupField = false;
+        this.asideMenuStockGroupDialogRef?.close();
         // after creating stock, get all stocks again
         this.selectedStockInputField.value = '';
         this.filterByText = '';

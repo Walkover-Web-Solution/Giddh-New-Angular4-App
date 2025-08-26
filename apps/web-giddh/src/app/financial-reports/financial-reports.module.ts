@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
@@ -104,7 +104,7 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         RecTypeModule,
         ShSelectModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
+        
         CurrencyModule,
         AccountDetailModalModule,
         ScrollingModule,

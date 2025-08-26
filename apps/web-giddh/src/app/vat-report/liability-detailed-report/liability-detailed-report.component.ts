@@ -34,8 +34,8 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold the value out/in to open/close setting gst sidebar */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting gst sidebar */
+    public asideGstSidebarMenuState: boolean = true;
     /** Hold table display columns */
     public displayedColumns: string[] = ['date', 'type', 'rate', 'reference', 'accountName', 'description', 'period', 'exclusive', 'inclusive', 'vat'];
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
@@ -129,6 +129,6 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 }

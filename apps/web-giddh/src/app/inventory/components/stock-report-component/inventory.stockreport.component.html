@@ -35,45 +35,36 @@
             </div>
 
             <div class="right-inventory">
-                <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
+                <div class="btn-group">
                     <button mat-stroked-button class="icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
-                        mat-stroked-button
-                        id="button-alignment"
-                        dropdownToggle
                         type="button"
-                        class="cp mr-r15 dropdown-toggle icon-btn"
-                        aria-controls="dropdown-alignment"
+                        class="cp mr-r15 icon-btn icon-btn"
+                        [matMenuTriggerFor]="downloadMenu"
                         matTooltip="Download"
                     >
                         <i class="icon-download-circle strong"></i>
                     </button>
-                    <ul
-                        id="dropdown-alignment"
-                        *dropdownMenu
-                        class="dropdown-menu dropdown-menu-right dropdown-menu-download"
-                        role="menu"
-                        aria-labelledby="button-alignment"
-                    >
-                        <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'csv')">
-                            <a class="dropdown-item">CSV</a>
-                        </li>
-                        <li role="menuitem" (click)="downloadAllInventoryReports('stock', 'xlsx')">
-                            <a class="dropdown-item">XLS</a>
-                        </li>
-                    </ul>
+                    <mat-menu #downloadMenu="matMenu" class="dropdown-menu-right dropdown-menu-download">
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'csv')">
+                            CSV
+                        </button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'xlsx')">
+                            XLS
+                        </button>
+                    </mat-menu>
                 </div>
                 <button
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     mat-raised-button color="primary" class="transfer-btn"
                     matTooltip="Alt+N"
-                    (click)="toggleTransferAsidePane()"
+                    (click)="openTransferAsidePaneDialog()"
                 >
                     New Transfer
                 </button>
-                <button mat-raised-button color="primary" class="mr-0" (click)="toggleAsidePane()" matTooltip="Alt+i">
+                <button mat-raised-button color="primary" class="mr-0" (click)="openAsidePaneDialog()" matTooltip="Alt+i">
                     Create New
                 </button>
             </div>
@@ -212,28 +203,17 @@
                         <th class="bd-rr bd-rb" width="14%">
                             <div
                                 class="btn-group btn-group-voucher-type"
-                                dropdown
-                                placement="bottom right"
-                                container="body"
                             >
                                 <button
-                                    id="button-alignment"
-                                    dropdownToggle
                                     type="button"
-                                    mat-raised-button color="primary" class="cp dropdown-toggle c-3"
-                                    aria-controls="dropdown-alignment"
+                                    [matMenuTriggerFor]="voucherTypeMenu"
+                                    mat-raised-button color="primary" class="cp c-3"
                                 >
                                     Voucher Type
                                     <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
                                 </button>
-                                <ul
-                                    id="dropdown-alignment"
-                                    *dropdownMenu
-                                    class="dropdown-menu dropdown-menu-right voucher-type"
-                                    role="menu"
-                                    aria-labelledby="button-alignment"
-                                >
-                                    <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
+                                <mat-menu #voucherTypeMenu="matMenu" class="dropdown-menu-right voucher-type">
+                                    <div *ngFor="let item of VOUCHER_TYPES" class="mat-menu-item">
                                         <mat-checkbox
                                             [(ngModel)]="item.checked"
                                             (click)="filterByCheck(item.value, $event.target?.checked)"
@@ -241,8 +221,8 @@
                                         >
                                             {{ item.label }}
                                         </mat-checkbox>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </mat-menu>
                             </div>
                         </th>
                         <th class="td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'account')">
@@ -678,13 +658,9 @@
     </section>
 </section>
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-pane
-    *ngIf="asideMenuState === 'in'"
-    [class]="asideMenuState"
-    [@slideInOut]="asideMenuState"
-    (closeAsideEvent)="toggleAsidePane()"
-></aside-pane>
+<ng-template #asideMenuTemplate>
+    <aside-pane (closeAsideEvent)="asideMenuDialogRef?.close()"></aside-pane>
+</ng-template>
 <!-- aside menu section -->
 
 <!-- Advance search popup -->
@@ -831,14 +807,12 @@
             </div>
 <!-- Advance  search popup -->
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-branch-transfer-pane
-    *ngIf="asideTransferPaneState === 'in'"
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (transferType)="openBranchTransferPopup($event)"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-branch-transfer-pane>
+<ng-template #asideTransferPaneTemplate>
+    <aside-branch-transfer-pane
+        (transferType)="openBranchTransferPopup($event)"
+        (closeAsideEvent)="asideTransferPaneDialogRef?.close()"
+    ></aside-branch-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->

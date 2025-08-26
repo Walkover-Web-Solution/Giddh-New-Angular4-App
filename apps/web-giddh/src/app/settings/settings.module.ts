@@ -42,7 +42,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
@@ -74,6 +74,7 @@ import { ShopifyIntegrationComponent } from './shopify-integration/shopify.inter
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
@@ -137,7 +138,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
         MatDialogModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        BsDropdownModule.forRoot(),
+        
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,
@@ -163,6 +164,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
         BankIntegrationModule,
         SerialNumberPipe,
         NewConfirmModalModule,
+        OverlayModule,
         GiddhDatepickerModule,
         TributeMentionModule,
         ReplaceAllPipeModule,

@@ -17,19 +17,7 @@ import { WarehouseActions } from '../warehouse/action/warehouse.action';
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
-    styleUrls: ['./address-settings.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./address-settings.component.scss']
 })
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds Aside Account AsidePane Dialog Template Reference */
@@ -114,8 +102,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public searchTaxInput: UntypedFormControl = new UntypedFormControl();
     /** Search state input field form control */
     public searchStateInput: UntypedFormControl = new UntypedFormControl();
-    /** Stores the current state of side menu */
-    public accountAsideMenuState: string = 'out';
     /** True, if search name input field is to be shown */
     public showSearchName: boolean;
     /** True, if search address input field is to be shown */
@@ -332,19 +318,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updateAddress(form: any): void {
         form.formValue['uniqueName'] = this.addressToUpdate?.uniqueName;
         this.updatedAddress.emit(form);
-    }
-
-    /**
-     * Adds fixed class to body when aside menu is opened
-     *
-     * @memberof AddressSettingsComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
     }
 
     /**

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
@@ -49,7 +49,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -124,7 +123,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        BsDropdownModule.forRoot(),
+        
         CurrencyModule,
         MatTabsModule,
         ReactiveFormsModule,
@@ -142,6 +141,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         MatPaginatorModule,
         GiddhDatepickerModule,
         MatMenuModule,
+        MatButtonModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatTableModule,
