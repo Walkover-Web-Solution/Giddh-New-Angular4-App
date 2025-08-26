@@ -329,7 +329,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public getProjectEntry(requestObject: any): void {
-        requestObject.category = 'expense';
+        requestObject.category = this.defaultParamsValue.category === this.projectWiseAccountingType.Expenses ? 'expense' : this.defaultParamsValue.category;
         this.componentStore.searchEntry(requestObject);
     }
 
