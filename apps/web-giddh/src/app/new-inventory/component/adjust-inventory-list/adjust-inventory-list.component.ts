@@ -18,6 +18,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'adjust-inventory-list',
@@ -29,6 +30,8 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { static: false }) public universalDatepickerTrigger: MatMenuTrigger;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -101,6 +104,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
+    /** This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
 
     constructor(
         private generalService: GeneralService,
@@ -425,6 +432,50 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.adjustInventoryListRequest.sortBy = event?.active;
         this.adjustInventoryListRequest.page = 1;
         this.getAllAdjustReports(false);
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AdjustInventoryListComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.toggleGiddhDatepicker(false);
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.toggleGiddhDatepicker(false);
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.adjustInventoryListRequest.from = this.fromDate;
+            this.adjustInventoryListRequest.to = this.toDate;
+        }
+        this.getAllAdjustReports(false);
+        this.changeDetection.detectChanges();
+    }
+
+
+    /**
+     * Toggles the datepicker menu
+     * 
+     * @param {boolean} isOpen - Whether to open or close the datepicker
+     * @memberof AdjustInventoryListComponent
+     */
+       public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+         } else {
+            this.universalDatepickerTrigger?.closeMenu();
+         }
     }
 
     /**
