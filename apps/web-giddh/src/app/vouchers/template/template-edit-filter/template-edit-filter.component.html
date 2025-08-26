@@ -47,58 +47,14 @@
                                                 ? showMessage()
                                                 : onDesignChange('uniqueName', template?.uniqueName)
                                         "
-                                        *ngIf="
-                                            template.type === voucherTypeEnum.invoice &&
-                                            templateType === voucherTypeEnum.invoice
-                                        "
                                     >
                                         <img
                                             src="./assets/images/templates/{{ template.templateType }}.png"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-5"
                                         />
-                                        <div class="beta-img position-absolute">
-                                            <img src="./assets/images/templates/beta.png" alt="beta" />
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="template-view-design bdr position-relative cursor-pointer"
-                                        (click)="
-                                            templateMode === templateModeEnum.Update
-                                                ? showMessage()
-                                                : onDesignChange('uniqueName', template?.uniqueName)
-                                        "
-                                        *ngIf="
-                                            template.type === voucherTypeEnum.voucher &&
-                                            templateType === voucherTypeEnum.voucher
-                                        "
-                                    >
-                                        <img
-                                            src="./assets/images/templates/{{ template.templateType }}.png"
-                                            alt="template"
-                                            class="view-img w-100 h-100 border-radius-5"
-                                        />
-                                        <div class="beta-img position-absolute">
-                                            <img src="./assets/images/templates/beta.png" alt="beta" />
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="template-view-design bdr position-relative cursor-pointer"
-                                        (click)="
-                                            templateMode === templateModeEnum.Update
-                                                ? showMessage()
-                                                : onDesignChange('uniqueName', template?.uniqueName)
-                                        "
-                                        *ngIf="
-                                            template?.templateType === templateTypeEnum.ThermalTemplate
-                                        "
-                                    >
-                                        <img
-                                            src="./assets/images/templates/{{ template.templateType }}.png"
-                                            alt="template"
-                                            class="view-img w-100 h-100 border-radius-5"
-                                        />
-                                        <div class="beta-img position-absolute">
+
+                                        <div class="beta-img position-absolute" *ngIf="template.templateType !== templateTypeEnum.GstTemplateA" >
                                             <img src="./assets/images/templates/beta.png" alt="beta" />
                                         </div>
                                     </div>
