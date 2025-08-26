@@ -102,7 +102,7 @@
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
-                <div *ngIf="selectedPayments?.length > 0" class="btn-group ml-auto" dropdown #dp="bs-dropdown">
+                <div *ngIf="selectedPayments?.length > 0">
                     <button
                         mat-stroked-button
                         class="mr-r15"
@@ -115,29 +115,18 @@
                     <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
                         <button
                             mat-raised-button color="primary"
-                            dropdownToggle
                             type="button"
-                            class="more-btn-dropdown dropdown-toggle mr-0"
-                            aria-controls="dropdown-basic"
+                            class="mr-0"
+                            [matMenuTriggerFor]="moreMenu"
                         >
                             {{ commonLocaleData?.app_more }}
-                            <span class="caret"></span>
+                            <i class="caret"></i>
                         </button>
-                        <ul
-                            *dropdownMenu
-                            class="dropdown-menu fixed-dropdown-plus"
-                            role="menu"
-                            aria-labelledby="button-basic"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item cp"
-                                    href="javascript:void(0)"
-                                    (click)="openConfirmationPopup()"
-                                    >{{ commonLocaleData?.app_delete }}</a
-                                >
-                            </li>
-                        </ul>
+                        <mat-menu #moreMenu="matMenu" class="more-dropdown-menu" xPosition="before" yPosition="below">
+                            <button mat-menu-item (click)="openConfirmationPopup()">
+                                {{ commonLocaleData?.app_delete }}
+                            </button>
+                        </mat-menu>
                     </ng-container>
                 </div>
                 <div>

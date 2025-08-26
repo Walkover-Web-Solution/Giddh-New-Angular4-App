@@ -20,8 +20,8 @@ export class TaxAuthorityComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Holds table columns */
     public displayedColumns: string[] = ['name', 'uniqueName', 'description', 'action'];
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Tax Authority List Observable */
@@ -123,6 +123,6 @@ export class TaxAuthorityComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 }

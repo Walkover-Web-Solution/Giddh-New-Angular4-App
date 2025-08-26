@@ -1,47 +1,30 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'welcome-inventory',
     templateUrl: './welcome-inventory.component.html',
-    styleUrls: ['./welcome-inventory.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./welcome-inventory.scss']
 })
 export class InventoryWelcomeComponent implements OnDestroy {
-    public asideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Template reference for aside menu */
+    @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu */
+    public asideMenuDialogRef: MatDialogRef<any>;
 
-    constructor() {
-        
+    constructor(private dialog: MatDialog) {
     }
 
-    // region asidemenu toggle
-    public toggleBodyClass() {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
-    public toggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    /**
+     * Opens the aside pane dialog
+     *
+     * @memberof InventoryWelcomeComponent
+     */
+    public openAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     public ngOnDestroy() {

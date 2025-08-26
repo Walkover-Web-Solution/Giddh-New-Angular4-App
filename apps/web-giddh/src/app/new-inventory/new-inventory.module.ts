@@ -4,7 +4,6 @@ import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { MatTabsModule } from "@angular/material/tabs";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { CreateNewGroupComponent } from "./component/create-new-group/create-new-group.component";
 import { CreateNewItemComponent } from "./component/create-new-item/create-new-item.component";
 import { CreateNewUnitComponent } from "./component/create-unit/create-unit.component";
@@ -140,7 +139,7 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         NewInventoryRoutingModule,
         SharedModule,
 
-        BsDropdownModule.forRoot(),
+        
         CommonModule,
         ModalModule.forRoot(),
         FormFieldsModule,

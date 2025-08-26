@@ -6,7 +6,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { InvoiceGenerateComponent } from './invoice.generate.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
 import { NoDataModule } from '../../shared/no-data/no-data.module';
@@ -14,6 +13,7 @@ import { VoucherModule } from '../../voucher/voucher.module';
 import { DatepickerWrapperModule } from '../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
 import { MatTableModule } from '@angular/material/table';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
     declarations: [

@@ -10,7 +10,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
@@ -46,7 +46,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
             spinnerSize: 30
         }),
         ShSelectModule,
-        BsDropdownModule.forRoot(),
+        
         ScrollingModule,
 
         SharedModule,

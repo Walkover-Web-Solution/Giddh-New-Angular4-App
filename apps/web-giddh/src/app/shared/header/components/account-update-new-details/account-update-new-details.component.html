@@ -1024,22 +1024,37 @@
                         <label>{{ localeData?.all_inherited_discounts }}</label>
                     </div>
                     <div *ngFor="let item of (activeAccount$ | async)?.inheritedDiscounts">
-                        <ng-template #popTemplate>
-                            <div class="popover-content">
-                                <label>{{ localeData?.discounts_inherited_from }}:</label>
-                                <ul>
-                                    <li>{{ item?.name }}</li>
-                                </ul>
-                            </div>
-                        </ng-template>
-                        <span
-                            class="tax-bullet"
-                            *ngFor="let inAppDiscount of item.applicableDiscounts"
-                            [popover]="popTemplate"
-                            placement="right"
-                            triggers="mouseenter:mouseleave"
-                            >{{ inAppDiscount.name }}
-                        </span>
+                        <ng-container *ngFor="let inAppDiscount of item.applicableDiscounts">
+                            <span
+                                cdkOverlayOrigin
+                                #discountTrigger="cdkOverlayOrigin"
+                                class="tax-bullet"
+                                (mouseenter)="currentDiscount = inAppDiscount"
+                                (mouseleave)="currentDiscount = null"
+                            >
+                                {{ inAppDiscount?.name }}
+                            </span>
+                            <ng-template
+                                cdkConnectedOverlay
+                                [cdkConnectedOverlayOrigin]="discountTrigger"
+                                [cdkConnectedOverlayOpen]="currentDiscount === inAppDiscount"
+                                [cdkConnectedOverlayPositions]="[
+                                    {
+                                        originX: 'end',
+                                        originY: 'center',
+                                        overlayX: 'start',
+                                        overlayY: 'center',
+                                        offsetX: 8
+                                    }
+                                ]">
+                                <div class="tax-tooltip bg-gray font-14 custom-cdk-overlay-wrapper">
+                                    <div>
+                                        <p>{{ localeData?.discounts_inherited_from }}:</p>
+                                        <p>{{ item?.name }}</p>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-container>
                     </div>
                     <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts?.length">
                         {{ localeData?.no_inherited_discounts }}
@@ -1086,24 +1101,37 @@
                                 <label>{{ localeData?.all_inherited_taxes }}</label>
                             </div>
                             <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
-                                <ng-template #popTemplate>
-                                    <div>
-                                        <div class="popover-content">
-                                            <label>{{ localeData?.tax_inherited }}:</label>
-                                            <ul>
-                                                <li>{{ inTax?.name }}</li>
-                                            </ul>
+                                <ng-container *ngFor="let inAppTax of inTax.applicableTaxes">
+                                    <span
+                                        cdkOverlayOrigin
+                                        #taxTrigger="cdkOverlayOrigin"
+                                        class="tax-bullet"
+                                        (mouseenter)="currentTax = inAppTax"
+                                        (mouseleave)="currentTax = null"
+                                    >
+                                        {{ inAppTax?.name }}
+                                    </span>
+                                    <ng-template
+                                        cdkConnectedOverlay
+                                        [cdkConnectedOverlayOrigin]="taxTrigger"
+                                        [cdkConnectedOverlayOpen]="currentTax === inAppTax"
+                                        [cdkConnectedOverlayPositions]="[
+                                            {
+                                                originX: 'end',
+                                                originY: 'center',
+                                                overlayX: 'start',
+                                                overlayY: 'center',
+                                                offsetX: 8
+                                            }
+                                        ]">
+                                        <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper">
+                                            <div>
+                                                <p>{{ localeData?.tax_inherited }}:</p>
+                                                <p>{{ inTax?.name }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </ng-template>
-                                <span
-                                    class="tax-bullet"
-                                    *ngFor="let inAppTax of inTax.applicableTaxes"
-                                    [popover]="popTemplate"
-                                    placement="right"
-                                    triggers="mouseenter:mouseleave"
-                                    >{{ inAppTax?.name }}
-                                </span>
+                                    </ng-template>
+                                </ng-container>
                             </div>
                             <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes?.length">
                                 {{ localeData?.no_inherited_taxes }}

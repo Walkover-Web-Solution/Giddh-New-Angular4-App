@@ -12,7 +12,6 @@ import { VatLiabilitiesPayments } from "./vat-liabilities-payments/vat-liabiliti
 import { VatReportRoutingModule } from "./vat-report.routing.module";
 import { CommonModule } from "@angular/common";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
@@ -52,7 +51,7 @@ import { ModalModule } from "ngx-bootstrap/modal";
         VatReportRoutingModule,
         CommonModule,
         CurrencyModule,
-        BsDropdownModule.forRoot(),
+        
         ClickOutsideModule,
         FormsModule,
         Daterangepicker,

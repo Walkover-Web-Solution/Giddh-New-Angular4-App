@@ -48,7 +48,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ServiceConfig } from '../../services/service.config';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -119,6 +119,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /** Stores the current visible on boarding modal instance */
+    private dialogRefExpirePlanRef: MatDialogRef<any>;
+    private dialogRefCrossLimitRef: MatDialogRef<any>;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -164,9 +167,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public totalNumberOfcompanies: number;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private subscriptions: Subscription[] = [];
-    public modelRef: BsModalRef;
-    public modelRefExpirePlan: BsModalRef;
-    public modelRefCrossLimit: BsModalRef;
 
     private activeCompanyForDb: ICompAidata;
     public isMobileSite: boolean;
@@ -303,7 +303,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _generalActions: GeneralActions,
         private authService: AuthenticationService,
         private _dbService: DbService,
-        private modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
@@ -1298,16 +1297,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-        if (!this.modalService.getModalsCount()) {
-            this.modelRefExpirePlan = this.modalService.show(template,
-                Object.assign({}, { class: 'subscription-upgrade' })
-            );
-        }
+        this.dialogRefExpirePlanRef = this.dialog.open(template,{
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
-        this.modelRefCrossLimit = this.modalService.show(template);
-
+        this.dialogRefCrossLimitRef = this.dialog.open(template,{
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -1326,12 +1324,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public goToSelectPlan(): void {
-        if (this.modelRefExpirePlan) {
-            this.modelRefExpirePlan.hide();
-        }
-        if (this.modelRefCrossLimit) {
-            this.modelRefCrossLimit.hide();
-        }
+        this.dialogRefExpirePlanRef?.close();
+        this.dialogRefCrossLimitRef?.close();
         document.querySelector('body').classList.remove('modal-open');
         if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
             this.router.navigate(['/pages/user-details/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
@@ -1388,29 +1382,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.trigger?.closeMenu();
         this.expandSidebar(false);
         this.isGoToBranch = true;
-    }
-
-    public onRight(nodes) {
-        if (nodes.currentVertical) {
-            if (!this.isDropdownOpen(nodes.currentVertical)) {
-                nodes.currentVertical.click();
-            }
-        }
-    }
-
-    public onLeft(nodes, navigator) {
-        navigator.remove();
-        if (navigator.currentVertical) {
-            if (this.isDropdownOpen(nodes.currentVertical)) {
-                navigator.currentVertical.click();
-            }
-        }
-    }
-
-    public isDropdownOpen(node) {
-        const attrs = node.attributes;
-        return (attrs.getNamedItem('dropdownToggle') && attrs.getNamedItem('switch-company')
-            && attrs.getNamedItem('aria-expanded') && attrs.getNamedItem('aria-expanded').nodeValue === 'true');
     }
 
     public mouseEnteredOnCompanyName(i: number) {

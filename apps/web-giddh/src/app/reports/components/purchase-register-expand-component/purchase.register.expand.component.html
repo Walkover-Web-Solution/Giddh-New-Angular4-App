@@ -5,48 +5,6 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="relative">
-        <hamburger-menu [pageHeading]="isMobileScreen ? localeData?.page_heading_single : ''"></hamburger-menu>
-        <div class="report-breadcrum d-md-none d-lg-none">
-            <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active">
-                    <a href="javascript:void(0)" (click)="goToDashboard(true)">{{ commonLocaleData?.app_report }}</a>
-                    <span class="d-inline-block pl-1"> ></span>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" (click)="goToDashboard(false)">{{ localeData?.page_heading }}</a
-                    ><span class="d-inline-block pl-1"> ></span>
-                </li>
-            </ul>
-            <div class="btn-group custom-month-select" dropdown>
-                <button
-                    id="button-custom-html"
-                    dropdownToggle
-                    type="button"
-                    class="btn dropdown-toggle"
-                    aria-controls="dropdown-custom-html"
-                >
-                    {{ selectedMonth }} <span class="caret"></span>
-                </button>
-                <ul
-                    id="dropdown-custom-html"
-                    *dropdownMenu
-                    class="dropdown-menu"
-                    role="menu"
-                    aria-labelledby="button-custom-html"
-                >
-                    <ng-container *ngFor="let item of monthYear; let i = index">
-                        <li role="menuitem">
-                            <a class="dropdown-item cursor-pointer" (click)="selectedFilterMonth(item, i + 1)">{{
-                                item
-                            }}</a>
-                        </li>
-                    </ng-container>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <div class="position-sticky position-left">
         <div class="top-bar">
             <div class="form-inline d-flex justify-content-between top-bar-content">

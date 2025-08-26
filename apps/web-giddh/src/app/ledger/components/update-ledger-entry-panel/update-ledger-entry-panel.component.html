@@ -1891,29 +1891,44 @@
                                         >
                                             <i class="edit-adjustment icon-edit11"></i>
                                         </a>
-                                        <i
-                                            class="icon-info"
-                                            [popover]="adjustmentPopOverTemplate"
-                                            [outsideClick]="true"
-                                            containerClass="adjustment-popover"
-                                            placement="bottom right"
-                                        ></i>
+
+                                        <span
+                                            cdkOverlayOrigin
+                                            #adjustmentPopOverTemplate="cdkOverlayOrigin"
+                                            (mouseenter)="openAdjustmentInfo(true)"
+                                            (mouseleave)="openAdjustmentInfo(false)"
+                                        >
+                                            <i class="icon-info"></i>
+                                        </span>
+                                        <ng-template
+                                            cdkConnectedOverlay
+                                            [cdkConnectedOverlayOrigin]="adjustmentPopOverTemplate"
+                                            [cdkConnectedOverlayOpen]="isAdjustmentInfoOpen"
+                                            [cdkConnectedOverlayPositions]="[
+                                                {
+                                                    originX: 'end',
+                                                    originY: 'center',
+                                                    overlayX: 'start',
+                                                    overlayY: 'center',
+                                                    offsetX: 8
+                                                }
+                                            ]">
+                                            <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper" (mouseenter)="openAdjustmentInfo(true)"
+                                            (mouseleave)="openAdjustmentInfo(false)">
+                                                <p class="mr-b1">
+                                                    <strong>{{ localeData?.adjustment }}</strong>
+                                                </p>
+                                                <p class="info-text">
+                                                    {{
+                                                        localeData?.adjustment_notes
+                                                            | replace
+                                                                : "[VOUCHER_NUMBER]"
+                                                                : vm.selectedLedger?.voucherNumber
+                                                    }}
+                                                </p>
+                                            </div>
+                                        </ng-template>
                                     </p>
-                                    <ng-template #adjustmentPopOverTemplate>
-                                        <div class="adjusted-info">
-                                            <p class="mr-b1">
-                                                <strong>{{ localeData?.adjustment }}</strong>
-                                            </p>
-                                            <p class="info-text">
-                                                {{
-                                                    localeData?.adjustment_notes
-                                                        | replace
-                                                            : "[VOUCHER_NUMBER]"
-                                                            : vm.selectedLedger?.voucherNumber
-                                                }}
-                                            </p>
-                                        </div>
-                                    </ng-template>
                                     <p class="font-12 text-light mr-b1">
                                         <span>
                                             <amount-field

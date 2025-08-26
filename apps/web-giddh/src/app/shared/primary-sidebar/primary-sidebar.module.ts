@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { CheckPermissionModule } from "../../permissions/check-permission.module";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
@@ -33,7 +32,7 @@ import { MatInputModule } from "@angular/material/input";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
+        
         MatTooltipModule,
         RouterModule,
         CheckPermissionModule,

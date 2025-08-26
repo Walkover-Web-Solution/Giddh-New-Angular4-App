@@ -60,256 +60,256 @@
                             </div>
                         </div>
                         <!-- other details -->
-                        <div class="row">
+                        <div class="row mr-b1">
                             <div class="col-12 col-sm-12">
-                                <div class="form-group toggle-btn mr-b05" (click)="toggleOtherDetails()">
-                                    <label class="cp">
-                                        <i
-                                            class="cp collapse-icons"
-                                            aria-hidden="true"
-                                            [ngClass]="{
-                                                'icon-minus': showOtherDetails,
-                                                'icon-plus': !showOtherDetails
-                                            }"
-                                        ></i
-                                        >Other Details
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div [ngClass]="{ 'd-none': !showOtherDetails }">
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>Unique Name</label>
-                                    <input
-                                        type="text"
-                                        name="uniqueName"
-                                        UniqueNameDirective
-                                        textCaseChangeDirective
-                                        class="form-control"
-                                        formControlName="uniqueName"
-                                    />
-                                </div>
-                                <div class="form-group col-sm-4 col-12">
-                                    <mat-radio-group formControlName="showCodeType" class="d-flex mb-2">
-                                        <mat-radio-button color="primary" value="hsn" class="mr-3">
-                                            HSN Code
-                                        </mat-radio-button>
-                                        <mat-radio-button color="primary" value="sac">
-                                            SAC Code
-                                        </mat-radio-button>
-                                    </mat-radio-group>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        maxlength="10"
-                                        decimalDigitsDirective
-                                        formControlName="hsnNumber"
-                                        *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
-                                    />
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        maxlength="10"
-                                        formControlName="sacNumber"
-                                        decimalDigitsDirective
-                                        *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
-                                    />
-                                </div>
-
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>Tax</label>
-
-                                    <div class="btn-group" dropdown>
-                                        <button mat-stroked-button
-                                            dropdownToggle
-                                            type="button"
-                                            class="dropdown-toggle form-control text-left"
-                                        >
-                                            Selected ({{ taxTempArray?.length }})
-                                            <span class="pull-right"><span class="caret"></span></span>
-                                        </button>
-                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                                            <li
-                                                role="menuitem"
-                                                *ngFor="let tax of companyTaxesList$ | async"
-                                                [ngClass]="{ 'opacity': tax.isDisabled }"
-                                            >
-                                                <a class="dropdown-item" (click)="$event.stopPropagation()">
-                                                    <mat-checkbox
-                                                        [disabled]="tax.isDisabled"
-                                                        [checked]="tax.isChecked"
-                                                        (click)="selectTax($event, tax)"
-                                                        color="primary"
-                                                    >
-                                                        {{ tax.name }}
-                                                    </mat-checkbox>
-                                                </a>
-                                            </li>
-                                            <li *ngIf="(companyTaxesList$ | async)?.length < 1">
-                                                <a class="dropdown-item" (click)="$event.stopPropagation()"
-                                                    >No Tax Found</a
+                                <mat-expansion-panel class="mr-t1" (opened)="toggleOtherDetails()">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>Other Details</mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="pd-1">
+                                        <div class="row">
+                                            <div class="form-group col-sm-4 col-12">
+                                                <label>Unique Name</label>
+                                                <input
+                                                    type="text"
+                                                    name="uniqueName"
+                                                    UniqueNameDirective
+                                                    textCaseChangeDirective
+                                                    class="form-control"
+                                                    formControlName="uniqueName"
+                                                />
+                                            </div>
+                                            <div class="form-group col-sm-4 col-12">
+                                                <span>
+                                                    <input
+                                                        type="radio"
+                                                        class="radio-custom radio-theme"
+                                                        name="showCodeType"
+                                                        id="hsnCodeType"
+                                                        formControlName="showCodeType"
+                                                        value="hsn"
+                                                    />
+                                                    <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
+                                                </span>
+                                                <span class="pull-right">
+                                                    <input
+                                                        type="radio"
+                                                        class="radio-custom radio-theme"
+                                                        name="showCodeType"
+                                                        id="sacCodeType"
+                                                        formControlName="showCodeType"
+                                                        value="sac"
+                                                    />
+                                                    <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
+                                                </span>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    maxlength="10"
+                                                    decimalDigitsDirective
+                                                    formControlName="hsnNumber"
+                                                    *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    maxlength="10"
+                                                    formControlName="sacNumber"
+                                                    decimalDigitsDirective
+                                                    *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
+                                                />
+                                            </div>
+            
+                                            <div class="form-group col-sm-4 col-12">
+                                                <label>Tax</label>
+                                                <button
+                                                    type="button"
+                                                    class="form-control text-left"
+                                                    [matMenuTriggerFor]="taxMenu"
+                                                    mat-button
                                                 >
-                                            </li>
-                                        </ul>
+                                                    Selected ({{ taxTempArray?.length }})
+                                                    <span class="pull-right"><span class="caret"></span></span>
+                                                </button>
+                                                <mat-menu #taxMenu="matMenu" class="tax-selection-menu">
+                                                    <div
+                                                        *ngFor="let tax of companyTaxesList$ | async"
+                                                        [ngClass]="{ 'opacity': tax.isDisabled }"
+                                                        mat-menu-item
+                                                        (click)="$event.stopPropagation()"
+                                                    >
+                                                        <mat-checkbox
+                                                            [disabled]="tax.isDisabled"
+                                                            [checked]="tax.isChecked"
+                                                            (click)="selectTax($event, tax)"
+                                                            color="primary"
+                                                        >
+                                                            {{ tax.name }}
+                                                        </mat-checkbox>
+                                                    </div>
+                                                    <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
+                                                        No Tax Found
+                                                    </div>
+                                                </mat-menu>
+                                            </div>
+                                        </div>
+            
+                                        <div class="row">
+                                            <div class="form-group col-sm-4 col-12">
+                                                <label>Open. Qty</label>
+                                                <input
+                                                    type="text"
+                                                    name="openingQuantity"
+                                                    decimalDigitsDirective
+                                                    [DecimalPlaces]="4"
+                                                    (change)="calCulateRate()"
+                                                    class="form-control"
+                                                    formControlName="openingQuantity"
+                                                />
+                                            </div>
+            
+                                            <div class="form-group col-sm-4 col-12">
+                                                <label>Amount</label>
+                                                <input
+                                                    type="text"
+                                                    name="openingAmount"
+                                                    (change)="calCulateRate()"
+                                                    decimalDigitsDirective
+                                                    [DecimalPlaces]="2"
+                                                    class="form-control"
+                                                    formControlName="openingAmount"
+                                                />
+                                            </div>
+            
+                                            <div class="form-group col-sm-4 col-12">
+                                                <label>Rate</label>
+                                                <input
+                                                    type="text"
+                                                    name="stockRate"
+                                                    formControlName="stockRate"
+                                                    class="form-control"
+                                                    placeholder="Auto calculate"
+                                                />
+                                            </div>
+                                        </div>
+            
+                                        <div class="row sku-row">
+                                            <!-- SKU Code -->
+                                            <div class="form-group col-sm-4 col-12">
+                                                <label>SKU Code</label>
+                                                <input
+                                                    type="text"
+                                                    name="skuCode"
+                                                    class="form-control"
+                                                    maxlength="20"
+                                                    formControlName="skuCode"
+                                                    (keyup)="validateSKU($event)"
+                                                />
+                                            </div>
+            
+                                            <!-- field 1 -->
+                                            <div
+                                                class="form-group col-sm-4 col-12"
+                                                *ngIf="customField1 || addStockForm.controls['customField1Heading']?.value"
+                                            >
+                                                <label>
+                                                    <span
+                                                        *ngIf="
+                                                            !customField1HeadingEditing &&
+                                                            !addStockForm.controls['customField1Heading']?.value
+                                                        "
+                                                        >Custom field 1</span
+                                                    >
+                                                    <span *ngIf="!customField1HeadingEditing">{{
+                                                        addStockForm.controls["customField1Heading"]?.value
+                                                    }}</span>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Custom field 1"
+                                                        class="label-input"
+                                                        *ngIf="customField1HeadingEditing"
+                                                        formControlName="customField1Heading"
+                                                        (blur)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                    />
+            
+                                                    <span class="pull-right">
+                                                        <i
+                                                            *ngIf="!customField1HeadingEditing"
+                                                            class="icon-edit-pencil"
+                                                            (click)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                        ></i>
+                                                        <i
+                                                            class="icon-cross text-danger"
+                                                            (click)="removeCustomField('remove', 1)"
+                                                        ></i>
+                                                    </span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="customField1Value"
+                                                    class="form-control"
+                                                    maxlength="30"
+                                                    formControlName="customField1Value"
+                                                />
+                                            </div>
+                                            <!-- field 2 -->
+                                            <div
+                                                class="form-group col-sm-4 col-12"
+                                                *ngIf="customField2 || addStockForm.controls['customField2Heading']?.value"
+                                            >
+                                                <label>
+                                                    <span
+                                                        *ngIf="
+                                                            !customField2HeadingEditing &&
+                                                            !addStockForm.controls['customField2Heading']?.value
+                                                        "
+                                                        >Custom field 2</span
+                                                    >
+                                                    <span *ngIf="!customField2HeadingEditing">{{
+                                                        addStockForm.controls["customField2Heading"]?.value
+                                                    }}</span>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Custom field 2"
+                                                        class="label-input"
+                                                        *ngIf="customField2HeadingEditing"
+                                                        formControlName="customField2Heading"
+                                                        (blur)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                    />
+            
+                                                    <span class="pull-right">
+                                                        <i
+                                                            *ngIf="!customField2HeadingEditing"
+                                                            class="icon-edit-pencil"
+                                                            (click)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                        ></i>
+                                                        <i
+                                                            class="icon-cross text-danger"
+                                                            (click)="removeCustomField('remove', 2)"
+                                                        ></i>
+                                                    </span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="customField2Value"
+                                                    class="form-control"
+                                                    maxlength="30"
+                                                    formControlName="customField2Value"
+                                                />
+                                            </div>
+                                            <!-- field 2 end -->
+                                            <div class="form-group col-sm-4 col-12">
+                                                <div
+                                                    class="new-custom-btn"
+                                                    (click)="addCustomField()"
+                                                    *ngIf="!customField2 || !customField1"
+                                                >
+                                                    + Custom field
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>Open. Qty</label>
-                                    <input
-                                        type="text"
-                                        name="openingQuantity"
-                                        decimalDigitsDirective
-                                        [DecimalPlaces]="4"
-                                        (change)="calCulateRate()"
-                                        class="form-control"
-                                        formControlName="openingQuantity"
-                                    />
-                                </div>
-
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>Amount</label>
-                                    <input
-                                        type="text"
-                                        name="openingAmount"
-                                        (change)="calCulateRate()"
-                                        decimalDigitsDirective
-                                        [DecimalPlaces]="2"
-                                        class="form-control"
-                                        formControlName="openingAmount"
-                                    />
-                                </div>
-
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>Rate</label>
-                                    <input
-                                        type="text"
-                                        name="stockRate"
-                                        formControlName="stockRate"
-                                        class="form-control"
-                                        placeholder="Auto calculate"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="row sku-row">
-                                <!-- SKU Code -->
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>SKU Code</label>
-                                    <input
-                                        type="text"
-                                        name="skuCode"
-                                        class="form-control"
-                                        maxlength="20"
-                                        formControlName="skuCode"
-                                        (keyup)="validateSKU($event)"
-                                    />
-                                </div>
-
-                                <!-- field 1 -->
-                                <div
-                                    class="form-group col-sm-4 col-12"
-                                    *ngIf="customField1 || addStockForm.controls['customField1Heading']?.value"
-                                >
-                                    <label>
-                                        <span
-                                            *ngIf="
-                                                !customField1HeadingEditing &&
-                                                !addStockForm.controls['customField1Heading']?.value
-                                            "
-                                            >Custom field 1</span
-                                        >
-                                        <span *ngIf="!customField1HeadingEditing">{{
-                                            addStockForm.controls["customField1Heading"]?.value
-                                        }}</span>
-                                        <input
-                                            type="text"
-                                            placeholder="Custom field 1"
-                                            class="label-input"
-                                            *ngIf="customField1HeadingEditing"
-                                            formControlName="customField1Heading"
-                                            (blur)="customField1HeadingEditing = !customField1HeadingEditing"
-                                        />
-
-                                        <span class="pull-right">
-                                            <i
-                                                *ngIf="!customField1HeadingEditing"
-                                                class="icon-edit-pencil"
-                                                (click)="customField1HeadingEditing = !customField1HeadingEditing"
-                                            ></i>
-                                            <i
-                                                class="icon-cross text-danger"
-                                                (click)="removeCustomField('remove', 1)"
-                                            ></i>
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="customField1Value"
-                                        class="form-control"
-                                        maxlength="30"
-                                        formControlName="customField1Value"
-                                    />
-                                </div>
-                                <!-- field 2 -->
-                                <div
-                                    class="form-group col-sm-4 col-12"
-                                    *ngIf="customField2 || addStockForm.controls['customField2Heading']?.value"
-                                >
-                                    <label>
-                                        <span
-                                            *ngIf="
-                                                !customField2HeadingEditing &&
-                                                !addStockForm.controls['customField2Heading']?.value
-                                            "
-                                            >Custom field 2</span
-                                        >
-                                        <span *ngIf="!customField2HeadingEditing">{{
-                                            addStockForm.controls["customField2Heading"]?.value
-                                        }}</span>
-                                        <input
-                                            type="text"
-                                            placeholder="Custom field 2"
-                                            class="label-input"
-                                            *ngIf="customField2HeadingEditing"
-                                            formControlName="customField2Heading"
-                                            (blur)="customField2HeadingEditing = !customField2HeadingEditing"
-                                        />
-
-                                        <span class="pull-right">
-                                            <i
-                                                *ngIf="!customField2HeadingEditing"
-                                                class="icon-edit-pencil"
-                                                (click)="customField2HeadingEditing = !customField2HeadingEditing"
-                                            ></i>
-                                            <i
-                                                class="icon-cross text-danger"
-                                                (click)="removeCustomField('remove', 2)"
-                                            ></i>
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="customField2Value"
-                                        class="form-control"
-                                        maxlength="30"
-                                        formControlName="customField2Value"
-                                    />
-                                </div>
-                                <!-- field 2 end -->
-                                <div class="form-group col-sm-4 col-12">
-                                    <div
-                                        class="new-custom-btn"
-                                        (click)="addCustomField()"
-                                        *ngIf="!customField2 || !customField1"
-                                    >
-                                        + Custom field
-                                    </div>
-                                </div>
+                                </mat-expansion-panel>
                             </div>
                         </div>
                     </div>
@@ -695,8 +695,8 @@
         "
         [ok]="'Yes'"
         [cancel]="'No'"
-        (cancelCallBack)="hideModal()"
-        (successCallBack)="deleteStock(); hideModal()"
+        (cancelCallBack)="closeDialog()"
+        (successCallBack)="deleteStock(); closeDialog()"
     >
     </confirm-modal>
 </ng-template>

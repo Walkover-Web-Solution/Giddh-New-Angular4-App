@@ -158,7 +158,7 @@
                                         (onShortcutPress)="keydownPressed()"
                                     >
                                         <span
-                                            (click)="OpenTransporterModel()"
+                                            (click)="openTransporterDialog()"
                                             [ngClass]="{ 'active': keydownClassAdded }"
                                             >Create New</span
                                         >
@@ -348,10 +348,9 @@
         </app-eWayBill-credentials-modal>
     </ng-template>
 
-    <div class="right-modal account-aside-menu-state">
-        <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
-        <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-            <button type="button" mat-stroked-button id="closedialog" (click)="OpenTransporterModel()">
+    <ng-template #transporterTemplate>
+        <div>
+            <button type="button" mat-stroked-button id="closedialog" (click)="transporterDialogRef?.close()">
                 <i class="icon-cross"></i>
             </button>
             <div class="form-header">
@@ -506,5 +505,6 @@
                 </mat-paginator>
             </div>
         </div>
-    </div>
+    </ng-template>
+
 </ng-container>

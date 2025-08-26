@@ -51,29 +51,28 @@
                         </div>
                         <div >
                             <div class="pull-right">
-                                <div class="btn-group" dropdown placement="bottom right">
-                                    <button mat-stroked-button class="mr-b05 cp mr-1 dropdown-toggle" id="buttonalignment" dropdownToggle type="button" aria-controls="dropdown-alignment">
+                                <div class="btn-group">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sky-blue mr-b05 cp mr-1"
+                                        mat-stroked-button
+                                        [matMenuTriggerFor]="downloadMenu"
+                                    >
                                         <i class="icon-download"></i> Download
                                     </button>
-                                    <ul
-                                        id="dropdown-alignment"
-                                        *dropdownMenu
-                                        class="dropdown-menu dropdown-menu-right"
-                                        role="menu"
-                                        aria-labelledby="button-alignment"
-                                    >
-                                        <li role="menuitem" (click)="downloadJobworkReport('csv')">
-                                            <a class="dropdown-item">Download CSV</a>
-                                        </li>
-                                        <li role="menuitem" (click)="downloadJobworkReport('xls')">
-                                            <a class="dropdown-item">Download XLS</a>
-                                        </li>
-                                    </ul>
+                                    <mat-menu #downloadMenu="matMenu" class="dropdown-menu-right">
+                                        <button mat-menu-item (click)="downloadJobworkReport('csv')">
+                                            Download CSV
+                                        </button>
+                                        <button mat-menu-item (click)="downloadJobworkReport('xls')">
+                                            Download XLS
+                                        </button>
+                                    </mat-menu>
                                 </div>
 
                                 <button mat-raised-button color="primary" class="mr-0"
                                     matTooltip="Alt+i"
-                                    (click)="toggleTransferAsidePane()"
+                                    (click)="openTransferAsidePaneDialog()"
                                 >
                                     Create New
                                 </button>
@@ -134,24 +133,12 @@
                                             <span>Product Name</span>
                                         </div>
                                     </th>
-                                </ng-container>
-                                <ng-container *ngIf="type === 'person'">
-                                    <td mat-cell *matCellDef="let txn" class="bd-rr" data-title="Product Name">{{ txn.stock.name }}</td>
-                                </ng-container>
-                            </ng-container>
-
-                            <!-- Voucher Type Column (only for stock type) -->
-                            <ng-container matColumnDef="voucherType">
-                                <ng-container *ngIf="type === 'stock'">
-                                    <th mat-header-cell *matHeaderCellDef class="bd-rr bd-rb" width="15%">
-                                        <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
+                                    <th class="bd-rr bd-rb" *ngIf="type === 'stock'" width="15%">
+                                        <div class="btn-group-voucher-type">
                                             <button
-                                                id="button-alignment"
-                                                dropdownToggle
                                                 type="button"
-                                                mat-stroked-button
-                                                class="cp p-0 dropdown-toggle c-3"
-                                                aria-controls="dropdown-alignment"
+                                                class="btn-link btn cp p-0 c-3"
+                                                [matMenuTriggerFor]="voucherTypeMenu"
                                             >
                                                 Voucher Type
                                                 <i
@@ -159,23 +146,16 @@
                                                     aria-hidden="true"
                                                 ></i>
                                             </button>
-                                            <ul
-                                                id="dropdown-alignment"
-                                                *dropdownMenu
-                                                class="dropdown-menu dropdown-menu-right voucher-type"
-                                                role="menu"
-                                                aria-labelledby="button-alignment"
-                                            >
-                                                <li role="menuitem dropdown-item" *ngFor="let item of VOUCHER_TYPES">
+                                            <mat-menu #voucherTypeMenu="matMenu" class="voucher-type" xPosition="before">
+                                                <div mat-menu-item *ngFor="let item of VOUCHER_TYPES" (click)="$event.stopPropagation()">
                                                     <mat-checkbox
                                                         [(ngModel)]="item.checked"
-                                                        (click)="filterByCheck(item.value, $event.target?.checked)"
-                                                        color="primary"
+                                                        (change)="filterByCheck(item.value, $event.checked)"
                                                     >
                                                         {{ item.label }}
                                                     </mat-checkbox>
-                                                </li>
-                                            </ul>
+                                                </div>
+                                            </mat-menu>
                                         </div>
                                     </th>
                                 </ng-container>
@@ -324,12 +304,11 @@
 </div>
 
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-transfer-pane
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-transfer-pane>
+<ng-template #asideMenuTemplate>
+    <aside-transfer-pane
+        (closeAsideEvent)="asideMenuDialogRef?.close()"
+    ></aside-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->

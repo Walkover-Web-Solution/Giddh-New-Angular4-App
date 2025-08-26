@@ -1,19 +1,19 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Inject, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Store, select } from '@ngrx/store';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { Location } from '@angular/common';
-import { BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 /**
  * Data with nested structure.
@@ -40,21 +40,13 @@ interface SidebarFlatNode {
     selector: 'inventory-sidebar',
     templateUrl: './inventory-sidebar.component.html',
     styleUrls: [`./inventory-sidebar.component.scss`],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventorySidebarComponent implements OnDestroy {
+    /** This will hold new inventory template reference */
+    @ViewChild('asideMenuStateForCreateNewInventoryTemplate') asideMenuStateForCreateNewInventoryTemplate: TemplateRef<any>;
+    /** This will hold aside menu state */
+    public asideMenuStateForCreateNewInventoryDialogRef: MatDialogRef<any>;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -101,8 +93,6 @@ export class InventorySidebarComponent implements OnDestroy {
     public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     /** Holds tree data has child */
     public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
     /** Holds inventory type module  */
     public moduleType: string = '';
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
@@ -120,7 +110,8 @@ export class InventorySidebarComponent implements OnDestroy {
         private store: Store<AppState>,
         @Inject(ServiceConfig) private serviceConfig,
         private settingsBranchAction: SettingsBranchActions,
-        private location: Location
+        private location: Location,
+        private dialog: MatDialog
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -311,48 +302,25 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
-    *Aside pane toggle fixed class
-    *
-    * @memberof InventorySidebarComponent
-    */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
-    /**
-     *Aside pane open function
+     * This will use for open aside pane dialog
      *
-     * @param {*} [event]
      * @param {*} [node]
      * @memberof InventorySidebarComponent
      */
-    public toggleAsidePane(event?: any, node?: any): void {
+    public openAsidePaneDialog(node?: any): void {
         this.moduleType = node?.moduleType;
         if (node?.openActiveMenu) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-            this.toggleBodyClass();
+            this.asideMenuStateForCreateNewInventoryDialogRef = this.dialog.open(this.asideMenuStateForCreateNewInventoryTemplate, ASIDE_PANE_CONFIG);
         }
     }
 
     /**
      * This will use for close aside menu
      *
-     * @param {*} [event]
      * @memberof InventorySidebarComponent
      */
-    public closeAsideMenu(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = 'out';
-        this.toggleBodyClass();
+    public closeAsideMenu(): void {
+        this.asideMenuStateForCreateNewInventoryDialogRef.close();
     }
 
     /**
